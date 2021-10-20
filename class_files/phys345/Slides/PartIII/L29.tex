@@ -1,0 +1,213 @@
+\documentclass[pdf,aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,booktabs,lmodern}
+\usepackage{physics}
+\usepackage{em-commands}
+\mode<presentation>{\usetheme{EM}}
+
+%Question Numbering
+\newcounter{questionnumber}
+\newcommand{\qnum}{%
+	\stepcounter{questionnumber}%
+	Q\arabic{questionnumber}
+}
+\resetcounteronoverlays{questionnumber}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+
+\tikzstyle{plate}=[draw, very thick, minimum width=4cm, minimum height=1cm, fill=gray!40, anchor=south]
+
+%preamble
+\title{Another spell of binding}
+\date{November 7, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+	\begin{itemize}
+		\item Homework
+			\begin{itemize}
+				\item HW10 posted and due on Friday at midnight!
+				\item I'm aiming to get HW9 graded tomorrow if I can
+				\item I'll grade HW10 on Saturday
+			\end{itemize}
+		\item Exam 2
+			\begin{itemize}
+				\item Don't forget Exam 2 is next Monday!
+				\item In-class portion similar to Exam 1
+				\item Also a small take-home portion due on Wednesday
+				\item I'm working on objectives for you to study from
+			\end{itemize}
+		\item Read at least the start of Chapter 6.3 for Friday
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Suppose a small current loop with magnetic moment pointing to the right is placed at various locations near the end of a large solenoid. At which point is the magnitude of the net force on the dipole greatest? You may or may not find it useful to recall that:
+	\[\force = \grad{(\va{m}\vdot\mf)}\]
+	\begin{center}
+		\begin{tikzpicture}
+			\coordinate (cap) at (0,0);
+			\def\r{1}
+			\def\len{4}
+			\draw[thick] (0,0) ellipse (0.5 cm and \r cm);
+			\draw[thick] (cap)++(0,\r) -- ++(-\len,0) arc (90:270:0.5cm and \r cm) -- ++(\len,0);
+			\foreach \x in {-4.0,-3.5,...,-1}{
+				\draw[very thick, Red, ->-=0.5]
+					(\x,\r) .. controls +(90:1) and +(-90:1) .. (\x+.45,-\r);
+			}
+			\node[point,label={above:A}] at (-2,0) {};
+			\node[point,label={above:B}] at (0,0) {};
+			\node[point,label={above:C}] at (1,0) {};
+			\node<1>[point,label={above:D}] at (3,0) {};
+			\node<2>[point,Teal,label={[Teal]above:D}] at (3,0) {};
+		\end{tikzpicture}
+	\end{center}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Consider a paramagnetic material placed in a uniform external magnetic field $\mf$. The total magnetic field just outside the material is now\ldots
+	\begin{enumerate}
+		\item smaller than
+		\item \alert<2>{larger than}
+		\item the same as
+	\end{enumerate}
+	\ldots it was before the material was placed.
+\end{frame}
+
+\begin{frame}{\qnum}
+	In our model for diamagnetism, let the angular momentum associated with an orbiting electron point in the $+\zhat$ direction.
+
+	What is the direction of the magnetic moment?
+	\begin{enumerate}
+		\item $+\zhat$
+		\item \alert<2>{$-\zhat$}
+		\item $+\xhat$
+		\item $-\xhat$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	In our model for diamagnetism, the electron travels around the ``loop'' in a time of
+	\[T = \frac{2\pi R}{v}\]
+	What is the magnitude of the magnetic dipole moment for this configuration?
+	\begin{enumerate}
+		\item $evR$
+		\item \alert<2>{$\displaystyle\frac{evR}{2}$}
+		\item $evR^2$
+		\item $\displaystyle\frac{evR^2}{2}$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	\begin{columns}
+		\column{0.5\textwidth}
+		A small chunk of material is placed just above a solenoid. It magnetizes, weakly, as shown by the arrows inside. What kind of material is the cube made of?
+		\begin{enumerate}
+			\item Diamagnetic
+			\item \alert<2>{Paramagnetic}
+			\item Ferromagnetic
+			\item Biomagnetic
+		\end{enumerate}
+		
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\coordinate (cent) at (0,0);
+				\def\r{1.5}
+				\pgfmathsetmacro{\a}{\r/4}
+				\def\l{4}
+				\draw[very thick] (cent) ellipse (\r cm and \a cm)
+					(cent)++(\r,0) -- +(0,-\l)
+					(cent)++(-\r,0) -- +(0,-\l);
+				\foreach \y in {-3.5,-3,...,-.5} {
+					\draw[very thick, Red, ->-=0.5] (-\r,\y) ..controls +(200:1) and +(20:1) .. (\r,\y-.5);
+				}
+				\pic at (-.3,1) {box};
+				\foreach \x in {-.5,-.3,...,.6} \draw[ultra thick, orange, -latex] (\x,.9) -- +(0,.8);
+			\end{tikzpicture}
+		\end{center}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{\qnum}
+	\begin{columns}
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\coordinate (cent) at (0,0);
+				\def\r{1.5}
+				\pgfmathsetmacro{\a}{\r/4}
+				\def\l{4}
+				\draw[very thick] (cent) ellipse (\r cm and \a cm)
+					(cent)++(\r,0) -- +(0,-\l)
+					(cent)++(-\r,0) -- +(0,-\l);
+				\foreach \y in {-3.5,-3,...,-.5} {
+					\draw[very thick, Red, ->-=0.5] (-\r,\y) ..controls +(200:1) and +(20:1) .. (\r,\y-.5);
+				}
+				\pic at (-.3,1) {box};
+				\foreach \x in {-.5,-.3,...,.6} \draw[ultra thick, orange, -latex] (\x,.9) -- +(0,.8);
+			\end{tikzpicture}
+		\end{center}
+
+		\column{0.5\textwidth}
+		Considering the same chunk of material, what force will it feel due to the magnetic field?
+		\begin{enumerate}
+			\item \alert<2>{Downwards}
+			\item Upwards
+			\item Out of the page
+			\item No force will be felt
+		\end{enumerate}
+		
+	\end{columns}
+\end{frame}
+
+%\begin{frame}{\qnum}
+	%\begin{columns}
+		%\column{0.5\textwidth}
+		%\begin{center}
+			%\begin{tikzpicture}
+				%\pic (c) at (0,0) {cyl=cyan!50!black/1.5/3};
+				%\draw[<->] ([xshift=-.4cm]c-lt) -- ([xshift=-.4cm]c-lb) node[left,midway] {$L$};
+				%\draw[<->, transform canvas={yshift=-.3cm}] (c-b) -- ($ (c-lt)!(c-b)!(c-lb) $) node[below,midway] {$R$};
+				%\foreach \y in {0,-1,-2,-3} \draw[very thick, orange, -latex] (-1,\y) -- +(2,0);
+			%\end{tikzpicture}
+		%\end{center}
+		
+		%\column{0.5\textwidth}
+		%A solid cylinder has uniform magnetization $\vmag$ throughout the volume in the $x$ direction as shown. What is the magnitude of the total magnetic dipole moment of the cylinder?
+		%\begin{enumerate}
+			%\item $\pi R^2 L M$
+			%\item $2\pi R L M$
+			%\item $2\pi R M$
+			%\item $\pi R^2 M$
+		%\end{enumerate}
+	%\end{columns}
+%\end{frame}
+
+%\begin{frame}{\qnum}
+	%\begin{columns}
+		%\column{0.5\textwidth}
+		%A solid cylinder has uniform magnetization $\vmag$ throughout the volume in the $z$ direction as shown. Where do bound currents show up?
+		%\begin{enumerate}
+			%\item All surfaces, but not volume
+			%\item Volume only, not on surface
+			%\item Top/bottom surface only
+			%\item Side (curved) surface only)
+		%\end{enumerate}
+		%\column{0.5\textwidth}
+		%\begin{center}
+			%\begin{tikzpicture}
+				%\pic (c) (0,0) {cyl=cyan!50!black/1.5/3};
+				%\foreach \x in {-1,0,1} \draw[very thick, orange,-latex] (\x,-3) -- +(0,2);
+			%\end{tikzpicture}
+		%\end{center}
+		
+	%\end{columns}
+%\end{frame}
+
+
+\end{document}

@@ -1,0 +1,6 @@
+name = 'Lecture 1'
+date = 2020-01-22
+chapter = 1
+description = 'First day of class'
+visible = true
+file = 'class_files/phys339/Slides/PartI/Ch1_1.pdf'

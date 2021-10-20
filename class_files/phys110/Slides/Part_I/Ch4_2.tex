@@ -1,0 +1,414 @@
+\documentclass[pdf, aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,lmodern,booktabs,tikz,caption}
+\usepackage{pdfpc-commands}
+
+\usepackage[mode=image]{standalone}
+\mode<presentation>{\usetheme{Astro}}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+\usetikzlibrary{calc,angles,quotes}
+
+\newcommand{\moon}[1] {
+  \coordinate (moon) at (#1:4);
+  \node[transform shape] at (moon) {\includegraphics[width=0.8cm]{ch2_moon_small2.png}};
+  \fill[black, opacity=0.5] (moon) -- +(0,.4cm) arc (90:270:.39cm) -- cycle;
+}
+\newcommand{\moonphase}[1] {
+  \coordinate (moon) at (-3.5,-3.5);
+  \node[transform shape] at (moon) {\includegraphics[width=2cm]{ch2_moon_small2.png}};
+  \fill[black, opacity=0.5] (moon) +(0,1cm) arc (90:270:1cm) arc (270:90:#1 cm and 1cm);
+}
+
+%preamble
+\title{Total Eclipse of the Heart}
+\date{September 14, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand*{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+	\begin{itemize}
+		\item New WebWork posted. Due Monday morning.
+		\item No physics tea today. SCRP talks in Ford 122.
+		\item Test 1 two weeks from today
+		\item Polling: \url{rembold-class.ddns.net}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{News of the Day: Cassini no more}
+  \begin{center}
+	  \href{https://www.youtube.com/watch?list=PLTiv_XWHnOZpKPaDTVy36z0U8GxoiIkZa&v=xrGAQCq9BMU}{\includegraphics[width=\textwidth]{Cassini.png}}
+  \end{center}
+  
+\end{frame}
+
+%\begin{frame}{Review Question}
+  %\begin{columns}
+	%\column{.5\textwidth}
+	%\begin{center}
+	  %\begin{tikzpicture}
+		%\node at (0,0) {\includegraphics[width=4cm]{ch2_moon_small2.png}};
+		%\fill[rotate=-160, black, opacity=0.5] (0,1.98) arc (90:270:1.98cm) arc (270:90:8mm and 1.98cm);
+	  %\end{tikzpicture}
+	%\end{center}
+	%\column{.5\textwidth}
+	%Which of the following describes the phase of the moon to the left, assuming the image was take in Syndey, Australia?
+	%\begin{enumerate}
+	  %\item Waxing Gibbous
+	  %\item Waning Gibbous
+	  %\item First Quarter
+	  %\item New
+	%\end{enumerate}
+  %\end{columns}
+%\end{frame}
+
+\begin{frame}{Review Question}
+	Say an orbiting planet lost some of it's mass in a process that kept it's angular momentum constant. Potential effects could be:
+	\begin{enumerate}
+		\item The planet slowing down but staying the same distance away from the Sun
+		\item The planet moving closer to the Sun but staying the same speed
+		\item \alert<2>{The planet moving further from the Sun but staying the same speed}
+		\item None of the above
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Our Wobbly Planet}
+  \begin{columns}
+	\column{.5\textwidth}
+	\begin{itemize}
+	  \item Just like a spinning top, Earth has a bit of a wobble
+	  \item Relative to the celestial sphere, the direction of our North Pole oscillates every \SI{26000}{yrs}
+	  \item ``North Star'' changes!
+	\end{itemize}
+	\column{.5\textwidth}
+	\begin{figure}[h!]
+	  \centering
+	  \includegraphics[width=.9\textwidth]{ch2_pole_precess.jpg}
+	\end{figure}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Let's Talk the Moon}
+  Two obvious observations we are interested in explaining:
+  \begin{itemize}
+	\item Why do we see the Moon going through phases?
+	\item What causes eclipses?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Lunar Facts}
+  \begin{itemize}
+	\item Moon orbits Earth in \SI{27.3}{\day}
+	\item Lunar Phases repeat every \SI{29.5}{\day}
+	  \begin{itemize}
+		\item Difference due to Earth moving about the sun during this time
+	  \end{itemize}
+	\item Sunlight hits Earth and Moon at same angle because the Sun is so far away
+	\item Moon's phase is also closely related to its rising and setting times
+	\item The Man in the Moon is always watching
+	  \begin{itemize}
+		\item We always see the same face of the moon
+	  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{It's just a phase}
+  \begin{center}
+	\begin{tikzpicture}[scale=.6]
+	  %\draw[help lines] (-5,-5) grid (5,5);
+	  \node[transform shape] at (0,0) {\includegraphics[width=1.44cm]{world.png}};
+	  \fill[black,opacity=0.5] (0,0) +(0,0.72) arc (90:270:0.72) -- cycle;
+	  \draw[help lines, dashed] (0,0) circle (4cm);
+	  \foreach \y in {-5,-4,...,5}{
+		\draw[yellow, -latex] (6,\y) -- +(-1,0);
+	  }
+	  \fill[black,rounded corners] (-5,-5) rectangle (-2,-2);
+	  \node at (-3.5,-5.25) {Observer View};
+	  \onslide<1>{
+		\moon{0};
+		\moonphase{-1};
+		\fill[red] (0:0.8) circle (1mm);
+	  }
+	  \onslide<2>{
+		\moon{45};
+		\moonphase{-.5};
+		\fill[red] (90:0.8) circle (1mm);
+	  }
+	  \onslide<3>{
+		\moon{90};
+		\moonphase{-0};
+		\fill[red] (90:0.8) circle (1mm);
+	  }
+	  \onslide<4>{
+		\moon{135};
+		\moonphase{.5};
+		\fill[red] (180:0.8) circle (1mm);
+	  }
+	  \onslide<5>{
+		\moon{180};
+		\moonphase{1};
+		\fill[red] (180:0.8) circle (1mm);
+	  }
+	\end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Wax on, Wane off}
+  \begin{itemize}
+	\item Waxing - the moon is becoming more full
+	  \begin{itemize}
+		\item Visible afternoon/evening
+	  \end{itemize}
+	\item Waning - the moon is becoming less full
+	  \begin{itemize}
+		\item Visible late night / morning
+	  \end{itemize}
+	\item In Northern Hemisphere:
+	  \begin{itemize}
+		\item Light on Right $\Rightarrow$ waxing
+		\item Opposite in Southern Hemisphere
+	  \end{itemize}
+  \end{itemize}
+  \begin{center}
+	\begin{tikzpicture}[scale=.7, transform shape]
+	  %\draw[help lines] (0,0) grid (12,4);
+	  \node at (5.5,4.5) {\Large Waxing Moons};
+	  \fill[black!80!blue, rounded corners] (0,0) rectangle +(3,4);
+	  \fill[black!85!blue, rounded corners] (4,0) rectangle +(3,4);
+	  \fill[black!90!blue, rounded corners] (8,0) rectangle +(3,4);
+	  \node (north) at (1.5,2) {\includegraphics[width=2cm]{ch2_moon_small2.png}};
+	  \node (equator) at (5.5,2) {\includegraphics[width=2cm]{ch2_moon_small2.png}};
+	  \node (south) at (9.5,2) {\includegraphics[width=2cm]{ch2_moon_small2.png}};
+	  \fill[black, opacity=0.7] (north) +(0,1) arc (90:270:1) arc (-90:90:0.5cm and 1cm);
+	  \fill[black, opacity=0.7, rotate around={-90:(equator)}] (equator) +(0,1) arc (90:270:1) arc (-90:90:0.5cm and 1cm);
+	  \fill[black, opacity=0.7, rotate around={180:(south)}] (south) +(0,1) arc (90:270:1) arc (-90:90:0.5cm and 1cm);
+	  \node at (1.5,.5) {\SI{+45}{\degree N}};
+	  \node at (5.5,.5) {Equator};
+	  \node at (9.5,.5) {\SI{+45}{\degree S}};
+	\end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Don't Turn Your Back!}
+  Why do we only see one side of the moon?
+  \begin{itemize}
+	\item If the moon did not spin as it orbited us, we'd see all parts of the moon
+	\item If the moon spun either quickly or slowly, we'd see all parts of the moon
+	\item But if it spun \emph{jussst riighht\ldots}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Synchronous Spinning}
+  \begin{center}
+	\begin{tikzpicture}[scale=.9]
+	  %\draw[help lines] (0,0) grid (10,6);
+	  \coordinate (earth) at (5,3);
+	  \node at (earth) {\includegraphics[width=1cm]{world.png}};
+	  \draw[help lines, dashed] (earth) circle (3cm);
+	  \foreach \t in {0,45,...,360}{
+		\begin{scope}[rotate around={\t:(earth)}, transform shape]
+		  \coordinate (moon) at (8,3);
+		  \node at (moon) {\includegraphics[width=1cm]{ch2_moon_small2.png}};
+		  \draw[red] (moon) +(-.6,0) node {N} +(.6,0) node {F};
+		  \draw[red,-latex] (moon) +(.3,0) arc (0:180:.3);
+		\end{scope}
+	  }
+	\end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Libration!}
+  In truth, we actually can see upwards of 60\% of the Moon's surface over a year
+  \begin{itemize}
+	\item \alert{Libration} describes this oscillating wobble
+	\item Libration in longitude due to the Moon's orbit not being perfectly circular
+	\item Libration in latitude due to the Moon's tilt (similar to Earth's seasons!)
+	\item Diurnal libration do to an observer getting two different perspectives from each side of the Earth daily
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{The Extra Bits}
+  \begin{figure}[h!]
+	\centering
+	\includegraphics[width=.7\textwidth]{ch2_libration.jpg}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Understanding Check}
+  Imagine you built yourself a lovely house on the surface of the moon. One day you are talking to your mom back on Earth and she mentions that it is a lovely full moon tonight. From your vantage point on the moon, what is Earth's phase?
+  \begin{enumerate}
+	\item \alert<2>{New}
+	\item Waxing
+	\item Full
+	\item Waning
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Eclipse Reminder}
+  \begin{center}
+	\inlineMovie{../Videos/LunarEclipse.ogv}{../Videos/LunarEclipse.png}{width=.8\textwidth}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Lunar Eclipse Facts}
+  \begin{itemize}
+	\item Lunar eclipses can \emph{only} occur when the Moon is full!
+	  \begin{itemize}
+		\item Otherwise the Earth isn't between the Moon and the Sun
+	  \end{itemize}
+	\item Lunar eclipses can be penumbral, partial, or total, depending on what part of the shadow overlaps the moon
+	\item Note that anyone on Earth sees the same eclipsed Moon (assuming its night)
+  \end{itemize}
+  \begin{center}
+	\begin{tikzpicture}
+	  \node[anchor=south west] at (0,0) {\includestandalone[width=\textwidth]{../Images/Standalone/ch2_eclipse_fig}};
+	  \onslide<1>{
+		\node at (12.5,2.8) {\includegraphics[width=3mm]{ch2_moon_small2.png}};
+		\node at (5,0) {Penumbral Eclipse};
+	  }
+	  \onslide<2>{
+		\node (moon) at (12.5,2.5) {\includegraphics[width=3mm]{ch2_moon_small2.png}};
+		\fill[black!70!red, opacity=0.5] (moon) ++(-.15,0) arc (180:350:1.5mm) -- cycle;
+		\node at (5,0) {Partial Eclipse};
+	  }
+	  \onslide<3>{
+		\node (moon) at (12.5,2.0) {\includegraphics[width=3mm]{ch2_moon_small2.png}};
+		\fill[black!50!red, opacity=0.5] (moon) circle (1.5mm);
+		\node at (5,0) {Total Eclipse};
+	  }
+	  %\draw[white] (0,0) grid (10,3);
+	\end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Solar Eclipses}
+  \begin{center}
+	\inlineMovie{../Videos/SolarEclipse.ogv}{../Videos/SolarEclipse.png}{width=.8\textwidth}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Solar Eclipses Facts}
+  \begin{itemize}
+	\item Moon casting shadow onto the Earth
+	\item Solar eclipses can only occur when the Moon is new!
+	\item Solar eclipses can be partial, total, or annular
+	\item Note that only select portions of the Earth observe the eclipsed Sun!
+  \end{itemize}
+  \begin{center}
+	\includestandalone[width=\textwidth]{../Images/Standalone/ch2_eclipse_sun}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Why not eclipses every month?}
+  \begin{itemize}
+	\item The Moon's orbit is tilted \SI{5}{\degree} to the ecliptic
+	\item Results in two seasons each year when eclipses can happen
+  \end{itemize}
+  \begin{center}
+	\begin{tikzpicture}
+	  \coordinate (earth) at (-4,0);
+	  \coordinate (rec) at (2,-4.5);
+	  %\draw[help lines] (-5,-3) grid (5,3);
+	  \draw[orange, thick] (-5,0) -- (5,0);
+	  \fill[inner color=yellow, outer color=orange] (0,0) circle (5mm);
+	  \onslide<1>{
+		\draw[purple, thick] (earth) +(175:1cm) node {\includegraphics[width=2mm]{ch2_moon_small2.png}} -- ++(-5:1cm);
+	  }
+	  \onslide<2>{
+		\draw[purple, thick] (earth) ellipse (1cm and 3mm);
+		\node at ($ (earth) - (1,0) $) {\includegraphics[width=2mm]{ch2_moon_small2.png}};
+		\draw[green, ultra thick,-latex] ($ (earth)-(0,1) $) node[below] {Eclipse Points} -- +(135:.9);
+		\draw[green, ultra thick,-latex] ($ (earth)-(0,1) $) -- +(45:.9);
+	  }
+	  \onslide<3>{
+		\draw[purple, thick] (earth) +(5:1cm) node {\includegraphics[width=2mm]{ch2_moon_small2.png}} -- ++(185:1cm);
+	  }
+	  \onslide<4>{
+		\draw[purple, thick] (earth) ellipse (1cm and 3mm);
+		\node at ($ (earth) - (1,0) $) {\includegraphics[width=2mm]{ch2_moon_small2.png}};
+		\draw[green, ultra thick,-latex] ($ (earth)-(0,1) $) node[below] {Eclipse Points} -- +(135:.9);
+		\draw[green, ultra thick,-latex] ($ (earth)-(0,1) $) -- +(45:.9);
+	  }
+	  \node at (earth) {\includegraphics[width=5mm]{world.png}};
+	  \fill[rounded corners,black] (rec) rectangle +(4,4);
+	  \node[above right] at (rec) {Top View};
+	  \onslide<1>{
+		\coordinate (center) at ($ (rec)+(2,2) $);
+		\coordinate (e) at ($ (center)+(180:1.25) $);
+		\coordinate (m) at ($ (e)+(180:5mm) $);
+		\draw[inner color=yellow, outer color=orange] (center) circle (1mm);
+		\draw[orange] (center) circle(1.25cm);
+		\node at (e) {\includegraphics[width=2mm]{world.png}};
+		\draw[purple] (e) circle (5mm);
+		\node at (m) {\includegraphics[width=1mm]{ch2_moon_small2.png}};
+	  }
+	  \onslide<2>{
+		\coordinate (center) at ($ (rec)+(2,2) $);
+		\coordinate (e) at ($ (center)+(270:1.25) $);
+		\coordinate (m) at ($ (e)+(270:5mm) $);
+		\draw[inner color=yellow, outer color=orange] (center) circle (1mm);
+		\draw[orange] (center) circle(1.25cm);
+		\node at (e) {\includegraphics[width=2mm]{world.png}};
+		\draw[purple] (e) circle (5mm);
+		\node at (m) {\includegraphics[width=1mm]{ch2_moon_small2.png}};
+	  }
+	  \onslide<3>{
+		\coordinate (center) at ($ (rec)+(2,2) $);
+		\coordinate (e) at ($ (center)+(0:1.25) $);
+		\coordinate (m) at ($ (e)+(180:5mm) $);
+		\draw[inner color=yellow, outer color=orange] (center) circle (1mm);
+		\draw[orange] (center) circle(1.25cm);
+		\node at (e) {\includegraphics[width=2mm]{world.png}};
+		\draw[purple] (e) circle (5mm);
+		\node at (m) {\includegraphics[width=1mm]{ch2_moon_small2.png}};
+	  }
+	  \onslide<4->{
+		\coordinate (center) at ($ (rec)+(2,2) $);
+		\coordinate (e) at ($ (center)+(90:1.25) $);
+		\coordinate (m) at ($ (e)+(90:5mm) $);
+		\draw[inner color=yellow, outer color=orange] (center) circle (1mm);
+		\draw[orange] (center) circle(1.25cm);
+		\node at (e) {\includegraphics[width=2mm]{world.png}};
+		\draw[purple] (e) circle (5mm);
+		\node at (m) {\includegraphics[width=1mm]{ch2_moon_small2.png}};
+	  }
+	\end{tikzpicture}
+  \end{center}
+  \onslide<5>{
+	\vspace{-4.5cm}
+	\begin{columns}
+	  \column{.6\textwidth}
+	  \begin{alertblock}{Eclipse Conditions}
+		An eclipse can only occur when:
+		\begin{itemize}
+		  \item There is a full moon (lunar eclipse) or new moon (solar eclipse)
+		  \item The Moon is at or near one of its two ecliptic crossing points
+		\end{itemize}
+	  \end{alertblock}
+	  \column{.4\textwidth}
+	\end{columns}
+  }
+\end{frame}
+
+\begin{frame}{The Saros Cycle}
+  \begin{itemize}
+	\item Ecliptic crossing points slowly move around the Moon's orbit
+	  \begin{itemize}
+		\item Put's potential eclipse seasons about 173 days apart
+	  \end{itemize}
+	\item Combine with lunar cycle to get one eclipse about every 18 years, 11 days, and 8 hours.
+	  \begin{itemize}
+		\item Called the \alert{Saros Cycle}
+	  \end{itemize}
+	\item Can predict \emph{when} an eclipse will occur but not where or what type
+  \end{itemize}
+  \begin{figure}[h!]
+	\centering
+	\includegraphics[width=.5\textwidth]{ch3_saros.jpg}
+  \end{figure}
+\end{frame}
+
+\end{document}

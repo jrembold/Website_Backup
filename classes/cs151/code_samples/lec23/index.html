@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Lecture 23 Code</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1'/>
+		<link rel='stylesheet' href='/~jjrembold/css/main.css'/>
+		<link rel='icon' href='/~jjrembold/images/favicon.png'>
+		<script src='/~jjrembold/js/jquery-2.1.4.min.js'></script>
+		<script src='/~jjrembold/js/TweenLite.min.js'></script>
+		<script src='/~jjrembold/js/CSSPlugin.min.js'></script>
+		<script src='/~jjrembold/js/skel.min-2.2.js'></script>
+		<script src='/~jjrembold/js/main.js'></script>
+		<script src='/~jjrembold/js/BigPicture.min.js'></script>
+
+		<header>
+	<p><a href="/www.willamette.edu/~jjrembold/">JED REMBOLD</a></p>
+	<nav>
+		<div class='topmenu'>
+			<ul>
+				<li><a href="/www.willamette.edu/~jjrembold/about">About Me</a></li>
+				<li>
+					<div class='class-drop'>
+						<div class='class-hover'>
+							<a href="/www.willamette.edu/~jjrembold/classes">Classes</a>
+						</div>
+						<div class='class-menu'>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/www.willamette.edu/~jjrembold/classes/cs151/cs151/">Intro Python</a><br>
+							
+							
+							
+							<a href="/www.willamette.edu/~jjrembold/classes/phys221/phys221/">Physics I</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+						</div>
+					</div>
+				</li>
+				<li><a href="/www.willamette.edu/~jjrembold/wu_schedule">Schedule</a></li>
+				<li>
+					<div class='class-drop'>
+						<div class='class-hover'>
+							<a href="/www.willamette.edu/~jjrembold/resources">Resources</a>
+						</div>
+						<div class='class-menu'>
+							
+							<a href="/www.willamette.edu/~jjrembold/resources/python_guides/guides/">Python Guides</a><br>
+							
+							<a href="/www.willamette.edu/~jjrembold/resources/grad_resources/grad_resources/">Grad Notes</a><br>
+							
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class='topmenu_bars'>
+			<ul>
+				<li class='slide-toggle'><span class='icon fa fa-bars' href="#"> Menu</span></li>
+			</ul>
+		</div>
+		<div class='topmenu_justbars'>
+			<ul>
+				<li class='slide-toggle'><span class='icon fa fa-bars' href="#"></span></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class='slideout-menu'>
+		<h3>Menu <span class='slide-toggle' href="#"><i class='fa fa-times'></i></span></h3>
+		<ul>
+			<li><a href="/www.willamette.edu/~jjrembold/about">About Me</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/classes">Classes</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/wu_schedule">Schedule</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/resources">Resources</a></li>
+		</ul>
+	</div>
+
+</header>
+
+	</head>
+	<body>
+
+
+	<div class='container'>
+		<div class='content'>
+			<div class='sub-banner'>
+				<h2>Lecture 23 Code</h2>
+			</div>
+			<center>
+				<br>
+				<div style="color: #0391A5">
+					Mar 16, 2020
+				</div>
+			</center>
+		<h6 id="basic-use-of-format">Basic Use of .format</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;This is a string with a number: </span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">10.123</span><span class="p">))</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="s2">&#34;The number is </span><span class="si">{}</span><span class="s2"> and 2 times the number is </span><span class="si">{}</span><span class="s2">&#34;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">15</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="labels-and-keywords">Labels and Keywords</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">T</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">{name1}</span><span class="s2"> and </span><span class="si">{name2}</span><span class="s2"> and </span><span class="si">{}</span><span class="s2">&#34;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&#34;Barry&#34;</span><span class="p">,</span> <span class="n">name1</span><span class="o">=</span><span class="s2">&#34;Jennifer&#34;</span><span class="p">,</span> <span class="n">name2</span><span class="o">=</span><span class="s2">&#34;Bart&#34;</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="different-formats">Different Formats</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">type_s</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">{num1:.13f}</span><span class="s2"> + </span><span class="si">{num2:d}</span><span class="s2"> = </span><span class="si">{num3:.2e}</span><span class="s2">&#34;</span>
+<span class="n">A</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">type_s</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num1</span><span class="o">=</span><span class="n">A</span><span class="p">,</span> <span class="n">num2</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">num3</span><span class="o">=</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">6</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="width-and-fills">Width and Fills</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">500</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">{:8d}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34; </span><span class="si">{:^10d}</span><span class="s2"> &#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+		<br>
+		</div>
+	</div>
+
+</body>
+<script src='/~jjrembold/js/click_handling.js'></script>
+</html>
+

@@ -1,0 +1,185 @@
+\documentclass[pdf,aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,lmodern,booktabs}
+\usepackage{physics}
+\usepackage{em-commands}
+\mode<presentation>{\usetheme{EM}}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+
+%preamble
+\title{Good ol' Gauss}
+\date{September 10, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+	\begin{itemize}
+		\item Homework 2 due tonight!
+			\begin{itemize}
+				\item Please remember to associate each page with a problem
+				\item Any Jupyter work should be saved as a pdf and then combined with your work
+				\item I really prefer pdfs over images
+					\begin{itemize}
+						\item See \emph{Scannable} or \emph{Genius Scan} apps for nice ways to do this from a phone
+						\item Or use an online converter
+					\end{itemize}
+				\item Also remember to turn in Friday's Visualization tutorial as well by the end of today
+			\end{itemize}
+		\item Homework 3 should be posted today
+		\item Wednesday Reading: Ch 1, Sections 5
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Gauss's Law}
+	\begin{center}
+		\begin{tikzpicture}
+			\fill[ball=gray!20] (0,0) circle (2);
+			\foreach \a in {0,30,...,360} \draw[very thick, red, -latex] (\a:2) --+(\a:1);
+			\node[ball=red!30, Red] at (-.5,-.5) {$+q$};
+			\node[fill=green!70!black, rotate=65, minimum size=3mm] (da) at (70:1.5) {};
+			\draw[very thick, -latex] (da.center) --+(70:1) node[above,math] {d\vA};
+		\end{tikzpicture}
+	\end{center}
+	\[\oint_S \ef \vdot d\vA = \int_V \frac{\rho}{\epsilon_0}\,d\tau\]
+\end{frame}
+
+\begin{frame}{}
+	Given the location of the little bit of charge $dq$, what is $\srmag$?
+	\begin{columns}
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\fill[gray!50] (0,0) circle (2);
+				\node[point, label={right:$dq$}] (q) at (30:2) {};
+				\node[point, label={right:P}] (P) at (0,3) {};
+				\draw[very thick, -latex] (0,0) -- (q) node[sloped, midway,below,math] {\pos_s};
+				\draw[very thick, -latex] (0,0) -- (P) node[midway,left,math] {\pos};
+				\draw[very thick, -latex] (q) -- (P) node[midway,right,math] {\sr};
+				\draw[<->] (90:0.5) arc (90:30:0.5) node[midway,above,math,xshift=.1cm] {\theta};
+			\end{tikzpicture}
+		\end{center}
+		\column{0.5\textwidth}
+		\begin{enumerate}
+			\item $\displaystyle \sqrt{z^2+r_s^2}$
+			\item \alert<2>{$\displaystyle \sqrt{z^2 + r_s^2 - 2zr_s\cos\theta}$}
+			\item $\displaystyle \sqrt{z^2 + r_s^2 + 2zr_s\cos\theta}$
+			\item Something else
+		\end{enumerate}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{}
+	The space in and around a cubical box (edge length $\ell$) is filled with a constant uniform electric field, $\ef = E_0\yhat$. What is the \alert{total} electric flux $\oint_S \ef\vdot d\vA$ through this closed surface?
+	\begin{columns}
+		\column{0.25\textwidth}
+		\begin{enumerate}
+			\item \alert<2>{0}
+			\item $E_0 \ell^2$
+			\item $2E_0 \ell^2$
+			\item $6E_0 \ell^2$
+		\end{enumerate}
+		
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\draw[-latex] (0,0,0) --+ (3,0,0) node[right,math] {\yhat};
+				\draw[-latex] (0,0,0) --+ (0,3,0) node[right,math] {\zhat};
+				\draw[-latex] (0,0,0) --+ (0,0,3) node[left,math] {\xhat};
+				\draw[very thick] (0,0,0) --++ (2,0,0) --++ (0,2,0) --++ (-2,0,0) -- cycle;
+				\draw[very thick] (0,0,2) --++ (2,0,0) --++ (0,2,0) --++ (-2,0,0) -- cycle;
+				\draw[very thick] (0,0,0) -- (0,0,2) (2,0,0) -- (2,0,2) (0,2,0) -- (0,2,2) (2,2,0) -- (2,2,2);
+				\draw[<->] (2.3,0,0) -- +(0,2,0) node[midway,right,math] {\ell};
+			\end{tikzpicture}
+		\end{center}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{}
+	A positive point charge is place outside a closed cylindrical surface as shown. The closed surface is comprised of the end caps (A and B) and the curved side surface (C). What is the sign of the electric flux through surface C?
+	\begin{columns}
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\draw[very thick, fill=Teal!50] (0,3) ellipse (1cm and 0.5cm)
+								(-1,3) -- +(0,-3) arc (180:360:1cm and 0.5cm) -- +(0,3);
+				\draw[dashed, very thick] (-1,0) arc (180:0:1cm and 0.5cm);
+				\node[point,label={left:$q$}] at (-2,1.5) {};
+				\node at (0,0) {B};
+				\node at (0,3) {A};
+				\node at (0,1.5) {C};
+			\end{tikzpicture}
+		\end{center}
+		\column{0.5\textwidth}
+		\begin{enumerate}
+			\item Positive
+			\item \alert<2>{Negative}
+			\item Zero
+			\item Not enough information to decide
+		\end{enumerate}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{}
+	Consider a cube of constant charge density centered at the origin.
+
+	\textbf{True or False:} You can use Gauss's Law to find the electric field directly above the center of the cube.
+
+	\begin{enumerate}
+		\item True, and I can argue how we'd do it.
+		\item True. I'm sure we can, but I not 100\% sure how right off.
+		\item False. I'm pretty sure we can't, but I can't say for sure why.
+		\item \alert<2>{False, and I can argue why we can't do it.}
+	\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{}
+	An electric dipole ($+q$ and $-q$, a small distance $d$ apart) sits centered in a Gaussian sphere. What can you say about the flux of $\ef$ through the sphere, and the $\abs{\ef}$ on the sphere?
+	\begin{columns}
+		\column{0.5\textwidth}
+		\begin{enumerate}
+			\item Flux = 0, E = 0 everywhere on the sphere surface
+			\item \alert<2>{Flux = 0, E need not be zero everywhere on the surface}
+			\item Flux is not 0, E = 0 everywhere on the sphere
+			\item Flux is not 0, E need not be zero everywhere on the surface
+		\end{enumerate}
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\draw[very thick] (0,0) circle (2.5cm);
+				\node[point, red, label={above:$q$}] at (-.5,0) {};
+				\node[point, blue, label={above:$-q$}] at (.5,0) {};
+			\end{tikzpicture}
+		\end{center}
+	\end{columns}
+\end{frame}
+
+%\begin{frame}{}
+	%A solid cylindrical rod is $L$ meters long and has a radius of $R$. The pipe has a charge density given by
+	%\[\rho(\pos) = \rho_0 s\]
+	%where $s$ is the cylindrical coordinate. Approximately what is the magnitude of the electric field $2R$ from the center of the rod?
+	%\begin{enumerate}
+		%\item $\displaystyle \frac{\rho_0 R^2}{3\epsilon_0}$
+		%\item $\displaystyle \frac{\rho_0 R^2}{6\epsilon_0}$
+		%\item $\displaystyle \frac{2\pi\rho_0R^3 L}{\epsilon_0}$
+		%\item $\displaystyle \frac{\rho_0 R^3}{\epsilon_0}$
+	%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}{}
+	%A solid cylindrical rod is $L$ meters long and has a radius of $R$. The pipe has a charge density given by
+	%\[\rho(\pos) = \rho_0 s\]
+	%where $s$ is the cylindrical coordinate. Approximately what is the magnitude of the electric field $\frac{R}{2}$ from the center of the rod?
+	%\begin{enumerate}
+		%\item $\displaystyle \frac{\rho_0 R}{6\epsilon_0}$
+		%\item $\displaystyle \frac{\rho_0 R^2}{6\epsilon_0}$
+		%\item $\displaystyle \frac{\rho_0 R^2}{12\epsilon_0}$
+		%\item $\displaystyle \frac{\rho_0 R^3 L}{8\epsilon_0}$
+	%\end{enumerate}
+%\end{frame}
+
+\end{document}

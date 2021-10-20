@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Lecture 15 Code</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1'/>
+		<link rel='stylesheet' href='/~jjrembold/css/main.css'/>
+		<link rel='icon' href='/~jjrembold/images/favicon.png'>
+		<script src='/~jjrembold/js/jquery-2.1.4.min.js'></script>
+		<script src='/~jjrembold/js/TweenLite.min.js'></script>
+		<script src='/~jjrembold/js/CSSPlugin.min.js'></script>
+		<script src='/~jjrembold/js/skel.min-2.2.js'></script>
+		<script src='/~jjrembold/js/main.js'></script>
+		<script src='/~jjrembold/js/BigPicture.min.js'></script>
+
+		<header>
+	<p><a href="/www.willamette.edu/~jjrembold/">JED REMBOLD</a></p>
+	<nav>
+		<div class='topmenu'>
+			<ul>
+				<li><a href="/www.willamette.edu/~jjrembold/about">About Me</a></li>
+				<li>
+					<div class='class-drop'>
+						<div class='class-hover'>
+							<a href="/www.willamette.edu/~jjrembold/classes">Classes</a>
+						</div>
+						<div class='class-menu'>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/www.willamette.edu/~jjrembold/classes/cs151/cs151/">Intro Python</a><br>
+							
+							
+							
+							<a href="/www.willamette.edu/~jjrembold/classes/phys221/phys221/">Physics I</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+						</div>
+					</div>
+				</li>
+				<li><a href="/www.willamette.edu/~jjrembold/wu_schedule">Schedule</a></li>
+				<li>
+					<div class='class-drop'>
+						<div class='class-hover'>
+							<a href="/www.willamette.edu/~jjrembold/resources">Resources</a>
+						</div>
+						<div class='class-menu'>
+							
+							<a href="/www.willamette.edu/~jjrembold/resources/python_guides/guides/">Python Guides</a><br>
+							
+							<a href="/www.willamette.edu/~jjrembold/resources/grad_resources/grad_resources/">Grad Notes</a><br>
+							
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class='topmenu_bars'>
+			<ul>
+				<li class='slide-toggle'><span class='icon fa fa-bars' href="#"> Menu</span></li>
+			</ul>
+		</div>
+		<div class='topmenu_justbars'>
+			<ul>
+				<li class='slide-toggle'><span class='icon fa fa-bars' href="#"></span></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class='slideout-menu'>
+		<h3>Menu <span class='slide-toggle' href="#"><i class='fa fa-times'></i></span></h3>
+		<ul>
+			<li><a href="/www.willamette.edu/~jjrembold/about">About Me</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/classes">Classes</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/wu_schedule">Schedule</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/resources">Resources</a></li>
+		</ul>
+	</div>
+
+</header>
+
+	</head>
+	<body>
+
+
+	<div class='container'>
+		<div class='content'>
+			<div class='sub-banner'>
+				<h2>Lecture 15 Code</h2>
+			</div>
+			<center>
+				<br>
+				<div style="color: #0391A5">
+					Sep 30, 2019
+				</div>
+			</center>
+		<p><br><br></p>
+<p><div class="highlight-wrapper">
+    <div class="highlight-before">Review Problem</div>
+        <div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running fib!&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+</div>
+
+<br></p>
+<div class="highlight-wrapper">
+    <div class="highlight-before">Recursive String Reverse</div>
+        <div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">def</span> <span class="nf">rec_str_rev</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">s</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">rec_str_rev</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></code></pre></td></tr></table>
+</div>
+</div>
+</div>
+
+<br>
+<div class="highlight-wrapper">
+    <div class="highlight-before">Recursive Remove Consecutive Duplicates</div>
+        <div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">def</span> <span class="nf">prune_dupes</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">s</span>
+    <span class="k">elif</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dropping the letter:&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">prune_dupes</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">prune_dupes</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span></code></pre></td></tr></table>
+</div>
+</div>
+</div>
+
+<br>
+<div class="highlight-wrapper">
+    <div class="highlight-before">Write to File</div>
+        <div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">def</span> <span class="nf">file_write</span><span class="p">():</span>
+    <span class="n">fhandle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;Names.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Enter a name: &#39;</span><span class="p">)</span>
+        <span class="n">fhandle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">fhandle</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+</div>
+
+<br>
+<p><div class="highlight-wrapper">
+    <div class="highlight-before">Write to File</div>
+        <div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">def</span> <span class="nf">file_read</span><span class="p">():</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;Names.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="c1"># print(repr(line))</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Betty&#39;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This is Betty!&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This is not Betty!&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+</div>
+
+<br></p>
+
+		<br>
+		</div>
+	</div>
+
+</body>
+<script src='/~jjrembold/js/click_handling.js'></script>
+</html>
+

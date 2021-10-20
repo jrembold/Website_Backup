@@ -1,0 +1,413 @@
+\documentclass[pdf,aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,lmodern,booktabs,tikz,tensor}
+\usepackage{pgfplots, pgfplotstable}
+\usepackage{pdfpc-commands}
+\usepackage[mode=buildnew]{standalone}
+\mode<presentation>{\usetheme{Astro}}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+\usetikzlibrary{calc,intersections, decorations.pathmorphing,shadings}
+\tikzstyle{image}=[inner sep=0pt, outer sep=0pt, anchor=south west]
+%\tikzstyle{proton}=[circle, minimum size = 7mm, ball color=red, black,transform shape]
+%\tikzstyle{neutron}=[circle, minimum size=7mm, ball color=gray, black, transform shape]
+%\tikzstyle{gammaray}=[ultra thick, -latex, decorate, decoration={snake, post length=3mm}]
+
+
+%preamble
+\title{Pu\ldots ul\ldots se\ldots ars\ldots}
+\date{November 9, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand*{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+  \begin{itemize}
+	\item WebWork due on Monday
+	\item Test 3 coming up a week from today!
+	  \begin{itemize}
+		  \item Should finish testable material on Monday
+		\item I'll get study questions and old tests up today or tomorrow
+	  \end{itemize}
+  \item Lab Group B has lab next Monday
+	\item Polling: \url{rembold-class.ddns.net}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Old News!}
+	\begin{itemize}
+		\item One of the oldest stars ever found spotted!
+			\begin{itemize}
+				\item Tiny red dwarf here in the Milky Way
+				\item Estimated at 13.5 billions years old
+				\item Extremely low metallicity
+				\item Proof that small stars could form in the early universe
+			\end{itemize}
+		\item Correction/Clarification
+			\begin{itemize}
+				\item In high mass stars, as they burn through each new fusion process, they never reach the electron degeneracy limit
+				\item Massive enough that the core gets hot and dense enough to start the next round of fusion before the star reaches that point
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+
+%\begin{frame}{Warm Up Question}
+  %Suppose that gravity is actually a million times as strong as it currently is (so say $G=\num{6.67e-5}$ instead of $\num{6.67e-11}$). All other things remaining the same, how would this effect the frequency of supernovas?
+  %\begin{enumerate}
+	%\item Supernovas would no longer occur at all
+	%\item Supernovas would be less common than they currently are, but still occur
+	%\item Supernovas would occur at about the same frequency they currently do
+	%\item \alert<2>{Supernovas would be more common than they currently are}
+  %\end{enumerate}
+%\end{frame}
+
+\begin{frame}{Warm Up}
+	When a low mass star ceases to have fusion reactions in its core, what is the core comprised of?
+	\begin{enumerate}
+		\item Hydrogen
+		\item Helium
+		\item \alert<2>{Carbon}
+		\item Iron
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Our Onion Star}
+  At this point we have multiple layers of shell fusion happening throughout the star
+  \begin{center}
+	\begin{tikzpicture}[scale=.8, lbl/.style={minimum width=2cm, minimum height=.75cm, anchor=west}]
+	  \shade[inner color=yellow, outer color=Background, even odd rule] (0,0) circle (2cm) (0,0) circle (4cm);
+	  \fill[orange!50!yellow] (0,0) circle (3.5cm);
+	  \fill[red] (0,0) circle (2cm);
+	  \fill[red!50!black] (0,0) circle (1cm);
+	  \fill[blue!70!black] (0,0) circle (5mm);
+	  \fill[green!50!black] (0,0) circle (2mm);
+	  \fill[gray!50!black] (0,0) circle (1mm);
+
+	  \node[fill=orange!50!yellow,lbl, text=black] at (4.5,2.5) {Hydrogen};
+	  \node[fill=red,lbl, text=black] at (4.5,1.5) {Helium};
+	  \node[fill=red!50!black, lbl] at (4.5,.5) {Carbon};
+	  \node[fill=blue!70!black, lbl] at (4.5,-.5) {Oxygen};
+	  \node[fill=green!50!black, lbl, text=black] at (4.5,-1.5) {Silicon};
+	  \node[fill=gray!50!black, lbl] at (4.5,-2.5) {Iron};
+	\end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Iron: The Great Killjoy \scriptsize Or is it!?}
+  \begin{columns}
+	\column{.5\textwidth}
+	\begin{center}
+	  \begin{tikzpicture}
+		\begin{axis}[
+			width=6.5cm,
+			height=7cm,
+			xlabel = Mass Number (Neutrons + Protons),
+			ylabel = Binding Energy (MeV),
+			ylabel near ticks,
+		  ]
+		  \addplot[scatter] table {../Data/BindingEnergy.csv};
+		  \node[pin=-90:Iron] at (axis cs: 56,8.5) {};
+		  \node[pin=45:Hydrogen] at (axis cs: 1,1) {};
+		  \node[pin=250:Uranium] at (axis cs: 238,7.3) {};
+		\end{axis}
+	  \end{tikzpicture}
+	\end{center}
+	\column{.5\textwidth}
+	\begin{itemize}
+	  \item Fusing elements greater than iron \alert{uses} energy!
+	  \item Iron also sucks up loose electrons running around
+		\begin{itemize}
+		  \item Decreases the internal electron degeneracy pressure
+		\end{itemize}
+	  \item Basically, once the star hits iron, it's game over
+		\begin{itemize}
+		  \item At least for fusion
+		  \item For other things, it's party time
+		\end{itemize}
+	\end{itemize}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Party Time!}
+  \begin{itemize}
+	\item Impossible for the core to contract enough to fuse iron and give off energy
+	\item Can electron degeneracy stop the collapse? (Like with brown and white dwarfs?)
+	  \begin{itemize}
+		\item NOPE! Too much mass!
+		\item Physics laws can't be violated:
+		  \begin{itemize}
+			\item All electrons combine with protons to make neutrons + neutrinos
+		  \end{itemize}
+		\item Pure neutron core continues to collapse
+		\item Can neutron degeneracy pressure stop the collapse?
+		  \begin{itemize}
+			\item Maybe!
+		  \end{itemize}
+	  \end{itemize}
+	\item The collapse is incredibly violent
+	\item Neutrinos from the creation of the neutrons surge outward with ridiculous energies
+	\item So dense and so many that they actually interact with the surrounding gas, exploding it outward
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Supernova Details}
+  \begin{itemize}
+	\item Core with mass of Sun and size of Earth contracts
+	  \begin{itemize}
+		\item Final size? A few kilometers across
+		\item Time to collapse? A fraction of a second
+	  \end{itemize}
+	\item Radiates 100 times the energy that the Sun will radiate \alert{over its entire 10 billion year lifetime}
+	\item The immense heat excites the gas that is exploding outward, causing it to shine
+	\item The insane pressure and energy also give elements heavier than iron a chance to form
+	  \begin{itemize}
+		\item Without supernovae, we wouldn't exist!
+	  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\fullFrameMovie{../Videos/Crab_Explosion.ogv}{../Videos/Crab_Explosion.png}
+
+\begin{frame}{Supernova Prettiness}
+  \begin{center}
+	\begin{tikzpicture}[image/.style={inner sep=0pt, outer sep=0pt, anchor=south west}]
+	  \node[image] at (0,0) {\includegraphics[width=6cm]{ch13_crab.jpg}};
+	  \node[image] at (5.5,1) {\includegraphics[width=5cm]{ch13_SN1994D.jpg}};
+	  \node[image, anchor=north west] at (10,2.5) {\includegraphics[width=4cm]{ch13_cassA.jpg}};
+	\end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Binary Complications}
+  \begin{itemize}
+	\item Happy orbit each other during main sequence
+	\item When one goes Giant, suddenly the other can start stealing its mass!
+	\item Accelerates the life-cycle of the thief
+  \end{itemize}
+  \begin{center}
+	\includegraphics[width=.5\textwidth]{ch13_mass_transfer.jpg}
+  \end{center}
+\end{frame}
+
+
+\begin{frame}{Final Resting Places}
+  Depending on their mass, stars will end up in one of three graves:
+  \begin{center}
+	\begin{tikzpicture}
+	  \foreach \p/\lab in {0/{White\\Dwarf}, 3.5/{Neutron\\Star}, 7/{Black\\Hole}}{
+		\begin{scope}[xshift=\p cm, text=black]
+		  \node[image, anchor=center] at (0,0) {\includegraphics[width=4cm]{ch14_grave.pdf}};
+		  \node[align=center, yshift=4mm, xshift=1mm, font=\Large] at (0,0) {\lab};
+		\end{scope}
+	  }
+	\end{tikzpicture}
+  \end{center}
+  We want to take some time to look at each in more depth!
+\end{frame}
+
+\begin{frame}{White Dwarf Refresher}
+  \begin{columns}
+	\column{.5\textwidth}
+	\begin{itemize}
+	  \item Remnants of lower mass stars
+	  \item Never got hot enough to fuse carbon
+		\begin{itemize}
+		  \item Thus largely comprised of carbon
+		\end{itemize}
+	  \item Supported by electron degeneracy pressure
+	  \item Roughly Earth sized
+	  \item Usually have about the mass of the Sun
+	\end{itemize}
+	\column{.5\textwidth}
+	\begin{center}
+	  \includegraphics[width=\textwidth]{ch14_SiriusB_and_Earth.jpg}
+	\end{center}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Fat Little Dwarfs}
+  \begin{columns}
+	\column{.5\textwidth}
+	\begin{itemize}
+	  \item Increasing a white dwarf's mass actually causes it to shrink
+	  \item Increased gravity increases faster than electron degeneracy can keep up
+	  \item Increasing electron degeneracy pressure requires the electrons to move around faster
+	  \item What about as this approaches the speed of light?
+		\begin{itemize}
+		  \item Chandrasekhar Limit
+		\end{itemize}
+	\end{itemize}
+	\column{.5\textwidth}
+	\begin{center}
+	  \includegraphics[width=.9\textwidth]{ch14_chandra_limit.png}
+	\end{center}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Best Friends}
+  \begin{itemize}
+	\item It is completely possible for a white dwarf to be part of a binary system
+	\item Can start siphoning mass from its neighbor
+	  \begin{itemize}
+		\item In-falling material flattens out into an accretion disk
+		\item Precious hydrogen begins to build up in a thin layer on the surface
+	  \end{itemize}
+  \end{itemize}
+  \begin{center}
+	\includegraphics[width=.5\textwidth]{ch14_wd_accrete.jpg}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Novae! \footnotesize (Of the non-Super type)}
+  \begin{itemize}
+	\item Hydrogen continues to build on surface
+	\item Gets compressed and heated
+	\item When the bottom layer gets up to fusion temperatures\ldots
+	  \begin{itemize}
+		\item A flare up!
+		\item Causes the system to shine for a few weeks as a \alert{nova}
+		\item Less bright than supernovae but still 100,000 Suns worth
+		\item Increased heat also provides gas pressure
+		  \begin{itemize}
+			\item Ejecting much of the other accreted material
+		  \end{itemize}
+	  \end{itemize}
+	\item Goes back to accreting afterwards, to repeat again later
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{About that limit though\ldots}
+  \begin{itemize}
+	\item What if accretion pushes a white dwarf past the Chandrasekhar limit?
+	\item Actually gets hot enough for carbon fusion
+	\item The entire star ignites almost simultaneously
+	\item Since electron degeneracy pressure does not depend on temperature, the star can't expand to regulate itself, and thus explodes
+	\item Creates a white dwarf supernova (Type Ia Supernova)
+	  \begin{itemize}
+		\item Massive stars produces Type II Supernova
+	  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Differences in Supernova}
+  \begin{itemize}
+	\item It is possible to distinguish between the supernova types in a few ways:
+	  \begin{itemize}
+		\item Ia Supernova have little or no hydrogen absorption lines
+		\item Their luminosities decay over time in different ways
+	  \end{itemize}
+	\item Because all Ia supernova come from $1.4M_\odot$ stars, they have very consistent luminosities
+	  \begin{itemize}
+		\item Can be used as a \alert{standard candle}
+		\item Known luminosity lets us use them as a ruler to determine distances!
+		\item Generally the best method for measuring distances for faraway galaxies
+	  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\fullFrameImage{ch14_2014J.png}
+
+\begin{frame}{Neutron Stars}
+  \begin{columns}
+	\column{.5\textwidth}
+	\begin{itemize}
+	  \item Higher mass stars collapse past the Chandrasekhar limit, going supernova and leaving behind a neutron star
+	  \item Supported by \alert{neutron} degeneracy pressure
+	  \item Only about 20 kilometers in diameter!
+	  \item Neutrons packed side by side throughout the star
+	  \item Made of\ldots \alert{neutronium}!
+	  \item Incredibly dense
+	\end{itemize}
+	\column{.5\textwidth}
+	\begin{center}
+	  \includegraphics[width=.8\textwidth]{ch14_neutronstar1.jpg}
+	\end{center}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Stop being so Dense}
+  \begin{itemize}
+	\item One cubic centimeter has a greater mass than Mt Everest!
+	\item That same cube would plunge through the Earth like steel through air
+	\item Would make swiss cheese of the Earth as it rotated
+	\item A ``mountain'' on a neutron star = \SI{10}{\centi\meter}
+	  \begin{itemize}
+		\item Larger mountains would create gravitational waves!
+	  \end{itemize}
+  \end{itemize}
+  \begin{center}
+	\includegraphics[width=.6\textwidth]{ch14_mountain.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}{How do we see them?}
+  \begin{itemize}
+	\item Directly
+	  \begin{itemize}
+		\item X-ray sources
+		\item Extremely faint optical sources
+	  \end{itemize}
+	\item Members of a binary
+	  \begin{itemize}
+		\item In-falling matter emits X-rays
+	  \end{itemize}
+	\item Pulsars!
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Little Green Men}
+  \begin{itemize}
+	\item First discovered in 1967
+	  \begin{itemize}
+		\item Joceyln Bell
+		\item Discovered a source of strange radio waves
+	  \end{itemize}
+	\item Pulsed on and off in precise 1.337301 second intervals
+	\item Jokingly called LGM for Little Green Men
+	  \begin{itemize}
+		\item Now known as \alert{Pulsars}
+	  \end{itemize}
+	\item Soon more were found in the center of supernova remnants
+  \end{itemize}
+\end{frame}
+
+\fullFrameImage{ch14_crab_pulsar.jpg}
+
+\begin{frame}{Structure of a Pulsar}
+  \begin{columns}
+	\column{.5\textwidth}
+	\begin{itemize}
+	  \item Strong magnetic fields focus outgoing radiation
+	  \item Results in a ``lighthouse'' effect
+	  \item Spins very fast due to conservation of angular momentum
+	  \item Rapid spinning causes these beams of radiation to sweep across us
+	\end{itemize}
+	\column{.5\textwidth}
+	\begin{center}
+	  \includegraphics[width=.9\textwidth]{ch14_pulsar.jpg}
+	\end{center}
+  \end{columns}
+\end{frame}
+
+%\fullFrameMovie{../Videos/Pulsar.ogv}{../Videos/Pulsar.png}
+
+%\begin{frame}{Tick Tock}
+  %\begin{itemize}
+	%\item Isolated pulsars will eventually slow as they lose angular momentum and energy to the outgoing gases
+	%\item Pulsars as part of binary systems may actually speed up
+	  %\begin{itemize}
+		%\item A steady diet of more mass lends more angular momentum
+		%\item Can end up pulsing every few thousandths of a second
+	  %\end{itemize}
+	%\item There is a rotational speed limit
+	  %\begin{itemize}
+		%\item If you spin too fast, gravity can't keep everything contained
+		%\item Is what tells us pulsars must be neutron stars and not white dwarfs
+	  %\end{itemize}
+  %\end{itemize}
+%\end{frame}
+
+
+\end{document}

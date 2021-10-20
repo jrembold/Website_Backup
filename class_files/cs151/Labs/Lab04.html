@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Lab4</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+   var mathElements = document.getElementsByClassName("math");
+   var macros = [];
+   for (var i = 0; i < mathElements.length; i++) {
+    var texText = mathElements[i].firstChild;
+    if (mathElements[i].tagName == "SPAN") {
+     katex.render(texText.data, mathElements[i], {
+      displayMode: mathElements[i].classList.contains('display'),
+      throwOnError: false,
+      macros: macros,
+      fleqn: false
+     });
+  }}});
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <style type="text/css">
+  body {
+      max-width: 45em;
+  }
+  a {
+      color: red;
+  }
+
+  a:visited {
+      color: red;
+  }
+
+  code {
+      background-color: rgb(230,230,230);
+      padding: 2px;
+  }
+
+  figure {
+      text-align: center;
+  }
+  </style>
+</head>
+<body>
+<h1 id="lab-4-triangle-numbers">Lab 4: Triangle Numbers</h1>
+<p>The goal for today’s lab is to practice:</p>
+<ul>
+<li>defining variables</li>
+<li>updating variables by assigning a new value to them</li>
+<li>using basic arithmetic operations in Python</li>
+<li>and potentially using some basic comparison conditionals.</li>
+</ul>
+<p>We’ll be doing pair programming today, so only one of you needs to grab the lab material from <a href="https://classroom.github.com/a/m8WrRjCs">here</a>. Otherwise, just look up front to see who your partner is and where you should be sitting!</p>
+<h2 id="setting-the-stage">Setting the Stage</h2>
+<p>A triangle number counts the number of objects necessary to construct an equilateral triangle with a given side length. For instance, the second triangle number is 3, as that is the number of objects necessary to construct an equilateral triangle with a side length of 2.</p>
+<figure>
+<img src="2Pile.svg" style="width:20%;" alt=" " /><figcaption aria-hidden="true"> </figcaption>
+</figure>
+<p>If you extend out this logic, you get something like the image below, which graphically depicts the first 5 triangle numbers.</p>
+<figure>
+<img src="5TrianglePiles.svg" style="width:100%;" alt=" " /><figcaption aria-hidden="true"> </figcaption>
+</figure>
+<p>You may note that each new triangle number is the same as the previous triangle <em>plus</em> the length of the new side. As such, the <span class="math inline">n^{th}</span> triangle number could be written as:</p>
+<p><span class="math display"> T_n = \sum_{k=1}^n k = 1 + 2 + 3 + \cdots + n </span></p>
+<p>or, in other words, by summing up all the positive integers smaller than or equal to <span class="math inline">n</span>. Another way of thinking about this is that your pyramid always has a base equal to the number of desired rows. Then each row above it gets 1 smaller, and you have to add everything up until you reach the top row which has only a single object.</p>
+<h2 id="instructions">Instructions</h2>
+<p>Now for the coding! At the top of the started function in your template for today the variable <code>n</code> is defined, initially being assigned the value of 2. Your task is to write code to complete the function to calculate and then print off the corresponding <span class="math inline">n^{th}</span> triangle number. So if the value of <code>n</code> is 2, when you run your program it should print out the number 3. If you change the value of <code>n</code> at the top of your code to 3, then running your program should print out the number 6. And so on. If you want a bigger number to check, the 100th triangle number is 5050. Make sure you code can correctly compute and print that value, and then call me over to be checked off!</p>
+<p>Some things to keep in mind:</p>
+<ul>
+<li>This is absolutely a case where the trickiest part of the task is deciding how you use the programming tools you know of: things like loops, variables, and arithmetic, to accomplish something that can be easily described in English. Depending on how you do it, the code may be <em>very short</em>!</li>
+<li>You will probably need a loop of some sort to gain the needed flexibility of adding up to whatever <code>n</code> is.</li>
+<li>If using a <code>while</code> loop, you’ll need some sort of True/False condition, which you can get with comparison operators such as <code>&lt;</code> or <code>&gt;</code>.</li>
+<li>Often times, instead of defining lots of variables, it can be useful to define one variable and then continually update or reassign its value each iteration of a loop.</li>
+<li>Remember to <code>print</code> out your value at the end of the function! If you don’t print something out, you won’t see any output when you try to run your program!</li>
+</ul>
+<h2 id="for-fast-folk">For Fast Folk</h2>
+<p>Given that much of the challenge in the above is seeing or realizing how to write out the simple sounding solution using tools that Python understands, this may go quite quickly for some. If you and your partner figured out the above particularly quickly (in under 4 partner swaps), I’ll ask that you tackle this second task. What percentage of the first 1000 triangle numbers are odd? It may help to consider the <code>%</code> operator when trying to determine whether a number is odd or even!</p>
+</body>
+</html>

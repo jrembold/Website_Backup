@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Lecture 11 Code</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1'/>
+		<link rel='stylesheet' href='/~jjrembold/css/main.css'/>
+		<link rel='icon' href='/~jjrembold/images/favicon.png'>
+		<script src='/~jjrembold/js/jquery-2.1.4.min.js'></script>
+		<script src='/~jjrembold/js/TweenLite.min.js'></script>
+		<script src='/~jjrembold/js/CSSPlugin.min.js'></script>
+		<script src='/~jjrembold/js/skel.min-2.2.js'></script>
+		<script src='/~jjrembold/js/main.js'></script>
+		<script src='/~jjrembold/js/BigPicture.min.js'></script>
+
+		<header>
+	<p><a href="/www.willamette.edu/~jjrembold/">JED REMBOLD</a></p>
+	<nav>
+		<div class='topmenu'>
+			<ul>
+				<li><a href="/www.willamette.edu/~jjrembold/about">About Me</a></li>
+				<li>
+					<div class='class-drop'>
+						<div class='class-hover'>
+							<a href="/www.willamette.edu/~jjrembold/classes">Classes</a>
+						</div>
+						<div class='class-menu'>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/www.willamette.edu/~jjrembold/classes/cs151/cs151/">Intro Python</a><br>
+							
+							
+							
+							<a href="/www.willamette.edu/~jjrembold/classes/phys221/phys221/">Physics I</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+						</div>
+					</div>
+				</li>
+				<li><a href="/www.willamette.edu/~jjrembold/wu_schedule">Schedule</a></li>
+				<li>
+					<div class='class-drop'>
+						<div class='class-hover'>
+							<a href="/www.willamette.edu/~jjrembold/resources">Resources</a>
+						</div>
+						<div class='class-menu'>
+							
+							<a href="/www.willamette.edu/~jjrembold/resources/python_guides/guides/">Python Guides</a><br>
+							
+							<a href="/www.willamette.edu/~jjrembold/resources/grad_resources/grad_resources/">Grad Notes</a><br>
+							
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class='topmenu_bars'>
+			<ul>
+				<li class='slide-toggle'><span class='icon fa fa-bars' href="#"> Menu</span></li>
+			</ul>
+		</div>
+		<div class='topmenu_justbars'>
+			<ul>
+				<li class='slide-toggle'><span class='icon fa fa-bars' href="#"></span></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class='slideout-menu'>
+		<h3>Menu <span class='slide-toggle' href="#"><i class='fa fa-times'></i></span></h3>
+		<ul>
+			<li><a href="/www.willamette.edu/~jjrembold/about">About Me</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/classes">Classes</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/wu_schedule">Schedule</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/resources">Resources</a></li>
+		</ul>
+	</div>
+
+</header>
+
+	</head>
+	<body>
+
+
+	<div class='container'>
+		<div class='content'>
+			<div class='sub-banner'>
+				<h2>Lecture 11 Code</h2>
+			</div>
+			<center>
+				<br>
+				<div style="color: #0391A5">
+					Feb 17, 2020
+				</div>
+			</center>
+		<p><br><br></p>
+<h6 id="varied-examples">Varied Examples</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">print_stuff</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Stuff 1&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Stuff 2&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">print_mult_of_A</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="mi">4</span><span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="mi">5</span><span class="o">*</span><span class="n">A</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">calc_year_savings</span><span class="p">(</span><span class="n">init_amt</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
+        <span class="n">init_amt</span> <span class="o">+=</span> <span class="n">init_amt</span> <span class="o">*</span> <span class="mf">0.03</span><span class="o">/</span><span class="mi">12</span>
+    <span class="k">return</span> <span class="n">init_amt</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="flow-example">Flow Example</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">year_savings</span><span class="p">(</span><span class="n">init_amt</span><span class="p">,</span> <span class="n">int_rate</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
+        <span class="n">init_amt</span> <span class="o">*=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">int_rate</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">init_amt</span>
+
+<span class="n">amount</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">rate</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">rate</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Savings:&#39;</span><span class="p">,</span> <span class="n">year_savings</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">rate</span><span class="p">))</span>
+    <span class="n">rate</span> <span class="o">+=</span> <span class="mf">0.05</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;All done!&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="summing-primes">Summing Primes</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">is_prime</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">num</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">num</span> <span class="o">%</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">is_prime</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_prime</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span> <span class="o">==</span> <span class="n">num</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;are both prime and sum to 100!&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><br>
+
+		<br>
+		</div>
+	</div>
+
+</body>
+<script src='/~jjrembold/js/click_handling.js'></script>
+</html>
+

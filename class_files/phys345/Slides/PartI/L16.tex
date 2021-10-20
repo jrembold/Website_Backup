@@ -1,0 +1,122 @@
+\documentclass[pdf,aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,booktabs,lmodern}
+\usepackage{physics}
+\usepackage{em-commands}
+\mode<presentation>{\usetheme{EM}}
+
+%Question Numbering
+\newcounter{questionnumber}
+\newcommand{\qnum}{%
+	\stepcounter{questionnumber}%
+	Q\arabic{questionnumber}
+}
+\resetcounteronoverlays{questionnumber}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+
+%preamble
+\title{Separating the R's from the \texorpdfstring{$\Theta$}{T}'s}
+\date{October 3, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+	\begin{itemize}
+		\item Homework 6 posted (now in its entirety!)
+			\begin{itemize}
+				\item I \emph{REALLY} suggest you start this one early. Separation of variable problems are not short and take \emph{time}.
+			\end{itemize}
+		\item Exam 1 a week from Friday: \emph{in class}
+		\item Have read Ch 3.4 on the Multipole expansion by Friday
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Given $\laplacian V = 0$ in Cartesian coordinates, we separated $V(x,y,z) = X(x)Y(y)Z(z)$. Will a similar approach work for spherical coordinates? I.e.\ can we separate $V(r,\theta,\phi) = R(r)\Theta(\theta)\Phi(\phi)$?
+	\begin{enumerate}
+		\item Sure
+		\item \alert<2>{Not quite, the angular bits can not be isolated from one another}
+		\item No, because in spherical coordinates the Laplace equation has lots of cross terms in it
+		\item I think so, but I'm not sure why
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	The general solution for the electric potential in spherical coordinates with azimuthal symmetry is:
+	\[V(r,\theta) = \sum_{\ell=0}^{\infty}(A_\ell r^\ell + \frac{B_\ell}{r^{\ell+1}})P_\ell(\cos\theta)\]
+	Consider a metal sphere at some constant potential. Which terms in the sum vanish outside the sphere?
+	\begin{enumerate}
+		\item \alert<2>{All the $A_\ell$'s}
+		\item All the $A_\ell$'s except $A_0$
+		\item All the $B_\ell$'s
+		\item All the $B_\ell$'s except $B_0$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	\[V(r,\theta) = \sum_{\ell=0}^{\infty}(A_\ell r^\ell + \frac{B_\ell}{r^{\ell+1}})P_\ell(\cos\theta)\]
+	Now say that $V$ everywhere on a spherical shell is a constant $V_0$, and there are no charges inside the sphere. Which terms do you expect to appear when solving for the potential inside the sphere?
+	\begin{enumerate}
+		\item Many $A_\ell$ terms, but no $B_\ell$'s
+		\item Many $B_\ell$ terms, but no $A_\ell$'s
+		\item \alert<2>{Just $A_0$}
+		\item Just $B_0$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Given an initial condition of
+	\[V_0 = \sum_{\ell=0}^\infty C_\ell P_\ell(\cos\theta)\]
+	we want to solve for $C_\ell$. We can do so by multiplying both sides by what and then integrating?
+	\begin{enumerate}
+		\item $P_m(\cos\theta)$
+		\item $P_m(\sin\theta)$
+		\item \alert<2>{$P_m(\cos\theta)\sin\theta$}
+		\item $P_m(\sin\theta)\cos\theta$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Suppose $V$ on a spherical shell of radius $R$ is:
+	\[V(R,\theta) = V_0(1+\cos^2\theta)\]
+	Which terms do you expect to appear when solving for the potential inside the shell? (Again, there are no other charges inside the shell.)
+	\begin{enumerate}
+		\item Many $A_\ell$ terms, but no $B_\ell$'s
+		\item Many $B_\ell$ terms, but no $A_\ell$'s
+		\item \alert<2>{Just $A_0$ and $A_2$}
+		\item Just $B_0$ and $B_2$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Example}
+	Let's work out the full solution for the potential on the inside of the spherical shell if the potential on the shell is given by:
+	\[V(R,\theta) = V_0(1+\cos^2\theta)\]
+	given the general form of the potential:
+	\[V(r,\theta) = \sum_{\ell=0}^{\infty}(A_\ell r^\ell + \frac{B_\ell}{r^{\ell+1}})P_\ell(\cos\theta)\]
+\end{frame}
+
+\begin{frame}{\qnum}
+	Suppose $V$ on a spherical shell of radius $R$ is:
+	\[V(R,\theta) = V_0(1+\cos^2\theta)\]
+	What would be the value of the $B_2$ term when solving for the potential outside the shell?
+	\begin{enumerate}
+		\item $\displaystyle \frac{4RV_0}{3}$
+		\item $\displaystyle \frac{2V_0}{3}$
+		\item \alert<2>{$\displaystyle \frac{2R^3V_0}{3}$}
+		\item $\displaystyle \frac{4V_0}{3}$
+	\end{enumerate}
+\end{frame}
+
+
+
+
+
+
+
+
+
+\end{document}

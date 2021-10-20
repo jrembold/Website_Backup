@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Lecture 3 Code</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1'/>
+		<link rel='stylesheet' href='/~jjrembold/css/main.css'/>
+		<link rel='icon' href='/~jjrembold/images/favicon.png'>
+		<script src='/~jjrembold/js/jquery-2.1.4.min.js'></script>
+		<script src='/~jjrembold/js/TweenLite.min.js'></script>
+		<script src='/~jjrembold/js/CSSPlugin.min.js'></script>
+		<script src='/~jjrembold/js/skel.min-2.2.js'></script>
+		<script src='/~jjrembold/js/main.js'></script>
+		<script src='/~jjrembold/js/BigPicture.min.js'></script>
+
+		<header>
+	<p><a href="/www.willamette.edu/~jjrembold/">JED REMBOLD</a></p>
+	<nav>
+		<div class='topmenu'>
+			<ul>
+				<li><a href="/www.willamette.edu/~jjrembold/about">About Me</a></li>
+				<li>
+					<div class='class-drop'>
+						<div class='class-hover'>
+							<a href="/www.willamette.edu/~jjrembold/classes">Classes</a>
+						</div>
+						<div class='class-menu'>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/www.willamette.edu/~jjrembold/classes/cs151/cs151/">Intro Python</a><br>
+							
+							
+							
+							<a href="/www.willamette.edu/~jjrembold/classes/phys221/phys221/">Physics I</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+						</div>
+					</div>
+				</li>
+				<li><a href="/www.willamette.edu/~jjrembold/wu_schedule">Schedule</a></li>
+				<li>
+					<div class='class-drop'>
+						<div class='class-hover'>
+							<a href="/www.willamette.edu/~jjrembold/resources">Resources</a>
+						</div>
+						<div class='class-menu'>
+							
+							<a href="/www.willamette.edu/~jjrembold/resources/python_guides/guides/">Python Guides</a><br>
+							
+							<a href="/www.willamette.edu/~jjrembold/resources/grad_resources/grad_resources/">Grad Notes</a><br>
+							
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class='topmenu_bars'>
+			<ul>
+				<li class='slide-toggle'><span class='icon fa fa-bars' href="#"> Menu</span></li>
+			</ul>
+		</div>
+		<div class='topmenu_justbars'>
+			<ul>
+				<li class='slide-toggle'><span class='icon fa fa-bars' href="#"></span></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class='slideout-menu'>
+		<h3>Menu <span class='slide-toggle' href="#"><i class='fa fa-times'></i></span></h3>
+		<ul>
+			<li><a href="/www.willamette.edu/~jjrembold/about">About Me</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/classes">Classes</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/wu_schedule">Schedule</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/resources">Resources</a></li>
+		</ul>
+	</div>
+
+</header>
+
+	</head>
+	<body>
+
+
+	<div class='container'>
+		<div class='content'>
+			<div class='sub-banner'>
+				<h2>Lecture 3 Code</h2>
+			</div>
+			<center>
+				<br>
+				<div style="color: #0391A5">
+					Jan 29, 2020
+				</div>
+			</center>
+		<h6 id="conditional-syntax">Conditional Syntax</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">A</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">B</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">C</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">==</span> <span class="n">B</span>
+
+<span class="k">if</span> <span class="n">C</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The test is true!&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The test is false!&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="elif-statements">Elif Statements</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">light_color</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">fill_in_color</span><span class="o">&gt;</span>
+
+<span class="k">if</span> <span class="n">light_color</span> <span class="o">==</span> <span class="s1">&#39;Green&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Keep going!&#39;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">light_color</span> <span class="o">==</span> <span class="s1">&#39;Yellow&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Slow down!&#39;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">light_color</span> <span class="o">==</span> <span class="s1">&#39;Red&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Stop!!&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;What country are you in?!&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="more-traffic-lights">More Traffic Lights</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">light_color</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">fill_in_color</span><span class="o">&gt;</span>
+<span class="n">time_since_changed</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">fill_in_time</span><span class="o">&gt;</span> <span class="c1">#seconds</span>
+
+<span class="k">if</span> <span class="n">light_color</span> <span class="o">==</span> <span class="s1">&#39;Green&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Keep going!&#39;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">light_color</span> <span class="o">==</span> <span class="s1">&#39;Yellow&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">time_since_changed</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gun it!&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Slow down!&#39;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">light_color</span> <span class="o">==</span> <span class="s1">&#39;Red&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Stop!!&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;What country are you in?!&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="stringy-inequalities">Stringy Inequalities</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="s1">&#39;ape&#39;</span> <span class="o">&lt;</span> <span class="s1">&#39;tuberculosis&#39;</span>
+<span class="s1">&#39;ape&#39;</span> <span class="o">&lt;</span> <span class="s1">&#39;Tuberculosis&#39;</span>
+<span class="s1">&#39;ape&#39;</span> <span class="o">&lt;</span> <span class="s1">&#39;tUBERCULOSIS&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="input-examples">Input Examples</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;What is your name? &#39;</span><span class="p">)</span>
+<span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s1">&#39;In what year were you born? &#39;</span><span class="p">))</span>
+
+<span class="n">age</span> <span class="o">=</span> <span class="mi">2020</span> <span class="o">-</span> <span class="n">year</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Your name is &#34;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&#34; and you are &#34;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">age</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&#34; years old.&#34;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+		<br>
+		</div>
+	</div>
+
+</body>
+<script src='/~jjrembold/js/click_handling.js'></script>
+</html>
+

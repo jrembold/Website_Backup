@@ -1,0 +1,628 @@
+\documentclass[pdf, aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,lmodern,booktabs,tikz,caption}
+\usepackage[mode=buildnew]{standalone}
+\mode<presentation>{\usetheme{Astro}}
+\usepackage{pdfpc-commands}
+\usepackage{intro-commands}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+\usetikzlibrary{calc}
+	  
+\newcommand{\moon}[1] {
+  \coordinate (moon) at (#1:4);
+  \node[transform shape] at (moon) {\includegraphics[width=0.8cm]{ch2_moon_small2.png}};
+  \fill[black, opacity=0.5] (moon) -- +(0,.4cm) arc (90:270:.39cm) -- cycle;
+}
+\newcommand{\moonphase}[1] {
+  \coordinate (moon) at (-3.5,-3.5);
+  \node[transform shape] at (moon) {\includegraphics[width=2cm]{ch2_moon_small2.png}};
+  \fill[black, opacity=0.5] (moon) +(0,1cm) arc (90:270:1cm) arc (270:90:#1 cm and 1cm);
+}
+
+%preamble
+\title{On Seasonal Moonings\ldots}
+\date{September 12, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand*{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+	\begin{itemize}
+		\item WebWorK due on Friday!
+		\item Starting Ch 4 content today
+		\item I'll be aiming to start posting weekly grade reports starting this weekend
+		\item Polling: \href{http://rembold-class.ddns.net}{rembold-class.ddns.net}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Review Question}
+	In which of the following situations would the gravitational force between the two masses be greatest?
+	\begin{columns}
+		\column{0.5\textwidth}
+		\begin{block}{A}
+			\begin{center}
+				\begin{tikzpicture}
+					\node[ball=cyan,black] (m1) at (0,0) {\SI{10}{\kilo\gram}};
+					\node[ball=orange,black] (m2) at (3,0) {\SI{20}{\kilo\gram}};
+					\draw[|-|] (0,-1) -- (3,-1) node[midway,above] {\SI{2}{\meter}};
+				\end{tikzpicture}
+			\end{center}
+		\end{block}
+		\begin{block}{\alert<2>{C}}
+			\begin{center}
+				\begin{tikzpicture}
+					\node[ball=cyan,black] (m1) at (0,0) {\SI{10}{\kilo\gram}};
+					\node[ball=orange,black,minimum size=5mm] (m2) at (2,0) {\SI{10}{\kilo\gram}};
+					\draw[|-|] (0,-1) -- (2,-1) node[midway,above] {\SI{1}{\meter}};
+				\end{tikzpicture}
+			\end{center}
+		\end{block}
+		\column{0.5\textwidth}
+		\begin{block}{B}
+			\begin{center}
+				\begin{tikzpicture}
+					\node[ball=cyan,black] (m1) at (0,0) {\SI{10}{\kilo\gram}};
+					\node[ball=orange,black,] (m2) at (4,0) {\SI{20}{\kilo\gram}};
+					\draw[|-|] (0,-1) -- (4,-1) node[midway,above] {\SI{3}{\meter}};
+				\end{tikzpicture}
+			\end{center}
+		\end{block}
+		\begin{block}{D}
+			\begin{center}
+				\begin{tikzpicture}
+					\node[ball=cyan,black] (m1) at (0,0) {\SI{10}{\kilo\gram}};
+					\node[ball=orange,black,minimum size=2cm] (m2) at (4,0) {\SI{30}{\kilo\gram}};
+					\draw[|-|] (0,-1) -- (4,-1) node[midway,above] {\SI{3}{\meter}};
+				\end{tikzpicture}
+			\end{center}
+		\end{block}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{The Fine Art of Throwing Things}
+  \begin{itemize}
+	\item Say you throw a ball sideways
+	  \begin{itemize}
+		\item<2-> You force the ball (using your arm) up to some speed
+		\item<3-> Inertia keeps the ball moving forward at that speed
+		\item<4-> Gravity drags the ball down
+	  \end{itemize}
+  \end{itemize}
+  \begin{center}
+	\begin{tikzpicture}
+	  \node at (0,0) {\includegraphics[width=3cm]{ch4_thrower.pdf}};
+	  %\fill[ball color=orange] (0,0) circle (3pt);
+	  \onslide<1>{\fill[ball color=green] (115:1.5) coordinate (p1) circle (3pt);}
+	  \onslide<2>{
+		  \fill[ball color=green] ($(p1)+(1,0)$) coordinate (p2) circle (3pt);
+		\draw[orange, thick,-latex] (p1) -- +(.9,0);
+	  }
+	  \onslide<3>{
+		\fill[ball color=green] ($(p2)+(1,0)$) circle (3pt);
+	  }
+	  \onslide<4>{
+		\foreach[count=\x] \y in {1.8,1.5, 0.9, 0.2, -.6, -1.5}{
+		  %\fill[ball color=green, opacity=\x/6] (2+\x,\y) circle (3pt);
+		  \fill[ball color=green, opacity=\x/6] ($(p2)+(\x+1,{\y-1.8})$) circle (3pt);
+		}
+	  }
+	\end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{One Powerful Arm\ldots}
+  \begin{itemize}
+	\item Now, if we hiked up a tall mountain and had a REALLY REALLY strong arm\ldots
+	\item \href{http://galileoandeinstein.physics.virginia.edu/more_stuff/flashlets/NewtMtn/home.html}{Newton's Mountain}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Moon Orbits}
+  \begin{itemize}
+	\item So we know that we can get an object into orbit by throwing it really hard in a certain direction
+	\item Whatever process formed the Moon must have thus given it this ``initial velocity''
+	\item So our Moon's orbit is a result of:
+	  \begin{itemize}
+		\item That velocity
+		\item Inertia
+		\item and the pull of gravity
+	  \end{itemize}
+  \end{itemize}
+  \begin{flushright}
+	\vspace{-2cm}
+	\begin{tikzpicture}
+	  \node at (0,0) {\includegraphics[width=1cm]{world.png}};
+	  \draw[dashed, help lines] (0,0) circle (2cm);
+	  \coordinate (moon) at (135:2cm);
+	  \draw[-latex, green, thick] (moon) -- node[midway,sloped,above] {\scriptsize Inertia} +(225:1cm);
+	  \fill[ball color=black!20] (moon) circle(1mm);
+	  \foreach \a in {45,90,...,360}{
+		\draw[-latex, orange, thick] (\a:1.8) -- (\a:1.1);
+	  }
+	  \node[align=center,orange, font=\scriptsize] at (2,-2) {Gravity pulls\\Moon toward\\Earth};
+	\end{tikzpicture}
+  \end{flushright}
+\end{frame}
+
+
+%\begin{frame}{Cavendish Experiment}
+  %\begin{itemize}
+	%\item A method to measure a tiny amount of gravitational force to determine $G$
+  %\end{itemize}
+  %\begin{center}
+	%\begin{tikzpicture}
+	  %\onslide<1>{
+		%\draw[LOrange, line width=3pt] (2,0) -- (-2,0);
+		%\fill[ball color=LOrange] (2,0) circle (2mm);
+		%\fill[ball color=LOrange] (-2,0) circle (2mm);
+		%\draw[Blue,line width=4pt] (0,2) -- (0,-2);
+		%\fill[ball color=Blue] (0,2) circle (5mm);
+		%\fill[ball color=Blue] (0,-2) circle (5mm);
+		%\draw[line width=4pt] (4pt,2mm) -- (4pt,-2mm);
+		%\draw[red,thick] (6pt,0) --+(-20:3cm);
+	  %}
+	  %\onslide<2>{
+		%\begin{scope}[rotate=60]
+		  %\draw[LOrange, line width=3pt] (2,0) -- (-2,0);
+		  %\fill[ball color=LOrange] (2,0) circle (2mm);
+		  %\fill[ball color=LOrange] (-2,0) circle (2mm);
+		%\end{scope}
+		%\begin{scope}[rotate=-5]
+		  %\draw[Blue,line width=4pt] (0,2) -- (0,-2);
+		  %\fill[ball color=Blue] (0,2) circle (5mm);
+		  %\fill[ball color=Blue] (0,-2) circle (5mm);
+		  %\draw[line width=4pt] (4pt,2mm) -- (4pt,-2mm);
+		%\end{scope}
+		%\draw[dashed,red!30,thick] (6pt,0) --+(-20:3cm);
+		%\draw[red,thick] (6pt,0) --+(-25:3cm) node[xshift=5mm,right,fg,align=left, font=\scriptsize] {Movement and\\oscillations\\used to determine\\gravitational constant};
+	  %}
+	  %\draw[rotate=19, fill=black!20, rounded corners] (2.7cm,-2mm) rectangle (4.0cm,2mm);
+	  %\draw[red,thick] (6pt,0) --+(20:2.5cm);
+	%\end{tikzpicture}
+  %\end{center}
+%\end{frame}
+
+\begin{frame}{Newton meets Kepler's 3rd}
+  \begin{itemize}
+	\item Recall that Kepler had worked out that
+	  \[\frac{a^3}{p^2}= \text{ same value for all planets orbiting Sun}\]
+	  \begin{itemize}
+		\item \alert{This is why we need to use AU and year units, because those describe Earth's $a$ and $p$!}
+	  \end{itemize}
+	\item<2> Newton worked out from theory that two objects held in orbit by gravity would obey:
+	  \[\frac{a^3}{p^2} = \frac{G \left( M_1 + M_2 \right)}{4\pi^2}\]
+	  where
+	  \vspace{-2mm}
+	  \scriptsize
+	  \begin{align*}
+		M_1, M_2 &= \text{ masses of objects in \underline{kilograms}}\\
+		a &= \text{ average separation of objects in \underline{meters}}\\
+		p &= \text{ orbital period in \underline{seconds}}\\
+		G &= \text{ gravitational constant in \underline{SI Units}}
+	  \end{align*}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{A Nicer Newton's Formulation}
+  \begin{itemize}
+	\item Put into more everyday units, Newton's formulation boils down to:
+		\[\frac{a^3}{p^2} = (M_1 + M_2)\]
+	  where
+	  \vspace{-2mm}
+	  \begin{align*}
+		  M_1, M_2 &= \text{ masses of objects in \alert{solar masses}}\\
+		a &= \text{ average separation of objects in \alert{AU}}\\
+		p &= \text{ orbital period in \alert{years}}\\
+	  \end{align*}
+  \item For the Sun and Earth, $M_1 + M_2 \approx 1$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Newton and Kepler's 3rd Law Example}
+  \begin{example}
+	Suppose our Sun suddenly grew to have 30 times it's current mass. Assuming we stayed the same distance away, how long would our new year be?
+	\begin{itemize}
+	  \item $a = \SI{1}{AU}$
+	  \item $M_{earth} + M_{sun} \approx M_{sun} = 1M_\odot$
+	\end{itemize}
+	\onslide<2>{
+	  \begin{align*}
+		p &= \sqrt{\frac{a^3}{\left( 30M_\odot \right)}}\\
+		&= \SI{0.18257}{yrs}\\
+		&= \SI{66.5}{days}
+	  \end{align*}
+	}
+  \end{example}
+\end{frame}
+
+\begin{frame}{Angular Momentum}
+  \begin{itemize}
+	\item Related to how much rotational inertia an object has
+	\item For an object moving in a circle, the \alert{angular momentum} is:
+	  \[L = m\times v \times r\]
+	\item The only way to change an objects angular momentum is to apply an angular force (called a torque)
+  \end{itemize}
+  \begin{center}
+	\begin{tikzpicture}
+	  \draw[help lines, dashed] (0,0) circle (2cm);
+	  \node[draw, circle, orange, fill=LOrange, text=black] (m) at (45:2) {$m$};
+	  \draw[thick] (0,0) -- node[midway, fill=Background] {$r$} (m);
+	  \draw[very thick, cyan, -latex] (m) --+(-45:1) node[below] {$v$};
+	\end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Figure Skating}
+	\begin{center}
+	  \inlineMovie{../Videos/SkaterSpin.ogv}{../Videos/SkaterSpin.jpg}{width=.8\textwidth}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Summary!}
+  \begin{itemize}
+	  \item Force is a measure of how something's motion will change
+	  \item The gravitational force increases with mass and decreases rapidly with distance
+	  \item Newton refined Kepler's 3rd law to account for the masses of the orbiting objects
+	  \item Angular momentum is related to an object's rotational inertia, and is difficult to change
+	  \item Decreases in radius will result in a faster rotating object
+  \end{itemize}
+\end{frame}
+
+\fullFrameImage{ch4_seasons.png}
+
+\begin{frame}{Concept Question}
+  Seasons are determined by the proximity of Earth to the sun. Summer when we are closer and Winter when we are further away.
+  \begin{enumerate}
+	\item True
+	\item False
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{The Reason for the Season}
+  \begin{itemize}
+	\item Summer in Northern Hemisphere = Winter in Southern
+	  \begin{itemize}
+		\item Both would be the same if seasons were based on distance
+	  \end{itemize}
+  \end{itemize}
+  \pause
+  \begin{alertblock}{Fact!}
+	Seasons are a result of the Earth's tilt.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{The Seasons}
+  \begin{center}
+	\begin{tikzpicture}[scale=0.95]
+	  %\fill[black!70] (-10,-5) rectangle (10,5);
+	  \draw[help lines, dashed] (0,0) ellipse (4cm and 2cm);
+	  %\node at (0,0) {\includegraphics[width=2cm]{sun.pdf}};
+	  \shade[inner color=yellow, outer color=orange] (0,0) circle (1cm);
+	  \fill[black, rounded corners] (-3,-1) rectangle +(-3,-2);
+	  \draw[white] (-5,-1.4) -- (-5,-2.6);
+	  \node at (-5,-2) {\includegraphics[width=1cm]{world.png}};
+	  
+	  \onslide<1>{%Fall Equinox
+		\coordinate (pos) at (0,-2);
+		\begin{scope}[rotate around={-23:(pos)}, transform shape]
+		  \draw[white] (pos) -- +(0,.6);
+		  \draw[white] (pos) -- +(0,-.6);
+		  \node at (pos) {\includegraphics[width=1cm]{world.png}};
+		\end{scope}
+		\node[below, yshift=-5mm] at (pos) {Fall Equinox};
+		\foreach \y in {-2.6,-2.3,...,-1.3}{
+		  \draw[yellow, -latex] (-3.5, \y) -- +(180:1);
+		}
+	  }
+	  \onslide<2>{%Winter Equinox
+		\coordinate (pos) at (4,0);
+		\begin{scope}[rotate around={-23:(pos)}, transform shape]
+		  \draw[white] (pos) -- +(0,.6);
+		  \draw[white] (pos) -- +(0,-.6);
+		  \node at (pos) {\includegraphics[width=1cm]{world.png}};
+		\end{scope}
+		\node[right, align=center, xshift=5mm] at (pos) {Winter\\Solstice};
+		\fill[red, opacity=0.3] (-5.53,-2) arc (-180:0:5.3mm) arc (0:-180:5.3mm and 2mm);
+		\begin{scope}[rotate around={-23:(-5,-2)}]
+		\foreach \y in {-2.6,-2.3,...,-1.3}{
+		  \draw[yellow, -latex] (-3.5, \y) -- +(180:1);
+		}
+		\end{scope}
+	  }
+	  \onslide<3>{%Spring Equinox
+		\coordinate (pos) at (0,2);
+		\begin{scope}[rotate around={-23:(pos)}, transform shape]
+		  \draw[white] (pos) -- +(0,.6);
+		  \draw[white] (pos) -- +(0,-.6);
+		  \node at (pos) {\includegraphics[width=1cm]{world.png}};
+		\end{scope}
+		\node[above, yshift=5mm] at (pos) {Spring Equinox};
+		\begin{scope}[rotate around={0:(-5,-2)}]
+		\foreach \y in {-2.6,-2.3,...,-1.3}{
+		  \draw[yellow, -latex] (-3.5, \y) -- +(180:1);
+		}
+		\end{scope}
+	  }
+	  \onslide<4>{%Summer Equinox
+		\coordinate (pos) at (-4,0);
+		\begin{scope}[rotate around={-23:(pos)}, transform shape]
+		  \draw[white] (pos) -- +(0,.6);
+		  \draw[white] (pos) -- +(0,-.6);
+		  \node at (pos) {\includegraphics[width=1cm]{world.png}};
+		\end{scope}
+		\node[left, align=center, xshift=-5mm] at (pos) {Summer\\Solstice};
+		\fill[red, opacity=0.3] (-5.53,-2) arc (180:0:5.3mm) arc (0:-180:5.3mm and 2mm);
+		\begin{scope}[rotate around={23:(-5,-2)}]
+		\foreach \y in {-2.6,-2.3,...,-1.3}{
+		  \draw[yellow, -latex] (-3.5, \y) -- +(180:1);
+		}
+		\end{scope}
+	  }
+	\end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{The Seasons}
+  \begin{columns}
+	\column{.5\textwidth}
+	\begin{itemize}
+	  \item More direct Sun heats better
+	  \item Each position marks the start of our ``seasons''
+	  \item Sun's position in the local sky changes as well
+		\begin{itemize}
+		  \item Highest on Summer Solstice
+		  \item Lowest on Winter Solstice
+		  \item Rises \emph{exactly} in the East and sets \emph{exactly} in the West on the Equinox's
+		\end{itemize}
+	\end{itemize}
+	\column{.5\textwidth}
+	\begin{figure}[h!]
+	  \centering
+	  \includegraphics[width=\textwidth]{ch2_SunPos.jpg}
+	\end{figure}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Alien Seasons}
+  \begin{itemize}
+	\item Earth's seasons
+	  \begin{itemize}
+		\item \alert{Planet Tilt}
+		\item Orbital variations
+		\item Distance differences due to tilt
+	  \end{itemize}
+	\item Pluto's seasons
+	  \begin{itemize}
+		\item Planet Tilt
+		\item \alert{Orbital variations}
+		\item Distance differences due to tilt
+	  \end{itemize}
+	\item TrES-4 (1.8x size of Jupiter, 0.05 AU from it's parent star)
+	  \begin{itemize}
+		\item Planet Tilt
+		\item Orbital variations
+		\item \alert{Distance differences due to tilt}
+	  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Our Wobbly Planet}
+  \begin{columns}
+	\column{.5\textwidth}
+	\begin{itemize}
+	  \item Just like a spinning top, Earth has a bit of a wobble
+	  \item Relative to the celestial sphere, the direction of our North Pole oscillates every \SI{26000}{yrs}
+	  \item ``North Star'' changes!
+	\end{itemize}
+	\column{.5\textwidth}
+	\begin{figure}[h!]
+	  \centering
+	  \includegraphics[width=.9\textwidth]{ch2_pole_precess.jpg}
+	\end{figure}
+  \end{columns}
+\end{frame}
+
+%\begin{frame}{Let's Talk the Moon}
+  %Two obvious observations we are interested in explaining:
+  %\begin{itemize}
+	%\item Why do we see the Moon going through phases?
+	%\item What causes eclipses?
+  %\end{itemize}
+%\end{frame}
+
+%\begin{frame}{Lunar Facts}
+  %\begin{itemize}
+	%\item Moon orbits Earth in \SI{27.3}{\day}
+	%\item Lunar Phases repeat every \SI{29.5}{\day}
+	  %\begin{itemize}
+		%\item Difference due to Earth moving about the sun during this time
+	  %\end{itemize}
+	%\item Sunlight hits Earth and Moon at same angle because the Sun is so far away
+	%\item Moon's phase is also closely related to its rising and setting times
+	%\item The Man in the Moon is always watching
+	  %\begin{itemize}
+		%\item We always see the same face of the moon
+	  %\end{itemize}
+  %\end{itemize}
+%\end{frame}
+
+%\begin{frame}{It's just a phase}
+  %\begin{center}
+	%\begin{tikzpicture}[scale=.6]
+	  %%\draw[help lines] (-5,-5) grid (5,5);
+	  %\node[transform shape] at (0,0) {\includegraphics[width=1.44cm]{world.png}};
+	  %\fill[black,opacity=0.5] (0,0) +(0,0.72) arc (90:270:0.72) -- cycle;
+	  %\draw[help lines, dashed] (0,0) circle (4cm);
+	  %\foreach \y in {-5,-4,...,5}{
+		%\draw[yellow, -latex] (6,\y) -- +(-1,0);
+	  %}
+	  %\fill[black,rounded corners] (-5,-5) rectangle (-2,-2);
+	  %\node at (-3.5,-5.25) {Observer View};
+	  %\onslide<1>{
+		%\moon{0};
+		%\moonphase{-1};
+		%\fill[red] (0:0.8) circle (1mm);
+	  %}
+	  %\onslide<2>{
+		%\moon{45};
+		%\moonphase{-.5};
+		%\fill[red] (90:0.8) circle (1mm);
+	  %}
+	  %\onslide<3>{
+		%\moon{90};
+		%\moonphase{-0};
+		%\fill[red] (90:0.8) circle (1mm);
+	  %}
+	  %\onslide<4>{
+		%\moon{135};
+		%\moonphase{.5};
+		%\fill[red] (180:0.8) circle (1mm);
+	  %}
+	  %\onslide<5>{
+		%\moon{180};
+		%\moonphase{1};
+		%\fill[red] (180:0.8) circle (1mm);
+	  %}
+	%\end{tikzpicture}
+  %\end{center}
+%\end{frame}
+
+%\begin{frame}{Wax on, Wane off}
+  %\begin{itemize}
+	%\item Waxing - the moon is becoming more full
+	  %\begin{itemize}
+		%\item Visible afternoon/evening
+	  %\end{itemize}
+	%\item Waning - the moon is becoming less full
+	  %\begin{itemize}
+		%\item Visible late night / morning
+	  %\end{itemize}
+	%\item In Northern Hemisphere:
+	  %\begin{itemize}
+		%\item Light on Right $\Rightarrow$ waxing
+		%\item Opposite in Southern Hemisphere
+	  %\end{itemize}
+  %\end{itemize}
+  %\begin{center}
+	%\begin{tikzpicture}[scale=.7, transform shape]
+	  %%\draw[help lines] (0,0) grid (12,4);
+	  %\node at (5.5,4.5) {\Large Waxing Moons};
+	  %\fill[black!80!blue, rounded corners] (0,0) rectangle +(3,4);
+	  %\fill[black!85!blue, rounded corners] (4,0) rectangle +(3,4);
+	  %\fill[black!90!blue, rounded corners] (8,0) rectangle +(3,4);
+	  %\node (north) at (1.5,2) {\includegraphics[width=2cm]{ch2_moon_small2.png}};
+	  %\node (equator) at (5.5,2) {\includegraphics[width=2cm]{ch2_moon_small2.png}};
+	  %\node (south) at (9.5,2) {\includegraphics[width=2cm]{ch2_moon_small2.png}};
+	  %\fill[black, opacity=0.7] (north) +(0,1) arc (90:270:1) arc (-90:90:0.5cm and 1cm);
+	  %\fill[black, opacity=0.7, rotate around={-90:(equator)}] (equator) +(0,1) arc (90:270:1) arc (-90:90:0.5cm and 1cm);
+	  %\fill[black, opacity=0.7, rotate around={180:(south)}] (south) +(0,1) arc (90:270:1) arc (-90:90:0.5cm and 1cm);
+	  %\node at (1.5,.5) {\SI{+45}{\degree N}};
+	  %\node at (5.5,.5) {Equator};
+	  %\node at (9.5,.5) {\SI{+45}{\degree S}};
+	%\end{tikzpicture}
+  %\end{center}
+%\end{frame}
+
+%\begin{frame}{Don't Turn Your Back!}
+  %Why do we only see one side of the moon?
+  %\begin{itemize}
+	%\item If the moon did not spin as it orbited us, we'd see all parts of the moon
+	%\item If the moon spun either quickly or slowly, we'd see all parts of the moon
+	%\item But if it spun \emph{jussst riighht\ldots}
+  %\end{itemize}
+%\end{frame}
+
+%\begin{frame}{Synchronous Spinning}
+  %\begin{center}
+	%\begin{tikzpicture}[scale=.9]
+	  %%\draw[help lines] (0,0) grid (10,6);
+	  %\coordinate (earth) at (5,3);
+	  %\node at (earth) {\includegraphics[width=1cm]{world.png}};
+	  %\draw[help lines, dashed] (earth) circle (3cm);
+	  %\foreach \t in {0,45,...,360}{
+		%\begin{scope}[rotate around={\t:(earth)}, transform shape]
+		  %\coordinate (moon) at (8,3);
+		  %\node at (moon) {\includegraphics[width=1cm]{ch2_moon_small2.png}};
+		  %\draw[red] (moon) +(-.6,0) node {N} +(.6,0) node {F};
+		  %\draw[red,-latex] (moon) +(.3,0) arc (0:180:.3);
+		%\end{scope}
+	  %}
+	%\end{tikzpicture}
+  %\end{center}
+%\end{frame}
+
+%\begin{frame}{Libration!}
+  %In truth, we actually can see upwards of 60\% of the Moon's surface over a year
+  %\begin{itemize}
+	%\item \alert{Libration} describes this oscillating wobble
+	%\item Libration in longitude due to the Moon's orbit not being perfectly circular
+	%\item Libration in latitude due to the Moon's tilt (similar to Earth's seasons!)
+	%\item Diurnal libration do to an observer getting two different perspectives from each side of the Earth daily
+  %\end{itemize}
+%\end{frame}
+
+%\begin{frame}{The Extra Bits}
+  %\begin{figure}[h!]
+	%\centering
+	%\includegraphics[width=.7\textwidth]{ch2_libration.jpg}
+  %\end{figure}
+%\end{frame}
+
+%\begin{frame}{Understanding Check}
+  %Imagine you built yourself a lovely house on the surface of the moon. One day you are talking to your mom back on Earth and she mentions that it is a lovely full moon tonight. From your vantage point on the moon, what is Earth's phase?
+  %\begin{enumerate}
+	%\item \alert<2>{New}
+	%\item Waxing
+	%\item Full
+	%\item Waning
+  %\end{enumerate}
+%\end{frame}
+
+%%\begin{frame}{Eclipse (of the non-Twilight variety)}
+  %%All good things cast shadows!
+  %%\begin{figure}[h!]
+	%%\centering
+	%%\begin{tikzpicture}
+	  %%%\node[anchor=south west] at (0,0) {\includegraphics[width=\textwidth]{eclipse.png}};
+	  %%\node[anchor=south west] at (0,0) {\includestandalone{../Images/Standalone/ch2_eclipse_fig}};
+	  %%\draw[white,-latex] (5,3) node[above] {penumbra} -- (9,2);
+	  %%\draw[white,-latex] (6,0) node[below] {umbra} -- (8.5,1.3);
+	  %%%\draw[white] (0,0) grid (10,3);
+	%%\end{tikzpicture}
+  %%\end{figure}
+%%\end{frame}
+
+%%\begin{frame}{Eclipse Facts}
+  %%\begin{itemize}
+	%%\item Lunar eclipses can \emph{only} occur when the Moon is full!
+	  %%\begin{itemize}
+		%%\item Otherwise the Earth isn't between the Moon and the Sun
+	  %%\end{itemize}
+	%%\item Lunar eclipses can be penumbral, partial, or total, depending on what part of the shadow overlaps the moon
+  %%\end{itemize}
+  %%\begin{center}
+	%%\begin{tikzpicture}
+	  %%\node[anchor=south west] at (0,0) {\includestandalone[width=\textwidth]{../Images/Standalone/ch2_eclipse_fig}};
+	  %%\onslide<1>{
+		%%\node at (12.5,2.8) {\includegraphics[width=3mm]{ch2_moon_small2.png}};
+		%%\node at (5,0) {Penumbral Eclipse};
+	  %%}
+	  %%\onslide<2>{
+		%%\node (moon) at (12.5,2.5) {\includegraphics[width=3mm]{ch2_moon_small2.png}};
+		%%\fill[black!70!red, opacity=0.5] (moon) ++(-.15,0) arc (180:350:1.5mm) -- cycle;
+		%%\node at (5,0) {Partial Eclipse};
+	  %%}
+	  %%\onslide<3>{
+		%%\node (moon) at (12.5,2.0) {\includegraphics[width=3mm]{ch2_moon_small2.png}};
+		%%\fill[black!50!red, opacity=0.5] (moon) circle (1.5mm);
+		%%\node at (5,0) {Total Eclipse};
+	  %%}
+	  %%%\draw[white] (0,0) grid (10,3);
+	%%\end{tikzpicture}
+  %%\end{center}
+%%\end{frame}
+
+\end{document}

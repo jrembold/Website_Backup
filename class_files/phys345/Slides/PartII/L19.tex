@@ -1,0 +1,203 @@
+\documentclass[pdf,aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,booktabs,lmodern}
+\usepackage{physics}
+\usepackage{em-commands}
+\mode<presentation>{\usetheme{EM}}
+
+%Question Numbering
+\newcounter{questionnumber}
+\newcommand{\qnum}{%
+	\stepcounter{questionnumber}%
+	Q\arabic{questionnumber}
+}
+\resetcounteronoverlays{questionnumber}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+
+%preamble
+\title{Casting a Binding}
+\date{October 10, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+	\begin{itemize}
+		\item YOU HAVE A TEST ON FRIDAY
+			\begin{itemize}
+				\item I'm trying to get your HW6's graded
+				\item Most old homework solutions are complete in my binder if you want to check some of your ungraded problems against them
+					\begin{itemize}
+						\item I only have the one binder and it may be in high demand, so try to not monopolize it!
+					\end{itemize}
+				\item Learning objectives are posted on Campuswire
+				\item You are probably looking at something like 3 calculation type problems and then a handful of conceptual problems
+				\item Bring everything. Your book, your notes, your homework, your calculator.
+			\end{itemize}
+		\item I'll be around until about 6:30 tomorrow if you have questions
+		\item There is a post category for ``Exam Preparation'' on Campuswire if you are having more questions!
+		\item AOE (Physics Club) meeting at 4:30pm on Thursday to solve the world's problems
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Are $\rho_b$ and $\sigma_b$ due to real charges?
+	\begin{enumerate}
+		\item Nope! They are just fictitious charges we use to describe the summed dipoles!
+		\item \alert<2>{Yes! Actual charges are living at those locations!}
+		\item What are $\rho_b$ and $\sigma_b$?
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	In the following case, is the bound surface and volume charge density zero or nonzero?
+	\begin{center}
+		\begin{tikzpicture}
+			\coordinate (mid) at (0,0);
+			\foreach \x in {-1,0,1}{
+				\foreach \y in {-1,0,1}{
+					\coordinate (s) at ($(mid)+(\x,\y)$);
+					\fill[cyan, opacity=.5] (s) circle (4mm);
+					\fill[cyan] (s) circle (.5mm);
+					\node[ball=red, minimum size=2mm] at ($(s)+(0,.3)$) {};
+				}
+			}
+			\node at ([yshift=-2cm]mid) {Physical Dipoles};
+			\coordinate (mid) at (5,0);
+			\foreach \x in {-1,0,1}{
+				\foreach \y in {-1,0,1}{
+					\coordinate (s) at ($(mid)+(\x,\y)$);
+					\draw[ultra thick,-latex, Red] ([yshift=-3mm]s) --+(0,.5);
+				}
+			}
+			\node at ([yshift=-2cm]mid) {Ideal Dipoles};
+		\end{tikzpicture}
+	\end{center}
+	\begin{enumerate}
+		\centering
+		\item $\sigma_b = 0 \qc \rho_b \neq 0$
+		\item $\sigma_b \neq 0 \qc \rho_b \neq 0$
+		\item $\sigma_b = 0 \qc \rho_b = 0$
+		\item \alert<2>{$\sigma_b \neq 0 \qc \rho_b = 0$}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	In the following case, is the bound surface and volume charge density zero or nonzero?
+	\begin{center}
+		\begin{tikzpicture}
+			\coordinate (mid) at (0,0);
+			\foreach \x in {-1,0,1}{
+				\foreach \y in {-1,0,1}{
+					\coordinate (s) at ($(mid)+(\x,\y)$);
+					\fill[cyan, opacity=.5] (s) circle (4mm);
+					\fill[cyan] (s) circle (.5mm);
+					\node[ball=red, minimum size=2mm] at ($(s)+(0,.2+.1*\y)$) {};
+				}
+			}
+			\node at ([yshift=-2cm]mid) {Physical Dipoles};
+			\coordinate (mid) at (5,0);
+			\foreach \x in {-1,0,1}{
+				\foreach \y in {-1,0,1}{
+					\coordinate (s) at ($(mid)+(\x,\y)$);
+					\draw[ultra thick,-latex, Red] ([yshift=-3mm]s) --+(0,.4+.1*\y);
+				}
+			}
+			\node at ([yshift=-2cm]mid) {Ideal Dipoles};
+		\end{tikzpicture}
+	\end{center}
+	\begin{enumerate}
+		\centering
+		\item $\sigma_b = 0 \qc \rho_b \neq 0$
+		\item \alert<2>{$\sigma_b \neq 0 \qc \rho_b \neq 0$}
+		\item $\sigma_b = 0 \qc \rho_b = 0$
+		\item $\sigma_b \neq 0 \qc \rho_b = 0$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	A dielectric slab (top area $A$ and height $h$) has been polarized with $\va{P}=P_0\zhat$. What is the surface charge density, $\sigma_b$, on the bottom surface?
+	\begin{columns}
+		\column{0.3\textwidth}
+		\begin{enumerate}
+			\item 0
+			\item \alert<2>{$-P_0$}
+			\item $P_0$
+			\item $P_0Ah$
+		\end{enumerate}
+		
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\draw pic (b) {box=Red/4/2/2};
+				\draw[|-|] ($(b-fbl)+(-.3,0)$) --+ (0,2) node[midway,left,math] {h};
+				\node[] at (2,2,1) {A};
+
+				\coordinate (o) at (0,0,4);
+				\begin{scope}[font=\scriptsize]
+					\path[thick, -latex] (o) edge node[at end,right,math] {\yhat} +(1,0,0) 
+					(o) edge node[at end,left,math] {\zhat} +(0,1,0) 
+					(o) edge node[at end,left,math] {\xhat} +(0,0,1);
+				\end{scope}
+			\end{tikzpicture}
+		\end{center}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{\qnum}
+	A dielectric sphere is uniformly polarized,
+	\[\va{P} = +P_0 \zhat\]
+	What is the surface charge density?
+	\begin{columns}
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\node[ball=cyan, minimum size=3cm] at (0,0) {};
+				\draw[very thick, latex-] (0,1) -- (0,-.5) node[below,math] {P_0};
+
+				\coordinate (o) at (0,0,5);
+				\begin{scope}[font=\scriptsize]
+					\path[thick, -latex] (o) edge node[at end,right,math] {\yhat} +(1,0,0) 
+					(o) edge node[at end,left,math] {\zhat} +(0,1,0) 
+					(o) edge node[at end,left,math] {\xhat} +(0,0,1);
+				\end{scope}
+			\end{tikzpicture}
+			
+		\end{center}
+		\column{0.5\textwidth}
+		\begin{enumerate}
+			\item 0
+			\item $C$ (but $C\neq 0$)
+			\item $C\sin\theta$
+			\item \alert<2>{$C\cos\theta$}
+		\end{enumerate}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{\qnum}
+	At the end of last class we had a cylinder of radius $a$ and height $b$ that had its base at the origin and was aligned along the $z$ axis. This cylinder had a polarization of 
+	\[\va{P} = P_0 \left(\frac{z}{b}\right) \zhat\]
+	What is the bound volume charge density? (\emph{Bonus! Also, what is the bound charge density on each cap and the sides?})
+	\begin{enumerate}
+		\item 0
+		\item $\displaystyle \frac{P_0}{b}$
+		\item \alert<2>{$\displaystyle -\frac{P_0}{b}$}
+		\item $\displaystyle -\frac{P_0}{b^2}$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Test Questions}
+	Any questions or clarifications in preparation for the test?
+\end{frame}
+
+
+
+
+
+
+
+
+\end{document}

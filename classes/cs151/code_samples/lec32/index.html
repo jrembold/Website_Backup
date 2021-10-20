@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Lecture 32 Code</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1'/>
+		<link rel='stylesheet' href='/~jjrembold/css/main.css'/>
+		<link rel='icon' href='/~jjrembold/images/favicon.png'>
+		<script src='/~jjrembold/js/jquery-2.1.4.min.js'></script>
+		<script src='/~jjrembold/js/TweenLite.min.js'></script>
+		<script src='/~jjrembold/js/CSSPlugin.min.js'></script>
+		<script src='/~jjrembold/js/skel.min-2.2.js'></script>
+		<script src='/~jjrembold/js/main.js'></script>
+		<script src='/~jjrembold/js/BigPicture.min.js'></script>
+
+		<header>
+	<p><a href="/www.willamette.edu/~jjrembold/">JED REMBOLD</a></p>
+	<nav>
+		<div class='topmenu'>
+			<ul>
+				<li><a href="/www.willamette.edu/~jjrembold/about">About Me</a></li>
+				<li>
+					<div class='class-drop'>
+						<div class='class-hover'>
+							<a href="/www.willamette.edu/~jjrembold/classes">Classes</a>
+						</div>
+						<div class='class-menu'>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/www.willamette.edu/~jjrembold/classes/cs151/cs151/">Intro Python</a><br>
+							
+							
+							
+							<a href="/www.willamette.edu/~jjrembold/classes/phys221/phys221/">Physics I</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+						</div>
+					</div>
+				</li>
+				<li><a href="/www.willamette.edu/~jjrembold/wu_schedule">Schedule</a></li>
+				<li>
+					<div class='class-drop'>
+						<div class='class-hover'>
+							<a href="/www.willamette.edu/~jjrembold/resources">Resources</a>
+						</div>
+						<div class='class-menu'>
+							
+							<a href="/www.willamette.edu/~jjrembold/resources/python_guides/guides/">Python Guides</a><br>
+							
+							<a href="/www.willamette.edu/~jjrembold/resources/grad_resources/grad_resources/">Grad Notes</a><br>
+							
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class='topmenu_bars'>
+			<ul>
+				<li class='slide-toggle'><span class='icon fa fa-bars' href="#"> Menu</span></li>
+			</ul>
+		</div>
+		<div class='topmenu_justbars'>
+			<ul>
+				<li class='slide-toggle'><span class='icon fa fa-bars' href="#"></span></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class='slideout-menu'>
+		<h3>Menu <span class='slide-toggle' href="#"><i class='fa fa-times'></i></span></h3>
+		<ul>
+			<li><a href="/www.willamette.edu/~jjrembold/about">About Me</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/classes">Classes</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/wu_schedule">Schedule</a></li>
+			<li><a href="/www.willamette.edu/~jjrembold/resources">Resources</a></li>
+		</ul>
+	</div>
+
+</header>
+
+	</head>
+	<body>
+
+
+	<div class='container'>
+		<div class='content'>
+			<div class='sub-banner'>
+				<h2>Lecture 32 Code</h2>
+			</div>
+			<center>
+				<br>
+				<div style="color: #0391A5">
+					Apr 15, 2020
+				</div>
+			</center>
+		<h6 id="arcade-classes">Arcade Classes</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">arcade</span>
+
+<span class="k">class</span> <span class="nc">Example</span><span class="p">(</span><span class="n">arcade</span><span class="o">.</span><span class="n">Window</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+        <span class="n">arcade</span><span class="o">.</span><span class="n">Window</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+        <span class="n">arcade</span><span class="o">.</span><span class="n">set_background_color</span><span class="p">(</span><span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BLUE_YONDER</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BOYSENBERRY</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xdir</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ydir</span> <span class="o">=</span> <span class="mi">2</span>
+
+        <span class="n">arcade</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">on_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">arcade</span><span class="o">.</span><span class="n">start_render</span><span class="p">()</span>
+        <span class="n">arcade</span><span class="o">.</span><span class="n">draw_circle_filled</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xdir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ydir</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xdir</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ydir</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">on_key_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">mod</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">ESCAPE</span><span class="p">:</span>
+            <span class="n">arcade</span><span class="o">.</span><span class="n">close_window</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">SPACE</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BOYSENBERRY</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BRIGHT_GREEN</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BOYSENBERRY</span>
+
+    <span class="k">def</span> <span class="nf">on_mouse_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">button</span><span class="p">,</span> <span class="n">mod</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">button</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">MOUSE_BUTTON_LEFT</span><span class="p">:</span>
+            <span class="n">arcade</span><span class="o">.</span><span class="n">set_background_color</span><span class="p">(</span><span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">GUPPIE_GREEN</span><span class="p">)</span>
+
+
+<span class="n">Example</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;Arcade Example&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><br>
+
+		<br>
+		</div>
+	</div>
+
+</body>
+<script src='/~jjrembold/js/click_handling.js'></script>
+</html>
+

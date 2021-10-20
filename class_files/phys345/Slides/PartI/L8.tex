@@ -1,0 +1,167 @@
+\documentclass[pdf,aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,lmodern,booktabs}
+\usepackage{physics}
+\usepackage{em-commands}
+\mode<presentation>{\usetheme{EM}}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+
+%preamble
+\title{Gaining Potential}
+\date{September 14, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+	\begin{itemize}
+		\item Homework 3 due Monday night
+			\begin{itemize}
+				\item Post questions to Campuswire over the weekend!
+			\end{itemize}
+		\item I'll be out of the office for much of the afternoon at the SCRP talks
+		\item Monday Reading: Ch 2.3 and Ch 2.4
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}{}
+	Evaluate
+	\[\int_{\text{all space}}(r^2 + \pos\vdot\va{a} +a^2)\delta^3(\pos-\va{a})\,d\tau\]
+	\begin{enumerate}
+		\item \alert<2>{$3a^2$}
+		\item $2a^2$
+		\item $a^2$
+		\item $0$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{}
+	Evaluate
+	\[\div \frac{1}{4\pi\epsilon_0}\frac{q}{r^2}\rhat\]
+	\begin{enumerate}
+		\item $\displaystyle \frac{q}{\epsilon_0}$
+		\item \alert<2>{$\displaystyle \frac{q}{\epsilon_0}\delta^3(\pos)$}
+		\item $\displaystyle \frac{q}{\epsilon_0}\rhat$
+		\item $\displaystyle \frac{4\pi q}{\epsilon_0}$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{}
+	Consider a small charged bead pierced by a long straight narrow charged wire, as seen below. Could you use Gauss's Law to solve for the electric field a short distance above the bead?
+	\begin{columns}
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\draw[very thick, name path=circ] (1.5,0) arc (0:360:1.5cm);
+				\path[name path=tline] (-3,.5) -- + (6,0);
+				\path[name intersections={of=circ and tline}];
+				\draw[very thick] (-3,.5) -- (intersection-2) (intersection-1) -- (3,.5);
+				\draw[very thick, dashed] (intersection-1) -- (intersection-2);
+				\path[name path=bline] (-3,-.5) -- + (6,0);
+				\path[name intersections={of=circ and bline}];
+				\draw[very thick] (-3,-.5) -- (intersection-1) (intersection-2) -- (3,-.5);
+				\draw[very thick, dashed] (intersection-1) -- (intersection-2);
+			\end{tikzpicture}
+		\end{center}
+		\column{0.5\textwidth}
+		\begin{enumerate}
+			\item Yes, just choose the correct surface.
+			\item \alert<2>{Yes, but it requires multiple surfaces.}
+			\item Yes, but only if the bead and wire have opposite charges.
+			\item No, this doesn't have the needed symmetry.
+		\end{enumerate}
+		
+	\end{columns}
+\end{frame}
+
+%\begin{frame}{}
+	%Is the following valid?
+	%\[\curl\left( \frac{1}{4\pi\epsilon_0} \iiint_V \frac{\rho(\pos_s)\,d\tau_s}{\srmag^2}\srhat \right) = \frac{1}{4\pi\epsilon_0}\iiint_V\left( \curl \frac{\rho(\pos_s)\,d\tau_s}{\srmag^2}\srhat \right)\]
+	%\begin{enumerate}
+		%\item Yup. That's valid and I can explain why.
+		%\item I think so, but I'm not sure I could explain it.
+		%\item Nope. That's illegal and I can explain why.
+		%\item I can't even venture a guess\ldots
+	%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}{}
+	%If $\curl \ef = 0$, then $\displaystyle \oint_C \ef\vdot d\vell = $
+	%\begin{enumerate}
+		%\item 0
+		%\item Something finite
+		%\item $\infty$
+		%\item Impossible to tell without knowing $C$
+	%\end{enumerate}
+%\end{frame}
+
+\begin{frame}{}
+	Does superposition apply to electric potential, $V$?
+	\[V_{tot} \overset{?}{=} \sum_i V_i = V_1 + V_2 + V_3 + \cdots\]
+	\begin{enumerate}
+		\item \alert<2>{Yes}
+		\item No
+		\item Sometimes
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{}
+	The potential is zero at some point in space.
+
+	You can conclude that:
+	\begin{enumerate}
+		\item The E-field is zero at that point
+		\item The E-field is zero near that point
+		\item The E-field is non-zero at that point
+		\item \alert<2>{You can conclude nothing about the E-field at that point}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{}
+	The potential is constant everywhere in some region of space.
+
+	You can conclude that:
+	\begin{enumerate}
+		\item The E-field is changing at a constant rate in that space.
+		\item The E-field has a constant magnitude in that space.
+		\item \alert<2>{The E-field is zero in that space.}
+		\item You can conclude nothing at all about the E-field in that space.
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{}
+	We usually choose the reference point $\mathcal{O}$ to be 0 at $\pos=\infty$ when calculating the potential of a point charge. ($V = kq/r$) How does this potential change if we choose our reference point to be $V(R)=0$ when $R$ is close to $q$?
+	\begin{enumerate}
+		\item $V(r)$ is higher than before
+		\item \alert<2>{$V(r)$ is lower than before}
+		\item $V(r)$ doesn't change
+		\item Impossible to say without knowing how close it gets
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{}
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[thick, -latex] (-.1,0) -- (6,0) node[right,math] {\rhat};
+			\draw[thick, -latex] (0,-.1) -- (0,4);
+			\draw[ultra thick, red] (0,0) -- (1.5,0) -- (1.5,3) .. controls +(-90:1) and +(180:3) .. (5.5,0);
+		\end{tikzpicture}
+	\end{center}
+	Could the above be a plot of $\abs{\ef}$? or $V(r)$? (Assuming for some physical situation)
+	\begin{enumerate}
+		\item Could be $E(r)$ or $V(r)$
+		\item \alert<2>{Could be $E(r)$, but not $V(r)$}
+		\item Can't be $E(r)$, but could be $V(r)$
+		\item Can't be either
+	\end{enumerate}
+\end{frame}
+
+
+
+
+
+\end{document}

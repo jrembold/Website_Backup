@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>My first slides</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../reveal.js/dist/theme/matthieu.css" id="theme">
+  <link rel="stylesheet" href="../reveal.js/plugin/highlight/monokai.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">My first slides</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Friday, August 7, 2020</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Welcome to CS-151: Intro to Programming with Python!</li>
+<li>Things to do:
+<ul>
+<li>Access the course webpage at <a href="http://www.willamette.edu/~jjrembold/classes/cs151/cs151/">http://www.willamette.edu/~jjrembold/classes/cs151/cs151/</a>
+<ul>
+<li>Also link to from WISE</li>
+</ul></li>
+<li>Read over the full syllabus</li>
+<li>Get yourself a copy of the book</li>
+<li>Make sure you can find and access the class forum on Discord</li>
+<li>Bring phone or computer for polling questions in the future</li>
+</ul></li>
+<li>Homework
+<ul>
+<li>HW1 will be posted later this week</li>
+<li>Will work in lab today to make sure you are setup with everything you need and have been introduced to the process</li>
+</ul></li>
+</ul>
+</section>
+<section id="slide-header-2" class="slide level2">
+<h2>Slide header 2</h2>
+<div class="columns">
+<div class="col theorem">
+<p>We will use a theorem</p>
+<p><span class="math display">\[\sum_i^{10} 5i^2 + 4\]</span></p>
+</div><div class="col">
+<ul>
+<li>here I will</li>
+<li>include some more things</li>
+<li>that I want</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="code-test" class="slide level2">
+<h2>Code Test!</h2>
+<p>Here we have some code:</p>
+<pre ><code class="python-repl" data-line-numbers="-|1-3|4,5|6-7|9-15|16-22">>>> A = 10
+>>> A
+10
+>>> int(23.45)
+23
+>>> type(A)
+int
+>>> # this is a comment! 123
+>>> for i in range(5):
+        print(i)
+0
+1
+2
+3
+4
+>>> for i in range(5):
+        print(i)
+0
+1
+2
+3
+4
+>>> print("yay this works!")
+yay this works!</code></pre>
+<aside class="notes">
+<p>Here I should talk about some things</p>
+</aside>
+</section>
+<section id="code-animation" class="slide level2" data-auto-animate="">
+<h2 data-auto-animate="">Code Animation</h2>
+<pre data-id="code-animation"><code class="python-repl" data-line-numbers="">>>> print(10+3)</code></pre>
+</section>
+<section id="code-animation-1" class="slide level2" data-auto-animate="">
+<h2 data-auto-animate="">Code Animation</h2>
+<pre data-id="code-animation"><code class="python-repl" data-line-numbers="">>>> print(10+3)
+13</code></pre>
+</section>
+<section id="extra-inline-test" class="slide level2">
+<h2>Extra inline test</h2>
+<p>What about if I want code inline like this: <code class="python">print(10)</code>? How can that work?</p>
+</section>
+    </div>
+  </div>
+
+  <script src="../reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../reveal.js/plugin/notes/notes.js"></script>
+  <script src="../reveal.js/plugin/search/search.js"></script>
+  <script src="../reveal.js/plugin/zoom/zoom.js"></script>
+  <script src="../reveal.js/plugin/math/math.js"></script>
+  <script src="../reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+        height: 1000,
+        math: {
+          mathjax: '../reveal.js/plugin/math/mathjax/tex-mml-chtml.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [
+          RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+        ],
+		chalkboard: {
+			// optionally load pre-recorded chalkboard drawing from file
+			//src: "chalkboard.json",
+		},
+		dependencies: [
+			{ src: "../reveal.js/plugin/chalkboard/chalkboard.js" },
+			{ src: "../reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize(); } }
+		],
+		keyboard: {
+			67: function() { RevealChalkboard.toggleNotesCanvas() },	// toggle notes canvas when 'c' is pressed
+			66: function() { RevealChalkboard.toggleChalkboard() },	// toggle chalkboard when 'b' is pressed
+			46: function() { RevealChalkboard.clear() },	// clear chalkboard when 'DEL' is pressed
+			 8: function() { RevealChalkboard.reset() },	// reset chalkboard data on current slide when 'BACKSPACE' is pressed
+			68: function() { RevealChalkboard.download() },	// downlad recorded chalkboard drawing when 'd' is pressed
+			88: function() { RevealChalkboard.colorNext() },	// cycle colors forward when 'x' is pressed
+			89: function() { RevealChalkboard.colorPrev() },	// cycle colors backward when 'y' is pressed
+		}
+      });
+    </script>
+    </body>
+</html>

@@ -1,0 +1,136 @@
+\documentclass[pdf,aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,lmodern,booktabs}
+\usepackage{physics}
+\usepackage{em-commands}
+\mode<presentation>{\usetheme{EM}}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+
+%preamble
+\title{One point for Dirac}
+\date{September 12, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+	\begin{itemize}
+		\item Homework 3 posted, due on Monday
+			\begin{itemize}
+				\item I might appreciate a few more people getting going and asking questions before Monday\ldots
+			\end{itemize}
+		\item I'll try to get HW2 graded before the end of the week
+		\item I'm going to put a poll up on Campuswire about how you feel class hours are going or if there are things you think could be changed to assist you more
+		\item Friday Reading: Ch 2.2.4, start Ch 2.3
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{}
+	A solid cylindrical rod is $L$ meters long and has a radius of $R$. The pipe has a charge density given by
+	\[\rho(\pos) = \rho_0 s\]
+	where $s$ is the cylindrical coordinate. Approximately what is the magnitude of the electric field $2R$ from the center of the rod?
+	\begin{enumerate}
+		\item $\displaystyle \frac{\rho_0 R^2}{3\epsilon_0}$
+		\item \alert<2>{$\displaystyle \frac{\rho_0 R^2}{6\epsilon_0}$}
+		\item $\displaystyle \frac{2\pi\rho_0R^3 L}{\epsilon_0}$
+		\item $\displaystyle \frac{\rho_0 R^3}{\epsilon_0}$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{}
+	A solid cylindrical rod is $L$ meters long and has a radius of $R$. The pipe has a charge density given by
+	\[\rho(\pos) = \rho_0 s\]
+	where $s$ is the cylindrical coordinate. Approximately what is the magnitude of the electric field $\frac{R}{2}$ from the center of the rod?
+	\begin{enumerate}
+		\item $\displaystyle \frac{\rho_0 R}{6\epsilon_0}$
+		\item $\displaystyle \frac{\rho_0 R^2}{6\epsilon_0}$
+		\item \alert<2>{$\displaystyle \frac{\rho_0 R^2}{12\epsilon_0}$}
+		\item $\displaystyle \frac{\rho_0 R^3 L}{8\epsilon_0}$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{}
+	What is the value of
+	\[\int_{-\infty}^{\infty}x^3\delta(x-2)\,dx\]
+	\begin{enumerate}
+		\item 0
+		\item 4
+		\item \alert<2>{8}
+		\item $\infty$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{}
+	In groups (to be determined), evaluate the following integrals, noting anything special you had to do or account for:
+	\begin{itemize}
+		\item Group A: $\displaystyle \int_{-\infty}^{\infty} xe^x \delta(x-1)\,dx$\onslide<2>{$=e$}
+		\item Group B: $\displaystyle \int_{\infty}^{-\infty} \log(x) \delta(x-2)\,dx$\onslide<2>{$=-\log(2)$}
+		\item Group C: $\displaystyle \int_{-\infty}^{0} xe^x \delta(x-1)\,dx$\onslide<2>{$=0$}
+		\item Group D: $\displaystyle \int_{-\infty}^{\infty} (x+1)^2 \delta(4x)\,dx$\onslide<2>{$=\frac{1}{4}$}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{}
+	Compute the following:
+	\[\int_{-\infty}^{\infty}x^2 \delta(3x+5)\,dx\]
+	\begin{enumerate}
+		\item $\displaystyle \frac{25}{3}$
+		\item $\displaystyle -\frac{5}{3}$
+		\item \alert<2>{$\displaystyle \frac{25}{27}$}
+		\item $\displaystyle \frac{25}{9}$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{}
+	A point charge $q$ is located at position $\va{R}$ as shown. What is $\rho(\pos)$, the charge density of all space?
+	\begin{columns}
+		\column{0.3\textwidth}
+		\begin{enumerate}
+			\item $\rho(\pos) = q\delta^3(\va{R})$
+			\item $\rho(\pos) = q\delta^3(\pos)$
+			\item \alert<2>{$\rho(\pos) = q\delta^3(\va{R}-\pos)$}
+			\item \alert<2>{$\rho(\pos) = q\delta^3(\pos -\va{R})$}
+		\end{enumerate}
+		
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\node[point, label={below:origin}] (o) at (0,0) {};
+				\node[point, label={right:$q$}] (p) at (60:3) {};
+				\draw[very thick, -latex] (o) -- (p) node[midway, below right, math] {\va{R}};
+			\end{tikzpicture}
+		\end{center}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{}
+	What are the units of $\delta^3(\pos)$ if the components of $\pos$ are measured in meters?
+	\begin{enumerate}
+		\item $\delta^3(\pos)$ is a unitless quantity
+		\item $[\si{\meter^3}]$: Units of length cubed
+		\item $[\si{\meter}]$: Units of length
+		\item \alert<2>{$[\si{\meter^{-3}}]$: Units of inverse cubic meters}
+	\end{enumerate}
+\end{frame}
+
+%\begin{frame}{}
+	%Evaluate
+	%\[\int_{\text{all space}}(r^2 + \pos\vdot\va{a} +a^2)\delta^3(\pos-\va{a})\,d\tau\]
+	%\begin{enumerate}
+		%\item $3a^2$
+		%\item $2a^2$
+		%\item $a^2$
+		%\item $0$
+	%\end{enumerate}
+	
+%\end{frame}
+
+
+
+
+
+
+\end{document}

@@ -1,0 +1,190 @@
+\documentclass[pdf,aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,booktabs,lmodern}
+\usepackage{physics}
+\usepackage{em-commands}
+\mode<presentation>{\usetheme{EM}}
+
+%Question Numbering
+\newcounter{questionnumber}
+\newcommand{\qnum}{%
+	\stepcounter{questionnumber}%
+	Q\arabic{questionnumber}
+}
+\resetcounteronoverlays{questionnumber}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+
+\tikzstyle{plate}=[draw, very thick, minimum width=4cm, minimum height=1cm, fill=gray!40, anchor=south]
+
+%preamble
+\title{Current Restrictions}
+\date{November 9, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+	\begin{itemize}
+		\item Homework
+			\begin{itemize}
+				\item HW9 is graded
+				\item HW10 due tonight!
+				\item I'll grade HW10 tomorrow
+			\end{itemize}
+		\item Exam 2
+			\begin{itemize}
+				\item Don't forget Exam 2 is Monday!
+				\item In-class portion similar to Exam 1
+				\item Also a small take-home portion due on Wednesday
+				\item I'm working on objectives for you to study from
+				\item I'll be around a portion of Sunday if you have questions
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{\qnum}
+	\begin{columns}
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\pic (c) at (0,0) {cyl=cyan!50!black/1.5/3/3};
+				\draw[<->] ([xshift=-.4cm]c-lt) -- ([xshift=-.4cm]c-lb) node[left,midway] {$L$};
+				\draw[<->, transform canvas={yshift=-.3cm}] (c-b) -- ($ (c-lt)!(c-b)!(c-lb) $) node[below,midway] {$R$};
+				\foreach \y in {0,-1,-2,-3} \draw[very thick, orange, -latex] (-1,\y) -- +(2,0);
+			\end{tikzpicture}
+		\end{center}
+		
+		\column{0.5\textwidth}
+		A solid cylinder has uniform magnetization $\vmag$ throughout the volume in the $x$ direction as shown. What is the magnitude of the total magnetic dipole moment of the cylinder?
+		\begin{enumerate}
+			\item \alert<2>{$\pi R^2 L M$}
+			\item $2\pi R L M$
+			\item $2\pi R M$
+			\item $\pi R^2 M$
+		\end{enumerate}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{\qnum}
+	\begin{columns}
+		\column{0.5\textwidth}
+		A solid cylinder has uniform magnetization $\vmag$ throughout the volume in the $z$ direction as shown. Where do bound currents show up?
+		\begin{enumerate}
+			\item All surfaces, but not volume
+			\item Volume only, not on surface
+			\item Top/bottom surface only
+			\item \alert<2>{Side (curved) surface only}
+		\end{enumerate}
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\pic (c) (0,0) {cyl=orange!50!black/1.5/3/3};
+				\foreach \x in {-1,0,1} \draw[very thick, white,-latex] (\x,-3) -- +(0,2);
+			\end{tikzpicture}
+		\end{center}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{\qnum}
+	\begin{columns}
+		\column{0.4\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\pic (c) (0,0) {cyl=Red!50!black/1.5/3/3};
+				\foreach \y in {-1,-2,-3}{
+					\draw[very thick, -latex, white] (0,\y)++(90+20:1.2cm and .3cm) arc(90+20:90+340:1.2cm and .3cm);
+				}
+				\node[white] at (0,-1.75) {$\vmag$};
+			\end{tikzpicture}
+		\end{center}
+		\column{0.5\textwidth}
+		A solid cylinder has uniform magnetization $\vmag$ throughout its volume in the $\vu*{\phi}$ direction as shown. In what direction does the bound surface current flow on the curved sides?
+		\begin{enumerate}
+			\item There is no bound surface current
+			\item The current flows in the $+\vu*\phi$ direction
+			\item The current flows in the $+\vu*z$ direction
+			\item \alert<2>{The current flows in the $-\vu*z$ direction}
+		\end{enumerate}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{\qnum}
+	A sphere has uniform magnetization $\vmag$ in the $+\zhat$ direction. What formula is correct to describe the bound surface current about the sphere?
+	\begin{columns}
+		\column{0.5\textwidth}
+		\begin{enumerate}
+			\item $M \sin\theta \vu*{\theta}$
+			\item \alert<2>{$M\sin\theta \vu*{\phi}$}
+			\item $M\cos\phi \vu*{\theta}$
+			\item $M\cos\phi \vu*{\phi}$
+		\end{enumerate}
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\draw[very thick, ball=violet!50] (0,0) circle (1.5);
+				\draw[very thick] (180:1.5) arc (180:360:1.5 cm and 0.7cm);
+				\draw[very thick, -latex] (90:1.2) -- +(0,1.5) node[right] {$\vmag$};
+			\end{tikzpicture}
+		\end{center}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Predict the results of the following experiment.
+
+	A paramagnetic bar and a diamagnetic bar are pushed inside of a solenoid.
+	\begin{enumerate}
+		\item The paramagnet is pushed out, the diamagnet sucked further in
+		\item \alert<2>{The diamagnet is pushed out, the paramagnet sucked further in}
+		\item Both are sucked further in, but with different force
+		\item Both are pushed out, but with different force
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	A very long aluminum (paramagnetic) rod carries a uniformly distributed current $\mcur$ along the $+\zhat$ direction. What is the direction of the bound volume current?
+	\begin{columns}
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\pic (c) at (0,0) {cyl=green!50!black/1.5/3/3};
+				\foreach \x in {-1,0,1} \draw[very thick, -latex, white] (\x,-3) -- +(0,2);
+				\node[white] at (.5,-2) {$\cur$};
+			\end{tikzpicture}
+		\end{center}
+		\column{0.5\textwidth}
+		\begin{enumerate}
+			\item \alert<2>{$+\zhat$}
+			\item $-\zhat$
+			\item $+\vu*{\phi}$
+			\item $-\vu*{\phi}$
+		\end{enumerate}
+	\end{columns}
+\end{frame}
+
+%\begin{frame}{\qnum}
+	%In the same long aluminum (paramagnetic) rod, what would be the direction of the auxiliary field $\af$ and $\vmag$?
+	%\begin{columns}
+		%\column{0.6\textwidth}
+		%\begin{enumerate}
+			%\item Both in the $\vu*{\phi}$ direction
+			%\item Both in the $-\vu*{\phi}$ direction
+			%\item $\af$ in $\vu*{\phi}$ direction, but $\vmag$ in $-\vu*\phi$ direction
+			%\item $\af$ in $-\vu*{\phi}$ direction, but $\vmag$ in $\vu*\phi$ direction
+		%\end{enumerate}
+		%\column{0.3\textwidth}
+		%\begin{center}
+			%\begin{tikzpicture}
+				%\pic (c) at (0,0) {cyl=yellow!50!black/1.5/3/3};
+				%\foreach \x in {-1,0,1} \draw[very thick, -latex, white] (\x,-3) -- +(0,2);
+				%\node[white] at (.5,-2) {$\cur$};
+			%\end{tikzpicture}
+		%\end{center}
+	%\end{columns}
+%\end{frame}
+
+
+\end{document}

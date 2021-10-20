@@ -1,0 +1,126 @@
+\documentclass[pdf,aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,booktabs,lmodern}
+\usepackage{physics}
+\usepackage{em-commands}
+\mode<presentation>{\usetheme{EM}}
+
+%Question Numbering
+\newcounter{questionnumber}
+\newcommand{\qnum}{%
+	\stepcounter{questionnumber}%
+	Q\arabic{questionnumber}
+}
+\resetcounteronoverlays{questionnumber}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+
+\tikzstyle{plate}=[draw, very thick, minimum width=4cm, minimum height=1cm, fill=gray!40, anchor=south]
+
+%preamble
+\title{The Potential of becoming a Vector}
+\date{November 2, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+	\begin{itemize}
+		\item Homework
+			\begin{itemize}
+				\item Homework 9 is due on Monday!
+				\item Homework 10 is going to be super short (like 1 or 2 problems) and will be due a week from \emph{today}
+			\end{itemize}
+		\item Physics Tea at 3!
+		\item Physics Seminar today on Laser Fusion!!
+			\begin{itemize}
+				\item 3:30pm in Collins 318
+			\end{itemize}
+		\item Read Chapter 6.1 for Monday
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{\qnum}
+	For an infinite solenoid of radius $R$, with current $\mcur$, and $n$ turns per unit length, what would be a correct way of writing $\vcd$?
+	\begin{enumerate}
+		\item $\vcd = n\mcur \vu*{\phi}$
+		\item \alert<2>{$\vcd = n\mcur\delta(r-R) \vu*{\phi}$}
+		\item $\vcd = \frac{\mcur}{n}\delta(r-R) \vu*{\phi}$
+		\item $\vcd = \mu_0 n \mcur\delta(r-R) \vu*{\phi}$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	What is required in order to define a vector potential where:
+	\[\laplacian\vA = -\mu_0 \vcd\]
+	\begin{enumerate}
+		\item $\curl\vA = 0$
+		\item \alert<2>{$\div\vA = 0$}
+		\item $\div\vA = \curl\vA$
+		\item $\vA \rightarrow 0$ at $\infty$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	What flexibility do you have in defining the vector potential, given the Coulomb gauge ($\div\vA=0$)? That is, what can $\vA_2$ be that gives us the same $\mf$? Here $C$ or $\va{C}$ is an arbitrary scalar or vector function.
+	\begin{enumerate}
+		\item $\vA_2 = \vA + C$
+		\item $\vA_2 = \vA + \va{C}$
+		\item \alert<2>{$\vA_2 = \vA + \grad{C}$}
+		\item $\vA_2 = \vA + \div{\va{C}}$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Assuming $\vcd$ goes to 0 at $\infty$, we can calculate $\vA$ in Cartesian using:
+	\[\vA(\pos) = \frac{\mu_0}{4\pi}\int \frac{\vcd(\pos_s)}{\srmag}d\tau_s\]
+	Can this integral also be done in spherical coordinates?
+	\begin{enumerate}
+		\item Yes, no problem
+		\item \alert<2>{Yes, $r_s$ can be spherical but $\vcd$ needs to be in Cartesian components}
+		\item Yes, $\vcd$ can be spherical, but $r_s$ needs to be in Cartesian components
+		\item No, this will not work due to cross terms in the spherical Laplacian
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	\begin{columns}
+		\column{0.4\textwidth}
+		Assuming the Coulomb gauge, the vector potential $\vA$ due to a long straight wire with current $\cur$ along the $z$-axis points in what direction?
+		\begin{enumerate}
+			\item \alert<2>{$\zhat$}
+			\item $\vu*{\phi}$
+			\item $\vu*{s}$
+		\end{enumerate}
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\draw[very thick, ->-=.7, Red] (0,0) -- +(0,4) node[pos=.7,right] {$\cur$};
+				\draw[thick, -latex] (0,4.5) -- +(0,1) node[above] {$\zhat$};
+			\end{tikzpicture}
+		\end{center}
+	\end{columns}
+\end{frame}
+
+%\begin{frame}{\qnum}
+	%What is the physical interpretation of $\oint \vA \vdot d\vell$?
+	%\begin{enumerate}
+		%\item The current density $\vcd$
+		%\item The magnetic field $\mf$
+		%\item The magnetic flux through a surface
+		%\item It has no particular physical interpretation
+	%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}{\qnum}
+	%Consider a square loop of height $H$ and length $\ell$ enclosing some amount of magnetic field. What happens to $\Phi_B$ as $H$ becomes vanishingly small?
+	%\begin{enumerate}
+		%\item $\Phi_B$ stays constant
+		%\item $\Phi_B$ gets smaller but doesn't vanish
+		%\item $\Phi_B$ goes to 0
+	%\end{enumerate}
+%\end{frame}
+
+\end{document}

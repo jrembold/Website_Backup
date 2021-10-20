@@ -1,0 +1,132 @@
+\documentclass[pdf,aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,booktabs,lmodern}
+\usepackage{physics}
+\usepackage{em-commands}
+\mode<presentation>{\usetheme{EM}}
+
+%Question Numbering
+\newcounter{questionnumber}
+\newcommand{\qnum}{%
+	\stepcounter{questionnumber}%
+	Q\arabic{questionnumber}
+}
+\resetcounteronoverlays{questionnumber}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+
+%preamble
+\title{But what is being displaced?!}
+\date{October 15, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+	\begin{itemize}
+		\item Test Results
+			\begin{itemize}
+				\item Trying to hand things back on Wednesday
+				\item Definitely by next Monday
+				\item Some people still need to take it so don't be too chatty about it yet please!
+			\end{itemize}
+		\item Homework 7 is posted! Due next Monday
+		\item No class on Friday!
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{\qnum}
+	If you put a polarizable material (a dielectric) in an external field $\ef_{ext}$, it polarizes, adding a new field, $\ef_{pol}$.
+	These superpose, making a total field $\ef_{tot}$. What is the vector equation relating these fields?
+	\begin{enumerate}
+		\item $\ef_{tot} + \ef_{ext} + \ef_{pol} = 0$
+		\item $\ef_{tot} = \ef_{ext} - \ef_{pol}$
+		\item \alert<2>{$\ef_{tot} = \ef_{ext} + \ef_{pol}$}
+		\item $\ef_{tot} = -\ef_{ext} + \ef_{pol}$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	We define the ``Electric Displacement'' or ``D'' field:
+	\[\va{D} = \epsilon_0\ef + \va{P}\]
+	If you put a dielectric in an \emph{external} field, it polarizes, adding a new \emph{induced} field (from the bound charges). These then superpose, making a \emph{total} electric field. Which of these three fields is the $\ef$ in the formula for $\va{D}$ above?
+	\begin{enumerate}
+		\item $\ef_{external}$
+		\item $\ef_{induced}$
+		\item \alert<2>{$\ef_{total}$}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	A solid non-conducting dielectric rod has been injected (``doped'') with a fixed, known charge distribution $\rho(s)$.
+	The material then responds, polarizing internally.
+
+	When computing $D$ in the rod, do you treat this $\rho(s)$ as the ``free charges'' or ``bound charges''?
+	\begin{enumerate}
+		\item \alert<2>{``free charge!''}
+		\item ``bound charge!''
+		\item Neither! $\rho(s)$ is some combination of the two
+		\item Something else
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	We define $\va{D} = \epsilon_0 \ef + \va{P}$ with
+	\[\oint \va{D}\vdot d\vA = Q_{free}\]
+	A point charge $+q$ is placed at the center of a dielectric sphere of radius $R$.
+	There are no other free charges anywhere.
+	What is $\abs{\va{D}(r)}$?
+	\begin{enumerate}
+		\item \alert<2>{$\displaystyle \frac{q}{4\pi r^2}$}
+		\item $\displaystyle \frac{q}{4\pi\epsilon_0 r^2}$
+		\item $\displaystyle \frac{q}{4\pi r^2}$ for $r<R$, but $\displaystyle \frac{q}{4\pi\epsilon_0 r^2}$ for $r>R$
+		\item None of the above, we need more information to answer.
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	When there are no free charges ($\rho_{free}=0$) in a dielectric material, does the electric potential $V$ in that material satisfy Laplace's Equation?
+	\[\laplacian V = 0\]
+	\begin{enumerate}
+		\item Yes
+		\item No
+		\item \alert<2>{Sometimes}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	An ``electret'' is the electric equivalent of a bar magnet. 
+	Say you have a cylindrical electret whose baked in polarization points along the cylinder's axis, going as:
+	\[\va{P} = P_0 \zhat\]
+	There are no free charges present.
+	Which of the following would be a true statement?
+	\begin{enumerate}
+		\item $\ef=0$ everywhere
+		\item $\va{D}=0$ everywhere
+		\item $\abs*{\va{P}}=P_0$ everywhere
+		\item \alert<2>{None of the above}
+	\end{enumerate}
+\end{frame}
+
+%\begin{frame}{\qnum}
+	%With the previous problem, we saw that despite there being no free charges present, $\ef\neq 0$ and thus $\va{D}\neq 0$.
+	%Since $\div \va{D} = \rho_{free}$, this implies that $\curl \va{D} \neq 0$. Where is there a non-zero value of the curl of $\va{D}$ in this problem?
+	%\begin{enumerate}
+		%\item In the center of the cylinder
+		%\item At the top surface
+		%\item At the bottom surface
+		%\item Outside the cylinder
+	%\end{enumerate}
+%\end{frame}
+
+
+
+
+
+
+
+
+
+\end{document}

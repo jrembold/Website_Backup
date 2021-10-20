@@ -1,0 +1,156 @@
+\documentclass[pdf,aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,booktabs,lmodern}
+\usepackage{physics}
+\usepackage{em-commands}
+\mode<presentation>{\usetheme{EM}}
+
+%Question Numbering
+\newcounter{questionnumber}
+\newcommand{\qnum}{%
+	\stepcounter{questionnumber}%
+	Q\arabic{questionnumber}
+}
+\resetcounteronoverlays{questionnumber}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+
+\tikzstyle{plate}=[draw, very thick, minimum width=4cm, minimum height=1cm, fill=gray!40, anchor=south]
+
+%preamble
+\title{Auxiliary is Hard to Spell}
+\date{November 14, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+	\begin{itemize}
+		\item Exam 2
+			\begin{itemize}
+				\item Take-home portion due today at 7pm
+				\item Deliver the hard-copy in person or email me a pdf of everything (including the signed cover page!)
+			\end{itemize}
+		\item Homework
+			\begin{itemize}
+				\item I'm trying to get Homework 11 out today, due after Thanksgiving
+				\item On all the Ch 6 material
+				\item Only 1 more homework after that!
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{\qnum}
+	A very long silver (diamagnetic) rod carries a uniformly distributed current $\mcur$ along the $+\zhat$ direction. What is the direction of the bound volume current?
+	\begin{columns}
+		\column{0.5\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\pic (c) at (0,0) {cyl=green!50!black/1.5/3/3};
+				\foreach \x in {-1,0,1} \draw[very thick, -latex, white] (\x,-3) -- +(0,2);
+				\node[white] at (.5,-2) {$\cur$};
+			\end{tikzpicture}
+		\end{center}
+		\column{0.5\textwidth}
+		\begin{enumerate}
+			\item $+\zhat$
+			\item \alert<2>{$-\zhat$}
+			\item $+\vu*{\phi}$
+			\item $-\vu*{\phi}$
+		\end{enumerate}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{\qnum}
+	In the same long silver (diamagnetic) rod, what would be the direction of the auxiliary field $\af$ and $\vmag$?
+	\begin{columns}
+		\column{0.6\textwidth}
+		\begin{enumerate}
+			\item Both in the $\vu*{\phi}$ direction
+			\item Both in the $-\vu*{\phi}$ direction
+			\item \alert<2>{$\af$ in $\vu*{\phi}$ direction, but $\vmag$ in $-\vu*\phi$ direction}
+			\item $\af$ in $-\vu*{\phi}$ direction, but $\vmag$ in $\vu*\phi$ direction
+		\end{enumerate}
+		\column{0.3\textwidth}
+		\begin{center}
+			\begin{tikzpicture}
+				\pic (c) at (0,0) {cyl=yellow!50!black/1.5/3/3};
+				\foreach \x in {-1,0,1} \draw[very thick, -latex, white] (\x,-3) -- +(0,2);
+				\node[white] at (.5,-2) {$\cur$};
+			\end{tikzpicture}
+		\end{center}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Say you wanted to determine the magnitude of $\af$ inside the rod using an Amperian loop. What would be the most useful loop to draw?
+	\begin{center}
+		\begin{tikzpicture}
+			\coordinate (c) at (0,0);
+			\pic at (c) {cyl=green!50!black/1.5/3/3};
+			\draw[dashed, very thick] (c)++(1,-1.5) arc (0:360:1cm and .3cm);
+			\node<1>[above=1cm, font=\Large] at (c) {A};
+			\node<2>[above=1cm, font=\Large, teal] at (c) {A};
+		\end{tikzpicture}
+		\begin{tikzpicture}
+			\coordinate (c) at (0,0);
+			\pic at (c) {cyl=cyan!50!black/1.5/3/3};
+		\draw[dashed, very thick] (c)++(1,-1) --++ (0,-1.5) --++(-1,0) -- ++(0,1.5) -- cycle;
+			\node[above=1cm, font=\Large] at (c) {B};
+		\end{tikzpicture}
+		\begin{tikzpicture}
+			\coordinate (c) at (0,0);
+			\pic at (c) {cyl=orange!50!black/1.5/3/3};
+		\draw[dashed, very thick] (c)++(1,-1) --++ (0,-1) --++(-2,0) -- ++(0,1) -- cycle;
+			\node[above=1cm, font=\Large] at (c) {C};
+		\end{tikzpicture}
+		\begin{tikzpicture}
+			\coordinate (c) at (0,0);
+			\pic at (c) {cyl=violet!50!black/1.5/3/3};
+		\draw[dashed, very thick] (c)++(.5,-1) --++ (2,0) --++(0,-1) -- ++(-2,0) -- cycle;
+			\node[above=1cm, font=\Large] at (c) {D};
+		\end{tikzpicture}
+	\end{center}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Take the case of a short, cylindrical iron magnet, which has some baked-in magnetization pointing in the $\zhat$ direction. What can you conclude about the auxiliary field $\af$?
+	\begin{enumerate}
+		\item $\af = 0$
+		\item $\af = \vmag$
+		\item $\af = -\vmag$
+		\item \alert<2>{None of the above}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Take an infinitely long, cylindrical (radius$=R$), iron magnet with a "frozen-in" magnetization given by:
+	\[\vmag = M_0 \zhat\]
+	What is the magnitude of the magnetic field outside the magnet?
+	\begin{enumerate}
+		\item \alert<2>{0}
+		\item $\mu_0 M_0$
+		\item $\mu_0 M_0 R$
+		\item $\displaystyle \mu_0 \frac{M_0 R}{s}$
+	\end{enumerate}
+\end{frame}
+
+
+%\begin{frame}{\qnum}
+	%For linearly magnetizable materials, the relationship between the magnetization and the H-field is
+	%\[\vmag = \chi_m \af\]
+	%What do you expect the sign of $\chi_m$ to be for a paramagnetic/diamagnetic material?
+	%\begin{enumerate}
+		%\item Both positive
+		%\item Both negative
+		%\item Para positive and Dia negative
+		%\item Para negative and Dia positive
+	%\end{enumerate}
+%\end{frame}
+
+
+
+
+\end{document}

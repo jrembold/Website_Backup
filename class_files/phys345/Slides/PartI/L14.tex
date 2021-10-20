@@ -1,0 +1,109 @@
+\documentclass[pdf,aspectratio=169]{beamer}
+\usepackage[]{hyperref,graphicx,siunitx,lmodern,booktabs}
+\usepackage{physics}
+\usepackage{em-commands}
+\mode<presentation>{\usetheme{EM}}
+
+%Question Numbering
+\newcounter{questionnumber}
+\newcommand{\qnum}{%
+	\stepcounter{questionnumber}%
+	Q\arabic{questionnumber}
+}
+\resetcounteronoverlays{questionnumber}
+
+\graphicspath{ {../Images/} }
+
+\sisetup{per-mode=symbol}
+
+%preamble
+\title{Just chill}
+\date{September 28, 2018}
+\author{Jed Rembold}
+
+\begin{document}
+\renewcommand{\theenumi}{\Alph{enumi}}
+
+\begin{frame}{Announcements}
+	\begin{itemize}
+		\item Homework 5 due on Monday!
+			\begin{itemize}
+				\item It should all be doable after today, so don't save it all till Monday!
+				\item Heavy use of plotting throughout the homework, but I'm trying to convey that you should be comfortable and familiar with visualizing results.
+			\end{itemize}
+		\item Polls up for HW4 time and preferred Test 1 type on Campuswire! Don't dally as they expire today!
+		\item Have read Ch 3.3.1 and at least part of Ch 3.3.2 by Monday
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Consider a function $f(x)$ that is both continuous and differentiable over some domain. Given a step size of $a$, which could be an approximate derivative of this function somewhere in that domain?
+	\[\dv{f}{x} \approx\]
+	\begin{enumerate}
+		\item $\displaystyle \frac{f(x_i + a) - f(x_i)}{x_i}$
+		\item $\displaystyle \frac{f(x_i+a) - f(x)}{a}$
+		\item $\displaystyle \frac{f(x_i) - f(x_i-a)}{a}$
+		\item \alert<2>{More than one of these\onslide<2>{ (B and C)}}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Say we want to use
+	\[\dv{f}{x} \approx \frac{f(x_i+a) - f(x_i)}{a}\]
+	What point best describes the location at which we are computing the approximate derivative?
+	\begin{enumerate}
+		\item $a$
+		\item $x_i$
+		\item $x_i + a$
+		\item \alert<2>{Somewhere else\onslide<2>{  ($x_i + a/2$)}}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	Taking a second derivative is as simple as applying the same discrete derivative equation again, at the location of the first derivative.
+	\[f^{\prime\prime}(x_i) \approx \frac{f^\prime(x_i + a/2) - f^\prime(x_i-a/2)}{a}\]
+What is the value of the second derivative then in terms of $f$?
+\begin{enumerate}
+	\item \alert<2>{$\displaystyle \frac{f(x-a/2) - 2f(x+a/2) + f(x+3a/2)}{a^2}$}
+	\item $\displaystyle \frac{f(x-a/2) + f(x+3a/2)}{a^2}$
+	\item $\displaystyle \frac{- 2f(x+a/2) }{a^2}$
+	\item $\displaystyle \frac{f(x-a/2) + 2f(x+a/2) + f(x+3a/2)}{a^2}$
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Implementing Relaxation}
+	\begin{enumerate}
+		\item Break up region of interest into discrete chunks
+		\item Set boundary conditions
+		\item Set initial guess at all other starting values
+		\item Choose max iterations and target accuracy
+		\item Start relaxing!
+			\begin{itemize}
+				\item Update all non-boundary terms with average of neighbors
+				\item Calculate difference from last iteration
+				\item Compare to target accuracy to see if keep iterating or target reached!
+			\end{itemize}
+		\item Plot up those sweet sweet results
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{\qnum}
+	To investigate if we have converged to a solution, we must compare our estimate of $V$ before and after the averaging calculation. For our 1D relaxation code, $V$ will be a 1D array. For the $k$th estimate, we can compare $V_k$ against the previous value by taking the difference. If this difference is stored as \texttt{err}, what is the type of \texttt{err}?
+	\begin{enumerate}
+		\item A scalar
+		\item \alert<2>{A 1D array}
+		\item A 2D array
+		\item A string
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Demo!}
+	For the rest of class I'll walk you through how I'd approach putting together a method of relaxation solver for the 1D case. A video of this will be available, but the notebook itself will not! Feel free to follow along on your laptops and ask questions as we go!
+	\vspace{1cm}
+
+	\textbf{Our problem:} Solve the 1D Laplace equation where $V(x=0) = -5$ and $V(x=50)=10$. We'd like to be accurate at least to within \si{\milli\volt}.
+\end{frame}
+
+
+
+\end{document}
