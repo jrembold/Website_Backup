@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2021-03-29">
-  <title>Getting Classy</title>
+  <meta name="dcterms.date" content="2021-10-27">
+  <title>Manipulating the Pixel Record</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -27,28 +27,139 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Getting Classy</h1>
+  <h1 class="title">Manipulating the Pixel Record</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">March 29, 2021</p>
+  <p class="date">October 27, 2021</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Project 3 is posted and due next Sunday evening!</li>
-<li>Sections this week will focus on questions related to Project 3</li>
-<li>Grading
+<li>Problem Set 5 is posted and ready for you to complete!</li>
+<li>Make sure you attend your sections today or tomorrow about lists</li>
+<li>Grading progress update
 <ul>
-<li>I took a bit of a break this weekend from grading, but rest assured I’m jumping back into it now</li>
-<li>I’m going to finish scoring PS4 and Project 2 before tackling the midterm</li>
+<li>Almost all of the PS3’s got graded, I only didn’t get through about 10</li>
+<li>I’ve got the basics in place to try to give grade reports, but it is still a little manual atm. If you would like a grade report to make any decisions about withdrawing or not, just ask and I’ll take the time to make one</li>
+<li>All the rest of my free time at the moment is going toward grading the midterm. I’m still hoping for Friday, but we’ll see. There are a lot of you.</li>
 </ul></li>
 <li>Polling: <a href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
 </section>
-<section id="review-question" class="slide level2" data-notes="Solution: 17 times!">
-<h2 data-notes="Solution: 17 times!">Review Question</h2>
-<p>The code for the main function of Merge Sort looked like below:</p>
-<pre ><code class="python" data-line-numbers="">def merge_sort(array):
+<section id="review-question" class="slide level2" data-notes="Solution: D[1][2]">
+<h2 data-notes="Solution: D[1][2]">Review Question</h2>
+<p>After running the below code, how would you access the <code class="python">"ninja"</code> element in list <code class="python">D</code>?</p>
+<pre ><code class="python">A = ['pirate', 'ninja']
+B = ['samurai'] + A
+C = [B, ['ship', 'rope', 'horse']]
+D = C[::-1]</code></pre>
+<div class="poll">
+<ol>
+<li><code class="python">D[1][0]</code></li>
+<li><code class="python">D[0][1]</code></li>
+<li><code class="python">D[0][2]</code></li>
+<li><code class="python">D[1][2]</code></li>
+</ol>
+</div>
+</section>
+<section id="d-arrays-images" class="slide level2">
+<h2>2D Arrays → Images</h2>
+<ul>
+<li>Image data is commonly stored in two-dimensional arrays</li>
+<li>Each element stores information about the pixel that exists at that location</li>
+<li>The <code class="python">GImage</code> class lets you convert between the image itself and the array representing the image contents by using the <code class="python">get_pixel_array</code> method, which returns a two-dimensional array of integers.</li>
+<li>We could get the pixels from our example image using:</li>
+</ul>
+<pre ><code class="python">image = GImage("VLA_Moonset.jpg")
+pixels = image.get_pixel_array()</code></pre>
+<ul>
+<li>The first index of the pixel array gets you the row, the second index gets you the column</li>
+</ul>
+</section>
+<section id="pixel-contents" class="slide level2">
+<h2>Pixel Contents</h2>
+<ul>
+<li>Each element in a pixel array is an integer in which the 32 bits are interpreted as:</li>
+</ul>
+<p><img data-src="../images/svg_cache/6f4ab5a843e8ce0709d2fd9fd2ccd797caacd077.svg" style="width:90.0%" /></p>
+<ul>
+<li>The first byte (8 bits) is the transparency or alpha</li>
+<li>The next three bytes indicate the amount of red, green, and blue in the pixel, where each value varies from 0 to 255
+<ul>
+<li>Form the RGB of a color, generally expressed in hexadecimal form
+<ul>
+<li><code class="python">10010101</code> → <code class="python">0x95</code></li>
+<li><code class="python">00111001</code> → <code class="python">0x39</code></li>
+<li><code class="python">01100011</code> → <code class="python">0x63</code></li>
+</ul></li>
+<li>Overall color: <code class="no-highlight">#953963</code> or <svg width="100" height="40" style="display:inline"><rect width="100" height="40" style="fill:#953963"></rect></svg></li>
+</ul></li>
+</ul>
+</section>
+<section id="combining-light-colors" class="slide level2">
+<h2>Combining Light Colors</h2>
+<figure>
+<img data-src="../images/RGB_illumination.jpg" style="width:60.0%" alt="Additive Colors" /><figcaption aria-hidden="true">Additive Colors</figcaption>
+</figure>
+</section>
+<section id="transparency" class="slide level2">
+<h2>Transparency</h2>
+<ul>
+<li>The first byte (8 bits) of the pixel value gives the transparency, which indicates how much of the background is allowed to show through</li>
+<li>Often denoted with the Greek letter alpha: <span class="math inline">\(\alpha\)</span></li>
+<li>Varies from 0 to 255 like the other 8 bit values:
+<ul>
+<li>0 is entirely transparent</li>
+<li>255 is entirely opaque</li>
+</ul></li>
+</ul>
+</section>
+<section id="breaking-out-the-colors" class="slide level2">
+<h2>Breaking out the Colors</h2>
+<ul>
+<li>You do not need to convert the pixel values yourself! PGL has built-in ways to extract the various colors</li>
+</ul>
+<div style="font-size:.8em;">
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">GImage.get_red(pixel)</code></td>
+<td>Returns the integer (0-255) corresponding to the red portion of the pixel</td>
+</tr>
+<tr class="even">
+<td><code class="python">GImage.get_green(pixel)</code></td>
+<td>Returns the integer (0-255) corresponding to the green portion of the pixel</td>
+</tr>
+<tr class="odd">
+<td><code class="python">GImage.get_blue(pixel)</code></td>
+<td>Returns the integer (0-255) corresponding to the blue portion of the pixel</td>
+</tr>
+<tr class="even">
+<td><code class="python">GImage.get_alpha(pixel)</code></td>
+<td>Returns the integer (0-255) corresponding to the alpha portion of the pixel</td>
+</tr>
+<tr class="odd">
+<td><code class="python">GImage.create_rgb_pixel(r,g,b)</code></td>
+<td>Returns a 32-bit integer corresponding to the desired color</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--
+## Review Question {data-notes="Solution: 17 times!"}
+The code for the main function of Merge Sort looked like below:
+```{.python data-line-numbers=""}
+def merge_sort(array):
     if len(array) > 1:
         mid = len(array)//2
         a1 = array[:mid]
@@ -57,256 +168,77 @@
         merge_sort(a2)
         merge(array, a1, a2)
 L = [45, 32, 68, 78, 12, 95, 312, 4, 32]
-merge_sort(L)</code></pre>
-<p>How many times (including line 10) does <code class="python">merge_sort</code> get called before the list is sorted?</p>
-<div class="hpoll">
-<ol>
-<li>1</li>
-<li>8</li>
-<li>12</li>
-<li>17</li>
-</ol>
+merge_sort(L)
+```
+How many times (including line 10) does `merge_sort` get called before the list is sorted?
+
+:::{.hpoll }
+#. 1
+#. 8
+#. 12
+#. 17
+:::
+
+## Standard Complexity Classes
+
+Name | Big-O | Example
+---|---|---
+constant | $\mathcal{O}(1)$ | Finding the first element of an array
+logarithmic | $\mathcal{O}(\log N)$ | Binary search in a sorted array
+linear | $\mathcal{O}(N)$ | Summing over an array, or linear search
+$N \log N$ | $\mathcal{O}(N\log N)$ | Merge sort
+quadratic | $\mathcal{O}(N^2)$ | Selection sort
+cubic | $\mathcal{O}(N^3)$ | Obvious algorithms for matrix multiplication
+exponential | $\mathcal{O}(2^N)$ | Branch and try all possibilities
+
+- In general, any problem who complexity can not be expressed as a polynomial is considered _intractable_
+
+
+## P vs NP
+![\ ](../images/P_NP.svg)
+-->
+</section>
+<section id="image-thresholding" class="slide level2">
+<h2>Image Thresholding</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>As an example of reading and manipulating pixel values, lets look at how we could threshold the image to the right</li>
+<li>Thresholding is when you take a grayscale image and convert it to a black and white image, where a pixel is set to be white if it is above a certain threshold in brightness</li>
+<li>Grayscale, so each RGB component is the same</li>
+<li>Let’s threshold at a value of 30</li>
+</ul>
+</div>
+<div class="col">
+<figure>
+<img data-src="../images/Moon.png" alt="Blurry Moon by Jed Rembold" /><figcaption aria-hidden="true">Blurry Moon by Jed Rembold</figcaption>
+</figure>
+</div>
 </div>
 </section>
-<section id="standard-complexity-classes" class="slide level2">
-<h2>Standard Complexity Classes</h2>
-<table>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Big-O</th>
-<th>Example</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>constant</td>
-<td><span class="math inline">\(\mathcal{O}(1)\)</span></td>
-<td>Finding the first element of an array</td>
-</tr>
-<tr class="even">
-<td>logarithmic</td>
-<td><span class="math inline">\(\mathcal{O}(\log N)\)</span></td>
-<td>Binary search in a sorted array</td>
-</tr>
-<tr class="odd">
-<td>linear</td>
-<td><span class="math inline">\(\mathcal{O}(N)\)</span></td>
-<td>Summing over an array, or linear search</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(N \log N\)</span></td>
-<td><span class="math inline">\(\mathcal{O}(N\log N)\)</span></td>
-<td>Merge sort</td>
-</tr>
-<tr class="odd">
-<td>quadratic</td>
-<td><span class="math inline">\(\mathcal{O}(N^2)\)</span></td>
-<td>Selection sort</td>
-</tr>
-<tr class="even">
-<td>cubic</td>
-<td><span class="math inline">\(\mathcal{O}(N^3)\)</span></td>
-<td>Obvious algorithms for matrix multiplication</td>
-</tr>
-<tr class="odd">
-<td>exponential</td>
-<td><span class="math inline">\(\mathcal{O}(2^N)\)</span></td>
-<td>Branch and try all possibilities</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>In general, any problem who complexity can not be expressed as a polynomial is considered <em>intractable</em></li>
-</ul>
-</section>
-<section id="p-vs-np" class="slide level2">
-<h2>P vs NP</h2>
-<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="381.3996mm"
-   height="164.10258mm"
-   viewBox="0 0 381.3996 164.10259"
-   version="1.1"
-   id="svg8"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
-   sodipodi:docname="P_NP.svg">
-  <defs
-     id="defs2" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#363636"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="681.77593"
-     inkscape:cy="285.93943"
-     inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
-     inkscape:document-rotation="0"
-     showgrid="false"
-     inkscape:window-width="2528"
-     inkscape:window-height="1381"
-     inkscape:window-x="1096"
-     inkscape:window-y="43"
-     inkscape:window-maximized="1" />
-  <metadata
-     id="metadata5">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(-240.0478,19.532075)">
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:60.5762px;line-height:1.25;font-family:'Trebuchet MS';-inkscape-font-specification:'Trebuchet MS, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f92672;fill-opacity:1;stroke:none;stroke-width:0.264583;"
-       x="384.15753"
-       y="35.101734"
-       id="text835"><tspan
-         sodipodi:role="line"
-         id="tspan833"
-         x="384.15753"
-         y="35.101734"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:60.5762px;font-family:'Trebuchet MS';-inkscape-font-specification:'Trebuchet MS, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#f92672;stroke-width:0.264583;">P</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:60.5762px;line-height:1.25;font-family:'Trebuchet MS';-inkscape-font-specification:'Trebuchet MS, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:0.264583;"
-       x="477.37659"
-       y="34.805954"
-       id="text1408"><tspan
-         sodipodi:role="line"
-         id="tspan1406"
-         x="477.37659"
-         y="34.805954"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:60.5762px;font-family:'Trebuchet MS';-inkscape-font-specification:'Trebuchet MS, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#66d9ef;stroke-width:0.264583;">NP</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.359px;line-height:1.25;font-family:'Trebuchet MS';-inkscape-font-specification:'Trebuchet MS, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264582"
-       x="272.90671"
-       y="73.434433"
-       id="text1412"
-       transform="scale(0.87481662,1.1430967)"><tspan
-         sodipodi:role="line"
-         id="tspan1410"
-         x="272.90671"
-         y="73.434433"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.359px;font-family:'Trebuchet MS';-inkscape-font-specification:'Trebuchet MS, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.264582">Easy to solve</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.359px;line-height:1.25;font-family:'Trebuchet MS';-inkscape-font-specification:'Trebuchet MS, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264582"
-       x="272.90671"
-       y="117.30214"
-       id="text1416"
-       transform="scale(0.87481662,1.1430967)"><tspan
-         sodipodi:role="line"
-         id="tspan1414"
-         x="272.90671"
-         y="117.30214"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.359px;font-family:'Trebuchet MS';-inkscape-font-specification:'Trebuchet MS, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.264582">Easy to verify</tspan></text>
-    <g
-       id="g1446"
-       class="fragment"
-       data-fragment-index="0"
-       transform="matrix(0.58530583,0,0,0.58530583,99.546422,-8.0998377)"
-       style="stroke-width:1.70851">
-      <path
-         style="fill:#a6e22e;stroke:#272822;stroke-width:0.452042px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="m 481.68147,130.52315 c 10.64097,11.70587 20.56098,24.19162 24.99536,40.80089 11.30069,-29.73519 26.09705,-60.03747 45.39852,-89.038649 L 506.4539,141.9872 Z"
-         id="path1418"
-         sodipodi:nodetypes="ccccc" />
-      <path
-         style="fill:#a6e22e;stroke:#272822;stroke-width:0.452042px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="m 481.68147,219.30245 c 10.64097,11.70587 20.56098,24.19162 24.99536,40.80089 11.30069,-29.73519 26.09705,-60.03747 45.39852,-89.03866 L 506.4539,230.7665 Z"
-         id="path1420"
-         sodipodi:nodetypes="ccccc" />
-    </g>
-    <path
-       style="fill:#a6e22e;stroke:#272822;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 494.02582,120.25916 c 6.22823,6.85152 12.03446,14.1595 14.62993,23.881 6.61436,-17.40418 15.27476,-35.14028 26.57202,-52.114843 l -26.7025,34.943823 z"
-       id="path1422"
-       sodipodi:nodetypes="ccccc"
-       class="fragment"
-       data-fragment-index="1" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:49.0354px;line-height:1.25;font-family:'Trebuchet MS';-inkscape-font-specification:'Trebuchet MS, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#fd971f;fill-opacity:1;stroke:none;stroke-width:0.264583;"
-       x="505.89117"
-       y="87.576302"
-       id="text1426"
-       class="fragment"
-       data-fragment-index="2"><tspan
-         sodipodi:role="line"
-         id="tspan1424"
-         x="505.89117"
-         y="87.576302"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:49.0354px;font-family:'Trebuchet MS';-inkscape-font-specification:'Trebuchet MS, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#fd971f;stroke-width:0.264583;">?</tspan></text>
-    <g
-       id="g1452"
-       class="fragment"
-       data-fragment-index="2"
-       transform="matrix(0.58530583,0,0,0.58530583,99.546422,-8.0998377)"
-       style="stroke-width:1.70851">
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:75.9964px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#fd971f;fill-opacity:1;stroke:none;stroke-width:0.452042;"
-         x="570.96332"
-         y="63.008766"
-         id="text1430"><tspan
-           sodipodi:role="line"
-           id="tspan1428"
-           x="570.96332"
-           y="63.008766"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:75.9964px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#fd971f;stroke-width:0.452042;">=</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:44.8661px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#fd971f;fill-opacity:1;stroke:none;stroke-width:0.452042;"
-         x="581.1347"
-         y="22.792524"
-         id="text1434"><tspan
-           sodipodi:role="line"
-           id="tspan1432"
-           x="581.1347"
-           y="22.792524"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:44.8661px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#fd971f;stroke-width:0.452042;">?</tspan></text>
-    </g>
-    <g
-       id="g1442"
-       style="fill:#f92672;stroke:#f92672;stroke-width:20.9096;stroke-miterlimit:4;stroke-dasharray:none"
-       transform="matrix(0.3753536,0,0,0.37072911,270.66612,-61.363648)"
-       class="fragment fade-in-then-out"
-       data-fragment-index="1">
-      <path
-         style="fill:#f92672;stroke:#f92672;stroke-width:20.9096;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m 608.1215,317.5609 c 18.99301,28.03276 43.88302,52.69495 78.69251,71.68743"
-         id="path1436"
-         sodipodi:nodetypes="cc" />
-      <path
-         style="fill:#f92672;stroke:#f92672;stroke-width:20.9096;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m 620.37234,383.67816 56.95821,-58.49038"
-         id="path1438" />
-    </g>
-  </g>
-</svg>
-</p>
+<section id="thresholding-code" class="slide level2">
+<h2>Thresholding Code</h2>
+<pre ><code class="python" style="max-height:900px; font-size:.8em;">from pgl import GWindow, GImage
+
+def threshold(e):
+    thresh_value = 30
+    height = len(pixels)
+    width = len(pixels[0])
+    new_array = [[0 for i in range(width)] for i in range(height)]
+    for r in range(height):
+        for c in range(width):
+            if GImage.get_red(pixels[r][c]) > thresh_value:
+                new_array[r][c] = GImage.create_rgb_pixel(0, 255, 0)
+            else:
+                new_array[r][c] = GImage.create_rgb_pixel(0, 0, 0)
+    new_image = GImage(new_array)
+    gw.add(new_image)
+
+gw = GWindow(800, 525)
+image = GImage("Moon.png")
+gw.add(image)
+pixels = image.get_pixel_array()
+gw.add_event_listener("click", threshold)</code></pre>
 </section>
 <section id="an-objects-purpose" class="slide level2">
 <h2>An Object’s Purpose</h2>
@@ -331,7 +263,7 @@ merge_sort(L)</code></pre>
 <li>In 2017, researchers established that the below tablet records Pythagorean triples!</li>
 </ul>
 <figure>
-<img data-src="../images/Plimpton_322.jpg" style="width:40.0%" alt="" /><figcaption>The Plimpton 322 Tablet</figcaption>
+<img data-src="../images/Plimpton_322.jpg" style="width:40.0%" alt="The Plimpton 322 Tablet" /><figcaption aria-hidden="true">The Plimpton 322 Tablet</figcaption>
 </figure>
 </section>
 <section id="recording-dickens" class="slide level2">
@@ -712,7 +644,7 @@ merge_sort(L)</code></pre>
 </ul></li>
 </ul>
 <figure>
-<img data-src="../images/ObjectRepresentations.png" alt="" /><figcaption>Objects are references!</figcaption>
+<img data-src="../images/ObjectRepresentations.png" alt="Objects are references!" /><figcaption aria-hidden="true">Objects are references!</figcaption>
 </figure>
 </section>
     </div>
@@ -738,6 +670,18 @@ merge_sort(L)</code></pre>
 		//autoAnimateEasing: 'ease-in',
 		//autoAnimateDuration: 1.0,
 		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
         // Display the page number of the current slide
         slideNumber: true,
         // Add the current slide number to the URL hash so that reloading the
@@ -745,15 +689,70 @@ merge_sort(L)</code></pre>
         hash: true,
         // Push each slide change to the browser history
         history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
         // Vertical centering of slides
         center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
         // Transition style
         transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
         height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
 		math: {
 		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
 		  <!--config: 'tex-mml-chtml',-->
