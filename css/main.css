@@ -208,7 +208,7 @@ header nav span:hover {
 #banner {
 	width: 99%;
 	height: 400px;
-	background-image: url('/~jjrembold/images/banner.jpg');
+	background-image: url("{{ "images/banner.jpg" | relURL }}");
 	background-size: cover;
 	border-radius: 20px;
 	margin-left: auto;
