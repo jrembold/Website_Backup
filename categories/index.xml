@@ -2,10 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Jeds Digital Home</title>
-    <link>/website_copy/categories/</link>
+    <link>/Website_Backup/categories/</link>
     <description>Recent content in Categories on Jeds Digital Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="/website_copy/categories/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/Website_Backup/categories/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
