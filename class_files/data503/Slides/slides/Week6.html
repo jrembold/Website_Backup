@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <title>Grouping Containers</title>
+  <title>Grouping JSON Models</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -16,8 +16,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -31,566 +34,451 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Grouping Containers</h1>
+  <h1 class="title">Grouping JSON Models</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Wednesday, February 15, 2023</p>
+  <p class="date">February 22/27, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Homework 5 is due on Sunday!</li>
-<li>No homework for next week, because you have a midterm to study
-for!</li>
-<li>Midterm next week!
+<li>Homework 5 due date:</li>
+<li>No homework for next week, because you have the midterm video to be
+working on!
 <ul>
-<li>Everything up through joins will be on the test
-<ul>
-<li>I know you have a HW on constraints due before then, but I am not
-going to include constraints on this test as I’m not 100% sure I’ll be
-able to have it scored in time</li>
-</ul></li>
-<li>I’ll be posting a study guide and some example questions</li>
-<li>Midterms will be done remotely over Zoom
-<ul>
-<li>If you want to have a cheat-sheet that you can glance off of, I’m
-not going to stop you. But if I notice you clearly staring at something
-it will probably affect your score.</li>
-</ul></li>
-<li>A sign-up sheet will also be going out for which block of time you
-want to sign up for next week</li>
+<li>We’ll discuss in a moment</li>
+<li>A guide will be sent out to everyone soon</li>
 </ul></li>
 <li>Polling: <a
 href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
 <!--------  THEORY ------------------>
 </section>
-<section id="docker-overview" class="slide level2">
-<h2>Docker Overview</h2>
-<div class="cols" style="align-items: center">
-<div class="col">
+<section id="data-modeling" class="slide level2">
+<h2>Data Modeling</h2>
 <ul>
-<li>Docker is just one method (though the most popular) to run
-applications in what are called <em>containers</em></li>
-<li>A container is an isolated environment that can run basically
-anything.</li>
-<li>Examples:
+<li>Data Modeling is the act of best deciding how to represent and store
+data such that it relates to the real world</li>
+<li>As much as possible, it is generally desirable to:
 <ul>
-<li>A webpage server</li>
-<li>A Postgres database</li>
-<li>An R or Python program</li>
-</ul></li>
-</ul>
-</div>
-<div class="col">
-<p><img
-data-src="https://1000logos.net/wp-content/uploads/2021/11/Docker-Logo-2013.png" /></p>
-</div>
-</div>
-</section>
-<section id="a-case-for-containers" class="slide level2">
-<h2>A Case for Containers</h2>
-<ul>
-<li>Why are containers useful?
-<ul>
-<li>Development environments can be difficult to replicate
-<ul>
-<li>Your environment has been tailored to you!</li>
-<li>Your OS, your software dependencies, your installed R libraries</li>
-</ul></li>
-<li>Development environments are not static
-<ul>
-<li>Libraries get new updates or patches</li>
-<li>Some software gets abandoned or features discontinued</li>
-</ul></li>
-</ul></li>
-<li>Containers contain a working copy of an exact development
-environment with specific versioning</li>
-<li>All that is needed to share with 100% reliability is software to run
-the container</li>
-</ul>
-</section>
-<section id="alternatives" class="slide level2">
-<h2>Alternatives?</h2>
-<ul>
-<li>Why not include a list of dependencies and let people install them?
-<ul>
-<li>This can work, but can get very muddled when working on multiple
-projects (what if I need both Python 3.6 and Python 3.10 installed
-simultaneously on my system?)</li>
-<li>Different operating systems also just do things differently or can
-have different libraries available</li>
-</ul></li>
-<li>Why not use Virtual Machines to replicate the development
-environment?
-<ul>
-<li>They can, but VMs run independent of your machine’s natural OS,
-interfacing directly with the hardware</li>
-<li>This can make them potentially more performant, but it also means a
-lot more overhead each time something needs to be run (they are running
-their own entire OS)</li>
+<li>ensure the model can easily help answer the types of questions you
+will want to ask</li>
+<li>operate at as low a level of granularity as possible</li>
+<li>remove redundancy</li>
+<li>ensure referential integrity</li>
 </ul></li>
 </ul>
 </section>
-<section id="the-container-way" class="slide level2">
-<h2>The Container Way</h2>
+<section id="normalization" class="slide level2">
+<h2>Normalization</h2>
 <ul>
-<li>Containers run <em>on top</em> of your natural operating system
+<li>First introduced by Edgar Codd in the early 1970s</li>
+<li>Codd outlined the following goals:
 <ul>
-<li>Requests to use hardware go through your host OS
-<ul>
-<li>Your natural OS acts as a sort of translator between the application
-and the hardware</li>
-<li>Operating systems are amazingly flexible, and so your system OS can
-handle this easily despite needing to translate for a potentially wide
-variety of container types</li>
+<li>to free the collection of relations from undesirable insertion,
+update, and deletion dependencies</li>
+<li>To reduce the need for restructuring the collection of relations as
+new types of data are introduced</li>
+<li>To make the relational model more informative to users</li>
+<li>To make the collection of relations neutral to what queries are
+being run on them</li>
 </ul></li>
-<li>There may be a slight raw performance hit, but it is
-<strong>much</strong> faster and easier on system resources to start up,
-work with, and run multiple containers at the same time</li>
-</ul></li>
+<li>To assist in these efforts, Codd introduced the idea of <em>normal
+forms</em></li>
 </ul>
 </section>
-<section id="installing-docker" class="slide level2">
-<h2>Installing Docker</h2>
+<section id="what-is-normal" class="slide level2">
+<h2>What is normal?</h2>
 <ul>
-<li>Getting Docker on your system is easy:
-<ul>
-<li>In MacOS: install <a
-href="https://www.docker.com/products/docker-desktop/">Docker
-Desktop</a>
-<ul>
-<li>Simple drag and drop into your Applications folder</li>
-</ul></li>
-<li>In Windows: still install <a
-href="https://www.docker.com/products/docker-desktop/">Docker
-Desktop</a>
-<ul>
-<li>Technically uses WSL2 in the background, but you already have that
-installed</li>
-</ul></li>
-<li>In Linux: you could install Docker Desktop, but easier to just
-install Docker from system repos</li>
-</ul></li>
-<li>Running Docker Desktop will launch both a GUI and the service itself
-<ul>
-<li>The service <em>must</em> be running for your system to understand
-Docker containers</li>
-</ul></li>
+<li>Each normal form builds on those before</li>
+<li>The primary normal forms are:</li>
 </ul>
+<dl>
+<dt>Denormalized</dt>
+<dd>
+No normalization. Nested and redundant data is allowed
+</dd>
+<dt>First normal form (1NF)</dt>
+<dd>
+Each column is unique and has a single value. The table has a unique
+primary key.
+</dd>
+<dt>Second normal form (2NF)</dt>
+<dd>
+Partial dependencies are removed (only necessary if compound primary
+key)
+</dd>
+<dt>Third normal form (3NF)</dt>
+<dd>
+Each table contains fields only relevant to its primary key, and has no
+transitive dependencies
+</dd>
+</dl>
 </section>
-<section id="images" class="slide level2">
-<h2>Images</h2>
-<ul>
-<li>Docker uses what it calls an <em>image</em> whenever it needs to
-create a new container</li>
-<li>An image is basically a blueprint or compilation of all the things
-that the container will need to function
-<ul>
-<li>Basic OS</li>
-<li>Any runtime environment (R, Python, etc.)</li>
-<li>The application code itself</li>
-<li>Any dependencies necessary</li>
-<li>Extra configuration options, usually in the form of environment
-variables</li>
-<li>The actual commands to run when the container is launched</li>
-</ul></li>
-<li>Images are <strong>read only</strong>. If any of the above changes,
-the image needs to be rebuilt</li>
-</ul>
-</section>
-<section id="image-layering" class="slide level2">
-<h2>Image Layering</h2>
-<div class="cols" style="align-items:center">
-<div class="col">
-<ul>
-<li>Images are constructed with a layering system, which helps when
-rebuilding
-<ul>
-<li>Only layers at or above where a change happened need to be
-reconstructed
-<ul>
-<li>This means ordering <em>does</em> matter!</li>
-</ul></li>
-<li>Layers generally mimic the same basic blueprint requirements that we
-just listed</li>
-</ul></li>
-</ul>
-</div>
-<div class="col">
-<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   width="133.88229mm"
-   height="133.88229mm"
-   viewBox="0 0 133.88229 133.88229"
-   version="1.1"
-   id="svg5"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
-   sodipodi:docname="docker_image_layers.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview7"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     showgrid="false"
-     inkscape:zoom="1.2938725"
-     inkscape:cx="455.99547"
-     inkscape:cy="223.36049"
-     inkscape:window-width="1680"
-     inkscape:window-height="1020"
-     inkscape:window-x="0"
-     inkscape:window-y="30"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <defs
-     id="defs2" />
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(-296.09671,-28.553965)">
-    <rect
-       style="fill:none;stroke:#5a4a78;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect739"
-       width="130.88229"
-       height="130.88229"
-       x="297.59671"
-       y="30.053965" />
-    <rect
-       style="fill:#166775;fill-opacity:0.444791;stroke:#166775;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"
-       id="rect1569"
-       width="119.4318"
-       height="21.899897"
-       x="303.32196"
-       y="130.86113" />
-    <rect
-       style="fill:#8f5e15;fill-opacity:0.444791;stroke:#8f5e15;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"
-       id="rect1679"
-       width="119.4318"
-       height="21.899897"
-       x="303.32196"
-       y="99.983818" />
-    <rect
-       style="fill:#8f5e15;fill-opacity:0.444791;stroke:#8f5e15;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"
-       id="rect1681"
-       width="119.4318"
-       height="21.899897"
-       x="303.32196"
-       y="69.106514" />
-    <rect
-       style="fill:#8f5e15;fill-opacity:0.444791;stroke:#8f5e15;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"
-       id="rect1683"
-       width="119.4318"
-       height="21.899897"
-       x="303.32196"
-       y="38.229198" />
-    <g
-       aria-label="Base Image"
-       id="text1749"
-       style="font-size:21.8091px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';fill:#343b58;fill-opacity:0.999988;stroke-width:1.20297;stroke-linecap:round;stroke-linejoin:round">
-      <path
-         d="m 324.68659,134.17789 h 3.62031 q 1.85378,0 2.70433,0.87236 0.85056,0.85056 0.85056,2.63891 v 0.61065 q 0,1.17769 -0.39257,1.9192 -0.37075,0.74151 -1.15588,1.06865 v 0.0436 q 1.78835,0.61066 1.78835,3.18413 v 1.30855 q 0,1.76654 -0.9378,2.70433 -0.91598,0.91598 -2.70432,0.91598 h -3.77298 z m 3.33679,6.21559 q 0.7197,0 1.06865,-0.37075 0.37076,-0.37076 0.37076,-1.24312 v -0.85055 q 0,-0.82875 -0.30533,-1.19951 -0.28352,-0.37075 -0.91598,-0.37075 h -1.15589 v 4.03468 z m 0.43619,6.86987 q 0.63246,0 0.93779,-0.32714 0.30533,-0.34894 0.30533,-1.17769 v -1.33035 q 0,-1.04684 -0.37076,-1.4394 -0.34894,-0.41438 -1.17769,-0.41438 h -1.06865 v 4.68896 z"
-         id="path242" />
-      <path
-         d="m 335.35123,134.17789 h 3.24955 l 2.48624,15.26637 h -2.399 l -0.43618,-3.03147 v 0.0436 h -2.72614 l -0.43618,2.98785 h -2.22453 z m 2.61709,10.20666 -1.06865,-7.54595 h -0.0436 l -1.04684,7.54595 z"
-         id="path244" />
-      <path
-         d="m 345.29615,149.66235 q -1.74473,0 -2.6389,-0.98141 -0.89417,-1.00322 -0.89417,-2.85699 v -0.87236 h 2.26814 v 1.04683 q 0,1.48302 1.24312,1.48302 0.61066,0 0.91598,-0.34894 0.32714,-0.37076 0.32714,-1.1777 0,-0.9596 -0.43618,-1.6793 -0.43618,-0.74151 -1.61388,-1.76653 -1.48301,-1.30855 -2.07186,-2.35539 -0.58885,-1.06864 -0.58885,-2.399 0,-1.81015 0.91599,-2.79156 0.91598,-1.00322 2.66071,-1.00322 1.72292,0 2.59528,1.00322 0.89417,0.98141 0.89417,2.83518 v 0.63246 h -2.26814 v -0.78512 q 0,-0.78513 -0.30533,-1.13408 -0.30533,-0.37075 -0.89417,-0.37075 -1.19951,0 -1.19951,1.46121 0,0.82874 0.43619,1.54844 0.45799,0.71971 1.63568,1.74473 1.50483,1.30855 2.07186,2.37719 0.56704,1.06865 0.56704,2.50805 0,1.87558 -0.93779,2.8788 -0.91598,1.00322 -2.68252,1.00322 z"
-         id="path246" />
-      <path
-         d="m 350.29043,134.17789 h 6.54273 v 2.18091 h -4.14373 v 4.03468 h 3.29317 v 2.18091 h -3.29317 v 4.68896 h 4.14373 v 2.18091 h -6.54273 z"
-         id="path248" />
-      <path
-         d="m 361.6966,134.17789 h 2.399 v 15.26637 h -2.399 z"
-         id="path250" />
-      <path
-         d="m 365.88394,134.17789 h 3.42403 l 1.52663,10.92636 h 0.0436 l 1.52664,-10.92636 h 3.42403 v 15.26637 h -2.26815 v -11.55882 h -0.0436 l -1.74472,11.55882 h -2.00644 l -1.74473,-11.55882 h -0.0436 v 11.55882 h -2.09367 z"
-         id="path252" />
-      <path
-         d="m 379.47101,134.17789 h 3.24955 l 2.48624,15.26637 h -2.399 l -0.43618,-3.03147 v 0.0436 h -2.72614 l -0.43618,2.98785 h -2.22453 z m 2.61709,10.20666 -1.06865,-7.54595 h -0.0436 l -1.04683,7.54595 z"
-         id="path254" />
-      <path
-         d="m 389.72125,149.66235 q -1.74473,0 -2.66071,-0.98141 -0.91599,-1.00322 -0.91599,-2.85699 v -8.02575 q 0,-1.85377 0.91599,-2.83518 0.91598,-1.00322 2.66071,-1.00322 1.74472,0 2.66071,1.00322 0.91598,0.98141 0.91598,2.83518 v 1.30855 h -2.26815 v -1.46121 q 0,-1.50483 -1.24312,-1.50483 -1.24311,0 -1.24311,1.50483 v 8.35288 q 0,1.48302 1.24311,1.48302 1.24312,0 1.24312,-1.48302 v -2.98784 h -1.1995 v -2.18091 h 3.46765 v 4.99428 q 0,1.85377 -0.91598,2.85699 -0.91599,0.98141 -2.66071,0.98141 z"
-         id="path256" />
-      <path
-         d="m 394.84641,134.17789 h 6.54273 v 2.18091 h -4.14373 v 4.03468 h 3.29317 v 2.18091 h -3.29317 v 4.68896 h 4.14373 v 2.18091 h -6.54273 z"
-         id="path258" />
-    </g>
-    <g
-       aria-label="Application"
-       id="text1753"
-       style="font-size:21.8091px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';fill:#343b58;fill-opacity:0.999988;stroke-width:1.20297;stroke-linecap:round;stroke-linejoin:round">
-      <path
-         d="m 324.33767,103.30058 h 3.24955 l 2.48624,15.26637 h -2.399 l -0.43618,-3.03147 v 0.0436 h -2.72614 l -0.43618,2.98785 h -2.22453 z m 2.61709,10.20666 -1.06865,-7.54595 h -0.0436 l -1.04684,7.54595 z"
-         id="path219" />
-      <path
-         d="m 331.22932,103.30058 h 3.53308 q 1.78834,0 2.68252,0.9596 0.89417,0.9596 0.89417,2.81337 v 1.50483 q 0,1.85377 -0.89417,2.81337 -0.89418,0.9596 -2.68252,0.9596 h -1.13408 v 6.2156 h -2.399 z m 3.53308,6.86986 q 0.58884,0 0.87236,-0.32713 0.30533,-0.32714 0.30533,-1.11227 v -1.81015 q 0,-0.78513 -0.30533,-1.11227 -0.28352,-0.32713 -0.87236,-0.32713 h -1.13408 v 4.68895 z"
-         id="path221" />
-      <path
-         d="m 339.64763,103.30058 h 3.53307 q 1.78835,0 2.68252,0.9596 0.89418,0.9596 0.89418,2.81337 v 1.50483 q 0,1.85377 -0.89418,2.81337 -0.89417,0.9596 -2.68252,0.9596 h -1.13407 v 6.2156 h -2.399 z m 3.53307,6.86986 q 0.58885,0 0.87237,-0.32713 0.30532,-0.32714 0.30532,-1.11227 v -1.81015 q 0,-0.78513 -0.30532,-1.11227 -0.28352,-0.32713 -0.87237,-0.32713 h -1.13407 v 4.68895 z"
-         id="path223" />
-      <path
-         d="m 348.06593,103.30058 h 2.399 v 13.08546 h 3.94745 v 2.18091 h -6.34645 z"
-         id="path225" />
-      <path
-         d="m 355.56826,103.30058 h 2.399 v 15.26637 h -2.399 z"
-         id="path227" />
-      <path
-         d="m 363.13601,118.78504 q -1.72292,0 -2.6389,-0.98141 -0.89418,-0.98141 -0.89418,-2.76976 v -8.20022 q 0,-1.78834 0.89418,-2.76975 0.91598,-0.98141 2.6389,-0.98141 1.72292,0 2.61709,0.98141 0.91598,0.98141 0.91598,2.76975 v 1.61388 h -2.26815 v -1.76654 q 0,-1.41759 -1.1995,-1.41759 -1.1995,0 -1.1995,1.41759 v 8.52736 q 0,1.39578 1.1995,1.39578 1.1995,0 1.1995,-1.39578 v -2.33358 h 2.26815 v 2.1591 q 0,1.78835 -0.91598,2.76976 -0.89417,0.98141 -2.61709,0.98141 z"
-         id="path229" />
-      <path
-         d="m 369.96224,103.30058 h 3.24956 l 2.48623,15.26637 h -2.399 l -0.43618,-3.03147 v 0.0436 h -2.72614 l -0.43618,2.98785 H 367.476 Z m 2.61709,10.20666 -1.06864,-7.54595 h -0.0436 l -1.04684,7.54595 z"
-         id="path231" />
-      <path
-         d="m 377.72627,105.48149 h -2.50805 v -2.18091 h 7.4151 v 2.18091 h -2.50805 v 13.08546 h -2.399 z"
-         id="path233" />
-      <path
-         d="m 383.78921,103.30058 h 2.399 v 15.26637 h -2.399 z"
-         id="path235" />
-      <path
-         d="m 391.44419,118.78504 q -1.76654,0 -2.70433,-1.00322 -0.93779,-1.00322 -0.93779,-2.83518 v -8.02575 q 0,-1.83197 0.93779,-2.83518 0.93779,-1.00322 2.70433,-1.00322 1.76653,0 2.70433,1.00322 0.93779,1.00321 0.93779,2.83518 v 8.02575 q 0,1.83196 -0.93779,2.83518 -0.9378,1.00322 -2.70433,1.00322 z m 0,-2.18091 q 1.24312,0 1.24312,-1.50483 v -8.33107 q 0,-1.50483 -1.24312,-1.50483 -1.24312,0 -1.24312,1.50483 v 8.33107 q 0,1.50483 1.24312,1.50483 z"
-         id="path237" />
-      <path
-         d="m 396.70017,103.30058 h 3.00966 l 2.33357,9.13801 h 0.0436 v -9.13801 h 2.13729 v 15.26637 h -2.46443 l -2.8788,-11.14445 h -0.0436 v 11.14445 h -2.13729 z"
-         id="path239" />
-    </g>
-    <g
-       aria-label="Dependencies"
-       id="text1809"
-       style="font-size:21.8091px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';fill:#343b58;fill-opacity:0.999988;stroke-width:1.20297;stroke-linecap:round;stroke-linejoin:round">
-      <path
-         d="m 315.16685,72.423274 h 3.66393 q 1.78834,0 2.68252,0.959601 0.89417,0.9596 0.89417,2.813374 v 7.720421 q 0,1.853773 -0.89417,2.813373 -0.89418,0.959601 -2.68252,0.959601 h -3.66393 z m 3.62031,13.08546 q 0.58884,0 0.89417,-0.348946 0.32714,-0.348945 0.32714,-1.134073 v -7.938512 q 0,-0.785127 -0.32714,-1.134073 -0.30533,-0.348946 -0.89417,-0.348946 h -1.22131 v 10.90455 z"
-         id="path194" />
-      <path
-         d="m 324.02134,72.423274 h 6.54273 v 2.18091 h -4.14372 v 4.034684 h 3.29317 v 2.18091 h -3.29317 v 4.688956 h 4.14372 v 2.18091 h -6.54273 z"
-         id="path196" />
-      <path
-         d="m 331.93807,72.423274 h 3.53307 q 1.78835,0 2.68252,0.959601 0.89417,0.9596 0.89417,2.813374 v 1.504827 q 0,1.853774 -0.89417,2.813374 -0.89417,0.959601 -2.68252,0.959601 h -1.13407 v 6.215593 h -2.399 z m 3.53307,6.869867 q 0.58885,0 0.87236,-0.327137 0.30533,-0.327136 0.30533,-1.112264 v -1.810155 q 0,-0.785128 -0.30533,-1.112264 -0.28351,-0.327137 -0.87236,-0.327137 h -1.13407 v 4.688957 z"
-         id="path198" />
-      <path
-         d="m 340.35637,72.423274 h 6.54273 v 2.18091 h -4.14373 v 4.034684 h 3.29318 v 2.18091 h -3.29318 v 4.688956 h 4.14373 v 2.18091 h -6.54273 z"
-         id="path200" />
-      <path
-         d="m 348.27309,72.423274 h 3.00966 l 2.33357,9.138013 h 0.0436 v -9.138013 h 2.13729 v 15.26637 h -2.46442 L 350.454,76.545194 h -0.0436 v 11.14445 h -2.1373 z"
-         id="path202" />
-      <path
-         d="m 357.58558,72.423274 h 3.66393 q 1.78834,0 2.68252,0.959601 0.89417,0.9596 0.89417,2.813374 v 7.720421 q 0,1.853773 -0.89417,2.813373 -0.89418,0.959601 -2.68252,0.959601 h -3.66393 z m 3.62031,13.08546 q 0.58885,0 0.89417,-0.348946 0.32714,-0.348945 0.32714,-1.134073 v -7.938512 q 0,-0.785127 -0.32714,-1.134073 -0.30532,-0.348946 -0.89417,-0.348946 h -1.22131 v 10.90455 z"
-         id="path204" />
-      <path
-         d="m 366.44008,72.423274 h 6.54273 v 2.18091 h -4.14373 v 4.034684 h 3.29317 v 2.18091 h -3.29317 v 4.688956 h 4.14373 v 2.18091 h -6.54273 z"
-         id="path206" />
-      <path
-         d="m 374.3568,72.423274 h 3.00966 l 2.33357,9.138013 h 0.0436 v -9.138013 h 2.13729 v 15.26637 h -2.46443 l -2.8788,-11.14445 h -0.0436 v 11.14445 h -2.13729 z"
-         id="path208" />
-      <path
-         d="m 387.0497,87.907735 q -1.72292,0 -2.6389,-0.98141 -0.89417,-0.981409 -0.89417,-2.769755 v -8.200222 q 0,-1.788346 0.89417,-2.769755 0.91598,-0.98141 2.6389,-0.98141 1.72292,0 2.61709,0.98141 0.91598,0.981409 0.91598,2.769755 v 1.613874 h -2.26814 v -1.766537 q 0,-1.417592 -1.1995,-1.417592 -1.1995,0 -1.1995,1.417592 v 8.527358 q 0,1.395782 1.1995,1.395782 1.1995,0 1.1995,-1.395782 v -2.333574 h 2.26814 v 2.159101 q 0,1.788346 -0.91598,2.769755 -0.89417,0.98141 -2.61709,0.98141 z"
-         id="path210" />
-      <path
-         d="m 392.02216,72.423274 h 2.399 v 15.26637 h -2.399 z"
-         id="path212" />
-      <path
-         d="m 396.2095,72.423274 h 6.54273 v 2.18091 h -4.14373 v 4.034684 h 3.29317 v 2.18091 h -3.29317 v 4.688956 h 4.14373 v 2.18091 h -6.54273 z"
-         id="path214" />
-      <path
-         d="m 407.28855,87.907735 q -1.74472,0 -2.6389,-0.98141 -0.89417,-1.003218 -0.89417,-2.856992 v -0.872364 h 2.26815 v 1.046837 q 0,1.483019 1.24312,1.483019 0.61065,0 0.91598,-0.348946 0.32713,-0.370754 0.32713,-1.177691 0,-0.9596 -0.43618,-1.679301 -0.43618,-0.741509 -1.61387,-1.766537 -1.48302,-1.308546 -2.07187,-2.355382 -0.58884,-1.068646 -0.58884,-2.399001 0,-1.810156 0.91598,-2.791565 0.91598,-1.003219 2.66071,-1.003219 1.72292,0 2.59528,1.003219 0.89418,0.981409 0.89418,2.835183 v 0.632464 h -2.26815 v -0.785128 q 0,-0.785127 -0.30533,-1.134073 -0.30532,-0.370755 -0.89417,-0.370755 -1.1995,0 -1.1995,1.46121 0,0.828746 0.43618,1.548446 0.45799,0.7197 1.63568,1.744728 1.50483,1.308546 2.07187,2.377192 0.56704,1.068646 0.56704,2.508046 0,1.875583 -0.9378,2.878801 -0.91598,1.003219 -2.68252,1.003219 z"
-         id="path216" />
-    </g>
-    <g
-       aria-label="Commands"
-       id="text1813"
-       style="font-size:21.8091px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';fill:#343b58;fill-opacity:0.999988;stroke-width:1.20297;stroke-linecap:round;stroke-linejoin:round">
-      <path
-         d="m 329.37554,57.030423 q -1.72292,0 -2.63891,-0.981409 -0.89417,-0.98141 -0.89417,-2.769756 v -8.200221 q 0,-1.788346 0.89417,-2.769756 0.91599,-0.981409 2.63891,-0.981409 1.72291,0 2.61709,0.981409 0.91598,0.98141 0.91598,2.769756 v 1.613873 h -2.26815 v -1.766537 q 0,-1.417591 -1.1995,-1.417591 -1.1995,0 -1.1995,1.417591 v 8.527358 q 0,1.395782 1.1995,1.395782 1.1995,0 1.1995,-1.395782 v -2.333574 h 2.26815 v 2.159101 q 0,1.788346 -0.91598,2.769756 -0.89418,0.981409 -2.61709,0.981409 z"
-         id="path177" />
-      <path
-         d="m 337.85928,57.030423 q -1.76654,0 -2.70433,-1.003218 -0.93779,-1.003219 -0.93779,-2.835183 v -8.025749 q 0,-1.831964 0.93779,-2.835183 0.93779,-1.003218 2.70433,-1.003218 1.76654,0 2.70433,1.003218 0.93779,1.003219 0.93779,2.835183 v 8.025749 q 0,1.831964 -0.93779,2.835183 -0.93779,1.003218 -2.70433,1.003218 z m 0,-2.18091 q 1.24312,0 1.24312,-1.504828 v -8.331076 q 0,-1.504827 -1.24312,-1.504827 -1.24312,0 -1.24312,1.504827 v 8.331076 q 0,1.504828 1.24312,1.504828 z"
-         id="path179" />
-      <path
-         d="m 343.11527,41.545963 h 3.42402 l 1.52664,10.926358 h 0.0436 l 1.52664,-10.926358 h 3.42402 v 15.266369 h -2.26814 V 45.25351 h -0.0436 l -1.74473,11.558822 h -2.00644 L 345.25256,45.25351 h -0.0436 v 11.558822 h -2.09367 z"
-         id="path181" />
-      <path
-         d="m 354.84856,41.545963 h 3.42403 l 1.52664,10.926358 h 0.0436 l 1.52664,-10.926358 h 3.42403 v 15.266369 h -2.26815 V 45.25351 h -0.0436 l -1.74473,11.558822 h -2.00644 L 356.98585,45.25351 h -0.0436 v 11.558822 h -2.09367 z"
-         id="path183" />
-      <path
-         d="m 368.43563,41.545963 h 3.24956 l 2.48624,15.266369 h -2.399 l -0.43619,-3.031465 v 0.04362 h -2.72613 l -0.43619,2.987846 h -2.22452 z m 2.6171,10.206658 -1.06865,-7.545948 h -0.0436 l -1.04684,7.545948 z"
-         id="path185" />
-      <path
-         d="m 375.32729,41.545963 h 3.00965 l 2.33358,9.138012 h 0.0436 v -9.138012 h 2.1373 V 56.812332 H 380.387 l -2.8788,-11.14445 h -0.0436 v 11.14445 h -2.13729 z"
-         id="path187" />
-      <path
-         d="m 384.63977,41.545963 h 3.66393 q 1.78835,0 2.68252,0.9596 0.89418,0.9596 0.89418,2.813374 v 7.720421 q 0,1.853773 -0.89418,2.813374 -0.89417,0.9596 -2.68252,0.9596 h -3.66393 z m 3.62032,13.085459 q 0.58884,0 0.89417,-0.348945 0.32713,-0.348946 0.32713,-1.134074 v -7.938512 q 0,-0.785127 -0.32713,-1.134073 -0.30533,-0.348945 -0.89417,-0.348945 h -1.22131 v 10.904549 z"
-         id="path189" />
-      <path
-         d="m 396.61297,57.030423 q -1.74473,0 -2.6389,-0.981409 -0.89417,-1.003219 -0.89417,-2.856992 v -0.872364 h 2.26814 v 1.046836 q 0,1.483019 1.24312,1.483019 0.61066,0 0.91598,-0.348945 0.32714,-0.370755 0.32714,-1.177692 0,-0.9596 -0.43618,-1.6793 -0.43618,-0.74151 -1.61387,-1.766537 -1.48302,-1.308546 -2.07187,-2.355383 -0.58884,-1.068646 -0.58884,-2.399001 0,-1.810155 0.91598,-2.791565 0.91598,-1.003218 2.66071,-1.003218 1.72292,0 2.59528,1.003218 0.89417,0.98141 0.89417,2.835183 v 0.632464 h -2.26814 v -0.785128 q 0,-0.785127 -0.30533,-1.134073 -0.30533,-0.370754 -0.89417,-0.370754 -1.1995,0 -1.1995,1.461209 0,0.828746 0.43618,1.548446 0.45799,0.719701 1.63568,1.744728 1.50483,1.308546 2.07187,2.377192 0.56703,1.068646 0.56703,2.508046 0,1.875583 -0.93779,2.878802 -0.91598,1.003218 -2.68252,1.003218 z"
-         id="path191" />
-    </g>
-  </g>
-</svg>
-</p>
-</div>
-</div>
-</section>
-<section id="base-images" class="slide level2">
-<h2>Base Images</h2>
-<ul>
-<li><p>You will almost always start from an initial basic image</p></li>
-<li><p>A collection of universally accessible images is hosted on <a
-href="https://hub.docker.com/search?q=">DockerHub</a></p></li>
-<li><p>These are all images in themselves, but also serve as excellent
-starting points for more custom images that you might want to
-build</p></li>
-<li><p>To download an image to your system for use, from a terminal:</p>
-<pre ><code class="bash">docker pull image_name:possible_tag</code></pre></li>
-<li><p>To see images currently on your system:</p>
-<pre ><code class="bash">docker images</code></pre></li>
-</ul>
-</section>
-<section id="containers-from-images" class="slide level2">
-<h2>Containers from Images</h2>
-<ul>
-<li><p>To actually run a container, you can use the GUI, or, from a
-terminal:</p>
-<pre ><code class="bash">docker run --flags container_name</code></pre>
-<ul>
-<li><code class="python">run</code> creates and starts the
-container</li>
-<li><code class="python">--flags</code> could be any number of options
-or boolean flags. Common ones include:
-<ul>
-<li><code class="python">-it</code> to launch interactively</li>
-<li><code class="python">--rm</code> to remove the container one the
-command or interative session finishes</li>
-<li><code class="python">-d</code> to run the container detached</li>
-</ul></li>
-<li>The container name is the name and (optionally) tag of the container
-you want to launch.
-<ul>
-<li>If the container is not already on your system, Docker will download
-it from DockerHub</li>
-</ul></li>
-</ul></li>
-</ul>
-</section>
-<section id="working-with-containers" class="slide level2">
-<h2>Working with Containers</h2>
-<ul>
-<li><p>To get a view of currently <em>running</em> containers:</p>
-<pre ><code class="bash">docker ps</code></pre>
-<ul>
-<li>Add a <code class="python">-a</code> flag at the end to see
-<strong>all</strong> containers</li>
-</ul></li>
-<li><p>To remove old containers:</p>
-<pre ><code class="bash">docker container rm container_name_or_id</code></pre></li>
-<li><p>Can start or stop exist containers with:</p>
-<pre ><code class="bash">docker start/stop container_name</code></pre></li>
-</ul>
-</section>
-<section id="customizing-images" class="slide level2">
-<h2>Customizing Images</h2>
-<ul>
-<li><p>Generally, you will want to customize a base image by adding your
-own layers on top</p></li>
-<li><p>The schematic of what comprises an image is all contained in a
-special text file, named <code class="python">Dockerfile</code></p>
-<ul>
-<li>Note the lack of extension at the end!</li>
-</ul></li>
-<li><p>A Dockerfile is a simple text file with some special instructions
-that dictate what layers comprise your image</p></li>
-<li><p>A Dockerfile is used to <em>build</em> the image</p>
-<pre ><code class="bash">docker build -t img_name path/to/dockerfile</code></pre></li>
-</ul>
-</section>
-<section id="adding-layers-in-the-dockerfile" class="slide level2">
-<h2>Adding Layers in the Dockerfile</h2>
+<section id="denormalized" class="slide level2">
+<h2>Denormalized</h2>
 <div class="cols">
 <div class="col">
 <ul>
-<li>Dockerfiles use a syntax with only a few keywords
-<ul>
-<li><code class="python">FROM</code> specifies the base image you are
-starting with</li>
-<li><code class="python">RUN</code> specifies a command to run. Often to
-satisfy dependencies or get libraries</li>
-<li><code class="python">COPY</code> will copy file from your local
-system into the image</li>
-<li><code class="python">CMD</code> specifies the default command to be
-run when the image is launched</li>
-</ul></li>
+<li>APIs will commonly give denormalized data, since they tend to return
+JSON type entries</li>
+<li>Consider the entry to the right about a particular order</li>
 </ul>
 </div>
-<div class="col">
-<pre ><code class="file" name="Dockerfile" style="font-size:.8em">FROM python:3
-
-WORKDIR /app
-
-COPY image.py .
-
-RUN pip install numpy matplotlib
-
-CMD ["python", "image.py"]</code></pre>
-<ul>
-<li>Layers are built from the “bottom up”</li>
-</ul>
+<div class="col" style="flex-grow:2">
+<pre ><code class="json" style="max-height:1000px; font-size:.9em;">{ "OrderID": 100,
+  "OrderItems": [
+    {
+      "sku": 1,
+      "price": 10,
+      "quantity": 1,
+      "name": "Thingmajig"
+    },
+    {
+      "sku": 2,
+      "price": 25,
+      "quantity": 2,
+      "name": "Whatchamacalit"
+    }],
+  "CustomerID": 5,
+  "CustomerName": "Jed Rembold",
+  "OrderDate": "2022-11-09" }</code></pre>
 </div>
 </div>
 </section>
-<section id="isolation" class="slide level2">
-<h2>Isolation</h2>
+<section id="initial-attempt" class="slide level2">
+<h2>Initial Attempt</h2>
+<table style="font-size:.9em">
+<tr>
+<th>
+OrderID
+</th>
+<th style="width:35%">
+OrderItems
+</th>
+<th>
+CustomerID
+</th>
+<th>
+CustomerName
+</th>
+<th>
+OrderDate
+</th>
+</tr>
+<tr>
+<td>
+100
+</td>
+<td>
+<pre><code class='json' style='font-size:.5em'>
+  [
+    {
+      "sku": 1,
+      "price": 10,
+      "quantity": 1,
+      "name": "Thingmajig"
+    },
+    {
+      "sku": 2,
+      "price": 25,
+      "quantity": 2,
+      "name": "Whatchamacalit"
+    }
+  ]
+    </code></pre>
+</td>
+<td>
+5
+</td>
+<td>
+Jed Rembold
+</td>
+<td>
+2022-11-09
+</td>
+</tr>
+</table>
+</section>
+<section id="st-normal-form" class="slide level2">
+<h2>1st Normal Form</h2>
+<div style="font-size: .8em">
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 5%" />
+<col style="width: 8%" />
+<col style="width: 11%" />
+<col style="width: 18%" />
+<col style="width: 14%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>OrderID</th>
+<th>Sku</th>
+<th>Price</th>
+<th>Quantity</th>
+<th>ProductName</th>
+<th>CustomerID</th>
+<th>CustomerName</th>
+<th>OrderDate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>100</td>
+<td>1</td>
+<td>50</td>
+<td>1</td>
+<td>Thingmajig</td>
+<td>5</td>
+<td>Jed Rembold</td>
+<td>2022-11-09</td>
+</tr>
+<tr class="even">
+<td>100</td>
+<td>2</td>
+<td>25</td>
+<td>2</td>
+<td>Whatchamacalit</td>
+<td>5</td>
+<td>Jed Rembold</td>
+<td>2022-11-09</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="st-normal-form-pk" class="slide level2">
+<h2>1st Normal Form (PK)</h2>
+<div style="font-size: .7em">
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 5%" />
+<col style="width: 7%" />
+<col style="width: 10%" />
+<col style="width: 16%" />
+<col style="width: 12%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">OrderID</th>
+<th style="text-align: center;">ItemNum</th>
+<th style="text-align: center;">Sku</th>
+<th style="text-align: center;">Price</th>
+<th style="text-align: center;">Quantity</th>
+<th style="text-align: left;">ProductName</th>
+<th style="text-align: center;">CustomerID</th>
+<th>CustomerName</th>
+<th>OrderDate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">50</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">Thingmajig</td>
+<td style="text-align: center;">5</td>
+<td>Jed Rembold</td>
+<td>2022-11-09</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">Whatchamacalit</td>
+<td style="text-align: center;">5</td>
+<td>Jed Rembold</td>
+<td>2022-11-09</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="evaluating-2nf" class="slide level2">
+<h2>Evaluating 2NF</h2>
 <ul>
-<li>Containers run as isolated systems, which is usually a good thing
+<li>To be in second normal form, there can be no partial dependencies,
+where columns depend on only one of the compound keys</li>
+<li>Here though the last 3 columns all depend only on OrderID
 <ul>
-<li>Ensures that nothing on your local system affects the container
-system</li>
-</ul></li>
-<li>Sometimes though we <em>need</em> holes “broken” in the isolation
-<ul>
-<li>A web server is available at a certain port, but we can’t access
-that port in the isolated container</li>
-<li>A program might generate a file, but that is in the container
-filesystem, which we can not access</li>
+<li>Solution: Split to new tables!</li>
 </ul></li>
 </ul>
 </section>
-<section id="poking-holes" class="slide level2">
-<h2>Poking Holes</h2>
+<section id="nd-normal-form" class="slide level2">
+<h2>2nd Normal Form</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">OrderID</th>
+<th style="text-align: center;">CustomerID</th>
+<th>CustomerName</th>
+<th>OrderDate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">5</td>
+<td>Jed Rembold</td>
+<td>2022-11-09</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">OrderID</th>
+<th style="text-align: center;">ItemNum</th>
+<th style="text-align: center;">Sku</th>
+<th style="text-align: center;">Price</th>
+<th style="text-align: center;">Quantity</th>
+<th>ProductName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">50</td>
+<td style="text-align: center;">1</td>
+<td>Thingmajig</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">2</td>
+<td>Whatchamacalit</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="evaluating-3nf" class="slide level2">
+<h2>Evaluating 3NF</h2>
 <ul>
-<li>When running a container, you can poke holes in the container to
-connect certain internal parts of the container with particular parts of
-your outside system
+<li>The third normal form prohibits transitive dependencies, where a
+column depends on another (that depends on the primary key), instead of
+depending directly on the primary key</li>
+<li>Here we have 2! One in each table:
 <ul>
-<li><p>Connecting ports</p>
-<pre ><code class="text">docker run -p localport:containerport cont_name</code></pre></li>
-<li><p>Connecting folders</p>
-<pre ><code class="text">docker run -v /local/folder:/container/folder cont_name</code></pre></li>
+<li><code class="python">ProductName</code> depends on
+<code class="python">Sku</code></li>
+<li><code class="python">CustomerName</code> depends on
+<code class="python">CustomerID</code></li>
 </ul></li>
+<li>Solution? More tables!</li>
 </ul>
 </section>
-<section id="challenge" class="slide level2">
-<h2>Challenge</h2>
+<section id="rd-normal-form" class="slide level2">
+<h2>3rd Normal Form</h2>
+<div style="font-size:.9em">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Sku</th>
+<th>ProductName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td>Thingmajig</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td>Whatchamacalit</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">CustomerID</th>
+<th>CustomerName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td>Jed Rembold</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">OrderID</th>
+<th style="text-align: center;">ItemNum</th>
+<th style="text-align: center;">Sku</th>
+<th style="text-align: center;">Price</th>
+<th style="text-align: center;">Quantity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">50</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">2</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">OrderID</th>
+<th style="text-align: center;">CustomerID</th>
+<th>OrderDate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">5</td>
+<td>2022-11-09</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="visually" class="slide level2">
+<h2>Visually</h2>
+<p><img data-src="../images/normal_forms_example.png"
+style="width:100.0%" /></p>
+</section>
+<section id="beyond" class="slide level2">
+<h2>Beyond</h2>
 <ul>
-<li>I have uploaded an image of my own to DockerHub, which you can find
-at <code class="python">jrembold/dockerdemo</code></li>
-<li>On your own time, see if you can:
-<ul>
-<li>Download the image</li>
-<li>Run the image interactively</li>
-<li>Find further instructions inside</li>
-</ul></li>
-<li>I’ll give you some extra HW points if you can email me with the
-answer to the further instructions :)</li>
+<li>Other normal forms exist (up to 6NF in the Boyce-Codd system)</li>
+<li>Most people only care about the first 3 to get data in a
+“normalized” state</li>
+<li>Unless you have specific performance reasons for wanting otherwise,
+you really should strive for normalized tables in your relational
+database, as they make maintaining, adding, updating, and adjusting your
+database and tables much easier</li>
 </ul>
 </section>
 <section id="break-time" class="slide level2">
@@ -637,31 +525,31 @@ key or which has the <code class="python">UNIQUE</code>
 constraint</p></li>
 <li><p>You can choose to set up indexes on other columns as well, but do
 so outside of the table creation</p>
-<pre ><code class="pgsql" style="font-size:1em">CREATE INDEX index_name ON table_name (col_name);</code></pre></li>
+<pre ><code class="pgsql" style="font-size:1em">CREATE INDEX |||index name||| ON |||table name||| (|||column|||);</code></pre></li>
 <li><p>If you decide you want to remove an index, you do so using the
 index name:</p>
-<pre ><code class="pgsql" style="font-size:1em">DROP INDEX index_name</code></pre></li>
+<pre ><code class="pgsql" style="font-size:1em">DROP INDEX |||index name|||;</code></pre></li>
 </ul>
 </section>
 <section id="benchmarking" class="slide level2">
 <h2>Benchmarking</h2>
 <ul>
-<li>How can we objectively test this?
+<li><p>How can we objectively test this?</p>
 <ul>
 <li>Postgres has the <code class="python">EXPLAIN</code> keyword to give
 you information about what the database is doing in the background</li>
 <li>Using <code class="python">EXPLAIN ANALYZE</code> will also give you
 timing information about how long it took a query to run</li>
 </ul></li>
-<li><code class="python">EXPLAIN</code> always comes at the start of
-your query</li>
-<li>Other SQL variants have their own versions, but most have some
-method of getting information back about execution time or what is being
-done under the hood</li>
-</ul>
+<li><p><code class="python">EXPLAIN</code> always comes at the start of
+your query</p>
 <pre ><code class="pgsql">EXPLAIN ANALYZE
-SELECT * FROM table_name
-WHERE col1 = 'test';</code></pre>
+SELECT * FROM |||table name|||
+WHERE |||condition|||;</code></pre></li>
+<li><p>Other SQL variants have their own versions, but most have some
+method of getting information back about execution time or what is being
+done under the hood</p></li>
+</ul>
 </section>
 <section id="benchmarking-caveats" class="slide level2">
 <h2>Benchmarking Caveats</h2>
@@ -769,9 +657,9 @@ matching values from a particular column
 <li>Note that once you make a grouping, you can only select entire
 columns that are a part of the grouping</li>
 </ul>
-<pre ><code class="pgsql">SELECT grouped_column
-FROM table_name
-GROUP BY grouped_column;</code></pre></li>
+<pre ><code class="pgsql">SELECT |||grouped column|||
+FROM |||table name|||
+GROUP BY |||grouped column|||;</code></pre></li>
 <li>Can visualize as if many smaller tables were created, one for each
 grouping, which are then joined back together with each table
 contributing one row</li>
@@ -786,11 +674,11 @@ contributing one row</li>
 be able to run aggregates across <em>all</em> potential groups
 <em>simultaneously</em> for comparison</p>
 <pre ><code class="pgsql">SELECT 
-  col_name, 
-  min(col_name), 
-  avg(col_name2)
-FROM table_name
-GROUP BY col_name;</code></pre></li>
+  |||grouped column|||, 
+  min(|||some other column|||), 
+  avg(|||some other column|||)
+FROM |||table name|||
+GROUP BY |||grouped column|||;</code></pre></li>
 <li><p>Causes any aggregate function to just aggregate over the smaller,
 group tables</p></li>
 </ul>
@@ -799,7 +687,7 @@ group tables</p></li>
 <h2>Group Example</h2>
 <p>Looking back at the cereal table, how can we answer:</p>
 <ul>
-<li>Which manufactorer sells the most sugar-laden cereal?</li>
+<li>Which manufacturer sells the most sugar-laden cereal?</li>
 <li>What shelf has the most cereals placed on it? What about the
 greatest sum of calories?</li>
 </ul>
@@ -814,11 +702,12 @@ columns</li>
 each combination</li>
 </ul>
 <pre ><code class="pgsql">SELECT 
-  col_name, 
-  min(col_name), 
-  avg(col_name2)
-FROM table_name
-GROUP BY col_name, col_name2;</code></pre>
+  |||grouped col1|||,
+  |||grouped col2|||,
+  min(|||other col|||), 
+  avg(|||other col|||)
+FROM |||table|||
+GROUP BY |||grouped col1|||, |||grouped col2|||</code></pre>
 </section>
 <section id="have-or-have-not" class="slide level2">
 <h2>HAVE or HAVE NOT</h2>
@@ -837,80 +726,452 @@ aggregates can be computed</li>
 </ul></li>
 </ul>
 <pre ><code class="pgsql">SELECT 
-  col_name, 
-  min(col_name), 
-  avg(col_name2)
-FROM table_name
-GROUP BY col_name
-HAVING min(col_name) > 50;</code></pre>
+  |||grouped col|||
+  min(|||other col|||), 
+  avg(|||other col|||)
+FROM |||table|||
+GROUP BY |||grouped col|||
+HAVING min(|||other col|||) > 50;</code></pre>
 </section>
 <section id="server-ordering" class="slide level2">
 <h2>Server Ordering</h2>
 <p><img data-src="../images/query_flowchart.png"
 style="width:80.0%" /></p>
-</section>
-<section id="showdown-time" class="slide level2">
-<h2>SHOWDOWN TIME!</h2>
-<ul>
-<li>Teams to be announced on next slide</li>
-<li>Whoever want to be in charge of submitting your answer can change
-your polling name to a fun team name :)</li>
-<li>Only one computer can be used by the pair of you at a time
-<ul>
-<li>We’ll be using the superhero dataset from HW4</li>
-<li>4 rounds: each round switch who is typing</li>
-</ul></li>
-<li>You’ll have 5 minutes to answer each question. Starting to 2 minutes
-you can submit a <em>single</em> answer
-<ul>
-<li>Submitting an answer sooner gets you more points!</li>
-</ul></li>
-</ul>
-</section>
-<section id="showdown-teams" class="slide level2">
-<h2>Showdown Teams</h2>
-<ul>
-<li>Frances and Miles</li>
-<li>Cristian, Jill and Oscar</li>
-<li>Micah and Alaina</li>
-<li>Aaryan and Phil</li>
-</ul>
-<!---------- Test Thoughts ------------->
 <!--
-## Overall Test Results
-::::::cols
-::::col
-![](../images/midterm_hist.png)
-
-::::
-
-::::col
-- Average: 82
-- Median: 85
-- St Dev: 14
+## SHOWDOWN TIME!
+- Teams to be announced on next slide
+- Whoever want to be in charge of submitting your answer can change your polling name to a fun team name :)
+- Only one computer can be used by the pair of you at a time
+  - We'll be using the superhero dataset from HW4
+  - 4 rounds: each round switch who is typing
+- You'll have 5 minutes to answer each question. Starting to 2 minutes you can submit a _single_ answer
+  - Submitting an answer sooner gets you more points!
 
 
-- I will be posting my solutions in case you want to look things over
-
-::::
-::::::
-
-
-## A few test thoughts
-- I should have done a better job explaining the purpose of the test
-  - I was not prepared for how foreign the concept was going to be to some
-  - The test was not meant to mimic everyday interactions, the test was meant as a probe to explore your understanding of how and why you do the things you do in those everyday actions
-- Access to outside resources is a wonderful tool, but is no substitute for having material in your head
-
-
-## Test Adjustments
-- I dropped Problem 1 entirely
-  - I had made a mistake with a clash between red and green
-  - Despite what the question asked, about 1/3 of your gave me information about the _resulting_ table, not the original table
-- On Problem 5 I chopped the points lost in half
-  - Most commonly people just had two values switched, which feels bad to lose double points from
-- Always check my arithmetic and please let me know if you come across a mistake
-    -->
+## Showdown Teams
+- Frances and Miles
+- Cristian, Jill and Oscar
+- Micah and Alaina
+- Aaryan and Phil
+-->
+</section>
+<section id="json-in-postgres" class="slide level2">
+<h2>JSON in Postgres</h2>
+<ul>
+<li>One data type that we haven’t discussed yet in Postgres is
+<code class="python">json</code></li>
+<li>Postgres actually support two <code class="python">json</code>
+types:
+<ul>
+<li><code class="python">json</code>: stores data as text
+<ul>
+<li>Slower to process, but maintains whitespace and key orderings</li>
+</ul></li>
+<li><code class="python">jsonb</code>: stores data in a binary format
+<ul>
+<li>Slightly slow to insert, but much faster to process</li>
+<li>Can have indexes defined</li>
+</ul></li>
+</ul></li>
+<li>In general, <code class="python">jsonb</code> is probably preferable
+unless you really need what the base <code class="python">json</code>
+type offers</li>
+</ul>
+</section>
+<section id="populating-json-tables" class="slide level2">
+<h2>Populating JSON Tables</h2>
+<ul>
+<li><p>JSON is frequently given with the outermost type be a list, and
+then each record inside separated by commas</p></li>
+<li><p>Postgres will <strong>not</strong> innately be able to import
+this type of document</p></li>
+<li><p>Instead, Postgres <code class="python">COPY</code> works best
+when the JSON is a newline delimited JSON file (sometimes called
+jsonlines), where each new record is on a single line, and there is no
+surrounding <code class="python">[]</code></p>
+<pre ><code class="pgsql">COPY |||table name|||
+FROM |||your newline json file|||.json</code></pre></li>
+</ul>
+</section>
+<section id="json-selections" class="slide level2">
+<h2>JSON Selections</h2>
+<ul>
+<li><p>You can drill down and select specific values from
+<code class="python">json</code> or <code class="python">jsonb</code>
+types using two different syntaxes:</p>
+<ul>
+<li><code class="python">raw_json -> 'key/index'</code> where:
+<ul>
+<li>key is a string for key-value pairs</li>
+<li>index is an integer for arrays (0-based!)</li>
+</ul></li>
+<li><code class="python">raw_json['key'/index]</code> with the same
+conventions as above</li>
+</ul></li>
+<li><p>These can be “chained” to “drill down” to the desired info</p>
+<pre ><code class="postgresql">raw_json -> 'siblings' -> 0 -> 'name'</code></pre></li>
+<li><p>These selections return more
+<code class="python">json</code>/<code class="python">jsonb</code>
+objects! Convert as needed</p></li>
+<li><p>Using <code class="python">->></code> will instead return a
+<code class="python">TEXT</code> type object</p></li>
+</ul>
+</section>
+<section id="json-existence" class="slide level2">
+<h2>JSON Existence</h2>
+<ul>
+<li><p>Recall that JSON does not enforce a strict schema, so some
+entries may have keys or values that others are missing</p></li>
+<li><p>It can thus be useful to check for the existence of certain keys
+or values</p></li>
+<li><p>You can check if an entire chunk is contained within a block of
+JSON using <code class="python">@></code>:</p>
+<pre ><code class="pgsql">raw_json @> sub_json</code></pre></li>
+<li><p>You can also check if a key or value shows up in the <strong>top
+level</strong> of the JSON block using
+<code class="python">?</code>:</p>
+<pre ><code class="pgsql">raw_json ? 'siblings'</code></pre></li>
+</ul>
+</section>
+<section id="json-indexes" class="slide level2">
+<h2>JSON Indexes</h2>
+<ul>
+<li><p>While you can create a default B-tree index for
+<code class="python">jsonb</code> columns, they generally wouldn’t be
+very useful</p></li>
+<li><p>Instead, we can use a different type of index called a
+<em>generalized inverted index</em>, or GIN</p></li>
+<li><p>This type of index works much better when the data is comprised
+of nested composite items (we’ll see it again when we look at text
+searching)</p></li>
+<li><p>Just add <code class="python">USING GIN</code> to your normal
+command to make an index</p>
+<pre ><code class="pgsql">CREATE INDEX |||my index||| ON |||mytable||| USING GIN (|||colname|||);</code></pre></li>
+</ul>
+<!---------------- SQL ------------------>
+</section>
+<section id="date-time-reminders" class="slide level2">
+<h2>Date-Time Reminders</h2>
+<ul>
+<li>We have about 4 current date or time related data types</li>
+<li>Date time types:
+<ul>
+<li><code class="python">DATE</code>: holds a single individual day</li>
+<li><code class="python">TIME</code>: holds a single individual
+time</li>
+<li><code class="python">TIMESTAMP</code> or variants with
+<code class="python">TIMESTAMPZ</code>: holds a combination of date and
+time, along with a potential time zone</li>
+</ul></li>
+<li>Interval types:
+<ul>
+<li><code class="python">INTERVAL</code>: holds a duration of time</li>
+</ul></li>
+</ul>
+</section>
+<section id="extracting-pieces" class="slide level2">
+<h2>Extracting Pieces</h2>
+<ul>
+<li>Having all the information in one value is convenient, but sometimes
+you only need pieces
+<ul>
+<li>The hour from the time, or the month from the date</li>
+</ul></li>
+<li>These can be particularly important with aggregates!</li>
+<li>Two methods to extract pieces of any datetime or interval type:
+<ul>
+<li>SQL standard:
+<code class="python">extract( text FROM datetime_value )</code></li>
+<li>Postgres specific:
+<code class="python">date_part( text, datetime_value )</code></li>
+</ul></li>
+<li>Both will return a <code class="python">DOUBLE PRECISION</code>
+value of whatever part was requested</li>
+</ul>
+</section>
+<section id="parts-of-extract" class="slide level2">
+<h2>Parts of Extract</h2>
+<ul>
+<li>You have a wide variety of what you can extract</li>
+</ul>
+<div style="font-size:.60em">
+<div class="cols">
+<div class="col">
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 81%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>text</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>century</td>
+<td>What century the date is in. 1st century starts 0001-01-01<span
+class="orange">★</span></td>
+</tr>
+<tr class="even">
+<td>day</td>
+<td>What day of the month</td>
+</tr>
+<tr class="odd">
+<td>decade</td>
+<td>The year divided by 10</td>
+</tr>
+<tr class="even">
+<td>dow</td>
+<td>The day of the week (0-6, starting with Sunday)</td>
+</tr>
+<tr class="odd">
+<td>doy</td>
+<td>The day of the year</td>
+</tr>
+<tr class="even">
+<td>epoch</td>
+<td>Number of seconds since 1970-01-01</td>
+</tr>
+<tr class="odd">
+<td>hour</td>
+<td>The current hour (0-23)</td>
+</tr>
+<tr class="even">
+<td>microseconds</td>
+<td>The number of microseconds</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>text</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>milliseconds</td>
+<td>The number of milliseconds</td>
+</tr>
+<tr class="even">
+<td>minute</td>
+<td>The minute</td>
+</tr>
+<tr class="odd">
+<td>month</td>
+<td>The month (1-12)</td>
+</tr>
+<tr class="even">
+<td>quarter</td>
+<td>What quarter of the year (1-4)</td>
+</tr>
+<tr class="odd">
+<td>second</td>
+<td>The number of seconds</td>
+</tr>
+<tr class="even">
+<td>timezone</td>
+<td>The timezone offset in seconds</td>
+</tr>
+<tr class="odd">
+<td>timezone_hour</td>
+<td>The timezone offset in hours</td>
+</tr>
+<tr class="even">
+<td>week</td>
+<td>What week of the year. ISO weeks start on Monday</td>
+</tr>
+<tr class="odd">
+<td>year</td>
+<td>The year</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<hr>
+<div style="font-size:.5em">
+<p><span class="orange">★</span> – If you disagree with this, please
+write your complaint to: Pope, Cathedral Saint-Peter of Roma,
+Vatican.</p>
+</div>
+</section>
+<section id="reversing-it" class="slide level2">
+<h2>Reversing it</h2>
+<div style="font-size:.9em">
+<ul>
+<li>Often times existing data sets have already separated out different
+aspects of the date or time
+<ul>
+<li>Year, month, and day might be in different columns for example</li>
+</ul></li>
+<li>It can be useful to “stitch” these together into an actual datetime
+type for further use.</li>
+<li>Postgres gives you a handful of functions to do so:
+<ul>
+<li><code class="python">make_date( year, month, day )</code>: Returns a
+new <code class="python">DATE</code> type value</li>
+<li><code class="python">make_time( hour, minute, seconds )</code>:
+Returns a new <code class="python">TIME</code> type value (with no
+timezone)</li>
+<li><code class="python">make_timestampz(year,month,day,hour,minute,second,time zone)</code>:
+Returns a new <code class="python">TIMESTAMPZ</code> type value</li>
+<li><code class="python">make_timestamp</code> and
+<code class="python">make_interval</code> also exist</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="aging-well" class="slide level2">
+<h2>Aging well</h2>
+<ul>
+<li>Subtracting two <code class="python">DATE</code> type values will
+give just an <code class="python">INT</code> (in days)</li>
+<li>Subtracting two <code class="python">TIMESTAMP</code> type values
+will give an <code class="python">INTERVAL</code>, with the biggest
+“unit” in days</li>
+<li>Using Postgres’s <code class="python">age()</code> function can
+smooth over both and give units larger than days
+<ul>
+<li><code class="python">age( datetime1, datetime2 )</code>: Subtracts
+datetime2 from datetime1</li>
+</ul></li>
+<li>This can <strong>still</strong> give you awkward interval units at
+times though, so also consider using
+<code class="python">justify_interval( interval )</code>, which breaks
+intervals into divisions that don’t exceed a categories max
+<ul>
+<li>Hours would always be between 0 and 23 for instance, or months
+between 1 and 12</li>
+<li>Especially if you want to extract a particular part, this is highly
+recommended</li>
+</ul></li>
+</ul>
+</section>
+<section id="what-time-is-it" class="slide level2">
+<h2>What time is it?</h2>
+<ul>
+<li>Standard SQL also provides constants for grabbing the current system
+time and date</li>
+</ul>
+<div style="font-size:.8em">
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>function</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">current_date</code></td>
+<td>Returns the current date</td>
+</tr>
+<tr class="even">
+<td><code class="python">current_time</code></td>
+<td>Returns the current time with timezone</td>
+</tr>
+<tr class="odd">
+<td><code class="python">localtime</code></td>
+<td>Returns the current time without timezone</td>
+</tr>
+<tr class="even">
+<td><code class="python">current_timestamp</code><span
+class="orange">★</span></td>
+<td>Returns the current date and time with timezone</td>
+</tr>
+<tr class="odd">
+<td><code class="python">localtimestamp</code></td>
+<td>Returns the current date and time without timezone</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<p><span class="orange">★</span> – Postgres also offers the shorter
+<code class="python">now()</code> <em>function</em> to do the same
+thing</p>
+<!--## Current vs Clock-->
+<!--- Any query using `current_timestamp` has it computed once at the start of a query-->
+<p><!--- This is frequently desired for logging, so that you just get 1 consistent time for any records added from a single query-->
+<!--- If you **want** record-by-record time keeping, you should use `clock_timestamp()` instead, which will work the same way but be updated before every value written to the table--></p>
+</section>
+<section id="time-zones" class="slide level2">
+<h2>Time Zones</h2>
+<ul>
+<li>Dealing with time zones can be a headache, and it is a very nice
+feature that Postgres can work with them smoothly</li>
+<li>By default, Postgres will <em>display</em> any timestamp with a time
+zone with the time as you would measure it in your current system
+timezone</li>
+<li>What is your current system timezone?
+<ul>
+<li><code class="python">SHOW timezone;</code></li>
+</ul></li>
+<li>Getting general information about timezones:
+<ul>
+<li>Getting abbreviations:
+<ul>
+<li><code class="python">SELECT * FROM pg_timezone_abbrevs;</code></li>
+</ul></li>
+<li>Getting full names:
+<ul>
+<li><code class="python">SELECT * FROM pg_timezone_names;</code></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="teleportation" class="slide level2">
+<h2>Teleportation</h2>
+<ul>
+<li>It can sometimes be useful to switch your “current” time zone
+<ul>
+<li>Maybe it is easier to compare times to someone else living in that
+time zone</li>
+</ul></li>
+<li>Several methods to make the switch:
+<ul>
+<li><p>Change your <code class="python">postgressql.conf</code> file,
+which controls your Postgres server. Only recommended if you have
+permanently moved elsewhere and the database time zone has not updated
+appropriately.</p></li>
+<li><p>Set future queries in a single session to be from a new
+timezone:</p>
+<p><code class="python">SET timezone TO time_zone_name_or_abbrv;</code></p>
+<ul>
+<li>This will also adjust what values your
+<code class="python">localtime</code> or
+<code class="python">localtimestamp</code> report!</li>
+</ul></li>
+<li><p>Transform a single query to be reported in a different time
+zone:</p>
+<pre ><code class="pgsql">SELECT |||datetime column||| AT TIME ZONE |||tz name or abbr|||
+FROM |||table name|||;</code></pre></li>
+</ul></li>
+</ul>
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity</h2>
+<ul>
+<li>Using the taxi rides dataset, see if you can:
+<ul>
+<li>Compute the number of rides given each hour of the day</li>
+<li>Compute the average cost of rides over each day of the month</li>
+<li>Compute the median cost of rides over each day of the week</li>
+<li>Compute the average duration of each ride over each hour of the
+day</li>
+</ul></li>
+</ul>
 </section>
     </div>
   </div>
@@ -929,6 +1190,7 @@ you can submit a <em>single</em> answer
   <script src="../html_srcs/revealjs/../other_plugins/reveal.js-d3/reveald3.js"></script>
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
 
   <script>
 
@@ -1046,6 +1308,11 @@ you can submit a <em>single</em> answer
 			tryFallbackURL: true, // true/false, default false
 			disableCheckFile: false, //default false
 		 },
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
 
         // reveal.js plugins
         plugins: [
@@ -1086,6 +1353,18 @@ you can submit a <em>single</em> answer
             //{ src: "../html_srcs/revealjs/plugin/d3/reveald3.js" },
 		],
       });
+    </script>
+    <script>
+    // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+      function remove_bars() {
+        var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+        console.log(pseudoBlocks);
+        for ( var i = 0; i < pseudoBlocks.length; i++) {
+          pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+        }
+        }
+      // omg this is even more hacky now, but I need this to run after hljs has done its thing
+      setTimeout(remove_bars, 100);
     </script>
     </body>
 </html>
