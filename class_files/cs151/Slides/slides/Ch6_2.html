@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2021-10-04">
+  <meta name="dcterms.date" content="2023-09-20">
   <title>Stringy Pythons</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,10 +14,18 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
   </style>
   <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
   <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
@@ -29,31 +37,76 @@
 <section id="title-slide">
   <h1 class="title">Stringy Pythons</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">October 4, 2021</p>
+  <p class="date">September 20, 2023</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
+<div style="font-size:.8em">
 <ul>
-<li><strong>Project 1 due tonight!</strong>
+<li>Homework
 <ul>
-<li>I’ll be around after 3 today until around 6 if you have last minute questions! Or you can contact me remotely later tonight</li>
+<li>Problem Set 3 posted!
+<ul>
+<li>After today you should be good to get started on most of the
+problems</li>
 </ul></li>
-<li>Problem Set 4 will go up by tomorrow</li>
-<li>Polling: <a href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>I probably won’t get to finish scoring PS2 until the weekend</li>
+</ul></li>
+<li>Upcoming Project 1: Wordle!
+<ul>
+<li>Aiming to release the guide for this on Friday</li>
+</ul></li>
+<li>Don’t forget to attend your section today or tomorrow!
+<ul>
+<li>Do you have a class conflict with part of your section that you
+haven’t talked to me about? Please do so!</li>
+</ul></li>
+<li>CS/DS Tea
+<ul>
+<li>Rebranding contest!</li>
+<li>Super cool sounding speaker tomorrow! Applications of ML in
+Astronomy!</li>
+</ul></li>
+<li>Polling: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
+</div>
 </section>
-<section id="review" class="slide level2" data-notes="Solution: 00101000">
-<h2 data-notes="Solution: 00101000">Review!</h2>
-<p>How would you represent the number <span class="math display">\[28_{16}\]</span> in binary?</p>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<div class="cols">
+<div class="col">
+<p>How could you represent the number of items shown to the right in a
+binary representation?</p>
 <div class="poll">
 <ol>
-<li><span class="math inline">\(01101101_2\)</span></li>
-<li><span class="math inline">\(10101010_2\)</span></li>
-<li><span class="math inline">\(00111010_2\)</span></li>
-<li><span class="math inline">\(00101000_2\)</span></li>
+<li>1011</li>
+<li>10110</li>
+<li>10010</li>
+<li>11010</li>
 </ol>
 </div>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/45409201b004e856928b4c30b5bde518fc6c73c3.svg"
+style="width:80.0%" /></p>
+</div>
+</div>
+<!--
+## Review! {data-notes="Solution: 00101000"}
+How would you represent the number
+$$28_{16}$$
+in binary?
+
+:::{.poll}
+#. $01101101_2$
+#. $10101010_2$
+#. $00111010_2$
+#. $00101000_2$
+:::
+-->
 <!--
 ## Representation
 - Sequences of bits have no intrinsic meaning!
@@ -65,81 +118,74 @@
     - Two-dimensional arrays of bits representing images
     - Sequences of images representing video, etc
 - To be useful though, everyone needs to agree on a representation!
--->
-</section>
-<section id="representation-pitfalls" class="slide level2">
-<h2>Representation Pitfalls</h2>
-<div class="cols">
-<div class="col">
-<pre ><code class="python">A = 1
+## Representation Pitfalls
+::::::cols
+::::col
+```python
+A = 1
 B = 0
 for i in range(10):
     B += 0.1
-print(A == B)</code></pre>
-</div>
-<div class="col" style="flex-grow:1.25">
-<ul>
-<li>The left code will print out <code class="python">False</code>!</li>
-<li>Python represents floating point (fractional) numbers using two integers
-<ul>
-<li>One to represent the significant digits</li>
-<li>One to represent the exponent</li>
-</ul></li>
-</ul>
-</div>
-</div>
-<ul>
-<li><span class="math inline">\(1\frac{1}{4}\)</span> Example
-<ul>
-<li>In decimal: <span class="math inline">\(\quad\displaystyle 1\frac{1}{4} = \frac{1}{1} + \frac{2}{10} + \frac{5}{100} = 1.25 = (125, -2)\)</span></li>
-<li>In binary: <span class="math inline">\(\quad\displaystyle 1\frac{1}{4} = \frac{1}{1} + \frac{0}{2} + \frac{1}{4} = 1.01 = (101, -10)\)</span></li>
-</ul></li>
-</ul>
-</section>
-<section id="floating-binary" class="slide level2">
-<h2>Floating Binary</h2>
-<div>
-<ul>
-<li class="fragment">Say we wanted to convert the value <span class="math inline">\(\tfrac{7}{8}\)</span> to a binary floating point representation: <span class="math display">\[\frac{7}{8} = \frac{0}{1} + \frac{1}{2} + \frac{1}{4} + \frac{1}{8} = 0.111 = (111, -11)\]</span></li>
-<li class="fragment">Now how would we convert <span class="math inline">\(\frac{1}{10}\)</span> to binary??
-<ul>
-<li class="fragment">We run into a problem! An infinitely repeating sequence! <span class="math display">\[\frac{1}{10} = \frac{0}{1} + \frac{0}{2} + \frac{0}{8} + \frac{1}{16} + \frac{1}{32} + \frac{0}{64} + \frac{0}{128} + \frac{1}{256} +  \cdots = 0.0001100110011\ldots\]</span></li>
-<li class="fragment">Have to stop the sequence somewhere and approximate it: <span class="math display">\[\frac{3}{32} = 0.09375\quad\text{or}\quad\frac{25}{256} = 0.09765625\]</span></li>
-</ul></li>
-<li class="fragment">Note that we have the same issues in decimal, writing out ratios like <span class="math inline">\(\frac{1}{3}\)</span></li>
-</ul>
-</div>
-</section>
-<section id="consequences" class="slide level2">
-<h2>Consequences</h2>
-<ul>
-<li>Most languages end up taking the first 53 significant digits <span class="math display">\[\frac{3602879701896397}{2^{55}} = 0.10000000000000000555111512312578270\]</span></li>
-<li>When doing operations on these numbers, extra decimals will sometimes get rounded off, suddenly making the number look precise, but you might always have a tiny bit of this rounding error showing up in floating point values.</li>
-<li>So be <em>careful</em> using <code class="python">==</code> for numeric comparisons! Rounding might result in unexpected falsehoods
-<ul>
-<li>Far better to check if two numbers are within a small margin of one another, or greater or less than the other</li>
-</ul></li>
-<li>Errors will usually average out over being a bit too large or two small
-<ul>
-<li>Repeated calculation of some types can sometimes accumulate errors in the same direction and cause more of an issue</li>
-</ul></li>
-</ul>
+print(A == B)
+```
+::::
+::::{.col style='flex-grow:1.25'}
+- The left code will print out `False`!
+- Python represents floating point (fractional) numbers using two integers
+    - One to represent the significant digits
+    - One to represent the exponent
+::::
+::::::
+- $1\frac{1}{4}$ Example
+    - In decimal:
+        $\quad\displaystyle 1\frac{1}{4} = \frac{1}{1} + \frac{2}{10} + \frac{5}{100} = 1.25 = (125, -2)$
+    - In binary:
+        $\quad\displaystyle 1\frac{1}{4} = \frac{1}{1} + \frac{0}{2} + \frac{1}{4} = 1.01 = (101, -10)$
+
+
+## Floating Binary
+:::incremental
+- Say we wanted to convert the value $\tfrac{7}{8}$ to a binary floating point representation:
+    $$\frac{7}{8} = \frac{0}{1} + \frac{1}{2} + \frac{1}{4} + \frac{1}{8} = 0.111 = (111, -11)$$
+- Now how would we convert $\frac{1}{10}$ to binary??
+    - We run into a problem! An infinitely repeating sequence!
+    $$\frac{1}{10} = \frac{0}{1} + \frac{0}{2} + \frac{0}{8} + \frac{1}{16} + \frac{1}{32} + \frac{0}{64} + \frac{0}{128} + \frac{1}{256} +  \cdots = 0.0001100110011\ldots$$ 
+    - Have to stop the sequence somewhere and approximate it:
+        $$\frac{3}{32} = 0.09375\quad\text{or}\quad\frac{25}{256} = 0.09765625$$
+- Note that we have the same issues in decimal, writing out ratios like $\frac{1}{3}$
+:::
+
+## Consequences
+- Most languages end up taking the first 53 significant digits
+    $$\frac{3602879701896397}{2^{55}} = 0.10000000000000000555111512312578270$$
+- When doing operations on these numbers, extra decimals will sometimes get rounded off, suddenly making the number look precise, but you might always have a tiny bit of this rounding error showing up in floating point values.
+- So be _careful_ using `==` for numeric comparisons! Rounding might result in unexpected falsehoods
+    - Far better to check if two numbers are within a small margin of one another, or greater or less than the other
+- Errors will usually average out over being a bit too large or two small
+    - Repeated calculation of some types can sometimes accumulate errors in the same direction and cause more of an issue
+-->
 </section>
 <section id="representing-characters" class="slide level2">
 <h2>Representing Characters</h2>
 <ul>
-<li>Use numeric encodings to represent character data inside the machine, where each character is assigned an integer value.</li>
+<li>We use numeric encodings to represent character data inside the
+machine, where each character is assigned an integer value.</li>
 <li>Character codes are not very useful unless standardized though!
 <ul>
-<li>Competing encodings in the early years made it difficult to share data across machines</li>
+<li>Competing encodings in the early years made it difficult to share
+data across machines</li>
 </ul></li>
-<li>First widely adopted character encoding was ASCII (American Standard Code for Information Interchange)</li>
-<li>Originally just with 128 possible characters, even after expanding to 256, ASCII proved inadequate in the international world, and has therefore been superseded by Unicode.</li>
+<li>First widely adopted character encoding was ASCII (American Standard
+Code for Information Interchange)</li>
+<li>Originally just with 128 possible characters, even after expanding
+to 256, ASCII proved inadequate in the international world, and has
+therefore been superseded by Unicode.</li>
 </ul>
 </section>
 <section id="ascii" class="slide level2">
 <h2>ASCII</h2>
-<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<figure>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -2639,18 +2685,68 @@ print(A == B)</code></pre>
     </g>
   </g>
 </svg>
-</p>
+
+<figcaption>The ASCII subset of Unicode</figcaption>
+</figure>
+</section>
+<section id="abstract-strings" class="slide level2">
+<h2>Abstract Strings</h2>
+<ul>
+<li>Characters (and their Unicode representation) are most often used in
+programming when combined to make collections of consecutive characters
+called <em>strings</em>.</li>
+<li>Internally, strings are stored as a sequence of characters in a
+sequential chunk of memory.</li>
+<li>You don’t have to (and generally don’t want to) think of the
+internal representation.
+<ul>
+<li>Better to think of the string as a single abstract unit</li>
+</ul></li>
+<li>Python emphasizes this abstract view by defining a built-in string
+class that already defines a selection of higher-level operations on
+string objects</li>
+</ul>
+</section>
+<section id="a-string-primer" class="slide level2">
+<h2>A String primer</h2>
+<ul>
+<li>A <em>string</em> in Python in a data type that represents textual
+data, in the form of a sequence of individual characters
+<ul>
+<li>Domain: all possible sequences of characters</li>
+<li>Operations: <strong>Many!</strong> But we’ll keep in quite simple
+initially</li>
+</ul></li>
+<li>Denoted by placing the desired sequence of characters between two
+quotation marks
+<ul>
+<li><code class="python">'I am a string'</code></li>
+<li>In Python, either single or double quotes can be used, but the ends
+must match
+<ul>
+<li><code class="python">"I am also a string!"</code></li>
+<li><code class="python">"I'm sad you've gone"</code></li>
+</ul></li>
+</ul></li>
+</ul>
 </section>
 <section id="meeting-chr-and-ord" class="slide level2">
-<h2>Meeting <code class="python">chr</code> and <code class="python">ord</code></h2>
+<h2>Meeting <code class="python">chr</code> and
+<code class="python">ord</code></h2>
 <ul>
-<li>Python includes two build in functions to simplify conversion between an integer and the corresponding Unicode character</li>
-<li><code class="python">chr</code> takes a base-10 integer and returns the corresponding Unicode character as a string
+<li>Python includes two build-in functions to simplify conversion
+between an integer and the corresponding Unicode character</li>
+<li><code class="python">chr</code> takes a base-10 integer and returns
+the corresponding Unicode character as a string
 <ul>
-<li><code class="python">chr(65)</code> gives <code class="python">"A"</code> (capital A)</li>
-<li><code class="python">chr(960)</code> gives <code class="python">"π"</code> (Greek letter pi)</li>
+<li><code class="python">chr(65)</code> gives
+<code class="python">"A"</code> (capital A)</li>
+<li><code class="python">chr(960)</code> gives
+<code class="python">"π"</code> (Greek letter pi)</li>
 </ul></li>
-<li><code class="python">ord</code> goes the other direction, taking a single character string and returning the corresponding base-10 integer of that character in Unicode
+<li><code class="python">ord</code> goes the other direction, taking a
+single character string and returning the corresponding base-10 integer
+of that character in Unicode
 <ul>
 <li><code class="python">ord("B")</code> gives 66</li>
 <li><code class="python">ord(" ")</code> gives 32</li>
@@ -2658,46 +2754,57 @@ print(A == B)</code></pre>
 </ul></li>
 </ul>
 </section>
-<section id="abstract-strings" class="slide level2">
-<h2>Abstract Strings</h2>
+<section id="lengths" class="slide level2">
+<h2>Lengths</h2>
 <ul>
-<li>Characters (and their Unicode representation) are most often used in programming when combined to make collections of consecutive characters called <em>strings</em>.</li>
-<li>Internally, strings are stored as a sequence of characters in a sequential chunk of memory.</li>
-<li>You don’t have to (and generally don’t want to) think of the internal representation.
-<ul>
-<li>Better to think of the string as a single abstract unit</li>
-</ul></li>
-<li>Python emphasizes this abstract view by defining a built-in string class that already defines a selection of higher-level operations on string objects</li>
+<li><p>The number of characters in a string is commonly called its
+<em>length</em></p></li>
+<li><p>The length of a string can be found using the build-in function
+<code class="python">len()</code></p>
+<pre ><code class="python">>>> len("Totally awesome")
+15</code></pre></li>
+<li><p>In practice, this function works for any sequence, of which
+string are just our first example</p></li>
 </ul>
 </section>
-<section id="picking-characters" class="slide level2">
-<h2>Picking Characters</h2>
+<section id="character-picking" class="slide level2">
+<h2>Character Picking</h2>
 <ul>
-<li>A string is an <em>ordered</em> collection of characters
+<li>A string is an <em>ordered</em> sequence of characters
 <ul>
-<li>Character positions in the string are identified by an <em>index</em>, which <strong>starts at 0</strong></li>
+<li>Character positions in the string are identified by an
+<em>index</em>, which <strong>starts at 0</strong></li>
 </ul></li>
 </ul>
-<p><img data-src="../images/svg_cache/d11dffd92f008b339586ee2ad299867371f1609a.svg" style="width:70.0%" /></p>
+<p><img
+data-src="../images/svg_cache/9d907491f4c471977e9b041a3db1b7c6bc2ea0cc.svg"
+style="width:70.0%" /></p>
 <ul>
-<li><p>You can select individual characters from the string using the syntax</p>
+<li><p>You can select individual characters from the string using the
+syntax</p>
 <pre ><code class="python">string[k]</code></pre>
-<p>where <code class="python">string</code> is the variable assigned to the desired string and <code class="python">k</code> is the index integer of the character you want</p>
-<pre ><code class="python-repl">>>> s = "spaghetti sauce"
->>> print(s[5])
+<p>where <code class="python">string</code> is the variable assigned to
+the desired string and <code class="python">k</code> is the index
+integer of the character you want</p>
+<pre ><code class="python-repl" style="font-size:.7em">>>> print("spaghetti sauce"[5])
 e</code></pre></li>
 </ul>
 </section>
 <section id="back-it-up" class="slide level2">
 <h2>Back it Up</h2>
 <ul>
-<li>Sometimes it is more useful to count from the end of the string, not the beginning</li>
-<li>Python gives you a convenient way to do this, using negative indexes</li>
+<li>Sometimes it is more useful to count from the end of the string, not
+the beginning</li>
+<li>Python gives you a convenient way to do this, using negative
+indexes</li>
 </ul>
 <p><br></p>
-<p><img data-src="../images/svg_cache/538f0111ca5dc337b6e8220a5135961769db4efb.svg" style="width:70.0%" /></p>
+<p><img
+data-src="../images/svg_cache/b81244858d27ed1fba077c2e55db5b8148227558.svg"
+style="width:70.0%" /></p>
 <ul>
-<li><p>A common use case is to grab the last character of the string, using</p>
+<li><p>A common use case is to grab the last character of the string,
+using</p>
 <pre ><code class="python">s[-1]</code></pre>
 <p>which is shorthand for</p>
 <pre ><code class="python">s[len(s)-1]</code></pre></li>
@@ -2707,34 +2814,245 @@ e</code></pre></li>
 <h2>Slicing</h2>
 <ul>
 <li><p>Often, you may want more than a single character</p></li>
-<li><p>Python allows you to specify a starting and an ending index through an operation known as <em>slicing</em></p></li>
+<li><p>Python allows you to specify a starting and an ending index
+through an operation known as <em>slicing</em></p></li>
 <li><p>The syntax looks like:</p>
 <pre ><code class="python">string_variable[start : limit]</code></pre>
-<p>where <code class="python">start</code> is the first index to be included and everything up to but <strong>not including</strong> the <code class="python">limit</code> is included</p></li>
-<li><p><code class="python">start</code> and <code class="python">limit</code> are actually optional (but the <code class="python">:</code> is not)</p>
+<p>where <code class="python">start</code> is the first index to be
+included and everything up to but <strong>not including</strong> the
+<code class="python">limit</code> is included</p></li>
+<li><p><code class="python">start</code> and
+<code class="python">limit</code> are actually optional (but the
+<code class="python">:</code> is not)</p>
 <ul>
-<li>If <code class="python">start</code> omitted, the slice will begin at the start of the string</li>
-<li>If <code class="python">limit</code> omitted, the slice will proceed to the end of the string</li>
+<li>If <code class="python">start</code> omitted, the slice will begin
+at the start of the string</li>
+<li>If <code class="python">limit</code> omitted, the slice will proceed
+to the end of the string</li>
 </ul></li>
 </ul>
 </section>
 <section id="and-dicing" class="slide level2">
 <h2>and Dicing</h2>
 <ul>
-<li>Can add a third component to the slice syntax, called a <em>stride</em></li>
-</ul>
-<pre ><code class="python">string_variable[start : limit : stride]</code></pre>
-<ul>
-<li>Specifies how large the steps are between each included index</li>
-<li>Can also make the stride negative to proceed backwards through a string</li>
-</ul>
+<li><p>Can add a third component to the slice syntax, called a
+<em>stride</em></p>
+<pre ><code class="python">string_variable[start : limit : stride]</code></pre></li>
+<li><p>Specifies how large the steps are between each included
+index</p></li>
+<li><p>Can also make the stride negative to proceed backwards through a
+string</p>
 <pre ><code class="python-repl">>>> s = "spaghetti sauce"
 >>> s[4:8]
 hett
 >>> s[10:]
 sauce
 >>> s[:10:2]
-sahti</code></pre>
+sahti</code></pre></li>
+</ul>
+</section>
+<section id="concatenation" class="slide level2">
+<h2>Concatenation</h2>
+<div style="font-size:.9em">
+<ul>
+<li><p><em>Concatenation</em> is the act of taking two separate objects
+and bringing them together to create a single new object</p></li>
+<li><p>For sequences, of which strings are a type, concatenation takes
+the contents of one sequence and add them to the end of another
+sequence</p></li>
+<li><p>Python <em>overloads</em> the <code class="python">+</code>
+operator to concatenate sequences like strings</p>
+<ul>
+<li>This is why keeping track of variable types is important!
+<code class="python">+</code> will <strong>add</strong> two numbers, but
+will <strong>concatenate</strong> two strings!</li>
+</ul>
+<pre ><code class="python">>>> 'fish' + 'sticks'
+'fishsticks'</code></pre></li>
+<li><p>Unlike in addition, order matters here!</p>
+<pre ><code class="python">>>> 'sticks' + 'fish'
+'sticksfish'</code></pre></li>
+</ul>
+</div>
+</section>
+<section id="repeat-again" class="slide level2">
+<h2>Repeat again?</h2>
+<ul>
+<li>We’ve seen how we can use addition (<code class="python">+</code>)
+in Python to concatenate strings</li>
+<li>In math, adding something many times is the same as multiplying</li>
+</ul>
+<p><span class="math display">\[5+5+5+5+5+5 = 6 \times 5\]</span></p>
+<ul>
+<li>The same logic holds true for Python strings!
+<ul>
+<li>You multiply by a <strong>integer</strong>: the number of times you
+want the concatenation repeated</li>
+<li>You can not multiply two strings together, Python will not
+understand what you are trying to do</li>
+</ul>
+<pre ><code class="python">print("Betelguese, " * 3)</code></pre></li>
+</ul>
+</section>
+<section id="comparing-strings" class="slide level2">
+<h2>Comparing Strings</h2>
+<ul>
+<li><p>Python lets you use normal comparison operators to compare
+strings</p>
+<pre ><code class="python">string1 == string2</code></pre>
+<p>is true if <code class="python">string1</code> and
+<code class="python">string2</code> contain the same characters in the
+same order</p></li>
+<li><p>Comparisons involving greater than or less than are done similar
+to alphabetical ordering</p>
+<ul>
+<li>Start at the beginning and compare a character. If they are the
+same, then compare the next character, etc</li>
+</ul></li>
+<li><p>All comparisons are done <strong>according to their Unicode
+values</strong>.</p>
+<ul>
+<li>Called <em>lexicographic ordering</em></li>
+<li><code class="python">"cat" > "CAT"</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="string-looping" class="slide level2">
+<h2>String Looping</h2>
+<ul>
+<li>Because strings are a sequence, they will work directly in a
+<code class="python">for</code> loop!</li>
+<li>In general, you have two options of how you want to loop through a
+string:</li>
+</ul>
+<div class="cols">
+<div class="col">
+<div class="block" name="By Index">
+<pre ><code class="python">s = "hello"
+for i in range(len(s)):
+    print(s[i], 'is letter', i)</code></pre>
+</div>
+</div>
+<div class="col">
+<div class="block" name="By Letter">
+<pre ><code class="python">s = "hello"
+for letter in s:
+    print(letter)</code></pre>
+</div>
+</div>
+</div>
+<ul>
+<li>Looping by letter can be very convenient, but you lose positional
+information</li>
+<li>You can always select the desired letter if looping by index</li>
+</ul>
+</section>
+<section id="cant-change-a-strings-colors" class="slide level2">
+<h2>Can’t change a string’s colors</h2>
+<ul>
+<li><p>Strings are what we call <em>immutable</em>: they can not be
+modified in place by clients.</p></li>
+<li><p>You can “look” at different parts of the string, but you can not
+“change” those parts without making a whole new string</p>
+<pre ><code class="python badcode">s = "Cats!"
+s[0] = "R"   # THIS WILL ERROR!!</code></pre></li>
+<li><p>You can of course create a new string object with the desired
+traits:</p>
+<pre ><code class="python">s = "R" + s[1:]</code></pre></li>
+<li><p>This applies to all methods that act on strings as well: they
+return a <strong>new</strong> string, they do not modify the
+original</p></li>
+</ul>
+<!-- for friday
+## Methods to find string patterns
+
+:::{style='font-size:.9em'}
+
+Method | Description
+--- | -----
+`string.find(pattern)` | Returns the first index of `pattern` in `string`, or `-1` if it does not appear
+`string.find(pattern, k)` | Same as the one-argument version, but starts searching at index `k`
+`string.rfind(pattern)` | Returns the last index of `pattern` is `string`, or `-1` if missing
+`string.rfind(pattern, k)` | Same as the one-argument version, but searches backwards from index `k`
+`string.startswith(prefix)` | Returns `True` if the string starts with `prefix`
+`string.endswith(suffix)` | Returns `True` if the string ends with `suffix`
+
+:::
+
+## Transforming Methods
+:::{style='font-size:.9em'}
+
+Method | Description
+---|----
+`string.lower()` | Returns a copy of `string` with all letters converted to lowercase
+`string.upper()` | Returns a copy of `string` with all letters converted to uppercase
+`string.capitalize()` | Returns a copy of `string` with the first character capitalized and the rest lowercase
+`string.strip()` | Returns a copy of `string` with whitespace and non-printing characters removed from both ends
+`string.replace(old, new)` | Returns a copy of `string` with all instances of `old` replaced by `new`
+:::
+
+## Classifying Character Methods
+:::{style='font-size:.9em'}
+
+Method | Description
+--- | -----
+`char.isalpha()` | Returns `True` if `char` is a letter
+`char.isdigit()` | Returns `True` if `char` is a digit
+`char.isalnum()` | Returns `True` if `char` is letter or a digit
+`char.islower()` | Returns `True` if `char` is a lowercase letter
+`char.isupper()` | Returns `True` if `char` is an uppercase letter
+`char.isspace()` | Returns `True` if `char` is a whitespace character (space, tab, or newline)
+`char.isidentifier()` | Returns `True` if `char` is a legal Python identifier
+:::
+
+
+## Igpay Atinlay
+- Suppose we wanted to write a script that converted English to Pig Latin
+- Rules of Pig Latin:
+    - If the word begins with a consonant, move everything up to the first vowel to the end and append on "ay" at the end
+    <center>
+        `fleet` ⟶  `eetflay`
+    </center>
+    - If the word starts with a vowel, just append "way" to the end
+    <center>
+        `orange` ⟶  `orangeway`
+    </center>
+    - If the word has no vowels, do nothing
+- Our decomposition:
+    - Find first vowel
+    - Convert a single word
+
+## Indingfay Owelsvay
+```python
+def find_first_vowel_index(word):
+    """
+    Find the first vowel in a word and return its index,
+    or return None if no vowels found.
+    """
+    for i in range(len(word)):
+        index = "aeiou".find(word[i].lower())
+        if index != -1:
+            return i
+    return None
+```
+
+## Onvertcay Oneway Ordway
+```{.python style='max-height:900px;'}
+def word_2_pig_latin(word):
+    """
+    Convert a single word with no special characters from
+    English to Pig Latin.
+    """
+    vowel = find_first_vowel_index(word)
+    if vowel is None:
+        return word
+    elif vowel == 0:
+        return word + "way"
+    else:
+        return word[vowel:] + word[:vowel] + "ay"
+```
+
+-->
 </section>
     </div>
   </div>
@@ -2759,6 +3077,7 @@ sahti</code></pre>
 		//autoAnimateEasing: 'ease-in',
 		//autoAnimateDuration: 1.0,
 		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
         // Display controls in the bottom right corner
         controls: true,
         // Help the user learn the controls by providing hints, for example by
@@ -2777,7 +3096,7 @@ sahti</code></pre>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -2786,27 +3105,16 @@ sahti</code></pre>
         center: false,
         // Enables touch navigation on devices with touch input
         touch: true,
-        // Loop the presentation
-        loop: false,
-        // Change the presentation direction to be RTL
-        rtl: false,
         // see https://revealjs.com/vertical-slides/#navigation-mode
         navigationMode: 'default',
-        // Randomizes the order of slides each time the presentation loads
-        shuffle: false,
         // Turns fragments on and off globally
         fragments: true,
         // Flags whether to include the current fragment in the URL,
         // so that reloading brings you to the same fragment position
         fragmentInURL: true,
-        // Flags if the presentation is running in an embedded mode,
-        // i.e. contained within a limited portion of the screen
-        embedded: false,
         // Flags if we should show a help overlay when the questionmark
         // key is pressed
         help: true,
-        // Flags if speaker notes should be visible to all viewers
-        showNotes: false,
         // Global override for autoplaying embedded media (video/audio/iframe)
         // - null: Media will only autoplay if data-autoplay is present
         // - true: All media will autoplay, regardless of individual setting
@@ -2830,14 +3138,10 @@ sahti</code></pre>
         // presenting each slide. This is used to show a pacing timer in the
         // speaker view
         defaultTiming: null,
-        // Enable slide navigation via mouse wheel
-        mouseWheel: false,
         // Hide cursor if inactive
         hideInactiveCursor: true,
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
-        // Opens links in an iframe preview overlay
-        previewLinks: false,
         // Transition style
         transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
@@ -2854,7 +3158,7 @@ sahti</code></pre>
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
-        height: 1200,
+        height: 1080,
         // The display mode that will be used to show slides
         display: 'block',
 		math: {
@@ -2894,7 +3198,7 @@ sahti</code></pre>
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
-        chalkWidth: 7,
+        chalkWidth: 5,
 		boardmarkers : [
                 { color: 'rgba(248,248,242,1)', cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                 { color: 'rgba(102,217,239,1)', cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
@@ -2919,6 +3223,7 @@ sahti</code></pre>
 			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
 		],
       });
+      
     </script>
     </body>
 </html>

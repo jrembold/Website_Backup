@@ -287,3 +287,20 @@ html * {
 @media print {
   .backgrounds {
     background-color: #fdf6e3; } }
+
+
+/* My custom aditions*/
+.cols {
+    display: flex;
+	padding: 10px;
+}
+.col {
+    flex: 1;
+	margin: 10px;
+	flex-grow: 1;
+
+}
+svg {
+	display: block;
+	margin: auto;
+}

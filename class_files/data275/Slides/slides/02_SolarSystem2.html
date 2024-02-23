@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2024-01-23">
+  <title>Kepler’s Ellipses</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Kepler’s Ellipses</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">January 23, 2024</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 1 is posted!
+<ul>
+<li>Partners revealed and introduction at end of class</li>
+<li>Example of a basic computational essay is on website as well</li>
+</ul></li>
+<li>Some of you still need to fill out the information gathering poll <a
+href="https://docs.google.com/forms/d/e/1FAIpQLSfO8PZWURDp-a_PVR_DMh9fP0DHgkbjg0g7XfDicJ370_aCfw/viewform?usp=sf_link">here</a></li>
+</ul>
+</section>
+<section id="todays-plan" class="slide level2">
+<h2>Today’s Plan</h2>
+<ul>
+<li>What can we determine with positions?
+<ul>
+<li>Kepler’s 1st Law</li>
+</ul></li>
+<li>Ellipse Math</li>
+<li>Ellipse Fitting</li>
+</ul>
+</section>
+<section id="a-note-on-packages" class="slide level2">
+<h2>A Note on Packages</h2>
+<ul>
+<li>Given that all of you generally fall into 1 of 2 camps (R or
+Python), where possible I’m going to try to not rely on package specific
+implementations</li>
+<li>That said, there are some common ones that will repeatedly come up:
+<ul>
+<li>Python
+<ul>
+<li><em>Pandas</em> introduces dataframes, which makes ideas much more
+similar to R’s dataframes</li>
+<li><em>Matplotlib</em> is still the workhorse of data visualization in
+Python</li>
+<li><em>Numpy</em> will probably make occasional appearances for pure
+number crunching</li>
+</ul></li>
+<li>R
+<ul>
+<li><em>Tidyverse</em> brings so many nice quality of life improvements
+and added functionality</li>
+<li><em>ggplot</em> is one of the best data visualization libraries I’ve
+seen</li>
+</ul></li>
+</ul></li>
+<li>Specific applied libraries may also spring up, but as much as
+possible I’ll try to give both camps equivalent options</li>
+</ul>
+<!--## Plotting Coordinates Demonstration-->
+<!--- The file [here](../demos/brightest_200.csv) is a CSV file containing the names and coordinates of the brightest 200 stars-->
+<!--- Suppose we want to visualize this arrangement of stars to see if we could identify any constellations-->
+</section>
+<section id="angular-separation" class="slide level2">
+<h2>Angular Separation</h2>
+<div>
+<ul>
+<li class="fragment">Frequently it is useful to describe the angular
+separation between two points (as seen from Earth)
+<ul>
+<li class="fragment">Pythagorean theorem will be close for small
+separations, but not quite accurate. Better to use: <span
+class="math display">\[ \theta \approx \sqrt{\left(\left(\alpha_A -
+\alpha_B\right)\cos\delta_A\right)^2 + \left(\delta_A -
+\delta_B\right)^2} \]</span> where <span
+class="math inline">\(\alpha\)</span> indicates Right Ascension and
+<span class="math inline">\(\delta\)</span> the Declination</li>
+</ul></li>
+<li class="fragment">For small angles, you can relate the angle to a
+physical separation through: <span class="math display">\[
+\frac{\theta}{360} = \frac{\text{separation}}{2\pi(\text{distance})}
+\]</span> where the <span class="math inline">\(\text{distance}\)</span>
+is the distance from the observer to the object in question
+<ul>
+<li class="fragment">Only really makes sense if both “ends” of the angle
+are the same distance away</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="tycho-brahe" class="slide level2">
+<h2>Tycho Brahe</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Last real “naked-eye” astronomer</li>
+<li>Took very precise angle measurements of stars and planets</li>
+<li>Did not believe in a heliocentric universe, as he saw no stellar
+parallax</li>
+<li>Hired Johannes Kepler to analyze all his data</li>
+</ul>
+</div>
+<div class="col">
+<figure>
+<img data-src="../images/brahe.jpg" alt="Brahe’s observations" />
+<figcaption aria-hidden="true">Brahe’s observations</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="johannes-kepler" class="slide level2">
+<h2>Johannes Kepler</h2>
+<ul>
+<li>Kepler then spent <strong>8 years</strong> trying to reconcile
+Tycho’s observations of Mars with the Ptolemaic (Earth centered)
+model</li>
+</ul>
+<div class="quote" style="font-size:.9em">
+<blockquote>
+<p>Who would have thought it possible? This hypothesis, which so closely
+agrees with the observed oppositions, is nevertheless false? If I had
+believed that we could ignore those 8 minutes, I would have patched up
+my hypothesis accordingly. But since it was not possible to ignore them,
+those 8 minutes point the road to a complete reform of astronomy…</p>
+</blockquote>
+<blockquote>
+<p>Thou seest now, diligent reader, that the hypothesis based on this
+method not only satisfies the four positions on which it was based, but
+also correctly represents within 2 minutes all the other
+observations.</p>
+</blockquote>
+<div class="attribution">
+<p><em>Nova Astronomica</em> – Johannes Kepler</p>
+</div>
+</div>
+</section>
+<section id="keplers-1st-law" class="slide level2">
+<h2>Kepler’s 1st Law</h2>
+<ul>
+<li>The orbits of the planets are ellipses</li>
+<li>The Sun sits at one focus, with nothing at the other</li>
+</ul>
+<p><img
+data-src="../images/svg_cache/fa79ec4fac97e43946400039f32248a0b1d76683.svg"
+style="width:50.0%" /></p>
+</section>
+<section id="an-ellipses-aside" class="slide level2">
+<h2>An Ellipses Aside</h2>
+<div class="cols" style="align-items: flex-start;">
+<div class="col">
+<ul>
+<li><p>Look like squished circles</p></li>
+<li><p>Described by:</p>
+<ul>
+<li>Major Axis (longest width)
+<ul>
+<li>Half lengths are “semi-”</li>
+</ul></li>
+<li>Minor Axis (shortest width)</li>
+<li>Foci distances</li>
+<li>Eccentricity (squished-ness)</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<!--![](../images/test_ellipses.svg)-->
+<div class="rstack">
+<div class="fragment current-visible only-fragment">
+<p><img
+data-src="../images/svg_cache/de297a245e902a0d89b6d6f9c242457f1cd59b5b.svg"
+style="width:100.0%" /></p>
+</div>
+<div class="fragment current-visible only-fragment">
+<p><img
+data-src="../images/svg_cache/ab383c4ea6c12f33973844038a72adb68f96f5da.svg"
+style="width:100.0%" /></p>
+</div>
+<div class="fragment current-visible only-fragment">
+<p><img
+data-src="../images/svg_cache/949bff3cb4485a6ecb45abd2ebcfb8f84dd3fdeb.svg"
+style="width:100.0%" /></p>
+</div>
+<div class="fragment current-visible only-fragment">
+<p><img
+data-src="../images/svg_cache/00aa8449ee9e6a8f70b17ca0e59087fa45704103.svg"
+style="width:100.0%" /></p>
+</div>
+<div class="fragment current-visible only-fragment">
+<p><img
+data-src="../images/svg_cache/f852d2b7c0f2c02fabb3668ab563cfe1d8d8a2e8.svg"
+style="width:100.0%" /></p>
+</div>
+<div class="fragment">
+<p><img
+data-src="../images/svg_cache/e809303ec46d34edca4cf75a1d1c030f7a0b950b.svg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="some-ellipse-math" class="slide level2">
+<h2>Some Ellipse Math</h2>
+<p>You can always get the foci locations and eccentricity from the
+semi-major and minor axes.</p>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Foci: <span class="math display">\[ f = \sqrt{a^2 - b^2}
+\]</span></li>
+<li>Eccentricity: <span class="math display">\[ \varepsilon = \sqrt{1 -
+\frac{b^2}{a^2}} \]</span></li>
+<li>Area: <span class="math display">\[ A = \pi a b \]</span></li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/28c8d70f25e5435cd54308f6c9c8c7e0ae447f3c.svg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="elliptical-orbits" class="slide level2">
+<h2>Elliptical Orbits</h2>
+<ul>
+<li>Most planets in the Solar System have orbits that are not very
+eccentric</li>
+</ul>
+<div class="fragment current-visible only-fragment">
+<p><img
+data-src="../images/svg_cache/ce206450ffe066577d4baac855a4cf27be1df78e.svg"
+style="width:50.0%" /></p>
+</div>
+<div class="fragment current-visible only-fragment">
+<p><img
+data-src="../images/svg_cache/c5cfe55fca64a9865e0019422d7afcc0d4c4af74.svg"
+style="width:55.0%" /></p>
+</div>
+<div class="fragment current-visible only-fragment">
+<p><img
+data-src="../images/svg_cache/780722fb48384cb3bb6b11fa6138476d25c57f7e.svg"
+style="width:60.0%" /></p>
+</div>
+<div class="fragment">
+<p><img
+data-src="../images/svg_cache/fda4fbcf6b04e60874113567ffd1c4a49d16e79d.svg"
+style="width:60.0%" /></p>
+</div>
+<div class="fragment">
+<ul>
+<li>The Sun is clearly not at the center however</li>
+</ul>
+<!--
+## Kepler's 2nd Law
+- A line joining a planet to the Sun sweeps out equal areas in equal times
+    - Results in planets moving faster when close to the Sun and slower when far away
+
+\begin{tikzpicture}%%width=60%
+[every node/.style={font=\sf, color=Black}]
+  \coordinate (sun) at (1.65,0);
+  \draw[very thick] (0,0) ellipse (3cm and 2.5cm);
+  \fill[opacity=0.5,Red] (sun) -- (-25:3cm and 2.5cm) arc (-25:25:3cm and 2.5cm);
+  \fill[opacity=0.5,Red] (sun) -- (172:3cm and 2.5cm) arc (172:188:3cm and 2.5cm);
+  \fill[inner color=yellow, outer color=orange] (sun) circle (2mm);
+  \node[right] at (3,0) {Fastest};
+  \node[left] at (-3,0) {Slowest};
+\end{tikzpicture}
+
+## Kepler's 3rd Law
+:::incremental
+- The square of a planet's orbital period is proportional to the cube of its semi-major axis.
+    - A planet's _period_ is the time it takes to complete an entire orbit
+    - An orbit's semi-major axis we defined earlier to be half the major axis
+- Mathematically, this look like:
+  $$ \frac{p^2}{a^3} = \text{constant} $$
+  where $p$ is the period and $a$ is the semi-major axis
+- For objects orbiting the Sun, if you choose units of years and AU, then
+  $$ p^2 \approx a^3 $$
+  - 1 _AU_ = 1 astronomic unit = average distance from Earth to Sun
+:::
+
+
+## Projections
+- When observing, you rarely get a perfectly top-down view of an ellipse
+- Often, you are looking at some view projected from the side
+    - This does not change the measurement of the period!
+    - It may make measuring the semi-major axis more difficult though
+- Since many planets (and moons) have _mostly_ circular orbits, you can estimate the major axis by just taking the largest end-to-end distance that you observe
+
+
+## Why Gravity?
+:::::cols
+::::col
+- Kepler told us that there **must** be these relationships, but he couldn't say _why_
+- Newton found that, if the direction that something is moving changes, then it **must** have experienced some force
+    - Newton's big connection (one of them) was determining that the necessary force turns out to be from gravity (at least for most astronomic objects)
+::::
+::::col
+\begin{tikzpicture}%%width=100%
+[scale=0.7]
+  \fill[inner color=yellow, outer color=orange] (0,0) circle (1cm);
+  \draw[dashed, -latex, thick] (3,0) arc (0:340:3cm);
+    \foreach \a in {0,45,...,350}{
+      \draw[orange, -latex] (\a:2.7) -- (\a:1.3);
+    }
+  \node at (3,0) {\includegraphics[width=1cm]{world.png}};
+\end{tikzpicture}
+
+::::
+:::::
+
+## Gravity
+- Gravity is the universal attractor
+    - Anything with mass attracts anything else with mass
+    - Strength of force increases with the amount of mass involved
+    - Strength of force decreases rapidly with distance between the masses
+
+\begin{tikzpicture}%%width=70%
+  \coordinate (ball1) at (0,0);
+  \coordinate (ball2) at (8,0);
+  \coordinate (d) at ($(ball1)-(0,1.5)$);
+  \draw[Green] (ball1) --+(0,-2);
+  \draw[Cyan] (ball2) --+(0,-2);
+  \fill[ball color=Green!50] (ball1) circle (1cm);
+  \fill[ball color=Cyan!50] (ball2) circle (1cm);
+  \node at ($(ball1)+(0,1.2)$) {$M_1$};
+  \node at ($(ball2)+(0,1.2)$) {$M_2$};
+  \draw[<->, thick] (d) -- node[midway,below] {d} (d-|ball2);
+  \draw[-latex, ultra thick,Red] (ball1) -- +(4,0);
+  \draw[-latex, ultra thick,Red] (ball2) -- +(-4,0);
+  \node[Red] at (4,1) {\scalebox{1.5}{$F_g = G \frac{M_1 M_2}{d^2}$}};
+\end{tikzpicture}
+
+
+## Newton meets Kepler's 3rd
+- Kepler already had worked out
+  $$ \frac{a^3}{p^2} = \text{same value for all planets orbiting Sun} $$
+- Newton worked out, starting with the force, that two objects held in orbit by gravity would obey:
+  $$ \frac{a^3}{p^2} = \frac{G(M_1 + M_2)}{4\pi^2} $$
+  where:
+  - $M_1, M_2$ are the masses of the objects in _kilograms_
+  - $a$ is the average separation between the objects in _meters_
+  - $p$ is the orbital period in _seconds_
+  - $G$ is the gravitational constant ($6.67\times10^{-11}$)
+
+
+## Some nicer units
+- Put in more convenient units, Newton's formulation of Kepler's 3rd boils down to:
+  $$ \frac{a^3}{p^2} = (M_1 + M_2)_\odot $$
+  where
+  - $M_1, M_2$ are the masses of objects in _solar masses_
+  - $a$ is the average separation of the objects in _AU_
+  - $p$ is the orbital period in _years_
+- For the Sun and most planets, $M_1 + M_2 \approx 1 M_\odot$
+- If you can measure $a$ and $p$, then you can work out the mass of the objects!
+-->
+</div>
+</section>
+<section id="more-vocab" class="slide level2">
+<h2>More Vocab</h2>
+<ul>
+<li><em>Apogee/Aphelion</em>: The point at which a body is at its
+furthest from the Earth/Sun</li>
+<li><em>Perigee/Perihelion</em>: The point at which a body is at its
+closest to the Earth/Sun</li>
+</ul>
+<p><img
+data-src="../images/svg_cache/5d328eecc59575011d2378ae70f0fd586e5d3768.svg"
+style="width:70.0%" /></p>
+</section>
+<section id="pesky-ellipses" class="slide level2">
+<h2>Pesky Ellipses</h2>
+<ul>
+<li>Because the elliptical orbits that space objects follow are tied
+directly to some physical properties, it can be very useful to determine
+elliptical parameters</li>
+<li>The classic equation of an ellipse: <span class="math display">\[
+\frac{(x-x_c)^2}{a^2} + \frac{(y-y_c)^2}{b^2} = 1 \]</span> allows for
+no rotations</li>
+<li>The general polynomial form: <span class="math display">\[ Ax^2 +
+Bxy + Cy^2 + Dx + Ey + F = 0 \]</span> doesn’t give obvious expressions
+for the desired parameters</li>
+</ul>
+</section>
+<section id="fitting-tactics" class="slide level2">
+<h2>Fitting Tactics</h2>
+<ul>
+<li>There are a variety of approaches, most perform best when the
+sampled points come from around the entire ellipse
+<ul>
+<li>Different approaches can error in different ways if all points are
+from one side of the ellipse</li>
+</ul></li>
+<li>All the pre-built options required some odd libraries and worked in
+very different ways between Python and R</li>
+<li>So I found starting code for both and then customized to create
+fitting options that work very similarly in both
+<ul>
+<li>In Python: <a href="../libs/fitellipse.py">fitellipse.py</a></li>
+<li>In R: <a href="../libs/fitellipse.r">fitellipse.r</a></li>
+</ul></li>
+</ul>
+</section>
+<section id="library-explanation" class="slide level2">
+<h2>Library Explanation</h2>
+<ul>
+<li>Both libraries introduce 3 functions. To get access to them, run or
+import the library
+<ul>
+<li>In Python: <code class="python">run fitellipse.py</code> or
+<code class="python">from fitellipse import *</code></li>
+<li>In R: <code class="python">source('fitellipse.r')</code></li>
+</ul></li>
+<li>3 functions:
+<ul>
+<li><code class="python">fit_ellipse(x, y)</code>: Computes the best fit
+ellipse and returns both the coefficients and the common fit parameters
+as an associative array. Takes points to fit as lists of x and y
+coordinates.</li>
+<li><code class="python">get_ellipse(fit_params)</code>: Computes a
+series of x and y points representing the given ellipse, where
+<code class="python">fit_params</code> is the output of
+<code class="python">fit_ellipse</code>. Useful for plotting
+purposes</li>
+<li><code class="python">create_test_ellipse(Rx,Ry,Cx,Cy,Rotation,NoiseLevel)</code>:
+creates a series of x and y coordinates representing an ellipse with the
+given parameters</li>
+</ul></li>
+</ul>
+</section>
+<section id="caveats" class="slide level2">
+<h2>Caveats</h2>
+<ul>
+<li>Both fitting functions seem to do excellent at determining the
+center of the ellipse and major and minor axes</li>
+<li>There is some variability with the resulting angle, where it
+sometimes comes out <span class="math inline">\(90^\circ\)</span> off
+(<span class="math inline">\(\pi/2\)</span> technically since the angle
+is in radians)
+<ul>
+<li>I believe this stems from discrepancies with whether it ends up
+finding the angle from the major or minor axis, but I’ve spent hours
+trying to make it more robust and thus far failed</li>
+<li>Fortunately, the angle of the ellipse has absolutely no bearing on
+any physical laws, and is only of interest for plotting purposes
+<ul>
+<li>If the angle of the ellipse is wrong when plotting, add or subtract
+<span class="math inline">\(\pi/2\)</span> from it</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="example-with-comet-neowise" class="slide level2">
+<h2>Example with Comet NeoWISE</h2>
+<ul>
+<li>Comet NeoWISE made an appearance several years back
+<ul>
+<li>That particular comet had a huge eccentricity and thus couldn’t
+easily be visualized</li>
+</ul></li>
+<li>A different NeoWISE comet though has its positions over the next 100
+years stored <a href="../demos/neowise_positions.csv">here</a></li>
+<li>How could I estimate the eccentricity of this comet?</li>
+</ul>
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity!</h2>
+<ul>
+<li>I have given you <a href="../demos/pluto_positions.csv">here</a> the
+coordinates of Pluto over a 300 year span</li>
+<li>Your task: determining the closest approach Pluto makes with the
+Sun. That is to say, what is its perihelion distance?
+<ul>
+<li>Doing so will require working out the major axis and determining
+where the Sun would be</li>
+<li>A picture might help you keep things straight as you go</li>
+</ul></li>
+<li><strong>Note</strong>: If you compare this value to the known value,
+it isn’t going to be perfect, owing to us not fully accounting for the
+tilt of Pluto’s orbit when computing the ellipse</li>
+</ul>
+</section>
+<section id="partners" class="slide level2">
+<h2>Partners!</h2>
+<ul>
+<li>I’m giving you a chance now to meet with your partner for HW1 to
+discuss schedules, strengths, weaknesses, and how you can best work
+together!</li>
+<li>Remember that there will be a check-in this weekend, so try to have
+at least something accomplished you can mention!</li>
+</ul>
+<div class="cols" style="align-items: flex-start">
+<div class="col">
+<ul>
+<li>Left rows (front to back)
+<ul>
+<li>Kendall L and Paul M</li>
+<li>Sam H and Milena L</li>
+<li>Owyn W and Nico M</li>
+<li>Jennifer A and Nathaniel S</li>
+<li>Indi E and Zachary H</li>
+<li>Brandon R and Kara D</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<ul>
+<li>Right rows (front to back)
+<ul>
+<li>Axel S and Teo M</li>
+<li>Siera E and Jackson S</li>
+<li>Matthew N and Emma M</li>
+<li>Mia P and Teddy B</li>
+<li>Sophia R and Leila F</li>
+<li>Trajan C and Alex T</li>
+<li>Ben W and Michael K</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>

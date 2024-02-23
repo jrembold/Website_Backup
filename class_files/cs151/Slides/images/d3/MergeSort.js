@@ -5,16 +5,28 @@ var values = [31, 41, 59, 26, 53, 58, 97, 93, 23, 84];
 var data = [];
 var spacing = 25;
 for (var x = 0; x < values.length; x++) {
-	data.push({'x':x*spacing, 'v':values[x], 'i':x});
+	data.push({'x':x*spacing, 'y': 0, 'v':values[x], 'i':x});
 }
 
 var svg = d3.select("body").append("svg")
-	.attr("viewBox", "-20 -10 " + (spacing*values.length+20) + " 70")
+	.attr("viewBox", "-50 -20 " + (spacing*values.length+75) + " 270")
 	.attr("width", "100%")
 	.attr("height", "100%");
 
 //var labels = svg.append("g").selectAll("text")
 
+
+// Boxes
+var boxes = svg.selectAll('#boxes').data(data, d => d.i).enter()
+	.append('rect')
+	.attr("width", spacing)
+	.attr("height", spacing)
+	.attr("x", d => d.x - spacing/2)
+	.attr("y", d => d.y - spacing / 2)
+	.attr("fill", "none")
+	.attr("stroke", Teal)
+
+// Numbers
 svg.selectAll('#num').data(data, d => d.i).enter()
 	.append("text")
 	.attr("x", d => d.x)
@@ -28,23 +40,37 @@ svg.selectAll('#num').data(data, d => d.i).enter()
 
 var labels = svg.selectAll('#num');
 
-function split(obj) {
-	let ls = svg.selectAll('#num').data(data.slice(0,5), d => d.i);
-	console.log(ls);
-	ls.enter()
-		.append("text")
-		.attr("x", d => d.x)
-		.attr("y", 0)
-		.text(d => d.v)
-		.attr("text-anchor", "middle")
-		.attr("font-size", "1em")
-		.attr("fill", Blue)
-		.attr("alignment-baseline", "central")
-		.attr("id", "num");
+function split(obj, level) {
+	let obj_len = obj.size()
+	let ls = svg.selectAll('#num').data(data.slice(0,Math.floor(obj_len/2)), d => d.i);
+	let rs = svg.selectAll('#num').data(data.slice(Math.floor(obj_len/2),obj_len), d => d.i);
+	//console.log(ls);
+	//ls.enter()
+		//.append("text")
+		//.attr("x", d => d.x)
+		//.attr("y", 0)
+		//.text(d => d.v)
+		//.attr("text-anchor", "middle")
+		//.attr("font-size", "1em")
+		//.attr("fill", Blue)
+		//.attr("alignment-baseline", "central")
+		//.attr("id", "num");
 
-	obj.transition()
+	//obj.transition()
+		//.duration(1000)
+		//.attr("x", (d,i) => i <= obj_len/2 ? d.x-20/level: d.x+20/level)
+		//.attr("y", (d,i) => d.y + 1.5*spacing*level)
+
+	ls.transition()
 		.duration(1000)
-		.attr("x", (d,i) => i < 5 ? d.x-10 : d.x + 10)
+		.attr("x", d => d.x - 20/level)
+		.attr("y", d => d.y + 1.5 * spacing * level)
+	rs.transition()
+		.duration(1000)
+		.attr("x", d => d.x + 20/level)
+		.attr("y", d => d.y + 1.5 * spacing * level)
+
+	return [ls, rs]
 }
 
 function swap(a,b) {

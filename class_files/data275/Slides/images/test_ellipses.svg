@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="238.0047mm"
+   height="147.47696mm"
+   viewBox="0 0 238.0047 147.47696"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="test_ellipses.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.3266287"
+     inkscape:cx="811.07846"
+     inkscape:cy="158.67288"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <marker
+       style="overflow:visible"
+       id="Arrow1"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Arrow1"
+       markerWidth="4.0606599"
+       markerHeight="6.7071061"
+       viewBox="0 0 4.0606602 6.7071068"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:butt"
+         d="M 3,-3 0,0 3,3"
+         id="path5057"
+         transform="rotate(180,0.125,0)"
+         sodipodi:nodetypes="ccc" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-391.47672,-66.454376)">
+    <ellipse
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+       id="path234"
+       cx="510.47906"
+       cy="140.19286"
+       rx="118.50235"
+       ry="73.23848" />
+    <g
+       id="g1258"
+       class="fragment current-visible"
+       data-fragment-index="2">
+      <path
+         style="fill:#0000ff;stroke:#0000ff;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker-start:url(#Arrow1);marker-end:url(#Arrow1)"
+         d="M 393.53917,140.42642 H 627.03681"
+         id="path398" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.6454px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#0000ff;stroke:#0000ff;stroke-width:0.293319;stroke-linecap:round;stroke-linejoin:round"
+         x="468.24661"
+         y="136.73621"
+         id="text1249"><tspan
+           sodipodi:role="line"
+           id="tspan1247"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.6454px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.293319"
+           x="468.24661"
+           y="136.73621">Major Axis</tspan></text>
+    </g>
+    <g
+       id="g2291"
+       class="fragment current-visible"
+       data-fragment-index="1">
+      <path
+         style="fill:#0000ff;stroke:#ff6600;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker-start:url(#Arrow1);marker-end:url(#Arrow1)"
+         d="M 508.41539,68.515146 V 212.00327"
+         id="path1384" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.1639px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ff6600;stroke:none;stroke-width:0.301938;stroke-linecap:round;stroke-linejoin:round"
+         x="-183.74074"
+         y="505.79379"
+         id="text2282"
+         transform="rotate(-90)"><tspan
+           sodipodi:role="line"
+           id="tspan2280"
+           style="fill:#ff6600;stroke:none;stroke-width:0.301938"
+           x="-183.74074"
+           y="505.79379">Minor Axis</tspan></text>
+    </g>
+  </g>
+</svg>

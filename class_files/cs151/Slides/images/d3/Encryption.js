@@ -4,7 +4,7 @@ var etext = [];
 var eve_present = false;
 
 var svg = d3.select("body").append("svg")
-	.attr("viewBox", "-120 -50 240 100")
+	.attr("viewBox", "-120 -50 240 200")
 	.attr("width", "100%")
 	.attr("height", "100%")
 	.attr('fill', Orange)

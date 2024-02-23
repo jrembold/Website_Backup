@@ -88,6 +88,13 @@ $if(mathjax)$
 $endif$
 $if(highlightjs)$
   <script src="$revealjs-url$/plugin/highlight/highlight.js"></script>
+  <script src="$revealjs-url$/../js/python_language.js"></script>
+$endif$
+$if(js)$
+  <script src="$revealjs-url$/../js/JSGraphics.js"></script>
+  $for(js)$
+  <script src="$revealjs-url$/../js/$js$.js"></script>
+  $endfor$
 $endif$
 
   <script>
@@ -98,6 +105,7 @@ $endif$
 		//autoAnimateEasing: 'ease-in',
 		//autoAnimateDuration: 1.0,
 		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
 $if(controls)$
         // Display controls in the bottom right corner
         controls: $controls$,
@@ -133,7 +141,7 @@ $endif$
 $if(history)$
         history: $history$,
 $else$
-        history: true,
+        history: false,
 $endif$
 $if(keyboard)$
         // Enable keyboard shortcuts for navigation
@@ -362,6 +370,14 @@ $endif$
 			disableCheckFile: false, //default false
 		 },
 
+$if(highlightjs)$
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+$endif$
+
         // reveal.js plugins
         plugins: [
 $if(mathjax)$
@@ -378,7 +394,7 @@ $endif$
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
-        chalkWidth: 7,
+        chalkWidth: 5,
 		boardmarkers : [
                 { color: 'rgba(248,248,242,1)', cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                 { color: 'rgba(102,217,239,1)', cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
@@ -403,7 +419,26 @@ $endif$
 			{ src: "$revealjs-url$/plugin/d3/reveald3.js" },
 		],
       });
+      $if(js)$
+        $for(js)$
+          Reveal.addEventListener("$js$", $js$)
+        $endfor$
+      $endif$
+
     </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
   $for(include-after)$
   $include-after$
   $endfor$

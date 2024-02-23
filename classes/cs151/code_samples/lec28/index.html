@@ -4,25 +4,25 @@
 	<head>
 		<title>Lecture 28 Code</title>
 		<meta name='viewport' content='width=device-width, initial-scale=1'/>
-		<link rel='stylesheet' href="/Website_Backup/css/main.css"/>
-		<link rel='icon' href="/Website_Backup/images/favicon.png">
-		<script src="/Website_Backup/js/jquery-2.1.4.min.js"></script>
-		<script src="/Website_Backup/js/TweenLite.min.js"></script>
-		<script src="/Website_Backup/js/CSSPlugin.min.js"></script>
-		<script src="/Website_Backup/js/skel.min-2.2.js"></script>
-		<script src="/Website_Backup/js/main.js"></script>
-		<script src="/Website_Backup/js/BigPicture.min.js"></script>
+		<link rel='stylesheet' href="/website_copy/css/main.css" />
+		<link rel='icon' href="/website_copy/images/favicon.png">
+		<script src="/website_copy/js/jquery-2.1.4.min.js"></script>
+		<script src="/website_copy/js/TweenLite.min.js"></script>
+		<script src="/website_copy/js/CSSPlugin.min.js"></script>
+		<script src="/website_copy/js/skel.min-2.2.js"></script>
+		<script src="/website_copy/js/main.js"></script>
+		<script src="/website_copy/js/BigPicture.min.js"></script>
 
 		<header>
-	<p><a href="/Website_Backup/">JED REMBOLD</a></p>
+	<p><a href="/website_copy/">JED REMBOLD</a></p>
 	<nav>
 		<div class='topmenu'>
 			<ul>
-				<li><a href="/Website_Backup/about">About Me</a></li>
+				<li><a href="/website_copy/about">About Me</a></li>
 				<li>
 					<div class='class-drop'>
 						<div class='class-hover'>
-							<a href="/Website_Backup/classes">Classes</a>
+							<a href="/website_copy/classes">Classes</a>
 						</div>
 						<div class='class-menu'>
 							
@@ -43,11 +43,69 @@
 							
 							
 							
-							<a href="/Website_Backup/classes/cs151/cs151/">Intro Python</a><br>
 							
 							
 							
-							<a href="/Website_Backup/classes/phys221/phys221/">Physics I</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/website_copy/classes/data275/data275/">Cosmos</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/website_copy/classes/data503/data503/">Data Eng</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
 							
 							
 							
@@ -234,17 +292,17 @@
 						</div>
 					</div>
 				</li>
-				<li><a href="/Website_Backup/wu_schedule">Schedule</a></li>
+				<li><a href="/website_copy/wu_schedule">Schedule</a></li>
 				<li>
 					<div class='class-drop'>
 						<div class='class-hover'>
-							<a href="/Website_Backup/resources">Resources</a>
+							<a href="/website_copy/resources">Resources</a>
 						</div>
 						<div class='class-menu'>
 							
-							<a href="/Website_Backup/resources/python_guides/guides/">Python Guides</a><br>
+							<a href="/website_copy/resources/python_guides/guides/">Python Guides</a><br>
 							
-							<a href="/Website_Backup/resources/grad_resources/grad_resources/">Grad Notes</a><br>
+							<a href="/website_copy/resources/grad_resources/grad_resources/">Grad Notes</a><br>
 							
 						</div>
 					</div>
@@ -266,10 +324,10 @@
 	<div class='slideout-menu'>
 		<h3>Menu <span class='slide-toggle' href="#"><i class='fa fa-times'></i></span></h3>
 		<ul>
-			<li><a href="/Website_Backup/about">About Me</a></li>
-			<li><a href="/Website_Backup/classes">Classes</a></li>
-			<li><a href="/Website_Backup/wu_schedule">Schedule</a></li>
-			<li><a href="/Website_Backup/resources">Resources</a></li>
+			<li><a href="/website_copy/about">About Me</a></li>
+			<li><a href="/website_copy/classes">Classes</a></li>
+			<li><a href="/website_copy/wu_schedule">Schedule</a></li>
+			<li><a href="/website_copy/resources">Resources</a></li>
 		</ul>
 	</div>
 
@@ -334,43 +392,43 @@
 </span><span class="lnt">37
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">Human</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">age</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">legs</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eyes</span> <span class="o">=</span> <span class="mi">2</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Human(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s1">)&#39;</span>
-
-<span class="k">class</span> <span class="nc">Pirate</span><span class="p">(</span><span class="n">Human</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">talk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&#34;Aye matey!&#34;</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Pirate(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s1">)&#39;</span>
-
-<span class="k">class</span> <span class="nc">Pegleg</span><span class="p">(</span><span class="n">Pirate</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
-        <span class="c1"># This works, but is not the recommended way!</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eyes</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">legs</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">type_peg</span> <span class="o">=</span> <span class="s1">&#39;oak&#39;</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Pegleg(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s1">)&#39;</span>
-
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;I have one leg!&#39;</span>
-
-<span class="k">class</span> <span class="nc">Patch</span><span class="p">(</span><span class="n">Pirate</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
-        <span class="n">Pirate</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eyes</span> <span class="o">=</span> <span class="mi">1</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Patch(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s1">)&#39;</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Human</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">age</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">legs</span> <span class="o">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">eyes</span> <span class="o">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Human(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s1">)&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Pirate</span><span class="p">(</span><span class="n">Human</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">talk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s2">&#34;Aye matey!&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Pirate(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s1">)&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Pegleg</span><span class="p">(</span><span class="n">Pirate</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># This works, but is not the recommended way!</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">eyes</span> <span class="o">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">legs</span> <span class="o">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">type_peg</span> <span class="o">=</span> <span class="s1">&#39;oak&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Pegleg(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s1">)&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s1">&#39;I have one leg!&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Patch</span><span class="p">(</span><span class="n">Pirate</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Pirate</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">eyes</span> <span class="o">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Patch(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s1">)&#39;</span></span></span></code></pre></td></tr></table>
 </div>
 </div>
 </div>
@@ -400,24 +458,24 @@
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">Pirate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">plunders</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eats</span> <span class="o">=</span> <span class="s1">&#39;food&#39;</span>
-
-<span class="k">class</span> <span class="nc">Zombie</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s1">&#39;Undead&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eats</span> <span class="o">=</span> <span class="s1">&#39;brains&#39;</span>
-
-<span class="k">class</span> <span class="nc">Black_Pearl_Crew</span><span class="p">(</span><span class="n">Pirate</span><span class="p">,</span> <span class="n">Zombie</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
-        <span class="n">Pirate</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
-        <span class="n">Zombie</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-<span class="n">Barbosa</span> <span class="o">=</span> <span class="n">Black_Pearl_Crew</span><span class="p">(</span><span class="mi">56</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Barbosa is </span><span class="si">{</span><span class="n">Barbosa</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s1"> and eats </span><span class="si">{</span><span class="n">Barbosa</span><span class="o">.</span><span class="n">eats</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Pirate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">plunders</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">eats</span> <span class="o">=</span> <span class="s1">&#39;food&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Zombie</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s1">&#39;Undead&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">eats</span> <span class="o">=</span> <span class="s1">&#39;brains&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Black_Pearl_Crew</span><span class="p">(</span><span class="n">Pirate</span><span class="p">,</span> <span class="n">Zombie</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Pirate</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Zombie</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Barbosa</span> <span class="o">=</span> <span class="n">Black_Pearl_Crew</span><span class="p">(</span><span class="mi">56</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Barbosa is </span><span class="si">{</span><span class="n">Barbosa</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s1"> and eats </span><span class="si">{</span><span class="n">Barbosa</span><span class="o">.</span><span class="n">eats</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div>
 </div>
@@ -429,6 +487,6 @@
 	</div>
 
 </body>
-<script src="/Website_Backup/js/click_handling.js" ></script>
+<script src="/website_copy/js/click_handling.js"></script>
 </html>
 

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="495.32474mm"
    height="252.65973mm"
    viewBox="0 0 495.32473 252.65973"
    version="1.1"
    id="svg839"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15, custom)"
-   sodipodi:docname="TeachingMachine.svg">
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="TeachingMachine.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs833">
     <marker
@@ -185,17 +185,20 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="1381.0537"
-     inkscape:cy="-144.98949"
+     inkscape:cx="696.42857"
+     inkscape:cy="430.71429"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
-     inkscape:window-width="2528"
-     inkscape:window-height="1381"
-     inkscape:window-x="1096"
-     inkscape:window-y="43"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata836">
     <rdf:RDF>
@@ -351,6 +354,17 @@
          d="m 524.43533,136.83736 v 185.47467 h -178.4345 v 124.91066 h 50.24028"
          id="path1265"
          sodipodi:nodetypes="ccccc" />
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;line-height:1.25;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#ae81ff;fill-opacity:1;stroke:none;stroke-width:0.565779"
+         x="459.57397"
+         y="453.35654"
+         id="text1"><tspan
+           sodipodi:role="line"
+           id="tspan1"
+           x="459.57397"
+           y="453.35654"
+           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ae81ff;stroke-width:0.565779;fill-opacity:1">str</tspan></text>
     </g>
     <g
        id="step4"
@@ -438,6 +452,17 @@
          d="M 571.46771,448.66372 H 680.70958 V 104.46793 h 60.19252"
          id="path1413"
          sodipodi:nodetypes="cccc" />
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;line-height:1.25;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#ae81ff;fill-opacity:1;stroke:none;stroke-width:0.565779"
+         x="854.57184"
+         y="141.34038"
+         id="text3-3"><tspan
+           sodipodi:role="line"
+           id="tspan3-6"
+           x="854.57184"
+           y="141.34038"
+           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ae81ff;fill-opacity:1;stroke-width:0.565779">str</tspan></text>
     </g>
     <g
        id="step5"
@@ -460,6 +485,17 @@
          x="1070.4055"
          y="117.38282"
          ry="7.7560673" />
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;line-height:1.25;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#ae81ff;fill-opacity:1;stroke:none;stroke-width:0.565779"
+         x="1155.646"
+         y="141.34038"
+         id="text3-7"><tspan
+           sodipodi:role="line"
+           id="tspan3-5"
+           x="1155.646"
+           y="141.34038"
+           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ae81ff;fill-opacity:1;stroke-width:0.565779">str</tspan></text>
       <rect
          style="fill:none;stroke:#66d9ef;stroke-width:6.41514235;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect919"
@@ -552,20 +588,42 @@
          id="path909" />
       <text
          xml:space="preserve"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;line-height:1.25;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f92672;fill-opacity:1;stroke:none;stroke-width:0.565779;"
-         x="806.14551"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;line-height:1.25;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f92672;fill-opacity:1;stroke:none;stroke-width:0.565779"
+         x="789.19818"
          y="395.67572"
          id="text913"><tspan
            sodipodi:role="line"
            id="tspan911"
-           x="806.14551"
+           x="789.19818"
            y="395.67572"
-           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#f92672;stroke-width:0.565779;">string : name</tspan></text>
+           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#f92672;stroke-width:0.565779">response : name</tspan></text>
       <path
          style="fill:none;stroke:#ae81ff;stroke-width:3.20757;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker2153);marker-end:url(#marker2223)"
          d="m 872.56657,275.94483 v 82.54328 l -157.78835,0 v 86.66083 h 26.19644"
          id="path2149"
          sodipodi:nodetypes="ccccc" />
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;line-height:1.25;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#ae81ff;fill-opacity:1;stroke:none;stroke-width:0.565779"
+         x="802.0708"
+         y="453.68869"
+         id="text2"><tspan
+           sodipodi:role="line"
+           id="tspan2"
+           x="802.0708"
+           y="453.68869"
+           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ae81ff;fill-opacity:1;stroke-width:0.565779">str</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;line-height:1.25;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#ae81ff;fill-opacity:1;stroke:none;stroke-width:0.565779"
+         x="903.07532"
+         y="453.68869"
+         id="text3"><tspan
+           sodipodi:role="line"
+           id="tspan3"
+           x="903.07532"
+           y="453.68869"
+           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8546px;font-family:'Droid Serif';-inkscape-font-specification:'Droid Serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ae81ff;fill-opacity:1;stroke-width:0.565779">str</tspan></text>
     </g>
   </g>
 </svg>

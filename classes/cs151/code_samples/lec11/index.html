@@ -4,25 +4,25 @@
 	<head>
 		<title>Lecture 11 Code</title>
 		<meta name='viewport' content='width=device-width, initial-scale=1'/>
-		<link rel='stylesheet' href="/Website_Backup/css/main.css"/>
-		<link rel='icon' href="/Website_Backup/images/favicon.png">
-		<script src="/Website_Backup/js/jquery-2.1.4.min.js"></script>
-		<script src="/Website_Backup/js/TweenLite.min.js"></script>
-		<script src="/Website_Backup/js/CSSPlugin.min.js"></script>
-		<script src="/Website_Backup/js/skel.min-2.2.js"></script>
-		<script src="/Website_Backup/js/main.js"></script>
-		<script src="/Website_Backup/js/BigPicture.min.js"></script>
+		<link rel='stylesheet' href="/website_copy/css/main.css" />
+		<link rel='icon' href="/website_copy/images/favicon.png">
+		<script src="/website_copy/js/jquery-2.1.4.min.js"></script>
+		<script src="/website_copy/js/TweenLite.min.js"></script>
+		<script src="/website_copy/js/CSSPlugin.min.js"></script>
+		<script src="/website_copy/js/skel.min-2.2.js"></script>
+		<script src="/website_copy/js/main.js"></script>
+		<script src="/website_copy/js/BigPicture.min.js"></script>
 
 		<header>
-	<p><a href="/Website_Backup/">JED REMBOLD</a></p>
+	<p><a href="/website_copy/">JED REMBOLD</a></p>
 	<nav>
 		<div class='topmenu'>
 			<ul>
-				<li><a href="/Website_Backup/about">About Me</a></li>
+				<li><a href="/website_copy/about">About Me</a></li>
 				<li>
 					<div class='class-drop'>
 						<div class='class-hover'>
-							<a href="/Website_Backup/classes">Classes</a>
+							<a href="/website_copy/classes">Classes</a>
 						</div>
 						<div class='class-menu'>
 							
@@ -43,11 +43,69 @@
 							
 							
 							
-							<a href="/Website_Backup/classes/cs151/cs151/">Intro Python</a><br>
 							
 							
 							
-							<a href="/Website_Backup/classes/phys221/phys221/">Physics I</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/website_copy/classes/data275/data275/">Cosmos</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/website_copy/classes/data503/data503/">Data Eng</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
 							
 							
 							
@@ -234,17 +292,17 @@
 						</div>
 					</div>
 				</li>
-				<li><a href="/Website_Backup/wu_schedule">Schedule</a></li>
+				<li><a href="/website_copy/wu_schedule">Schedule</a></li>
 				<li>
 					<div class='class-drop'>
 						<div class='class-hover'>
-							<a href="/Website_Backup/resources">Resources</a>
+							<a href="/website_copy/resources">Resources</a>
 						</div>
 						<div class='class-menu'>
 							
-							<a href="/Website_Backup/resources/python_guides/guides/">Python Guides</a><br>
+							<a href="/website_copy/resources/python_guides/guides/">Python Guides</a><br>
 							
-							<a href="/Website_Backup/resources/grad_resources/grad_resources/">Grad Notes</a><br>
+							<a href="/website_copy/resources/grad_resources/grad_resources/">Grad Notes</a><br>
 							
 						</div>
 					</div>
@@ -266,10 +324,10 @@
 	<div class='slideout-menu'>
 		<h3>Menu <span class='slide-toggle' href="#"><i class='fa fa-times'></i></span></h3>
 		<ul>
-			<li><a href="/Website_Backup/about">About Me</a></li>
-			<li><a href="/Website_Backup/classes">Classes</a></li>
-			<li><a href="/Website_Backup/wu_schedule">Schedule</a></li>
-			<li><a href="/Website_Backup/resources">Resources</a></li>
+			<li><a href="/website_copy/about">About Me</a></li>
+			<li><a href="/website_copy/classes">Classes</a></li>
+			<li><a href="/website_copy/wu_schedule">Schedule</a></li>
+			<li><a href="/website_copy/resources">Resources</a></li>
 		</ul>
 	</div>
 
@@ -307,18 +365,18 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">print_stuff</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Stuff 1&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Stuff 2&#39;</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">print_mult_of_A</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="mi">4</span><span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="mi">5</span><span class="o">*</span><span class="n">A</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">calc_year_savings</span><span class="p">(</span><span class="n">init_amt</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
-        <span class="n">init_amt</span> <span class="o">+=</span> <span class="n">init_amt</span> <span class="o">*</span> <span class="mf">0.03</span><span class="o">/</span><span class="mi">12</span>
-    <span class="k">return</span> <span class="n">init_amt</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">print_stuff</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Stuff 1&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Stuff 2&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">print_mult_of_A</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="mi">4</span><span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="mi">5</span><span class="o">*</span><span class="n">A</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">calc_year_savings</span><span class="p">(</span><span class="n">init_amt</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">init_amt</span> <span class="o">+=</span> <span class="n">init_amt</span> <span class="o">*</span> <span class="mf">0.03</span><span class="o">/</span><span class="mi">12</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">init_amt</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h6 id="flow-example">Flow Example</h6>
 <div class="highlight"><div class="chroma">
@@ -337,19 +395,19 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">year_savings</span><span class="p">(</span><span class="n">init_amt</span><span class="p">,</span> <span class="n">int_rate</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
-        <span class="n">init_amt</span> <span class="o">*=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">int_rate</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">init_amt</span>
-
-<span class="n">amount</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="n">rate</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">while</span> <span class="n">rate</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Savings:&#39;</span><span class="p">,</span> <span class="n">year_savings</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">rate</span><span class="p">))</span>
-    <span class="n">rate</span> <span class="o">+=</span> <span class="mf">0.05</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;All done!&#39;</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">year_savings</span><span class="p">(</span><span class="n">init_amt</span><span class="p">,</span> <span class="n">int_rate</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">init_amt</span> <span class="o">*=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">int_rate</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">init_amt</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">amount</span> <span class="o">=</span> <span class="mi">100</span>
+</span></span><span class="line"><span class="cl"><span class="n">rate</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="n">rate</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Savings:&#39;</span><span class="p">,</span> <span class="n">year_savings</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">rate</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">rate</span> <span class="o">+=</span> <span class="mf">0.05</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;All done!&#39;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h6 id="summing-primes">Summing Primes</h6>
 <div class="highlight"><div class="chroma">
@@ -366,17 +424,17 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">is_prime</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">num</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">num</span> <span class="o">%</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">return</span> <span class="kc">True</span>
-
-<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">is_prime</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_prime</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span> <span class="o">==</span> <span class="n">num</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;are both prime and sum to 100!&#39;</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">is_prime</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">num</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">num</span> <span class="o">%</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">is_prime</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_prime</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span> <span class="o">==</span> <span class="n">num</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;are both prime and sum to 100!&#39;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><br>
 
@@ -385,6 +443,6 @@
 	</div>
 
 </body>
-<script src="/Website_Backup/js/click_handling.js" ></script>
+<script src="/website_copy/js/click_handling.js"></script>
 </html>
 

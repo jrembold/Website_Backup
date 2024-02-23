@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2024-02-06">
+  <title>Absorption and Doppler</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Absorption and Doppler</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">February 6, 2024</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>I’m aiming to have HW1 feedback to you by the end of the week</li>
+<li>Homework 2 is out!
+<ul>
+<li>Partner meetup time at the end of today</li>
+<li>Should have enough to do problem 1 by the end of today and 2 and 3
+by the end of Thursday</li>
+</ul></li>
+<li>We’ll start looking at HR diagrams on Thursday</li>
+</ul>
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap:</h2>
+<ul>
+<li>We get two pieces of information when light enters our eyes:
+location and spectrum</li>
+<li>Light is an oscillating EM wave, with many possible wavelengths
+<ul>
+<li>Visible from 400nm to 720nm</li>
+</ul></li>
+<li>EM radiation comes from charges changing direction and speed
+<ul>
+<li>Hotter objects:
+<ul>
+<li>Produce more radiation</li>
+<li>Produce “bluer” radiation</li>
+</ul></li>
+<li>Planck’s Law models this relation: <span class="math display">\[
+B(\lambda, T) =
+\frac{2hc^2}{\lambda^5}\frac{1}{\exp\left(\frac{hc}{\lambda k_B
+T}\right) - 1} \]</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="todays-plan" class="slide level2">
+<h2>Today’s Plan</h2>
+<ul>
+<li>Atomic spectral lines
+<ul>
+<li>Emission</li>
+<li>Broadening</li>
+<li>Absorption</li>
+</ul></li>
+<li>Doppler</li>
+</ul>
+</section>
+<section id="section" class="slide level2"
+data-background-image="../images/ch5_sun_spectrum.jpg">
+<h2 data-background-image="../images/ch5_sun_spectrum.jpg"></h2>
+</section>
+<section id="spectra-and-composition" class="slide level2">
+<h2>Spectra and Composition</h2>
+<ul>
+<li>Objects with thermal spectra are generally dense (wood, rocks,
+people, metals, stars, etc.)</li>
+<li>A perfect “blackbody” spectrum would <em>only</em> give us
+information about the temperature</li>
+<li>Diffuse gases though can have more complex spectra, such that we can
+actually get information about chemical composition
+<ul>
+<li>Interestingly, this information also can help us identify some
+aspects about motion</li>
+</ul>
+<ul>
+<li class="fragment"><strong>Why is gas special?</strong></li>
+</ul></li>
+</ul>
+</section>
+<section id="life-of-an-electron" class="slide level2">
+<h2>Life of an Electron</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Electrons orbit around the nucleus of an atom</li>
+<li>Only allowed in certain areas, which correspond to different
+<em>energy levels</em></li>
+<li>The height of each energy level is determined by the atomic
+properties of the nucleus</li>
+</ul>
+</div>
+<div class="col">
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="293.42502mm"
+   height="211.61749mm"
+   viewBox="0 0 293.42503 211.61749"
+   version="1.1"
+   id="energysvg"
+   sodipodi:docname="energy_levels.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.359385"
+     inkscape:cx="754.01744"
+     inkscape:cy="363.03181"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <inkscape:path-effect
+       effect="knot"
+       id="path-effect7531"
+       is_visible="true"
+       lpeversion="1"
+       switcher_size="15"
+       interruption_width="3"
+       prop_to_stroke_width="true"
+       add_stroke_width="inkscape_1.0_and_up"
+       both="false"
+       inverse_width="false"
+       add_other_stroke_width="inkscape_1.0_and_up"
+       crossing_points_vector="" />
+    <marker
+       style="overflow:visible"
+       id="TriangleStart"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="TriangleStart"
+       markerWidth="5.3244081"
+       markerHeight="6.155385"
+       viewBox="0 0 5.3244081 6.1553851"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1722">
+      <stop
+         style="stop-color:#fafafa;stop-opacity:1"
+         offset="0"
+         id="stop1718" />
+      <stop
+         style="stop-color:#0d52bf;stop-opacity:1"
+         offset="1"
+         id="stop1720" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient984">
+      <stop
+         style="stop-color:#fafafa;stop-opacity:1"
+         offset="0"
+         id="stop980" />
+      <stop
+         style="stop-color:#7a0000;stop-opacity:1"
+         offset="1"
+         id="stop982" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient871">
+      <stop
+         style="stop-color:#d48e15;stop-opacity:1"
+         offset="0"
+         id="stop867" />
+      <stop
+         style="stop-color:#fafafa;stop-opacity:0"
+         offset="1"
+         id="stop869" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient871"
+       id="radialGradient873"
+       cx="363.70078"
+       cy="89.790504"
+       fx="363.70078"
+       fy="89.790504"
+       r="105.37975"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.5255085,-0.00556296,0.00543676,1.4909037,-191.61606,-42.055236)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient984"
+       id="radialGradient986"
+       cx="362.99002"
+       cy="89.132072"
+       fx="362.99002"
+       fy="89.132072"
+       r="3.5841286"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0000023,0,0,1,-8.4512167e-4,0)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1722"
+       id="radialGradient1716"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0000023,0,0,1,43.432563,0)"
+       cx="362.99002"
+       cy="89.132072"
+       fx="362.99002"
+       fy="89.132072"
+       r="3.5841286" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1722"
+       id="radialGradient4810"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0000023,0,0,1,141.41624,63.740166)"
+       cx="362.99002"
+       cy="89.132072"
+       fx="362.99002"
+       fy="89.132072"
+       r="3.5841286" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-257.89201,16.01839)">
+    <circle
+       style="fill:url(#radialGradient873);fill-opacity:1;stroke:none;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round"
+       id="path234"
+       cx="363.70078"
+       cy="89.790504"
+       r="105.27975" />
+    <g
+       id="g3188"
+       class="fragment"
+       data-fragment-index="1">
+      <circle
+         style="fill:none;fill-opacity:1;stroke:#1a1a1a;stroke-width:1.05833;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:4.23333, 2.11667;stroke-dashoffset:0"
+         id="circle2450"
+         cx="363.70078"
+         cy="89.790504"
+         r="105.27975" />
+      <circle
+         style="fill:none;fill-opacity:1;stroke:#1a1a1a;stroke-width:1.05833;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:4.23334, 2.11665;stroke-dashoffset:0"
+         id="circle3178"
+         cx="363.70081"
+         cy="89.790672"
+         r="92.841202" />
+      <circle
+         style="fill:none;fill-opacity:1;stroke:#1a1a1a;stroke-width:1.05833;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:4.23333, 2.11667;stroke-dashoffset:0"
+         id="circle3180"
+         cx="363.70078"
+         cy="89.790939"
+         r="75.025421" />
+      <circle
+         style="fill:none;fill-opacity:1;stroke:#1a1a1a;stroke-width:1.05833;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:4.23335, 2.11667;stroke-dashoffset:0"
+         id="circle3182"
+         cx="363.70078"
+         cy="89.791"
+         r="43.370102" />
+      <g
+         id="g4748"
+         transform="translate(0,2.3141468)">
+        <path
+           style="fill:#d48e15;fill-opacity:1;stroke:#667885;stroke-width:1.05833;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+           d="m 481.04662,151.29111 h 46.01924"
+           id="path4736" />
+        <path
+           style="fill:#d48e15;fill-opacity:1;stroke:#667885;stroke-width:1.05833;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+           d="m 481.04662,79.650128 h 46.01924"
+           id="path4738" />
+        <path
+           style="fill:#d48e15;fill-opacity:1;stroke:#667885;stroke-width:1.05833;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+           d="m 481.04662,41.385754 h 46.01924"
+           id="path4740" />
+        <path
+           style="fill:#d48e15;fill-opacity:1;stroke:#667885;stroke-width:1.05833;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+           d="m 481.04662,18.806237 h 46.01924"
+           id="path4742" />
+        <text
+           xml:space="preserve"
+           style="font-size:14.1111px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';fill:#273445;fill-opacity:1;stroke:none;stroke-width:1.05833;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+           x="-107.89248"
+           y="547.92706"
+           id="text4929"
+           transform="rotate(-90)"><tspan
+             sodipodi:role="line"
+             id="tspan4927"
+             style="fill:#273445;stroke:none;stroke-width:1.05833"
+             x="-107.89248"
+             y="547.92706">Energy</tspan></text>
+        <path
+           style="fill:#1a1a1a;fill-opacity:1;stroke:#485a6c;stroke-width:1.05833;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+           d="M 543.49674,162.72373 V 111.63236"
+           id="path5711" />
+        <path
+           style="fill:#1a1a1a;fill-opacity:1;stroke:#485a6c;stroke-width:1.05833;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart)"
+           d="M 543.49674,59.632265 V 8.5408947"
+           id="path5713" />
+      </g>
+      <circle
+         style="fill:url(#radialGradient4810);fill-opacity:1;stroke:none;stroke-width:0.00680877;stroke-linecap:round;stroke-linejoin:round"
+         id="circle4808"
+         cx="505.11786"
+         cy="153.53067"
+         r="3.5841286" />
+    </g>
+    <circle
+       style="fill:url(#radialGradient986);fill-opacity:1;stroke:none;stroke-width:0.00680877;stroke-linecap:round;stroke-linejoin:round"
+       id="circle976"
+       cx="363.70078"
+       cy="89.790504"
+       r="3.5841286" />
+    <circle
+       style="fill:url(#radialGradient1716);fill-opacity:1;stroke:none;stroke-width:0.00680877;stroke-linecap:round;stroke-linejoin:round"
+       id="circle1714"
+       cx="407.13419"
+       cy="89.790504"
+       r="3.5841286" />
+  </g>
+</svg>
+</p>
+</div>
+</div>
+</section>
+<section id="fingerprinting-light" class="slide level2">
+<h2>Fingerprinting Light</h2>
+<ul>
+<li>The discrete energy levels result in <em>line spectra</em></li>
+<li>These spectra are unique for each atom and molecule, so they work as
+fingerprints!</li>
+</ul>
+<p><img
+data-src="../images/svg_cache/ac87c1c984d1fbbe879fc266435b985c3c3f6939.svg"
+style="width:80.0%" /></p>
+</section>
+<section id="on-the-case" class="slide level2">
+<h2>On the Case</h2>
+<ul>
+<li><p>Scattered around the room are ~4 different gas lamps, each with a
+different type of gas</p></li>
+<li><p>Given the descriptions below, can you identify which is
+corresponds to which gas?</p>
+<div style="font-size:.85em">
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 90%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Gas</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Hydrogen</td>
+<td>Two strong lines, one red, one greenish-blue, and a weaker
+blue-violet</td>
+</tr>
+<tr class="even">
+<td>Helium</td>
+<td>Prominent yellow-orange line, fairly strong red and blue-green lines
+and a number of weaker</td>
+</tr>
+<tr class="odd">
+<td>Mercury</td>
+<td>Strong yellow, green, and violet lines, numerous weaker red
+lines</td>
+</tr>
+<tr class="even">
+<td>Neon</td>
+<td>Two green lines, then lots of lines starting around yellow and going
+to longer wavelengths</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+</ul>
+</section>
+<section id="seems-sus" class="slide level2">
+<h2>Seems Sus</h2>
+<ul>
+<li>Stars (especially the surface) are made almost entirely of
+hydrogen</li>
+<li>So why do we get a (mostly) blackbody curve when looking at stars,
+and not sharp hydrogen emission peaks?</li>
+</ul>
+</section>
+<section id="stars-neq-gas-lamps" class="slide level2">
+<h2>Stars <span class="math inline">\(\neq\)</span> Gas Lamps</h2>
+<ul>
+<li>Atoms in close proximity to one another influence each other’s
+energy levels</li>
+</ul>
+<div class="r-stack">
+<div class="fragment current-visible">
+<p><img
+data-src="../images/svg_cache/351970102295ad3b25c9ae71a79e30b400938fa8.svg"
+width="1000" /></p>
+</div>
+<div class="fragment">
+<p><img
+data-src="../images/svg_cache/168d8aad5bdaabca06ad6eeeea13f6730bd99bda.svg"
+width="1200" /></p>
+</div>
+</div>
+</section>
+<section id="evolution-of-spectra" class="slide level2">
+<h2>Evolution of Spectra</h2>
+<div class="r-stack">
+<div class="fragment current-visible">
+<p><img
+data-src="../images/svg_cache/b817abaebff7f735e3b248f71fec54f258d0d343.svg"
+width="1200" /></p>
+</div>
+<div class="fragment current-visible">
+<p><img
+data-src="../images/svg_cache/e71f3f033ef6055b16f5f8f0b5beb08318e1c21a.svg"
+width="1200" /></p>
+</div>
+<div class="fragment current-visible">
+<p><img
+data-src="../images/svg_cache/bbf0468d1b518e66e5dd8b916753456ff5f54848.svg"
+width="1200" /></p>
+</div>
+<div class="fragment current-visible">
+<p><img
+data-src="../images/svg_cache/8180f6ab031916adde17bf2cc7b0fc1291dd938d.svg"
+width="1200" /></p>
+</div>
+</div>
+</section>
+<section id="absorption-spectra-and-goldilocks" class="slide level2">
+<h2>Absorption Spectra and Goldilocks</h2>
+<ul>
+<li>What if we have a cooler, diffuse gas, but with blackbody radiation
+shining on it?</li>
+<li>Some of the radiation will be absorbed</li>
+<li>Only the “just right” wavelengths corresponding to certain energy
+steps</li>
+</ul>
+<p><img
+data-src="../images/svg_cache/fdefb83ad0d77149af50d31e7f267a9a4bd9ec22.svg"
+style="width:50.0%" /></p>
+</section>
+<section id="sample-case-hydrogen" class="slide level2">
+<h2>Sample Case: Hydrogen</h2>
+<p><img
+data-src="../images/svg_cache/b4b3282e069646257805f39c4d32aee77681f8e2.svg"
+style="width:100.0%" /></p>
+</section>
+<section id="that-spectra-is-stellar" class="slide level2">
+<h2>That Spectra is Stellar!</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Hot gases in the surface regions of a star emit a blackbody
+spectrum, depending on their temperature</li>
+<li>Slightly cooler gases further out absorb some wavelengths, giving
+rise to absorption lines</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/ch5_sun_spectrum.jpg" /></p>
+</div>
+</div>
+</section>
+<section id="viewing-absorption-differently" class="slide level2">
+<h2>Viewing Absorption Differently</h2>
+<p><img data-src="../images/solar_spectra.png" /></p>
+</section>
+<section id="but-wait-theres-more" class="slide level2">
+<h2>But wait, there’s more!</h2>
+<iframe width="1025" height="585" src="https://www.youtube.com/embed/EXxcwFfovkc" title="Train Horn Doppler Effect" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+</iframe>
+</section>
+<section id="the-doppler-effect" class="slide level2">
+<h2>The Doppler Effect</h2>
+<ul>
+<li>The Doppler effect affects <em>all</em> types of waves, including
+light!</li>
+<li>Approach waves get compressed (smaller wavelengths)</li>
+<li>Receding waves get stretched (larger wavelengths)</li>
+</ul>
+<p><img
+data-src="../images/svg_cache/e664b523a8b1e722914c9c4d9c77614e4981dbab.svg"
+style="width:70.0%" /></p>
+</section>
+<section id="putting-numbers-to-it" class="slide level2">
+<h2>Putting Numbers to It</h2>
+<p>For our purposes: <span class="math display">\[ \frac{\lambda_{obs} -
+\lambda_{rest}}{\lambda_{rest}} = \frac{V}{c} \]</span> where:</p>
+<ul>
+<li><span class="math inline">\(\lambda_{obs}\)</span> is the wavelength
+you, the observer, see</li>
+<li><span class="math inline">\(\lambda_{rest}\)</span> is the normal
+wavelength you’d see if the object was not moving</li>
+<li><span class="math inline">\(V\)</span> is the speed of the light
+source relative to you
+<ul>
+<li>Negative if coming towards you</li>
+<li>Positive if moving away from you</li>
+</ul></li>
+<li><span class="math inline">\(c\)</span> is the speed of light</li>
+</ul>
+</section>
+<section id="astronomy-implications" class="slide level2">
+<h2>Astronomy Implications</h2>
+<ul>
+<li>We can measure radial speeds of objects!</li>
+<li>Approaching objects are <em>blueshifted</em></li>
+<li>Receding objects are <em>redshifted</em></li>
+</ul>
+<p><img
+data-src="../images/svg_cache/9a1515cf4dd802c846a9aa19066b181ca020457b.svg"
+style="width:100.0%" /></p>
+</section>
+<section id="partners" class="slide level2">
+<h2>Partners!</h2>
+<ul>
+<li>I’m giving you a chance now to meet with your partner for HW2 to
+discuss schedules, strengths, weaknesses, and how you can best work
+together!</li>
+<li>Remember that there will be a check-in this weekend, so try to have
+at least something accomplished you can mention!</li>
+</ul>
+<div class="cols" style="align-items: flex-start">
+<div class="col">
+<ul>
+<li>Left rows (front to back)
+<ul>
+<li>Ben W and Jennifer A</li>
+<li>Leila F and Kendall L</li>
+<li>Paul M and Michael K</li>
+<li>Nico M and Alex T</li>
+<li>Teo M and Zachary H</li>
+<li>Sam H and Indi E</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<ul>
+<li>Right rows (front to back)
+<ul>
+<li>Mia P and Dash L</li>
+<li>Kara D and Siera E</li>
+<li>Teddy B and Nathaniel SP</li>
+<li>Trajan C and Owyn W</li>
+<li>Brandon RH, Matthew N, and Sophia R</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>

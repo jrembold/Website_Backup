@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2023-04-10">
+  <title>Fitting</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Fitting</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">April 10, 2023</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Due to the fact that both the next sections were going to focus
+analytically on the process of fitting models to data, I’m going to
+combine their homework assignments.
+<ul>
+<li>The last homework assignment (HW5) will thus be due April 26</li>
+<li>This will leave the last few days of class for project work</li>
+<li>I’m working to have it up by the end of the week</li>
+</ul></li>
+<li>HW4 Partner Reflection! (<a
+href="https://docs.google.com/forms/d/e/1FAIpQLSfvLl2EobtSOSnv2SBEeqNQvc7IklGVXmi5__iK3DQIrexx8w/viewform?usp=sf_link">Here!</a>)</li>
+<li>Quiz 2 on Exoplanets and Galaxies on Wednesday
+<ul>
+<li>Study materials have been out! Look them over!</li>
+</ul></li>
+<li>I’m working through HW3 feedback</li>
+</ul>
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap</h2>
+<ul>
+<li>Rotation or velocity curves measure the speed of orbiting objects as
+you move outwards from a central body
+<ul>
+<li>Commonly assume circular or largely circular orbits</li>
+<li>Generally measured through Doppler shifts</li>
+</ul></li>
+<li>The shape of a rotation curve tells you about the distribution of
+material throughout the region</li>
+<li>The rotation curves of galaxies do not match what we would expect,
+thus leading to conjectures about dark matter</li>
+</ul>
+</section>
+<section id="discussing-today" class="slide level2">
+<h2>Discussing Today</h2>
+<ul>
+<li>What do we want from a model fit?</li>
+<li>Why might we need methods beyond least-mean squares?</li>
+<li>How can randomness help us determine the output of integrals?</li>
+</ul>
+</section>
+<section id="why-fit-data" class="slide level2">
+<h2>Why fit data?</h2>
+<ul>
+<li>A “fit” model computes the values of unknown constants within the
+model</li>
+<li>In science, and in astronomy in particular, such models are usually
+derived from fundamental first principles, and thus those constants are
+linked to physical properties or laws</li>
+<li>Individual fits themselves are often still not that important:
+rather they tend to contribute to a overall story that the data is
+telling</li>
+</ul>
+</section>
+<section id="fitting-neglect" class="slide level2">
+<h2>Fitting Neglect</h2>
+<ul>
+<li>In the fitting that we have done so far this semester, we have been
+leaving some important things out
+<ul>
+<li>What role does the known error or variance play in our input
+data?</li>
+<li>How confident should we be in our fit parameters? That is, what
+variance should we expect in the fit parameters?</li>
+</ul></li>
+</ul>
+</section>
+<section id="solving-integrals" class="slide level2">
+<h2>Solving Integrals</h2>
+<ul>
+<li>Suppose you want to find the area under a function <span
+class="math inline">\(f(x)\)</span> between <span
+class="math inline">\(x=a\)</span> and <span
+class="math inline">\(x=b\)</span>, such that you are interested in
+<span class="math display">\[ \int_a^b f(x)\,dx \]</span></li>
+<li>If <span class="math inline">\(f(x)\)</span> is simple and you know
+a bit of calculus, this is relatively straightforward</li>
+<li>But what if <span class="math inline">\(f(x)\)</span> is some
+terribly complicated function that you don’t know how to integrate?
+<ul>
+<li>Or worse, what if <span class="math inline">\(f(x)\)</span> is a
+largely black-box, wherein you put in an input and then some time later
+get an output, without seeing what happens in the middle?</li>
+</ul></li>
+</ul>
+</section>
+<section id="alternative-approaches" class="slide level2">
+<h2>Alternative Approaches</h2>
+<ul>
+<li>When posed with an intractable integral, most folks these days look
+to:
+<ul>
+<li>Wolfram Alpha, or some other computation engine, for aid</li>
+<li>Numerical techniques</li>
+</ul></li>
+<li>Numerical techniques rely on breaking the integral up into simple
+approximations
+<ul>
+<li>The key here is that they are approximations (midpoint rule,
+trapezoid rule, simpson’s rule, etc.)</li>
+<li>As approximations, there will always be some inherent error
+associated with using these methods</li>
+</ul></li>
+</ul>
+</section>
+<section id="entering-the-multiverse" class="slide level2">
+<h2>Entering the Multiverse</h2>
+<ul>
+<li>For nice one-dimensional problems, these methods can work out
+nicely</li>
+<li>But what if our function was instead dependent on, for instance, 6
+parameters? <span class="math display">\[ f(x,y,z,a,b,c)
+\quad\rightarrow\quad \int\int\int\int\int\int
+f(x,y,z,a,b,c)\,dx\,dy\,dz\,da\,db\,dc \]</span></li>
+<li>The trapezoid rule is a decent approximation method, but if you work
+it out, it’s error scales as: <span class="math display">\[ \epsilon
+\propto \frac{1}{N^{2/d}} \]</span> where <span
+class="math inline">\(N\)</span> is the number of sample points (how
+skinny are the rectangles) and <span class="math inline">\(d\)</span>
+the number of dimensions being integrated over</li>
+</ul>
+</section>
+<section id="compiling-errors" class="slide level2">
+<h2>Compiling Errors</h2>
+<ul>
+<li>In order to keep a constant error value then as the number of
+dimensions increase: <span class="math display">\[ N =
+(1/\epsilon)^{d/2} \]</span></li>
+<li>This is highly problematic for higher dimensional data, as we need
+exponentially more data to keep the errors at a given level!
+<ul>
+<li>We need to compute the area of each of those trapezoids, so
+exponentially more trapezoids means exponentially longer running
+time</li>
+</ul></li>
+</ul>
+</section>
+<section id="a-random-solution" class="slide level2">
+<h2>A Random Solution</h2>
+<ul>
+<li>What if, instead of slicing up the entire region of interest, we
+instead randomly sampled from that region</li>
+<li>Computing, for instance, just the area at a given, randomly selected
+point</li>
+<li>It turns out this error scales as: <span class="math display">\[
+\epsilon \propto \frac{1}{\sqrt{N}} \]</span> which no longer has any
+<span class="math inline">\(d\)</span> dependence!!</li>
+<li>This is the basis behind random (or <em>Monte Carlo</em>) selection
+methods</li>
+</ul>
+</section>
+<section id="random-areas" class="slide level2">
+<h2>Random Areas?</h2>
+<ul>
+<li>How do random points get us an accurate portrayal of the area under
+the curve?
+<ul>
+<li>At each random point, compute the value of the function at that
+point, this will be the height of your rectangle</li>
+<li>The width of your rectangle is just the span of your boundaries</li>
+</ul></li>
+<li>Some points will overestimate the area, and some will underestimate
+the area</li>
+<li>The amazing aspect is that the <strong>average</strong> of the point
+areas <strong>will</strong> closely approximate the actual area under
+the curve</li>
+</ul>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<p>Suppose we wanted to evaluate the area under the curve <span
+class="math display">\[ f(x) = -\frac{4}{5}x + 4 \]</span> from <span
+class="math inline">\(x=0\)</span> to <span
+class="math inline">\(x=5\)</span>, using Monte Carlo methods.</p>
+</section>
+<section id="importance" class="slide level2">
+<h2>Importance</h2>
+<ul>
+<li>For some functions, all points might not be equally
+interesting.</li>
+<li>We instead might want to weigh certain regions higher in our random
+selection, as that is where the interesting things are happening</li>
+<li>If we do so, we need to recognize that in computing our areas, we
+are now doing <span class="math display">\[ \frac{f(x_k)}{p(x_k)}
+\]</span> where <span class="math inline">\(p(x_k)\)</span> is the
+probability of selecting a particular <span
+class="math inline">\(x\)</span>
+<ul>
+<li>This is the same as what we were doing before, since for a uniform
+sampling, the probability weights looked like <span
+class="math inline">\(\tfrac{1}{b-a}\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="example-2" class="slide level2">
+<h2>Example 2</h2>
+<p>Now suppose we wanted to evaluate the area under the piece-wise
+function: <span class="math display">\[ f(x) = \begin{cases}0 &amp; x
+\leq 4;\\ 5x-20 &amp; 4 &lt; x \leq 5;\\ -5x+30 &amp; 5 &lt; x \leq 6;\\
+0 &amp; x &gt; 6;\end{cases} \]</span> from <span
+class="math inline">\(x=0\)</span> to <span
+class="math inline">\(x=10\)</span>, using Monte Carlo methods. Check
+into both uniform sampling and sampling targeted about the central
+peak.</p>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>

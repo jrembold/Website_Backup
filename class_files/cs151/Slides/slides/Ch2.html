@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2021-09-10">
-  <title>True and “True”</title>
+  <meta name="dcterms.date" content="2023-09-13">
+  <title>All About Control</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -14,10 +14,15 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
   </style>
   <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
   <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
@@ -27,211 +32,117 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">True and “True”</h1>
+  <h1 class="title">All About Control</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">September 10, 2021</p>
+  <p class="date">September 13, 2023</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Problem Set 1 due on Monday night!
+<li>Problem Set 2 posted!
 <ul>
-<li>Feel free to email, direct message me on Discord, or post questions on Campuswire over the weekend if you get stuck on something</li>
-<li>I’m still making it through giving feedback on PS0, so keep an eye out for that, if you haven’t already received it</li>
+<li>I’m working on scoring and giving feedback on PS1</li>
+<li>Autochecker results are for your <em>own use and piece of mind</em>.
+They do not directly influence your grade.</li>
+<li>Tired of getting emails from the autochecker? I’ll post a guide
+video to the website for how to disable them.</li>
 </ul></li>
-<li>Sections
-<ul>
-<li>Hopefully everyone made it to their sections</li>
-<li>Be aware that all the section leaders have only had experience doing this remotely in the past, so it may take some adjustments to in-person</li>
-</ul></li>
-<li>Class Discord server invite went out on Wednesday evening
-<ul>
-<li>Section leaders were interested in having this to make it easier to answer your questions or help out remotely</li>
-</ul></li>
-<li>Polling: <a href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>Polling: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
 </section>
-<section id="shorthand-and-multiple" class="slide level2">
-<h2>Shorthand and Multiple</h2>
-<ul>
-<li>It is very common to want to adjust an existing variable</li>
-</ul>
-<pre ><code class="python">balance = balance + deposit</code></pre>
-<ul>
-<li>Python gives you a shorter expression to describe this relationship:</li>
-</ul>
-<pre ><code class="python">balance += deposit</code></pre>
-<ul>
-<li>You can do this with any operation (op) following the general form:</li>
-</ul>
-<pre ><code class="python">variable op= expression</code></pre>
-<ul>
-<li><p>You can name multiple variables at once by separating with commas</p>
-<pre ><code class="python">A, B, C = 1, 2, 3</code></pre>
-<ul>
-<li>All the expressions on the right are computed before being assigned to the left variables</li>
-</ul></li>
-</ul>
-</section>
-<section id="understanding-check" class="slide level2" data-notes="Solution: 40">
-<h2 data-notes="Solution: 40">Understanding Check!</h2>
-<p>What is the final printed value of <code class="python">A</code> in the code below?</p>
-<pre ><code class="idle">>>> A = 10
->>> B = 4
->>> C = A * B
->>> A -= B
->>> A, B, C = C, A, B
->>> print(A)
-??</code></pre>
-<div class="hpoll">
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<div class="cols">
+<div class="col">
+<p>Examining the code to the right, what is the output value if I
+evaluate the expression <code class="python">func2(1,5)</code>?</p>
+<div class="poll">
 <ol>
-<li>4</li>
-<li>10</li>
-<li>30</li>
-<li>40</li>
+<li><span class="math inline">\(1\)</span></li>
+<li><span class="math inline">\(5\)</span></li>
+<li><span class="math inline">\(32\)</span></li>
+<li><span class="math inline">\(2.33\times10^{22}\)</span></li>
 </ol>
 </div>
-</section>
-<section id="what-is-your-function" class="slide level2">
-<h2>What is your Function?</h2>
-<ul>
-<li>As discussed in the context of Karel, a <em>function</em> is a sequence of commands that have been collected together and given a name.</li>
-<li>Unlike in Karel though, functions typically go beyond that and can have inputs and outputs</li>
-</ul>
-<p><img data-src="../images/svg_cache/bd545feea45d8c5454f3813c4655ed1a85dcd06d.svg" style="width:70.0%" /></p>
-</section>
-<section id="writing-your-own-functions" class="slide level2">
-<h2>Writing your own functions</h2>
-<ul>
-<li><p>The general form of a function definition looks like:</p>
-<pre ><code class="python">def name(parameter_list):
-    #statements in function body</code></pre>
-<ul>
-<li><code class="python">name</code> is your chosen name for the function</li>
-<li><code class="no-highlight">parameter_list</code> is a comma-separated list of <strong>variable names</strong> that will hold each input value</li>
-</ul></li>
-<li><p>You can return or output a value from the function by including a return statement</p>
-<pre ><code class="python">return expression</code></pre>
-<ul>
-<li><code class="python">expression</code> is the value you want to return or output</li>
-<li>If no <code class="python">return</code> statement is included, Python will by default return <code class="python">None</code></li>
-</ul></li>
-</ul>
-</section>
-<section id="simple-function-examples" class="slide level2">
-<h2>Simple function examples</h2>
-<ul>
-<li><p>Convert Fahrenheit temperatures to their Celsius equivalent</p>
-<pre ><code class="python">def f_to_c(f):
-    return 5 / 9 * (f - 32)</code></pre>
-<ul>
-<li><p>Using the function:</p>
-<pre ><code class="python">print(f_to_c(45))</code></pre></li>
-</ul></li>
-<li><p>Computes the volume of a cylinder of height <code class="python">h</code> and radius <code class="python">r</code></p>
-<pre ><code class="python">def cylinder_volume(r, h):
-    return 3.14159 * r**2 * h</code></pre>
-<ul>
-<li><p>Using the function:</p>
-<pre ><code class="python">print(cylinder_volume(2,10))</code></pre></li>
-</ul></li>
-</ul>
-<!--
-## Review Question
-::::::cols
-::::col
-Examining the code to the right, what is the output value if I evaluate the expression `func2(10)`?
+</div>
+<div class="col" style="font-size:.9em; flex-grow:1.5">
+<pre ><code class="python">def func1(x):
+    for i in range(3):
+        x *= 2
+    return x + x
 
-
-:::{.poll}
-#. 6
-#. 9
-#. 16
-#. 19
-:::
-
-::::
-
-::::col
-```python
-def func1(x):
-    return 3 + x
-
-def func2(y):
-    A = func1(y+1)
-    A -= 5
-    return A + y
-```
-::::
-::::::
--->
-</section>
-<section id="built-ins" class="slide level2">
-<h2>Built-ins</h2>
-<ul>
-<li>All modern languages include a collection of pre-defined functions for convenience</li>
-<li>In Python, common build-in functions that operate on <strong>numbers</strong> include:</li>
-</ul>
-<table>
-<thead>
-<tr class="header">
-<th>Function</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code class="python">abs(x)</code></td>
-<td>The absolute value of x</td>
-</tr>
-<tr class="even">
-<td><code class="python">max(x,y,...)</code></td>
-<td>The largest of all the arguments</td>
-</tr>
-<tr class="odd">
-<td><code class="python">min(x,y,...)</code></td>
-<td>The smallest of all the arguments</td>
-</tr>
-<tr class="even">
-<td><code class="python">round(x)</code></td>
-<td>The value of x rounded to the nearest integer</td>
-</tr>
-<tr class="odd">
-<td><code class="python">int(x)</code></td>
-<td>The value of x truncated to an integer</td>
-</tr>
-<tr class="even">
-<td><code class="python">float(x)</code></td>
-<td>The value of x as a decimal</td>
-</tr>
-</tbody>
-</table>
+def func2(y, z):
+    A = func1(y+1) % 8
+    z, A = A + z, y
+    return z ** A</code></pre>
+</div>
+</div>
 </section>
 <section id="visiting-the-libraryies" class="slide level2">
 <h2>Visiting the library(ies)</h2>
 <ul>
-<li>A huge strength of Python is that it offers a very large number of code collections called <em>libraries</em>
+<li>A huge strength of Python is that it offers a very large number of
+code collections called <em>libraries</em>
 <ul>
 <li>Can save you the effort from writing that code yourself!</li>
 </ul></li>
-<li>Requires you to <em>import</em> that library, which can take several different forms
+<li>Requires you to <em>import</em> that library, which can take several
+different forms
 <ul>
-<li><p>Most common is to use <code class="python">import</code> to grab everything in a library</p>
+<li><p>Most common is to use <code class="python">import</code> to grab
+everything in a library</p>
 <pre ><code class="python">import math</code></pre>
 <ul>
-<li>You must then access any function in that library using its <em>fully qualified name</em>, which includes the library name (<code class="python">var = math.sqrt(4)</code>)</li>
+<li>You must then access any function in that library using its
+<em>fully qualified name</em>, which includes the library name
+(<code class="python">var = math.sqrt(4)</code>)</li>
 </ul></li>
-<li><p>Can also use <code class="python">from ... import</code> to grab specific functions from the library</p>
+<li><p>Can also use <code class="python">from ... import</code> to grab
+specific functions from the library</p>
 <pre ><code class="python">from math import sqrt</code></pre>
 <ul>
-<li>You do not need to use the library name then when you call it (<code class="python">var = sqrt(4)</code>)</li>
+<li>You do not need to use the library name then when you call it
+(<code class="python">var = sqrt(4)</code>)</li>
 </ul></li>
 </ul></li>
 </ul>
 </section>
+<section id="using-libraries" class="slide level2">
+<h2>Using Libraries</h2>
+<div>
+<ul>
+<li class="fragment">While using libraries is highly efficient, it does
+demand some different skills</li>
+<li class="fragment">How do you know what a library offers? Or how to
+use what it offers?</li>
+<li class="fragment">You <strong>read the documentation!</strong>
+<ul>
+<li class="fragment">Describes what constants (if any) the library makes
+available</li>
+<li class="fragment">Describes all the functions the library offers</li>
+<li class="fragment">Describes what inputs and outputs those functions
+require</li>
+<li class="fragment">Often includes some examples</li>
+</ul></li>
+<li class="fragment">If you are unwilling to read documentation to learn
+a new library, then you will be forced to write everything from scratch
+on your own, and thus making anything interesting as a programmer will
+get unreasonably difficult</li>
+</ul>
+</div>
+</section>
 <section id="useful-math-definitions" class="slide level2">
 <h2>Useful <code class="python">math</code> definitions</h2>
+<div style="margin:auto; width: fit-content;">
+<p><a
+href="https://docs.python.org/3/library/math.html#module-math">Full
+Documentation</a></p>
+</div>
+<div style="font-size:.75em">
+<div class="cols">
+<div class="col">
 <table>
 <thead>
 <tr class="header">
@@ -242,11 +153,13 @@ def func2(y):
 <tbody>
 <tr class="odd">
 <td><code class="python">math.pi</code></td>
-<td>The mathematical constant <span class="math inline">\(\pi\)</span></td>
+<td>The mathematical constant <span
+class="math inline">\(\pi\)</span></td>
 </tr>
 <tr class="even">
 <td><code class="python">math.e</code></td>
-<td>The mathematical constant <span class="math inline">\(e\)</span></td>
+<td>The mathematical constant <span
+class="math inline">\(e\)</span></td>
 </tr>
 <tr class="odd">
 <td><code class="python">math.sqrt(x)</code></td>
@@ -260,123 +173,148 @@ def func2(y):
 <td><code class="python">math.log10(x)</code></td>
 <td>The base 10 logarithm of x</td>
 </tr>
-<tr class="even">
-<td><code class="python">math.sin(x)</code></td>
-<td>The sine of x in radians</td>
-</tr>
-<tr class="odd">
-<td><code class="python">math.cos(x)</code></td>
-<td>The cosine of x in radians</td>
-</tr>
-<tr class="even">
-<td><code class="python">math.asin(x)</code></td>
-<td>The arcsin of x</td>
-</tr>
-<tr class="odd">
-<td><code class="python">math.degrees(x)</code></td>
-<td>Converts from radians to degrees</td>
-</tr>
-<tr class="even">
-<td><code class="python">math.radians(x)</code></td>
-<td>Converts from degrees to radians</td>
-</tr>
 </tbody>
 </table>
-</section>
-<section id="running-a-program" class="slide level2">
-<h2>Running a Program</h2>
-<ul>
-<li><p>Python programs specify what part of the code is supposed to be when a program is run using a few special lines at the end of the program</p>
-<pre ><code class="python">if __name__ == '__main__':
-    function_to_run()</code></pre>
-<ul>
-<li><code class="python">function_to_run</code> is the name of whatever function you want to execute when the program is run</li>
-</ul></li>
-<li><p>Patterns of this sort are commonly called <em>boilerplate</em></p>
-<ul>
-<li>Less important to fully understand all the pieces of it now</li>
-<li>Is important to understand what it is doing and how to implement it correctly</li>
-</ul></li>
-</ul>
-</section>
-<section id="string-theory" class="slide level2">
-<h2>String Theory</h2>
-<ul>
-<li>Would be nice to work with more interesting data than just numbers</li>
-<li>Everything internally is represented as sequences of binary numbers, but more useful to think abstractly about concepts initially</li>
-<li>First non-numeric data type to look at will be <strong>strings</strong>
-<ul>
-<li>Domain is all <em>sequences</em> of characters
-<ul>
-<li>A single string is often comprised of multiple characters</li>
-</ul></li>
-<li>Indicated in Python with pairs of quotes (single or double)</li>
-</ul>
-<pre ><code class="python">"This is a great string!"
-'And this is also a string!'</code></pre></li>
-</ul>
-</section>
-<section id="string-functions" class="slide level2">
-<h2>String Functions</h2>
-<ul>
-<li>Python has several built-in functions that are useful when working with strings</li>
-</ul>
+</div>
+<div class="col">
 <table>
 <thead>
 <tr class="header">
-<th>Function</th>
+<th>Code</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">len(s)</code></td>
-<td>Gets the number of characters in <code class="python">s</code></td>
+<td><code class="python">math.sin(x)</code></td>
+<td>The sine of x in radians</td>
 </tr>
 <tr class="even">
-<td><code class="python">str(x)</code></td>
-<td>Converts the value of <code class="python">x</code> to a string</td>
+<td><code class="python">math.cos(x)</code></td>
+<td>The cosine of x in radians</td>
 </tr>
 <tr class="odd">
-<td><code class="python">int(s)</code></td>
-<td>Attempts to convert <code class="python">s</code> to an integer</td>
+<td><code class="python">math.asin(x)</code></td>
+<td>The arcsin of x</td>
 </tr>
 <tr class="even">
-<td><code class="python">float(s)</code></td>
-<td>Attempts to convert <code class="python">s</code> to a float</td>
+<td><code class="python">math.degrees(x)</code></td>
+<td>Converts radians to degrees</td>
 </tr>
 <tr class="odd">
-<td><code class="python">print(...)</code></td>
-<td>Prints all arguments separated by spaces</td>
-</tr>
-<tr class="even">
-<td><code class="python">input(prompt)</code></td>
-<td>Shows the user <code class="python">prompt</code> and then reads in a typed string</td>
+<td><code class="python">math.radians(x)</code></td>
+<td>Converts degrees to radians</td>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+</div>
+<!-- older practice, I changed it up for something that requires math
+## Practice
+:::incremental
+- Most people have seen or had to memorize the quadratic formula at some point in time. As a reminder, the equation
+$$a\cdot x^2 + b\cdot x + c = 0$$
+can be solved for $x$ according to
+$$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
+- Take some time with a neighbor to work out how you could define a function `quad` which takes 3 arguments `a,b,c` and returns the greater of the two solutions (the $+$ one)
+    - _Tip:_ writing out complicated equation on a single line in Python can get real ugly and hard to understand. Consider breaking up the equation and assigning pieces of it to variables that you can combine later.
+:::
+-->
 </section>
-<section id="stringy-operations" class="slide level2">
-<h2>Stringy Operations</h2>
+<section id="practice" class="slide level2">
+<h2>Practice</h2>
+<div class="cols">
+<div class="col" style="flex-grow:2; font-size:.9em">
 <ul>
-<li><p>Initially we will focus just on <em>concatenating</em> strings, or combining them end to end</p>
+<li>When you drop a rock into a pool of water, the outward moving
+ripples get smaller and smaller as they move away from the center</li>
+<li>Mathematically, the height of these ripples can be described by:
+<span class="math display">\[h(A, B, C, r) = A e^{-B\cdot
+r}\cos\left(\frac{2\pi}{C}\cdot r\right) \]</span> where <span
+class="math inline">\(A, B, C\)</span> describe aspects of the initial
+drop and the liquid, and <span class="math inline">\(r\)</span> depicts
+the distance from the center</li>
+<li>Write a function to compute the height of the wave based on these
+parameters.</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/ripple.jpg" /></p>
+</div>
+</div>
+</section>
+<section id="extra-if-functionality" class="slide level2">
+<h2>Extra <code class="python">if</code> functionality</h2>
+<div class="cols">
+<div class="col">
 <ul>
-<li>Many more operations we’ll look at later in Ch 6</li>
+<li>Karel could only use <code class="python">if</code> and
+<code class="python">else</code></li>
+<li>Python also supports an <code class="python">elif</code>
+statement</li>
+<li>This lets you chain together multiple mutually exclusive condition
+checks</li>
+<li>You can include as many <code class="python">elif</code> chained
+statements as you want</li>
+<li>Only a single <code class="python">elif</code> block will ever be
+entered!</li>
+</ul>
+</div>
+<div class="col">
+<pre ><code class="python" style="max-height:900px; font-size:0.75em">if condition_1:
+    # Run this code if 
+    # condition 1 is true
+elif condition_2:
+    # This code runs if 
+    # condition 1 is false
+    # but condition 2 is true
+elif condition_3:
+    # Runs if both condition 1
+    # and 2 fail but condition
+    # 3 is true
+else:
+    # This code runs if 
+    # all above conditions 
+    # fail</code></pre>
+</div>
+</div>
+</section>
+<section id="booleans" class="slide level2">
+<h2>Booleans</h2>
+<ul>
+<li>In Karel we know certain functions would evaluate to yes/no or
+true/false
+<ul>
+<li>Python stores this sort of information in a data type called a
+<em>boolean</em></li>
 </ul></li>
-<li><p>Concatenate in Python using the <code class="python">+</code> operator:</p>
-<pre ><code class="idle">>>> print("ABC" + "DEF")
-ABCDEF</code></pre></li>
-<li><p><code class="python">+</code> with numbers gets you addition, <code class="python">+</code> with strings gets you concatenation</p></li>
-<li><p>If you have mixed types and want concatenation, need to convert all to strings</p>
-<pre ><code class="idle">>>> print("Catch" + str(-22))
-Catch-22</code></pre></li>
+<li>A boolean data type can only have one of two possible values: true
+or false</li>
+<li>Literal booleans are defined in Python using
+<code class="python">True</code> or
+<code class="python">False</code></li>
+<li>These can be assigned to variables, returned from functions, etc.
+just like numeric data types
+<ul>
+<li>Most importantly, they can be utilized with control statements!</li>
+</ul>
+<pre ><code class="python">A = True
+if A:
+  A = False
+print(A)</code></pre></li>
 </ul>
 </section>
 <section id="boolean-expressions" class="slide level2">
 <h2>Boolean Expressions</h2>
 <ul>
-<li><p>Python defines two types of operators that work with Boolean data: <em>relational operators</em> and <em>logical operators</em></p></li>
-<li><p>Relational operators compare values of other types and produce a <code class="python">True</code>/<code class="python">False</code> result:</p>
+<li><p>Python defines two types of operators that work with Boolean
+data: <em>relational operators</em> and <em>logical
+operators</em></p></li>
+<li><p>Relational operators compare values of other types and produce a
+boolean
+<code class="python">True</code>/<code class="python">False</code>
+result:</p>
 <table>
 <tbody>
 <tr class="odd">
@@ -408,7 +346,10 @@ Catch-22</code></pre></li>
 </tr>
 </tbody>
 </table></li>
-<li><p>Be careful! <code class="python">==</code> <em>compares</em> two booleans. A single <code class="python">=</code> <em>assigns</em> a variable. The odds are high you’ll use one when you meant the other at least once this semester!</p></li>
+<li><p>Be careful! <code class="python">==</code> <em>compares</em> two
+values. A single <code class="python">=</code> <em>assigns</em> a
+variable. The odds are high you’ll use one when you meant the other at
+least once this semester!</p></li>
 </ul>
 </section>
 <section id="the-vulcan-way" class="slide level2">
@@ -440,25 +381,31 @@ Catch-22</code></pre></li>
 </ul>
 <div>
 <ul>
-<li class="fragment">Order of operations follows parentheses and then proceeds left to right</li>
-<li class="fragment">Careful that <code class="python">or</code> is still <code class="python">True</code> if both options are <code class="python">True</code> which is a little different than common English use</li>
-<li class="fragment">Similarly, careful with combining <code class="python">not</code> with <code class="python">and</code> and <code class="python">or</code>
+<li class="fragment">Order of operations follows parentheses and then
+proceeds left to right</li>
+<li class="fragment">Careful that <code class="python">or</code> is
+still <code class="python">True</code> if both options are
+<code class="python">True</code></li>
+<li class="fragment">Similarly, careful with combining
+<code class="python">not</code> with <code class="python">and</code> and
+<code class="python">or</code>
 <ul>
-<li class="fragment">“Not A or B” in common English is not the same as <code class="python">not A or B</code></li>
+<li class="fragment">“Not A or B” in common English is not the same as
+<code class="python">not A or B</code></li>
 </ul></li>
 </ul>
 </div>
 </section>
-<section id="understanding-check-1" class="slide level2">
+<section id="understanding-check" class="slide level2">
 <h2>Understanding Check</h2>
-<p>What is the final printed value in the code below?</p>
+<p>What value is printed when the code to the right runs?</p>
 <div class="cols">
 <div class="col">
 <div class="poll">
 <ol>
 <li><code class="python">True</code></li>
 <li><code class="python">False</code></li>
-<li><code class="python">"4Quiz"</code></li>
+<li>5</li>
 <li>This would give an error</li>
 </ol>
 </div>
@@ -466,12 +413,12 @@ Catch-22</code></pre></li>
 <div class="col" style="flex-grow:2;">
 <pre ><code class="python">A = 10
 B = 4
-C = "Quiz"
-A *= len(C)
-if A > 40 and C != "C":
-    print(str(B)+C)
+C = 1
+A *= B
+if A > 40 and C != 10 % 4:
+    print(B+C)
 else:
-    print(A < B or not (C == "C"))
+    print(A < B or not (C == 10 // 4))
 </code></pre>
 </div>
 </div>
@@ -479,68 +426,66 @@ else:
 <section id="shorting-the-circuit" class="slide level2">
 <h2>Shorting the Circuit</h2>
 <ul>
-<li>Python evaluates <em>and</em> and <em>or</em> operators using a strategy called <em>short-circuit mode</em></li>
+<li>Python evaluates <em>and</em> and <em>or</em> operators using a
+strategy called <em>short-circuit mode</em></li>
 <li>Only evaluates the right operand if it actually needs to
 <ul>
-<li><p>Example: if <code class="python">n=0</code>, then the <code class="python">x % n == 0</code> is never actually checked in the statement</p>
+<li><p>Example: if <code class="python">n=0</code>, then the
+<code class="python">x % n == 0</code> is never actually checked in the
+statement</p>
 <pre ><code class="python">n != 0 and x % n == 0</code></pre>
-<p>since <code class="python">n != 0</code> already is <code class="python">False</code> and <code class="python">False and</code> <em>anything</em> is always <code class="python">False</code></p></li>
+<p>since <code class="python">n != 0</code> already is
+<code class="python">False</code> and
+<code class="python">False and</code> <em>anything</em> is always
+<code class="python">False</code></p></li>
 </ul></li>
-<li>Can use short-circuit to prevent errors: the above <code class="python">x % n == 0</code> statement would have erred out if <code class="python">n=0</code></li>
+<li>Can use short-circuit to prevent errors: the above
+<code class="python">x % n == 0</code> statement would have errored out
+if <code class="python">n=0</code></li>
 </ul>
 </section>
-<section id="sentinels" class="slide level2">
-<h2>Sentinels</h2>
+<section id="for-loop-anatomy" class="slide level2">
+<h2>For Loop Anatomy</h2>
 <ul>
-<li>Many programs in programming can be approached similarly by using a particular <em>idiom</em> or <em>pattern</em></li>
-<li>A common one with repetition is to use a variable to keep track of the loop state until something particular happens (the sentinel is triggered) <br><br></li>
+<li><p>We have already seen <code class="python">for</code> loops in
+Karel, but let’s expand on their use:</p></li>
+<li><p>The more general syntax of a <code class="python">for</code> loop
+looks like:</p>
+<pre ><code class="python">for variable_name in sequence:
+    # code to loop over</code></pre>
+<ul>
+<li><code class="python">variable_name</code> is a variable name that
+will be assigned every value in the sequence over the course of the
+loop</li>
+<li><code class="python">sequence</code> is any expression that produces
+an object which supports iteration
+<ul>
+<li>We’ve already seen <code class="python">range()</code> fill this
+role</li>
+<li><strong>Any</strong> sequence works though, and we’ll see examples
+of another type of sequence next week</li>
+</ul></li>
+</ul></li>
 </ul>
-<pre ><code class="python">finished = False
-while not finished:
-    line = input("Enter a number: ")
-    if line == "":
-        finished = True
-    else:
-        print(line)</code></pre>
-</section>
-<section id="understanding-check-2" class="slide level2">
-<h2>Understanding Check</h2>
-<div class="cols">
-<div class="col">
-<pre ><code class="python">x = 7
-y = 0
-while x >= 0:
-    y += x
-    x -= 2
-print(y)</code></pre>
-</div>
-<div class="col">
-<p>What will the printed output of the code to the left?</p>
-<div class="poll">
-<ol>
-<li>15</li>
-<li>16</li>
-<li>28</li>
-<li>Infinite Loop</li>
-</ol>
-</div>
-</div>
-</div>
 </section>
 <section id="the-range-iterable" class="slide level2">
 <h2>The <code class="python">range()</code> iterable</h2>
 <ul>
-<li>Need an easy way to produce or describe a range of numeric values</li>
-<li>The built-in <code class="python">range()</code> function handles this and produces the needed iterable object</li>
+<li>Need an easy way to produce or describe a range of numeric
+values</li>
+<li>The built-in <code class="python">range()</code> function handles
+this and produces the needed iterable object</li>
 <li>Takes 1, 2, or 3 arguments:
 <ul>
 <li>Start (default 0): where to start the sequence at</li>
-<li>Stop (mandatory): the sequence ends just <em>below</em> this value (does not include it!)</li>
+<li>Stop (mandatory): the sequence ends just <em>below</em> this value
+(does not include it!)</li>
 <li>Step (default 1): what value the sequence counts by <br><br></li>
 </ul></li>
 </ul>
 <div class="block" name="Warning!">
-<p>Be careful, the <code class="python">range</code> function will stop one step <em>before</em> the final stop value.</p>
+<p>Be careful, the <code class="python">range</code> function will stop
+one step <em>before</em> the final stop value.</p>
 </div>
 </section>
 <section id="for-ranging-examples" class="slide level2">
@@ -556,24 +501,186 @@ print(y)</code></pre>
 <pre ><code class="python">for n in range(10,0,-1):
     print(n)</code></pre></li>
 </ul>
-</section>
-<section id="iterating-over-sequences" class="slide level2">
-<h2>Iterating over sequences</h2>
-<ul>
-<li><p>We can also use a <code class="python">for</code> loop to iterate directly over a sequence of values</p></li>
-<li><p>Python supports many different types of sequences, but thus far we only know about one: strings!</p>
-<ul>
-<li>Recall strings are just a sequence of individual characters</li>
-</ul></li>
-<li><p>We can loop through a string to examine each individual character</p></li>
-<li><p>Example looping through to count occurrences of a given letter:</p>
-<pre ><code class="python">def count_letters(letter, string):
-    count = 0
-    for character in string:
-        if character == letter:
-            count += 1
-    return count</code></pre></li>
-</ul>
+<!-- only makes sense after strings introduced
+## Iterating over sequences
+- We can also use a `for` loop to iterate directly over a sequence of values
+- We can loop through a string or list to examine each individual character or element
+- Example of looping through a word to count occurrences of a given letter:
+
+    ```python
+    def count_letters(letter, string):
+        count = 0
+        for character in string:
+            if character == letter:
+                count += 1
+        return count
+    ```
+
+## Sentinels
+- Many programs in programming can be approached similarly by using a particular _idiom_ or _pattern_
+
+::::::cols
+::::col
+
+:::{.block name="Loop Until..." style='font-size:.75em'}
+- Using a variable to track/control a loop state
+
+  ```{.python style='width:100%'}
+  finished = False
+  while not finished:
+      line = input("Enter a number: ")
+      if line == "":
+          finished = True
+      else:
+          print(line)
+  ```
+:::
+
+::::
+
+::::col
+:::{.block name="Building Sequences" style='font-size:.75em'}
+- Building up a sequence from nothing using concatenation
+
+  ```{.python style='width:100%'}
+  new = ""
+  word = "fantastical"
+  i = 0
+  while i < len(word):
+      new += word[i]
+      i += 2
+  ```
+:::
+
+::::
+::::::
+
+-->
+<!--
+## Review Question
+:::::cols
+::::col
+What would be the printed output of the code to the right?
+
+:::poll
+#. 12
+#. 13
+#. 14
+#. 15
+:::
+::::
+::::col
+```python
+A = "hots"
+B = ["fire", A + A]
+C = A[3] + A[1]
+B += C + C[0]
+D = B[0] + B[1] + B[2]
+print(len(D))
+```
+-->
+<!-- for Friday
+## Test Yourself
+- It is easy to make mistakes when writing code
+    - Syntax mistakes
+    - Typos or operations mistakes
+    - Overall conceptual mistakes
+- Given that making mistakes is entirely natural, it is also imperative that looking for mistakes become entirely natural
+- You known what the desired goal is for basically every problem in this class. **Test your code!**
+
+
+## Way of Testing
+:::incremental
+- Run your code early and often
+    - If your code is breaking at something early, it is not going to fix itself if you continue
+- Test outputs directly
+    - Problems will generally give several example outputs of desired functions
+    - For your own functions, you should know what you want them to be outputting
+    - Run a function as isolated as you can make it after writing it, and _ensure_ that it is performing as expected
+- Write code to test code
+    - Wherever possible, I provide some automated tests that can be run
+    - You can (and should) write your own tests as well. They need not be complicated!!
+:::
+
+## Assertions
+- You can use Python's `assert` statement to write test functions, which take the form:
+  ```python
+  assert condition
+  ```
+  where `condition` is any operation that returns a `True` or `False`
+- Assert statements "expect" a condition to yield a `True`, and if they do, nothing happens
+    - No news is good news in this case
+- If an assert condition evaluates to `False`, an error is raised
+- Naming your test functions starting with the word `test_` will make them automatically discoverable by other tools
+
+
+## Testing Example
+- Suppose we wanted to write some checks of the `count_letters` function from earlier
+
+```python
+def test_count_letters():
+    """ Runs several tests on the function count_letters """
+    assert count_letters("z", "banana") == 0
+    assert count_letters("a", "strawberry") == 1
+    assert count_letters("A", "apple") == 0
+    assert count_letters("e", "eerie") == 3
+```
+
+## Showcasing Autochecks
+- When you submit code to GitHub, my pre-written tests are run
+    - If **any** check fails, you'll see the red X (and possibly get an email)
+    - Let's look at how to get information about what went wrong
+- VSCode actually can run all the tests locally as well
+    - Let's also walk through how that works (and looks)
+-->
+<!--
+## Introduction to Wordle
+::::::cols
+::::col
+- Our first project will be Wordle
+- Milestone guide will be posted this weekend
+- Not due until the end of the month
+- You still have another PS due in between
+- Could complete in a week, but we are getting it to you early in case you want to start sooner
+::::
+
+::::col
+![The game of Wordle](../images/wordle.png)
+::::
+::::::
+
+## Your Responsibilities
+- We will provide you with a custom data type that will handle all the graphics and user interaction
+    - Don't worry, you'll have a chance to implement your own GUIs later in the semester!
+- Your responsibilities:
+    - Displaying and reading letters from boxes
+    - Evaluating whether a word is valid
+    - Determining what color each letter of a word should be
+    - Determining when victory or defeat occurs
+
+
+## Your Toolbox
+- Special functions provided by the graphics data type
+    - These will be well documented, and include things like
+        - Getting or setting a letter in a particular box
+        - Getting or changing the color of a given box
+        - Changing which row is used when characters are entered
+- Variables and functions
+- Control statements
+    - Good use of loops and if statements will be very useful
+- Basic string functions
+
+
+## An Approach to Success
+- Each project is accompanied by a highly detailed guide: **read it!**
+    - Explains background ideas so that you can understand the big picture of what you are needing to do
+    - Also included a breakdown of individual _milestones_
+        - A _milestone_ is a discrete checkpoint that you should ensure is working (and that you understand!) before moving on
+- Projects are all about managing complexity. If you start trying to implement milestones out of order, you are asking for disaster
+- Don't let yourself get overwhelmed by scale. Focus on one particular milestone at a time, which should involve focusing only on a small part of your overall code
+
+
+-->
 </section>
     </div>
   </div>
@@ -598,6 +705,7 @@ print(y)</code></pre>
 		//autoAnimateEasing: 'ease-in',
 		//autoAnimateDuration: 1.0,
 		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
         // Display controls in the bottom right corner
         controls: true,
         // Help the user learn the controls by providing hints, for example by
@@ -616,7 +724,7 @@ print(y)</code></pre>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -678,7 +786,7 @@ print(y)</code></pre>
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
-        height: 1200,
+        height: 1080,
         // The display mode that will be used to show slides
         display: 'block',
 		math: {
@@ -718,7 +826,7 @@ print(y)</code></pre>
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
-        chalkWidth: 7,
+        chalkWidth: 5,
 		boardmarkers : [
                 { color: 'rgba(248,248,242,1)', cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                 { color: 'rgba(102,217,239,1)', cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
@@ -743,6 +851,7 @@ print(y)</code></pre>
 			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
 		],
       });
+      
     </script>
     </body>
 </html>

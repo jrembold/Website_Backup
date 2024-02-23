@@ -4,25 +4,25 @@
 	<head>
 		<title>Lecture 25 Code</title>
 		<meta name='viewport' content='width=device-width, initial-scale=1'/>
-		<link rel='stylesheet' href="/Website_Backup/css/main.css"/>
-		<link rel='icon' href="/Website_Backup/images/favicon.png">
-		<script src="/Website_Backup/js/jquery-2.1.4.min.js"></script>
-		<script src="/Website_Backup/js/TweenLite.min.js"></script>
-		<script src="/Website_Backup/js/CSSPlugin.min.js"></script>
-		<script src="/Website_Backup/js/skel.min-2.2.js"></script>
-		<script src="/Website_Backup/js/main.js"></script>
-		<script src="/Website_Backup/js/BigPicture.min.js"></script>
+		<link rel='stylesheet' href="/website_copy/css/main.css" />
+		<link rel='icon' href="/website_copy/images/favicon.png">
+		<script src="/website_copy/js/jquery-2.1.4.min.js"></script>
+		<script src="/website_copy/js/TweenLite.min.js"></script>
+		<script src="/website_copy/js/CSSPlugin.min.js"></script>
+		<script src="/website_copy/js/skel.min-2.2.js"></script>
+		<script src="/website_copy/js/main.js"></script>
+		<script src="/website_copy/js/BigPicture.min.js"></script>
 
 		<header>
-	<p><a href="/Website_Backup/">JED REMBOLD</a></p>
+	<p><a href="/website_copy/">JED REMBOLD</a></p>
 	<nav>
 		<div class='topmenu'>
 			<ul>
-				<li><a href="/Website_Backup/about">About Me</a></li>
+				<li><a href="/website_copy/about">About Me</a></li>
 				<li>
 					<div class='class-drop'>
 						<div class='class-hover'>
-							<a href="/Website_Backup/classes">Classes</a>
+							<a href="/website_copy/classes">Classes</a>
 						</div>
 						<div class='class-menu'>
 							
@@ -43,11 +43,69 @@
 							
 							
 							
-							<a href="/Website_Backup/classes/cs151/cs151/">Intro Python</a><br>
 							
 							
 							
-							<a href="/Website_Backup/classes/phys221/phys221/">Physics I</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/website_copy/classes/data275/data275/">Cosmos</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/website_copy/classes/data503/data503/">Data Eng</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
 							
 							
 							
@@ -234,17 +292,17 @@
 						</div>
 					</div>
 				</li>
-				<li><a href="/Website_Backup/wu_schedule">Schedule</a></li>
+				<li><a href="/website_copy/wu_schedule">Schedule</a></li>
 				<li>
 					<div class='class-drop'>
 						<div class='class-hover'>
-							<a href="/Website_Backup/resources">Resources</a>
+							<a href="/website_copy/resources">Resources</a>
 						</div>
 						<div class='class-menu'>
 							
-							<a href="/Website_Backup/resources/python_guides/guides/">Python Guides</a><br>
+							<a href="/website_copy/resources/python_guides/guides/">Python Guides</a><br>
 							
-							<a href="/Website_Backup/resources/grad_resources/grad_resources/">Grad Notes</a><br>
+							<a href="/website_copy/resources/grad_resources/grad_resources/">Grad Notes</a><br>
 							
 						</div>
 					</div>
@@ -266,10 +324,10 @@
 	<div class='slideout-menu'>
 		<h3>Menu <span class='slide-toggle' href="#"><i class='fa fa-times'></i></span></h3>
 		<ul>
-			<li><a href="/Website_Backup/about">About Me</a></li>
-			<li><a href="/Website_Backup/classes">Classes</a></li>
-			<li><a href="/Website_Backup/wu_schedule">Schedule</a></li>
-			<li><a href="/Website_Backup/resources">Resources</a></li>
+			<li><a href="/website_copy/about">About Me</a></li>
+			<li><a href="/website_copy/classes">Classes</a></li>
+			<li><a href="/website_copy/wu_schedule">Schedule</a></li>
+			<li><a href="/website_copy/resources">Resources</a></li>
 		</ul>
 	</div>
 
@@ -310,21 +368,21 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Coordinate</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">turkey</span> <span class="o">=</span> <span class="kc">True</span>
-
-<span class="n">C1</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">C2</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
-
-<span class="n">C2</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">C1</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">C2</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">C1</span><span class="o">.</span><span class="n">turkey</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">C2</span><span class="o">.</span><span class="n">turkey</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Coordinate</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">turkey</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">C1</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">C2</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">C2</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">10</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">C1</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">C2</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">C1</span><span class="o">.</span><span class="n">turkey</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">C2</span><span class="o">.</span><span class="n">turkey</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h6 id="a-student-class">A Student Class</h6>
 <div class="highlight"><div class="chroma">
@@ -347,23 +405,23 @@
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Student</span><span class="p">:</span>
-   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
-       <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-       <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
-       <span class="bp">self</span><span class="o">.</span><span class="n">is_human</span> <span class="o">=</span> <span class="kc">True</span>
-
-
-<span class="n">s1</span> <span class="o">=</span> <span class="n">Student</span><span class="p">(</span><span class="s2">&#34;Bob&#34;</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
-<span class="n">s2</span> <span class="o">=</span> <span class="n">Student</span><span class="p">(</span><span class="s2">&#34;Jill&#34;</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
-<span class="n">s2</span><span class="o">.</span><span class="n">is_human</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">s1</span><span class="o">.</span><span class="n">age</span> <span class="o">+=</span> <span class="mi">1</span>
-
-<span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="p">[</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">]:</span>
-   <span class="nb">print</span><span class="p">(</span>
-       <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">student</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> is </span><span class="si">{</span><span class="n">student</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s1"> and </span><span class="si">{</span><span class="s2">&#34;is&#34;</span> <span class="k">if</span> <span class="n">student</span><span class="o">.</span><span class="n">is_human</span> <span class="k">else</span> <span class="s2">&#34;is not&#34;</span><span class="si">}</span><span class="s1"> human.&#39;</span>
-   <span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Student</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">       <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+</span></span><span class="line"><span class="cl">       <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+</span></span><span class="line"><span class="cl">       <span class="bp">self</span><span class="o">.</span><span class="n">is_human</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">s1</span> <span class="o">=</span> <span class="n">Student</span><span class="p">(</span><span class="s2">&#34;Bob&#34;</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s2</span> <span class="o">=</span> <span class="n">Student</span><span class="p">(</span><span class="s2">&#34;Jill&#34;</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s2</span><span class="o">.</span><span class="n">is_human</span> <span class="o">=</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl"><span class="n">s1</span><span class="o">.</span><span class="n">age</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="p">[</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl">   <span class="nb">print</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">       <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">student</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> is </span><span class="si">{</span><span class="n">student</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s1"> and </span><span class="si">{</span><span class="s2">&#34;is&#34;</span> <span class="k">if</span> <span class="n">student</span><span class="o">.</span><span class="n">is_human</span> <span class="k">else</span> <span class="s2">&#34;is not&#34;</span><span class="si">}</span><span class="s1"> human.&#39;</span>
+</span></span><span class="line"><span class="cl">   <span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h6 id="adding-methods">Adding Methods</h6>
 <div class="highlight"><div class="chroma">
@@ -394,31 +452,31 @@
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Coordinate</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">turkey</span> <span class="o">=</span> <span class="kc">True</span>
-
-    <span class="k">def</span> <span class="nf">dist2origin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
-        <span class="k">return</span> <span class="n">d</span>
-
-    <span class="k">def</span> <span class="nf">distance2coord</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">othercoord</span><span class="p">):</span>
-        <span class="n">diffx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">othercoord</span><span class="o">.</span><span class="n">x</span>
-        <span class="n">diffy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">othercoord</span><span class="o">.</span><span class="n">y</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">diffx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">diffy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
-        <span class="k">return</span> <span class="n">d</span>
-
-
-<span class="n">C1</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">C2</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">C1</span><span class="o">.</span><span class="n">dist2origin</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">Coordinate</span><span class="o">.</span><span class="n">dist2origin</span><span class="p">(</span><span class="n">C2</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">C1</span><span class="o">.</span><span class="n">distance2coord</span><span class="p">(</span><span class="n">C2</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">C2</span><span class="o">.</span><span class="n">distance2coord</span><span class="p">(</span><span class="n">C1</span><span class="p">))</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Coordinate</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">turkey</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">dist2origin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">d</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">distance2coord</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">othercoord</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">diffx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">othercoord</span><span class="o">.</span><span class="n">x</span>
+</span></span><span class="line"><span class="cl">        <span class="n">diffy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">othercoord</span><span class="o">.</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl">        <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">diffx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">diffy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">d</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">C1</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">C2</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">C1</span><span class="o">.</span><span class="n">dist2origin</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">Coordinate</span><span class="o">.</span><span class="n">dist2origin</span><span class="p">(</span><span class="n">C2</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">C1</span><span class="o">.</span><span class="n">distance2coord</span><span class="p">(</span><span class="n">C2</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">C2</span><span class="o">.</span><span class="n">distance2coord</span><span class="p">(</span><span class="n">C1</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><br>
 
@@ -427,6 +485,6 @@
 	</div>
 
 </body>
-<script src="/Website_Backup/js/click_handling.js" ></script>
+<script src="/website_copy/js/click_handling.js"></script>
 </html>
 

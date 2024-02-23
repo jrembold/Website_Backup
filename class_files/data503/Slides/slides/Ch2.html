@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Making Selections</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Making Selections</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Thursday, January 13, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>HW1 will be posted by the end of the day</li>
+<li>I’m still finalizing a few guides, and am hoping to have them out by the end of the day as well</li>
+<li>Look over Ch 3 for next Tuesday</li>
+<li>We’ll have some polling today, just directly in the YouTube chat client</li>
+</ul>
+</section>
+<section id="review" class="slide level2">
+<h2>Review!</h2>
+<div class="cols">
+<div class="col">
+<p>The SQL commands to the right involve creating and then populating a simple table. If they were run one after the other, which of the below possibilities would mostly closely mimic how the <code class="python">rev</code> table would look?</p>
+</div>
+<div class="col" style="flex-grow:2">
+<pre ><code class="sql">CREATE TABLE rev (
+  name VARCHAR(15), 
+  age int);
+
+INSERT INTO rev (name)
+VALUES ('Bob'), ('Sally');</code></pre>
+</div>
+</div>
+<div class="hpoll">
+<ol>
+<li><table>
+<thead>
+<tr class="header">
+<th>name</th>
+<th>age</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bob</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td>Sally</td>
+<td>22</td>
+</tr>
+</tbody>
+</table></li>
+<li><table>
+<thead>
+<tr class="header">
+<th>name</th>
+<th>age</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bob</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Sally</td>
+<td></td>
+</tr>
+</tbody>
+</table></li>
+<li><table>
+<thead>
+<tr class="header">
+<th>name</th>
+<th>age</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bob</td>
+<td>Sally</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></li>
+<li>This would give an error.</li>
+</ol>
+</div>
+</section>
+<section id="query-time" class="slide level2">
+<h2>Query Time</h2>
+<ul>
+<li>The prime use of SQL for individuals <em>not</em> in charge of managing a database is using it to <em>query</em> the database for information</li>
+<li>Queries return only a subset of information from the database, and don’t alter the database in any way</li>
+<li>The keyword that begins any query is <code class="python">SELECT</code>, followed by:
+<ul>
+<li>The column name(s) you would like information from, and</li>
+<li>The table you want to get the information from</li>
+</ul></li>
+<li>Basic syntax then could look something like:</li>
+</ul>
+<pre ><code class="sql">SELECT colname1, colname2 FROM table_name;</code></pre>
+<ul>
+<li>An asterisk <code class="python">*</code>, can stand in for the column names to stand for “all the columns”</li>
+</ul>
+<pre ><code class="sql">SELECT * FROM table_name;</code></pre>
+</section>
+<section id="you-are-distinct" class="slide level2">
+<h2>You are Distinct</h2>
+<ul>
+<li>In many instances, a particular column may have duplicate entries
+<ul>
+<li>Each <em>row</em> should be unique, but if looking at just a single column, there very well could be duplicates</li>
+</ul></li>
+<li>The <code class="python">DISTINCT</code> keyword allows you to only display the <em>unique</em> values that appear in a column
+<ul>
+<li>Appears before the names of the desired columns</li>
+</ul></li>
+<li>Can be applied to multiple columns at a time
+<ul>
+<li>Then interpreted as “For each X in the table, what are all the Y values?”</li>
+</ul></li>
+</ul>
+<pre ><code class="sql">SELECT DISTINCT colname1 FROM table_name;</code></pre>
+<p>or</p>
+<pre ><code class="sql">SELECT DISTINCT colname1, colname2
+FROM table_name;</code></pre>
+</section>
+<section id="reversing-entropy" class="slide level2">
+<h2>Reversing Entropy</h2>
+<ul>
+<li>Sometimes patterns can be more evident if some ordering is applied to the query results
+<ul>
+<li>The ordering only applies to the query, the original data is untouched</li>
+</ul></li>
+<li>SQL provides the <code class="python">ORDER BY</code> keyword to indicate a column to use for ordering</li>
+<li>Can use <code class="python">ASC</code> (the default) or <code class="python">DESC</code> to specify the direction of ordering</li>
+<li>Can also order by multiple columns (separate by comma)</li>
+</ul>
+<pre ><code class="sql">SELECT colname1, colname2
+FROM table_name
+ORDER BY colname2 DESC;</code></pre>
+</section>
+<section id="lexicographic-ordering" class="slide level2">
+<h2>Lexicographic Ordering</h2>
+<ul>
+<li>When your database was created, Postgres assigned it a character encoding scheme, usually UTF-8</li>
+<li>Each character of text is represented internally by a number</li>
+<li>These <em>internal numbers</em> are what Postgres uses to order text</li>
+<li>Mostly will work as expected, but be wary of mixed capitalization or punctuation</li>
+</ul>
+<figure>
+<img data-src="../images/ASCII.png" alt="UTF-8 Encodings" /><figcaption aria-hidden="true">UTF-8 Encodings</figcaption>
+</figure>
+</section>
+<section id="filtration" class="slide level2">
+<h2>Filtration</h2>
+<ul>
+<li>Especially in tables with thousands to millions of rows, you likely don’t want <em>all</em> of the information pertaining to a column</li>
+<li>Instead it makes sense to filter or only return rows that meet certain criteria</li>
+<li>SQL’s <code class="python">WHERE</code> keyword provides exactly this functionality</li>
+</ul>
+<pre ><code class="sql">SELECT colname1 FROM table_name
+WHERE some_condition;</code></pre>
+<ul>
+<li>Each condition is some sort of comparison check, which could be summarized as a true / false question</li>
+</ul>
+</section>
+<section id="comparison-operations" class="slide level2">
+<h2>Comparison Operations</h2>
+<div style="font-size:.9em">
+<table>
+<thead>
+<tr class="header">
+<th>Operator</th>
+<th>Function</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">=</code></td>
+<td>Equal to</td>
+<td><code class="python">WHERE colname = 5</code></td>
+</tr>
+<tr class="even">
+<td><code class="python"><></code> or <code class="python">!=</code></td>
+<td>Not equal to</td>
+<td><code class="python">WHERE colname != 'fish'</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">></code></td>
+<td>Greater than</td>
+<td><code class="python">WHERE colname > 0</code></td>
+</tr>
+<tr class="even">
+<td><code class="python"><</code></td>
+<td>Less than</td>
+<td><code class="python">WHERE colname < 100</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">>=</code></td>
+<td>Greater than or equal to</td>
+<td><code class="python">WHERE colname >= 0</code></td>
+</tr>
+<tr class="even">
+<td><code class="python"><=</code></td>
+<td>Less than or equal to</td>
+<td><code class="python">WHERE colname <= 1000</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">BETWEEN</code></td>
+<td>Within a range</td>
+<td><code class="python">WHERE colname BETWEEN 50 and 100</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">IN</code></td>
+<td>Matches one of a set</td>
+<td><code class="python">WHERE colname IN ('red', 'blue')</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">LIKE</code> or <code class="python">ILIKE</code></td>
+<td>Match a pattern</td>
+<td><code class="python">WHERE colname LIKE '%ed'</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">NOT</code></td>
+<td>Negates a condition</td>
+<td><code class="python">WHERE colname NOT LIKE '%ed'</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="understanding-check" class="slide level2">
+<h2>Understanding Check</h2>
+<p>Suppose I’d like to select from my <code class="python">cereal</code> table an alphabetized list of all the cereal names that have the same amount of grams of proteins as they do grams of fat. Which query would best deliver on this?</p>
+<div class="cols">
+<div class="col">
+<div class="block" name="A">
+<pre ><code class="sql">SELECT name FROM cereal
+WHERE fat >= protein
+ORDER BY cereal;</code></pre>
+</div>
+<div class="block" name="C">
+<pre ><code class="sql">SELECT DISTINCT name 
+FROM cereal
+WHERE fat = protein;</code></pre>
+</div>
+</div>
+<div class="col">
+<div class="block" name="B">
+<pre ><code class="sql">SELECT name FROM cereal
+WHERE fat = protein
+ORDER BY name;</code></pre>
+</div>
+<div class="block" name="D">
+<pre ><code class="sql">SELECT name FROM cereal
+WHERE protein = fat
+ORDER BY protein;</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="pattern-matching" class="slide level2">
+<h2>Pattern Matching</h2>
+<ul>
+<li><code class="python">LIKE</code> and <code class="python">ILIKE</code> differ only in whether capitalization matters in the match
+<ul>
+<li><code class="python">LIKE</code> is capitalization sensitive, <code class="python">ILIKE</code> is not</li>
+</ul></li>
+<li>Each can use several special characters in the desired pattern
+<ul>
+<li><code class="python">%</code> is a wildcard matching one or more of any character</li>
+<li><code class="python">_</code> is a wildcard matching just a single character</li>
+<li>If you want to actually match off one of these characters, you need to “escape” it with a backslash (<code class="python">\_</code> or <code class="python">\%</code>)</li>
+</ul></li>
+</ul>
+</section>
+<section id="conditional-combinations" class="slide level2">
+<h2>Conditional Combinations</h2>
+<ul>
+<li>Often, you might need to filter or several or more complicated conditions</li>
+<li>SQL also has the boolean <code class="python">AND</code> and <code class="python">OR</code> operators that you can use to stitch together multiple conditions</li>
+<li>Order of operations is left to right, so surround terms in parentheses if you need them evaluated earlier</li>
+</ul>
+<pre ><code class="sql">SELECT *
+FROM table_name
+WHERE colname1 LIKE 'F%' AND
+      (colname2 > 50 OR colname3 <= 10);</code></pre>
+</section>
+<section id="reaching-your-limit" class="slide level2">
+<h2>Reaching Your Limit</h2>
+<ul>
+<li>Often times, especially if sorting, you may not even be interested in <em>all</em> the results</li>
+<li>Maybe you just want the first few, or even just the first result</li>
+<li>You can control the maximum number of rows returned using <code class="python">LIMIT</code></li>
+<li>Comes last, after all the other keywords</li>
+</ul>
+<pre ><code class="sql">SELECT * FROM table_name
+WHERE some_condition
+ORDER BY column1
+LIMIT 5;</code></pre>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<p>Suppose you are particularly short and thus can only access cereals on the first two shelves. You’d like to grab the Cheerios-type cereal that has the highest amount of sugar per serving. How could you figure out what cereal you should be grabbing?</p>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1440,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

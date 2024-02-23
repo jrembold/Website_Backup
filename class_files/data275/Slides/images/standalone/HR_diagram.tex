@@ -1,0 +1,33 @@
+
+\documentclass[12pt]{standalone}
+\usepackage{pgfplots,pgfplotstable}
+\usepgfplotslibrary{statistics, groupplots}
+\pgfplotsset{compat=newest}
+
+\begin{document}
+\begin{tikzpicture}
+	  \pgfplotsset{colormap={stars}{[0.1cm] color(0cm)=(blue); color(1.8cm)=(white); color(2.1cm)=(yellow); color(2.6cm)=(red); color(3cm)=(red!50!black)}}
+	  \begin{loglogaxis}[
+		  width=\textwidth,
+		  height=7.5cm,
+		  x dir = reverse,
+		  xlabel = Temperature (K),
+		  ylabel = Fraction of Sun's Luminosity,
+		  ticklabel style={font=\tiny},
+		  xtick = {3000, 6000, 10000, 25000},
+		  xticklabels = {3000,6000,10000,25000},
+		  colormap name= stars,
+		]
+		\addplot[scatter, scatter src=-x, draw=black, only marks, mark size = 1pt] table[x index=0, y index=1] {./HR_Data.csv};
+		\node at (axis cs: 10^4.5,10^-4) {O};
+		\node at (axis cs: 10^4.2,10^-4) {B};
+		\node at (axis cs: 10^3.95,10^-4) {A};
+		\node at (axis cs: 10^3.85,10^-4) {F};
+		\node at (axis cs: 10^3.7,10^-4) {G};
+		\node at (axis cs: 10^3.6,10^-4) {K};
+		\node at (axis cs: 10^3.4,10^-4) {M};
+	  \end{loglogaxis}
+\end{tikzpicture}
+
+
+\end{document}

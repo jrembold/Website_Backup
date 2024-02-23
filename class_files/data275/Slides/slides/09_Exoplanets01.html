@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2024-02-15">
+  <title>Fourier Analysis</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Fourier Analysis</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">February 15, 2024</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<div style="font-size:.95em">
+<ul>
+<li>Homework 2 is due on Friday (technically)
+<ul>
+<li>I have been a massive bundle of stress all week trying to get caught
+up on some grading. I’m not there yet, but am <em>trying</em> to have
+feedback to you by the end of tomorrow.</li>
+<li>Some common comments that you should at least make sure you are
+adhering to for HW2:
+<ul>
+<li>Figures should have labeled axes and should be referenced in the
+text.</li>
+<li>You should explain what you are going to do in code <em>before</em>
+you show it.</li>
+<li>In general, you should always have some language explaining what is
+going on between code cells. A long string of code cells isn’t an essay:
+its just code.</li>
+<li>Make sure you address all stated parts of the question.</li>
+</ul></li>
+</ul></li>
+<li><strong>Don’t forget the debriefing form this weekend!</strong></li>
+<li>Quiz at the end of class today!</li>
+</ul>
+</div>
+</section>
+<section id="todays-plan" class="slide level2">
+<h2>Today’s Plan</h2>
+<ul>
+<li>Why can determining periodicity be difficult?</li>
+<li>What is a Fourier transform?</li>
+<li>How can I use a Fourier transform to extract information from a
+signal?</li>
+<li>Quiz!</li>
+</ul>
+</section>
+<section id="periodicity" class="slide level2">
+<h2>Periodicity</h2>
+<ul>
+<li>Identifying repetition in observations often gives important
+information about a source or event</li>
+<li>There are no limits on the shape of the observation beyond that it
+repeats
+<ul>
+<li>Signal may be smooth, like a sine wave</li>
+<li>Signal may be something non-continuous, like a square wave</li>
+<li>Signal can be a combination of several underlying signals that all
+repeat differently</li>
+</ul></li>
+<li>The <em>period</em>, often denoted with a <span
+class="math inline">\(T\)</span>, of an observation is the elapsed time
+between repetitions</li>
+</ul>
+</section>
+<section id="the-easy-case" class="slide level2">
+<h2>The “Easy” Case</h2>
+<ul>
+<li>For simple, known repeating functions, you might think just fitting
+the data would work
+<ul>
+<li>It <em>can</em>, but it can also be surprisingly susceptible to
+initial parameter guesses
+<!--- Can be done with non-continuous functions as well, so long as you can represent it in code--></li>
+</ul></li>
+</ul>
+<p><img data-src="../images/period_sin_sensitive.png"
+style="width:80.0%" /></p>
+</section>
+<section id="frequency" class="slide level2">
+<h2>Frequency</h2>
+<div style="font-size:.95em">
+<ul>
+<li>There are multiple ways to think about how fast an event or
+observation repeats</li>
+<li>We’ve already mentioned that the period is the time between
+repetitions</li>
+<li>Alternatively, we could talk about how many repeats occur within a
+certain time
+<ul>
+<li>This is called the <em>frequency</em>, generally indicated with an
+<span class="math inline">\(f\)</span></li>
+</ul></li>
+<li>The period of a repeating event and the frequency of that event are
+easily correlated: <span class="math display">\[ T = \frac{1}{f}
+\]</span></li>
+<li>Frequency is thus in units of 1 over time. If time is measured in
+seconds, this unit is called a <em>hertz</em></li>
+</ul>
+</div>
+</section>
+<section id="complications" class="slide level2">
+<h2>Complications</h2>
+<ul>
+<li>If the period of your signal is small compared to the frequency of
+your observations, it can be nearly impossible (or actually impossible)
+to tease out the period</li>
+<li>Making a simple fit to the signal rapidly becomes unfeasible if the
+signal is a combination of several periodic sources</li>
+<li>Even if you <strong>know</strong> the number of periodic sources and
+can model it mathematically
+<ul>
+<li>If fitting even a single basic sine wave is sensitive to initial
+guesses, it gets worse with more complexity</li>
+</ul></li>
+</ul>
+</section>
+<section id="another-way" class="slide level2">
+<h2>Another Way</h2>
+<ul>
+<li>We need better ways to find and determine periodic behavior in
+data</li>
+<li>One method is to construct a periodogram
+<ul>
+<li>A periodogram is a visual representation of the strength of
+differing periodic signals to a combined signal</li>
+</ul></li>
+<li>Periodograms are inherently related and linked to Fourier Series and
+the Fourier Transform</li>
+</ul>
+</section>
+<section id="fourier-series" class="slide level2">
+<h2>Fourier Series</h2>
+<div style="font-size:.95em">
+<ul>
+<li><strong>Any</strong> periodic function can be represented by summing
+together many differing sine waves of different amplitudes, periods, and
+phases</li>
+<li>A generic sine wave would have a form of: <span
+class="math display">\[ A\sin\left(\frac{2\pi t}{T} + \phi\right)
+\]</span></li>
+<li>The <em>Fourier Series</em> of a periodic function is just the
+infinite series of all the sine wave contributions that could be added
+together to exactly equal that periodic function
+<ul>
+<li>3Blue1Brown has several <em>excellent</em> videos on Fourier series
+and the (upcoming) Fourier Transform that you should check out on
+YouTube</li>
+</ul></li>
+<li>This lets us just focus on finding and determining sinusoidal
+periodic repetition</li>
+</ul>
+</div>
+</section>
+<section id="the-fourier-transform" class="slide level2">
+<h2>The Fourier Transform</h2>
+<ul>
+<li>The <em>Fourier Transform</em> shifts data from looking at how it
+changes over time, to looking at how it changes over different
+frequencies <span class="math display">\[ \hat{g}(f) =
+\int_{-\infty}^\infty g(t) e^{-2\pi i f t}\,dt \]</span></li>
+<li>This value can absolutely be complex</li>
+<li>A larger magnitude of <span
+class="math inline">\(\hat{g}(f)\)</span> implies a greater contribution
+of that frequency to the original
+<ul>
+<li>Commonly measured as <span
+class="math inline">\(\left|\hat{g}(f)\right|^2\)</span>, known as the
+<em>power spectrum</em></li>
+</ul></li>
+<li>Fourier transforms are symmetric about the y-axis, since periodic
+motion can occur in either direction
+<ul>
+<li>You can generally just focus on the positive values.</li>
+</ul></li>
+</ul>
+</section>
+<section id="examples" class="slide level2">
+<h2>Examples</h2>
+<p><img data-src="../images/python/inf_sin_and_trans.png"
+style="width:70.0%" /> <img
+data-src="../images/python/inf_square_and_trans.png"
+style="width:70.0%" /></p>
+</section>
+<section id="the-discrete-fourier-transform" class="slide level2">
+<h2>The Discrete Fourier Transform</h2>
+<ul>
+<li>When computing a Fourier Transform from data, we are technically
+always computing the <em>Discrete Fourier Transform</em>, since we only
+know the value of the function at certain points</li>
+<li>This absolutely will have ramifications in terms of what we end of
+seeing, but I’d like to postpone that discussion for the future</li>
+<li>So long as the data looks mostly like an infinite continuous series,
+the DFT will closely mimic the continuous Fourier Transform previously
+defined
+<ul>
+<li>Spacing of data points relatively close together relative to the
+period</li>
+<li>Data available over many full periods</li>
+</ul></li>
+<li>The classic algorithm for computing a DFT is the <em>Fast Fourier
+Transform</em>, which is what libraries will generally make available in
+different languages</li>
+</ul>
+</section>
+<section id="python-fft" class="slide level2">
+<h2>Python FFT</h2>
+<ul>
+<li>You can access functions to perform a FFT from several libraries in
+Python:
+<ul>
+<li>Numpy has it in <code class="python">np.fft</code>, and offers
+several variants</li>
+<li>Scipy has it in <code class="python">scipy.fft</code> and also
+offers several variants</li>
+</ul></li>
+<li>In both:
+<ul>
+<li>The <code class="python">fft</code> function will return complex
+output, symmetric about 0</li>
+<li>The <code class="python">rfft</code> function will return real
+output, only include positive frequencies</li>
+<li>The <code class="python">fftfreq</code> function will generate a
+list of the corresponding frequencies to plot the power spectrum
+against</li>
+</ul></li>
+</ul>
+</section>
+<section id="r-fft" class="slide level2">
+<h2>R FFT</h2>
+<ul>
+<li>In R, the FFT function is defined in the
+<code class="python">stats</code> library</li>
+<li>Only offers the <code class="python">fft</code> function, which will
+return complex output, symmetric about 0</li>
+<li>No function that corresponds to <code class="python">fftfreq</code>
+in Python</li>
+<li>I wrote an R package to give you this functionality:
+<code class="python">fftutils.r</code></li>
+</ul>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<ul>
+<li>Suppose I wanted to try to decompose the following wave into its
+various parts. Data available <a
+href="../demos/multi_wave.csv">here</a>. <img
+data-src="../images/python/multi_wave.png" /></li>
+</ul>
+<!--
+## The Inverse FFT
+- You can also go backwards!
+- The _Inverse Fourier Transform_ moves you back from the frequency-domain to the time-domain
+- In Python, this is given by `ifft`
+- In R, use the `inverse = TRUE` flag inside `fft`
+- Make it possible to filter out certain frequencies, and then transform back to a clean signal
+
+
+## Activity!
+- I've generated noisy data of a single oscillation [here](../demos/dopplerdata.csv).
+- Your task is to determine the period/frequency, filter out everything else, and then transform that signal back and plot it atop the original noise
+
+
+-->
+</section>
+<section id="quiz-time" class="slide level2">
+<h2>Quiz Time!</h2>
+<p>The remainder of class has been set aside to take Quiz 1.</p>
+<ul>
+<li>I brought some spare calculators if you want to borrow one</li>
+<li>Once you finish up, you are free to leave!</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>

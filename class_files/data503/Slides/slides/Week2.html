@@ -1,0 +1,2166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>The Source of Types and Commerce</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">The Source of Types and Commerce</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">January 25/30, 2024</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Did the first HW get submitted ok?
+<ul>
+<li>If you had any issues, let’s get them figured out before you leave
+tonight</li>
+</ul></li>
+<li>Homework 2 is posted!</li>
+<li>Starting next week, I like incorporating some in-class polling in
+many lectures to give you a chance to think (and stop listening to me).
+<ul>
+<li><a href="http:\rembold-class.ddns.net">rembold-class.ddns.net</a> to
+respond!</li>
+<li>No actual points associated with this.</li>
+</ul></li>
+<li>For next week:
+<ul>
+<li>DeBarros: Ch 6</li>
+</ul></li>
+</ul>
+<!--
+## The Big Picture
+- Data-intensive vs Compute-intensive
+  - More and more, the limiting factor is data-intensive operations
+- Applications to handle data-intensive tasks have common needs
+  - Storage of data so that it can later be found and retrieved (_databases_)
+  - Remember the result of costly operations, so as to not need to repeat them (_caching_)
+  - Search through or filter data in various ways (_indexing_)
+  - Send messages to other processes to handle certain tasks (_stream processing_)
+  - Periodically analyze a large amount of accumulated data (_batch processing_)
+- There are _many_ systems that can address one of these needs, but rarely all
+- How can we think about the tools and options to design a data system that fits our requirements?
+-->
+</section>
+<section id="the-primary-objectives" class="slide level2">
+<h2>The Primary Objective(s)</h2>
+<p>There are three main concerns when building any data system:</p>
+<dl>
+<dt>Reliability:</dt>
+<dd>
+The system works and is not prone to breakage
+</dd>
+<dt>Scalability:</dt>
+<dd>
+The system can grow as needs or data grows
+</dd>
+<dt>Maintainability:</dt>
+<dd>
+Future work on the system can be done productively
+</dd>
+</dl>
+</section>
+<section id="secondary-objective" class="slide level2">
+<h2>Secondary Objective</h2>
+<ul>
+<li>There are other high-level issues to consider as well
+<ul>
+<li>How do you ensure that the data remains correct and complete?</li>
+<li>How do you handle increased size or data load?</li>
+<li>How should your database interface with users?</li>
+<li>How will you handle errors or problems and the resulting
+downtime?</li>
+</ul></li>
+</ul>
+</section>
+<section id="external-factors" class="slide level2">
+<h2>External Factors</h2>
+<ul>
+<li>Oftentimes “outside” factors can also influence how your system can
+be build or managed
+<ul>
+<li>The skill and experience of developers and users</li>
+<li>Any legacy system dependencies</li>
+<li>Time-scale for delivery</li>
+<li>Your organization’s tolerance for risk</li>
+<li>Regulatory climate</li>
+</ul></li>
+</ul>
+</section>
+<section id="reliability" class="slide level2">
+<h2>Reliability</h2>
+<ul>
+<li><strong>The system should continue to work correctly, even when
+things go wrong.</strong>
+<ul>
+<li>The application should perform as the user expects</li>
+<li>The application has a reasonable tolerance for errors or unexpected
+use</li>
+<li>The application achieves the goals of the use case(s)</li>
+<li>The application prevents abuse or unauthorized access</li>
+</ul></li>
+</ul>
+</section>
+<section id="system-resilience" class="slide level2">
+<h2>System Resilience</h2>
+<ul>
+<li>A <em>fault</em> is anything that could go wrong in the use of a
+data system
+<ul>
+<li>Don’t necessarily have to break the entire system (system
+failure)</li>
+</ul></li>
+<li>A system that can tolerate faults without entirely breaking is said
+to be <em>resilient</em></li>
+<li>Faults are going to happen! The goal is to gracefully handle them
+and prevent system failure.</li>
+<li>You can not fully plan/mitigate every potential fault
+<ul>
+<li>At some point, you have to accept that the odds of some faults
+occurring are not worth the expense it would take to mitigate against
+them.</li>
+</ul></li>
+</ul>
+</section>
+<section id="fault-types" class="slide level2">
+<h2>Fault Types!</h2>
+<div class="cols" style="align-items: center">
+<div class="col" style="font-size:.9em">
+<dl>
+<dt>Hardware faults:</dt>
+<dd>
+<ul>
+<li>Not if, but <strong>when</strong> hardware will die!</li>
+</ul>
+</dd>
+<dt>Software faults:</dt>
+<dd>
+<ul>
+<li>Probably less likely, but potentially more devastating, as they tend
+to cascade.</li>
+</ul>
+</dd>
+<dt>Human faults:</dt>
+<dd>
+<ul>
+<li>Potentially the most common source</li>
+<li>Can be managed through careful planning and clear communication</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="col">
+<figure>
+<img data-src="../images/San_Andreas_Fault.png" style="width:60.0%"
+alt="Not this type" />
+<figcaption aria-hidden="true">Not this type</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="scalability" class="slide level2">
+<h2>Scalability</h2>
+<div class="cols" style="align-items:center">
+<div class="col">
+<figure>
+<img data-src="../images/plan4growth.png" style="width:100.0%"
+alt="Prepare for growth!" />
+<figcaption aria-hidden="true">Prepare for growth!</figcaption>
+</figure>
+</div>
+<div class="col">
+<ul>
+<li>As the demands on the data system grow, there should be reasonable
+options available for handling the increased demand.
+<ul>
+<li>Understanding <em>exactly</em> how a system’s demands might grow is
+usually impossible, but the idea is to have contingencies in place and
+routes where growth COULD happen.</li>
+<li>“If we grow in this way, what options would we have?”</li>
+</ul></li>
+<li>Requires being able to quantify when the system needs to grow!</li>
+</ul>
+</div>
+</div>
+<!--
+## Load and Performance
+- _Load_ is characterized by how much work your system is having to do
+  - Can vary from system to system, and often times might have several key factors
+  - Examples: number of requests/queries per second, amount of data to process per second, number of active users
+- Changes to load can yield changes in _performance_
+  - Often measure through metrics such as records processed per second, or speed of response time
+  - What is the typical case? -- _median_
+  - What are the worst cases? -- _95%, 99%, or 99.9%_
+
+![](../images/percentiles.png){width=90%}
+-->
+</section>
+<section id="common-scaling-options" class="slide level2">
+<h2>Common Scaling Options</h2>
+<dl>
+<dt>Scaling Up:</dt>
+<dd>
+<ul>
+<li>Moving everything over to a more powerful machine
+<ul>
+<li>Often times simpler</li>
+<li>Can get very expensive as the machine needs to get really
+powerful</li>
+</ul></li>
+</ul>
+</dd>
+<dt>Scaling Out:</dt>
+<dd>
+<ul>
+<li>Distributing the load across more machines
+<ul>
+<li>Can be more complicated, but each machine can be cheaper</li>
+<li>Need methods for deciding when more machines need to be added</li>
+</ul></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="maintainability" class="slide level2">
+<h2>Maintainability</h2>
+<ul>
+<li>Other people who work on the system <strong>should be able to work
+on it productively.</strong>
+<ul>
+<li>Time spent fixing things that broke because you didn’t account for
+them (and should have) is not productive time</li>
+<li>Time spent jumping back and forth between various systems trying to
+figure out how they are talking to one another because you
+over-complicated the system is not productive time</li>
+<li>Time spent having to unpack your system because you did not document
+it clearly is not productive time</li>
+</ul></li>
+<li>Non-productive time has very real monetary and resource allocation
+costs!</li>
+</ul>
+</section>
+<section id="achieving-maintainability" class="slide level2">
+<h2>Achieving Maintainability</h2>
+<div style="font-size:.9em">
+<ul>
+<li><em>Operability</em>
+<ul>
+<li>Make it easy for the operations team to keep the system running
+smoothly
+<ul>
+<li>Provide transparency in what the system is doing</li>
+<li>Provide excellent documentation of what will happen in specific
+instances</li>
+<li>Providing good default settings, but allowing manual control when
+necessary</li>
+</ul></li>
+</ul></li>
+<li><em>Simplicity</em>
+<ul>
+<li>Make it easy for others to understand the system, by removing as
+much complexity as possible
+<ul>
+<li>Limit complexity that comes just from an implementation</li>
+<li>Use good abstractions, where possible</li>
+</ul></li>
+</ul></li>
+<li><em>Evolvability</em>
+<ul>
+<li>Make it easy for others to make changes to the system in the future
+(you’ll never anticipate everything!)
+<ul>
+<li>Use <em>Agile</em> working patterns where possible</li>
+<li>Test-driven development can be useful</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="a-plunge-into-the-data-engineering-lifecycle"
+class="slide level2">
+<h2>A Plunge into the Data Engineering Lifecycle</h2>
+<ul>
+<li>Previously, we showcased the data lifecycle</li>
+</ul>
+<p><img
+data-src="../images/svg_cache/aa834106a9d941b7e8ed768d013e150e8fe6c1b8.svg"
+style="width:100.0%" /></p>
+</section>
+<section id="generation" class="slide level2">
+<h2>Generation</h2>
+<ul>
+<li>Data can come from a <strong>massive</strong> variety of
+sources</li>
+<li>It is up to the data engineer to understand all the different types
+of sources and how they might impact future parts of the data lifecycle
+<ul>
+<li>How long does the data persist in the source system?</li>
+<li>At what rate is the data generated?</li>
+<li>How often do errors or formatting issues occur?</li>
+<li>Could the data contain duplicates?</li>
+<li>What schema is used? What happens if it changes?</li>
+<li>How frequently should data be pulled from the source?</li>
+<li>Will reading from the source impact its performance?</li>
+</ul></li>
+</ul>
+</section>
+<section id="where-could-data-come-from" class="slide level2">
+<h2>Where Could Data Come From?</h2>
+<ul>
+<li>As we look toward ingesting data into our data pipeline, we need to
+know where it could be coming from
+<ul>
+<li>Files and unstructured data</li>
+<li>APIs</li>
+<li>Application databases</li>
+<li>Analytical databases</li>
+<li>Change Data Capture</li>
+<li>Logs</li>
+<li>Insert-only tables</li>
+<li>Messages and streams</li>
+</ul></li>
+</ul>
+</section>
+<section id="files" class="slide level2">
+<h2>Files</h2>
+<ul>
+<li>A universal method of data exchange</li>
+<li>File types each have their quirks and can come in a variety of
+structures
+<ul>
+<li>Structured
+<ul>
+<li>Excel, CSV</li>
+</ul></li>
+<li>Semi-structured
+<ul>
+<li>JSON, XML, CSV</li>
+</ul></li>
+<li>Unstructured
+<ul>
+<li>TXT</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="apis" class="slide level2">
+<h2>APIs</h2>
+<ul>
+<li>An <em>application programming interface</em>, or API, is a
+structure to enable requesting (or modifying) data from another
+system</li>
+<li>If well crafted, should in theory simply life for data
+engineers</li>
+<li>In practice, there are can be a wide variety of API formats, and
+each tends to be bespoke for the data is works with
+<ul>
+<li>Maintaining many custom API connections can still take considerable
+time and energy</li>
+</ul></li>
+</ul>
+</section>
+<section id="application-databases" class="slide level2">
+<h2>Application Databases</h2>
+<ul>
+<li>Sometimes called <em>transactional databases</em>, these are systems
+that specialize in <em>online transaction processing</em> (OLTP)</li>
+<li>Focus on supporting and enabling massive amounts of transactions
+with little latency</li>
+<li>Less suited for analytics, where one query might need to scan or
+process a vast amount of data</li>
+</ul>
+</section>
+<section id="trippin-acid" class="slide level2">
+<h2>Trippin’ ACID</h2>
+<ul>
+<li>Transaction databases will commonly support ACID characteristics
+<ul>
+<li><em>Atomicity</em>: related transactions all occur at the same time
+and as a group</li>
+<li><em>Consistency</em>: reading a value from the database will always
+return the latest value</li>
+<li><em>Isolation</em>: if two updates occur at seemingly the same time,
+the end database state will be consistent with the order they were
+sent</li>
+<li><em>Durability</em>: committed data will never be lost, even if
+power is lost</li>
+</ul></li>
+<li>Not all systems support all of these, as significant performance
+boosts can be had from relaxing some of these constraints</li>
+</ul>
+</section>
+<section id="analytical-databases" class="slide level2">
+<h2>Analytical Databases</h2>
+<ul>
+<li>Systems constructed to support mainly <em>online analytical
+processing</em> (OLAP) uses</li>
+<li>Constructed to quickly scan vast amounts of infomation and perform
+bulk aggregates</li>
+<li>Poorly suited for high amounts of transactions or lookups</li>
+</ul>
+</section>
+<section id="change-data-capture" class="slide level2">
+<h2>Change Data Capture</h2>
+<ul>
+<li>Extracts each <em>change</em> event that occurs on a database</li>
+<li>This is akin to tracking changes when you are editing a document:
+only the change is specified, not the absolute or original values</li>
+<li>Frequently used to replicate information between databases without
+actually needing to query the database</li>
+<li>Generally handled a bit differently depending on database type</li>
+</ul>
+<!--
+## CRUD and Insert-Only
+- Common transactions want to create, read, update, or delete data (often shortened to CRUD)
+- Insert-only tables retain history within the table itself, by never updating or removing data
+- All additions to the table are timestamped, and the current state of the table is the latest record value
+- Makes it easy to rewind, and you basically can't lose data
+- Can get very inefficient very quickly
+-->
+</section>
+<section id="logs" class="slide level2">
+<h2>Logs</h2>
+<ul>
+<li>Capture information about events happening on a system</li>
+<li>At a minimum, should include:
+<ul>
+<li><em>Who</em>: what human, computer, or service caused the
+event?</li>
+<li><em>What</em>: what actual event occurred?</li>
+<li><em>When</em>: when did the event transpire?</li>
+</ul></li>
+<li>Can be encoded in a variety of formats:
+<ul>
+<li>Binary encodings: fast and efficient but less flexible in how they
+can be used</li>
+<li>Semistructured logs: encoded as text in some serializable format
+(often JSON)</li>
+<li>Unstructured: essentially plain-text console output. Extracting
+needed information can be complicated</li>
+</ul></li>
+<li>Databases frequently store their own <em>write-ahead logs</em></li>
+</ul>
+</section>
+<section id="messages-and-streams" class="slide level2">
+<h2>Messages and Streams</h2>
+<ul>
+<li>A <em>message</em> is row data communicated across two or more
+systems
+<ul>
+<li>Once the message is received, it is deleted</li>
+<li>Frequently might use a message queue where messages wait until
+processed (and are then deleted)</li>
+</ul></li>
+<li>A stream is an append-only log of events
+<ul>
+<li>Can view as a running collection of the latest messages</li>
+<li>Events are ordered by some method (frequently timestamp)</li>
+<li>Let’s you look at trends across many events</li>
+</ul></li>
+</ul>
+</section>
+<section id="storage" class="slide level2">
+<h2>Storage</h2>
+<ul>
+<li>Every part of the lifecycle depends on some type of storage
+<ul>
+<li>Often, multiple types of storage may be used throughout the
+cycle</li>
+</ul></li>
+<li>Key things to keep in mind when evaluating storage options include:
+<ul>
+<li>Can this storage system keep up with the necessary read and write
+speeds?</li>
+<li>Do you understand the system well enough to know if you are using it
+non-optimally?</li>
+<li>Can the system scale over time (both in size and performance)?</li>
+<li>Is it pure object storage, or does it need to support complex
+queries?</li>
+<li>What schema system does the storage solution utilize?</li>
+<li>How hot or cold is the data you need to store?</li>
+</ul></li>
+</ul>
+</section>
+<section id="database-landscape" class="slide level2">
+<h2>Database Landscape</h2>
+<figure>
+<img data-src="../images/data_model_island.png" style="width:75.0%"
+alt="Data Model Island" />
+<figcaption aria-hidden="true">Data Model Island</figcaption>
+</figure>
+</section>
+<section id="a-choice" class="slide level2">
+<h2>A Choice</h2>
+<ul>
+<li>As can be seen from the air, there are a <em>lot</em> of potential
+database models</li>
+<li>Don’t try to have an in-depth understanding of them all!</li>
+<li>Understand the main groupings so that you can make informed choices
+about what might work best in your instance
+<ul>
+<li>All have pros and cons. No “one size fits all” approach is going to
+work.</li>
+<li>Working out what you need up front will save you lots of time (and
+effort) in the long run</li>
+</ul></li>
+</ul>
+<p><br> <img data-src="../images/data_models.png"
+style="width:50.0%" /></p>
+</section>
+<section id="relational-models" class="slide level2">
+<h2>Relational Models</h2>
+<ul>
+<li>Principle query language: SQL</li>
+<li>Built on series of tables with matched rows or values linking them
+(forming the “relationships”)</li>
+<li>Originally built largely for Business Data Processing
+<ul>
+<li>Realized later that it generalized surprisingly well for a much
+wider set of use cases</li>
+</ul></li>
+<li>Was widely adopted by the 80’s, and remains the most common and well
+known data model 40+ years later</li>
+</ul>
+<p><br> <img data-src="../images/friend_classes_schema.png"
+style="width:60.0%" /></p>
+</section>
+<section id="the-champion" class="slide level2">
+<h2>The Champion</h2>
+<div style="font-size:.9em">
+<ul>
+<li>Multiple other contenders and technology have arisen, but none have
+yet displaced SQL and relational models</li>
+<li>SQL does a lot of things very well, but it does have some issues:
+<ul>
+<li>Some datasets have a need for more scalability than relational
+databases can easily achieve</li>
+<li>Free and open source technologies are all the rage these days, and
+many flavors of SQL are still largely commercially run products</li>
+<li>Relational schema are restrictive, and some data needs more
+flexibility</li>
+<li>An object-oriented program <em>impedance mismatch</em>, owing to a
+disconnect in how each thing about information</li>
+</ul></li>
+<li>On the plus side, it handles one-to-many and many-to-many
+relationships decently well with its relationships, it just means the
+information is spread out over potentially many tables
+<ul>
+<li>The power of joins though means this information can be collected
+together quickly when needed</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="the-document-model" class="slide level2">
+<h2>The Document Model</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Sometimes referred to generally as NoSQL to highlight its
+differences from relational models</li>
+<li>Best for situations where data exists largely in self-contained
+documents and outside relationships are fairly rare</li>
+<li>Major examples: XML, JSON, MongoDB</li>
+<li>One-to-many relationships give rise to a tree structure</li>
+</ul>
+</div>
+<div class="col">
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="242.93298mm"
+   height="246.04034mm"
+   viewBox="0 0 242.93298 246.04034"
+   version="1.1"
+   id="svg5"
+   inkscape:export-filename="/home/jedediah/Teaching/DataEng/FundDE/Lectures/images/data_models.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="document_tree.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.66368547"
+     inkscape:cx="577.83396"
+     inkscape:cy="616.25577"
+     inkscape:window-width="2528"
+     inkscape:window-height="1381"
+     inkscape:window-x="1096"
+     inkscape:window-y="43"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-384.64743,8.3869042)">
+    <circle
+       style="fill:#a3be8c;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="path5930"
+       cx="518.90948"
+       cy="11.042206"
+       r="18.860405" />
+    <circle
+       style="fill:#81a1c1;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6012"
+       cx="519.62805"
+       cy="69.949684"
+       r="18.860405" />
+    <circle
+       style="fill:#81a1c1;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6014"
+       cx="431.10477"
+       cy="69.949684"
+       r="18.860405" />
+    <circle
+       style="fill:#81a1c1;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6016"
+       cx="608.15131"
+       cy="69.949684"
+       r="18.860405" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 503.24744,21.549744 446.76681,59.442146"
+       id="path6040"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#path5930"
+       inkscape:connection-end="#circle6014" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 519.13953,29.901199 0.25848,21.189492"
+       id="path6144"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#path5930"
+       inkscape:connection-end="#circle6012" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 534.64962,21.432086 57.76155,38.127718"
+       id="path6146"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#path5930"
+       inkscape:connection-end="#circle6016" />
+    <circle
+       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6282"
+       cx="404.07654"
+       cy="143.11349"
+       r="18.860405" />
+    <circle
+       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6284"
+       cx="451.73239"
+       cy="143.11349"
+       r="18.860405" />
+    <circle
+       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6286"
+       cx="520.43475"
+       cy="143.11349"
+       r="18.860405" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 424.56912,87.641289 410.61218,125.42189"
+       id="path6346"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6014"
+       inkscape:connection-end="#circle6282" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 436.22261,88.102088 10.39194,36.859002"
+       id="path6348"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6014"
+       inkscape:connection-end="#circle6284" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 519.83599,88.808813 0.39082,35.445557"
+       id="path6350"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6012"
+       inkscape:connection-end="#circle6286" />
+    <circle
+       style="fill:#b48ead;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6432"
+       cx="404.07654"
+       cy="218.22433"
+       r="18.860405" />
+    <circle
+       style="fill:#b48ead;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6434"
+       cx="496.57126"
+       cy="218.22433"
+       r="18.860405" />
+    <circle
+       style="fill:#b48ead;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6436"
+       cx="550.32861"
+       cy="218.22433"
+       r="18.860405" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 404.07654,161.9739 v 37.39003"
+       id="path6478"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6282"
+       inkscape:connection-end="#circle6432" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 514.72393,161.08842 -12.44185,39.16099"
+       id="path6480"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6286"
+       inkscape:connection-end="#circle6434" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 527.409,160.63687 15.94537,40.06409"
+       id="path6482"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6286"
+       inkscape:connection-end="#circle6436" />
+  </g>
+</svg>
+</p>
+</div>
+</div>
+</section>
+<section id="the-document-model-proscons" class="slide level2">
+<h2>The Document Model Pros/Cons</h2>
+<ul>
+<li>Strength of the document model:
+<ul>
+<li>It handles one-to-many relationships very well</li>
+<li>More closely mimics object-oriented programming, so less impedance
+mismatch</li>
+<li>Schema are generally quite flexible: not every record has to have
+the exact same information</li>
+<li>Data is generally stored together or close to related data, so
+lookups can be fairly efficient</li>
+</ul></li>
+<li>Weaknesses of the document model
+<ul>
+<li>Struggles more with many-to-many relationships</li>
+<li>Joins are more difficult, and possibly need to be done entirely
+outside the database in some cases</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-graph-model" class="slide level2">
+<h2>The Graph Model</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Primarily deals with data with lots of many-to-many
+relationships</li>
+<li>Relational databases can do this to some extent, but graph models do
+it really well</li>
+<li>Broken up into:
+<ul>
+<li>Vertices: the information</li>
+<li>Edges: the connections</li>
+</ul></li>
+<li>Examples: Cypher, SparQL</li>
+</ul>
+</div>
+<div class="col">
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="246.42206mm"
+   height="261.45273mm"
+   viewBox="0 0 246.42205 261.45272"
+   version="1.1"
+   id="svg5"
+   inkscape:export-filename="/home/jedediah/Teaching/DataEng/FundDE/Lectures/images/data_models.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="graph_tree.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.66368547"
+     inkscape:cx="462.17661"
+     inkscape:cy="513.05449"
+     inkscape:window-width="2528"
+     inkscape:window-height="1381"
+     inkscape:window-x="1096"
+     inkscape:window-y="43"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-385.40628,8.3869042)">
+    <circle
+       style="fill:#a3be8c;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="path5930"
+       cx="518.90948"
+       cy="11.042206"
+       r="18.860405" />
+    <circle
+       style="fill:#81a1c1;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6012"
+       cx="564.88049"
+       cy="107.91157"
+       r="18.860405" />
+    <circle
+       style="fill:#81a1c1;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6014"
+       cx="440.42334"
+       cy="34.155361"
+       r="18.860405" />
+    <circle
+       style="fill:#b48ead;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6016"
+       cx="612.34399"
+       cy="58.437183"
+       r="18.860405" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 500.81758,16.370039 458.51525,28.827528"
+       id="path6040"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#path5930"
+       inkscape:connection-end="#circle6014" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 526.99559,28.081121 29.7988,62.791531"
+       id="path6144"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#path5930"
+       inkscape:connection-end="#circle6012" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 535.72942,19.574176 59.79464,30.331037"
+       id="path6146"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#path5930"
+       inkscape:connection-end="#circle6016" />
+    <circle
+       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6282"
+       cx="404.83539"
+       cy="127.75301"
+       r="18.860405" />
+    <circle
+       style="fill:#bf616a;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6284"
+       cx="477.89328"
+       cy="91.187714"
+       r="18.860405" />
+    <circle
+       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6286"
+       cx="505.0946"
+       cy="178.9637"
+       r="18.860405" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 433.72048,51.784138 411.53825,110.12424"
+       id="path6346"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6014"
+       inkscape:connection-end="#circle6282" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 450.77924,49.917903 16.75814,25.507269"
+       id="path6348"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6014"
+       inkscape:connection-end="#circle6284" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 552.73748,122.34285 -35.49986,42.18956"
+       id="path6350"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6012"
+       inkscape:connection-end="#circle6286" />
+    <circle
+       style="fill:#88c0d0;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6432"
+       cx="427.0943"
+       cy="209.22621"
+       r="18.860405" />
+    <circle
+       style="fill:#bf616a;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6434"
+       cx="566.5946"
+       cy="233.63672"
+       r="18.860405" />
+    <circle
+       style="fill:#88c0d0;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="circle6436"
+       cx="612.39923"
+       cy="160.54115"
+       r="18.860405" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 409.80591,145.94637 12.31787,45.08648"
+       id="path6478"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6282"
+       inkscape:connection-end="#circle6432" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 519.19014,191.49452 33.30893,29.61137"
+       id="path6480"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6286"
+       inkscape:connection-end="#circle6434" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 523.68287,175.77238 70.12809,-12.03991"
+       id="path6482"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6286"
+       inkscape:connection-end="#circle6436" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 496.41415,94.74847 49.94548,9.60234"
+       id="path6705"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6284"
+       inkscape:connection-end="#circle6012" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 483.47599,109.20256 16.03591,51.74629"
+       id="path6707"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6284"
+       inkscape:connection-end="#circle6286" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 576.60926,217.65521 25.77531,-41.13254"
+       id="path6709"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6434"
+       inkscape:connection-end="#circle6436" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 612.38903,141.68081 612.3542,77.297526"
+       id="path6711"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#circle6436"
+       inkscape:connection-end="#circle6016" />
+  </g>
+</svg>
+</p>
+</div>
+</div>
+</section>
+<section id="our-powers-combined" class="slide level2">
+<h2>Our Powers Combined</h2>
+<blockquote>
+<p>“It seems that relational and document databases are becoming more
+similar over time, and that is a good thing: the data models complement
+each other. If a database is able to handle document-like data and also
+perform relational queries on it, applications can use the combination
+of features that best fits their needs. A hybrid of the relational and
+document models is a good route for databases to take in the
+future.”</p>
+</blockquote>
+</section>
+<section id="declarative-vs-imperative" class="slide level2">
+<h2>Declarative vs Imperative</h2>
+<div class="cols">
+<div class="col">
+<div class="block" name="Imperative">
+<ul>
+<li>Tells the computer exactly what you want to have happen and in what
+order</li>
+<li>The way most programming languages work</li>
+<li>Pros:
+<ul>
+<li>Fine grain control</li>
+<li>Highly flexible</li>
+</ul></li>
+<li>Cons:
+<ul>
+<li>Usually more verbose</li>
+<li>Changes would generally break queries</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div class="col">
+<div class="block" name="Declarative">
+<ul>
+<li>Tells the computer what you would like to have occur</li>
+<li>Leaves the details up to the system for how to accomplish that</li>
+<li>Pros:
+<ul>
+<li>More concise and easier to work with</li>
+<li>Abstracts away the complexity, so background work won’t break
+queries</li>
+</ul></li>
+<li>Cons
+<ul>
+<li>Need to operate within allowed bounds</li>
+<li>Sometimes less transparency in what is occurring behind the
+scenes</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<!--
+## Ingestion
+- Ingestion is the act of getting the information from source and bringing it into your domain
+- Questions to ask:
+  - What are my use cases for this data? Can I reuse the data instead of creating multiple versions?
+  - What is the data destination after ingestion?
+  - In what volume with the data typically arrive?
+  - What format is the data in? Can my downstream systems handle that format?
+  - Would a streaming or batch ingestion approach be better for my needs?
+  - Will I need to pull the data from the source, or is it being pushed to me?
+
+
+## Transformation
+- Need to move the data into a useful form for downstream usage
+- Basic transformations are things like: mapping data to correct types, putting records in a standard format, and removing bad records
+- Further transformations may do things like: change the schema, apply some type of normalization, apply large-scale aggregation or featurize data
+- Some important questions include:
+  - What is the associate business value of doing this transformation?
+  - Is the transformation as simple and isolated as possible?
+
+
+## Serving
+- Data has to be used for practical purposes to actually have _value_
+- Who is the end user of this data?
+  - Analytics
+    - Operational: what is happening **now**?
+    - Business intelligence: what are current trends?
+    - Embedded: enables customers to view trends
+  - Machine Learning
+    - Can some feature engineering be built into the lifecycle?
+    - Is the data discoverable for ML engineers to find and use?
+  - Reverse ETL
+    - Feeding the data back into source systems
+    - Still pretty nacent as a name or accepted practice
+-->
+</section>
+<section id="break-time" class="slide level2">
+<h2>Break Time</h2>
+<ul>
+<li>Get some food and relax!</li>
+</ul>
+<!--
+## Pattern Matching
+- `LIKE` and `ILIKE` differ only in whether capitalization matters in the match
+  - `LIKE` is capitalization sensitive, `ILIKE` is not
+- Each can use several special characters in the desired pattern
+  - `%` is a wildcard matching one or more of any character
+  - `_` is a wildcard matching just a single character
+  - If you want to actually match off one of these characters, you need to "escape" it with a backslash (`\_` or `\%`)
+
+
+## Conditional Combinations
+- Often, you might need to filter or several or more complicated conditions
+- SQL also has the boolean `AND` and `OR` operators that you can use to stitch together multiple conditions
+- Order of operations is not guaranteed! So surround terms in parentheses if you need them evaluated earlier
+  ```pgsql
+  SELECT *
+  FROM table_name
+  WHERE colname1 LIKE 'F%' AND
+        (colname2 > 50 OR colname3 <= 10);
+  ```
+
+## Reaching Your Limit
+- Often times, especially if sorting, you may not even be interested in _all_ the results
+- Maybe you just want the first few, or even just the first result
+- You can control the maximum number of rows returned using `LIMIT`
+- Comes last, after all the other keywords:
+  ```pgsql
+  SELECT * FROM table_name
+  WHERE some_condition
+  ORDER BY column1
+  LIMIT 5;
+  ```
+-->
+<!--
+## Understanding Check
+
+::::::cols
+::::col
+Suppose a table had been created using the SQL statement to the right. How would you then query for the most recent number of positive cases from a university (school with "University" in its name)?
+::::
+
+::::{.col style='flex-grow:1'}
+
+```{.pgsql style="font-size:.8em;"}
+CREATE TABLE cases (
+  id BIGSERIAL,
+  school_name VARCHAR(50),
+  case_positive INT,
+  tests_run INT,
+  date_taken DATE
+);
+```
+
+::::
+::::::
+
+::::::cols
+::::col
+:::{.block name=A}
+```{.pgsql style="font-size:.8em;"}
+SELECT case_positive FROM cases
+WHERE school_name LIKE '_University_'
+ORDER BY date_taken;
+```
+:::
+
+:::{.block name=C}
+```{.pgsql style="font-size:.8em;"}
+SELECT case_positive FROM cases
+WHERE school_name LIKE '%University%'
+ORDER BY case_positive DESC, 
+         date_taken DESC;
+```
+:::
+
+::::
+
+::::col
+:::{.block name=B}
+```{.pgsql style="font-size:.8em;"}
+SELECT case_positive FROM cases
+WHERE school_name LIKE '_University_'
+ORDER BY date_taken DESC;
+```
+:::
+:::{.block name=D}
+```{.pgsql style="font-size:.8em;"}
+SELECT case_positive FROM cases
+WHERE school_name LIKE '%University%'
+ORDER BY date_taken DESC;
+```
+:::
+
+::::
+::::::
+-->
+</section>
+<section id="data-type-fundamentals" class="slide level2">
+<h2>Data Type Fundamentals</h2>
+<ul>
+<li>Each column in a table can only have data of a
+<strong>single</strong> type
+<ul>
+<li>Or be missing an entry, designated with a special
+<code class="python">NULL</code> entry</li>
+</ul></li>
+<li>Assigning the correct data types of columns can
+<ul>
+<li>Improve memory allocations</li>
+<li>Improve performance</li>
+<li>Prevent errors in data entry</li>
+<li>Prevent mistakes in calculations</li>
+</ul></li>
+<li>Postgres can accept a <em>large</em> number of data types, but today
+we will focus in depth on the most common: characters, numbers, and
+dates and times</li>
+</ul>
+</section>
+<section id="characters-or-text" class="slide level2"
+data-notes="Example after this">
+<h2 data-notes="Example after this">Characters or Text</h2>
+<div style="font-size:.9em">
+<ul>
+<li>One of the more common things to be stored are characters or
+sequences of characters</li>
+<li>Postgres has several types you can use to store this sort of
+information:
+<ul>
+<li><code class="python">CHAR(n)</code>: A fixed length column of
+<em>n</em> characters. <strong>Always</strong> uses this amount of
+characters, padding with spaces if your stored sequence of characters is
+shorter.
+<ul>
+<li>Omitting the <code class="python">(n)</code> is the same as
+<code class="pgsql">CHAR(1)</code></li>
+</ul></li>
+<li><code class="python">VARCHAR(n)</code>: A variable length column
+with a <strong>maximum</strong> of <em>n</em> characters. If your stored
+sequence is smaller, then no padding is done and the data is stored as
+is.
+<ul>
+<li>Omitting the <code class="python">(n)</code> is the same as
+<code class="pgsql">TEXT</code></li>
+</ul></li>
+<li><code class="python">TEXT</code><span class="orange">★</span>: A
+variable length column of “unlimited length” (about 1 GB).</li>
+</ul></li>
+<li>In Postgres (unlike in some other variants) there is not really a
+difference in performance between all 3 types</li>
+</ul>
+</div>
+<br>
+<hr>
+<div style="font-size:.8em">
+<p><span class="orange">★</span> – Postgres specific, though similar
+implementations exist in other variants</p>
+</div>
+</section>
+<section id="character-takeaways" class="slide level2">
+<h2>Character Takeaways</h2>
+<ul>
+<li>In general, don’t use <code class="python">CHAR</code> unless what
+you are storing is <em>always</em> a given length of characters
+<ul>
+<li>State abbreviations for instance, or possibly other single character
+encodings</li>
+</ul></li>
+<li>Use <code class="python">VARCHAR</code> or
+<code class="python">TEXT</code> in most situations
+<ul>
+<li><code class="python">VARCHAR</code> is more portable, but make sure
+to choose a max that is well above whatever your longest sequence of
+characters could be</li>
+<li>Can also choose <code class="python">VARCHAR</code> if you
+<em>want</em> an error to be output if too many characters are
+entered</li>
+<li>If you don’t mind being Postgres specific,
+<code class="python">TEXT</code> should always work</li>
+</ul></li>
+</ul>
+</section>
+<section id="numbers" class="slide level2">
+<h2>Numbers</h2>
+<ul>
+<li>Important to be able to do built-in math calculations on
+columns</li>
+<li>If the information you want to store is numeric, always use a
+numeric data type rather than the characters of a number</li>
+<li>A few different options for numbers:
+<ul>
+<li><em>Integers</em>: whole numbers (positive and negative)</li>
+<li><em>Fixed-point</em> and <em>Floating-point</em>: fractions of whole
+numbers (also positive and negative)</li>
+</ul></li>
+<li>For each there are several data types that you can choose from,
+largely depending on the size of the numbers you are expecting.</li>
+</ul>
+</section>
+<section id="integers" class="slide level2">
+<h2>Integers</h2>
+<ul>
+<li>Probably the most common form of number you will use in a
+database</li>
+<li>Can use 3 different data types in SQL to represent an integer
+<ul>
+<li>Differ just in the size of the numbers they can hold <!----></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Size</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">SMALLINT</code></td>
+<td>2 bytes</td>
+<td>±32,767</td>
+</tr>
+<tr class="even">
+<td><code class="python">INTEGER</code></td>
+<td>4 bytes</td>
+<td>±2,147,483,648</td>
+</tr>
+<tr class="odd">
+<td><code class="python">BIGINT</code></td>
+<td>8 bytes</td>
+<td>±9,223,372,036,854,775,808</td>
+</tr>
+</tbody>
+</table></li>
+<li><code class="python">SMALLINT</code> is generally only used if disk
+space is at a premium</li>
+<li>Probably only use <code class="python">BIGINT</code> if sure that
+<code class="python">INTEGER</code> is insufficient</li>
+</ul>
+</section>
+<section id="serial-integers" class="slide level2">
+<h2>Serial Integers</h2>
+<ul>
+<li>If you want a column to be auto-incrementing, you can use the serial
+form of the integer types:
+<ul>
+<li><code class="python">SMALLSERIAL</code></li>
+<li><code class="python">SERIAL</code></li>
+<li><code class="python">BIGSERIAL</code></li>
+</ul></li>
+<li>Have the same allowed ranges as their integer counterparts</li>
+<li>No need to specify that column when adding a row: Postgres will
+automatically increment and add it</li>
+<li>While each increment will be unique, you may not have perfect even
+intervals
+<ul>
+<li>Removed row values are not reused</li>
+<li>If an <code class="python">INSERT</code> is interrupted because of
+an error, that unique integer is basically skipped</li>
+</ul></li>
+</ul>
+</section>
+<section id="fixed-point-numbers" class="slide level2">
+<h2>Fixed-Point Numbers</h2>
+<ul>
+<li>Represents a fractional value</li>
+<li>Two methods of writing:
+<ul>
+<li><code class="python">NUMERIC(precision, scale)</code></li>
+<li><code class="python">DECIMAL(precision, scale)</code></li>
+</ul></li>
+<li><em>precision</em> is a positive integer representing the max total
+number of digits comprising the number (on both sides of the decimal
+point)
+<ul>
+<li>If provided, needs to be between 1 and 1000</li>
+</ul></li>
+<li><em>scale</em> is a positive integer representing the total number
+of digits to the right of the decimal point</li>
+<li>Will round or pad the decimal digits with 0’s if needed to get the
+correct number of digits after the decimal</li>
+<li>Will return an error if the input number can’t fit within the
+precision</li>
+</ul>
+</section>
+<section id="fixed-point-examples" class="slide level2">
+<h2>Fixed-Point Examples</h2>
+<ul>
+<li>Consider the number: 192.837465</li>
+<li>In various fixed-point formats:
+<ul>
+<li><code class="python">NUMERIC(5,2)</code> = 192.84</li>
+<li><code class="python">NUMERIC(10,2)</code> = 192.84</li>
+<li><code class="python">NUMERIC(15,10)</code> = 192.8374650000</li>
+<li><code class="python">NUMERIC(6,3)</code> = 192.837</li>
+<li><code class="python">NUMERIC(4,2)</code> =
+<strong>ERROR</strong></li>
+</ul></li>
+<li>If you don’t include inputs:
+<ul>
+<li><code class="python">NUMERIC(5)</code> = 193
+<ul>
+<li>Treats the scale as 0</li>
+</ul></li>
+<li><code class="python">NUMERIC</code> = 192.837465
+<ul>
+<li>Will store up to the maximum precision and scale allowed (131,072
+digits before and 16,383 digits after the decimal, lol)</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="floating-point-numbers" class="slide level2">
+<h2>Floating-Point Numbers</h2>
+<ul>
+<li>Still represents a fractional value</li>
+<li>Differs from Fixed-Point in that they use exponents to store the
+information, so the decimal point could “float”</li>
+<li>Two data types that can be used:
+<ul>
+<li><code class="python">REAL</code></li>
+<li><code class="python">DOUBLE PRECISION</code></li>
+</ul></li>
+<li>They differ just in their precision (and how much storage space they
+take)
+<ul>
+<li><code class="python">REAL</code> will show at most 9 significant
+digits and takes up 4 bytes</li>
+<li><code class="python">DOUBLE PRECISION</code> will show at most 17
+significant digits and takes up 8 bytes</li>
+</ul></li>
+</ul>
+</section>
+<section id="floating-pitfalls" class="slide level2">
+<h2>Floating Pitfalls</h2>
+<ul>
+<li>Float-point representations are computed using binary math to make
+them easy to store in the computer</li>
+<li>Some fractional values cannot be perfectly captured with a binary
+decimal though
+<ul>
+<li>In the same way that we can’t <em>exactly</em> write 1/3 as a
+decimal</li>
+</ul></li>
+<li>Postgres will use the best approximation that it can given the
+precision, but it is still an approximation!</li>
+<li>Takeaways:
+<ul>
+<li><strong>Do not use floating-point values if you will be doing
+sensitive calculations with the numbers!</strong>
+<ul>
+<li>i.e. money</li>
+</ul></li>
+<li>Comparing two float-point values for equality might not work as
+expected, due to these tiny approximations
+<ul>
+<li>Better to check if greater or less than, or within a small interval
+around the desired value</li>
+</ul></li>
+</ul></li>
+</ul>
+<!--
+## Understanding Check!
+
+::::::cols
+::::col
+<br>
+A table is made as shown to the right. Only one of the rows below could be added to that table using `INSERT INTO` without causing an error. Which row could be successfully added?
+::::
+
+::::col
+```pgsql
+CREATE TABLE revq (
+  col1 CHAR(2),
+  col2 VARCHAR(10),
+  col3 SMALLINT,
+  col4 NUMERIC(3,2),
+  col5 REAL
+);
+```
+::::
+::::::
+
+Answer | col1 | col2 | col3 | col4 | col5
+--- | --- |--- |---|---|---
+A | 'OR' | 'Hello!' | 30200 | 12.2 | 3.14
+B | '12' | 'How odd!' | 43210 | 2.23 | 2.718281828
+C | 'OK' | 'Puzzling.' | 13.6 | 1.1 | 1.41
+D | 'C' | 'Mysterious...' | 2132 | 8 | 1.618
+
+-->
+</section>
+<section id="dates-and-times" class="slide level2">
+<h2>Dates and Times</h2>
+<ul>
+<li>One very nice aspect of all SQL databases is that they can work with
+times and dates very easily, assuming the correct data type is used
+<ul>
+<li>This shouldn’t be trivialized! Working with times and dates is often
+a <strong>pain</strong> given all the complexities of the Gregorian
+calendar, time zones, daylight savings time, etc.</li>
+</ul></li>
+<li>Approximately 4 major time and date data types, summarized in the
+below table</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Storage Size</th>
+<th>Lowest</th>
+<th>Highest</th>
+<th>Resolution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">DATE</code></td>
+<td>4 bytes</td>
+<td>4713 BC</td>
+<td>5874897 AD</td>
+<td>1 day</td>
+</tr>
+<tr class="even">
+<td><code class="python">TIME</code></td>
+<td>8 bytes</td>
+<td>00:00:00</td>
+<td>24:00:00</td>
+<td>1 μs</td>
+</tr>
+<tr class="odd">
+<td><code class="python">TIMESTAMP</code></td>
+<td>8 bytes</td>
+<td>4713 BC</td>
+<td>294276 AD</td>
+<td>1 μs</td>
+</tr>
+<tr class="even">
+<td><code class="python">INTERVAL</code></td>
+<td>16 bytes</td>
+<td>-178000000 yrs</td>
+<td>-178000000 yrs</td>
+<td>1 μs</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dates" class="slide level2">
+<h2>DATES</h2>
+<ul>
+<li>Holds information for a single day
+<ul>
+<li>No information about time</li>
+</ul></li>
+<li>Data needs to be enclosed in single quotes, like text strings</li>
+<li>Postgres can actually correctly parse a ridiculous number of ways of
+writing the date, but you can never go wrong with the ISO standard of
+YYYY-MM-DD</li>
+<li>Other acceptable variants include:</li>
+</ul>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">January 18, 2022</td>
+<td style="text-align: left;">1/18/2022</td>
+<td style="text-align: left;">01/18/22</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2022-Jan-18</td>
+<td style="text-align: left;">18-Jan-2022</td>
+<td style="text-align: left;">Jan-18-22</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">20220118</td>
+<td style="text-align: left;">Jan 18, 22</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="times" class="slide level2">
+<h2>Times</h2>
+<ul>
+<li>Holds information about a single time
+<ul>
+<li>No information about date is stored</li>
+<li>A date CAN be included, but it is largely ignored</li>
+</ul></li>
+<li>Still needs to be enclosed in single quotes</li>
+<li>Has variants that are both with and without timezone
+<ul>
+<li><code class="python">TIME</code> is technically without
+timezone</li>
+<li><code class="python">TIME WITH TIME ZONE</code> is, as expected,
+including a timezone
+<ul>
+<li>Postgres has a shorthand notation for this, called
+<code class="python">TIMETZ</code><span class="orange">★</span></li>
+<li>Due to the way timezones are stored and some issues that arise,
+using this data type is generally discouraged.</li>
+</ul></li>
+</ul></li>
+<li>ISO time formats looks like HH:MM:SS.FFFF, where the hours are on
+the <strong>24 hour clock</strong></li>
+<li>Other formats are accepted, including</li>
+</ul>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">16:05:06</td>
+<td style="text-align: left;">16:05</td>
+<td style="text-align: left;">04:05 PM</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">04:05:06.123 PM</td>
+<td style="text-align: left;">04:05:06 AM</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="timezones" class="slide level2">
+<h2>Timezones</h2>
+<ul>
+<li>If specifying a timezone, it comes after the time and there are a
+few ways to describe it:
+<ul>
+<li>Abbreviation: PST (for Pacific Standard Time)</li>
+<li>Full name: America/Los_Angeles
+<ul>
+<li>This method requires you to enter the date as well, so that it can
+tell if daylight savings is active or not!</li>
+</ul></li>
+<li>UTC Offset: -8 (our clocks are currently 8 hours behind GMT)</li>
+</ul></li>
+<li>If no timezone is specified, but the field requires one, the system
+timezone is used</li>
+<li>Examples of times with time zones:
+<ul>
+<li>04:05:06 PM PST</li>
+<li>2022-01-18 16:05:06 America/Los_Angeles</li>
+<li>16:05:06-8</li>
+</ul></li>
+</ul>
+</section>
+<section id="timestamps" class="slide level2">
+<h2>Timestamps</h2>
+<ul>
+<li>A <code class="python">TIMESTAMP</code> field holds basically both a
+time and a date</li>
+<li>The date portion always needs to come first</li>
+<li>The same properties and formats that apply to each individually
+apply here as well</li>
+<li>Also have the option of with or without a timezone
+<ul>
+<li><code class="python">TIMESTAMP</code> by itself is without a
+timezone, as per SQL standards</li>
+<li><code class="python">TIMESTAMP WITH TIME ZONE</code> is with a
+timezone. Shorthand in Postgres is
+<code class="python">TIMESTAMPTZ</code><span
+class="orange">★</span></li>
+</ul></li>
+<li>Internally, timestamps with a timezone are always <em>stored</em> in
+UTC, but then when displayed are converted back to the local
+timezone</li>
+<li>Examples:
+<ul>
+<li>2022-01-18 14:30:00</li>
+<li>Jan-18-2022 2:30 PM PST</li>
+</ul></li>
+</ul>
+</section>
+<section id="intervals" class="slide level2">
+<h2>Intervals</h2>
+<ul>
+<li>Represents a span of time</li>
+<li>Generally given by first a number and then by a unit
+<ul>
+<li>Possible units: microsecond, millisecond, second, minute, hour, day,
+week, month, year, decade, century, millennium</li>
+<li>Abbreviations or plurals of the above also work</li>
+</ul></li>
+<li>Examples:
+<ul>
+<li>1 day</li>
+<li>3 century 2 mins</li>
+<li>45 ms</li>
+<li>1 mon 87 us</li>
+</ul></li>
+<li>Intervals can be used in calculations with other date/time data
+types
+<ul>
+<li>Can also be used in comparisons if subtracting timestamps</li>
+</ul></li>
+</ul>
+</section>
+<section id="more" class="slide level2">
+<h2>MORE!</h2>
+<ul>
+<li>These are just a small sample of some of the most common data
+types</li>
+<li>Postgres supports <em>many</em> more!
+<ul>
+<li>Booleans</li>
+<li>Geometric types</li>
+<li>Network address types</li>
+<li>JSON types</li>
+<li>A full list can be found <a
+href="https://www.postgresql.org/docs/14/datatype.html">here</a></li>
+</ul></li>
+<li>We’ll address others as the come up sporadically through the rest of
+the semester, but you have the core basics now</li>
+</ul>
+</section>
+<section id="conversions" class="slide level2">
+<h2>Conversions</h2>
+<ul>
+<li><p>There are plenty of instances where you may need to convert
+between types</p>
+<ul>
+<li>Sometimes calculations (coming soon!) need a certain data type</li>
+<li>Sometimes the information was just not stored in the most ideal
+type</li>
+</ul></li>
+<li><p>Can use the <code class="python">CAST</code> function to convert
+between data types (where it makes sense)</p></li>
+<li><p>Core syntax is</p>
+<pre ><code class="pgsql">CAST(|||column name||| AS |||new data type|||)</code></pre></li>
+<li><p>Postgres has a shorthand conversion syntax that uses double
+colons:</p>
+<pre ><code class="pgsql">|||column name|||::|||new data type|||</code></pre></li>
+<li><p>Be aware that casting data to a text string with a maximum size
+smaller than the data will <em>truncate</em> the conversion to get it to
+fit, <em>not</em> give an error.</p></li>
+</ul>
+</section>
+<section id="sql-io" class="slide level2">
+<h2>SQL I/O</h2>
+<ul>
+<li><code class="python">INSERT INTO</code> is great for small tables or
+adding a few rows, not so great for bulk populating of a table</li>
+<li>Frequently, data is stored in delimited text files for flexibility
+and portability</li>
+<li>Postgres can import data from <em>or</em> write data to these sorts
+of delimited text files using its <code class="python">COPY</code>
+command
+<ul>
+<li>This command is Postgres specific, though other SQL variants have
+their similar methods</li>
+</ul></li>
+<li>Postgres needs to have permission to access the file or folder in
+order to import or export!
+<ul>
+<li>If having issues:
+<ul>
+<li>On Windows: The <code class="python">C:\Users\Public</code> should
+be universally accessible</li>
+<li>On Mac: The <code class="python">/tmp</code> folder should be
+universally accessible, or just give the
+<code class="python">postgres</code> user read/write access to a folder
+of your choosing</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="delimited-files" class="slide level2">
+<h2>Delimited Files</h2>
+<div style="font-size:.9em">
+<ul>
+<li>A delimited text file simply uses a special character, called the
+<em>delimiter</em>, to indicate where column breaks should be</li>
+<li>Otherwise, each line contains the information for a single row</li>
+<li>Most common delimiter is the comma, and hence the term CSV or
+“Comma-Separated Values”
+<ul>
+<li>Basically any character can be used as a delimiter though, so you
+might need to adjust sometimes</li>
+</ul></li>
+<li>If the delimiter naturally appears in an entry, and isn’t indicating
+a column break, then that entry needs to be surrounded with a <em>text
+qualifier</em>
+<ul>
+<li>The most common text qualifier is a pair of double quotes, but it
+could be other symbols</li>
+</ul></li>
+<li>Often times, the first row of the file is a delimited description of
+each column name or what it represents
+<ul>
+<li>Not always present, in which case you (hopefully) have other
+documentation to consult to understand the column meanings</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="an-office-ial-csv" class="slide level2">
+<h2>An Office-ial CSV</h2>
+<pre ><code class="text">id,first_name,last_name,birthday
+1,Michael,Scott,"Mar 15, 1964"
+2,Dwight,Schrute,"Jan 20, 1970"
+3,Pam,Beesly,"Mar 25, 1979"
+4,Jim,Halpert,"Oct 1, 1978"
+5,Kelly,Kapoor,"Feb 5, 1980"</code></pre>
+<ul>
+<li>Note:
+<ul>
+<li>The birthday column entries are quoted owing to the comma within
+them</li>
+<li>No spaces show up anywhere except within quoted blocks</li>
+<li>The first line contains a header, which is useful for understanding
+but contains no actual data</li>
+<li>Make sure you have no empty line at the end!</li>
+</ul></li>
+</ul>
+</section>
+<section id="importing-data" class="slide level2">
+<h2>Importing Data</h2>
+<ul>
+<li><p>The <code class="python">COPY</code> command will copy
+information into an <em>existing</em> table, it won’t create the
+table</p>
+<ul>
+<li>Thus you are still responsible for creating the table (and
+associated data types for each column) before
+<code class="python">COPY</code> will be useful
+<ul>
+<li>Yes, this can still be painful for huge tables. There are some
+scripts that can help with it or do some automated checking, but they
+tend to be far from perfect.</li>
+</ul></li>
+</ul></li>
+<li><p>Syntax of the <code class="python">COPY</code> statement:</p>
+<pre ><code class="pgsql">COPY |||table name|||
+FROM |||full path to filename|||
+WITH ( |||import options||| );</code></pre></li>
+</ul>
+</section>
+<section id="importing-details" class="slide level2">
+<h2>Importing Details</h2>
+<ul>
+<li>The full text filename needs to be the entire path that points to
+your file
+<ul>
+<li>On Windows, that would start with
+<code class="python">C:\</code></li>
+<li>On MacOS, that would start with <code class="python">/</code></li>
+</ul></li>
+<li>You have a basic selection of import options:
+<ul>
+<li><code class="python">FORMAT CSV</code> sets the delimiter to a comma
+and the default text qualifier to double quotes</li>
+<li><code class="python">HEADER</code> specifies that there is a header,
+and so the first row of the file should be skipped</li>
+<li><code class="python">DELIMITER 'x'</code> sets
+<code class="python">x</code> to be the delimiter instead of the default
+comma (or tab)</li>
+<li><code class="python">QUOTE 'x'</code> sets
+<code class="python">x</code> to be the new text qualifier, instead of
+double quotes</li>
+</ul></li>
+<li>If you run the <code class="python">COPY</code> command multiple
+times, it will just keep adding the CSV contents to the end of the
+current table</li>
+</ul>
+</section>
+<section id="subset-imports" class="slide level2">
+<h2>Subset Imports</h2>
+<ul>
+<li><p>Sometimes an CSV might not have <em>all</em> the data you want in
+your SQL table</p></li>
+<li><p>You can import all the information from the CSV into only a
+subset of the SQL table columns</p>
+<ul>
+<li>As far as I know, you can’t easily go the other direction, importing
+only a portion of the CSV columns</li>
+</ul></li>
+<li><p>Just requires that you specify the target SQL columns after
+specifying the table</p>
+<pre ><code class="pgsql">COPY |||table name||| (|||col1|||, |||col2|||, |||col3|||)
+FROM |||full path to filename|||
+WITH (FORMAT CSV, HEADER);</code></pre></li>
+</ul>
+</section>
+<section id="importing-only-certain-rows" class="slide level2">
+<h2>Importing only certain rows</h2>
+<ul>
+<li><p>Starting with Postgres 12, the option was added to use a
+<code class="python">WHERE</code> keyword to only copy rows that met a
+certain condition to the table</p></li>
+<li><p>The <code class="python">WHERE</code> comes <em>after</em> the
+<code class="python">WITH</code> statement:</p>
+<pre ><code class="pgsql">COPY |||table name||| (|||col1|||, |||col2|||)
+FROM |||full path to filename|||
+WITH (FORMAT CSV)
+WHERE |||col1||| = 'Baboon'</code></pre></li>
+</ul>
+</section>
+<section id="exporting-data" class="slide level2">
+<h2>Exporting Data</h2>
+<ul>
+<li><p>Exporting data takes information from your SQL table and allows
+you to store it in a text file</p>
+<ul>
+<li>Note that this process isn’t lossless, as the data types of each
+column are not stored, just the contents and (possibly) column
+names</li>
+</ul></li>
+<li><p>Syntax-wise, it is almost exactly like copying into a SQL table,
+except using <code class="python">TO</code> instead of
+<code class="python">FROM</code></p>
+<pre ><code class="pgsql">COPY |||table name|||
+TO |||full path to filename|||
+WITH ( |||import options||| );</code></pre></li>
+<li><p>This exports <strong>all</strong> columns from the specified
+table to the filename with the desired format</p></li>
+</ul>
+</section>
+<section id="exporting-subsets" class="slide level2">
+<h2>Exporting Subsets</h2>
+<div style="font-size:.9em">
+<ul>
+<li>In many instances, you may not want <strong>all</strong> the columns
+to be exported. In that case, you have a few options:</li>
+<li>Exporting only particular columns:
+<ul>
+<li>Just specify the desired columns after the table name</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:1em;">COPY |||table name||| (|||col1|||, |||col2|||, |||col3|||)
+TO |||full path to filename|||
+WITH ( |||import options||| );</code></pre></li>
+<li>Export just the output of a query:
+<ul>
+<li>Embed the query instead of a table name</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:1em;">COPY (
+  SELECT |||col1|||, |||col2||| FROM |||table name|||
+  ORDER BY |||col2|||
+  )
+TO |||full path to filename|||
+WITH ( |||import_options||| );</code></pre></li>
+</ul>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveal.js-d3/reveald3.js"></script>
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+            //{ src: "../html_srcs/revealjs/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    <script>
+    // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+      function remove_bars() {
+        var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+        console.log(pseudoBlocks);
+        for ( var i = 0; i < pseudoBlocks.length; i++) {
+          pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+        }
+        }
+      // omg this is even more hacky now, but I need this to run after hljs has done its thing
+      setTimeout(remove_bars, 100);
+    </script>
+    </body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Subqueries</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Subqueries</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Tuesday, March 8, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 7 due on Thursday
+<ul>
+<li>You should have gotten feedback on HW 5, and I’m working on HW6</li>
+</ul></li>
+<li>Test 2 a week from Thursday
+<ul>
+<li>No HW due next week</li>
+</ul></li>
+<li>Datafest!
+<ul>
+<li>March 31 - April 3</li>
+<li>Work in teams of 2-5 to glean insights on a large, rich and complex dataset provided by a secret data sponsor!</li>
+<li><a href="../images/pdfs/DataFestFlyer_2022.pdf">Flyer with all the necessary info here!</a></li>
+</ul></li>
+<li>Polling today: www.PollEv.com/jedrembold441</li>
+</ul>
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<p>What is the output of the below query?</p>
+<pre ><code class="pgsql">SELECT make_time(
+  date_part('dow', current_date)::INT,
+  date_part('day', now())::INT,
+  date_part('hour', localtime)::INT
+  ) AT TIME ZONE 'PDT';</code></pre>
+<p>Open-ended poll this time, so you’ll need to type in your answer (no multiple choice)!</p>
+</section>
+<section id="section" class="slide level2" data-background-iframe="https://embed.polleverywhere.com/free_text_polls/R2bjEVi88zH7r54djkAhI?controls=none&amp;short_poll=true">
+<h2 data-background-iframe="https://embed.polleverywhere.com/free_text_polls/R2bjEVi88zH7r54djkAhI?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="subqueries" class="slide level2">
+<h2>Subqueries</h2>
+<ul>
+<li>A <em>subquery</em> is simply a query embedded within another piece of SQL</li>
+<li>Commonly used to prepare some data or compute a value to be used by the surrounding SQL</li>
+<li>We have already seen very simple versions
+<ul>
+<li>Creating a new table, for example</li>
+</ul>
+<pre ><code class="pgsql">CREATE TABLE new_table AS (
+  SELECT * FROM og_table
+);</code></pre></li>
+<li>Often, you could have saved the subquery as its own table and then used that directly, but not always</li>
+</ul>
+</section>
+<section id="common-uses-of-subqueries" class="slide level2">
+<h2>Common Uses of Subqueries</h2>
+<ul>
+<li>Computing a single value to use in comparisons</li>
+<li>Computing a single column or list of values to use either directly in a table or in comparisons</li>
+<li>Performing “join-like” operations (potentially in a more flexible manner)</li>
+<li>Filtering one table based on the contents of another table</li>
+<li>Otherwise combining operations that would otherwise have taken several steps</li>
+</ul>
+</section>
+<section id="filter-on-single-value" class="slide level2">
+<h2>Filter on single value</h2>
+<ul>
+<li>Think back to HW3 where you needed to filter out all the outlier taxi-ride speeds
+<ul>
+<li>There you had to compute the quartiles, the whisker edges, and then filter directly by tying that number back in</li>
+</ul></li>
+<li>Subqueries can combine those steps! You can directly compare a value to the subquery <strong>so long as the query outputs only a single value</strong></li>
+</ul>
+<pre ><code class="pgsql" style="font-size:1em">SELECT *
+FROM tablename
+WHERE colname > (
+  SELECT avg(colname2)
+  FROM tablename2
+);</code></pre>
+</section>
+<section id="derived-tables" class="slide level2">
+<h2>Derived Tables</h2>
+<ul>
+<li>You can use the output of a subquery anywhere you would normally reference a table name</li>
+<li>Such a table is then called a <em>derived table</em></li>
+<li>You <strong>must</strong> give such subqueries a table alias, else you have no way to refer to them</li>
+</ul>
+<pre ><code class="pgsql">SELECT *
+FROM (
+  SELECT col1, col2
+  FROM tablename
+) AS mytable;</code></pre>
+</section>
+<section id="repeating-column-values" class="slide level2">
+<h2>Repeating Column Values</h2>
+<ul>
+<li>Sometimes it is very useful to have a constant value assigned to an entire column
+<ul>
+<li>We can’t just use an aggregate function (or similar) though, else we get mismatched column lengths</li>
+</ul></li>
+<li>You can include a subquery <em>in your selected columns</em> if it outputs only a <strong>single value</strong>
+<ul>
+<li>That value will be propagated to all the rows</li>
+</ul></li>
+<li>Give it an alias so the column heading has some meaning!</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT
+  col1,
+  col2,
+  (SELECT avg(col2) FROM tablename2)
+FROM tablename;</code></pre>
+</section>
+<section id="subquery-expressions" class="slide level2">
+<h2>Subquery Expressions</h2>
+<ul>
+<li>Can also use subqueries to filter based on whether certain content is present within the subquery output</li>
+<li>Combinations of a keyword followed by the subquery
+<ul>
+<li><code class="python">expr IN (subquery)</code> and <code class="python">expr NOT IN (subquery)</code></li>
+<li><code class="python">EXISTS (subquery)</code> and <code class="python">NOT EXISTS (subquery)</code></li>
+<li><code class="python">expr op ANY (subquery)</code></li>
+<li><code class="python">expr op ALL (subquery)</code></li>
+</ul></li>
+<li><code class="python">expr</code> is a column name or value, and <code class="python">op</code> is a boolean operator (<code class="python">=,>,>=</code>,etc)</li>
+<li>All subquery expressions are evaluated in short-circuit mode: they will return an answer as soon as they can</li>
+</ul>
+</section>
+<section id="in-subquery" class="slide level2">
+<h2>IN Subquery</h2>
+<ul>
+<li>Will check to see if a term appears anywhere in the subquery output</li>
+<li>The subquery must output a <strong>single column</strong> (though it could be empty)</li>
+<li><code class="python">NOT IN</code> just reverses the situation</li>
+<li><strong>Be careful of NULLs</strong>
+<ul>
+<li><code class="python">1 IN (1,2,3)</code> gives True</li>
+<li><code class="python">1 IN (2,3)</code> gives False</li>
+<li><code class="python">1 IN (NULL,2,3)</code> gives <code class="python">NULL</code></li>
+<li>Most dangerous with <code class="python">NOT IN</code>, since <code class="python">1 NOT IN (NULL,2,3)</code> will give <code class="python">NULL</code>, not True</li>
+</ul></li>
+</ul>
+</section>
+<section id="exists-subquery" class="slide level2">
+<h2>EXISTS Subquery</h2>
+<ul>
+<li>Checks just to see if the subquery has <strong>any</strong> rows in the output
+<ul>
+<li>No expression to compare to, just looking at subquery output</li>
+</ul></li>
+<li>The <em>contents</em> of the subquery do not matter at all, so a simple <code class="python">SELECT 1 FROM ...</code> is usually used</li>
+<li>The subquery is frequently a form called a <em>correlated subquery</em>, where it references the table in the outer query</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT col1, col2
+FROM table1
+WHERE EXISTS (
+  SELECT 1
+  FROM table2
+  WHERE table1.col1 = table2.col2
+);</code></pre>
+</section>
+<section id="any-and-all" class="slide level2">
+<h2>ANY and ALL</h2>
+<ul>
+<li>At times you don’t want to see if a value is <em>in</em> the subquery output, but rather how it <em>compares</em> to the output</li>
+<li>A boolean expressions needs to return a single True or False though</li>
+<li><code class="python">ANY</code> and <code class="python">ALL</code> “broadcast” the boolean comparison across all the subquery rows
+<ul>
+<li><code class="python">ANY</code> will return True if <em>any</em> of the rows evaluate to True with the expression</li>
+<li><code class="python">ALL</code> will only return True if <em>all</em> of the rows evaluate to True with the expression</li>
+</ul></li>
+<li><code class="python">expr = ANY (subquery)</code> is thus identical to <code class="python">expr IN (subquery)</code></li>
+</ul>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT col1
+FROM table1
+WHERE col1 < ALL ( SELECT col2
+                   FROM table2);</code></pre>
+</section>
+<section id="subqueries-vs-joins" class="slide level2">
+<h2>Subqueries vs Joins</h2>
+<ul>
+<li>You may have realized that subqueries can do many similar things to what we used joins for!</li>
+<li>When should each be used?
+<ul>
+<li>Subqueries are great when you only need information from a single table, but it depends on another table</li>
+<li>Joins are necessary when you need information from multiple tables</li>
+</ul></li>
+<li>Historically, most RDMS were better optimized for joins, but many have improved substantially in recent years for subqueries
+<ul>
+<li>If in doubt, use the form that makes the most sense for what you <em>semantically</em> want to accomplish. You can always convert it later if better optimization is needed and could be achieved</li>
+</ul></li>
+</ul>
+</section>
+<section id="be-careful" class="slide level2">
+<h2>Be careful!</h2>
+<ul>
+<li>It can be pretty easy to leap off the deep end with subqueries</li>
+<li>Always keep in mind what you want the subquery to achieve, and test it individually to make sure it is doing what you expect
+<ul>
+<li>Use them where they fit the needs of the situation</li>
+<li>A nice aspect of subqueries is that you can work from the “bottom-up”, starting with smaller subqueries you know and building on them</li>
+</ul></li>
+<li><strong>Organize your queries nicely!</strong>
+<ul>
+<li>This becomes even more important with subqueries</li>
+</ul></li>
+</ul>
+</section>
+<section id="pair-activity" class="slide level2">
+<h2>Pair Activity!</h2>
+<ul>
+<li>I’ve prepped a simple grades database <a href="../activity_data/assignment_submission.sql">here</a> that you can download and run the sql file to create a <code class="python">mar08</code> schema in your database of choice which will contain three common tables: <code class="python">roster</code>, <code class="python">assignments</code>, <code class="python">submissions</code></li>
+<li>See if you can answer the first two questions below <strong>without using any joins</strong>. (You can use them on the third, as it gets crazy otherwise I think)
+<ul>
+<li>Which student(s) have turned in <em>nothing</em>?</li>
+<li>Which assignment name has the worst scored average overall?</li>
+<li>Which students scored below average on every quiz?</li>
+</ul></li>
+</ul>
+</section>
+<section id="todays-pairings" class="slide level2">
+<h2>Today’s Pairings</h2>
+<ul>
+<li>Paul and Malie</li>
+<li>Leo and Jack</li>
+<li>Aidan and Gordy</li>
+<li>Maya, Douglas, and Madeline</li>
+<li>Seth and Hayden</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

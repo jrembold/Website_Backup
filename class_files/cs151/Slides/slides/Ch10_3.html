@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2021-04-09">
+  <meta name="dcterms.date" content="2021-11-05">
   <title>Classy Details</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -29,39 +29,190 @@
 <section id="title-slide">
   <h1 class="title">Classy Details</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">April 9, 2021</p>
+  <p class="date">November 5, 2021</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>PS6 due on Sunday</li>
-<li>Grade Reports!</li>
-<li>Project 4 guide was posted on Wednesday!
+<li>Grade Reports are out!</li>
+<li>Keep making progress on Project 3!</li>
+<li>Project 4 guide will be posted on Monday, after we introduce the Enigma machine in class.
 <ul>
-<li>Especially after the examples in class and lab today, you should be good to cruise through at least the first 3 milestones!</li>
+<li>You have basically two weeks for this one. It is due the Friday before Thanksgiving.</li>
 </ul></li>
+<li>Organized lab today! (First in a while!)</li>
 <li>Polling: <a href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
 </section>
-<section id="review-question" class="slide level2" data-notes="Solution: hnktge">
-<h2 data-notes="Solution: hnktge">Review Question</h2>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
 <div class="cols">
 <div class="col">
-<p>Let’s consider a greatly simplified Enigma machine, which only has one rotor that is not turning. So the signal goes through the rotor then the reflector and back through the rotor. Given the rotor and reflector mappings shown to the right, what would the word <code class="python">python</code> encrypt to?</p>
+<p>What expression below would best fill in the gap in the code to the right?</p>
 <div class="poll">
 <ol>
-<li><code class="python">aicmnz</code></li>
-<li><code class="python">hnktge</code></li>
-<li><code class="python">rfqbls</code></li>
-<li><code class="python">zghpmy</code></li>
+<li><code class="python">self.wage = wage</code></li>
+<li><code class="python">TechJob.__init__(self, wage)</code></li>
+<li><code class="python">TechJob.__init__(wage)</code></li>
+<li><code class="python">Job.__init__(wage)</code></li>
 </ol>
 </div>
 </div>
-<div class="col">
-<p><img data-src="../images/svg_cache/eabfaa6d95faaf0fd14e2c4cbf20720676bb912d.svg" style="height:100.0%" /></p>
+<div class="col" style="flex-grow:1">
+<pre ><code class="python" style="max-height:900px; font-size:0.7em;">class Job:
+    def __init__(self, wage):
+        self.wage = wage
+
+class TechJob(Job):
+    def __init__(self, wage):
+        self.wage = wage
+        self.codes = True
+
+class SeniorDev(TechJob):
+    def __init__(self, wage, exp):
+        # What goes here?
+        self.exp = exp</code></pre>
 </div>
 </div>
+<!--
+## Review Question {data-notes="Solution: hnktge"}
+::::::cols
+::::col
+Let's consider a greatly simplified Enigma machine, which only has one rotor that is not turning. So the signal goes through the rotor then the reflector and back through the rotor. Given the rotor and reflector mappings shown to the right, what would the word `python` encrypt to?
+
+:::{.poll}
+#. `aicmnz`
+#. `hnktge`
+#. `rfqbls`
+#. `zghpmy`
+:::
+
+::::
+
+::::col
+\begin{tikzpicture}%%height=100%
+[label/.style={font=\Large\bf, MGreen},
+scale=1.8,
+transform shape,
+]
+\node[label, MRed] at (1,0.5) {Rotor 1};
+\foreach[count=\t] \a/\b in {A/D,B/M,C/T,D/W,E/S,F/I,G/L,H/R,I/U,J/Y,K/Q,L/N,M/K,N/F,O/E,P/J,Q/C,R/A,S/Z,T/B,U/P,V/G,W/X,X/O,Y/H,Z/V} {
+    \node[label](a) at (0,-\t*0.5) {\a};
+    \node[label](b) at (2,-\t*0.5) {\b};
+    \draw[-stealth, MBlue, line width=3pt] (a) -- (b);
+}
+
+
+\node[label, MRed] at (6,0.5) {Reflector};
+\foreach[count=\t] \a/\b in {A/U,B/Q,C/N,D/T,E/L,F/S,G/Z,H/F,I/M,J/R,K/E,L/H,M/D,N/P,O/X,P/K,Q/I,R/B,S/V,T/Y,U/G,V/J,W/C,X/W,Y/O,Z/A} {
+    \node[label](a) at (5,-\t*0.5) {\a};
+    \node[label](b) at (7,-\t*0.5) {\b};
+    \draw[-stealth, MBlue, line width=3pt] (a) -- (b);
+}
+
+\end{tikzpicture}
+
+
+::::
+::::::
+-->
+</section>
+<section id="overusing-inheritance" class="slide level2">
+<h2>Overusing Inheritance</h2>
+<ul>
+<li>Inheritance is often used in situations where it does not really apply
+<ul>
+<li>A common example you might see in textbooks is a <code class="python">Pizza</code> class with various subclasses of pizza, like Pepperoni or Hawaiian.</li>
+<li>This is silly, there is only one point of difference between those objects: the ingredients
+<ul>
+<li>Just make a pizza class with a list of ingredients as an attribute</li>
+</ul></li>
+</ul></li>
+<li>Inheritance makes sense when subclasses share behavior</li>
+</ul>
+</section>
+<section id="extensions" class="slide level2">
+<h2>Extensions</h2>
+<ul>
+<li>While designing new class hierarchies will prove useful as you move on to larger applications, it is often more useful to <strong>extend</strong> existing classes to add new, desirable behavior</li>
+<li>This can be done with any existing class, but a few classes in the <code class="python">GObject</code> hierarchy make very enticing targets as the bases for potential extension:
+<ul>
+<li>The <code class="python">GPolygon</code> class makes it easy to define new subclasses that have a polygonal outline.
+<ul>
+<li>Also automatically support filling, since <code class="python">GPolygon</code> is a subclass of <code class="python">GFillableObject</code></li>
+</ul></li>
+<li>The <code class="python">GCompound</code> class can serve as a great parent for new subclasses that are composed of a combination of other shapes.</li>
+</ul></li>
+<li>In either case, it is generally useful to add additional methods or attributes to the subclass that are specific to that type.</li>
+</ul>
+</section>
+<section id="a-starry-example" class="slide level2">
+<h2>A Starry Example</h2>
+<pre ><code class="python" style="max-height:900px; font-size:0.8em;">class Star(GPolygon):
+    """ Class to draw an any-sided star with specified insets. """
+
+    def __init__(self, n_pts, r_out, r_in):
+        GPolygon.__init__(self)
+        angle_step = 2*math.pi / n_pts
+        angle = -math.pi/2
+        for n in range(n_pts):
+            self.add_vertex(r_out * math.cos(angle), 
+                            r_out * math.sin(angle))
+            angle += angle_step / 2
+            self.add_vertex(r_in * math.cos(angle),
+                            r_in * math.sin(angle))
+            angle += angle_step / 2
+
+
+def draw_stars():
+    gw = GWindow(400, 400)
+    s = Star(7, 100, 50)
+    s.set_filled(True)
+    s.set_fill_color('Gold')
+    gw.add(s, 200, 200)
+
+    s = Star(23, 40,30)
+    s.set_filled(True)
+    s.set_fill_color('Red')
+    gw.add(s, 200,200)
+
+draw_stars()</code></pre>
+</section>
+<section id="now-for-something-a-bit-flashier" class="slide level2">
+<h2>Now for something a bit flashier!</h2>
+<pre ><code class="python" style="max-height:900px">class FlashingStar(Star):
+    """ Class to draw flashing stars! """
+
+    def __init__(self, n_pts, r_out, r_in, 
+                 colors=['red','blue'], state=True):
+        Star.__init__(self, n_pts, r_out, r_in)
+        self.state = state
+        self.set_filled(self.state)
+        self.set_fill_color(random.choice(colors))
+        
+
+    def swap_fill(self):
+        self.state = not self.state
+        self.set_filled(self.state)
+
+
+def draw_stars():
+    def flash_callback():
+        for star in starlist:
+            star.swap_fill()
+
+    gw = GWindow(400, 400)
+    starlist = []
+    for i in range(3):
+        for j in range(3):
+            star = FlashingStar(3+i+j, 50, 20,
+                state=random.choice([True,False]))
+            gw.add(star, 100+i*100, 100+j*100)
+            starlist.append(star)
+    gw.set_interval(flash_callback, 1000)
+
+draw_stars()</code></pre>
 </section>
 <section id="making-fancy-labels" class="slide level2">
 <h2>Making Fancy Labels</h2>
@@ -113,7 +264,7 @@ draw_label()</code></pre>
 <li>The text illustrates this with a train diagram, I will illustrate it here by making a segmented snake. <br><br></li>
 </ul>
 <figure>
-<img data-src="../images/CompoundSnake.png" style="width:40.0%" alt="" /><figcaption> </figcaption>
+<img data-src="../images/CompoundSnake.png" style="width:40.0%" alt=" " /><figcaption aria-hidden="true"> </figcaption>
 </figure>
 </section>
 <section id="the-snake-hierarchy" class="slide level2">
@@ -122,7 +273,7 @@ draw_label()</code></pre>
 <li>Here I will utilize a generic snake body segment which will be a subclass of <code class="python">GCompound</code>
 <ul>
 <li>The snake head and tail segments will then be subclasses of the body segment class
-<p><img data-src="../images/svg_cache/98a30fc173ba00805bf7f4a315f85762d48c16e4.svg" style="width:60.0%" /></p></li>
+<p><img data-src="../images/svg_cache/6ba5c9f47747e0575f27c687561871e14e5dc723.svg" style="width:60.0%" /></p></li>
 </ul></li>
 <li>All the common elements will be added in the body segment, with the head and tail subclasses only adding their specific details.</li>
 </ul>
@@ -135,7 +286,7 @@ draw_label()</code></pre>
 <li>One advantage of doing so is that we can then animate the entire snake as a whole easily!</li>
 </ul>
 <figure>
-<img data-src="../images/MovingCompoundSnake.gif" alt="" /><figcaption> </figcaption>
+<img data-src="../images/MovingCompoundSnake.gif" alt=" " /><figcaption aria-hidden="true"> </figcaption>
 </figure>
 </section>
 <section id="snakey-code" class="slide level2">
@@ -329,6 +480,18 @@ make_snake()</code></pre>
 		//autoAnimateEasing: 'ease-in',
 		//autoAnimateDuration: 1.0,
 		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
         // Display the page number of the current slide
         slideNumber: true,
         // Add the current slide number to the URL hash so that reloading the
@@ -336,15 +499,70 @@ make_snake()</code></pre>
         hash: true,
         // Push each slide change to the browser history
         history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
         // Vertical centering of slides
         center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
         // Transition style
         transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
         height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
 		math: {
 		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
 		  <!--config: 'tex-mml-chtml',-->

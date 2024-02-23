@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2021-10-06">
-  <title>Cat’s Cradle: String Manipulation</title>
+  <meta name="dcterms.date" content="2023-09-22">
+  <title>Transforming English</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -14,10 +14,15 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
   </style>
   <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
   <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
@@ -27,161 +32,159 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Cat’s Cradle: String Manipulation</h1>
+  <h1 class="title">Transforming English</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">October 6, 2021</p>
+  <p class="date">September 22, 2023</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Problem Set 2 has been posted!</li>
-<li>If you are still working on Project 1, get it in <em>pronto</em>!</li>
-<li>Sections today and tomorrow</li>
-<li>I have to be out of my office at 4:30pm today, so I apologize for cutting my office hours short today. I’ll be around until at least 6 tomorrow to compensate</li>
-<li>Polling: <a href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>Problem Set 3 due Monday night!</li>
+<li>Project 1: Wordle guide out by the end of today!
+<ul>
+<li>No worries if you are still working on PS3 this weekend, that is the
+expectation</li>
+<li>But try to make sure PS3 gets in on time so that you can get a good
+start on Wordle</li>
+</ul></li>
+<li>I’ll be around from 3-6:30 or so this afternoon if you have
+questions that come up, then I’ll be at the volleyball gaame</li>
+<li>Polling: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
 </section>
-<section id="review" class="slide level2" data-notes="Solution: t!d">
-<h2 data-notes="Solution: t!d">Review!</h2>
-<p>What would be printed from the below piece of code here?</p>
-<pre ><code class="python">s = "October is here already?!"
-a = ""
-for i in range(-4,4,3):
-    a = s[i] + a
-print(a)</code></pre>
+<section id="review" class="slide level2"
+data-notes="Solution: x[-6:-1]">
+<h2 data-notes="Solution: x[-6:-1]">Review!</h2>
+<p>Suppose you have the string
+<code class="python">x = "consternation"</code> and you’d like to just
+extract and print the word <code class="python">"nation"</code>. Which
+expression below will <strong>not</strong> give you the string
+<code class="python">"nation"</code>?</p>
 <div class="poll">
 <ol>
-<li><code class="python">"yOo"</code></li>
-<li><code class="python">"dr esr"</code></li>
-<li><code class="python">"t!d"</code></li>
-<li><code class="python">"dy?!"</code></li>
+<li><code class="python">x[7:len(x)]</code></li>
+<li><code class="python">x[7:]</code></li>
+<li><code class="python">x[-6:len(x)]</code></li>
+<li><code class="python">x[-6:-1]</code></li>
 </ol>
 </div>
-</section>
-<section id="slicing" class="slide level2">
-<h2>Slicing</h2>
-<ul>
-<li><p>Often, you may want more than a single character</p></li>
-<li><p>Python allows you to specify a starting and an ending index through an operation known as <em>slicing</em></p></li>
-<li><p>The syntax looks like:</p>
-<pre ><code class="python">string_variable[start : limit]</code></pre>
-<p>where <code class="python">start</code> is the first index to be included and everything up to but <strong>not including</strong> the <code class="python">limit</code> is included</p></li>
-<li><p><code class="python">start</code> and <code class="python">limit</code> are actually optional (but the <code class="python">:</code> is not)</p>
-<ul>
-<li>If <code class="python">start</code> omitted, the slice will begin at the start of the string</li>
-<li>If <code class="python">limit</code> omitted, the slice will proceed to the end of the string</li>
-</ul></li>
-</ul>
-</section>
-<section id="and-dicing" class="slide level2">
-<h2>and Dicing</h2>
-<ul>
-<li>Can add a third component to the slice syntax, called a <em>stride</em></li>
-</ul>
-<pre ><code class="python">string_variable[start : limit : stride]</code></pre>
-<ul>
-<li>Specifies how large the steps are between each included index</li>
-<li>Can also make the stride negative to proceed backwards through a string</li>
-</ul>
-<pre ><code class="python-repl">>>> s = "spaghetti sauce"
->>> s[4:8]
-hett
->>> s[10:]
-sauce
->>> s[:10:2]
-sahti</code></pre>
-</section>
-<section id="repeat-again" class="slide level2">
-<h2>Repeat again?</h2>
-<ul>
-<li>We’ve already seen how we can use addition (<code class="python">+</code>) in Python to concatenate strings</li>
-<li>In math, adding something many times is the same as multiplying</li>
-</ul>
-<p><span class="math display">\[5+5+5+5+5+5 = 6 \times 5\]</span></p>
-<ul>
-<li>The same logic holds true for Python strings!
-<ul>
-<li>You multiply by a <strong>integer</strong>: the number of times you want the concatenation repeated</li>
-<li>You can not multiply two strings together, Python will not understand what you are trying to do</li>
-</ul>
-<pre ><code class="python">print("Betelguese, " * 3)</code></pre></li>
-</ul>
 </section>
 <section id="comparing-strings" class="slide level2">
 <h2>Comparing Strings</h2>
 <ul>
-<li><p>Python lets you use normal comparison operators to compare strings</p>
+<li><p>Python lets you use normal comparison operators to compare
+strings</p>
 <pre ><code class="python">string1 == string2</code></pre>
-<p>is true if <code class="python">string1</code> and <code class="python">string2</code> contain the same characters in the same order</p></li>
-<li><p>Comparisons involving greater than or less than are done similar to alphabetical ordering</p>
+<p>is true if <code class="python">string1</code> and
+<code class="python">string2</code> contain the same characters in the
+same order</p></li>
+<li><p>Comparisons involving greater than or less than are done similar
+to alphabetical ordering</p>
 <ul>
-<li>Start at the beginning and compare a character. If they are the same, then compare the next character, etc</li>
+<li>Start at the beginning and compare a character. If they are the
+same, then compare the next character, etc</li>
 </ul></li>
-<li><p>All comparisons are done <strong>according to their Unicode values</strong>.</p>
+<li><p>All comparisons are done <strong>according to their Unicode
+values</strong>.</p>
 <ul>
 <li>Called <em>lexicographic ordering</em></li>
 <li><code class="python">"cat" > "CAT"</code></li>
-<li><code class="python">"Zebra" < "aardvark"</code></li>
 </ul></li>
+</ul>
+</section>
+<section id="comparing-substrings" class="slide level2">
+<h2>Comparing Substrings</h2>
+<ul>
+<li><p>Sometimes you want to check if a string shows up as a piece of
+another string</p>
+<ul>
+<li><p>You do have the tools to do this manually:</p>
+<pre ><code class="python">def check_if_substr(part, whole):
+    L = len(part)
+    for i in range(whole - L):
+        if whole[i:i+L] == part:
+            return True
+    return False</code></pre></li>
+</ul></li>
+<li><p>Thankfully, Python offers you the <code class="python">in</code>
+keyword, which accomplishes the same thing, but much simpler:</p>
+<pre ><code class="python">if part in whole:
+    #your code here</code></pre></li>
+</ul>
+</section>
+<section id="string-looping" class="slide level2">
+<h2>String Looping</h2>
+<ul>
+<li>Because strings are a sequence, they will work directly in a
+<code class="python">for</code> loop!</li>
+<li>In general, you have two options of how you want to loop through a
+string:</li>
+</ul>
+<div class="cols">
+<div class="col">
+<div class="block" name="By Index">
+<pre ><code class="python">s = "hello"
+for i in range(len(s)):
+    print(s[i], 'is letter', i)</code></pre>
+</div>
+</div>
+<div class="col">
+<div class="block" name="By Letter">
+<pre ><code class="python">s = "hello"
+for letter in s:
+    print(letter)</code></pre>
+</div>
+</div>
+</div>
+<ul>
+<li>Looping by letter can be very convenient, but you lose positional
+information</li>
+<li>You can always select the desired letter if looping by index</li>
 </ul>
 </section>
 <section id="cant-change-a-strings-colors" class="slide level2">
 <h2>Can’t change a string’s colors</h2>
 <ul>
-<li>Strings are what we call <em>immutable</em>: they can not be modified in place by clients.</li>
-<li>You can “look” at different parts of the string, but you can not “change” those parts without making a whole new string</li>
-</ul>
+<li><p>Strings are what we call <em>immutable</em>: they can not be
+modified in place by clients.</p></li>
+<li><p>You can “look” at different parts of the string, but you can not
+“change” those parts without making a whole new string</p>
 <pre ><code class="python badcode">s = "Cats!"
-s[0] = "R"   # THIS WILL ERROR!!</code></pre>
-<ul>
-<li>You can of course create a new string object with the desired traits:</li>
-</ul>
-<pre ><code class="python">s = "R" + s[1:]</code></pre>
-<ul>
-<li>This applies to all methods that act on strings as well: they return a <strong>new</strong> string, they do not modify the original</li>
+s[0] = "R"   # THIS WILL ERROR!!</code></pre></li>
+<li><p>You can of course create a new string object with the desired
+traits:</p>
+<pre ><code class="python">s = "R" + s[1:]</code></pre></li>
+<li><p>This applies to all methods that act on strings as well: they
+return a <strong>new</strong> string, they do not modify the
+original</p></li>
 </ul>
 </section>
-<section id="methods-to-find-string-patterns" class="slide level2">
-<h2>Methods to find string patterns</h2>
-<table>
-<colgroup>
-<col style="width: 37%" />
-<col style="width: 62%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Method</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code class="python">string.find(pattern)</code></td>
-<td>Returns the first index of <code class="python">pattern</code> in <code class="python">string</code>, or <code class="python">-1</code> if it does not appear</td>
-</tr>
-<tr class="even">
-<td><code class="python">string.find(pattern, k)</code></td>
-<td>Same as the one-argument version, but starts searching at index <code class="python">k</code></td>
-</tr>
-<tr class="odd">
-<td><code class="python">string.rfind(pattern)</code></td>
-<td>Returns the last index of <code class="python">pattern</code> is <code class="python">string</code>, or <code class="python">-1</code> if missing</td>
-</tr>
-<tr class="even">
-<td><code class="python">string.rfind(pattern, k)</code></td>
-<td>Same as the one-argument version, but searches backwards from index <code class="python">k</code></td>
-</tr>
-<tr class="odd">
-<td><code class="python">string.startswith(prefix)</code></td>
-<td>Returns <code class="python">True</code> if the string starts with <code class="python">prefix</code></td>
-</tr>
-<tr class="even">
-<td><code class="python">string.endswith(suffix)</code></td>
-<td>Returns <code class="python">True</code> if the string ends with <code class="python">suffix</code></td>
-</tr>
-</tbody>
-</table>
+<section id="receiver-syntax" class="slide level2">
+<h2>Receiver Syntax</h2>
+<div style="font-size:.9em">
+<ul>
+<li><p>So far, all operations between or on objects have used symbols to
+indicate the operation</p>
+<ul>
+<li>The <code class="python">+</code> sign, for instance</li>
+</ul></li>
+<li><p>Going forward, we will begin to see examples of operations on
+objects that use <em>receiver syntax</em></p></li>
+<li><p>In receiver syntax, we specify the object to act on, followed by
+a dot and then a predefined function (called a <em>method</em> here)
+name</p>
+<pre ><code class="python">obj.method_name()</code></pre>
+<ul>
+<li>This is like you are running this special function on the object, so
+you <strong>need</strong> the <code class="python">()</code> at the
+end</li>
+<li>Some methods also allow arguments, to influence exactly how the
+operation will proceed</li>
+</ul></li>
+</ul>
+</div>
 </section>
 <section id="transforming-methods" class="slide level2">
 <h2>Transforming Methods</h2>
@@ -199,23 +202,29 @@ s[0] = "R"   # THIS WILL ERROR!!</code></pre>
 <tbody>
 <tr class="odd">
 <td><code class="python">string.lower()</code></td>
-<td>Returns a copy of <code class="python">string</code> with all letters converted to lowercase</td>
+<td>Returns a copy of <code class="python">string</code> with all
+letters converted to lowercase</td>
 </tr>
 <tr class="even">
 <td><code class="python">string.upper()</code></td>
-<td>Returns a copy of <code class="python">string</code> with all letters converted to uppercase</td>
+<td>Returns a copy of <code class="python">string</code> with all
+letters converted to uppercase</td>
 </tr>
 <tr class="odd">
 <td><code class="python">string.capitalize()</code></td>
-<td>Returns a copy of <code class="python">string</code> with the first character capitalized and the rest lowercase</td>
+<td>Returns a copy of <code class="python">string</code> with the first
+character capitalized and the rest lowercase</td>
 </tr>
 <tr class="even">
 <td><code class="python">string.strip()</code></td>
-<td>Returns a copy of <code class="python">string</code> with whitespace and non-printing characters removed from both ends</td>
+<td>Returns a copy of <code class="python">string</code> with whitespace
+and non-printing characters removed from both ends</td>
 </tr>
 <tr class="odd">
 <td><code class="python">string.replace(old, new)</code></td>
-<td>Returns a copy of <code class="python">string</code> with all instances of <code class="python">old</code> replaced by <code class="python">new</code></td>
+<td>Returns a copy of <code class="python">string</code> with
+<strong>all</strong> instances of <code class="python">old</code>
+replaced by <code class="python">new</code></td>
 </tr>
 </tbody>
 </table>
@@ -236,58 +245,169 @@ s[0] = "R"   # THIS WILL ERROR!!</code></pre>
 <tbody>
 <tr class="odd">
 <td><code class="python">char.isalpha()</code></td>
-<td>Returns <code class="python">True</code> if <code class="python">char</code> is a letter</td>
+<td>Returns <code class="python">True</code> if
+<code class="python">char</code> is a letter</td>
 </tr>
 <tr class="even">
 <td><code class="python">char.isdigit()</code></td>
-<td>Returns <code class="python">True</code> if <code class="python">char</code> is a digit</td>
+<td>Returns <code class="python">True</code> if
+<code class="python">char</code> is a digit</td>
 </tr>
 <tr class="odd">
 <td><code class="python">char.isalnum()</code></td>
-<td>Returns <code class="python">True</code> if <code class="python">char</code> is letter or a digit</td>
+<td>Returns <code class="python">True</code> if
+<code class="python">char</code> is letter or a digit</td>
 </tr>
 <tr class="even">
 <td><code class="python">char.islower()</code></td>
-<td>Returns <code class="python">True</code> if <code class="python">char</code> is a lowercase letter</td>
+<td>Returns <code class="python">True</code> if
+<code class="python">char</code> is a lowercase letter</td>
 </tr>
 <tr class="odd">
 <td><code class="python">char.isupper()</code></td>
-<td>Returns <code class="python">True</code> if <code class="python">char</code> is an uppercase letter</td>
+<td>Returns <code class="python">True</code> if
+<code class="python">char</code> is an uppercase letter</td>
 </tr>
 <tr class="even">
 <td><code class="python">char.isspace()</code></td>
-<td>Returns <code class="python">True</code> if <code class="python">char</code> is a whitespace character (space, tab, or newline)</td>
+<td>Returns <code class="python">True</code> if
+<code class="python">char</code> is a whitespace character (space, tab,
+or newline)</td>
 </tr>
 <tr class="odd">
 <td><code class="python">char.isidentifier()</code></td>
-<td>Returns <code class="python">True</code> if <code class="python">char</code> is a legal Python identifier</td>
+<td>Returns <code class="python">True</code> if
+<code class="python">char</code> is a legal Python identifier</td>
 </tr>
 </tbody>
 </table>
 </section>
+<section id="f-not-g" class="slide level2">
+<h2>F not G</h2>
+<ul>
+<li><p>Constructing text or a sentence by interleaving strings and other
+objects comes up a lot in communicating code results to a user</p></li>
+<li><p>For any Python version past 3.6, the nicest and easiest way to do
+this is with what are called <em>f-strings</em>:</p>
+<pre ><code class="python">A = 10
+print(f"The value of A is: {A}!")</code></pre></li>
+<li><p>You can define an f-string anytime you would normally define a
+string, just be aware that the substitution happens with the values of
+variable <em>at that point</em></p>
+<pre ><code class="python">A = 10
+s = f"The value of A is {A}"
+A = 12
+print(s)</code></pre></li>
+</ul>
+</section>
+<section id="getting-some-input" class="slide level2">
+<h2>Getting some <code class="python">input</code></h2>
+<ul>
+<li><p>We’ve seen how to display information to a user, but to retrieve
+data from a user, we can use Python’s built-in
+<code class="python">input()</code> function</p></li>
+<li><p>The form will generally look like:</p>
+<pre ><code class="python">variable = input(prompt_text)</code></pre>
+<ul>
+<li><code class="python">variable</code> is the variable name you want
+to assign the user’s typed input to</li>
+<li><code class="python">prompt_text</code> is the string that will be
+displayed on the screen to communicate to the user what they should be
+doing</li>
+</ul></li>
+<li><p>The <code class="python">input()</code> function <strong>always
+returns a string</strong></p>
+<ul>
+<li><p>If you want to get an integer from the user, you will need to
+convert it yourself after retrieving it</p>
+<pre ><code class="python">num = int(input('Pick a number between 1 and 10: '))</code></pre></li>
+</ul></li>
+</ul>
+</section>
+<section id="the-english.py-library" class="slide level2">
+<h2>The <code class="python">english.py</code> Library</h2>
+<ul>
+<li>To facilitate working with English words, we can take advantage of
+the pre-written <code class="python">english</code> module
+<ul>
+<li>This will be highly useful in the Wordle project!</li>
+</ul></li>
+<li>The <code class="python">english</code> module exports two
+resources:
+<ul>
+<li><code class="python">ENGLISH_WORDS</code>: a constant sequence which
+contains all the valid English words in alphabetical order</li>
+<li><code class="python">is_english_word()</code>: a predicate function
+which takes a string as input and returns
+<code class="python">True</code> or <code class="python">False</code>
+depending on if that string is a valid English word</li>
+</ul></li>
+</ul>
+<!--
+## Biggest simple palindrome
+- Suppose we wanted to determine what the longest simple palindrome(s) was in the English language:
+
+```python
+from english import ENGLISH_WORDS
+
+def find_biggest_palindromes():
+    best_length = 0
+    for word in ENGLISH_WORDS:
+        if word == word[::-1] and len(word) >= best_length:
+            print(word)
+            best_length = len(word)
+```
+-->
+</section>
+<section id="biggest-no-vowel-word" class="slide level2">
+<h2>Biggest No-vowel Word</h2>
+<ul>
+<li>Suppose we wanted to determine the longest word in the English
+language without vowels:</li>
+</ul>
+<pre ><code class="python">from english import ENGLISH_WORDS
+
+def find_first_vowel(word):
+    for i in range(len(word)):
+        if word[i].lower() in "aeiou":
+            return i
+    return -1
+
+def find_longest_no_vowels():
+    best_length = 0
+    for word in ENGLISH_WORDS:
+        vowel_loc = find_first_vowel(word)
+        if vowel_loc == -1 and len(word) > best_length:
+            best_length = len(word)
+            print(word)
+
+
+if __name__ == '__main__':
+    find_longest_no_vowels()</code></pre>
+</section>
 <section id="igpay-atinlay" class="slide level2">
 <h2>Igpay Atinlay</h2>
 <ul>
-<li>Suppose we wanted to write a script that converted English to Pig Latin</li>
+<li>Suppose we wanted to write a script that converted English to Pig
+Latin</li>
 <li>Rules of Pig Latin:
 <ul>
-<li>If the word begins with a consonant, move everything up to the first vowel to the end and append on “ay” at the end
+<li>If the word begins with a consonant, move everything up to the first
+vowel to the end and append on “ay” at the end
 <center>
 <code class="python">fleet</code> ⟶ <code class="python">eetflay</code>
 </center></li>
 <li>If the word starts with a vowel, just append “way” to the end
 <center>
-<code class="python">orange</code> ⟶ <code class="python">orangeway</code>
+<code class="python">orange</code> ⟶
+<code class="python">orangeway</code>
 </center></li>
 <li>If the word has no vowels, do nothing</li>
 </ul></li>
 <li>Our decomposition:
 <ul>
-<li>Convert a single word
-<ul>
 <li>Find first vowel</li>
-</ul></li>
-<li>Loop over whole phrase to convert the entire phrase word by word</li>
+<li>Convert a single word</li>
 </ul></li>
 </ul>
 </section>
@@ -319,23 +439,213 @@ s[0] = "R"   # THIS WILL ERROR!!</code></pre>
     else:
         return word[vowel:] + word[:vowel] + "ay"</code></pre>
 </section>
-<section id="onvertcay-hrasepay" class="slide level2">
-<h2>Onvertcay hrasepay</h2>
-<pre ><code class="python" style="max-height:900px;">def string_2_pig_latin(string):
-    start = 0
-    i = 0
-    phrase = ""
-    finding_words = True
-    while len(string) > 0 and finding_words:
-        if not string[i].isalpha():
-            word = string[start:i]
-            phrase += word_2_pig_latin(word) + string[i]
-            start = i + 1
-        i += 1
-        if i == len(string):
-            finding_words = False
-            phrase += word_2_pig_latin(string[start:])
-    return phrase</code></pre>
+<section id="when-pig-latin-english" class="slide level2">
+<h2>When Pig Latin = English?</h2>
+<ul>
+<li>What about when the Pig Latin version of a word is a (different) but
+valid English word?</li>
+<li>Lets not count words with no vowels, since clearly they would
+qualify</li>
+</ul>
+<pre ><code class="python">def platin_equals_english():
+    count = 0
+    for word in ENGLISH_WORDS:
+        platin = word_2_pig_latin(word)
+        if is_english_word(platin) and word != platin:
+            print(word, ":", platin)
+            count += 1
+    return count</code></pre>
+<!-- push off until Monday?
+## Formatting Strings
+- F-strings allow up to easily substitute in values, but what if we want those values to have a particular format?
+    - Rounded to the nearest two decimal places, for example
+- One option would be to handle all this before the substitution manually
+- Python gives a more streamlined method, using a _format spec_
+- A format spec will be given inside the `{}` placeholder
+    - Comes after the variable/value itself
+    - There is a colon between the variable/value and the format spec
+  ```python
+  A = 10.234
+  print(f"The value of A is {A:0.2f}")
+  ```
+
+## Shaping your format
+- A Format spec is a special string that determine the desired format
+- Lots we can do, but we rarely need to do it all at once
+- The basic building blocks (square brackets just to group):
+<center>
+<br>
+<span style="font-family: monospace">
+<span class="fragment highlight-current-red" data-fragment-index=6>[[fill]align]</span>><span class="fragment highlight-current-red" data-fragment-index=5>[sign]</span><span class="fragment highlight-current-red" data-fragment-index=4>[width]</span><span class="fragment highlight-current-red" data-fragment-index=3>[,]</span><span class="fragment highlight-current-red" data-fragment-index=2>[.precision]</span><span class="fragment highlight-current-red" data-fragment-index=1>[type]</span>
+</span>
+</center>
+
+<hr>
+
+<div class="only-fragment fragment current" data-fragment-index=1>
+- Type
+    - How you want the object represented as a string
+    - "d" - base-10 integer
+    - "f" - float or decimal
+    - "e" - scientific notation
+    - More on next slide
+</div>
+<div class="only-fragment fragment current" data-fragment-index=2>
+- Precision
+    - How many digits to display after a decimal point
+    - Details can vary a little by conversion type
+</div>
+<div class="only-fragment fragment current" data-fragment-index=3>
+- Grouping?
+    - A comma here indicates that numbers should be grouped in sets of 3 and separated with a comma
+</div>
+<div class="only-fragment fragment current" data-fragment-index=4>
+- Width
+    - The *minimum* number of characters you want the formatted value to have
+    - If not otherwise specified, pads the value with space characters
+</div>
+<div class="only-fragment fragment current" data-fragment-index=5>
+- Sign?
+    - If the sign of the number should be specified
+    - A `+` sign ensures all numbers will have either a `+` or `-` sign in front
+    - A space just adds a space before positive numbers (negatives would have a `-` sign in front)
+</div>
+<div class="only-fragment fragment current" data-fragment-index=6>
+- Fill and Align
+    - How you want the text aligned if it is shorter than the minium width
+        - Can be `<`, `>`, or `^` for left, right, or center justified
+    - Any fill characters you want to fill the empty space come before
+        - Default is space
+</div>
+
+
+## Output Conversion Types
+
+:::{style='font-size:.9em'}
+
+Code | Description
+--- | ---
+`b` | Inserts an integer using its binary representation
+`d` | Inserts an integer using its decimal representation
+`e` or `E` | Inserts a number using scientific notation
+`f` or `F` | Inserts a number using a decimal point format
+`g` or `G` | Choose `e` or `f` to get the best fit
+`o` | Inserts an integer using its octal representation
+`s` | Inserts a string value
+`x` or `X` | Inserts an integer using its hexadecimal representation
+
+:::
+
+- Uppercase conversion types use capital characters where possible in output
+
+
+## Understanding Check! {data-notes="The 32//8 option"}
+Which of the provided formatted string options below would evaluate to appear as:
+
+<center>
+`101,234.98   & 4000`
+</center>
+
+when printed?
+
+:::{.poll}
+#. `f"{101234.984:<12,.2f} & {3200//8:<4d}"`
+#. `f"{101234.984:>12,.2f} & {32000//8:0>3d}"`
+#. `f"{101234.984:<12,f} & {320//8:0>4d}"`
+#. `f"{101234.984:<12,.2f} & {32//8:0<4d}"`
+:::
+
+## Arrays and Lists
+- From the earliest days, programming languages have supported the idea of an _array_, or an ordered sequence of values.
+- Individual values in an array are called _elements_, and the number of elements is the _length_ of the array.
+- Each element's position in the array is given by its _index_, with index numbers starting at 0 and extending up to 1 less than the length of the array
+- Python implements the array concept in a bit more general form called a _list_.
+
+
+## Reminder: Making Lists
+- Created using square brackets with elements separated by commas:
+  ```python
+  COIN_VALUES = [1, 5, 10, 25, 50, 100]
+  COIN_NAMES = [ "penny", "nickle", "dime",
+                 "quarter", "half-dollar", "dollar" ]
+  ```
+- Lists are commonly represented visually or conceptually as a series of numbered boxes:
+\begin{tikzpicture}%%width=80%
+[box/.style={draw, thick, MBlue, minimum width=2cm, minimum height=1cm, font=\tt, text width=2cm, align=center}]
+\node[box, label={[MPurple,font=\footnotesize]below:0}](0) at (0,0) {1};
+\node[box, label={[MPurple,font=\footnotesize]below:1}, right=0cm of 0](1) {5};
+\node[box, label={[MPurple,font=\footnotesize]below:2}, right=0cm of 1](2) {10};
+\node[box, label={[MPurple,font=\footnotesize]below:3}, right=0cm of 2](3) {25};
+\node[box, label={[MPurple,font=\footnotesize]below:4}, right=0cm of 3](4) {50};
+\node[box, label={[MPurple,font=\footnotesize]below:5}, right=0cm of 4](5) {100};
+\node[anchor=south west, font=\tt\footnotesize, color=MGreen] at (0.north west) {COIN\_VALUES};
+\node[box, label={[MPurple,font=\footnotesize]below:0}](0) at (0,-2) {"penny"};
+\node[box, label={[MPurple,font=\footnotesize]below:1}, right=0cm of 0](1) {"nickel"};
+\node[box, label={[MPurple,font=\footnotesize]below:2}, right=0cm of 1](2) {"dime"};
+\node[box, label={[MPurple,font=\footnotesize]below:3}, right=0cm of 2](3) {"quarter"};
+\node[box, label={[MPurple,font=\footnotesize]below:4}, right=0cm of 3](4) {"half-\\dollar"};
+\node[box, label={[MPurple,font=\footnotesize]below:5}, right=0cm of 4](5) {"dollar"};
+\node[anchor=south west, font=\tt\footnotesize, color=MGreen] at (0.north west) {COIN\_NAMES};
+\end{tikzpicture}
+
+
+## What we already know
+- Can retrieve the value of any element in a list by writing the index of that element in square brackets after the list name
+    - `COIN_VALUES[3]` ⟶ `25`
+    - `COIN_NAMES[2]` ⟶ `"dime"`
+- Can concatenate two lists to form a new list with elements from both
+    - `[1,2,3] + [4,5,6]`⟶  `[1,2,3,4,5,6]`
+
+- Can loop through each of the list elements in turn
+  ```python
+  for elem in my_list:
+    # do stuff with elem
+  ```
+  where `elem` is the name of the variable that will sequentially get assigned the value of every element in `my_list`
+
+## Sequences
+- Sound familiar? Lists are just like more general strings!
+- Strings and lists are examples of a more general class of object in Python called _sequences_
+
+::::::cols
+::::col
+:::{.block name=Old}
+- We already knew that all sequences support:
+  - The `len` function
+  - Index numbering starting at 0
+  - Concatenation using `+` or `+=`
+  - Selection of an individual element using square brackets
+  - Looping over elements
+:::
+::::
+
+::::col
+:::{.block name=New .fragment}
+- We can now add:
+  - Negative index numbering counting backwards from the end 
+  - Slicing in all forms
+  - Comparing sequences
+  - Repetition using `*`
+  - Inclusion testing using `in` operator
+:::
+::::
+::::::
+
+## Understanding Check! {data-notes="Solution: None of the above, as it errors"}
+What would the below expression evaluate to?
+
+<center>
+<code>["One", 2, True][-1:1:-1][1]</code>
+</center>
+
+:::{.poll}
+#. `"n"`
+#. `2`
+#. `True`
+#. None of the above, or this will error
+:::
+
+-->
 </section>
     </div>
   </div>
@@ -360,6 +670,7 @@ s[0] = "R"   # THIS WILL ERROR!!</code></pre>
 		//autoAnimateEasing: 'ease-in',
 		//autoAnimateDuration: 1.0,
 		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
         // Display controls in the bottom right corner
         controls: true,
         // Help the user learn the controls by providing hints, for example by
@@ -378,7 +689,7 @@ s[0] = "R"   # THIS WILL ERROR!!</code></pre>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -480,7 +791,7 @@ s[0] = "R"   # THIS WILL ERROR!!</code></pre>
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
-        chalkWidth: 7,
+        chalkWidth: 5,
 		boardmarkers : [
                 { color: 'rgba(248,248,242,1)', cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                 { color: 'rgba(102,217,239,1)', cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
@@ -505,6 +816,7 @@ s[0] = "R"   # THIS WILL ERROR!!</code></pre>
 			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
 		],
       });
+      
     </script>
     </body>
 </html>

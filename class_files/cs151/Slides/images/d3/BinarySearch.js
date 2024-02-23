@@ -35,7 +35,7 @@ var labels = svg.selectAll("labels").data(data).enter()
 	.attr("text-anchor", "middle")
 	.attr("font-size", "1em")
 	.attr("fill", Green)
-	.attr("alignment-baseline", "central")
+	.attr("alignment-baseline", "mathematical")
 
 
 function circle (value) {
@@ -91,7 +91,7 @@ function circle (value) {
 			.transition()
 			.duration(1000)
 			.attr("fill", "black")
-			.attr("font-size", "2em")
+			.attr("font-size", "1.8em")
 		boxes.filter(d => d.text == target)
 			.transition()
 			.duration(1000)

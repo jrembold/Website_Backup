@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Applying Constraints</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Applying Constraints</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Tuesday, February 8, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Exam 1 on Thursday!
+<ul>
+<li>Study materials posted
+<ul>
+<li>If solutions aren’t posted yet, they will be by the end of
+today</li>
+</ul></li>
+<li>Only on Chapters 1 - 5, so no joins</li>
+</ul></li>
+<li>Thursday is also the last possible day to turn in HW3</li>
+<li>Homework 4 will be posted at the end of Thursday</li>
+<li>Polling today: www.PollEv.com/jedrembold441</li>
+</ul>
+</section>
+<section id="review" class="slide level2">
+<h2>Review!</h2>
+<div class="cols">
+<div class="col">
+<p>Given the table (named <code class="python">employees</code>) to the
+right and the query immediately below, what would the output table look
+like?</p>
+<pre ><code class="pgsql" style="font-size:.8em">SELECT p1.name, p2.name
+FROM employees as p1
+LEFT JOIN employees as p2
+  ON p1.superior id > p2.id
+ORDER BY p1.name LIMIT 2;</code></pre>
+</div>
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>id</th>
+<th>name</th>
+<th>superior_id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Bob</td>
+<td>NULL</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Frank</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Kelly</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Anne</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Tiffany</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Henry</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="hpoll" style="font-size:.8em">
+<ol>
+<li><table>
+<thead>
+<tr class="header">
+<th>name</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Anne</td>
+<td>Kelly</td>
+</tr>
+<tr class="even">
+<td>Bob</td>
+<td>NULL</td>
+</tr>
+</tbody>
+</table></li>
+<li><table>
+<thead>
+<tr class="header">
+<th>name</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Anne</td>
+<td>Kelly</td>
+</tr>
+<tr class="even">
+<td>Frank</td>
+<td>Bob</td>
+</tr>
+</tbody>
+</table></li>
+<li><table>
+<thead>
+<tr class="header">
+<th>name</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Frank</td>
+<td>Bob</td>
+</tr>
+<tr class="even">
+<td>Kelly</td>
+<td>Bob</td>
+</tr>
+</tbody>
+</table></li>
+<li><table>
+<thead>
+<tr class="header">
+<th>name</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Anne</td>
+<td>Bob</td>
+</tr>
+<tr class="even">
+<td>Anne</td>
+<td>Frank</td>
+</tr>
+</tbody>
+</table></li>
+</ol>
+</div>
+</section>
+<section id="section" class="slide level2"
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/w0jUrsXWNeETTCO9nhuPi?controls=none&amp;short_poll=true">
+<h2
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/w0jUrsXWNeETTCO9nhuPi?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="identifiers" class="slide level2">
+<h2>Identifiers</h2>
+<ul>
+<li>We’ve been naming tables and columns for a while now, and sometimes
+you’ve seen double quotes around them and other times you have not</li>
+<li>Double quotes around an identifier (table or column name) achieves
+several things:
+<ul>
+<li>The name becomes <em>case sensitive</em>. Otherwise, all names in
+SQL are case insensitive.</li>
+<li>The name can include special characters that otherwise are not
+allowed
+<ul>
+<li>Without double quotes, only letters, underscores, or digits are
+allowed, and the identifier must start with a letter or underscore</li>
+</ul></li>
+<li>The name could be the same as an SQL keyword
+<ul>
+<li>If the keyword clearly would not apply where the identifier exists,
+SQL can figure it out, but otherwise it MUST be double quoted</li>
+<li>Try to limit naming identifiers after common keywords, as it just
+gets confusing</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="guidelines" class="slide level2">
+<h2>Guidelines</h2>
+<ul>
+<li>Recommendations for good identifier naming:
+<ul>
+<li><strong>Use snake case:</strong> Using all lowercase characters and
+underscores to separate words</li>
+<li><strong>Keep names easy to understand:</strong> As the complexity of
+the database increases, it might start having 100’s of tables. Given
+them names that actually help you immediately know what they
+contain!</li>
+<li><strong>Use plurals for table names:</strong> Tables hold many rows
+worth of data, so it makes sense to refer to them in the plural.</li>
+<li><strong>Keep them fairly short:</strong> Postgres limits you to 63
+characters, but other systems are even less. So keep them short and
+sweet.</li>
+<li><strong>When copying tables, use new names that assist later
+management:</strong> Often you may want to copy a table to run some
+calculations or alter it in a way that does not affect the original.
+Consider appending the date in <code class="python">YYYY-MM-DD</code> to
+the table name to make it easier to find later what your latest version
+is.</li>
+</ul></li>
+</ul>
+</section>
+<section id="why-constrain-yourself" class="slide level2">
+<h2>Why Constrain Yourself?</h2>
+<ul>
+<li>Data is only useful if we can easily access it in the form we’d
+expect</li>
+<li>Specific column types already are one step in this direction
+<ul>
+<li>Entering in data in another format either gets converted or an error
+gets output</li>
+</ul></li>
+<li>We can also import a variety of other <em>constraints</em> on the
+columns or rows of our table
+<ul>
+<li>All are with the idea of further ensuring that the data in our table
+is of the form that we expect</li>
+<li>If we try to enter or change any data that would violate these
+constraints, SQL will return an error instead.</li>
+</ul></li>
+</ul>
+</section>
+<section id="constraining-details" class="slide level2">
+<h2>Constraining Details</h2>
+<ul>
+<li>Postgres gives you two main locations where you can apply
+constraints:
+<ul>
+<li>At the column level, immediately after specifying a column type</li>
+<li>At the table level, after all columns have been specified</li>
+</ul></li>
+<li>For the most part, all the different types of contraints can be
+applied in either location
+<ul>
+<li>Only exception is constraints that refer to multiple columns, which
+should be applied as table constraints</li>
+</ul></li>
+<li>The anatomy of a constraint syntax looks like:</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:0.9em">CONSTRAINT constraint_name CONSTRAINT_TYPE CONSTRAINT_CONDITIONS</code></pre>
+</section>
+<section id="check" class="slide level2">
+<h2>CHECK</h2>
+<ul>
+<li>The <code class="python">CHECK</code> constraint is perhaps the most
+straightforward, in that it just checks to see if a certain condition is
+true</li>
+<li>If the condition is untrue, then an error will be raised</li>
+<li>Can be written in either form, but must be a table constrain if
+referencing multiple columns</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:1em">CREATE TABLE example (
+  col1 INT CHECK (col1 > 0),
+  col2 INT,
+  col3 INT,
+  CONSTRAINT second_constraint CHECK (col2 > col3)
+);</code></pre>
+</section>
+<section id="not-null" class="slide level2">
+<h2>NOT NULL</h2>
+<ul>
+<li>Often, you may want to enforce a particular column to
+<em>always</em> have data</li>
+<li>To do so, you can set up a contraint on a column to not contain any
+null values</li>
+<li>The <code class="python">NOT NULL</code> constraint is only applied
+to columns, not to the entire table!</li>
+</ul>
+<pre ><code class="pgsql">CREATE TABLE example (
+  col1 INT NOT NULL,
+  col2 INT
+);</code></pre>
+</section>
+<section id="uniqueness" class="slide level2">
+<h2>Uniqueness</h2>
+<ul>
+<li>Similarly to forcing a column to always contain data, you can also
+force it to have only <em>unique</em> data</li>
+<li>Requires that every row in that column have a distinct value. Any
+duplicates will be rejected.</li>
+<li>If done as a table constraint, can also require
+<strong>pairs</strong> of columns to be unique</li>
+</ul>
+<pre ><code class="pgsql">CREATE TABLE example (
+  col1 INT UNIQUE,
+  col2 INT,
+  col3 INT,
+  CONSTRAINT uniq_pair UNIQUE (col2, col3)
+);</code></pre>
+</section>
+<section id="understanding-check" class="slide level2">
+<h2>Understanding Check</h2>
+<div class="cols">
+<div class="col">
+<p>Given the table created as seen below, which insertion command would
+complete successfully?</p>
+<pre ><code class="pgsql" style="font-size:.8em">CREATE TABLE uc (
+  id_num INT UNIQUE NOT NULL,
+  prod_name TEXT UNIQUE,
+  price NUMERIC(5,2)
+  wholesale NUMERIC(5,2),
+  CHECK (price > wholesale),
+  CHECK (price >= 0)
+);</code></pre>
+</div>
+<div class="col">
+<pre ><code class="pgsql answer" name="A" style="font-size:.6em;">INSERT INTO uc VALUES
+ (1, 'Steak', 3.22, 5.00),
+ (2, 'Beans', 4.12, 2.50));</code></pre>
+<pre ><code class="pgsql answer" name="A" style="font-size:.6em;">INSERT INTO uc VALUES
+ (1, 'Steak', 3.22, 1.23),
+ (2, NULL, 2.65, 1.26));</code></pre>
+<pre ><code class="pgsql answer" name="A" style="font-size:.6em">INSERT INTO uc VALUES
+ (1, 'Steak', 3.22, 2.78),
+ (NULL, 'Beans', 4.12, 2.50));</code></pre>
+<pre ><code class="pgsql answer" name="A" style="font-size:.6em">INSERT INTO uc VALUES
+ (1, 'Steak', -3.22, -5.00),
+ (2, 'Steak', 4.12, 2.50));</code></pre>
+</div>
+</div>
+</section>
+<section id="section-1" class="slide level2"
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/oO5Ge5RNTVf9Dj6VvEd9h?controls=none&amp;short_poll=true">
+<h2
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/oO5Ge5RNTVf9Dj6VvEd9h?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="the-primary-directive" class="slide level2">
+<h2>The Primary Directive</h2>
+<ul>
+<li>Combining <code class="python">UNIQUE</code> and
+<code class="python">NOT NULL</code> is so common that such a constraint
+gets its own name: the <em>primary key</em></li>
+<li>A primary key gives you an unambiguous way to select a specific row
+from a table</li>
+<li>If you already have a table column doing this, why declare as a
+primary key?
+<ul>
+<li>It enforces that entries in your column need to maintain this unique
+and present constraint going forward</li>
+<li>It can simplify joins, as the default column to join on is the
+primary key</li>
+<li>It will speed of queries, as SQL uses the primary key to better
+optimize its searches</li>
+</ul></li>
+<li>Sometimes desirable to create a <em>composite primary key</em> based
+off multiple columns</li>
+</ul>
+</section>
+<section id="natural-vs-surrogate" class="slide level2">
+<h2>Natural vs Surrogate</h2>
+<ul>
+<li>Where possible, using a <em>natural</em> primary key is often
+preferred
+<ul>
+<li>Requires that a column already in your data meets the criteria of
+containing purely unique, non-null values</li>
+<li>Can sometimes combine a few columns to arrive at this
+requirement</li>
+<li>Using the existing data for the key helps give the primary key some
+actual meaning</li>
+</ul></li>
+<li>In other situations, a <em>surrogate</em> primary key may be
+necessary
+<ul>
+<li>Adds an artificial column to your table that contains purely unique,
+non-null values
+<ul>
+<li>The <code class="python">SERIAL</code> data types are great for
+this, or some people prefer to use UUIDs</li>
+</ul></li>
+<li>The drawback is that your tables may lose some meaning without
+performing a bunch of joins</li>
+</ul></li>
+</ul>
+</section>
+<section id="creating-primary-keys" class="slide level2">
+<h2>Creating Primary Keys</h2>
+<ul>
+<li>You can create a primary key constraint on a single column using
+either syntax</li>
+<li>Composite primary keys must be done as a table constraint</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:1em">CREATE TABLE example (
+  col1 TEXT PRIMARY KEY,
+  col2 INT
+  );</code></pre>
+<pre ><code class="pgsql" style="font-size:1em">CREATE TABLE example (
+  col1 TEXT,
+  col2 INT,
+  col3 INT,
+  CONSTRAINT comp_key PRIMARY KEY (col1, col2)
+);</code></pre>
+</section>
+<section id="foreign-keys" class="slide level2">
+<h2>Foreign Keys</h2>
+<ul>
+<li>Tables can be related to other tables: <em>foreign key
+constraints</em> are a way to formalize these relationships</li>
+<li>Says: “the values in this column are related to this other column in
+this other table”
+<ul>
+<li>Almost always refers to another primary key, though it could
+technically be any uniquely constrained column</li>
+</ul></li>
+<li>Could have many foreign key constraints in one table, as opposed to
+having only a single primary key constraint</li>
+<li>Uses the keyword <code class="python">REFERENCES</code></li>
+</ul>
+<pre ><code class="pgsql" style="font-size:1em">CREATE TABLE example2 (
+  col1 TEXT PRIMARY KEY,
+  col2 INT REFERENCES example (col1)
+);</code></pre>
+</section>
+<section id="table-foreign-constraints" class="slide level2">
+<h2>Table Foreign Constraints</h2>
+<ul>
+<li>Declaring foreign constraints in the table syntax is more
+cumbersome, and I’d only do it if you had a composite primary key that
+you needed to match</li>
+</ul>
+<pre ><code class="pgsql">CREATE TABLE example2 (
+  col1 TEXT PRIMARY KEY,
+  col2 INT,
+  col3 INT,
+  CONSTRAINT fkey_pair FOREIGN KEY (col2,col3) 
+    REFERENCES example (col1,col2)
+);</code></pre>
+</section>
+<section id="foreign-considerations" class="slide level2">
+<h2>Foreign Considerations</h2>
+<ul>
+<li>Foreign keys are meant to enforce the relations between tables, so
+they raise some other considerations
+<ul>
+<li>You can not add a row to a table that refers to another until that
+other table contains the necessary primary key</li>
+<li>You can not delete a table that has another depending on it</li>
+<li>By default, you can not delete or change an individual row in a
+table that is being referenced by another
+<ul>
+<li>Can alter this so that any referencing rows are ALSO deleted</li>
+<li>Could also tweak to set those row foreign keys to be
+<code class="python">NULL</code> or the column default</li>
+</ul>
+<pre ><code class="pgsql">...
+col2 INT REFERENCES example ON DELETE CASCADE
+col3 INT REFERENCES example ON DELETE SET NULL
+...</code></pre></li>
+</ul></li>
+</ul>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<ul>
+<li>We previously looked at joins with the roster, hw_info, and
+submissions tables. How would we create these with full
+constraints?</li>
+</ul>
+<p><img data-src="../images/hw_assignment_schema.png" /></p>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Check the Index</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Check the Index</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Tuesday, February 15, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Exam 1 being handed back!
+<ul>
+<li>We’ll go over it in a moment</li>
+</ul></li>
+<li>Hopefully you saw that HW4 has been posted. Due on Thursday.
+<ul>
+<li>Entirely on joins, so you have everything you need already.</li>
+</ul></li>
+<li>Polling today: www.PollEv.com/jedrembold441</li>
+</ul>
+</section>
+<section id="exam-summary" class="slide level2">
+<h2>Exam Summary</h2>
+<div class="cols" style="align-items:center">
+<div class="col" style="flex-grow:2">
+<p><img data-src="../images/exam1_hist.png" style="width:100.0%" /></p>
+</div>
+<div class="col">
+<ul>
+<li>Average: 87.084</li>
+<li>Median: 87.805</li>
+<li>StDev: 8.391</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="problem-1" class="slide level2">
+<h2>Problem 1</h2>
+<div class="cols">
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">id</code></td>
+<td><code class="python">SERIAL</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">name</code></td>
+<td><code class="python">TEXT</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">age</code></td>
+<td><code class="python">SMALLINT</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">gender</code></td>
+<td><code class="python">VARCHAR(15)</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">met_thru</code></td>
+<td><code class="python">VARCHAR(20)</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">last_talk</code></td>
+<td><code class="python">DATE</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">notes</code></td>
+<td><code class="python">TEXT</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col">
+<pre ><code class="pgsql" style="font-size:.8em">SELECT name
+FROM correspondents
+WHERE gender = 'Female' and last_talk < '2018';</code></pre>
+<pre ><code class="pgsql" style="font-size:.8em">SELECT avg(age)
+FROM correspondents
+WHERE notes ILIKE '%had baby%' 
+   OR notes ILIKE '%pregnant%';</code></pre>
+<pre ><code class="pgsql" style="font-size:.8em">SELECT DISTINCT met_thru 
+FROM correspondents
+ORDER BY last_talk DESC LIMIT 5;</code></pre>
+</div>
+</div>
+</section>
+<section id="problem-2" class="slide level2">
+<h2>Problem 2</h2>
+<pre ><code class="pgsql">SELECT
+    min(red - cyan::INT) AS new_a,
+    percentile_disc(0.5) WITHIN GROUP 
+         (ORDER BY cyan) AS new_b,
+    max(2 * red + green) AS new_c
+FROM mysterious_table
+WHERE blue ILIKE '%odd' 
+  AND orange BETWEEN '1:00' AND '13:00';</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">new_a</code></td>
+<td><code class="python">INTEGER</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">new_b</code></td>
+<td><code class="python">REAL</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">new_c</code></td>
+<td><code class="python">NUMERIC</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="problem-3" class="slide level2">
+<h2>Problem 3</h2>
+<pre ><code class="text" style="font-size:1em">William Ellison,57 Elizabeth Dr.,Merrillville,IN,46410
+Colten Spears,8457 Sycamore Ave.,Amsterdam,NY,12010
+Kendra Aguilar,76 North Alton Lane,Tualatin,OR,97062
+Natalia Church,7789 Ryan Dr.,Englewood,NJ,07631</code></pre>
+<ul>
+<li>Write out a command to create the table to store this information,
+with extra <code class="python">id</code> field.</li>
+<li>Write out a command to import the data into your table.</li>
+<li>Add some new information to the end of the table.</li>
+</ul>
+</section>
+<section id="problem-4a" class="slide level2">
+<h2>Problem 4a</h2>
+<table>
+<thead>
+<tr class="header">
+<th>c1</th>
+<th>c2</th>
+<th>c3</th>
+<th>c4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2022-06-29</td>
+<td>Curling</td>
+<td>24</td>
+<td>9.5</td>
+</tr>
+<tr class="even">
+<td>2022-11-15</td>
+<td>Tennis</td>
+<td><code class="python">NULL</code></td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td>2022-06-12</td>
+<td>Baseball</td>
+<td>2</td>
+<td>-0.5</td>
+</tr>
+<tr class="even">
+<td>2022-12-27</td>
+<td>Ultimate</td>
+<td>0</td>
+<td>2.1</td>
+</tr>
+<tr class="odd">
+<td>2022-04-15</td>
+<td>Surfing</td>
+<td><code class="python">NULL</code></td>
+<td>4.5</td>
+</tr>
+<tr class="even">
+<td>2022-10-03</td>
+<td>Cheerleading</td>
+<td>10</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+<pre ><code class="pgsql">SELECT c2, c3 + c4 AS "add"
+FROM amazing
+WHERE c2 ILIKE '%e%i%'
+ORDER BY c2;    </code></pre>
+</section>
+<section id="problem-4b" class="slide level2">
+<h2>Problem 4b</h2>
+<table>
+<thead>
+<tr class="header">
+<th>c1</th>
+<th>c2</th>
+<th>c3</th>
+<th>c4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2022-06-29</td>
+<td>Curling</td>
+<td>24</td>
+<td>9.5</td>
+</tr>
+<tr class="even">
+<td>2022-11-15</td>
+<td>Tennis</td>
+<td><code class="python">NULL</code></td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td>2022-06-12</td>
+<td>Baseball</td>
+<td>2</td>
+<td>-0.5</td>
+</tr>
+<tr class="even">
+<td>2022-12-27</td>
+<td>Ultimate</td>
+<td>0</td>
+<td>2.1</td>
+</tr>
+<tr class="odd">
+<td>2022-04-15</td>
+<td>Surfing</td>
+<td><code class="python">NULL</code></td>
+<td>4.5</td>
+</tr>
+<tr class="even">
+<td>2022-10-03</td>
+<td>Cheerleading</td>
+<td>10</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+<pre ><code class="pgsql">SELECT COUNT(*) % COUNT(c3) AS rem
+FROM amazing
+WHERE c4 > 0;</code></pre>
+</section>
+<section id="problem-4c" class="slide level2">
+<h2>Problem 4c</h2>
+<table>
+<thead>
+<tr class="header">
+<th>c1</th>
+<th>c2</th>
+<th>c3</th>
+<th>c4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2022-06-29</td>
+<td>Curling</td>
+<td>24</td>
+<td>9.5</td>
+</tr>
+<tr class="even">
+<td>2022-11-15</td>
+<td>Tennis</td>
+<td><code class="python">NULL</code></td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td>2022-06-12</td>
+<td>Baseball</td>
+<td>2</td>
+<td>-0.5</td>
+</tr>
+<tr class="even">
+<td>2022-12-27</td>
+<td>Ultimate</td>
+<td>0</td>
+<td>2.1</td>
+</tr>
+<tr class="odd">
+<td>2022-04-15</td>
+<td>Surfing</td>
+<td><code class="python">NULL</code></td>
+<td>4.5</td>
+</tr>
+<tr class="even">
+<td>2022-10-03</td>
+<td>Cheerleading</td>
+<td>10</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+<pre ><code class="pgsql">SELECT c2
+FROM amazing
+WHERE c1::TEXT ILIKE '%-0_-%'
+ORDER BY c4;</code></pre>
+</section>
+<section id="problem-4d" class="slide level2">
+<h2>Problem 4d</h2>
+<table>
+<thead>
+<tr class="header">
+<th>c1</th>
+<th>c2</th>
+<th>c3</th>
+<th>c4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2022-06-29</td>
+<td>Curling</td>
+<td>24</td>
+<td>9.5</td>
+</tr>
+<tr class="even">
+<td>2022-11-15</td>
+<td>Tennis</td>
+<td><code class="python">NULL</code></td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td>2022-06-12</td>
+<td>Baseball</td>
+<td>2</td>
+<td>-0.5</td>
+</tr>
+<tr class="even">
+<td>2022-12-27</td>
+<td>Ultimate</td>
+<td>0</td>
+<td>2.1</td>
+</tr>
+<tr class="odd">
+<td>2022-04-15</td>
+<td>Surfing</td>
+<td><code class="python">NULL</code></td>
+<td>4.5</td>
+</tr>
+<tr class="even">
+<td>2022-10-03</td>
+<td>Cheerleading</td>
+<td>10</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+<pre ><code class="pgsql">SELECT sum(c4)
+FROM amazing
+WHERE c3 IS NULL OR c4 < 0;</code></pre>
+</section>
+<section id="problem-5" class="slide level2">
+<h2>Problem 5</h2>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 16%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>puzzle_id</td>
+<td><code class="python">INT</code></td>
+<td>The unique puzzle id number</td>
+</tr>
+<tr class="even">
+<td>release_date</td>
+<td><code class="python">DATE</code></td>
+<td>The day the puzzle was publically available</td>
+</tr>
+<tr class="odd">
+<td>solution</td>
+<td><code class="python">CHAR(5)</code></td>
+<td>The 5 letter solution to the puzzle</td>
+</tr>
+<tr class="even">
+<td>player_name</td>
+<td><code class="python">TEXT</code></td>
+<td>The name of the player</td>
+</tr>
+<tr class="odd">
+<td>guesses</td>
+<td><code class="python">SMALLINT</code></td>
+<td>Number of guesses. Null if more than 6</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>When the player named “Bobby” attempts a puzzle, he succeeds in
+solving it what percentage of the time?</li>
+<li>What is the most likely number of guesses it takes any player to
+complete the puzzle if the letter “a” is the second letter?</li>
+<li>How many of the daily puzzles have been solved in one guess?</li>
+</ul>
+<!--
+## Activity
+Suppose you wanted to track your Spotify playlist information in your own database. Questions you may want to be able to answer might include:
+
+- What is the total playtime of this playlist?
+- What is the most common band in a particular playlist?
+- Of all the artists who perform songs in any playlist, which artists collaborate with others the most?
+- Songs from how many different albums are in a particular playlist?
+
+In groups of two or three, sketch out table diagrams similar to what we just saw in the previous example (commonly called ERD or Entity Relationship Diagrams), that would allow all these questions to be answered. Your tables should include primary keys and foreign keys where appropriate.
+
+Online sketching resources include: [drawsql](https://drawsql.app/), [visual-paradigm](https://online.visual-paradigm.com/), or [DrawIO](https://app.diagrams.net/)
+-->
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<p>One of the commands below to create a table is valid. Which is
+it?</p>
+<div class="cols">
+<div class="col">
+<pre ><code class="pgsql answer" style="font-size:.8em" name="A">CREATE TABLE rev_a (
+  "name" TEXT PRIMARY KEY,
+  "year" INT PRIMARY KEY,
+  "class" TEXT
+);</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.8em" name="C">CREATE TABLE rev_a (
+  "name" TEXT UNIQUE NOT NULL,
+  "year" INT 
+   CHECK("class" != 'junior'),
+  "class" TEXT
+);</code></pre>
+</div>
+<div class="col">
+<pre ><code class="pgsql answer" style="font-size:.8em" name="B">CREATE TABLE rev_a (
+  "name" TEXT,
+  "year" INT,
+  "class" TEXT REFERENCES other,
+  CONSTRAINT "name" PRIMARY KEY );</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.8em" name="D">CREATE TABLE rev_a (
+  "name" TEXT,
+  "year" INT,
+  "class" TEXT,
+  PRIMARY KEY ("name"),
+  UNIQUE ("year","class"));</code></pre>
+</div>
+</div>
+</section>
+<section id="section" class="slide level2"
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/8wkq2eveNBAqNsX1nn394?controls=none&amp;short_poll=true">
+<h2
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/8wkq2eveNBAqNsX1nn394?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="consulting-an-index" class="slide level2">
+<h2>Consulting an Index</h2>
+<ul>
+<li>Like in a book, an <em>index</em> is a precomputed guide to help
+find things faster</li>
+<li>We can construct similar precomputed guides for certain columns in
+SQL to also help find things faster!</li>
+<li>There are several different types of indexes
+<ul>
+<li>By default, the assigned index type is a B-Tree index in Postgres
+<ul>
+<li>B-Tree stands for <em>balanced tree</em> and work best for
+<em>orderable</em> type data</li>
+</ul></li>
+<li>Index types like <em>Generalized Inverted Index</em> (GIN) and
+<em>Generalized Search Tree</em> (GiST) will be discussed later as they
+come up</li>
+<li>Different columns in the same table can be indexed with different
+methods</li>
+</ul></li>
+</ul>
+</section>
+<section id="climbing-a-b-tree" class="slide level2">
+<h2>Climbing a B-Tree</h2>
+<figure>
+<img data-src="../images/b-tree-loopup.png" style="width:80.0%"
+alt="Showing the structure and looking up a key in a B-Tree" />
+<figcaption aria-hidden="true">Showing the structure and looking up a
+key in a B-Tree</figcaption>
+</figure>
+</section>
+<section id="creating-indexes" class="slide level2">
+<h2>Creating Indexes</h2>
+<ul>
+<li><p>Postgres will automatically index any column that is a primary
+key or which has the <code class="python">UNIQUE</code>
+constraint</p></li>
+<li><p>You can choose to set up indexes on other columns as well, but do
+so outside of the table creation</p>
+<pre ><code class="pgsql" style="font-size:1em">CREATE INDEX index_name ON table_name (col_name);</code></pre></li>
+<li><p>If you decide you want to remove an index, you do so using the
+index name:</p>
+<pre ><code class="pgsql" style="font-size:1em">DROP INDEX index_name</code></pre></li>
+</ul>
+</section>
+<section id="benchmarking" class="slide level2">
+<h2>Benchmarking</h2>
+<ul>
+<li>One of the prime reasons for creating an index is to speed up access
+or manipulation of the data later</li>
+<li>How can we objectively test this?
+<ul>
+<li>Postgres has the <code class="python">EXPLAIN</code> keyword to give
+you information about what the database is doing in the background</li>
+<li>Using <code class="python">EXPLAIN ANALYZE</code> will also give you
+timing information about how long it took a query to run</li>
+</ul></li>
+<li><code class="python">EXPLAIN</code> always comes at the start of
+your query</li>
+<li>Other SQL variants have their own versions, but most have some
+method of getting information back about execution time or what is being
+done under the hood</li>
+</ul>
+</section>
+<section id="benchmarking-caveats" class="slide level2">
+<h2>Benchmarking Caveats</h2>
+<ul>
+<li><code class="python">EXPLAIN ANALYZE</code> reports to you the time
+it took the server to process the query, not necessarily the time it
+took your client to finish getting and rendering the response!
+<ul>
+<li>Especially for queries that return a huge number of rows, you might
+see a significant difference</li>
+</ul></li>
+<li>Indexes are optimized for certain types of operations. Just because
+you index a column doesn’t mean that Postgres will <strong>use</strong>
+that index if you are doing an incompatible operation!
+<ul>
+<li>Check more than just the timings from
+<code class="python">EXPLAIN ANALYZE</code>
+<ul>
+<li>See comments about Bitmaps and Heaps? Then the index was used.</li>
+<li>See comments about Parallel or Seq scans? Then the index was not
+used.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="costs" class="slide level2">
+<h2>Costs</h2>
+<ul>
+<li>Indexes always have a cost associated with them, both in initial
+setup and in every time new data is added to the column
+<ul>
+<li>Also, they are stored information, so they can also inflate your
+database size</li>
+</ul></li>
+<li>Consider indexing only those columns that receive the heaviest of
+use in filters or in joining</li>
+<li>You never need to worry about indexing primary keys or unique
+columns, as those are done automatically</li>
+<li>When in doubt, <strong>benchmark</strong> your queries before and
+after adding an index to see if you are really gaining much from
+it!</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Calculated</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Calculated</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Tuesday, January 25, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>HW2 is due on Thursday night!
+<ul>
+<li>HW1 feedback has been posted on GitHub. Guide for how to view will
+also be posted on the website.</li>
+</ul></li>
+<li>We’ll still be working through Ch 5 on Thursday</li>
+<li>Polling today: www.PollEv.com/jedrembold441</li>
+</ul>
+</section>
+<section id="understanding-check" class="slide level2">
+<h2>Understanding Check</h2>
+<div class="cols">
+<div class="col">
+<pre ><code class="pgsql" style="font-size:.8em">CREATE TABLE purchases (
+  "date" DATE,
+  "store" VARCHAR(20),
+  "purchased" TEXT,
+  "tot_price" NUMERIC(10,2));</code></pre>
+<p>How to import the data to the right into the above table?</p>
+</div>
+<div class="col">
+<pre ><code class="text file" name="C:\DATA\purchases.csv" style="font-size:.9em">date:store:purchased
+Jan-5-22:Walmart:eggs,milk
+Jan-10-22:Roths:cereal,steak
+Jan-16-22:Roths:milk,butter
+Jan-18-22:Winco:beans</code></pre>
+</div>
+</div>
+<div class="cols">
+<div class="col">
+<pre ><code class="pgsql answer" style="font-size:.7em;" name="A">COPY purchases
+FROM 'C:\DATA\purchases.csv'
+WITH (FORMAT CSV, HEADER);</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.7em;" name="C">COPY purchases (date, store, purchased)
+FROM 'C:\DATA\purchases.csv'
+WITH (FORMAT CSV, HEADER, 
+      DELIMITER ':');</code></pre>
+</div>
+<div class="col">
+<pre ><code class="pgsql answer" style="font-size:.7em;" name="B">COPY purchases (date, store, purchased)
+FROM 'C:\DATA\purchases.csv'
+WITH (FORMAT CSV, DELIMITER ':');</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.7em;" name="D">COPY purchases (date, store)
+FROM 'purchases.csv'
+WITH (FORMAT CSV, HEADER,
+      DELIMITER ',');</code></pre>
+</div>
+</div>
+</section>
+<section id="section" class="slide level2"
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/Mf4J5hvZj2SocBpehiVfa?controls=none&amp;short_poll=true">
+<h2
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/Mf4J5hvZj2SocBpehiVfa?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="not-null" class="slide level2">
+<h2>Not Null</h2>
+<ul>
+<li>Probably have come across instances where you don’t want to have a
+bunch of <code class="python">NULL</code> values in your output
+query</li>
+<li>You can <strong>not</strong> filter them out using
+<code class="python">colname != NULL</code>
+<ul>
+<li>A <code class="python">NULL</code> value comparison <em>always</em>
+gives <code class="python">NULL</code>, no matter the comparison</li>
+</ul></li>
+<li>Need to use the keywords <code class="python">IS NOT NULL</code> (or
+<code class="python">IS NULL</code> if you want to find the null
+values)</li>
+</ul>
+<pre ><code class="pgsql">SELECT colname
+FROM tablename
+WHERE colname IS NOT NULL;</code></pre>
+</section>
+<section id="some-commentary" class="slide level2">
+<h2>Some Commentary</h2>
+<ul>
+<li>It can be useful sometimes to leave yourself little notes or
+explanations in your queries, especially if you are saving them for
+later</li>
+<li>Like many programming languages, SQL has the concept of a
+<em>comment</em>, which is a piece of text that is entirely ignored by
+the system when running commands</li>
+<li>In SQL, you can only comment a single line at a time</li>
+<li>Use a double dash prefix <code class="python">--</code> to turn
+everything following on that line to a comment</li>
+</ul>
+<pre ><code class="pgsql">-- This is a comment
+SELECT *
+FROM table_name -- this is my table name
+ORDER BY col1;</code></pre>
+</section>
+<section id="making-calculations" class="slide level2">
+<h2>Making Calculations</h2>
+<ul>
+<li>Just like your favorite spreadsheet program, SQL can perform a wide
+variety of calculations on data within tables
+<ul>
+<li>Basic arithmetic</li>
+<li>Calculations between columns</li>
+<li>Calculations within columns</li>
+<li>Applying functions to columns</li>
+</ul></li>
+<li>We’ll initially focus on how to do the first several, and save
+things like functions until a bit later in the semester</li>
+</ul>
+</section>
+<section id="testing-in-sql" class="slide level2">
+<h2>Testing in SQL</h2>
+<ul>
+<li>When testing or troubleshooting, it can be useful to not have to
+work with entire tables
+<ul>
+<li>Keeps things simple</li>
+<li>You don’t have to worry about generating a “test” table to work
+with</li>
+</ul></li>
+<li>You can run <code class="python">SELECT</code> statements on values
+directly if needed, omitting a reference to a table!
+<ul>
+<li>Just leave off the <code class="python">FROM</code> portion of the
+statement</li>
+</ul>
+<pre ><code class="pgsql">SELECT CAST('Jan 25, 2022' AS DATE);</code></pre>
+<pre ><code class="pgsql">SELECT 'aardvark' > 'Zebra';</code></pre></li>
+<li>This can be particularly useful as we begin to look at how SQL
+handles basic calculations</li>
+</ul>
+</section>
+<section id="fundamental-arithmetic" class="slide level2">
+<h2>Fundamental Arithmetic</h2>
+<ul>
+<li>SQL understands all the basic arithmetic symbols and operations you
+learned in grade school</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Operator</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code class="python">+</code></td>
+<td>Addition</td>
+<td><code class="python">4 + 5</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code class="python">-</code></td>
+<td>Subtraction</td>
+<td><code class="python">10 - 5</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code class="python">*</code></td>
+<td>Multiplication</td>
+<td><code class="python">2 * 4</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code class="python">/</code></td>
+<td>Division</td>
+<td><code class="python">20 / 5</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>All are part of the SQL standard, available in any variant</li>
+<li>All of these can be used and computed directly in whatever portion
+of an SQL command you might need (selects, filters, ordering, etc.)</li>
+</ul>
+<pre ><code class="pgsql">SELECT 5 * 4 / 2;</code></pre>
+</section>
+<section id="further-operation-symbols" class="slide level2">
+<h2>Further Operation Symbols</h2>
+<ul>
+<li>Additionally, Postgres supports a handful of other common
+mathematical symbolic operations</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Operator</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">%</code></td>
+<td>Modulo (remainder)</td>
+<td><code class="python">7 % 5</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">^</code></td>
+<td>Exponentiation</td>
+<td><code class="python">3 ^ 2</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">|/</code></td>
+<td>Square root</td>
+<td><code class="python">|/9</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">||/</code></td>
+<td>Cube root</td>
+<td><code class="python">||/27</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">!</code></td>
+<td>Factorial</td>
+<td><code class="python">5!</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">@</code></td>
+<td>Absolute value</td>
+<td><code class="python">@ -42</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>I prefer the functional counterparts instead of some of these
+symbols</li>
+</ul>
+<pre ><code class="pgsql">SELECT 5! % 7;</code></pre>
+</section>
+<section id="resulting-data-types" class="slide level2">
+<h2>Resulting Data Types</h2>
+<ul>
+<li>The types of objects involved in an operation determine the
+resulting type</li>
+<li>Basic arithmetic and modulo:
+<ul>
+<li>Two integers → an integer</li>
+<li>Numeric on either side → numeric (not necessarily with the same
+precision/scale)</li>
+<li>Any float → double precision</li>
+</ul></li>
+<li><strong>Be most wary of dividing two integers!</strong></li>
+<li>The exponentiation and root operations will mostly return floats or
+numeric, regardless of if an integer is entered</li>
+<li>You may need to cast a value to a different data type to get the
+desired output at times!</li>
+<li>The <code class="python">pg_typeof()</code> function can be useful
+at times if you need to check a data type</li>
+</ul>
+</section>
+<section id="there-must-be-order" class="slide level2">
+<h2>There Must be Order</h2>
+<ul>
+<li>SQL follows your standard order of operations
+<ol>
+<li>Exponents and roots</li>
+<li>Multiplication, division, and modulo</li>
+<li>Addition and subtraction</li>
+</ol></li>
+<li>If you want some other ordering, you need to use parentheses to
+group things accordingly, as operations in parentheses happen first</li>
+</ul>
+<pre ><code class="pgsql">SELECT 4 ^ (9 % 2 + 1);</code></pre>
+</section>
+<section id="understanding-check-1" class="slide level2">
+<h2>Understanding Check</h2>
+<p>What would be the output of the below selection?</p>
+<pre ><code class="pgsql">SELECT (1 + 2) ^ (9 % (10 - 4) / 2) * 2::REAL;</code></pre>
+<div class="poll">
+<ol>
+<li>10.3923</li>
+<li>6</li>
+<li>8.4821</li>
+<li>2</li>
+</ol>
+</div>
+</section>
+<section id="section-1" class="slide level2"
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/ovCdlilqWpwphcHD2Rl42?controls=none&amp;short_poll=true">
+<h2
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/ovCdlilqWpwphcHD2Rl42?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="common-mathematical-functions" class="slide level2">
+<h2>Common Mathematical Functions</h2>
+<ul>
+<li>Postgres supports many common mathematical functions as well</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">sqrt(num)</code></td>
+<td>Square root</td>
+</tr>
+<tr class="even">
+<td><code class="python">abs(num)</code></td>
+<td>Absolute value</td>
+</tr>
+<tr class="odd">
+<td><code class="python">factorial(num)</code></td>
+<td>Factorial of a number</td>
+</tr>
+<tr class="even">
+<td><code class="python">sin(num)</code></td>
+<td>Sine of radians</td>
+</tr>
+<tr class="odd">
+<td><code class="python">sind(num)</code></td>
+<td>Sine of degrees</td>
+</tr>
+<tr class="even">
+<td><code class="python">asin(num)</code></td>
+<td>Inverse sine in radians</td>
+</tr>
+<tr class="odd">
+<td><code class="python">degrees(num)</code></td>
+<td>Convert radians to degrees</td>
+</tr>
+<tr class="even">
+<td><code class="python">log(num)</code></td>
+<td>Base 10 logarithm</td>
+</tr>
+<tr class="odd">
+<td><code class="python">ln(num)</code></td>
+<td>Base e logarithm</td>
+</tr>
+<tr class="even">
+<td><code class="python">round(num,scale)</code></td>
+<td>Round number to scale decimal places</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="renaming-columns" class="slide level2">
+<h2>Renaming Columns</h2>
+<ul>
+<li><p>You may have noticed that the default column names when selecting
+a calculation can be nonsensical</p></li>
+<li><p>SQL provides a way for you to name a column on the fly, using the
+<code class="python">AS</code> keyword</p></li>
+<li><p>Technically forms what is commonly called an alias</p></li>
+<li><p>Syntax:</p>
+<pre ><code class="pgsql">SELECT (calculation) AS col_name;</code></pre></li>
+<li><p>You can then refer to that column name later in your command if
+you want or need</p>
+<ul>
+<li>In particular, in <code class="python">ORDER BY</code> or (later)
+<code class="python">GROUP BY</code></li>
+<li>You can <em>not</em> use the alias in
+<code class="python">WHERE</code> or (later)
+<code class="python">HAVING</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="column-operations" class="slide level2">
+<h2>Column Operations</h2>
+<ul>
+<li>You can do operations on entire columns at a time</li>
+<li>Just use the column name in the calculation expression</li>
+<li>Calculations are done on a row by row basis</li>
+<li>Can use anywhere else you would use a calculation (selections,
+filters, ordering, etc.)</li>
+</ul>
+<pre ><code class="pgsql">SELECT col1, col2, col1 - col2 FROM tablename;</code></pre>
+<p><img data-src="../images/column_calc.png" style="width:90.0%" /></p>
+</section>
+<section id="queries-to-tables" class="slide level2">
+<h2>Queries to Tables</h2>
+<ul>
+<li>Sometimes, especially as we continue to build sophistication in our
+queries, you may want to save the output of a query to another database
+table</li>
+<li>This can give you a multistep process in approaching more
+complicated actions</li>
+<li>Sometimes useful to use a <em>temporary</em> table as well by adding
+the <code class="python">TEMP</code> keyword
+<ul>
+<li>Only exists until you close out the session</li>
+</ul></li>
+<li>To set a table to a query output, use the
+<code class="python">AS</code> keyword</li>
+</ul>
+<pre ><code class="pgsql">CREATE TEMP TABLE my_temp_table AS (
+  SELECT col1, col2, ... FROM existing_table
+);</code></pre>
+<!-- On Thursday
+## Aggregate Functions
+-->
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1440,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

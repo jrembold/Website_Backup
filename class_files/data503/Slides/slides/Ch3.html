@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>The Right Type</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">The Right Type</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Tuesday, January 18, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>HW1 is due at the end of the day on Thursday
+<ul>
+<li>You just need to have uploaded your solutions back to the GitHub repository. Nothing else needs to be done.</li>
+<li>If you have not started yet, know that guides have been posted on the website for setting up VSCode with Postgres and for downloading and uploading materials through GitHub Classroom</li>
+</ul></li>
+<li>Look over Ch 4 for Thursday</li>
+<li>We’ll continue using YouTube’s polling feature today for review and understanding checks</li>
+</ul>
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<div class="cols">
+<div class="col">
+<p>Suppose a table had been created using the SQL statement to the right. How would you then query for the most recent number of positive cases from a university (school with “University” in its name)?</p>
+</div>
+<div class="col" style="flex-grow:1">
+<pre ><code class="pgsql" style="font-size:.9em;">CREATE TABLE cases (
+  id BIGSERIAL,
+  school_name VARCHAR(50),
+  case_positive INT,
+  tests_run INT,
+  date_taken DATE
+);</code></pre>
+</div>
+</div>
+<div class="cols">
+<div class="col">
+<div class="block" name="A">
+<pre ><code class="pgsql" style="font-size:.9em;">SELECT case_positive FROM cases
+WHERE school_name LIKE '_University_'
+ORDER BY date_taken;</code></pre>
+</div>
+<div class="block" name="C">
+<pre ><code class="pgsql" style="font-size:.9em;">SELECT case_positive FROM cases
+WHERE school_name LIKE '%University%'
+ORDER BY case_positive DESC, 
+         date_taken DESC;</code></pre>
+</div>
+</div>
+<div class="col">
+<div class="block" name="B">
+<pre ><code class="pgsql" style="font-size:.9em;">SELECT case_positive FROM cases
+WHERE school_name LIKE '_University_'
+ORDER BY date_taken DESC;</code></pre>
+</div>
+<div class="block" name="D">
+<pre ><code class="pgsql" style="font-size:.9em;">SELECT case_positive FROM cases
+WHERE school_name LIKE '%University%'
+ORDER BY date_taken DESC;</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="data-type-fundamentals" class="slide level2">
+<h2>Data Type Fundamentals</h2>
+<ul>
+<li>Each column in a table can only have data of a <strong>single</strong> type
+<ul>
+<li>Or be missing an entry, designated with a special <code class="python">NULL</code> entry</li>
+</ul></li>
+<li>Assigning the correct data types of columns can
+<ul>
+<li>Improve memory allocations</li>
+<li>Improve performance</li>
+<li>Prevent errors in data entry</li>
+<li>Prevent mistakes in calculations</li>
+</ul></li>
+<li>Postgres can accept a <em>large</em> number of data types, but today we will focus in depth on the most common: characters, numbers, and dates and times</li>
+</ul>
+</section>
+<section id="characters-or-text" class="slide level2" data-notes="Example after this">
+<h2 data-notes="Example after this">Characters or Text</h2>
+<ul>
+<li>One of the more common things to be stored are characters or sequences of characters</li>
+<li>Postgres has several types you can use to store this sort of information:
+<ul>
+<li><code class="python">CHAR(n)</code>: A fixed length column of <em>n</em> characters. <strong>Always</strong> uses this amount of characters, padding with spaces if your stored sequence of characters is shorter.
+<ul>
+<li>Omitting the <code class="python">(n)</code> is the same as <code class="pgsql">CHAR(1)</code></li>
+</ul></li>
+<li><code class="python">VARCHAR(n)</code>: A variable length column with a <strong>maximum</strong> of <em>n</em> characters. If your stored sequence is smaller, then no padding is done and the data is stored as is.
+<ul>
+<li>Omitting the <code class="python">(n)</code> is the same as <code class="pgsql">TEXT</code></li>
+</ul></li>
+<li><code class="python">TEXT</code><span class="orange">★</span>: A variable length column of “unlimited length” (about 1 GB).</li>
+</ul></li>
+<li>In Postgres (unlike in some other variants) there is not really a difference in performance between all 3 types</li>
+</ul>
+<br>
+<hr>
+<p><span class="orange">★</span> – Postgres specific, though similar implementations exist in other variants</p>
+</section>
+<section id="character-takeaways" class="slide level2">
+<h2>Character Takeaways</h2>
+<ul>
+<li>In general, don’t use <code class="python">CHAR</code> unless what you are storing is <em>always</em> a given length of characters
+<ul>
+<li>State abbreviations for instance, or possibly other single character encodings</li>
+</ul></li>
+<li>Use <code class="python">VARCHAR</code> or <code class="python">TEXT</code> in most situations
+<ul>
+<li><code class="python">VARCHAR</code> is more portable, but make sure to choose a max that is well above whatever your longest sequence of characters could be</li>
+<li>Can also choose <code class="python">VARCHAR</code> if you <em>want</em> an error to be output if too many characters are entered</li>
+<li>If you don’t mind being Postgres specific, <code class="python">TEXT</code> should always work</li>
+</ul></li>
+</ul>
+</section>
+<section id="numbers" class="slide level2">
+<h2>Numbers</h2>
+<ul>
+<li>Important to be able to do built-in math calculations on columns</li>
+<li>If the information you want to store is numeric, always use a numeric data type rather than the characters of a number</li>
+<li>A few different options for numbers:
+<ul>
+<li><em>Integers</em>: whole numbers (positive and negative)</li>
+<li><em>Fixed-point</em> and <em>Floating-point</em>: fractions of whole numbers (also positive and negative)</li>
+</ul></li>
+<li>For each there are several data types that you can choose from, largely depending on the size of the numbers you are expecting.</li>
+</ul>
+</section>
+<section id="integers" class="slide level2">
+<h2>Integers</h2>
+<ul>
+<li>Probably the most common form of number you will use in a database</li>
+<li>Can use 3 different data types in SQL to represent an integer
+<ul>
+<li>Differ just in the size of the numbers they can hold <!----></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Size</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">SMALLINT</code></td>
+<td>2 bytes</td>
+<td>±32,767</td>
+</tr>
+<tr class="even">
+<td><code class="python">INTEGER</code></td>
+<td>4 bytes</td>
+<td>±2,147,483,648</td>
+</tr>
+<tr class="odd">
+<td><code class="python">BIGINT</code></td>
+<td>8 bytes</td>
+<td>±9,223,372,036,854,775,808</td>
+</tr>
+</tbody>
+</table></li>
+<li><code class="python">SMALLINT</code> is generally only used if disk space is at a premium</li>
+<li>Probably only use <code class="python">BIGINT</code> if sure that <code class="python">INTEGER</code> is insufficient</li>
+</ul>
+</section>
+<section id="serial-integers" class="slide level2">
+<h2>Serial Integers</h2>
+<ul>
+<li>If you want a column to be auto-incrementing, you can use the serial form of the integer types:
+<ul>
+<li><code class="python">SMALLSERIAL</code></li>
+<li><code class="python">SERIAL</code></li>
+<li><code class="python">BIGSERIAL</code></li>
+</ul></li>
+<li>Have the same allowed ranges as their integer counterparts</li>
+<li>No need to specify that column when adding a row: Postgres will automatically increment and add it</li>
+<li>While each increment will be unique, you may not have perfect even intervals
+<ul>
+<li>Removed row values are not reused</li>
+<li>If an <code class="python">INSERT</code> is interrupted because of an error, that unique integer is basically skipped</li>
+</ul></li>
+</ul>
+</section>
+<section id="fixed-point-numbers" class="slide level2">
+<h2>Fixed-Point Numbers</h2>
+<ul>
+<li>Represents a fractional value</li>
+<li>Two methods of writing:
+<ul>
+<li><code class="python">NUMERIC(precision, scale)</code></li>
+<li><code class="python">DECIMAL(precision, scale)</code></li>
+</ul></li>
+<li><em>precision</em> is a positive integer representing the max total number of digits comprising the number (on both sides of the decimal point)
+<ul>
+<li>If provided, needs to be between 1 and 1000</li>
+</ul></li>
+<li><em>scale</em> is a positive integer representing the total number of digits to the right of the decimal point</li>
+<li>Will round or pad the decimal digits with 0’s if needed to get the correct number of digits after the decimal</li>
+<li>Will return an error if the input number can’t fit within the precision</li>
+</ul>
+</section>
+<section id="fixed-point-examples" class="slide level2">
+<h2>Fixed-Point Examples</h2>
+<ul>
+<li>Consider the number: 192.837465</li>
+<li>In various fixed-point formats:
+<ul>
+<li><code class="python">NUMERIC(5,2)</code> = 192.84</li>
+<li><code class="python">NUMERIC(10,2)</code> = 192.84</li>
+<li><code class="python">NUMERIC(15,10)</code> = 192.8374650000</li>
+<li><code class="python">NUMERIC(6,3)</code> = 192.837</li>
+<li><code class="python">NUMERIC(4,2)</code> = <strong>ERROR</strong></li>
+</ul></li>
+<li>If you don’t include inputs:
+<ul>
+<li><code class="python">NUMERIC(5)</code> = 193
+<ul>
+<li>Treats the scale as 0</li>
+</ul></li>
+<li><code class="python">NUMERIC</code> = 192.837465
+<ul>
+<li>Will store up to the maximum precision and scale allowed (131,072 digits before and 16,383 digits after the decimal, lol)</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="floating-point-numbers" class="slide level2">
+<h2>Floating-Point Numbers</h2>
+<ul>
+<li>Still represents a fractional value</li>
+<li>Differs from Fixed-Point in that they use exponents to store the information, so the decimal point could “float”</li>
+<li>Two data types that can be used:
+<ul>
+<li><code class="python">REAL</code></li>
+<li><code class="python">DOUBLE PRECISION</code></li>
+</ul></li>
+<li>They differ just in their precision (and how much storage space they take)
+<ul>
+<li><code class="python">REAL</code> will show at most 9 significant digits and takes up 4 bytes</li>
+<li><code class="python">DOUBLE PRECISION</code> will show at most 17 significant digits and takes up 8 bytes</li>
+</ul></li>
+</ul>
+</section>
+<section id="floating-pitfalls" class="slide level2">
+<h2>Floating Pitfalls</h2>
+<ul>
+<li>Float-point representations are computed using binary math to make them easy to store in the computer</li>
+<li>Some fractional values cannot be perfectly captured with a binary decimal though
+<ul>
+<li>In the same way that we can’t <em>exactly</em> write 1/3 as a decimal</li>
+</ul></li>
+<li>Postgres will use the best approximation that it can given the precision, but it is still an approximation!</li>
+<li>Takeaways:
+<ul>
+<li><strong>Do not use floating-point values if you will be doing sensitive calculations with the numbers!</strong>
+<ul>
+<li>i.e. money</li>
+</ul></li>
+<li>Comparing two float-point values for equality might not work as expected, due to these tiny approximations
+<ul>
+<li>Better to check if greater or less than, or within a small interval around the desired value</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="understanding-check" class="slide level2">
+<h2>Understanding Check!</h2>
+<div class="cols">
+<div class="col">
+<p><br> A table is made as shown to the right. Only one of the rows below could be added to that table using <code class="python">INSERT INTO</code> without causing an error. Which row could be successfully added?</p>
+</div>
+<div class="col">
+<pre ><code class="pgsql">CREATE TABLE revq (
+  col1 CHAR(2),
+  col2 TEXT,
+  col3 SMALLINT,
+  col4 NUMERIC(3,2),
+  col5 REAL
+);</code></pre>
+</div>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th>Answer</th>
+<th>col1</th>
+<th>col2</th>
+<th>col3</th>
+<th>col4</th>
+<th>col5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>‘OR’</td>
+<td>‘Hello!’</td>
+<td>30200</td>
+<td>12.2</td>
+<td>3.14</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>‘12’</td>
+<td>‘How odd!’</td>
+<td>43210</td>
+<td>2.23</td>
+<td>2.718281828</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>‘OK’</td>
+<td>‘Puzzling.’</td>
+<td>13.6</td>
+<td>1.1</td>
+<td>1.41</td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>‘C’</td>
+<td>‘Mysterious…’</td>
+<td>2132</td>
+<td>8</td>
+<td>1.618</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dates-and-times" class="slide level2">
+<h2>Dates and Times</h2>
+<ul>
+<li>One very nice aspect of all SQL databases is that they can work with times and dates very easily, assuming the correct data type is used
+<ul>
+<li>This shouldn’t be trivialized! Working with times and dates is often a <strong>pain</strong> given all the complexities of the Gregorian calendar, time zones, daylight savings time, etc.</li>
+</ul></li>
+<li>Approximately 4 major time and date data types, summarized in the below table</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Storage Size</th>
+<th>Lowest</th>
+<th>Highest</th>
+<th>Resolution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">DATE</code></td>
+<td>4 bytes</td>
+<td>4713 BC</td>
+<td>5874897 AD</td>
+<td>1 day</td>
+</tr>
+<tr class="even">
+<td><code class="python">TIME</code></td>
+<td>8 bytes</td>
+<td>00:00:00</td>
+<td>24:00:00</td>
+<td>1 μs</td>
+</tr>
+<tr class="odd">
+<td><code class="python">TIMESTAMP</code></td>
+<td>8 bytes</td>
+<td>4713 BC</td>
+<td>294276 AD</td>
+<td>1 μs</td>
+</tr>
+<tr class="even">
+<td><code class="python">INTERVAL</code></td>
+<td>16 bytes</td>
+<td>-178000000 yrs</td>
+<td>-178000000 yrs</td>
+<td>1 μs</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dates" class="slide level2">
+<h2>DATES</h2>
+<ul>
+<li>Holds information for a single day
+<ul>
+<li>No information about time</li>
+</ul></li>
+<li>Data needs to be enclosed in single quotes, like text strings</li>
+<li>Postgres can actually correctly parse a ridiculous number of ways of writing the date, but you can never go wrong with the ISO standard of YYYY-MM-DD</li>
+<li>Other acceptable variants include:</li>
+</ul>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">January 18, 2022</td>
+<td style="text-align: left;">1/18/2022</td>
+<td style="text-align: left;">01/18/22</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2022-Jan-18</td>
+<td style="text-align: left;">18-Jan-2022</td>
+<td style="text-align: left;">Jan-18-22</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">20220118</td>
+<td style="text-align: left;">Jan 18, 22</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="times" class="slide level2">
+<h2>Times</h2>
+<ul>
+<li>Holds information about a single time
+<ul>
+<li>No information about date is stored</li>
+<li>A date CAN be included, but it is largely ignored</li>
+</ul></li>
+<li>Still needs to be enclosed in single quotes</li>
+<li>Has variants that are both with and without timezone
+<ul>
+<li><code class="python">TIME</code> is technically without timezone</li>
+<li><code class="python">TIME WITH TIME ZONE</code> is, as expected, including a timezone
+<ul>
+<li>Postgres has a shorthand notation for this, called <code class="python">TIMETZ</code><span class="orange">★</span></li>
+<li>Due to the way timezones are stored and some issues that arise, using this data type is generally discouraged.</li>
+</ul></li>
+</ul></li>
+<li>ISO time formats looks like HH:MM:SS.FFFF, where the hours are on the <strong>24 hour clock</strong></li>
+<li>Other formats are accepted, including</li>
+</ul>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">16:05:06</td>
+<td style="text-align: left;">16:05</td>
+<td style="text-align: left;">04:05 PM</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">04:05:06.123 PM</td>
+<td style="text-align: left;">04:05:06 AM</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="timezones" class="slide level2">
+<h2>Timezones</h2>
+<ul>
+<li>If specifying a timezone, it comes after the time and there are a few ways to describe it:
+<ul>
+<li>Abbreviation: PST (for Pacific Standard Time)</li>
+<li>Full name: America/Los_Angeles
+<ul>
+<li>This method requires you to enter the date as well, so that it can tell if daylight savings is active or not!</li>
+</ul></li>
+<li>UTC Offset: -8 (our clocks are currently 8 hours behind GMT)</li>
+</ul></li>
+<li>If no timezone is specified, but the field requires one, the system timezone is used</li>
+<li>Examples of times with time zones:
+<ul>
+<li>04:05:06 PM PST</li>
+<li>2022-01-18 16:05:06 America/Los_Angeles</li>
+<li>16:05:06-8</li>
+</ul></li>
+</ul>
+</section>
+<section id="timestamps" class="slide level2">
+<h2>Timestamps</h2>
+<ul>
+<li>A <code class="python">TIMESTAMP</code> field holds basically both a time and a date</li>
+<li>The date portion always needs to come first</li>
+<li>The same properties and formats that apply to each individually apply here as well</li>
+<li>Also have the option of with or without a timezone
+<ul>
+<li><code class="python">TIMESTAMP</code> by itself is without a timezone, as per SQL standards</li>
+<li><code class="python">TIMESTAMP WITH TIME ZONE</code> is with a timezone. Shorthand in Postgres is <code class="python">TIMESTAMPTZ</code><span class="orange">★</span></li>
+</ul></li>
+<li>Internally, timestamps with a timezone are always <em>stored</em> in UTC, but then when displayed are converted back to the local timezone</li>
+<li>Examples:
+<ul>
+<li>2022-01-18 14:30:00</li>
+<li>Jan-18-2022 2:30 PM PST</li>
+</ul></li>
+</ul>
+</section>
+<section id="intervals" class="slide level2">
+<h2>Intervals</h2>
+<ul>
+<li>Represents a span of time</li>
+<li>Generally given by first a number and then by a unit
+<ul>
+<li>Possible units: microsecond, millisecond, second, minute, hour, day, week, month, year, decade, century, millennium</li>
+<li>Abbreviations or plurals of the above also work</li>
+</ul></li>
+<li>Examples:
+<ul>
+<li>1 day</li>
+<li>3 century 2 mins</li>
+<li>45 ms</li>
+<li>1 mon 87 us</li>
+</ul></li>
+<li>Intervals can be used in calculations with other date/time data types
+<ul>
+<li>Can also be used in comparisons if subtracting timestamps</li>
+</ul></li>
+</ul>
+</section>
+<section id="more" class="slide level2">
+<h2>MORE!</h2>
+<ul>
+<li>These are just a small sample of some of the most common data types</li>
+<li>Postgres supports <em>many</em> more!
+<ul>
+<li>Booleans</li>
+<li>Geometric types</li>
+<li>Network address types</li>
+<li>JSON types</li>
+<li>A full list can be found <a href="https://www.postgresql.org/docs/14/datatype.html">here</a></li>
+</ul></li>
+<li>We’ll address others as the come up sporadically through the rest of the semester, but you have the core basics now</li>
+</ul>
+</section>
+<section id="conversions" class="slide level2">
+<h2>Conversions</h2>
+<ul>
+<li>There are plenty of instances where you may need to convert between types
+<ul>
+<li>Sometimes calculations (coming soon!) need a certain data type</li>
+<li>Sometimes the information was just not stored in the most ideal type</li>
+</ul></li>
+<li>Can use the <code class="python">CAST</code> function to convert between data types (where it makes sense)</li>
+<li>Core syntax is</li>
+</ul>
+<pre ><code class="pgsql">CAST(col_name AS new_data_type)</code></pre>
+<ul>
+<li>Postgres has a shorthand conversion syntax that uses double colons:</li>
+</ul>
+<pre ><code class="pgsql">col_name::new_data_type</code></pre>
+<ul>
+<li>Be aware that casting data to a text string with a maximum size smaller than it would take will <em>truncate</em> the conversion to get it to fit</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1440,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

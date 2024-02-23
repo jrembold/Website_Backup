@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2021-09-08">
+  <meta name="dcterms.date" content="2023-09-08">
   <title>What is your type?</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,10 +14,18 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
   </style>
   <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
   <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
@@ -29,31 +37,38 @@
 <section id="title-slide">
   <h1 class="title">What is your type?</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">September 8, 2021</p>
+  <p class="date">September 8, 2023</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Problem Set 1 is posted
+<li>Problem Set 1 due Monday night!</li>
+<li>I may still be contacting a few of you to see about section swaps,
+but not many more are needed, so thank you to those that have been
+flexible!</li>
+<li>Moving back into the book today, catching information and details
+from Ch 1 that we haven’t yet talked about
 <ul>
-<li>Due at the end of Monday</li>
+<li>Text is posted <a
+href="http://willamette.edu/~jjrembold/class_files/cs151/CS151-Reader-2023.pdf">here</a>
+and also linked on the main course webpage</li>
 </ul></li>
-<li>I’m working through getting feedback out on PS0. There are a lot of you!</li>
-<li>Small sections happening today or tomorrow!
-<ul>
-<li>Make sure you show up at the necessary time and place!</li>
-</ul></li>
-<li>Moving back into the book today, catching information and details from Ch 1 that we haven’t yet talked about</li>
-<li>Polling: <a href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>I have a meeting from 1-3 today, but will be around a bit afterwards
+if you want to catch me to ask any questions before the weekend</li>
+<li>Polling (<strong>different today!</strong>): <a
+href="https://pollev.com/jedrembold441">pollev.com/jedrembold441</a></li>
 </ul>
 </section>
-<section id="review-question" class="slide level2" data-notes="Solution: C">
+<section id="review-question" class="slide level2"
+data-notes="Solution: C">
 <h2 data-notes="Solution: C">Review Question</h2>
 <div class="cols">
-<div class="col">
-<p>Karel starts in the empty world shown at one of the marked positions and runs the below code. One of the starting positions will result in an error before the code finishes. Which one?</p>
-<pre ><code class="python" style="font-size:0.9em">for i in range(3):
+<div class="col" style="flex-grow:1.3">
+<p>Karel starts in the empty world shown at one of the marked positions
+and runs the below code. One of the starting positions will result in an
+error before the code finishes. Which one?</p>
+<pre ><code class="python" style="font-size:0.8em">for i in range(2):
     move()
     turn_left()
     for i in range(2):
@@ -63,25 +78,98 @@
     turn_right()</code></pre>
 </div>
 <div class="col">
-<p><img data-src="../images/svg_cache/c0e5600caf86dee896b324b2dc133acadc5424c4.svg" style="width:100.0%" /></p>
+<p><img
+data-src="../images/svg_cache/c0e5600caf86dee896b324b2dc133acadc5424c4.svg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="algorithms" class="slide level2">
+<h2>Algorithms</h2>
+<ul>
+<li>The process of designing a solution strategy to a problem is called
+<em>algorithmic design</em></li>
+<li>An <em>algorithm</em> is just an approach or recipe for a method to
+solve a particular problem
+<ul>
+<li>Most commonly language agnostic</li>
+</ul></li>
+<li>Algorithms are not a new concept
+<ul>
+<li>Euclid’s algorithm to find the greatest common divisor, for
+instance</li>
+</ul></li>
+<li>A large part of computer science is focused on the study or analysis
+of algorithms</li>
+</ul>
+</section>
+<section id="algorithm-code" class="slide level2">
+<h2>Algorithm ⮕ Code</h2>
+<ul>
+<li>You need to have an algorithm in place <strong>before</strong> you
+can write the code to tell the computer what you want to do
+<ul>
+<li>Imagine an alien asking me how to bake a cake. I need to understand
+the steps to baking the cake before I can even worry about the
+translation or communication</li>
+</ul></li>
+<li>Programming tools like conditional statements and loops will
+frequently play a role in your algorithm, but as general concepts
+<ul>
+<li>I can easily describe a loop to you without needing the exact syntax
+of Python</li>
+</ul></li>
+<li>The <em>implementation</em> of the algorithm is the act of
+translating it into Python (or whatever language you are using)</li>
+</ul>
+</section>
+<section id="an-amazing-algorithm" class="slide level2">
+<h2>An Amazing Algorithm</h2>
+<div class="cols">
+<div class="col" style="font-size:.8em">
+<ul>
+<li>Consider a simple, loop-less, maze that we want to move through
+<ul>
+<li>Karel can start anywhere</li>
+<li>The end of the maze is a beeper, and can be anywhere</li>
+</ul></li>
+<li>A common algorithm to get through the maze is to essentially always
+follow or touch the wall to your right
+<ul>
+<li>How could we phrase this in language Karel would understand?</li>
+</ul></li>
+<li>Take 5 minutes with a neighbor to write out how you could
+<strong>implement</strong> the above algorithm in a way Karel could
+understand</li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/b6ec06c2a3fee2efeceb1865b37293e5194d5fa8.svg"
+style="width:100.0%" /></p>
 </div>
 </div>
 </section>
 <section id="data-types" class="slide level2">
 <h2>Data Types</h2>
 <ul>
-<li>Generally, the data processed by computers can take on many forms</li>
-<li>A <em>data type</em> defines the common characteristics of some data values that have a certain form or purpose.
+<li>Generally, the data processed by computers can take on many
+forms</li>
+<li>A <em>data type</em> defines the common characteristics of some data
+values that have a certain form or purpose.
 <ul>
-<li>Ex: a whole number or integer has certain characteristics common to all integers</li>
+<li>Ex: a whole number or integer has certain characteristics common to
+all integers</li>
 </ul></li>
-<li>A data type has a <em>domain</em>, which is the set of all potential values that would belong to that type.
+<li>A data type has a <em>domain</em>, which is the set of all potential
+values that would belong to that type.
 <ul>
-<li>Ex: 0,1,2,3,4,5,6,7,…</li>
+<li>Ex: 0, 1, 2, 3, 4, 5, 6, 7, …</li>
 </ul></li>
-<li>A data type has a <em>set of operations</em> that define how those values can be manipulated
+<li>A data type has a <em>set of operations</em> that define how those
+values can be manipulated
 <ul>
-<li>Ex: You can add two whole numbers (5+2)</li>
+<li>Ex: You can add two whole numbers (5 + 2)</li>
 </ul></li>
 </ul>
 </section>
@@ -91,47 +179,161 @@
 <li>Initially, we’ll focus on the numeric types</li>
 <li>Python has 3 data types for representing numbers:
 <ul>
-<li><p><code class="python">int</code> for integers and whole numbers</p>
+<li><p><code class="python">int</code> for integers and whole
+numbers</p>
 <pre ><code class="python">1, 2, 3, 10, 1001010101, -231</code></pre></li>
-<li><p><code class="python">float</code> for numbers containing a decimal point</p>
+<li><p><code class="python">float</code> for numbers containing a
+decimal point</p>
 <pre ><code class="python">1.23, 3.14, 10.001, 0.0, -8.23</code></pre></li>
-<li><p><code class="python">complex</code> for numbers with an imaginary component (which we won’t deal with)</p></li>
+<li><p><code class="python">complex</code> for numbers with an imaginary
+component (which we won’t deal with)</p></li>
 </ul></li>
 </ul>
 </section>
 <section id="expressions" class="slide level2">
 <h2>Expressions</h2>
 <ul>
-<li>Python describes computation using <em>arithmetic expressions</em>, which consist of <em>terms</em> joined by <em>operators</em>
+<li>Python describes computation using <em>arithmetic expressions</em>,
+which consist of <em>terms</em> joined by <em>operators</em>
 <ul>
-<li>Very similar to how a logical English sentence has nouns connected by verbs</li>
+<li>Very similar to how a logical English sentence has nouns connected
+by verbs</li>
 </ul></li>
 <li>A term in an expression can be:
 <ul>
 <li>an explicit numeric value (called a literal) like 1 or 3.14</li>
-<li>a variable name serving as a placeholder to a value</li>
-<li>a value resulting from the output of a function call</li>
+<li>a variable name serving as a placeholder to a value (more on those
+in a moment!)</li>
+<li>a value resulting from the output of a function call (more on those
+on Monday!)</li>
 <li>another expression enclosed in parentheses</li>
 </ul></li>
-<li>Operators are mostly the common ones found from arithmetic, but with a few extras, as we’ll see on the next slide</li>
-<li>The result of an expression will have a data type that generally depends on both the operation done and the input data types</li>
 </ul>
+<p><br></p>
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="329.58304mm"
+   height="25.093552mm"
+   viewBox="0 0 329.58304 25.093552"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   sodipodi:docname="expressions.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.457453"
+     inkscape:cx="677.66524"
+     inkscape:cy="-221.88072"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(23.498847,-81.3686)">
+    <text
+       xml:space="preserve"
+       style="font-size:23.8114px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#a6e22e;stroke:none;stroke-width:1.31342;stroke-linecap:round;stroke-dasharray:none"
+       x="-27.992485"
+       y="101.2847"
+       id="text236"><tspan
+         sodipodi:role="line"
+         id="tspan234"
+         style="fill:#a6e22e;stroke:none;stroke-width:1.31342;stroke-dasharray:none"
+         x="-27.992485"
+         y="101.2847">[term]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:23.8114px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#a6e22e;stroke:none;stroke-width:1.31342;stroke-linecap:round;stroke-dasharray:none"
+       x="222.65875"
+       y="101.2847"
+       id="text3080"><tspan
+         sodipodi:role="line"
+         id="tspan3078"
+         style="fill:#a6e22e;stroke:none;stroke-width:1.31342;stroke-dasharray:none"
+         x="222.65875"
+         y="101.2847">[term]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:23.8114px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#f92672;stroke:none;stroke-width:1.31342;stroke-linecap:round;stroke-dasharray:none"
+       x="68.026825"
+       y="101.2847"
+       id="text3084"><tspan
+         sodipodi:role="line"
+         id="tspan3082"
+         style="fill:#f92672;stroke:none;stroke-width:1.31342;stroke-dasharray:none"
+         x="68.026825"
+         y="101.2847">[operator]</tspan></text>
+  </g>
+</svg>
+</p>
+<!--
+- Operators are mostly the common ones found from arithmetic, but with a few extras, as we'll see on the next slide
+- The result of an expression will have a data type that generally depends on both the operation done and the input data types
+-->
 </section>
 <section id="integer-and-float-operations" class="slide level2">
 <h2>Integer and Float Operations</h2>
+<div style="font-size:.85em">
 <ul>
-<li><code class="python">i + j</code>  the <em>sum</em> of <code class="python">i</code> and <code class="python">j</code><span class="orange"></span></li>
-<li><code class="python">i - j</code>  the <em>difference</em> between <code class="python">i</code> and <code class="python">j</code><span class="orange"></span></li>
-<li><code class="python">i * j</code>  the <em>product</em> of <code class="python">i</code> and <code class="python">j</code><span class="orange"></span></li>
-<li><code class="python">i // j</code>  the <em>floor division</em> of <code class="python">i</code> by <code class="python">j</code><span class="orange"></span></li>
-<li><code class="python">i / j</code>  the <em>division</em> of <code class="python">i</code> by <code class="python">j</code><span class="orange">†</span></li>
-<li><code class="python">i % j</code>  the <em>remainder</em> when <code class="python">i</code> is divided by <code class="python">j</code><span class="orange"></span></li>
-<li><code class="python">i ** j</code>  <code class="python">i</code> to the <em>power</em> of <code class="python">j</code><span class="orange"></span></li>
+<li><code class="python">i + j</code>  the <em>sum</em> of
+<code class="python">i</code> and <code class="python">j</code><span
+class="orange"></span></li>
+<li><code class="python">i - j</code>  the <em>difference</em> between
+<code class="python">i</code> and <code class="python">j</code><span
+class="orange"></span></li>
+<li><code class="python">i * j</code>  the <em>product</em> of
+<code class="python">i</code> and <code class="python">j</code><span
+class="orange"></span></li>
+<li><code class="python">i // j</code>  the <em>floor division</em> of
+<code class="python">i</code> by <code class="python">j</code><span
+class="orange"></span></li>
+<li><code class="python">i / j</code>  the <em>division</em> of
+<code class="python">i</code> by <code class="python">j</code><span
+class="orange">†</span></li>
+<li><code class="python">i % j</code>  the <em>remainder</em> when
+<code class="python">i</code> is divided by
+<code class="python">j</code><span class="orange"></span></li>
+<li><code class="python">i ** j</code>  <code class="python">i</code>
+to the <em>power</em> of <code class="python">j</code><span
+class="orange"></span><span class="orange">‡</span></li>
+<li><code class="python">-j</code>  the <em>negation</em> of
+<code class="python">j</code><span class="orange"></span></li>
 </ul>
-<br>
+</div>
 <hr>
-<p><br> <span class="orange"></span> – Returns <code class="python">int</code> if both <code class="python">i</code> and <code class="python">j</code> are integers, <code class="python">float</code> otherwise</p>
-<p><span class="orange">†</span> – Returns <code class="python">float</code> always</p>
+<div style="font-size:.9em">
+<p><span class="orange"></span> – Returns
+<code class="python">int</code> if both <code class="python">i</code>
+and <code class="python">j</code> are integers,
+<code class="python">float</code> otherwise</p>
+<p><span class="orange">†</span> – Returns
+<code class="python">float</code> always</p>
+<p><span class="orange">‡</span> – Returns
+<code class="python">float</code> always if
+<code class="python">j</code> is negative</p>
+</div>
 </section>
 <section id="order-of-operations" class="slide level2">
 <h2>Order of Operations</h2>
@@ -140,17 +342,22 @@
 <li>Operations in parentheses done first</li>
 <li>Without parentheses, order of operations proceeds as:
 <ul>
-<li><code class="python">**</code> (exponents)</li>
+<li><code class="python">**</code> (exponents, executed <em>right to
+left</em>)</li>
 <li><code class="python">-n</code> (negative numbers)</li>
-<li><code class="python">*</code>, <code class="python">/</code>, <code class="python">//</code>, <code class="python">%</code>, executed from left to right</li>
-<li><code class="python">+</code> and <code class="python">-</code>, executed from left to right</li>
+<li><code class="python">*</code>, <code class="python">/</code>,
+<code class="python">//</code>, <code class="python">%</code>, executed
+from left to right</li>
+<li><code class="python">+</code> and <code class="python">-</code>,
+executed from left to right</li>
 </ul></li>
 </ul>
 </section>
-<section id="understanding-check" class="slide level2" data-notes="Solution: 15">
+<section id="understanding-check" class="slide level2"
+data-notes="Solution: 15">
 <h2 data-notes="Solution: 15">Understanding Check</h2>
 <p>What is the value of the below expression?</p>
-<pre ><code class="python">1 * 2 * 3 + (4 + 5) % 6 + (7 * 8) // 9</code></pre>
+<p><code class="python inlinecode">1 * 2 * 3 + (4 + 5) % 6 + (7 * 8) // 9</code></p>
 <div class="poll">
 <ol>
 <li>15</li>
@@ -162,106 +369,150 @@
 </section>
 <section id="tis-variable" class="slide level2">
 <h2>Tis Variable</h2>
+<div style="font-size:.9em">
 <ul>
-<li>One of the terms that can appear in expressions is what we term a variable</li>
-<li>A <em>variable</em> is a placeholder or nametag for a value that can be updated as the program progresses</li>
+<li>One of the terms that can appear in expressions is what we term a
+variable</li>
+<li>A <em>variable</em> is a placeholder or nametag for a value that can
+be updated as the program progresses</li>
 <li>Envision as a named box capable of storing a value
-<p><img data-src="../images/svg_cache/f6c6bb43f05da24ad71fc0f13983388e3f56eafe.svg" data-id="box&#39;" alt="&#39;Will this work?" style="width:20.0%" /></p></li>
+<p><img
+data-src="../images/svg_cache/f6c6bb43f05da24ad71fc0f13983388e3f56eafe.svg"
+style="width:20.0%" data-id="box&#39;"
+alt="&#39;Will this work?" /></p></li>
 <li>Each variable has the following attributes:
 <ul>
 <li>A <em>name</em>: which enables you to tell variables apart</li>
-<li>A <em>value</em>: which represents the current contents of the variable</li>
+<li>A <em>value</em>: which represents the current contents of the
+variable</li>
 </ul></li>
-<li>A variable’s name is fixed, but the value can change whenever you <em>assign</em> a new value to the variable</li>
+<li>A variable’s name is fixed, but the value can change whenever you
+<em>assign</em> a new value to the variable</li>
 </ul>
+</div>
 </section>
 <section id="making-assignments" class="slide level2">
 <h2>Making Assignments</h2>
 <ul>
-<li>You create a variable by assigning it a value with Python’s <em>assignment statement</em> <code class="python">=</code>:</li>
-</ul>
-<pre ><code class="python">variable_name = expression</code></pre>
+<li><p>You create a variable by assigning it a value with Python’s
+<em>assignment statement</em>, <code class="python">=</code>, a single
+equals sign:</p>
+<pre ><code class="python">variable_name = expression</code></pre></li>
+<li><p>The variable name <strong>must</strong> appear on the left of the
+<code class="python">=</code> in Python!</p></li>
+<li><p>Python first computes the value of the right-hand side of the
+equals and then assigns to the name on the left</p>
 <ul>
-<li>Python first computes the value of the righthand side of the equals and then assigns to the name on the left
+<li><p>The same variable name can seem to appear on both sides of the
+equals!</p>
+<pre ><code class="python">total = total + value</code></pre>
 <ul>
-<li>The same variable can appear on both sides of the equals!</li>
-</ul>
-<pre ><code class="python">total = total + value</code></pre></li>
+<li>The <code class="python">total</code> on the right represents some
+existing value</li>
+<li>The <code class="python">total</code> on the left is the new label
+of whatever the right expression evaluates to</li>
+</ul></li>
+</ul></li>
 </ul>
 </section>
 <section id="ephemeral-variables" class="slide level2">
 <h2>Ephemeral Variables</h2>
+<div class="cols">
+<div class="col">
 <ul>
-<li>When you assign a new value to a variable, the old value is lost</li>
-</ul>
-<pre ><code class="idle" style="font-size:0.8em">>>> A = 10
->>> print(A)
+<li><p>When you assign a new value to a variable, the old value is
+lost</p>
+<pre ><code class="idle python-repl" style="font-size:0.8em">>>> A = 10
+>>> A
 10
->>> A = A + 5
->>> print(A)
-15</code></pre>
-<ul>
-<li>Variables defined in terms of others do <strong>not</strong> get automatically updated</li>
+>>> B = A + 5
+>>> B
+15
+>>> A = B
+>>> A
+15</code></pre></li>
 </ul>
-<pre ><code class="idle" style="font-size:0.8em">>>> A = 10
+</div>
+<div class="col">
+<ul>
+<li><p>Variables defined in terms of others do <strong>not</strong> get
+automatically updated</p></li>
+<li><p>Python evaluates expressions from the top down</p>
+<pre ><code class="idle python-repl" style="font-size:0.8em">>>> A = 10
 >>> B = A + 2
 >>> A = 8
->>> print(B)
-12</code></pre>
+>>> B
+12</code></pre></li>
+</ul>
+</div>
+</div>
 </section>
 <section id="the-power-of-names" class="slide level2">
 <h2>The Power of Names</h2>
+<div style="font-size:.9em">
 <ul>
-<li>Names for variables, functions, and classes are called <em>identifiers</em></li>
-<li>Composed of letters, numbers and underscores, but <strong>can not start with a number</strong></li>
+<li>Names for variables, functions, and (eventually) classes are called
+<em>identifiers</em></li>
+<li>Composed of letters, numbers and underscores, but <strong>can not
+start with a number</strong></li>
 <li>A variety of different conventions to mark word boundaries:
 <ul>
-<li><em>Snake case</em> uses underscores: <code class="python">this_is_amazing</code></li>
-<li><em>Camel case</em> uses uppercase: <code class="python">thisIsAmazing</code></li>
+<li><em>Snake case</em> uses underscores:
+<code class="python">this_is_amazing</code></li>
+<li><em>Camel case</em> uses uppercase:
+<code class="python">thisIsAmazing</code></li>
 </ul></li>
 <li>We will aim to follow the following conventions:
 <ul>
 <li>Variable and function names will use snake case</li>
-<li>Constant variables will use all uppercase and underscores: <code class="python">MAX_WIDTH</code></li>
+<li>Constant variables will use all uppercase and underscores:
+<code class="python">MAX_WIDTH</code></li>
 <li>Class names will use camel case and begin with a capital letter</li>
 </ul></li>
-<li>Capitalization matters! <code class="python">radius</code> and <code class="python">Radius</code> are different variable names!</li>
+<li>Capitalization matters! <code class="python">radius</code> and
+<code class="python">Radius</code> are different variable names!</li>
 <li><strong>Pick meaningful variable names!</strong></li>
 </ul>
+</div>
 </section>
-<section id="shorthand-and-multiple" class="slide level2">
-<h2>Shorthand and Multiple</h2>
+<section id="shorthand-and-multiple-assignments" class="slide level2">
+<h2>Shorthand and Multiple Assignments</h2>
+<div style="font-size:.9em">
 <ul>
-<li>It is very common to want to adjust an existing variable</li>
-</ul>
-<pre ><code class="python">balance = balance + deposit</code></pre>
-<ul>
-<li>Python gives you a shorter expression to describe this relationship:</li>
-</ul>
-<pre ><code class="python">balance += deposit</code></pre>
-<ul>
-<li>You can do this with any operation (op) following the general form:</li>
-</ul>
-<pre ><code class="python">variable op= expression</code></pre>
-<ul>
-<li><p>You can name multiple variables at once by separating with commas</p>
+<li><p>It is very common to want to adjust an existing variable
+value</p>
+<pre ><code class="python">balance = balance + deposit</code></pre></li>
+<li><p>Python gives you a shorter expression to describe this
+relationship:</p>
+<pre ><code class="python">balance += deposit</code></pre></li>
+<li><p>You can do this with any operation (op) following the general
+form:</p>
+<pre ><code class="python">variable op= expression</code></pre></li>
+<li><p>You can name multiple variables at once by separating with
+commas</p>
 <pre ><code class="python">A, B, C = 1, 2, 3</code></pre>
 <ul>
-<li>All the expressions on the right are computed before being assigned to the left variables</li>
+<li>All the expressions on the right are computed before being assigned
+to the left variables</li>
+<li>This can give you a very concise way of swapping variable
+values</li>
 </ul></li>
 </ul>
+</div>
 </section>
-<section id="understanding-check-1" class="slide level2" data-notes="Solution: 40">
+<section id="understanding-check-1" class="slide level2"
+data-notes="Solution: 40">
 <h2 data-notes="Solution: 40">Understanding Check!</h2>
-<p>What is the final printed value of <code class="python">A</code> in the code below?</p>
-<pre ><code class="idle">>>> A = 10
+<p>What is the output value of <code class="python">A</code> in the code
+below?</p>
+<pre ><code class="idle python-repl">>>> A = 10
 >>> B = 4
 >>> C = A * B
 >>> A -= B
 >>> A, B, C = C, A, B
->>> print(A)
+>>> A
 ??</code></pre>
-<div class="poll">
+<div class="hpoll">
 <ol>
 <li>4</li>
 <li>10</li>
@@ -269,93 +520,78 @@
 <li>40</li>
 </ol>
 </div>
-</section>
-<section id="what-is-your-function" class="slide level2">
-<h2>What is your Function?</h2>
-<ul>
-<li>As discussed in the context of Karel, a <em>function</em> is a sequence of commands that have been collected together and given a name.</li>
-<li>Unlike in Karel though, functions typically go beyond that and can have inputs and outputs</li>
-</ul>
-<p><img data-src="../images/svg_cache/bd545feea45d8c5454f3813c4655ed1a85dcd06d.svg" style="width:70.0%" /></p>
-</section>
-<section id="writing-your-own-functions" class="slide level2">
-<h2>Writing your own functions</h2>
-<ul>
-<li><p>The general form of a function definition looks like:</p>
-<pre ><code class="python">def name(parameter_list):
-    #statements in function body</code></pre>
-<ul>
-<li><code class="python">name</code> is your chosen name for the function</li>
-<li><code class="no-highlight">parameter_list</code> is a comma-separated list of <strong>variable names</strong> that will hold each input value</li>
-</ul></li>
-<li><p>You can return or output a value from the function by including a return statement</p>
-<pre ><code class="python">return expression</code></pre>
-<ul>
-<li><code class="python">expression</code> is the value you want to return or output</li>
-<li>If no <code class="python">return</code> statement is included, Python will by default return <code class="python">None</code></li>
-</ul></li>
-</ul>
-</section>
-<section id="simple-function-examples" class="slide level2">
-<h2>Simple function examples</h2>
-<ul>
-<li><p>Convert Fahrenheit temperatures to their Celsius equivalent</p>
-<pre ><code class="python">def f_to_c(f):
-    return 5 / 9 * (f - 32)</code></pre>
-<ul>
-<li><p>Using the function:</p>
-<pre ><code class="python">print(f_to_c(45))</code></pre></li>
-</ul></li>
-<li><p>Computes the volume of a cylinder of height <code class="python">h</code> and radius <code class="python">r</code></p>
-<pre ><code class="python">def cylinder_volume(r, h):
-    return 3.14159 * r**2 * h</code></pre>
-<ul>
-<li><p>Using the function:</p>
-<pre ><code class="python">print(cylinder_volume(2,10))</code></pre></li>
-</ul></li>
-</ul>
-<!-- Didn't get past this point in class -->
-</section>
-<section id="built-ins" class="slide level2">
-<h2>Built-ins</h2>
-<ul>
-<li>All modern languages include a collection of pre-defined functions for convenience</li>
-<li>In Python, common build-in functions that operate on numbers include:</li>
-</ul>
-<table>
-<thead>
-<tr class="header">
-<th>Function</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code class="python">abs(x)</code></td>
-<td>The absolute value of x</td>
-</tr>
-<tr class="even">
-<td><code class="python">max(x,y,...)</code></td>
-<td>The largest of all the arguments</td>
-</tr>
-<tr class="odd">
-<td><code class="python">min(x,y,...)</code></td>
-<td>The smallest of all the arguments</td>
-</tr>
-<tr class="even">
-<td><code class="python">round(x)</code></td>
-<td>The value of x rounded to the nearest integer</td>
-</tr>
-<tr class="odd">
-<td><code class="python">int(x)</code></td>
-<td>The value of x truncated to an integer</td>
-</tr>
-<tr class="even">
-<td><code class="python">float(x)</code></td>
-<td>The value of x as a decimal</td>
-</tr>
-</tbody>
-</table>
+<!--for next day
+## What is your Function?
+- As discussed in the context of Karel, a _function_ is a sequence of commands that have been collected together and given a name.
+- Unlike in Karel though, functions typically go beyond that and can have inputs and outputs
+
+\begin{tikzpicture}[every node/.style={font=\sffamily}]%%width=70%
+\draw[very thick, rounded corners, MGreen] (0,0) rectangle +(3,2);
+\node[MGreen, anchor=south west] at (0,2) {Function};
+\node[draw, very thick, MBlue, rounded corners, minimum size=1cm] at (1.5,1) {Contents};
+\draw[very thick, MYellow, -stealth] (-2,1) -- +(2.25,0) node[above, pos=.25] {Inputs};
+\draw[very thick, MRed, -stealth] (2.75,1) -- +(2.25,0) node[above, pos=.75] {Outputs};
+\end{tikzpicture}
+
+## Writing your own functions
+- The general form of a function definition looks like:
+
+    ``` {.python}
+    def name(parameter_list):
+        #statements in function body
+    ```
+    - `name` is your chosen name for the function
+    - `parameter_list`{.no-highlight} is a comma-separated list of **variable names** that will hold each input value
+- You can return or output a value from the function by including a return statement
+
+    ```python
+    return expression
+    ```
+    - `expression` is the value you want to return or output
+    - If no `return` statement is included, Python will by default return `None`
+
+
+## A Functional Diagram
+
+![](../images/function_io.svg)
+
+## Simple function examples
+- Convert Fahrenheit temperatures to their Celsius equivalent
+
+    ```python
+    def f_to_c(f):
+        return 5 / 9 * (f - 32)
+    ```
+    - Using the function:
+
+        ```python
+        print(f_to_c(45))
+        ```
+- Computes the volume of a cylinder of height `h` and radius `r`
+
+    ```python
+    def cylinder_volume(r, h):
+        return 3.14159 * r**2 * h
+    ```
+    - Using the function:
+
+        ```python
+        print(cylinder_volume(2,10))
+        ```
+
+## Built-ins
+- All modern languages include a collection of pre-defined functions for convenience
+- In Python, common build-in functions that operate on numbers include:
+
+Function | Description
+--- | ---
+`abs(x)` | The absolute value of x
+`max(x,y,...)` | The largest of all the arguments
+`min(x,y,...)` | The smallest of all the arguments
+`round(x)` | The value of x rounded to the nearest integer
+`int(x)` | The value of x truncated to an integer
+`float(x)` | The value of x as a decimal
+-->
 <!--
 ## Running a Program
 - Python programs specify what part of the code is supposed to be when a program is run using a few special lines at the end of the program
@@ -450,6 +686,7 @@ if __name__ == '__main__':
 		//autoAnimateEasing: 'ease-in',
 		//autoAnimateDuration: 1.0,
 		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
         // Display controls in the bottom right corner
         controls: true,
         // Help the user learn the controls by providing hints, for example by
@@ -468,7 +705,7 @@ if __name__ == '__main__':
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -530,7 +767,7 @@ if __name__ == '__main__':
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
-        height: 1200,
+        height: 1080,
         // The display mode that will be used to show slides
         display: 'block',
 		math: {
@@ -570,7 +807,7 @@ if __name__ == '__main__':
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
-        chalkWidth: 7,
+        chalkWidth: 5,
 		boardmarkers : [
                 { color: 'rgba(248,248,242,1)', cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                 { color: 'rgba(102,217,239,1)', cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
@@ -595,6 +832,7 @@ if __name__ == '__main__':
 			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
 		],
       });
+      
     </script>
     </body>
 </html>

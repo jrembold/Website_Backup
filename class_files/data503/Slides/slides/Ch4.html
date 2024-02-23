@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Importing and Exporting</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Importing and Exporting</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Thursday, January 20, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>HW1 is due at the end of today!
+<ul>
+<li>You just need to have uploaded your solutions back to the GitHub repository. Nothing else needs to be done.</li>
+</ul></li>
+<li>HW2 will be posted by the end of the day</li>
+<li>Look over the first part of Ch 5 for Thursday</li>
+<li>Using some different polling today: www.PollEv.com/jedrembold441</li>
+</ul>
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<p>All of the following values could be added to a <code class="python">NUMERIC(6,4)</code> type column except for one, which would result in an error. Which number would result in the error?</p>
+<div class="poll">
+<ol>
+<li>60</li>
+<li>34.192834</li>
+<li>101.3</li>
+<li>0.9812</li>
+</ol>
+</div>
+</section>
+<section id="section" class="slide level2" data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/8yzLTj5yX1hfTL47VOJc4?controls=none&amp;short_poll=true">
+<h2 data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/8yzLTj5yX1hfTL47VOJc4?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="intervals" class="slide level2">
+<h2>Intervals</h2>
+<ul>
+<li>Represents a span of time</li>
+<li>Generally given by first a number and then by a unit
+<ul>
+<li>Possible units: microsecond, millisecond, second, minute, hour, day, week, month, year, decade, century, millennium</li>
+<li>Abbreviations or plurals of the above also work</li>
+</ul></li>
+<li>Examples:
+<ul>
+<li>1 day</li>
+<li>3 century 2 mins</li>
+<li>45 ms</li>
+<li>1 mon 87 us</li>
+</ul></li>
+<li>Intervals can be used in calculations with other date/time data types
+<ul>
+<li>Can also be used in comparisons if subtracting timestamps</li>
+</ul></li>
+</ul>
+</section>
+<section id="more" class="slide level2">
+<h2>MORE!</h2>
+<ul>
+<li>These are just a small sample of some of the most common data types</li>
+<li>Postgres supports <em>many</em> more!
+<ul>
+<li>Booleans</li>
+<li>Geometric types</li>
+<li>Network address types</li>
+<li>JSON types</li>
+<li>A full list can be found <a href="https://www.postgresql.org/docs/14/datatype.html">here</a></li>
+</ul></li>
+<li>We’ll address others as the come up sporadically through the rest of the semester, but you have the core basics now</li>
+</ul>
+</section>
+<section id="conversions" class="slide level2">
+<h2>Conversions</h2>
+<ul>
+<li>There are plenty of instances where you may need to convert between types
+<ul>
+<li>Sometimes calculations (coming soon!) need a certain data type</li>
+<li>Sometimes the information was just not stored in the most ideal type</li>
+</ul></li>
+<li>Can use the <code class="python">CAST</code> function to convert between data types (where it makes sense)</li>
+<li>Core syntax is</li>
+</ul>
+<pre ><code class="pgsql">CAST(col_name AS new_data_type)</code></pre>
+<ul>
+<li>Postgres has a shorthand conversion syntax that uses double colons:</li>
+</ul>
+<pre ><code class="pgsql">col_name::new_data_type</code></pre>
+<ul>
+<li>Be aware that casting data to a text string with a maximum size smaller than it would take will <em>truncate</em> the conversion to get it to fit</li>
+</ul>
+</section>
+<section id="sql-io" class="slide level2">
+<h2>SQL I/O</h2>
+<ul>
+<li><code class="python">INSERT INTO</code> is great for small tables or adding a few rows, not so great for bulk populating of a table</li>
+<li>Frequently, data is stored in delimited text files for flexibility and portability</li>
+<li>Postgres can import data from <em>or</em> write data to these sorts of delimited text files using its <code class="python">COPY</code> command
+<ul>
+<li>This command is Postgres specific, though other SQL variants have their similar methods</li>
+</ul></li>
+<li>Postgres needs to have permission to access the file or folder in order to import or export!
+<ul>
+<li>If having issues:
+<ul>
+<li>On Windows: The <code class="python">C:\Users\Public</code> should be universally accessible</li>
+<li>On Mac: The <code class="python">/tmp</code> folder should be universally accessible</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="delimited-files" class="slide level2">
+<h2>Delimited Files</h2>
+<ul>
+<li>A delimited text file simply uses a special character, called the <em>delimiter</em>, to indicate where column breaks should be</li>
+<li>Otherwise, each line contains the information for a single row</li>
+<li>Most common delimiter is the comma, and hence the term CSV or “Comma-Separated Values”
+<ul>
+<li>Basically any character can be used as a delimiter though, so you might need to adjust sometimes</li>
+</ul></li>
+<li>If the delimiter naturally appears in an entry, and isn’t indicating a column break, then that entry needs to be surrounded with a <em>text qualifier</em>
+<ul>
+<li>The most common text qualifier is a pair of double quotes, but it could be other symbols</li>
+</ul></li>
+<li>Often times, the first row of the file is a delimited description of each column name or what it represents
+<ul>
+<li>Not always present, in which case you (hopefully) have other documentation to consult to understand the column meanings</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-classic-csv" class="slide level2">
+<h2>The Classic CSV</h2>
+<pre ><code class="text">id,first_name,last_name,birthday
+1,Michael,Scott,"Mar 15, 1964"
+2,Dwight,Schrute,"Jan 20, 1970"
+3,Pam,Beesly,"Mar 25, 1979"
+4,Jim,Halpert,"Oct 1, 1978"
+5,Kelly,Kapoor,"Feb 5, 1980"</code></pre>
+<ul>
+<li>Note:
+<ul>
+<li>The birthday column entries are quoted owing to the comma within them</li>
+<li>No spaces show up anywhere except within quoted blocks</li>
+<li>The first line contains a header, which is useful for understanding but contains no actual data</li>
+<li>Make sure you have no empty line at the end!</li>
+</ul></li>
+</ul>
+</section>
+<section id="importing-data" class="slide level2">
+<h2>Importing Data</h2>
+<ul>
+<li><p>The <code class="python">COPY</code> command will copy information into an <em>existing</em> table, it won’t create the table</p>
+<ul>
+<li>Thus you are still responsible for creating the table (and associated data types for each column) before <code class="python">COPY</code> will be useful
+<ul>
+<li>Yes, this can still be painful for huge tables. There are some scripts that can help with it or do some automated checking, but they tend to be far from perfect.</li>
+</ul></li>
+</ul></li>
+<li><p>Syntax of the <code class="python">COPY</code> statement:</p>
+<pre ><code class="pgsql">COPY tablename
+FROM full_text_filename
+WITH ( import_options );</code></pre></li>
+</ul>
+</section>
+<section id="importing-details" class="slide level2">
+<h2>Importing Details</h2>
+<ul>
+<li>The full text filename needs to be the entire path that points to your file
+<ul>
+<li>On Windows, that would start with <code class="python">C:\</code></li>
+<li>On MacOS, that would start with <code class="python">/</code></li>
+</ul></li>
+<li>You have a basic selection of import options:
+<ul>
+<li><code class="python">FORMAT CSV</code> sets the delimiter to a comma and the default text qualifier to double quotes</li>
+<li><code class="python">HEADER</code> specifies that there is a header, and so the first row of the file should be skipped</li>
+<li><code class="python">DELIMITER 'x'</code> sets <code class="python">x</code> to be the delimiter instead of the default comma (or tab)</li>
+<li><code class="python">QUOTE 'x'</code> sets <code class="python">x</code> to be the new text qualifier, instead of double quotes</li>
+</ul></li>
+<li>If you run the <code class="python">COPY</code> command multiple times, it will just keep adding the CSV contents to the end of the current table</li>
+</ul>
+</section>
+<section id="subset-imports" class="slide level2">
+<h2>Subset Imports</h2>
+<ul>
+<li><p>Sometimes an CSV might not have <em>all</em> the data you want in your SQL table</p></li>
+<li><p>You can import all the information from the CSV into only a subset of the SQL table columns</p>
+<ul>
+<li>As far as I know, you can’t easily go the other direction, importing only a portion of the CSV columns</li>
+</ul></li>
+<li><p>Just requires that you specify the target SQL columns after specifying the table</p>
+<pre ><code class="pgsql">COPY tablename (col1, col2, col3)
+FROM full_text_filename
+WITH (FORMAT CSV, HEADER);</code></pre></li>
+</ul>
+</section>
+<section id="understanding-check" class="slide level2">
+<h2>Understanding Check</h2>
+<div class="cols">
+<div class="col">
+<pre ><code class="pgsql" style="font-size:.8em">CREATE TABLE purchases (
+  "date" DATE,
+  "store" VARCHAR(20),
+  "purchased" TEXT,
+  "tot_price" NUMERIC(10,2));</code></pre>
+<p>How to import the data to the right into the above table?</p>
+</div>
+<div class="col">
+<pre ><code class="text file" name="C:\DATA\purchases.csv" style="font-size:.9em">date:store:purchased
+Jan-5-22:Walmart:eggs,milk
+Jan-10-22:Roths:cereal,steak
+Jan-16-22:Roths:milk,butter
+Jan-18-22:Winco:beans</code></pre>
+</div>
+</div>
+<div class="cols">
+<div class="col">
+<pre ><code class="pgsql answer" style="font-size:.7em;" name="A">COPY purchases
+FROM 'C:\DATA\purchases.csv'
+WITH (FORMAT CSV, HEADER);</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.7em;" name="C">COPY purchases (date, store, purchased)
+FROM 'C:\DATA\purchases.csv'
+WITH (FORMAT CSV, HEADER, 
+      DELIMITER ':');</code></pre>
+</div>
+<div class="col">
+<pre ><code class="pgsql answer" style="font-size:.7em;" name="B">COPY purchases (date, store, purchased)
+FROM 'C:\DATA\purchases.csv'
+WITH (FORMAT CSV, DELIMITER ':');</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.7em;" name="D">COPY purchases (date, store)
+FROM 'purchases.csv'
+WITH (FORMAT CSV, HEADER,
+      DELIMITER ',');</code></pre>
+</div>
+</div>
+</section>
+<section id="section-1" class="slide level2" data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/Mf4J5hvZj2SocBpehiVfa?controls=none&amp;short_poll=true">
+<h2 data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/Mf4J5hvZj2SocBpehiVfa?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="exporting-data" class="slide level2">
+<h2>Exporting Data</h2>
+<ul>
+<li><p>Exporting data takes information from your SQL table and allows you to store it in a text file</p>
+<ul>
+<li>Note that this process isn’t lossless, as the data types of each column are not stored, just the contents and column names</li>
+</ul></li>
+<li><p>Syntax-wise, it is almost exactly like copying into a SQL table, except using <code class="python">TO</code> instead of <code class="python">FROM</code></p>
+<pre ><code class="pgsql">COPY tablename
+TO full_text_filename
+WITH ( import_options );</code></pre></li>
+<li><p>This exports <strong>all</strong> columns from the specified table to the filename with the desired format</p></li>
+</ul>
+</section>
+<section id="exporting-subsets" class="slide level2">
+<h2>Exporting Subsets</h2>
+<ul>
+<li>In many instances, you may not want <strong>all</strong> the columns to be exported. In that case, you have a few options:</li>
+<li>Exporting only particular columns:
+<ul>
+<li>Just specify the desired columns after the table name</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:1em;">COPY tablename (col1, col2, col3)
+TO full_text_filename
+WITH ( import_options );</code></pre></li>
+<li>Export just the output of a query:
+<ul>
+<li>Embed the query instead of a table name</li>
+</ul>
+<pre ><code class="pgqsl" style="font-size:1em;">COPY (
+  SELECT col1, col2 FROM tablename
+  ORDER BY col2
+  )
+TO full_text_filename
+WITH ( import_options );</code></pre></li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1440,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

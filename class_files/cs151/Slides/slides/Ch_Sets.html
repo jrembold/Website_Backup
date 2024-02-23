@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2021-04-23">
+  <meta name="dcterms.date" content="2022-11-14">
   <title>Sets</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,10 +14,15 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
   </style>
   <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
   <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
@@ -29,24 +34,251 @@
 <section id="title-slide">
   <h1 class="title">Sets</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">April 23, 2021</p>
+  <p class="date">November 14, 2022</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Be making progress on Project 5!
+<li>Enigma Project is due on Friday!
 <ul>
-<li>Sunday marks the halfway point. Are you at least halfway through?</li>
-<li>Be asking questions of me or your section leaders! Don’t wait until the last minute!</li>
+<li>Get a start on it today if you haven’t already!!</li>
 </ul></li>
-<li>Our <em>last</em> official lab today playing around with python’s set object
+<li>Winner of the Graphics Contest was Dominik, with his great
+implementation of Pacman!
 <ul>
-<li>I’m leaving both days next week open for Project 5 work and questions</li>
+<li>Only enough submissions for 1 winner</li>
+<li>The last contest of the semester will be a Game Contest and
+instructions will be posted by the end of the week</li>
 </ul></li>
-<li>Don’t forget the Game Contest is live if you want to make a submission to that.</li>
-<li>Polling: <a href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>Grade Reports posted!
+<ul>
+<li>Just got all of the Project 2 scores in last night, so those should
+be accurately reflected now</li>
+<li>There are a few things I still need to fix, but otherwise let me
+know if something seems amiss!</li>
+</ul></li>
+<li>Polling: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
+</section>
+<section id="understanding-check" class="slide level2"
+data-notes="Solution: [125,167,204]">
+<h2 data-notes="Solution: [125,167,204]">Understanding Check</h2>
+<p>What is the printed value of the below code?</p>
+<pre ><code class="python">A = [
+    {'name': 'Jill',  'weight':125, 'height':62},
+    {'name': 'Sam',   'height':68},
+    {'name': 'Bobby', 'height':72},
+]
+A.append({'weight':204, 'height':70, 'name':'Jim'})
+B= A[1]
+B['weight'] = 167
+print([d['weight'] for d in A if 'weight' in d])</code></pre>
+<div class="cols">
+<div class="col poll">
+<ol>
+<li>
+<code class="python">[100,204]</code>
+</li>
+<li>
+<code class="python">[156,173,204]</code>
+</li>
+</ol>
+</div>
+<div class="col poll">
+<ol style="counter-reset: li 2">
+<li>
+<code class="python">[100,167,173,204]</code>
+</li>
+<li>
+<code class="python">[125,167,204]</code>
+</li>
+</ol>
+</div>
+</div>
+</section>
+<section id="dictionary-records" class="slide level2">
+<h2>Dictionary Records</h2>
+<ul>
+<li><p>While most commonly used to indicate mappings, dictionaries have
+seen increased use of late as structures to store records</p></li>
+<li><p>Looks surprisingly close to our original template of:</p>
+<pre ><code class="python">boss = {
+    'name': 'Scrooge',
+    'title': 'founder',
+    'salary': 1000
+    }</code></pre></li>
+<li><p>Allows easy access of attributes without worrying about
+ordering</p>
+<pre ><code class="python">print(boss['name'])</code></pre></li>
+</ul>
+<!--
+## Review Question
+::::::cols
+::::col
+The data file to the right is read in and run using the TeachingMachine. What question do you end up at if you choose B 4 times in a row?
+
+:::{.poll}
+#. Q1
+#. Q2
+#. Q3
+#. None of the above
+:::
+
+::::
+
+::::col
+
+:::{.text}
+<pre style='font-size:0.5em;'>
+Q1
+What is the square root of 36?
+    A) 0
+    B) 6
+    C) 10
+-----
+A: Q2
+B: Q3
+C: Q1
+
+Q2
+Are you happy?
+    A) Yes
+    B) No
+    C) What kind of question is this?
+-----
+B: Q1
+*: Q3
+
+Q3
+What is your age?
+    A) Young
+    B) Prime of my life
+    C) Old
+-----
+A: Q1
+*: Q2
+</pre>
+:::
+
+
+::::
+::::::
+
+## An Internal Representation
+
+![\ ](../images/TeachingMachine.svg)
+
+
+## The `TMCourse` Class
+```{.python style='max-height:900px; font-size:0.6em; line-height:1.2em;' data-line-numbers='32-46'}
+from TMQuestion import TMQuestion
+
+class TMCourse:
+
+    def __init__(self, questions):
+        """Creates a new TMCourse object with the specified questions."""
+        self._questions = questions
+
+    def get_question(self, name):
+        """Returns the question with the specified name."""
+        return self._questions[name]
+
+    def run(self):
+        """Steps through the questions in this course."""
+        current = "START"
+        while current != "EXIT":
+            question = self.get_question(current)
+            for line in question.get_text():
+                print(line)
+            answer = input("> ").strip().upper()
+            next = question.lookup_answer(answer)
+            if next is None:
+                print("I don't understand that response.")
+            else:
+                current = next
+
+# Implementation notes
+# --------------------
+# To make sure that the course starts at the first question, this method
+# always includes an entry labeled "START" in the question table.
+
+    @staticmethod
+    def read_course(f):
+        """Reads the entire course from the data file f."""
+        questions = { }
+        finished = False
+        while not finished:
+            question = TMQuestion.read_question(f)
+            if question is None:
+                finished = True
+            else:
+                name = question.get_name()
+                if len(questions) == 0:
+                    questions["START"] = question
+                questions[name] = question
+        return TMCourse(questions)
+```
+
+## The `TMQuestion` Class
+```{.python style='max-height:900px; font-size:0.6em; line-height:1.2em;' data-line-numbers='5-9|11-13|15-17|19-24|26-39|40-53'}
+class TMQuestion:
+
+    MARKER = "-----"
+
+    def __init__(self, name, text, answers):
+        """Creates a new TMQuestion object with these attributes."""
+        self._name = name
+        self._text = text
+        self._answers = answers
+
+    def get_name(self):
+        """Returns the name of this question."""
+        return self._name
+
+    def get_text(self):
+        """Returns the list containing the text of this question."""
+        return self._text
+
+    def lookup_answer(self, response):
+        """Looks up the response to find the next question."""
+        next_question = self._answers.get(response, None)
+        if next_question is None:
+            next_question = self._answers.get("*", None)
+        return next_question
+
+    @staticmethod
+    def read_question(f):
+        """Reads one question from the data file f."""
+        name = f.readline().rstrip()
+        if name == "":
+            return None
+        text = [ ]
+        finished = False
+        while not finished:
+            line = f.readline().rstrip()
+            if line == TMQuestion.MARKER:
+                finished = True
+            else:
+                text.append(line)
+        answers = { }
+        finished = False
+        while not finished:
+            line = f.readline().rstrip()
+            if line == "":
+                finished = True
+            else:
+                colon = line.find(":")
+                if colon == -1:
+                    raise ValueError("Missing colon in " + line)
+                response = line[:colon].strip().upper()
+                next_question = line[colon + 1:].strip()
+                answers[response] = next_question
+        return TMQuestion(name, text, answers)
+```
+
+-->
 </section>
 <section id="mathematical-sets" class="slide level2">
 <h2>Mathematical Sets</h2>
@@ -78,7 +310,8 @@ primary = { "red", "green", "blue" }</code></pre>
 <ul>
 <li>Set elements must be immutable</li>
 <li>Sets themselves are generally mutable</li>
-<li>Can <strong>not</strong> create an empty set just using <code class="python">{ }</code>!
+<li>Can <strong>not</strong> create an empty set just using
+<code class="python">{ }</code>!
 <ul>
 <li>Python assumes this to be an empty dictionary!</li>
 <li>Must instead use <code class="python">set()</code>.</li>
@@ -95,30 +328,57 @@ primary = { "red", "green", "blue" }</code></pre>
 <li>red ∈ <strong>primary</strong></li>
 <li>-1 ∉ <strong>N</strong></li>
 </ul></li>
-<li>The <em>union</em> of the sets <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> (<span class="math inline">\(A \cup B\)</span>) consists of all elements in either <span class="math inline">\(A\)</span> or <span class="math inline">\(B\)</span> or both.</li>
-<li>The <em>intersection</em> of the sets <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> (<span class="math inline">\(A \cap B\)</span>) consists of all elements in both <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>.</li>
-<li>The <em>set difference</em> of <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> (<span class="math inline">\(A - B\)</span>) consists of all elements in <span class="math inline">\(A\)</span> but not in <span class="math inline">\(B\)</span>.</li>
-<li>The <em>symmetric set difference</em> of <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> (<span class="math inline">\(A\triangle B\)</span>) consists of all elements in <span class="math inline">\(A\)</span> or <span class="math inline">\(B\)</span> but not in both.</li>
+<li>The <em>union</em> of the sets <span
+class="math inline">\(A\)</span> and <span
+class="math inline">\(B\)</span> (<span class="math inline">\(A \cup
+B\)</span>) consists of all elements in either <span
+class="math inline">\(A\)</span> or <span
+class="math inline">\(B\)</span> or both.</li>
+<li>The <em>intersection</em> of the sets <span
+class="math inline">\(A\)</span> and <span
+class="math inline">\(B\)</span> (<span class="math inline">\(A \cap
+B\)</span>) consists of all elements in both <span
+class="math inline">\(A\)</span> and <span
+class="math inline">\(B\)</span>.</li>
+<li>The <em>set difference</em> of <span
+class="math inline">\(A\)</span> and <span
+class="math inline">\(B\)</span> (<span class="math inline">\(A -
+B\)</span>) consists of all elements in <span
+class="math inline">\(A\)</span> but not in <span
+class="math inline">\(B\)</span>.</li>
+<li>The <em>symmetric set difference</em> of <span
+class="math inline">\(A\)</span> and <span
+class="math inline">\(B\)</span> (<span class="math inline">\(A\triangle
+B\)</span>) consists of all elements in <span
+class="math inline">\(A\)</span> or <span
+class="math inline">\(B\)</span> but not in both.</li>
 </ul>
 </section>
 <section id="python-implementations" class="slide level2">
 <h2>Python Implementations</h2>
 <ul>
-<li>Python’s built-in implementation of sets supports all these same operations</li>
-<li>Can either use appropriately named methods on sets or operators between sets</li>
+<li>Python’s built-in implementation of sets supports all these same
+operations</li>
+<li>Can either use appropriately named methods on sets or operators
+between sets</li>
 <li>Membership <code class="inlinecode">3 in primes</code></li>
 </ul>
 <div class="cols">
 <div class="col">
 <ul>
-<li>Union: <code class="inlinecode">A.union(B)</code> <code class="inlinecode python">A | B</code></li>
-<li>Intersection <code class="inlinecode">A.intersection(B)</code> <code class="inlinecode python">A & B</code></li>
+<li>Union: <code class="inlinecode">A.union(B)</code>
+<code class="inlinecode python">A | B</code></li>
+<li>Intersection <code class="inlinecode">A.intersection(B)</code>
+<code class="inlinecode python">A & B</code></li>
 </ul>
 </div>
 <div class="col">
 <ul>
-<li>Difference <code class="inlinecode">A.difference(B)</code> <code class="inlinecode python">A - B</code></li>
-<li>Symmetric difference <code class="inlinecode">A.symmetric_difference(B)</code> <code class="inlinecode python">A ^ B</code></li>
+<li>Difference <code class="inlinecode">A.difference(B)</code>
+<code class="inlinecode python">A - B</code></li>
+<li>Symmetric difference
+<code class="inlinecode">A.symmetric_difference(B)</code>
+<code class="inlinecode python">A ^ B</code></li>
 </ul>
 </div>
 </div>
@@ -126,8 +386,10 @@ primary = { "red", "green", "blue" }</code></pre>
 <section id="venn-diagrams" class="slide level2">
 <h2>Venn Diagrams</h2>
 <ul>
-<li>A <em>Venn Diagram</em> is a graphical representation of a set which indicates common elements as overlapping areas</li>
-<li>The following Venn diagrams illustrate the effect of the 4 primary set operations</li>
+<li>A <em>Venn Diagram</em> is a graphical representation of a set which
+indicates common elements as overlapping areas</li>
+<li>The following Venn diagrams illustrate the effect of the 4 primary
+set operations</li>
 </ul>
 <div class="cols">
 <div class="col">
@@ -250,7 +512,7 @@ primary = { "red", "green", "blue" }</code></pre>
        transform="matrix(0.26458333,0,0,0.26458333,267.44543,16.12859)" />
   </g>
 </svg>
- <br> <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<br> <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -652,7 +914,7 @@ primary = { "red", "green", "blue" }</code></pre>
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984004px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e22e;stroke-width:0.264583;">A ∩ B</tspan></text>
   </g>
 </svg>
- <br> <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<br> <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -974,7 +1236,7 @@ primary = { "red", "green", "blue" }</code></pre>
 <li>odds ∆ squares</li>
 </ul>
 </section>
-<section id="understanding-check" class="slide level2">
+<section id="understanding-check-1" class="slide level2">
 <h2>Understanding Check</h2>
 <p>Looking at the same sets:</p>
 <table>
@@ -996,7 +1258,9 @@ primary = { "red", "green", "blue" }</code></pre>
 </tr>
 </tbody>
 </table>
-<p>What is the set resulting from: <span class="math display">\[ (\text{primes} \cap \text{evens}) \cup (\text{odds}\cap\text{squares})\]</span></p>
+<p>What is the set resulting from: <span class="math display">\[
+(\text{primes} \cap \text{evens}) \cup
+(\text{odds}\cap\text{squares})\]</span></p>
 <div class="hpoll">
 <ol>
 <li>∅</li>
@@ -1009,22 +1273,35 @@ primary = { "red", "green", "blue" }</code></pre>
 <section id="set-relationships" class="slide level2">
 <h2>Set Relationships</h2>
 <ul>
-<li>Sets <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are <em>equal</em> (<span class="math inline">\(A = B\)</span>) if they have the same elements.
+<li>Sets <span class="math inline">\(A\)</span> and <span
+class="math inline">\(B\)</span> are <em>equal</em> (<span
+class="math inline">\(A = B\)</span>) if they have the same elements.
 <ul>
 <li>This would make them the same circles in a Venn diagram</li>
 </ul></li>
-<li>Set <span class="math inline">\(A\)</span> is a <em>subset</em> of <span class="math inline">\(B\)</span> (<span class="math inline">\(A\subseteq B\)</span>) if all the elements in <span class="math inline">\(A\)</span> are also in <span class="math inline">\(B\)</span>.
+<li>Set <span class="math inline">\(A\)</span> is a <em>subset</em> of
+<span class="math inline">\(B\)</span> (<span
+class="math inline">\(A\subseteq B\)</span>) if all the elements in
+<span class="math inline">\(A\)</span> are also in <span
+class="math inline">\(B\)</span>.
 <ul>
-<li>This would mean that the circle for <span class="math inline">\(A\)</span> would be entirely inside (or equal) to the circle of <span class="math inline">\(B\)</span></li>
+<li>This would mean that the circle for <span
+class="math inline">\(A\)</span> would be entirely inside (or equal) to
+the circle of <span class="math inline">\(B\)</span></li>
 </ul></li>
-<li>Set <span class="math inline">\(A\)</span> is a <em>proper subset</em> of <span class="math inline">\(B\)</span> (<span class="math inline">\(A\subset B\)</span>) if <span class="math inline">\(A\)</span> is a subset of <span class="math inline">\(B\)</span> and the two sets are not equal</li>
+<li>Set <span class="math inline">\(A\)</span> is a <em>proper
+subset</em> of <span class="math inline">\(B\)</span> (<span
+class="math inline">\(A\subset B\)</span>) if <span
+class="math inline">\(A\)</span> is a subset of <span
+class="math inline">\(B\)</span> and the two sets are not equal</li>
 </ul>
 </section>
 <section id="informal-proofs" class="slide level2">
 <h2>Informal Proofs</h2>
 <ul>
 <li>You can use Venn diagrams to justify different set identities</li>
-<li>Example: Say you wanted to show that: <span class="math display">\[ A - (B \cap C) = (A-B) \cup (A-C)\]</span></li>
+<li>Example: Say you wanted to show that: <span class="math display">\[
+A - (B \cap C) = (A-B) \cup (A-C)\]</span></li>
 </ul>
 <p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
@@ -1548,7 +1825,8 @@ primary = { "red", "green", "blue" }</code></pre>
 <section id="python-set-methods" class="slide level2">
 <h2>Python Set Methods</h2>
 <ul>
-<li>Can also use “set comprehension” to generate a set <code class="inlinecode">{ x for x in range(0,100,2) }</code></li>
+<li>Can also use “set comprehension” to generate a set
+<code class="inlinecode">{ x for x in range(0,100,2) }</code></li>
 </ul>
 <table>
 <colgroup>
@@ -1568,7 +1846,8 @@ primary = { "red", "green", "blue" }</code></pre>
 </tr>
 <tr class="even">
 <td><code class="python">elem in set</code></td>
-<td>Returns <code class="python">True</code> if <code class="python">elem</code> is in the set</td>
+<td>Returns <code class="python">True</code> if
+<code class="python">elem</code> is in the set</td>
 </tr>
 <tr class="odd">
 <td><code class="python">set.copy()</code></td>
@@ -1580,11 +1859,13 @@ primary = { "red", "green", "blue" }</code></pre>
 </tr>
 <tr class="odd">
 <td><code class="python">set.remove(elem)</code></td>
-<td>Removes the element from the set, raising a <code class="python">ValueError</code> if it is missing</td>
+<td>Removes the element from the set, raising a
+<code class="python">ValueError</code> if it is missing</td>
 </tr>
 <tr class="even">
 <td><code class="python">set.discard(elem)</code></td>
-<td>Removes the element from the set, doing nothing if it is missing</td>
+<td>Removes the element from the set, doing nothing if it is
+missing</td>
 </tr>
 </tbody>
 </table>
@@ -1593,16 +1874,26 @@ primary = { "red", "green", "blue" }</code></pre>
 <h2>Why use sets?</h2>
 <dl>
 <dt>Sets come up naturally in many situations</dt>
-<dd>Many real-world applications involve unordered collections of unique elements, for which sets are the natural model.
+<dd>
+Many real-world applications involve unordered collections of unique
+elements, for which sets are the natural model.
 </dd>
 <dt>Sets have a well-established mathematical foundation</dt>
-<dd>If you can frame your application in terms of sets, you can rely on the various mathematical properties that apply to sets.
+<dd>
+If you can frame your application in terms of sets, you can rely on the
+various mathematical properties that apply to sets.
 </dd>
 <dt>Sets can make it easier to reason about your program</dt>
-<dd>One of the advantages of mathematical abstraction is that using it often makes it easy to think clearly and rigorously about what your program does.
+<dd>
+One of the advantages of mathematical abstraction is that using it often
+makes it easy to think clearly and rigorously about what your program
+does.
 </dd>
 <dt>Many important algorithms are described in terms of sets</dt>
-<dd>If you look at web sites that describe some of the most important algorithms in computer science, many of them base those descriptions in terms of set operations.
+<dd>
+If you look at web sites that describe some of the most important
+algorithms in computer science, many of them base those descriptions in
+terms of set operations.
 </dd>
 </dl>
 </section>
@@ -1629,22 +1920,89 @@ primary = { "red", "green", "blue" }</code></pre>
 		//autoAnimateEasing: 'ease-in',
 		//autoAnimateDuration: 1.0,
 		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
         // Display the page number of the current slide
         slideNumber: true,
         // Add the current slide number to the URL hash so that reloading the
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
         // Vertical centering of slides
         center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
         // Transition style
         transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
         height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
 		math: {
 		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
 		  <!--config: 'tex-mml-chtml',-->

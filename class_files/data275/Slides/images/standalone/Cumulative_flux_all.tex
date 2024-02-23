@@ -1,0 +1,77 @@
+\documentclass[12pt]{standalone}
+\usepackage{pgfplots,pgfplotstable}
+\usepgfplotslibrary{statistics, groupplots}
+\pgfplotsset{compat=newest}
+
+\begin{document}
+\begin{tikzpicture}[xscale=.8,yscale=.70]
+		\begin{loglogaxis}[
+			width=.85\textwidth,
+			height=8cm,
+			%height=4in,
+			grid=major,
+			legend entries={This Research, Slope = -0.9, Suggs 2011, Halliday 1996, Brown 2002, Harris 2008, Stuart 2001, Rabinowitz 2000, Suggs 2014},
+			legend style={fill=white},
+			xlabel= Energy (kton of TNT),
+			ylabel= {Cumulative Number Striking\\ Earth each Year},
+			ylabel style={align=center, font=\scriptsize},
+			xlabel style={font=\scriptsize},
+			xmin=1E-6, xmax=1E10,
+			ymin=1E-10, ymax=1E8,
+			%title= Full Size Distribution of Asteroid Debris,
+			%title style = {yshift=1.5cm},
+			scale only axis,
+			axis x line*=bottom,
+			axis line style={black},
+			tick style={black},
+			%axis on top=true,
+			%xtick={1E-6,1E-4,1E-2,1,1E2, 1E4, 1E6,1E8,1E10},
+			xticklabel style = {font=\scriptsize},
+			yticklabel style = {font=\scriptsize},
+			mark size = 4pt,
+			text = black
+		  ]
+		  \addplot+[only marks,cyan,fill=cyan,
+			error bars/.cd,
+			y dir=both, y explicit,
+			x dir=both, x explicit,
+		  ] 
+		  table[x=Energy, y=Imps_per_Year, x error minus=En_Low, x error plus=En_High, y error=Y_err] {sc_fluxbyenergy_Rband_v2.dat};
+		  
+		  %Read in fit parameters from earlier
+		  \pgfplotstableread{sc_fluxbyenergy_Rband_v2_parameters.dat}{\paramtable};
+		  \pgfplotstablegetelem{1}{[index]0}\of{\paramtable};
+		  \pgfmathsetmacro\slope{\pgfplotsretval};
+		  \pgfplotstablegetelem{0}{[index]0}\of{\paramtable};
+		  \pgfmathsetmacro\interscept{\pgfplotsretval};
+
+		  %\addplot[domain=2E-6:1E9] {11.2*x^\slope};
+		  \addplot[domain=2E-6:1E9, ultra thick, dashed, orange] {3.16*x^-0.90};
+		  \addplot+[only marks,brown!20] coordinates { (7.5E-6, 1.75E5)};
+		  \addplot+[only marks,orange] table[ x=X, y=Y] {VisualFireballCounts.dat};
+		  \addplot+[only marks,blue!20] table[ x=BrownX, y=BrownY] {OutsideCumulativeCounts.dat};
+		  \addplot+[only marks] table[ x=E, y=N] {./HarrisCounts.dat};
+		  \addplot+[only marks,yellow] table[ x=Linear2X, y=Linear2Y] {OutsideCumulativeCounts.dat};
+		  \addplot+[only marks,violet] table[ x=SpacewatchX, y=SpacewatchY] {OutsideCumulativeCounts.dat};
+		  \addplot+[only marks,red] table {SuggsLatestCounts.dat};
+		  %\node[coordinate, pin={[pin edge={<-,thick}]250:{Chelyabinsk Meteorite}}] at (axis cs: 500,1E-2) {};
+		\end{loglogaxis}
+		\begin{loglogaxis}[
+		  scale only axis,
+		  width=.85\textwidth,
+		  height=8cm,
+		  axis x line*=top,
+		  axis y line=none,
+		  xmin=2E-5, xmax=5.6,
+		  ymin=1E-10, ymax=1E8,
+		  xlabel = Diameter (km),
+		  xlabel style = {font=\scriptsize},
+		  xticklabel style = {font=\scriptsize},
+		  text = black,
+		  axis line style={black},
+		  tick style={black},
+		]
+		\end{loglogaxis}
+\end{tikzpicture}
+
+\end{document}

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Join Me</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Join Me</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Thursday, January 27, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>HW3 due on Thursday
+<ul>
+<li>HW2 feedback has been posted on GitHub.
+<ul>
+<li>I still didn’t see submissions from a few of you. Thursday is the
+last day they will be accepted!</li>
+</ul></li>
+</ul></li>
+<li>Still in Ch 6 on Thursday</li>
+<li>First test is a week from Thursday.</li>
+<li>I’ve updated both the online and syllabus schedule to reflect our
+pacing</li>
+<li>Polling today: www.PollEv.com/jedrembold441</li>
+</ul>
+</section>
+<section id="understanding-check" class="slide level2">
+<h2>Understanding Check</h2>
+<div class="cols">
+<div class="col">
+<p>Suppose you have a table of items with the schema shown below and
+wanted to find the most common difference between Price A and Price B.
+You are looking for bargains, so in the case of a tie, you’d like to
+know the biggest. Which query will deliver on your wish?</p>
+<pre ><code class="pgsql" style="font-size:.9em">CREATE TABLE rev (
+  "name" TEXT,
+  "pa" NUMERIC(4,2),
+  "pb" NUMERIC(4,2)
+);</code></pre>
+</div>
+<div class="col" style="flex-grow:1.2">
+<pre ><code class="pgsql answer" style="font-size:.7em" name="A">SELECT mode(pb - pa)
+FROM rev;</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.7em" name="B">SELECT
+  mode() WITHIN GROUP (ORDER BY pb) -
+  mode() WITHIN GROUP (ORDER BY pa)
+FROM rev;</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.7em" name="C">SELECT
+  mode() WITHIN GROUP (ORDER BY (pb-pa))
+FROM rev;</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.7em" name="D">SELECT
+  mode() WITHIN GROUP 
+    (ORDER BY (pb-pa) DESC)
+FROM rev;</code></pre>
+</div>
+</div>
+</section>
+<section id="section" class="slide level2"
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/mxlegsBVqWXTnICRZwVAw?controls=none&amp;short_poll=true">
+<h2
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/mxlegsBVqWXTnICRZwVAw?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="linking-tables" class="slide level2">
+<h2>Linking Tables</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Our whole idea of breaking apart data across multiple tables was
+prefaced on the fact that we could pull it back together when
+needed</li>
+<li>There is nothing special about the linkages: we can link any columns
+that we want</li>
+<li>The act of collecting data from multiple tables based on particular
+rows and columns is called a <em>join</em> in SQL</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/join-me-vader.jpg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="creating-the-join" class="slide level2">
+<h2>Creating the Join</h2>
+<ul>
+<li>A join pulls information from multiple tables into a new table
+(since all queries return a table)</li>
+<li>The columns that are matched across tables are called
+<em>keys</em></li>
+<li>The general idea is then to:
+<ul>
+<li>Set up your selection as usual from a single table</li>
+<li>Join to that table another table</li>
+<li>Specifying what columns in each table will act as keys along with a
+conditional relating them
+<ul>
+<li>Most common condition is equality</li>
+</ul></li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql">SELECT * FROM table_a
+JOIN table_b
+ON table_a.key_col = table_b.key_col;</code></pre>
+</section>
+<section id="column-names" class="slide level2">
+<h2>Column Names</h2>
+<ul>
+<li>When you start refering to multiple table names in your query, you
+might get overlapping column names
+<ul>
+<li>Columns names must be unique <strong>within a table</strong> but
+might be the same <strong>across tables</strong></li>
+</ul></li>
+<li>To avoid ambiguity, you can preface a column name with the table it
+is coming from, separated by a period</li>
+<li>This is useful both for selecting the join key columns, but also for
+selecting particular columns you want out of the joined table</li>
+</ul>
+<pre ><code class="pgsql">SELECT tab1.name, tab1.age, tab2.name
+FROM tab1
+JOIN tab2 ON tab1.age = tab2.age;</code></pre>
+</section>
+<section id="inner-join" class="slide level2">
+<h2>(Inner) Join</h2>
+<ul>
+<li>The basic join only keeps rows from table 1 and table 2 that matched
+on the given column keys
+<ul>
+<li>This is also called an <em>inner join</em></li>
+</ul></li>
+<li>Any row in table 1 that had to counterpart in table 2 is left out
+<ul>
+<li>Identically for any row in table 2 that had no counterpart</li>
+</ul></li>
+<li>The key take-away is that it keeps what was in <strong>both</strong>
+tables</li>
+<li>If a value appears twice in one table, it will be duplicated in the
+joined table as well
+<ul>
+<li>One reason that many times people try to join on columns that hold
+unique values, but not always necesarry</li>
+</ul></li>
+<li>Visually, I think an animation does a terrific job of explaining
+what is happening
+<ul>
+<li>All animations today from the excellent <a
+href="https://dataschool.com/how-to-teach-people-sql/inner-join-animated/">How
+to teach people SQL</a> from TheDataSchool</li>
+</ul></li>
+</ul>
+</section>
+<section id="section-1" class="slide level2"
+data-background="../images/inner_join_anim.gif">
+<h2 data-background="../images/inner_join_anim.gif"></h2>
+</section>
+<section id="left-and-right-join" class="slide level2">
+<h2>Left and Right Join</h2>
+<ul>
+<li>Sometimes, you don’t want to include <em>only</em> the rows that
+were in both table</li>
+<li>Maybe you want <strong>all</strong> the rows from one table, but
+joining the other data when it is available</li>
+<li>In these cases, you can use a <code class="python">LEFT JOIN</code>
+or <code class="python">RIGHT JOIN</code>
+<ul>
+<li><code class="python">LEFT JOIN</code> is decidedly the more common,
+and you can make any <code class="python">RIGHT JOIN</code> a
+<code class="python">LEFT JOIN</code> just by flipping the table
+ordering</li>
+</ul></li>
+<li>Rows still need to have the same number of columns, so
+<code class="python">NULL</code> values will be inserted if the dominant
+table does not have a match</li>
+</ul>
+</section>
+<section id="section-2" class="slide level2"
+data-background="../images/left_join_anim.gif">
+<h2 data-background="../images/left_join_anim.gif"></h2>
+</section>
+<section id="full-outer-join" class="slide level2">
+<h2>FULL OUTER JOIN</h2>
+<ul>
+<li>On occasion, you just want <em>all</em> the data from both tables
+<ul>
+<li>Matching where possible</li>
+<li>But keeping data from both left or right tables if no match</li>
+</ul></li>
+<li>In these cases, a <code class="python">FULL OUTER JOIN</code> will
+do what you want
+<ul>
+<li>Essentially does a <code class="python">LEFT JOIN</code> followed by
+a <code class="python">RIGHT JOIN</code> with the existing table</li>
+</ul></li>
+<li>Anything without a match is still padded with
+<code class="python">NULL</code> values</li>
+</ul>
+</section>
+<section id="section-3" class="slide level2"
+data-background="../images/full_outer_join_anim.gif">
+<h2 data-background="../images/full_outer_join_anim.gif"></h2>
+</section>
+<section id="cross-join" class="slide level2">
+<h2>Cross Join</h2>
+<ul>
+<li>Lastly, sometimes you want to see <em>all the possible</em>
+combinations between the rows of two tables
+<ul>
+<li>Sometimes called a <em>cartesian product</em></li>
+</ul></li>
+<li>A <code class="python">CROSS JOIN</code> will return a table of all
+of these possibilities</li>
+<li>Could imagine cross joining all of the values with the suits to
+generate your standard 52 card playing deck</li>
+<li>These can get very large very fast!
+<ul>
+<li>Do <strong>not</strong> run on tables of millions of rows!</li>
+</ul></li>
+</ul>
+</section>
+<section id="section-4" class="slide level2"
+data-background="../images/cross_join_anim.gif" width="90%">
+<h2 data-background="../images/cross_join_anim.gif" width="90%"></h2>
+</section>
+<section id="practice" class="slide level2">
+<h2>Practice</h2>
+<p><img data-src="../images/hw_assignment_schema.png" /></p>
+<div class="center quip">
+<p>First names of students who have submitted any assignment?</p>
+</div>
+</section>
+<section id="practice-1" class="slide level2">
+<h2>Practice</h2>
+<p><img data-src="../images/hw_assignment_schema.png" /></p>
+<div class="center quip">
+<p>Last name and earned points of any submitted assignments for all
+students in class?</p>
+</div>
+</section>
+<section id="practice-2" class="slide level2">
+<h2>Practice</h2>
+<p><img data-src="../images/hw_assignment_schema.png" /></p>
+<div class="center quip">
+<p>Student ID and name of the assignment for all perfect scores?</p>
+</div>
+</section>
+<section id="practice-3" class="slide level2">
+<h2>Practice</h2>
+<p><img data-src="../images/hw_assignment_schema.png" /></p>
+<div class="center quip">
+<p>Percentage of all submitted homework that was submitted late?</p>
+</div>
+</section>
+<section id="practice-4" class="slide level2">
+<h2>Practice</h2>
+<p><img data-src="../images/hw_assignment_schema.png" /></p>
+<div class="center quip">
+<p>All combinations of students and homework assignments?</p>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1280,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

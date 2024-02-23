@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Editor</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1'/>
+		<link rel='stylesheet' href="/website_copy/css/main.css" />
+		<link rel='icon' href="/website_copy/images/favicon.png">
+		<script src="/website_copy/js/jquery-2.1.4.min.js"></script>
+		<script src="/website_copy/js/TweenLite.min.js"></script>
+		<script src="/website_copy/js/CSSPlugin.min.js"></script>
+		<script src="/website_copy/js/skel.min-2.2.js"></script>
+		<script src="/website_copy/js/main.js"></script>
+		<script src="/website_copy/js/BigPicture.min.js"></script>
+
+		<header>
+	<p><a href="/website_copy/">JED REMBOLD</a></p>
+	<nav>
+		<div class='topmenu'>
+			<ul>
+				<li><a href="/website_copy/about">About Me</a></li>
+				<li>
+					<div class='class-drop'>
+						<div class='class-hover'>
+							<a href="/website_copy/classes">Classes</a>
+						</div>
+						<div class='class-menu'>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/website_copy/classes/data275/data275/">Cosmos</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/website_copy/classes/data503/data503/">Data Eng</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+						</div>
+					</div>
+				</li>
+				<li><a href="/website_copy/wu_schedule">Schedule</a></li>
+				<li>
+					<div class='class-drop'>
+						<div class='class-hover'>
+							<a href="/website_copy/resources">Resources</a>
+						</div>
+						<div class='class-menu'>
+							
+							<a href="/website_copy/resources/python_guides/guides/">Python Guides</a><br>
+							
+							<a href="/website_copy/resources/grad_resources/grad_resources/">Grad Notes</a><br>
+							
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class='topmenu_bars'>
+			<ul>
+				<li class='slide-toggle'><span class='icon fa fa-bars' href="#"> Menu</span></li>
+			</ul>
+		</div>
+		<div class='topmenu_justbars'>
+			<ul>
+				<li class='slide-toggle'><span class='icon fa fa-bars' href="#"></span></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class='slideout-menu'>
+		<h3>Menu <span class='slide-toggle' href="#"><i class='fa fa-times'></i></span></h3>
+		<ul>
+			<li><a href="/website_copy/about">About Me</a></li>
+			<li><a href="/website_copy/classes">Classes</a></li>
+			<li><a href="/website_copy/wu_schedule">Schedule</a></li>
+			<li><a href="/website_copy/resources">Resources</a></li>
+		</ul>
+	</div>
+
+</header>
+
+	</head>
+	<body>
+
+
+	<div class='container'>
+		<div class='content'>
+			<div class='sub-banner'>
+				<h2>Editor</h2>
+			</div>
+		<style>
+.editor-container {
+	position: relative;
+	width: 90%;
+	margin: auto;
+}
+.editor-container #editor {
+	width: 100%;
+	height: 80vh;
+	margin: auto;
+	font-size: 20px;
+	font-family: 'Menlo';
+}
+.editor-container #copybut{
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	z-index: 1;
+	border-radius: 10px;
+	border: 3pt solid #0391A5;
+	color: #FFAE00;
+	background-color: transparent;
+	padding: 8pt;
+	opacity: 0;
+	transition: opacity .5s ease-in-out;
+}
+.editor-container:hover #copybut {
+	opacity: 1
+}
+.editor-container #copybut:active {
+	border-color: red;
+	}
+</style>
+<br>
+<div class="editor-container">
+<button id="copybut" onClick="mycopy()">Copy</button>
+<div id="editor"> </div>
+</div>
+<br>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.0/ace.js"></script>
+<script>
+var editor = ace.edit("editor");
+editor.setTheme("ace/theme/gruvbox");
+editor.session.setMode("ace/mode/python");
+editor.session.setUseSoftTabs(false);
+
+function mycopy() {
+	var copytext = editor.getValue()
+	navigator.clipboard.writeText(copytext);
+}
+</script>
+
+		<br>
+		</div>
+	</div>
+
+</body>
+<script src="/website_copy/js/click_handling.js"></script>
+</html>
+

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Transactions</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Transactions</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Tuesday, March 1, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 6 due on Thursday
+<ul>
+<li>You should have gotten feedback on HW4 by now, and I’m working on HW5</li>
+</ul></li>
+<li>We are a day ahead of the schedule again, so I’ll be updating it later this week to better reflect reality</li>
+<li>Note that we are initially skipping Chapter 10, so we’ll be looking at Ch 11 material on Thursday</li>
+<li>Terminal <code class="python">psql</code> issues? Let’s briefly overview.</li>
+<li>Polling today: www.PollEv.com/jedrembold441</li>
+</ul>
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<div class="cols">
+<div class="col">
+<p>The table named <code class="python">revq</code> to the right is acted upon by the below SQL queries. What entries in the table are left untouched once all queries have been run? Tap all entries in the image that apply.</p>
+</div>
+<div class="col">
+<table style="width:36%;">
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 11%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">row1 <em>TEXT</em></th>
+<th style="text-align: left;">row2 <em>REAL</em></th>
+<th style="text-align: left;">row3 <em>INT</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">0.24</td>
+<td style="text-align: left;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">9.1</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">10</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre ><code class="pgsql" style="font-size:.85em;">ALTER TABLE revq ADD COLUMN row4 INT;
+UPDATE revq SET row4 = row2;
+UPDATE revq SET (row2,row3)=(row3, row2) WHERE row1 IN ('B','C');
+UPDATE rev SET row3 = row3 - row4;
+UPDATE revq SET row2 = row2 + row4 WHERE row3 > 10;
+ALTER TABLE revq DROP COLUMN row4;</code></pre>
+</section>
+<section id="section" class="slide level2" data-background-iframe="https://embed.polleverywhere.com/clickable_images/5Ngz28L4t0lR0AdqJS8TA?controls=none&amp;short_poll=true">
+<h2 data-background-iframe="https://embed.polleverywhere.com/clickable_images/5Ngz28L4t0lR0AdqJS8TA?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="backup-tables" class="slide level2">
+<h2>Backup Tables</h2>
+<ul>
+<li>Frequently, if you are about to heavily modify a table, you should consider working on a backup copy</li>
+<li>We actually have already seen the basic machinery for this:</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:0.9em">CREATE TABLE new_table AS
+SELECT * FROM og_table;</code></pre>
+<ul>
+<li><strong>Note:</strong> Indexes and constraints are stored separately, and so are NOT copied over using this process!</li>
+<li>For including constraints and indexes, you can use a Postgres specific syntax, but the newly created table will initially be missing the data</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:0.9em">CREATE TABLE new_table
+(LIKE og_table INCLUDING ALL);</code></pre>
+</section>
+<section id="table-to-table" class="slide level2">
+<h2>Table to Table</h2>
+<ul>
+<li>In some cases, you’ll want to update or pass information across tables
+<ul>
+<li>Maybe one table has newer values that you want to use to update the original table</li>
+</ul></li>
+<li>In core SQL, you’d need to use subqueries, which we’ll be talking about in a few chapters</li>
+<li>In Postgres, to update, you can use <code class="python">FROM</code>:</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:.9em">UPDATE table_name1
+SET col_name = table_name2.col_name
+FROM table_name2
+WHERE table_name.col1 = table_name2.col1;</code></pre>
+<ul>
+<li>To insert values from another table into another:</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:.9em">INSERT INTO new_table SELECT * FROM old_table;</code></pre>
+</section>
+<section id="deletions" class="slide level2">
+<h2>Deletions</h2>
+<ul>
+<li>Similar to changing tables, removing things from tables has two main keywords:
+<ul>
+<li><code class="python">DROP</code> for removing aspects of a table like columns, constraints, indexes, or the table itself</li>
+<li><code class="python">DELETE FROM</code> for removing rows from tables</li>
+</ul></li>
+<li><code class="python">DROP</code> will frequently come after an <code class="python">ALTER TABLE</code> unless you are dropping the table itself</li>
+<li><code class="python">DELETE FROM</code> without a filter will <strong>delete all rows</strong>
+<ul>
+<li>Make absolutely sure you are using a filter if you don’t want that to happen!</li>
+<li>Another good reason to make up your tables before editing them</li>
+</ul></li>
+</ul>
+</section>
+<section id="getting-deleted" class="slide level2">
+<h2>Getting Deleted</h2>
+<pre ><code class="pgsql">ALTER TABLE tname DROP COLUMN colname;
+ALTER TABLE tname DROP CONSTRAINT const_name;
+DROP INDEX index_name;
+DROP TABLE tname;
+
+DELETE FROM tname; -- All rows gone!
+DELETE FROM tname WHERE condition;</code></pre>
+<ul>
+<li>In general, unless you have an important reason, don’t remove actual data from a table
+<ul>
+<li>You can filter it, you can create new tables that are missing that data, etc.</li>
+</ul></li>
+</ul>
+</section>
+<section id="transactions" class="slide level2">
+<h2>Transactions</h2>
+<ul>
+<li><em>Atomicity</em> is an important aspect of most database changes
+<ul>
+<li>The idea that related changes should happen in a single, self-contained step</li>
+</ul></li>
+<li>Many changes you might make to a database have several steps though!
+<ul>
+<li>Need to change one value in one table and another value in another table</li>
+<li>Need to create a new row and then copy some information into it</li>
+</ul></li>
+<li>Remember that, in general, others can access the database at the same time
+<ul>
+<li>What if they tried to access the data you were working on mid-operation?</li>
+</ul></li>
+<li>So solve these issues, SQL has the concept of a <em>transaction</em></li>
+</ul>
+</section>
+<section id="bundling-up" class="slide level2">
+<h2>Bundling Up</h2>
+<ul>
+<li>A <em>transaction</em> is essentially a bundling of several statements into one, discrete change to the database</li>
+<li>Commands within the transaction have not yet modified the database, but exist only in local memory</li>
+<li>Changes get written to the database all at once upon the conclusion of the transaction</li>
+<li>Starting a transaction?
+<ul>
+<li><code class="python">START TRANSACTION;</code> or <code class="python">BEGIN;</code></li>
+</ul></li>
+<li>Ending a transaction?
+<ul>
+<li><code class="python">COMMIT;</code> actually makes the changes</li>
+<li><code class="python">ROLLBACK;</code> throws out everything within the transaction</li>
+</ul></li>
+</ul>
+</section>
+<section id="uses-of-transactions" class="slide level2">
+<h2>Uses of Transactions</h2>
+<ul>
+<li>Protecting against system faults
+<ul>
+<li>What if you have a system crash in the middle of an operation?
+<ul>
+<li>What commands had been run? What commands had not?</li>
+</ul></li>
+<li>Transactions actually write to a log what they are <em>going</em> to do before they actually do it. So in case of a crash, then the transaction can then simply be rerun</li>
+</ul></li>
+<li>Protecting against simultaneous access
+<ul>
+<li>Changes occur all at once, so it is impossible for another database user to access data “mid-change”</li>
+<li>Other users of the database will see none of your changes until actually committed</li>
+</ul></li>
+<li>Testing changes
+<ul>
+<li>Sometimes it is useful to check to see that some changes look the way you wanted before actually changing the database</li>
+<li>Embedding within a transaction block always gives you the option to rollback</li>
+</ul></li>
+</ul>
+</section>
+<section id="practice-activity" class="slide level2">
+<h2>Practice Activity</h2>
+<ul>
+<li>There is a simple CSV of presidents and debt <a href="../activity_data/presidents.csv">here</a></li>
+<li>It has some problems which you should determine and fix before answering the following questions:
+<ul>
+<li>What are the top 5 presidents to have the greatest average annual increase in national debt over the years of their presidency?</li>
+<li>How do the median values of annual increases in national debt compare across party lines?</li>
+<li>Trickier: What is the average <em>change</em> in the annual increase percentage of national debt overall all the years?</li>
+</ul></li>
+</ul>
+</section>
+<section id="groups" class="slide level2">
+<h2>Groups</h2>
+<ul>
+<li>You’ll be working in pairs, one computer used per pair
+<ul>
+<li>Rotate who is typing periodically!</li>
+</ul></li>
+<li>Pairs:
+<ul>
+<li>Group A: Leo and Malie</li>
+<li>Group B: Seth and Maya</li>
+<li>Group C: Jack and Gordy</li>
+<li>Group D: Aidan and Douglas</li>
+<li>Group E: Hayden, Madeline and Paul</li>
+</ul></li>
+</ul>
+</section>
+<section id="question-answers" class="slide level2">
+<h2>Question Answers</h2>
+<ul>
+<li>What are the top 5 presidents to have the greatest average annual increase in national debt over the years of their presidency?
+<ul>
+<li>Reagan, HW Bush, Ford, Carter, Obama</li>
+</ul></li>
+<li>How do the median values of annual increases in national debt compare across party lines?
+<ul>
+<li>Democrats: 3.65%</li>
+<li>Republicans: 7.40%</li>
+</ul></li>
+<li>Trickier: What is the average <em>change</em> in the annual increase percentage of national debt overall all the years?
+<ul>
+<li>Only about 0.05%, but seemingly a slight steady increase</li>
+</ul></li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

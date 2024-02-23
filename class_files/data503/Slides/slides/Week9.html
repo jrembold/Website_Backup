@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Subqueries, Pivots and Windows</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Subqueries, Pivots and Windows</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Wednesday, November 2, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Try to have HW8 completed by next Wednesday
+<ul>
+<li>I was hugely behind it getting this posted, plus as out of town the
+next 3 days and worried about being able to respond to your
+questions</li>
+<li>It is mostly just important to try to get your data being collected
+as soon as possible</li>
+</ul></li>
+<li>Today is going to be entirely SQL focused</li>
+<li>In class polling: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+</ul>
+</section>
+<section id="current-vs-clock" class="slide level2">
+<h2>Current vs Clock</h2>
+<ul>
+<li>Any query using <code class="python">current_timestamp</code> has it
+computed once at the start of a query
+<ul>
+<li>This is frequently desired for logging, so that you just get 1
+consistent time for any records added from a single query</li>
+</ul></li>
+<li>If you <strong>want</strong> record-by-record time keeping, you
+should use <code class="python">clock_timestamp()</code> instead, which
+will work the same way but be updated before every value written to the
+table</li>
+</ul>
+</section>
+<section id="quick-review-activity" class="slide level2">
+<h2>Quick Review Activity</h2>
+<ul>
+<li>Using the taxi rides dataset, see if you can:
+<ul>
+<li>Compute the number of rides given each hour of the day</li>
+<li>Compute the average cost of rides over each day of the month</li>
+<li>Compute the median cost of rides over each day of the week</li>
+<li>Compute the average duration of each ride over each hour of the
+day</li>
+</ul></li>
+</ul>
+</section>
+<section id="subqueries" class="slide level2">
+<h2>Subqueries</h2>
+<ul>
+<li>A <em>subquery</em> is simply a query embedded within another piece
+of SQL</li>
+<li>Commonly used to prepare some data or compute a value to be used by
+the surrounding SQL</li>
+<li>We have already seen very simple versions
+<ul>
+<li>Creating a new table, for example</li>
+</ul>
+<pre ><code class="pgsql">CREATE TABLE new_table AS (
+  SELECT * FROM og_table
+);</code></pre></li>
+<li>Often, you could have saved the subquery as its own table and then
+used that directly, but not always</li>
+</ul>
+</section>
+<section id="common-uses-of-subqueries" class="slide level2">
+<h2>Common Uses of Subqueries</h2>
+<ul>
+<li>Computing a single value to use in comparisons</li>
+<li>Computing a single column or list of values to use either directly
+in a table or in comparisons</li>
+<li>Performing “join-like” operations (potentially in a more flexible
+manner)</li>
+<li>Filtering one table based on the contents of another table</li>
+<li>Otherwise combining operations that would otherwise have taken
+several steps</li>
+</ul>
+</section>
+<section id="filter-on-single-value" class="slide level2">
+<h2>Filter on single value</h2>
+<ul>
+<li><p>Think back to HW3 where you needed to filter out all the outlier
+taxi-ride speeds</p>
+<ul>
+<li>There you had to compute the quartiles, the whisker edges, and then
+filter directly by typing that number back in</li>
+</ul></li>
+<li><p>Subqueries can combine those steps! You can directly compare a
+value to the subquery output <strong>so long as the query outputs only a
+single value</strong></p>
+<pre ><code class="pgsql" style="font-size:1em">SELECT *
+FROM tablename
+WHERE colname > (
+  SELECT avg(colname2)
+  FROM tablename2
+);</code></pre></li>
+</ul>
+</section>
+<section id="derived-tables" class="slide level2">
+<h2>Derived Tables</h2>
+<ul>
+<li><p>You can use the output of a subquery anywhere you would normally
+reference a table name</p></li>
+<li><p>Such a table is then called a <em>derived table</em></p></li>
+<li><p>You <strong>must</strong> give such subqueries a table alias,
+else you have no way to refer to them</p>
+<pre ><code class="pgsql">SELECT *
+FROM (
+  SELECT col1, col2
+  FROM tablename
+) AS mytable; -- World's most boring table alias</code></pre></li>
+</ul>
+</section>
+<section id="repeating-column-values" class="slide level2">
+<h2>Repeating Column Values</h2>
+<ul>
+<li><p>Sometimes it is very useful to have a constant value assigned to
+an entire column</p>
+<ul>
+<li>We can’t just use an aggregate function (or similar) though, else we
+get mismatched column lengths</li>
+</ul></li>
+<li><p>You can include a subquery <em>in your selected columns</em> if
+it outputs only a <strong>single value</strong></p>
+<ul>
+<li>That value will be propagated to all the rows</li>
+</ul></li>
+<li><p>Give it an alias so the column heading has some meaning!</p>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT
+  col1,
+  col2,
+  (SELECT avg(col2) FROM tablename2) as const_value
+FROM tablename;</code></pre></li>
+</ul>
+</section>
+<section id="subquery-expressions" class="slide level2">
+<h2>Subquery Expressions</h2>
+<ul>
+<li>Can also use subqueries to filter based on whether certain content
+is present within the subquery output</li>
+<li>Combinations of a keyword followed by the subquery
+<ul>
+<li><code class="python">expr IN (subquery)</code> and
+<code class="python">expr NOT IN (subquery)</code></li>
+<li><code class="python">EXISTS (subquery)</code> and
+<code class="python">NOT EXISTS (subquery)</code></li>
+<li><code class="python">expr op ANY (subquery)</code></li>
+<li><code class="python">expr op ALL (subquery)</code></li>
+</ul></li>
+<li><code class="python">expr</code> is a column name or value, and
+<code class="python">op</code> is a boolean operator
+(<code class="python">=,>,>=</code>,etc)</li>
+<li>All subquery expressions are evaluated in short-circuit mode: they
+will return an answer as soon as they can</li>
+</ul>
+</section>
+<section id="in-subquery" class="slide level2">
+<h2>IN Subquery</h2>
+<ul>
+<li>Will check to see if a term appears anywhere in the subquery
+output</li>
+<li>The subquery must output a <strong>single column</strong> (though it
+could be empty)</li>
+<li><code class="python">NOT IN</code> just reverses the situation</li>
+<li><strong>Be careful of NULLs</strong>
+<ul>
+<li><code class="python">1 IN (1,2,3)</code> gives True</li>
+<li><code class="python">1 IN (2,3)</code> gives False</li>
+<li><code class="python">1 IN (NULL,2,3)</code> gives
+<code class="python">NULL</code></li>
+<li>Most dangerous with <code class="python">NOT IN</code>, since
+<code class="python">1 NOT IN (NULL,2,3)</code> will give
+<code class="python">NULL</code>, and not True as you might expect</li>
+</ul></li>
+</ul>
+</section>
+<section id="exists-subquery" class="slide level2">
+<h2>EXISTS Subquery</h2>
+<ul>
+<li>Checks just to see if the subquery has <strong>any</strong> rows in
+the output
+<ul>
+<li>No expression to compare to, just looking at subquery output</li>
+</ul></li>
+<li>The <em>contents</em> of the subquery do not matter at all, so a
+simple <code class="python">SELECT 1 FROM ...</code> is usually
+used</li>
+<li>To be useful, the subquery is frequently what is called a
+<em>correlated subquery</em>, where it references the table in the outer
+query
+<ul>
+<li>These types of subqueries can <strong>not</strong> be run in
+isolation</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT col1, col2
+FROM table1
+WHERE EXISTS (
+  SELECT 1
+  FROM table2
+  WHERE table1.col1 = table2.col2
+);</code></pre></li>
+</ul>
+</section>
+<section id="any-and-all" class="slide level2">
+<h2>ANY and ALL</h2>
+<ul>
+<li><p>At times you don’t want to see if a value is <em>in</em> the
+subquery output, but rather how it <em>compares</em> to the
+output</p></li>
+<li><p>A boolean expression needs to return a single True or False
+though</p></li>
+<li><p><code class="python">ANY</code> and
+<code class="python">ALL</code> “broadcast” the boolean comparison
+across all the subquery rows</p>
+<ul>
+<li><code class="python">ANY</code> will return True if <em>any</em> of
+the rows evaluate to True with the expression</li>
+<li><code class="python">ALL</code> will only return True if
+<em>all</em> of the rows evaluate to True with the expression</li>
+</ul></li>
+<li><p><code class="python">expr = ANY (subquery)</code> is thus
+identical to <code class="python">expr IN (subquery)</code></p>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT col1
+FROM table1
+WHERE col1 < ALL ( SELECT col2
+                   FROM table2);</code></pre></li>
+</ul>
+</section>
+<section id="subqueries-vs-joins" class="slide level2">
+<h2>Subqueries vs Joins</h2>
+<ul>
+<li>You may have realized that subqueries can do many similar things to
+what we used joins for!</li>
+<li>When should each be used?
+<ul>
+<li>Subqueries are great when you only need information from a single
+table, but what information depends on another table</li>
+<li>Joins are necessary when you need information from multiple
+tables</li>
+</ul></li>
+<li>Historically, most RDMS were better optimized for joins, but many
+have improved substantially in recent years for subqueries
+<ul>
+<li>If in doubt, use the form that makes the most sense for what you
+<em>semantically</em> want to accomplish. You can always convert it
+later if better optimization is needed and could be achieved</li>
+</ul></li>
+</ul>
+</section>
+<section id="be-careful" class="slide level2">
+<h2>Be careful!</h2>
+<ul>
+<li>It can be pretty easy to leap off the deep end with subqueries</li>
+<li>Always keep in mind what you want the subquery to achieve, and test
+it individually to make sure it is doing what you expect
+<ul>
+<li>Use them where they fit the needs of the situation</li>
+<li>A nice aspect of subqueries is that you can work from the
+“bottom-up”, starting with smaller subqueries you know and building on
+them</li>
+</ul></li>
+<li><strong>Organize your queries nicely!</strong>
+<ul>
+<li>This becomes even more important with subqueries</li>
+</ul></li>
+</ul>
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity!</h2>
+<ul>
+<li>I’ve prepped a simple grades database <a
+href="../activity_data/assignment_submission.sql">here</a> that you can
+download and run the sql file to create a
+<code class="python">subq1</code> schema in your database of choice
+which will contain three common tables:
+<code class="python">roster</code>,
+<code class="python">assignments</code>,
+<code class="python">submissions</code></li>
+<li>See if you can answer the questions below <strong>without using
+joins</strong> and only subqueries (as practice).
+<ul>
+<li>Which student(s) have turned in <em>nothing</em>?</li>
+<li>Which assignment name has the worst scored average overall?
+<!--- Which students scored below average on every quiz?-->
+<!--- Pairings--> <!--- Karol and Jullian--> <!--- Megan and Rochelle-->
+<!--- Nina and Ellie--> <!--- Andrew and Liam-->
+<!--- Maribel and Connor--></li>
+</ul></li>
+</ul>
+</section>
+<section id="common-table-expressions" class="slide level2">
+<h2>Common Table Expressions</h2>
+<ul>
+<li>Sometimes you may want to use the same derived tables multiple
+places in a query</li>
+<li>You could copy and paste those subqueries, but there is a better
+way</li>
+<li><em>Common Table Expressions</em> or CTEs are a way for you to
+define up front a derived table that can be referenced anywhere in the
+rest of the query</li>
+<li>To do so, you use a <code class="python">WITH</code> keyword:</li>
+</ul>
+<pre ><code class="pgsql">WITH
+  derived_table_name (new_col_names) AS (
+    subquery
+  )
+SELECT ...</code></pre>
+</section>
+<section id="cte-details" class="slide level2">
+<h2>CTE Details</h2>
+<ul>
+<li>The number of columns returned by your subquery
+<strong>must</strong> match the number of column names you initially
+define
+<ul>
+<li>If you aren’t going to rename the columns, you do not even really
+need to include the new column names, but it can be nice for
+clarity</li>
+</ul></li>
+<li>You do not need to include data types, as these will be inherited
+from the subquery columns</li>
+<li>You can include multiple derived tables in the CTE statement,
+separated with a comma</li>
+<li>Good use of CTE’s can help clarify and simplify queries
+<ul>
+<li><em>Especially</em> if you have a subquery that you need to
+reference a few times, use a CTE!</li>
+</ul></li>
+</ul>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<p>Using a CTE and other subqueries, let’s extract the middle 50% of the
+taxi_rides by duration.</p>
+</section>
+<section id="why-cross-tabulation" class="slide level2">
+<h2>Why Cross Tabulation?</h2>
+<ul>
+<li>SQL tables tend to operate with observations (records/rows) and
+variables (columns)
+<ul>
+<li>Commonly called a “tidy” data format</li>
+</ul></li>
+<li>This isn’t always the most <em>human readable</em> format</li>
+<li>Cross-tabulations or pivot tables compare variables to other
+variables</li>
+</ul>
+<div class="cols" style="font-size:.9em">
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th style="text-align: center;">Color</th>
+<th style="text-align: center;">Condition</th>
+<th style="text-align: center;">Number</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Apple</td>
+<td style="text-align: center;">Red</td>
+<td style="text-align: center;">Good</td>
+<td style="text-align: center;">5</td>
+</tr>
+<tr class="even">
+<td>Orange</td>
+<td style="text-align: center;">Orange</td>
+<td style="text-align: center;">Bad</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td>Cherry</td>
+<td style="text-align: center;">Red</td>
+<td style="text-align: center;">Good</td>
+<td style="text-align: center;">10</td>
+</tr>
+<tr class="even">
+<td>Banana</td>
+<td style="text-align: center;">Yellow</td>
+<td style="text-align: center;">Good</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td>Pineapple</td>
+<td style="text-align: center;">Yellow</td>
+<td style="text-align: center;">Bad</td>
+<td style="text-align: center;">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>Color</th>
+<th style="text-align: center;">Good</th>
+<th style="text-align: center;">Bad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Red</td>
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td>Orange</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td>Yellow</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="extensions" class="slide level2">
+<h2>Extensions</h2>
+<ul>
+<li><p>Standard SQL has no way to create these
+cross-tabulations</p></li>
+<li><p>Postgres has a function to help, but it is located in an
+<em>extension</em> or <em>module</em></p>
+<ul>
+<li>Extensions to Postgres are collections of functions, date types, and
+more which add some functionality to a particular database</li>
+</ul></li>
+<li><p>To use an extension, you need only enable it for your particular
+database</p>
+<pre ><code class="pgsql">CREATE EXTENSION extension_name;</code></pre></li>
+<li><p>To facilitate making pivot tables, we need to add the
+<code class="python">tablefunc</code> extension to our database, which
+will add the <code class="python">crosstab</code> function</p></li>
+<li><p>You can always remove an extension using
+<code class="python">DROP</code> if you need later</p></li>
+</ul>
+</section>
+<section id="pieces-of-the-crosstab" class="slide level2">
+<h2>Pieces of the Crosstab</h2>
+<ul>
+<li>The <code class="python">crosstab</code> function has a lot going
+on, so let’s break things down</li>
+</ul>
+<div class="cols">
+<div class="col">
+<pre ><code class="pgsql" style="max-height:800px">SELECT *
+FROM crosstab(
+  'subquery 1',
+  'subquery 2'
+  )
+AS (
+  col1 dtype1,
+  col2 dtype2,
+  ⋮
+);</code></pre>
+</div>
+<div class="col" style="font-size:.9em">
+<div>
+<ul>
+<li class="fragment">Subquery 1 must return 3 columns
+<ul>
+<li class="fragment">The first is the row label values</li>
+<li class="fragment">The second is the column label values</li>
+<li class="fragment">The third is the particular data values</li>
+</ul></li>
+<li class="fragment">Subquery 2 returns a single column
+<ul>
+<li class="fragment">What column categories should rows be placed
+into?</li>
+</ul></li>
+<li class="fragment">You still need to define the column names and data
+types
+<ul>
+<li class="fragment">First should be the row label name and data
+type</li>
+<li class="fragment">Rest should be whatever column categories you are
+creating</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="example-1" class="slide level2">
+<h2>Example</h2>
+<p>Let’s construct a pivot table comparing the total number of taxi
+rides at different days of the week across different hours.</p>
+</section>
+<section id="on-the-case" class="slide level2">
+<h2>On the Case</h2>
+<ul>
+<li>It can be useful in certain situations to employ a little
+conditional logic <em>outside</em> a filtering statement</li>
+<li>Can be particularly useful to tweak or reclassify values</li>
+<li>Standard SQL has the <code class="python">CASE</code> statement to
+accomplish this
+<ul>
+<li>Essentially works like programming languages if…else if…else
+blocks</li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql">CASE 
+  WHEN some_condition1 THEN output1
+  WHEN some_condition2 THEN output2
+  ⋮
+  ELSE outputX
+END</code></pre>
+</section>
+<section id="a-case-study" class="slide level2">
+<h2>A Case Study</h2>
+<ul>
+<li><p>Comparisons are made in order, so the first condition that
+matches, that output is used</p></li>
+<li><p>If you do not include an <code class="python">ELSE</code> part,
+then <code class="python">NULL</code> will be output if nothing else
+matches</p></li>
+<li><p><code class="python">CASE</code> statements most often show up in
+<code class="python">SELECT</code> statements where column outputs are
+being selected, but they could potentially also show up in filtering or
+ordering statements</p></li>
+<li><p>A <code class="python">CASE</code> statement will not evaluate
+results where the condition is not met, so they can be used to prevent
+certain errors as well (such as dividing by 0)</p>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT
+  CASE WHEN a != 0 THEN 5/a END
+FROM tablename;</code></pre></li>
+</ul>
+</section>
+<section id="example-2" class="slide level2">
+<h2>Example</h2>
+<p>Let’s compute how many taxi rides were considered:</p>
+<ul>
+<li>“Time Travelers” with a duration of less than 0</li>
+<li>“Short Trips” with a duration less than 5 minutes</li>
+<li>“Medium Trips” with a duration between 5 and 15 minutes</li>
+<li>“Long Trips” with a duration greater than 15 minutes</li>
+</ul>
+</section>
+<section id="coalesce" class="slide level2">
+<h2>Coalesce</h2>
+<ul>
+<li>Similar to <code class="python">CASE</code>, SQL also has the
+<code class="python">COALESCE</code> statement</li>
+<li><code class="python">COALESCE</code> returns the first non-null
+value in the list</li>
+<li>Frequently used to substitute a default value for
+<code class="python">NULL</code> values</li>
+</ul>
+<pre ><code class="pgsql">SELECT
+  student_id,
+  COALESCE(grade, 0)
+FROM grades;</code></pre>
+</section>
+<section id="activity-1" class="slide level2">
+<h2>Activity!</h2>
+<p>Using the same grade book tables as earlier (<a
+href="../activity_data/assignment_submission.sql">here</a> if you need
+them again), do the following:</p>
+<ul>
+<li>Create a pivot table for student quiz point scores with full student
+names as the rows and individual quizes as the columns. You can
+concatenate two strings in SQL using the <code class="python">||</code>
+operator. So <code class="python">fname || ' ' || lname</code> would
+give the first and last name with a space between as a single string.
+Feel free to use joins here.</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">student_name</th>
+<th style="text-align: center;">Quiz 1</th>
+<th style="text-align: center;">Quiz 2</th>
+<th style="text-align: center;">Quiz 3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Hailey Gray</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">21</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">⋮</td>
+<td style="text-align: center;">⋮</td>
+<td style="text-align: center;">⋮</td>
+<td style="text-align: center;">⋮</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Create a pivot table for student letter grades on each quiz. Parts
+of this will look really similar to what you did in the first part, but
+there will be some important differences.</li>
+</ul>
+</section>
+<section id="window-functions" class="slide level2">
+<h2>Window Functions</h2>
+<ul>
+<li>One useful piece of kit that is not included in the text is that of
+<em>window functions</em></li>
+<li>A window function is like a mix between a normal column value and an
+aggregate function
+<ul>
+<li>Unlike aggregate functions, a window function returns a value for
+each row</li>
+<li>Unlike normal column values, a window function can utilize other
+rows included within its “window” in making an aggregation</li>
+</ul></li>
+<li>Any normal aggregate function can be used as a window function,
+though there are specific window functions as well</li>
+<li>Window functions can only be used inside
+<code class="python">SELECT</code> or
+<code class="python">ORDER BY</code> statements
+<ul>
+<li>They are evaluated <em>after</em> any filtering, grouping, or normal
+aggregations</li>
+</ul></li>
+</ul>
+</section>
+<section id="over-the-hill" class="slide level2">
+<h2>Over the Hill</h2>
+<ul>
+<li>The defining characteristic of any window function is the
+<code class="python">OVER ()</code> keyword, which comes after the
+aggregating window function</li>
+<li>Content inside the <code class="python">()</code> determines the
+“window” of the window function</li>
+<li>By default, if nothing is provided, the entire column is the
+window</li>
+<li>The below would output the average of the column in every row
+<ul>
+<li>This means it is technically no different from accomplishing this
+with a subquery</li>
+</ul>
+<pre ><code class="pgsql">SELECT AVG(col1) OVER()
+FROM table_name;</code></pre></li>
+</ul>
+</section>
+<section id="dedicated-window-functions" class="slide level2">
+<h2>Dedicated Window Functions</h2>
+<ul>
+<li>You can use any existing aggregate function as a window function,
+but there are also more specific window functions</li>
+</ul>
+<div style="font-size:.9em">
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 81%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">row_number()</code></td>
+<td>Assigns an ascending row number to each row in a window</td>
+</tr>
+<tr class="even">
+<td><code class="python">rank()</code></td>
+<td>Assigns an ascending rank to each row, with possible ties skipping
+the next value</td>
+</tr>
+<tr class="odd">
+<td><code class="python">dense_rank()</code></td>
+<td>Assigns an ascending rank to each row, with possible ties not
+skipping the next value</td>
+</tr>
+<tr class="even">
+<td><code class="python">first_value(col)</code></td>
+<td>Returns the first value in the window of column
+<code class="python">col</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">last_value(col)</code></td>
+<td>Returns the last value in the window of column
+<code class="python">col</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">lag(col)</code></td>
+<td>Returns the previous row of column
+<code class="python">col</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">lead(col)</code></td>
+<td>Returns the next row of column <code class="python">col</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="determining-order" class="slide level2">
+<h2>DETERMINING ORDER</h2>
+<ul>
+<li>Often, to be useful, you may want to define an ordering inside the
+<code class="python">OVER()</code> statement</li>
+<li>As soon as you specify an ordering, <strong>the default window
+changes</strong>
+<ul>
+<li>By default, each window now encompasses everything from the start,
+up to that current row
+<ul>
+<li>Easiest to see with classic aggregate functions</li>
+</ul></li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql">SELECT COUNT(*) OVER(ORDER BY col2)
+FROM table_name;</code></pre>
+</section>
+<section id="tweaking-the-window" class="slide level2">
+<h2>Tweaking the Window</h2>
+<ul>
+<li><p>You can tweak this window by specifying the starting and stopping
+point, using the syntax:</p>
+<pre ><code class="pgsql">... ROWS BETWEEN offset1 PRECEDING AND offset2 FOLLOWING</code></pre>
+<p>which appears in the <code class="python">OVER</code> clause, after
+any provided ordering</p></li>
+<li><p>Can also exclude the current row or group from the window:</p>
+<pre ><code class="pgsql">... EXCLUDE CURRENT ROW</code></pre>
+<ul>
+<li>Group here refers to all other rows tied with the current row</li>
+</ul></li>
+<li><p>Can be used to compute “rolling” averages and similar</p></li>
+</ul>
+</section>
+<section id="partitioning" class="slide level2">
+<h2>Partitioning</h2>
+<ul>
+<li>Additionally, you can specify a partition for the window</li>
+<li>The default partition is the entire column</li>
+<li>Partitioning here is determined <em>before</em> the rows comprising
+the window are computed
+<ul>
+<li>This has a similar feel to <code class="python">GROUP BY</code>, but
+<em>every</em> row will get a value here</li>
+</ul></li>
+<li>Window functions evaluated within each window within each
+partition</li>
+</ul>
+<pre ><code class="pgsql">SELECT AVG(col1) OVER (
+    PARTITION BY col2
+  )
+FROM table_name;</code></pre>
+</section>
+<section id="activity-2" class="slide level2">
+<h2>Activity!</h2>
+<ul>
+<li>Contained <a href="../activity_data/halloween.sql">here</a> is an
+SQL file to generate a table of Halloween trick-or-treater data, which
+contains two columns:
+<ul>
+<li>The minute within an hour span when a trick-or-treater visited</li>
+<li>What candy was given to the trick-or-treater</li>
+</ul></li>
+<li>You started out with a supply of 40 of each type of candy</li>
+<li>Using this information, answer the following questions:
+<ul>
+<li>Between the 20th and 30th minutes, what were the three most popular
+candies given?</li>
+<li>At what minute of the hour did you run out of Starburst?</li>
+<li>Which candy did you run out of first?</li>
+<li>Construct a 5-minute rolling average of the number of
+trick-or-treaters you saw each minute of the evening. According to this,
+about when were things busiest?</li>
+</ul></li>
+</ul>
+<!--## Pairs-->
+<!--- Andrew and Liam-->
+<!--- Nina and Rochelle-->
+<!--- Ellie, Connor, and Megan-->
+<!--- Karol, Maribel, and Jullian-->
+<!--## Text Power-->
+<!--- Time to focus on everything we can do with strings!-->
+<!--- Chapter topic fall into several main ideas:-->
+<p><!--- Manipulating strings-->
+<!--- More complicated pattern matching-->
+<!--- Full text searching using normalization and lexemes-->
+<!--- All are geared around making using text and strings much more powerful and flexible--></p>
+<!--## Stringy Functions (CORE)-->
+<!--:::{style='font-size:.9em'}-->
+<!--| Function                  | Description                                                                                           |-->
+<!--|-----------------------------------|---------------------------------------------|-->
+<!--| `str1 || str2` | Concatenates string 1 and string 2 together |-->
+<!--| `upper(str)`              | Converts a string to all uppercase characters                                                         |-->
+<!--| `lower(str)`              | Converts a string to all lowercase characters                                                         |-->
+<!--| `char_length(str)`        | Returns the number of characters in the string                                                        |-->
+<!--| `position(str IN substr)` | Find the number of the character where the substring begins                                           |-->
+<!--| `trim(opt chr FROM str)`  | Removes the given characters from the string, optionally taking from the _leading_ or _trailing_ edge |-->
+<!--| `substring(str FROM n FOR l)` | Returns the portion of the string starting at position n and continuing for l characters |-->
+<!--:::-->
+<!--## String Functions (Postgres)-->
+<!--:::{style='font-size:.9em'}-->
+<!--| Function                  | Description                                                                              |-->
+<!--|--------------------------------|------------------------------------------------------------------------------------------|-->
+<!--| `initcap(str)`            | Converts the first character of each word to uppercase, and the rest lower               |-->
+<!--| `left(str,n)`             | Returns the first n characters of the string                                             |-->
+<!--| `right(str,n)`            | Returns the last n characters of the string                                              |-->
+<!--| `ltrim(str,chr)`          | Remove the characters (space by default) from the start of the string                    |-->
+<!--| `rtrim(str,chr)`          | Remove the characters (space by default) from the end of the string                      |-->
+<!--| `replace(str,from,to)`    | Replaces all occurance of _from_ in the string to _to_                                   |-->
+<!--| `length(str)`             | Returns the number of characters in the string                                           |-->
+<!--| `substr(str, n, l)` | Returns the portion of the string starting at position n and continuing l characters |-->
+<!--:::-->
+<!--## Enhanced Pattern Matching-->
+<!--- We've already seen basic pattern matching with `LIKE` and `LIKE`-->
+<p><!--- Some flexibility with wildcard characters: `%` and `_`-->
+<!--- To get (much) more flexibility, we need to pivot to something made for exactly this purpose: _regular expressions_ (or _regex_)-->
+<!--- Regular expressions are a sequence of mostly single character symbols that denote exactly what patterns one could wish for-->
+<!--- These sequences of characters can initially look very inscrutable! Stick with it!-->
+<!--- Regex's are useful all over, and supported in almost all programming languages as well. Learning at least the basics is time very well spent.--></p>
+<!--## Basic Regex Terms-->
+<!--:::{style='font-size:.7em'}-->
+<!--::::::cols-->
+<!--::::col-->
+<!--| Expression | Description                                                |-->
+<!--|------------|------------------------------------------------------------|-->
+<!--| `.`        | Matches _any_ character except a new line                  |-->
+<!--| `[abc]`    | Matches any character in the square brackets (a or b or c) |-->
+<!--| `[a-z]`    | Matches a range of characters (all lowercase letters here) |-->
+<!--| `[^a-z]`   | Caret negates what follows (so no lowercase letters here)  |-->
+<!--| `\w`       | Any word character, digit or underscore                    |-->
+<!--| `\d`       | Any digit                                                  |-->
+<!--| `\s`       | A space                                                    |-->
+<!--| `\t`       | A tab character                                            |-->
+<!--| `\n`       | A newline character                                        |-->
+<!--::::-->
+<!--::::col-->
+<!--| Expression | Description                                   |-->
+<!--|------------|-----------------------------------------------|-->
+<!--| `^`        | Match at the start of the string                           |-->
+<!--| `$`        | Match at the end of the string                             |-->
+<!--| `?`        | Get the preceding match 0 or one time         |-->
+<!--| `*`        | Get the preceding match zero or more times    |-->
+<!--| `+`        | Get the preceding match one or more times     |-->
+<!--| `{m}`      | Get the preceding match exactly m times       |-->
+<!--| `{m,n}`    | Get the preceding match between m and n times |-->
+<!--| `a|b`      | Match on either a or b                        |-->
+<!--| `( )`      | Create a capture group or set precedence      |-->
+<!--| `(?: )`    | Negate reporting a capture group              |-->
+<!--::::-->
+<!--::::::-->
+<!--:::-->
+<!--## Other Regex Concepts-->
+<!--- If you ever want to match off a symbol that has special meaning in regex (a parenthese, for instance) you must _escape it_ with a backslash: `\(`-->
+<!--- Reserved characters include: `{ } [ ] / \ + * . $ ^ | ?`-->
+<!--- Flags can be added at the end to tweak matching-->
+<p><!--- `/i` means that matches will be case insensitive-->
+<!--- `/g` means that all instances of the match will be returned, not just the first-->
+<!--- `/m` allows the anchor characters (`^` and `$`) to operate on each line, not just across the entire string.--></p>
+<!--## {data-background-iframe="https://regexr.com/6hfai"}-->
+<!--## Your Turn!-->
+<!--- The link [here](https://regexone.com/problem/matching_phone_numbers) has a nice sequence of short problems to test your skills against-->
+<!--- Most problems consist of:-->
+<p><!--- Terms that you want to match correctly-->
+<!--- Terms that you want to **not** match-->
+<!--- Capture groups that you'd like to capture-->
+<!--- In the below pairings, see how many you can figure out in the next 20 minutes-->
+<!--- Andrew and Megan--> <!--- Nina and Connor-->
+<!--- Ellie, Rochelle, and Liam-->
+<!--- Karol, Maribel, and Jullian--></p>
+<!--## Back to SQL-->
+<!--- One of the main ways we previously used pattern matching was for filtering-->
+<!--- You can also use regexes for pattern matching!-->
+<p><!--- `~` is a case sensitive match using the following regex-->
+<!--- `~*` is a case insensitive match using the following regex-->
+<!--- Either can have a `!` in front to negate the search (where things do **not** match the regex)--></p>
+<!--```pgsql-->
+<!--SELECT colname-->
+<!--FROM tablename-->
+<!--WHERE colname ~ '[a-z]*\s\d{2}';-->
+<!--```-->
+<!--## Extracting Data-->
+<!--- Another hugely common use of regex is to extract only the data you want from a much larger string-->
+<!--- This can be particularly useful when cleaning data or constructing useful database tables-->
+<!--- `regexp_match(str, regex)` returns the first matching instance in the string-->
+<p><!--- What is returned is whatever is in any _capture groups_ you may have included in your regex, or the entire match if there are no capture groups-->
+<!--- Output is returned as an array, to allow for potentially multiple capture groups-->
+<!--- If you just have one capture group and don't want it in an array, index it out using `[1]` at the end after wrapping entire expression in ()--></p>
+<!--```{.pgsql style='font-size:.9em'}-->
+<!--SELECT (regexp_match('today is March 15, 2022', '\d{4}'))[1];-->
+<!--```-->
+<!--## Back to You!-->
+<!--- In the same pairings as previously, take a look at [this](../activity_data/regex_parsing.csv) CSV file, which contains a simple subset of artists and dimensions from the MoMA data set-->
+<!--- Create the simple table and import in the data from the CSV-->
+<!--- See if you can achieve the following:-->
+<p><!--- Create and populate new columns for first, middle, and last name-->
+<!--- Create and populate new columns to hold the width and height in inches (in `1 1/4` form)-->
+<!--- If feeling good about the above, create new columns to hold decimal equivalents of the width and height--></p>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveal.js-d3/reveald3.js"></script>
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+            //{ src: "../html_srcs/revealjs/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

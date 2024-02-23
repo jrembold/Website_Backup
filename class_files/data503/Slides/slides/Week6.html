@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Grouping Containers</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Grouping Containers</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Wednesday, February 15, 2023</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 5 is due on Sunday!</li>
+<li>No homework for next week, because you have a midterm to study
+for!</li>
+<li>Midterm next week!
+<ul>
+<li>Everything up through joins will be on the test
+<ul>
+<li>I know you have a HW on constraints due before then, but I am not
+going to include constraints on this test as I’m not 100% sure I’ll be
+able to have it scored in time</li>
+</ul></li>
+<li>I’ll be posting a study guide and some example questions</li>
+<li>Midterms will be done remotely over Zoom
+<ul>
+<li>If you want to have a cheat-sheet that you can glance off of, I’m
+not going to stop you. But if I notice you clearly staring at something
+it will probably affect your score.</li>
+</ul></li>
+<li>A sign-up sheet will also be going out for which block of time you
+want to sign up for next week</li>
+</ul></li>
+<li>Polling: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+</ul>
+<!--------  THEORY ------------------>
+</section>
+<section id="docker-overview" class="slide level2">
+<h2>Docker Overview</h2>
+<div class="cols" style="align-items: center">
+<div class="col">
+<ul>
+<li>Docker is just one method (though the most popular) to run
+applications in what are called <em>containers</em></li>
+<li>A container is an isolated environment that can run basically
+anything.</li>
+<li>Examples:
+<ul>
+<li>A webpage server</li>
+<li>A Postgres database</li>
+<li>An R or Python program</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="https://1000logos.net/wp-content/uploads/2021/11/Docker-Logo-2013.png" /></p>
+</div>
+</div>
+</section>
+<section id="a-case-for-containers" class="slide level2">
+<h2>A Case for Containers</h2>
+<ul>
+<li>Why are containers useful?
+<ul>
+<li>Development environments can be difficult to replicate
+<ul>
+<li>Your environment has been tailored to you!</li>
+<li>Your OS, your software dependencies, your installed R libraries</li>
+</ul></li>
+<li>Development environments are not static
+<ul>
+<li>Libraries get new updates or patches</li>
+<li>Some software gets abandoned or features discontinued</li>
+</ul></li>
+</ul></li>
+<li>Containers contain a working copy of an exact development
+environment with specific versioning</li>
+<li>All that is needed to share with 100% reliability is software to run
+the container</li>
+</ul>
+</section>
+<section id="alternatives" class="slide level2">
+<h2>Alternatives?</h2>
+<ul>
+<li>Why not include a list of dependencies and let people install them?
+<ul>
+<li>This can work, but can get very muddled when working on multiple
+projects (what if I need both Python 3.6 and Python 3.10 installed
+simultaneously on my system?)</li>
+<li>Different operating systems also just do things differently or can
+have different libraries available</li>
+</ul></li>
+<li>Why not use Virtual Machines to replicate the development
+environment?
+<ul>
+<li>They can, but VMs run independent of your machine’s natural OS,
+interfacing directly with the hardware</li>
+<li>This can make them potentially more performant, but it also means a
+lot more overhead each time something needs to be run (they are running
+their own entire OS)</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-container-way" class="slide level2">
+<h2>The Container Way</h2>
+<ul>
+<li>Containers run <em>on top</em> of your natural operating system
+<ul>
+<li>Requests to use hardware go through your host OS
+<ul>
+<li>Your natural OS acts as a sort of translator between the application
+and the hardware</li>
+<li>Operating systems are amazingly flexible, and so your system OS can
+handle this easily despite needing to translate for a potentially wide
+variety of container types</li>
+</ul></li>
+<li>There may be a slight raw performance hit, but it is
+<strong>much</strong> faster and easier on system resources to start up,
+work with, and run multiple containers at the same time</li>
+</ul></li>
+</ul>
+</section>
+<section id="installing-docker" class="slide level2">
+<h2>Installing Docker</h2>
+<ul>
+<li>Getting Docker on your system is easy:
+<ul>
+<li>In MacOS: install <a
+href="https://www.docker.com/products/docker-desktop/">Docker
+Desktop</a>
+<ul>
+<li>Simple drag and drop into your Applications folder</li>
+</ul></li>
+<li>In Windows: still install <a
+href="https://www.docker.com/products/docker-desktop/">Docker
+Desktop</a>
+<ul>
+<li>Technically uses WSL2 in the background, but you already have that
+installed</li>
+</ul></li>
+<li>In Linux: you could install Docker Desktop, but easier to just
+install Docker from system repos</li>
+</ul></li>
+<li>Running Docker Desktop will launch both a GUI and the service itself
+<ul>
+<li>The service <em>must</em> be running for your system to understand
+Docker containers</li>
+</ul></li>
+</ul>
+</section>
+<section id="images" class="slide level2">
+<h2>Images</h2>
+<ul>
+<li>Docker uses what it calls an <em>image</em> whenever it needs to
+create a new container</li>
+<li>An image is basically a blueprint or compilation of all the things
+that the container will need to function
+<ul>
+<li>Basic OS</li>
+<li>Any runtime environment (R, Python, etc.)</li>
+<li>The application code itself</li>
+<li>Any dependencies necessary</li>
+<li>Extra configuration options, usually in the form of environment
+variables</li>
+<li>The actual commands to run when the container is launched</li>
+</ul></li>
+<li>Images are <strong>read only</strong>. If any of the above changes,
+the image needs to be rebuilt</li>
+</ul>
+</section>
+<section id="image-layering" class="slide level2">
+<h2>Image Layering</h2>
+<div class="cols" style="align-items:center">
+<div class="col">
+<ul>
+<li>Images are constructed with a layering system, which helps when
+rebuilding
+<ul>
+<li>Only layers at or above where a change happened need to be
+reconstructed
+<ul>
+<li>This means ordering <em>does</em> matter!</li>
+</ul></li>
+<li>Layers generally mimic the same basic blueprint requirements that we
+just listed</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="133.88229mm"
+   height="133.88229mm"
+   viewBox="0 0 133.88229 133.88229"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   sodipodi:docname="docker_image_layers.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.2938725"
+     inkscape:cx="455.99547"
+     inkscape:cy="223.36049"
+     inkscape:window-width="1680"
+     inkscape:window-height="1020"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-296.09671,-28.553965)">
+    <rect
+       style="fill:none;stroke:#5a4a78;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect739"
+       width="130.88229"
+       height="130.88229"
+       x="297.59671"
+       y="30.053965" />
+    <rect
+       style="fill:#166775;fill-opacity:0.444791;stroke:#166775;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"
+       id="rect1569"
+       width="119.4318"
+       height="21.899897"
+       x="303.32196"
+       y="130.86113" />
+    <rect
+       style="fill:#8f5e15;fill-opacity:0.444791;stroke:#8f5e15;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"
+       id="rect1679"
+       width="119.4318"
+       height="21.899897"
+       x="303.32196"
+       y="99.983818" />
+    <rect
+       style="fill:#8f5e15;fill-opacity:0.444791;stroke:#8f5e15;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"
+       id="rect1681"
+       width="119.4318"
+       height="21.899897"
+       x="303.32196"
+       y="69.106514" />
+    <rect
+       style="fill:#8f5e15;fill-opacity:0.444791;stroke:#8f5e15;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"
+       id="rect1683"
+       width="119.4318"
+       height="21.899897"
+       x="303.32196"
+       y="38.229198" />
+    <g
+       aria-label="Base Image"
+       id="text1749"
+       style="font-size:21.8091px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';fill:#343b58;fill-opacity:0.999988;stroke-width:1.20297;stroke-linecap:round;stroke-linejoin:round">
+      <path
+         d="m 324.68659,134.17789 h 3.62031 q 1.85378,0 2.70433,0.87236 0.85056,0.85056 0.85056,2.63891 v 0.61065 q 0,1.17769 -0.39257,1.9192 -0.37075,0.74151 -1.15588,1.06865 v 0.0436 q 1.78835,0.61066 1.78835,3.18413 v 1.30855 q 0,1.76654 -0.9378,2.70433 -0.91598,0.91598 -2.70432,0.91598 h -3.77298 z m 3.33679,6.21559 q 0.7197,0 1.06865,-0.37075 0.37076,-0.37076 0.37076,-1.24312 v -0.85055 q 0,-0.82875 -0.30533,-1.19951 -0.28352,-0.37075 -0.91598,-0.37075 h -1.15589 v 4.03468 z m 0.43619,6.86987 q 0.63246,0 0.93779,-0.32714 0.30533,-0.34894 0.30533,-1.17769 v -1.33035 q 0,-1.04684 -0.37076,-1.4394 -0.34894,-0.41438 -1.17769,-0.41438 h -1.06865 v 4.68896 z"
+         id="path242" />
+      <path
+         d="m 335.35123,134.17789 h 3.24955 l 2.48624,15.26637 h -2.399 l -0.43618,-3.03147 v 0.0436 h -2.72614 l -0.43618,2.98785 h -2.22453 z m 2.61709,10.20666 -1.06865,-7.54595 h -0.0436 l -1.04684,7.54595 z"
+         id="path244" />
+      <path
+         d="m 345.29615,149.66235 q -1.74473,0 -2.6389,-0.98141 -0.89417,-1.00322 -0.89417,-2.85699 v -0.87236 h 2.26814 v 1.04683 q 0,1.48302 1.24312,1.48302 0.61066,0 0.91598,-0.34894 0.32714,-0.37076 0.32714,-1.1777 0,-0.9596 -0.43618,-1.6793 -0.43618,-0.74151 -1.61388,-1.76653 -1.48301,-1.30855 -2.07186,-2.35539 -0.58885,-1.06864 -0.58885,-2.399 0,-1.81015 0.91599,-2.79156 0.91598,-1.00322 2.66071,-1.00322 1.72292,0 2.59528,1.00322 0.89417,0.98141 0.89417,2.83518 v 0.63246 h -2.26814 v -0.78512 q 0,-0.78513 -0.30533,-1.13408 -0.30533,-0.37075 -0.89417,-0.37075 -1.19951,0 -1.19951,1.46121 0,0.82874 0.43619,1.54844 0.45799,0.71971 1.63568,1.74473 1.50483,1.30855 2.07186,2.37719 0.56704,1.06865 0.56704,2.50805 0,1.87558 -0.93779,2.8788 -0.91598,1.00322 -2.68252,1.00322 z"
+         id="path246" />
+      <path
+         d="m 350.29043,134.17789 h 6.54273 v 2.18091 h -4.14373 v 4.03468 h 3.29317 v 2.18091 h -3.29317 v 4.68896 h 4.14373 v 2.18091 h -6.54273 z"
+         id="path248" />
+      <path
+         d="m 361.6966,134.17789 h 2.399 v 15.26637 h -2.399 z"
+         id="path250" />
+      <path
+         d="m 365.88394,134.17789 h 3.42403 l 1.52663,10.92636 h 0.0436 l 1.52664,-10.92636 h 3.42403 v 15.26637 h -2.26815 v -11.55882 h -0.0436 l -1.74472,11.55882 h -2.00644 l -1.74473,-11.55882 h -0.0436 v 11.55882 h -2.09367 z"
+         id="path252" />
+      <path
+         d="m 379.47101,134.17789 h 3.24955 l 2.48624,15.26637 h -2.399 l -0.43618,-3.03147 v 0.0436 h -2.72614 l -0.43618,2.98785 h -2.22453 z m 2.61709,10.20666 -1.06865,-7.54595 h -0.0436 l -1.04683,7.54595 z"
+         id="path254" />
+      <path
+         d="m 389.72125,149.66235 q -1.74473,0 -2.66071,-0.98141 -0.91599,-1.00322 -0.91599,-2.85699 v -8.02575 q 0,-1.85377 0.91599,-2.83518 0.91598,-1.00322 2.66071,-1.00322 1.74472,0 2.66071,1.00322 0.91598,0.98141 0.91598,2.83518 v 1.30855 h -2.26815 v -1.46121 q 0,-1.50483 -1.24312,-1.50483 -1.24311,0 -1.24311,1.50483 v 8.35288 q 0,1.48302 1.24311,1.48302 1.24312,0 1.24312,-1.48302 v -2.98784 h -1.1995 v -2.18091 h 3.46765 v 4.99428 q 0,1.85377 -0.91598,2.85699 -0.91599,0.98141 -2.66071,0.98141 z"
+         id="path256" />
+      <path
+         d="m 394.84641,134.17789 h 6.54273 v 2.18091 h -4.14373 v 4.03468 h 3.29317 v 2.18091 h -3.29317 v 4.68896 h 4.14373 v 2.18091 h -6.54273 z"
+         id="path258" />
+    </g>
+    <g
+       aria-label="Application"
+       id="text1753"
+       style="font-size:21.8091px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';fill:#343b58;fill-opacity:0.999988;stroke-width:1.20297;stroke-linecap:round;stroke-linejoin:round">
+      <path
+         d="m 324.33767,103.30058 h 3.24955 l 2.48624,15.26637 h -2.399 l -0.43618,-3.03147 v 0.0436 h -2.72614 l -0.43618,2.98785 h -2.22453 z m 2.61709,10.20666 -1.06865,-7.54595 h -0.0436 l -1.04684,7.54595 z"
+         id="path219" />
+      <path
+         d="m 331.22932,103.30058 h 3.53308 q 1.78834,0 2.68252,0.9596 0.89417,0.9596 0.89417,2.81337 v 1.50483 q 0,1.85377 -0.89417,2.81337 -0.89418,0.9596 -2.68252,0.9596 h -1.13408 v 6.2156 h -2.399 z m 3.53308,6.86986 q 0.58884,0 0.87236,-0.32713 0.30533,-0.32714 0.30533,-1.11227 v -1.81015 q 0,-0.78513 -0.30533,-1.11227 -0.28352,-0.32713 -0.87236,-0.32713 h -1.13408 v 4.68895 z"
+         id="path221" />
+      <path
+         d="m 339.64763,103.30058 h 3.53307 q 1.78835,0 2.68252,0.9596 0.89418,0.9596 0.89418,2.81337 v 1.50483 q 0,1.85377 -0.89418,2.81337 -0.89417,0.9596 -2.68252,0.9596 h -1.13407 v 6.2156 h -2.399 z m 3.53307,6.86986 q 0.58885,0 0.87237,-0.32713 0.30532,-0.32714 0.30532,-1.11227 v -1.81015 q 0,-0.78513 -0.30532,-1.11227 -0.28352,-0.32713 -0.87237,-0.32713 h -1.13407 v 4.68895 z"
+         id="path223" />
+      <path
+         d="m 348.06593,103.30058 h 2.399 v 13.08546 h 3.94745 v 2.18091 h -6.34645 z"
+         id="path225" />
+      <path
+         d="m 355.56826,103.30058 h 2.399 v 15.26637 h -2.399 z"
+         id="path227" />
+      <path
+         d="m 363.13601,118.78504 q -1.72292,0 -2.6389,-0.98141 -0.89418,-0.98141 -0.89418,-2.76976 v -8.20022 q 0,-1.78834 0.89418,-2.76975 0.91598,-0.98141 2.6389,-0.98141 1.72292,0 2.61709,0.98141 0.91598,0.98141 0.91598,2.76975 v 1.61388 h -2.26815 v -1.76654 q 0,-1.41759 -1.1995,-1.41759 -1.1995,0 -1.1995,1.41759 v 8.52736 q 0,1.39578 1.1995,1.39578 1.1995,0 1.1995,-1.39578 v -2.33358 h 2.26815 v 2.1591 q 0,1.78835 -0.91598,2.76976 -0.89417,0.98141 -2.61709,0.98141 z"
+         id="path229" />
+      <path
+         d="m 369.96224,103.30058 h 3.24956 l 2.48623,15.26637 h -2.399 l -0.43618,-3.03147 v 0.0436 h -2.72614 l -0.43618,2.98785 H 367.476 Z m 2.61709,10.20666 -1.06864,-7.54595 h -0.0436 l -1.04684,7.54595 z"
+         id="path231" />
+      <path
+         d="m 377.72627,105.48149 h -2.50805 v -2.18091 h 7.4151 v 2.18091 h -2.50805 v 13.08546 h -2.399 z"
+         id="path233" />
+      <path
+         d="m 383.78921,103.30058 h 2.399 v 15.26637 h -2.399 z"
+         id="path235" />
+      <path
+         d="m 391.44419,118.78504 q -1.76654,0 -2.70433,-1.00322 -0.93779,-1.00322 -0.93779,-2.83518 v -8.02575 q 0,-1.83197 0.93779,-2.83518 0.93779,-1.00322 2.70433,-1.00322 1.76653,0 2.70433,1.00322 0.93779,1.00321 0.93779,2.83518 v 8.02575 q 0,1.83196 -0.93779,2.83518 -0.9378,1.00322 -2.70433,1.00322 z m 0,-2.18091 q 1.24312,0 1.24312,-1.50483 v -8.33107 q 0,-1.50483 -1.24312,-1.50483 -1.24312,0 -1.24312,1.50483 v 8.33107 q 0,1.50483 1.24312,1.50483 z"
+         id="path237" />
+      <path
+         d="m 396.70017,103.30058 h 3.00966 l 2.33357,9.13801 h 0.0436 v -9.13801 h 2.13729 v 15.26637 h -2.46443 l -2.8788,-11.14445 h -0.0436 v 11.14445 h -2.13729 z"
+         id="path239" />
+    </g>
+    <g
+       aria-label="Dependencies"
+       id="text1809"
+       style="font-size:21.8091px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';fill:#343b58;fill-opacity:0.999988;stroke-width:1.20297;stroke-linecap:round;stroke-linejoin:round">
+      <path
+         d="m 315.16685,72.423274 h 3.66393 q 1.78834,0 2.68252,0.959601 0.89417,0.9596 0.89417,2.813374 v 7.720421 q 0,1.853773 -0.89417,2.813373 -0.89418,0.959601 -2.68252,0.959601 h -3.66393 z m 3.62031,13.08546 q 0.58884,0 0.89417,-0.348946 0.32714,-0.348945 0.32714,-1.134073 v -7.938512 q 0,-0.785127 -0.32714,-1.134073 -0.30533,-0.348946 -0.89417,-0.348946 h -1.22131 v 10.90455 z"
+         id="path194" />
+      <path
+         d="m 324.02134,72.423274 h 6.54273 v 2.18091 h -4.14372 v 4.034684 h 3.29317 v 2.18091 h -3.29317 v 4.688956 h 4.14372 v 2.18091 h -6.54273 z"
+         id="path196" />
+      <path
+         d="m 331.93807,72.423274 h 3.53307 q 1.78835,0 2.68252,0.959601 0.89417,0.9596 0.89417,2.813374 v 1.504827 q 0,1.853774 -0.89417,2.813374 -0.89417,0.959601 -2.68252,0.959601 h -1.13407 v 6.215593 h -2.399 z m 3.53307,6.869867 q 0.58885,0 0.87236,-0.327137 0.30533,-0.327136 0.30533,-1.112264 v -1.810155 q 0,-0.785128 -0.30533,-1.112264 -0.28351,-0.327137 -0.87236,-0.327137 h -1.13407 v 4.688957 z"
+         id="path198" />
+      <path
+         d="m 340.35637,72.423274 h 6.54273 v 2.18091 h -4.14373 v 4.034684 h 3.29318 v 2.18091 h -3.29318 v 4.688956 h 4.14373 v 2.18091 h -6.54273 z"
+         id="path200" />
+      <path
+         d="m 348.27309,72.423274 h 3.00966 l 2.33357,9.138013 h 0.0436 v -9.138013 h 2.13729 v 15.26637 h -2.46442 L 350.454,76.545194 h -0.0436 v 11.14445 h -2.1373 z"
+         id="path202" />
+      <path
+         d="m 357.58558,72.423274 h 3.66393 q 1.78834,0 2.68252,0.959601 0.89417,0.9596 0.89417,2.813374 v 7.720421 q 0,1.853773 -0.89417,2.813373 -0.89418,0.959601 -2.68252,0.959601 h -3.66393 z m 3.62031,13.08546 q 0.58885,0 0.89417,-0.348946 0.32714,-0.348945 0.32714,-1.134073 v -7.938512 q 0,-0.785127 -0.32714,-1.134073 -0.30532,-0.348946 -0.89417,-0.348946 h -1.22131 v 10.90455 z"
+         id="path204" />
+      <path
+         d="m 366.44008,72.423274 h 6.54273 v 2.18091 h -4.14373 v 4.034684 h 3.29317 v 2.18091 h -3.29317 v 4.688956 h 4.14373 v 2.18091 h -6.54273 z"
+         id="path206" />
+      <path
+         d="m 374.3568,72.423274 h 3.00966 l 2.33357,9.138013 h 0.0436 v -9.138013 h 2.13729 v 15.26637 h -2.46443 l -2.8788,-11.14445 h -0.0436 v 11.14445 h -2.13729 z"
+         id="path208" />
+      <path
+         d="m 387.0497,87.907735 q -1.72292,0 -2.6389,-0.98141 -0.89417,-0.981409 -0.89417,-2.769755 v -8.200222 q 0,-1.788346 0.89417,-2.769755 0.91598,-0.98141 2.6389,-0.98141 1.72292,0 2.61709,0.98141 0.91598,0.981409 0.91598,2.769755 v 1.613874 h -2.26814 v -1.766537 q 0,-1.417592 -1.1995,-1.417592 -1.1995,0 -1.1995,1.417592 v 8.527358 q 0,1.395782 1.1995,1.395782 1.1995,0 1.1995,-1.395782 v -2.333574 h 2.26814 v 2.159101 q 0,1.788346 -0.91598,2.769755 -0.89417,0.98141 -2.61709,0.98141 z"
+         id="path210" />
+      <path
+         d="m 392.02216,72.423274 h 2.399 v 15.26637 h -2.399 z"
+         id="path212" />
+      <path
+         d="m 396.2095,72.423274 h 6.54273 v 2.18091 h -4.14373 v 4.034684 h 3.29317 v 2.18091 h -3.29317 v 4.688956 h 4.14373 v 2.18091 h -6.54273 z"
+         id="path214" />
+      <path
+         d="m 407.28855,87.907735 q -1.74472,0 -2.6389,-0.98141 -0.89417,-1.003218 -0.89417,-2.856992 v -0.872364 h 2.26815 v 1.046837 q 0,1.483019 1.24312,1.483019 0.61065,0 0.91598,-0.348946 0.32713,-0.370754 0.32713,-1.177691 0,-0.9596 -0.43618,-1.679301 -0.43618,-0.741509 -1.61387,-1.766537 -1.48302,-1.308546 -2.07187,-2.355382 -0.58884,-1.068646 -0.58884,-2.399001 0,-1.810156 0.91598,-2.791565 0.91598,-1.003219 2.66071,-1.003219 1.72292,0 2.59528,1.003219 0.89418,0.981409 0.89418,2.835183 v 0.632464 h -2.26815 v -0.785128 q 0,-0.785127 -0.30533,-1.134073 -0.30532,-0.370755 -0.89417,-0.370755 -1.1995,0 -1.1995,1.46121 0,0.828746 0.43618,1.548446 0.45799,0.7197 1.63568,1.744728 1.50483,1.308546 2.07187,2.377192 0.56704,1.068646 0.56704,2.508046 0,1.875583 -0.9378,2.878801 -0.91598,1.003219 -2.68252,1.003219 z"
+         id="path216" />
+    </g>
+    <g
+       aria-label="Commands"
+       id="text1813"
+       style="font-size:21.8091px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';fill:#343b58;fill-opacity:0.999988;stroke-width:1.20297;stroke-linecap:round;stroke-linejoin:round">
+      <path
+         d="m 329.37554,57.030423 q -1.72292,0 -2.63891,-0.981409 -0.89417,-0.98141 -0.89417,-2.769756 v -8.200221 q 0,-1.788346 0.89417,-2.769756 0.91599,-0.981409 2.63891,-0.981409 1.72291,0 2.61709,0.981409 0.91598,0.98141 0.91598,2.769756 v 1.613873 h -2.26815 v -1.766537 q 0,-1.417591 -1.1995,-1.417591 -1.1995,0 -1.1995,1.417591 v 8.527358 q 0,1.395782 1.1995,1.395782 1.1995,0 1.1995,-1.395782 v -2.333574 h 2.26815 v 2.159101 q 0,1.788346 -0.91598,2.769756 -0.89418,0.981409 -2.61709,0.981409 z"
+         id="path177" />
+      <path
+         d="m 337.85928,57.030423 q -1.76654,0 -2.70433,-1.003218 -0.93779,-1.003219 -0.93779,-2.835183 v -8.025749 q 0,-1.831964 0.93779,-2.835183 0.93779,-1.003218 2.70433,-1.003218 1.76654,0 2.70433,1.003218 0.93779,1.003219 0.93779,2.835183 v 8.025749 q 0,1.831964 -0.93779,2.835183 -0.93779,1.003218 -2.70433,1.003218 z m 0,-2.18091 q 1.24312,0 1.24312,-1.504828 v -8.331076 q 0,-1.504827 -1.24312,-1.504827 -1.24312,0 -1.24312,1.504827 v 8.331076 q 0,1.504828 1.24312,1.504828 z"
+         id="path179" />
+      <path
+         d="m 343.11527,41.545963 h 3.42402 l 1.52664,10.926358 h 0.0436 l 1.52664,-10.926358 h 3.42402 v 15.266369 h -2.26814 V 45.25351 h -0.0436 l -1.74473,11.558822 h -2.00644 L 345.25256,45.25351 h -0.0436 v 11.558822 h -2.09367 z"
+         id="path181" />
+      <path
+         d="m 354.84856,41.545963 h 3.42403 l 1.52664,10.926358 h 0.0436 l 1.52664,-10.926358 h 3.42403 v 15.266369 h -2.26815 V 45.25351 h -0.0436 l -1.74473,11.558822 h -2.00644 L 356.98585,45.25351 h -0.0436 v 11.558822 h -2.09367 z"
+         id="path183" />
+      <path
+         d="m 368.43563,41.545963 h 3.24956 l 2.48624,15.266369 h -2.399 l -0.43619,-3.031465 v 0.04362 h -2.72613 l -0.43619,2.987846 h -2.22452 z m 2.6171,10.206658 -1.06865,-7.545948 h -0.0436 l -1.04684,7.545948 z"
+         id="path185" />
+      <path
+         d="m 375.32729,41.545963 h 3.00965 l 2.33358,9.138012 h 0.0436 v -9.138012 h 2.1373 V 56.812332 H 380.387 l -2.8788,-11.14445 h -0.0436 v 11.14445 h -2.13729 z"
+         id="path187" />
+      <path
+         d="m 384.63977,41.545963 h 3.66393 q 1.78835,0 2.68252,0.9596 0.89418,0.9596 0.89418,2.813374 v 7.720421 q 0,1.853773 -0.89418,2.813374 -0.89417,0.9596 -2.68252,0.9596 h -3.66393 z m 3.62032,13.085459 q 0.58884,0 0.89417,-0.348945 0.32713,-0.348946 0.32713,-1.134074 v -7.938512 q 0,-0.785127 -0.32713,-1.134073 -0.30533,-0.348945 -0.89417,-0.348945 h -1.22131 v 10.904549 z"
+         id="path189" />
+      <path
+         d="m 396.61297,57.030423 q -1.74473,0 -2.6389,-0.981409 -0.89417,-1.003219 -0.89417,-2.856992 v -0.872364 h 2.26814 v 1.046836 q 0,1.483019 1.24312,1.483019 0.61066,0 0.91598,-0.348945 0.32714,-0.370755 0.32714,-1.177692 0,-0.9596 -0.43618,-1.6793 -0.43618,-0.74151 -1.61387,-1.766537 -1.48302,-1.308546 -2.07187,-2.355383 -0.58884,-1.068646 -0.58884,-2.399001 0,-1.810155 0.91598,-2.791565 0.91598,-1.003218 2.66071,-1.003218 1.72292,0 2.59528,1.003218 0.89417,0.98141 0.89417,2.835183 v 0.632464 h -2.26814 v -0.785128 q 0,-0.785127 -0.30533,-1.134073 -0.30533,-0.370754 -0.89417,-0.370754 -1.1995,0 -1.1995,1.461209 0,0.828746 0.43618,1.548446 0.45799,0.719701 1.63568,1.744728 1.50483,1.308546 2.07187,2.377192 0.56703,1.068646 0.56703,2.508046 0,1.875583 -0.93779,2.878802 -0.91598,1.003218 -2.68252,1.003218 z"
+         id="path191" />
+    </g>
+  </g>
+</svg>
+</p>
+</div>
+</div>
+</section>
+<section id="base-images" class="slide level2">
+<h2>Base Images</h2>
+<ul>
+<li><p>You will almost always start from an initial basic image</p></li>
+<li><p>A collection of universally accessible images is hosted on <a
+href="https://hub.docker.com/search?q=">DockerHub</a></p></li>
+<li><p>These are all images in themselves, but also serve as excellent
+starting points for more custom images that you might want to
+build</p></li>
+<li><p>To download an image to your system for use, from a terminal:</p>
+<pre ><code class="bash">docker pull image_name:possible_tag</code></pre></li>
+<li><p>To see images currently on your system:</p>
+<pre ><code class="bash">docker images</code></pre></li>
+</ul>
+</section>
+<section id="containers-from-images" class="slide level2">
+<h2>Containers from Images</h2>
+<ul>
+<li><p>To actually run a container, you can use the GUI, or, from a
+terminal:</p>
+<pre ><code class="bash">docker run --flags container_name</code></pre>
+<ul>
+<li><code class="python">run</code> creates and starts the
+container</li>
+<li><code class="python">--flags</code> could be any number of options
+or boolean flags. Common ones include:
+<ul>
+<li><code class="python">-it</code> to launch interactively</li>
+<li><code class="python">--rm</code> to remove the container one the
+command or interative session finishes</li>
+<li><code class="python">-d</code> to run the container detached</li>
+</ul></li>
+<li>The container name is the name and (optionally) tag of the container
+you want to launch.
+<ul>
+<li>If the container is not already on your system, Docker will download
+it from DockerHub</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="working-with-containers" class="slide level2">
+<h2>Working with Containers</h2>
+<ul>
+<li><p>To get a view of currently <em>running</em> containers:</p>
+<pre ><code class="bash">docker ps</code></pre>
+<ul>
+<li>Add a <code class="python">-a</code> flag at the end to see
+<strong>all</strong> containers</li>
+</ul></li>
+<li><p>To remove old containers:</p>
+<pre ><code class="bash">docker container rm container_name_or_id</code></pre></li>
+<li><p>Can start or stop exist containers with:</p>
+<pre ><code class="bash">docker start/stop container_name</code></pre></li>
+</ul>
+</section>
+<section id="customizing-images" class="slide level2">
+<h2>Customizing Images</h2>
+<ul>
+<li><p>Generally, you will want to customize a base image by adding your
+own layers on top</p></li>
+<li><p>The schematic of what comprises an image is all contained in a
+special text file, named <code class="python">Dockerfile</code></p>
+<ul>
+<li>Note the lack of extension at the end!</li>
+</ul></li>
+<li><p>A Dockerfile is a simple text file with some special instructions
+that dictate what layers comprise your image</p></li>
+<li><p>A Dockerfile is used to <em>build</em> the image</p>
+<pre ><code class="bash">docker build -t img_name path/to/dockerfile</code></pre></li>
+</ul>
+</section>
+<section id="adding-layers-in-the-dockerfile" class="slide level2">
+<h2>Adding Layers in the Dockerfile</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Dockerfiles use a syntax with only a few keywords
+<ul>
+<li><code class="python">FROM</code> specifies the base image you are
+starting with</li>
+<li><code class="python">RUN</code> specifies a command to run. Often to
+satisfy dependencies or get libraries</li>
+<li><code class="python">COPY</code> will copy file from your local
+system into the image</li>
+<li><code class="python">CMD</code> specifies the default command to be
+run when the image is launched</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<pre ><code class="file" name="Dockerfile" style="font-size:.8em">FROM python:3
+
+WORKDIR /app
+
+COPY image.py .
+
+RUN pip install numpy matplotlib
+
+CMD ["python", "image.py"]</code></pre>
+<ul>
+<li>Layers are built from the “bottom up”</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="isolation" class="slide level2">
+<h2>Isolation</h2>
+<ul>
+<li>Containers run as isolated systems, which is usually a good thing
+<ul>
+<li>Ensures that nothing on your local system affects the container
+system</li>
+</ul></li>
+<li>Sometimes though we <em>need</em> holes “broken” in the isolation
+<ul>
+<li>A web server is available at a certain port, but we can’t access
+that port in the isolated container</li>
+<li>A program might generate a file, but that is in the container
+filesystem, which we can not access</li>
+</ul></li>
+</ul>
+</section>
+<section id="poking-holes" class="slide level2">
+<h2>Poking Holes</h2>
+<ul>
+<li>When running a container, you can poke holes in the container to
+connect certain internal parts of the container with particular parts of
+your outside system
+<ul>
+<li><p>Connecting ports</p>
+<pre ><code class="text">docker run -p localport:containerport cont_name</code></pre></li>
+<li><p>Connecting folders</p>
+<pre ><code class="text">docker run -v /local/folder:/container/folder cont_name</code></pre></li>
+</ul></li>
+</ul>
+</section>
+<section id="challenge" class="slide level2">
+<h2>Challenge</h2>
+<ul>
+<li>I have uploaded an image of my own to DockerHub, which you can find
+at <code class="python">jrembold/dockerdemo</code></li>
+<li>On your own time, see if you can:
+<ul>
+<li>Download the image</li>
+<li>Run the image interactively</li>
+<li>Find further instructions inside</li>
+</ul></li>
+<li>I’ll give you some extra HW points if you can email me with the
+answer to the further instructions :)</li>
+</ul>
+</section>
+<section id="break-time" class="slide level2">
+<h2>Break Time!</h2>
+<p><img data-src="../images/nomming_catepillar.png" /></p>
+<!---------------- SQL ------------------>
+</section>
+<section id="consulting-an-index" class="slide level2">
+<h2>Consulting an Index</h2>
+<ul>
+<li>Like in a book, an <em>index</em> is a precomputed guide to help
+find things faster</li>
+<li>We can construct similar precomputed guides for certain columns in
+SQL to also help find things faster!</li>
+<li>There are several different types of indexes
+<ul>
+<li>By default, the assigned index type is a B-Tree index in Postgres
+<ul>
+<li>B-Tree stands for <em>balanced tree</em> and work best for
+<em>orderable</em> type data</li>
+</ul></li>
+<li>Index types like <em>Generalized Inverted Index</em> (GIN) and
+<em>Generalized Search Tree</em> (GiST) will be discussed later as they
+come up</li>
+<li>Different columns in the same table can be indexed with different
+methods</li>
+</ul></li>
+</ul>
+</section>
+<section id="climbing-a-b-tree" class="slide level2">
+<h2>Climbing a B-Tree</h2>
+<figure>
+<img data-src="../images/b-tree-loopup.png" style="width:80.0%"
+alt="Showing the structure and looking up a key in a B-Tree" />
+<figcaption aria-hidden="true">Showing the structure and looking up a
+key in a B-Tree</figcaption>
+</figure>
+</section>
+<section id="creating-indexes" class="slide level2">
+<h2>Creating Indexes</h2>
+<ul>
+<li><p>Postgres will automatically index any column that is a primary
+key or which has the <code class="python">UNIQUE</code>
+constraint</p></li>
+<li><p>You can choose to set up indexes on other columns as well, but do
+so outside of the table creation</p>
+<pre ><code class="pgsql" style="font-size:1em">CREATE INDEX index_name ON table_name (col_name);</code></pre></li>
+<li><p>If you decide you want to remove an index, you do so using the
+index name:</p>
+<pre ><code class="pgsql" style="font-size:1em">DROP INDEX index_name</code></pre></li>
+</ul>
+</section>
+<section id="benchmarking" class="slide level2">
+<h2>Benchmarking</h2>
+<ul>
+<li>How can we objectively test this?
+<ul>
+<li>Postgres has the <code class="python">EXPLAIN</code> keyword to give
+you information about what the database is doing in the background</li>
+<li>Using <code class="python">EXPLAIN ANALYZE</code> will also give you
+timing information about how long it took a query to run</li>
+</ul></li>
+<li><code class="python">EXPLAIN</code> always comes at the start of
+your query</li>
+<li>Other SQL variants have their own versions, but most have some
+method of getting information back about execution time or what is being
+done under the hood</li>
+</ul>
+<pre ><code class="pgsql">EXPLAIN ANALYZE
+SELECT * FROM table_name
+WHERE col1 = 'test';</code></pre>
+</section>
+<section id="benchmarking-caveats" class="slide level2">
+<h2>Benchmarking Caveats</h2>
+<ul>
+<li><code class="python">EXPLAIN ANALYZE</code> reports to you the time
+it took the server to process the query, not necessarily the time it
+took your client to finish getting and rendering the response!
+<ul>
+<li>Especially for queries that return a huge number of rows, you might
+see a significant difference</li>
+</ul></li>
+<li>Indexes are optimized for certain types of operations. Just because
+you index a column doesn’t mean that Postgres will <strong>use</strong>
+that index if you are doing an incompatible operation!
+<ul>
+<li>Check more than just the timings from
+<code class="python">EXPLAIN ANALYZE</code>
+<ul>
+<li>See comments about Bitmaps and Heaps? Then the index was used.</li>
+<li>See comments about Parallel or Seq scans? Then the index was not
+used.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="costs" class="slide level2">
+<h2>Costs</h2>
+<ul>
+<li>Indexes always have a cost associated with them, both in initial
+setup and in every time new data is added to the column
+<ul>
+<li>Also, they are stored information, so they can also inflate your
+database size</li>
+</ul></li>
+<li>Consider indexing only those columns that receive the heaviest of
+use in filters or in joining</li>
+<li>You never need to worry about indexing primary keys or unique
+columns, as those are done automatically
+<ul>
+<li>Indexing of <em>foreign keys</em> though is not automatic, and might
+be a good idea for large datasets</li>
+</ul></li>
+<li>When in doubt, <strong>benchmark</strong> your queries before and
+after adding an index to see if you are really gaining much from
+it!</li>
+</ul>
+</section>
+<section id="benchmarking-activity" class="slide level2">
+<h2>Benchmarking Activity</h2>
+<ul>
+<li>Most likely, you already (still) have the NYC Taxi Rides data on
+your computer</li>
+<li>Benchmark that data set under three different queries, for each
+getting a time both before creating an index and then after creating an
+index over the desired column
+<ul>
+<li>Select all the columns for the row where the taxi id = 56789</li>
+<li>Select all the columns for the rows where the total amount charged
+was greater than $20</li>
+<li>Select all the columns for the rows where the total amount charged
+was greater than $10</li>
+</ul></li>
+<li>Enter your values into the shared spreadsheet <a
+href="https://docs.google.com/spreadsheets/d/1WLhoEYzDR3I6LZqeZZ-FM0lmdiTKde_Ygwk1f5_sQRk/edit?usp=sharing">here</a>
+(Just choose an unused trial number)</li>
+</ul>
+</section>
+<section id="birds-of-a-feather" class="slide level2">
+<h2>Birds of a Feather</h2>
+<ul>
+<li><p>It is frequently the case that values in a particular table
+column all belong to a smaller subset of categories or options</p>
+<ul>
+<li>Think months of the year or political parties</li>
+</ul></li>
+<li><p>With current methods, if you want to compare some sort of
+aggregate between those categories or options, you need to do it in
+multiple queries:</p>
+<div class="cols">
+<div class="col">
+<pre ><code class="pgsql">SELECT AVG(age)
+FROM voters
+WHERE party = 'D'</code></pre>
+</div>
+<div class="col">
+<pre ><code class="pgsql">SELECT AVG(age)
+FROM voters
+WHERE party = 'R'</code></pre>
+</div>
+</div></li>
+<li><p>This rapidly becomes intractable if you want to compare across
+many categories</p></li>
+</ul>
+</section>
+<section id="the-fix" class="slide level2">
+<h2>The Fix</h2>
+<ul>
+<li>SQL has one last trick up its sleeve with the
+<code class="python">GROUP BY</code> command</li>
+<li><code class="python">GROUP BY</code> gathers together all rows with
+matching values from a particular column
+<ul>
+<li>By itself, this is basically the same as running
+<code class="python">DISTINCT</code> on a column</li>
+<li>Note that once you make a grouping, you can only select entire
+columns that are a part of the grouping</li>
+</ul>
+<pre ><code class="pgsql">SELECT grouped_column
+FROM table_name
+GROUP BY grouped_column;</code></pre></li>
+<li>Can visualize as if many smaller tables were created, one for each
+grouping, which are then joined back together with each table
+contributing one row</li>
+</ul>
+</section>
+<section id="aggregating-groups" class="slide level2">
+<h2>Aggregating Groups</h2>
+<ul>
+<li><p>Groups by themselves are not that useful, since we already had
+<code class="python">DISTINCT</code></p></li>
+<li><p>The prime use-case of <code class="python">GROUP BY</code> is to
+be able to run aggregates across <em>all</em> potential groups
+<em>simultaneously</em> for comparison</p>
+<pre ><code class="pgsql">SELECT 
+  col_name, 
+  min(col_name), 
+  avg(col_name2)
+FROM table_name
+GROUP BY col_name;</code></pre></li>
+<li><p>Causes any aggregate function to just aggregate over the smaller,
+group tables</p></li>
+</ul>
+</section>
+<section id="group-example" class="slide level2">
+<h2>Group Example</h2>
+<p>Looking back at the cereal table, how can we answer:</p>
+<ul>
+<li>Which manufactorer sells the most sugar-laden cereal?</li>
+<li>What shelf has the most cereals placed on it? What about the
+greatest sum of calories?</li>
+</ul>
+</section>
+<section id="multiple-groups" class="slide level2">
+<h2>MULTIPLE GROUPS</h2>
+<ul>
+<li>Like with <code class="python">DISTINCT</code> or
+<code class="python">UNIQUE</code>, you can group by multiple
+columns</li>
+<li>Essentially splits the sub-tables into even smaller tables, one for
+each combination</li>
+</ul>
+<pre ><code class="pgsql">SELECT 
+  col_name, 
+  min(col_name), 
+  avg(col_name2)
+FROM table_name
+GROUP BY col_name, col_name2;</code></pre>
+</section>
+<section id="have-or-have-not" class="slide level2">
+<h2>HAVE or HAVE NOT</h2>
+<ul>
+<li>You can not filter based on aggregates using
+<code class="python">WHERE</code>
+<ul>
+<li><code class="python">WHERE</code> actions happen before any
+aggregates can be computed</li>
+</ul></li>
+<li>If you want to filter your grouped results, you need to use
+<code class="python">HAVING</code>
+<ul>
+<li><code class="python">HAVING</code> filters take place
+<strong>after</strong> groups and aggregates have been computed</li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql">SELECT 
+  col_name, 
+  min(col_name), 
+  avg(col_name2)
+FROM table_name
+GROUP BY col_name
+HAVING min(col_name) > 50;</code></pre>
+</section>
+<section id="server-ordering" class="slide level2">
+<h2>Server Ordering</h2>
+<p><img data-src="../images/query_flowchart.png"
+style="width:80.0%" /></p>
+</section>
+<section id="showdown-time" class="slide level2">
+<h2>SHOWDOWN TIME!</h2>
+<ul>
+<li>Teams to be announced on next slide</li>
+<li>Whoever want to be in charge of submitting your answer can change
+your polling name to a fun team name :)</li>
+<li>Only one computer can be used by the pair of you at a time
+<ul>
+<li>We’ll be using the superhero dataset from HW4</li>
+<li>4 rounds: each round switch who is typing</li>
+</ul></li>
+<li>You’ll have 5 minutes to answer each question. Starting to 2 minutes
+you can submit a <em>single</em> answer
+<ul>
+<li>Submitting an answer sooner gets you more points!</li>
+</ul></li>
+</ul>
+</section>
+<section id="showdown-teams" class="slide level2">
+<h2>Showdown Teams</h2>
+<ul>
+<li>Frances and Miles</li>
+<li>Cristian, Jill and Oscar</li>
+<li>Micah and Alaina</li>
+<li>Aaryan and Phil</li>
+</ul>
+<!---------- Test Thoughts ------------->
+<!--
+## Overall Test Results
+::::::cols
+::::col
+![](../images/midterm_hist.png)
+
+::::
+
+::::col
+- Average: 82
+- Median: 85
+- St Dev: 14
+
+
+- I will be posting my solutions in case you want to look things over
+
+::::
+::::::
+
+
+## A few test thoughts
+- I should have done a better job explaining the purpose of the test
+  - I was not prepared for how foreign the concept was going to be to some
+  - The test was not meant to mimic everyday interactions, the test was meant as a probe to explore your understanding of how and why you do the things you do in those everyday actions
+- Access to outside resources is a wonderful tool, but is no substitute for having material in your head
+
+
+## Test Adjustments
+- I dropped Problem 1 entirely
+  - I had made a mistake with a clash between red and green
+  - Despite what the question asked, about 1/3 of your gave me information about the _resulting_ table, not the original table
+- On Problem 5 I chopped the points lost in half
+  - Most commonly people just had two values switched, which feels bad to lose double points from
+- Always check my arithmetic and please let me know if you come across a mistake
+    -->
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveal.js-d3/reveald3.js"></script>
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+            //{ src: "../html_srcs/revealjs/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

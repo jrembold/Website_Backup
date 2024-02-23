@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Batch Processing and PostGIS</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Batch Processing and PostGIS</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Wednesday, April 6, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 10 due on Friday (last one!)
+<ul>
+<li>I’m still working on getting caught up on the older hw, but am
+making progress</li>
+</ul></li>
+<li>Project pairing assignments went out on Saturday, so you should be
+able to be thinking about making a start there</li>
+<li>In class polling: www.PollEv.com/jedrembold441</li>
+</ul>
+<!--------------Theory-------------------->
+</section>
+<section id="duplicating-databases" class="slide level2">
+<h2>Duplicating Databases</h2>
+<dl>
+<dt>Systems of Record</dt>
+<dd>
+<ul>
+<li>The original source of data</li>
+<li>Considered the “truth” if conflicts arise</li>
+<li>Facts are stored exactly once and generally normalized</li>
+</ul>
+</dd>
+<dt>Derived Data Systems</dt>
+<dd>
+<ul>
+<li>Uses the same data as the system of record but stored in a
+transformed way</li>
+<li>Can “rederive” the data if something goes awry</li>
+<li>Commonly denormalized, and exists more for speeding up certain types
+of queries</li>
+<li>Need to ensure they are still an accurate reflection of “truth”</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="processing-systems" class="slide level2">
+<h2>Processing Systems</h2>
+<dl>
+<dt>Service Systems</dt>
+<dd>
+<ul>
+<li>A service waits for a request or instruction before springing into
+action</li>
+<li>Client is waiting for a response, so response time is important</li>
+</ul>
+</dd>
+<dt>Batch Systems</dt>
+<dd>
+<ul>
+<li>Ingests a large amount of data all at once and then processes it to
+generate some output</li>
+<li>Commonly scheduled to run periodically or depending on the size</li>
+<li>Throughput is important</li>
+</ul>
+</dd>
+<dt>Stream Systems</dt>
+<dd>
+<ul>
+<li>Ingests smaller amounts of data and processes it to generate some
+output</li>
+<li>Operates on data shortly after the data is generated</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="a-unix-approach" class="slide level2">
+<h2>A Unix Approach</h2>
+<ul>
+<li>Batch processing is all about transforming some input data into an
+alternative output type</li>
+<li>Method 1: Code it!
+<ul>
+<li>Choose your language of choice, bring in the data, make your
+adjustments, and write out some output</li>
+<li>May be inefficient or struggle with things at scale</li>
+</ul></li>
+<li>Method 2: Unix it!
+<ul>
+<li>A Unix shell has a host of tools to perform simple transformations
+<ul>
+<li><code class="python">awk</code>, <code class="python">sort</code>,
+<code class="python">uniq</code>, <code class="python">head</code>,
+<code class="python">grep</code>
+<ul>
+<li>More on these if you take the DS in the NS summer course!</li>
+</ul></li>
+<li>“Do one thing and do it well”</li>
+</ul></li>
+<li>Inputs and outputs are composable through the use of “pipes”
+<ul>
+<li>Requires a common interface (files, or a string of bytes, here)</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="scale-strikes-again" class="slide level2">
+<h2>Scale Strikes Again</h2>
+<ul>
+<li>Both of these methods might work very well on a single system, but
+can be clunky to scale</li>
+<li>You <em>can</em> write code to distribute work over a host of nodes,
+but it is generally a pain and easy to do poorly</li>
+<li>A method to do similar analysis over a distributed system would be
+nice!</li>
+</ul>
+</section>
+<section id="mapreduce" class="slide level2">
+<h2>MapReduce</h2>
+<ul>
+<li>A single MapReduce job is similar to a single Unix process
+<ul>
+<li>Takes some number of input data and produces some output</li>
+</ul></li>
+<li>Uses a <em>distributed filesystem</em> for its common interface
+<ul>
+<li>Most common is the Hadoop Distributed File System, or HDFS</li>
+<li>Essentially creates one large filesystem using disks across all
+machines in the distributed system</li>
+</ul></li>
+<li>Composable, with the output of one MapReduce operation being used in
+a subsequent MapReduce operation
+<ul>
+<li>Chains or <em>workflows</em> can be up to around 50-100 operations
+for recommendation data</li>
+<li>Generally need a <em>scheduler</em> to start the next operation once
+the previous has finished</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-mapreduce-flow" class="slide level2">
+<h2>The MapReduce Flow</h2>
+<figure>
+<img data-src="../images/mapreduce.png" style="width:100.0%"
+alt="The MapReduce process" />
+<figcaption aria-hidden="true">The MapReduce process</figcaption>
+</figure>
+</section>
+<section id="why-mapreduce" class="slide level2">
+<h2>Why MapReduce?</h2>
+<ul>
+<li>MapReduce can mimic many types of database operations
+<ul>
+<li>Things like joins and groupings</li>
+</ul></li>
+<li>Why MapReduce over a massively parallel processing database (MPP)?
+<ul>
+<li>Diversity of storage (don’t need to work about schema)</li>
+<li>Diversity of processing (write your own MapReduce code for tailored
+outputs)</li>
+<li>Less sensitive to faults</li>
+</ul></li>
+</ul>
+</section>
+<section id="alternatives" class="slide level2">
+<h2>Alternatives</h2>
+<ul>
+<li>Writing low level MapReduce code can be unpleasant
+<ul>
+<li>Multiple high-level abstractions written atop to help simplify: Pig,
+Hive, Cascading, Crunch</li>
+</ul></li>
+<li>MapReduce constantly writing out intermediate state can be a
+bottleneck
+<ul>
+<li>Spark, Tez, and Flink utilize operators to help guide data through
+multiple reductions
+<ul>
+<li>Make the flow more like the Unix pipes</li>
+</ul></li>
+</ul></li>
+<li>MapReduce is not efficient for small iterative tasks, frequently
+needed for traversing graphs models
+<ul>
+<li>The Pregel model can work better in these systems, implemented by
+Apache Giraph, Spark’s GraphX, or Flink’s Gelly
+<ul>
+<li>Information passed between vertices, and the vertices can remember
+previous state</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="the-big-picture" class="slide level2">
+<h2>The Big Picture</h2>
+<p><img data-src="../images/ch10_island.png" style="width:55.0%" /></p>
+</section>
+<section id="break-time" class="slide level2">
+<h2>Break Time!</h2>
+<p><img
+data-src="https://media2.giphy.com/media/26tP4mS08o114G2kg/giphy.gif?cid=ecf05e47lyobwhi0b3chbob5f2y4biam9e28qeku3jhralxd&amp;rid=giphy.gif&amp;ct=g" /></p>
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<p>What would the output of the below query look like?</p>
+<pre ><code class="pgsql">SELECT regexp_split_to_table(
+  '01-13-2021, 04-24-2022', '[,-]\s*') AS rev;</code></pre>
+<div class="hpoll">
+<ol>
+<li><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">rev</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">01-13-2021</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">04-24-2022</td>
+</tr>
+</tbody>
+</table></li>
+<li><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">rev</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">01</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2021, 04</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2022</td>
+</tr>
+</tbody>
+</table></li>
+<li><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">rev</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">01</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2021</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">04</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">24</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2022</td>
+</tr>
+</tbody>
+</table></li>
+<li><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">rev</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">01</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2021</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">“”</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">04</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2022</td>
+</tr>
+</tbody>
+</table></li>
+</ol>
+</div>
+</section>
+<section id="section" class="slide level2"
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/Ecx2GKqAf1uJ7SoI8R2Oz?controls=none&amp;short_poll=true">
+<h2
+data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/Ecx2GKqAf1uJ7SoI8R2Oz?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="ranking" class="slide level2">
+<h2>Ranking</h2>
+<ul>
+<li>Sometimes a query might return many results, such that you would
+want a method to rank or compare them and only select the “best”</li>
+<li>Ranking by relevancy is vague and tends to be very application
+specific, but it can be useful</li>
+<li><code class="python">ts_rank</code> will give an arbitrary rank
+based on how many times your query words appear in the text
+<ul>
+<li>This might mean that longer texts will always receive a higher rank!
+You can normalize by the text length by providing an extra numeric code
+as a third argument (2 or 8 probably best)</li>
+</ul></li>
+<li><code class="python">ts_rank_cd</code> does similar, but also
+considers the proximity of searched lexemes</li>
+<li>Both functions take 2 required arguments:
+<ul>
+<li>a tsvector of the contents to be ranked</li>
+<li>a tsquery determining how they will be ranked</li>
+</ul></li>
+</ul>
+<!--
+## Your Turn!
+The file [here](../activity_data/alice.sql) contains the SQL commands to generate and populate a simple table `alice` which hold the raw chapter contents of the book: Alice in Wonderland. You will need to set up your own `tsvector` column and index. In the same groups as earlier, see if you can use the data to answer the following:
+
+- In what chapters does the "Chesire cat" appear?
+- In what chapter does the word "mushroom" appear the most? How many times does it appear?
+-->
+</section>
+<section id="positional-data" class="slide level2">
+<h2>Positional Data</h2>
+<ul>
+<li>Location information can be a fundamental aspect of stored data</li>
+<li>Currently, we could store such data, but Postgres has no intelligent
+methods of working with or analyzing that data</li>
+<li>We’ll focus the next few days on how we can utilize Postgres’s
+PostGIS extension to unlock the power of location based data</li>
+<li>Don’t overlook the official <a
+href="https://postgis.net/docs/manual-3.2/reference.html#Geometry_Inputs">PostGIS
+documentation</a>, which can be a helpful resource to accompany these
+slides and the text</li>
+</ul>
+</section>
+<section id="postgis" class="slide level2">
+<h2>PostGIS</h2>
+<ul>
+<li>Unlike the <code class="python">tablefunc</code> extension,
+<code class="python">PostGIS</code> does not generally come with plain
+Postgres by default
+<ul>
+<li>On Windows and Mac however, if you installed Postgres as indicated
+at the start of the semester, you <em>should</em> already have it on
+your system</li>
+<li>If you are missing it in Windows, you can launch the Stack Builder
+and should be able to add the extension from there</li>
+</ul></li>
+<li>The PostGIS extension will bring in a lot of extra functions and
+data types, so you might consider creating a new database to contain GIS
+type data (maybe <code class="python">analysis_gis</code>)</li>
+<li>Adding the extension to the database is the same as with other
+extensions:</li>
+</ul>
+<pre ><code class="pgsql">CREATE EXTENSION postgis;</code></pre>
+</section>
+<section id="geometries" class="slide level2">
+<h2>Geometries</h2>
+<figure>
+<img data-src="../images/postgis_types.png"
+alt="PostGIS introduces geometries to describe various features" />
+<figcaption aria-hidden="true">PostGIS introduces geometries to describe
+various features</figcaption>
+</figure>
+</section>
+<section id="well-known-text" class="slide level2">
+<h2>Well-Known Text</h2>
+<ul>
+<li>Most of the new geometries will be constructed by passing in a
+well-known text string (or WKT)</li>
+</ul>
+<div style="font-size:.8em">
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 43%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Format</th>
+<th>Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">Point</code></td>
+<td><code class="python">'POINT (-74.9 42.7)'</code></td>
+<td>No comma separating, and longitude comes first!</td>
+</tr>
+<tr class="even">
+<td><code class="python">LineString</code></td>
+<td><code class="python">'LINESTRING (-74.9 42.7, -75.1 42.7)'</code></td>
+<td>Comma separates coordinate pairs</td>
+</tr>
+<tr class="odd">
+<td><code class="python">Polygon</code></td>
+<td><code class="python">'POLYGON((74 42, 75 42, 76 43, 74 42))'</code></td>
+<td>Double parentheses, initial point repeated to close</td>
+</tr>
+<tr class="even">
+<td><code class="python">MultiPoint</code></td>
+<td><code class="python">'MULTIPOINT(75 42, 74 43)'</code></td>
+<td>Comma separates coordinate pairs</td>
+</tr>
+<tr class="odd">
+<td><code class="python">MultiLineString</code></td>
+<td><code class="python">'MULTILINESTRING((76 43, 77 43), (78 43, 77 43))'</code></td>
+<td>Parentheses group individual lines</td>
+</tr>
+<tr class="even">
+<td><code class="python">MultiPolygon</code></td>
+<td><code class="python">'MULTIPOLYGON(((74 43, 75 44, 74 45, 74 43), (81 40, 81 39, 82 39, 81 40)))'</code></td>
+<td>Still double parentheses to start and end, with 3rd parentheses
+grouping polygons</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="coordinate-systems" class="slide level2">
+<h2>Coordinate Systems</h2>
+<ul>
+<li>To be able to relate and compare locations to one another, a
+consistent coordinate system needs to be used
+<ul>
+<li>This covers everything from the mapping projection to whether or not
+you are working in curved space</li>
+</ul></li>
+<li>PostGIS (and most GIS applications) let you specify the coordinate
+system with a <em>Spatial Reference System Identifier</em>, or SRID</li>
+<li>Most commonly used for us will be the most recent World Geodetic
+System: WGS 84
+<ul>
+<li>This corresponds to an SRID of 4326</li>
+</ul></li>
+<li>If grabbing geospatial data from an online source, <strong>always
+check its coordinate system</strong></li>
+<li>All coordinate system information stored in
+<code class="python">spatial_ref_sys</code> table, so you can query to
+find necessary SRIDs</li>
+</ul>
+</section>
+<section id="new-data-types" class="slide level2">
+<h2>New Data Types</h2>
+<ul>
+<li>While PostGIS introduces many new spatial geometries, only a few new
+data types are added to Postgres.</li>
+<li><code class="python">geography</code>
+<ul>
+<li>Based on spherical curvature, all calculations take place on a
+globe</li>
+<li>More complicated math means fewer functions work, but distances are
+more precise, <strong>especially over large spans</strong></li>
+<li>Results expressed in meters</li>
+</ul></li>
+<li><code class="python">geometry</code>
+<ul>
+<li>Based on a flat map, where all calculations take place on a plane
+(the mathematical sort)</li>
+<li>Math is simpler, but distances are less precise if across large
+spans</li>
+<li>Results expressed in units dependent on chosen coordinate
+system</li>
+</ul></li>
+<li>Both types can hold all of the spatial geometries mentioned
+earlier</li>
+</ul>
+</section>
+<section id="creating-spatial-types" class="slide level2">
+<h2>Creating Spatial Types</h2>
+<ul>
+<li>Two main methods of creating geography or geometry types:
+<ul>
+<li><code class="python">ST_GeomFromText(WKT, SRID)</code> creates a
+geometry object to hold the spatial object given by the WKT with the
+optional given SRID
+<ul>
+<li>If no SRID is given, it is assumed to be 0 (no SRID at all)</li>
+</ul></li>
+<li><code class="python">ST_GeogFromText(WKT, SRID)</code> creates a
+geography object to hold the spatial object given by the WKT with the
+optional given SRID
+<ul>
+<li>If no SRID is given, WGS 84 (SRID 4326) is the assumed default</li>
+</ul></li>
+</ul></li>
+<li>If you look at the output of one of these data types, it is
+<strong>not</strong> human readable</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:1em">SELECT ST_GeogFromText('POINT(-75 42)');
+>> 0101000020E61000000000000000C052C00000000000004540
+SELECT ST_GeomFromText('POINT(-75 42)', 4326);</code></pre>
+</section>
+<section id="making-spatial-objects" class="slide level2">
+<h2>Making Spatial Objects</h2>
+<ul>
+<li>Using a WKT to create spatial objects can be clunky if you already
+have latitude and longitude values in your table as
+<em>numbers</em></li>
+<li>PostGIS offers a number of constructor functions for various objects
+that return <em>geometry</em> data types with no inherent SRID
+<ul>
+<li><code class="python">ST_MakePoint(long, lat, [z,m])</code> will
+create a geometric point with optional 3rd or 4th dimensions as
+well</li>
+<li><code class="python">ST_MakeLine(point1, point2)</code> will create
+a line from the first point to the second. There is an array option as
+well.</li>
+<li><code class="python">ST_MakePolygon(geometry_linestring, [cutout_linestring])</code>
+will create a geometric polygon using the provided linestring with
+optional cutouts</li>
+<li>These can have an SRID attached to them and be cast to geography
+data types as desired
+<ul>
+<li><code class="python">ST_SetSRID(object, SRID)</code> will attach the
+given SRID metadata to the object</li>
+</ul></li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql" style="font-size:1em">SELECT ST_SetSRID(ST_MakePoint(75,45), 4326);</code></pre>
+</section>
+<section id="adding-an-index" class="slide level2">
+<h2>Adding an Index</h2>
+<ul>
+<li>B-Trees are not well suited for indexing coordinate information
+<ul>
+<li>Which would be “bigger”: (2,0) or (0,2)?</li>
+</ul></li>
+<li>Instead, PostGIS recommends using the <em>Generalized Search
+Tree</em> (GiST) index type</li>
+</ul>
+<pre ><code class="pgsql">CREATE INDEX index_name
+ON table_name
+USING GIST (col_name);</code></pre>
+</section>
+<section id="actual-analysis" class="slide level2">
+<h2>Actual Analysis!</h2>
+<ul>
+<li>Now that we’ve gone to all this effort to get the spatial data into
+a format that Postgres can understand, we can actually do some
+analysis!</li>
+<li>Two of the most common functions deal with distances:
+<ul>
+<li><code class="python">ST_DWithin(point1, point2, distance)</code>
+returns a True or False depending on whether the two points are within
+the given distance from one another
+<ul>
+<li>Remember that geography distances are in meters, whereas geometry
+distance units depend on the SRID</li>
+</ul></li>
+<li><code class="python">ST_Distance(point1, point2)</code> computes the
+distance between the two points
+<ul>
+<li>This will be along a curve in geography, or on the flat plane in
+geometry</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="your-turn" class="slide level2">
+<h2>Your Turn!</h2>
+<ul>
+<li>In the pairs below, import in the data <a
+href="../activity_data/nwcolleges.sql">here</a>, which is a collection
+of the small liberal art NW colleges along with their latitude and
+longitudes. See if you can add a new column with the necessary data
+type, add an index, and then answer the following questions:
+<ul>
+<li>What other schools are within 100km of Willamette?</li>
+<li>What two schools are the closest together?</li>
+</ul></li>
+<li>Pairs:
+<ul>
+<li>Liam, Karol and Megan</li>
+<li>Rochelle and Maribel</li>
+<li>Jullian, Nina, Connor</li>
+<li>Ellie and Andrew</li>
+</ul></li>
+</ul>
+</section>
+<section id="shapefiles" class="slide level2">
+<h2>Shapefiles</h2>
+<ul>
+<li>Life would be very painstaking if you had to recreate complex
+polygons point by point</li>
+<li>Instead, more sources of spatial information that is more than a
+single point distribute that information in what is commonly called a
+<em>shapefile</em>
+<ul>
+<li>Shapefiles are the data format developed for the ArcGIS
+platform</li>
+<li>Basically a zip which includes several files that contain the
+necessary information (.shp, .shx, and .dbf, at least)</li>
+<li>The shapefile contains all the same information as we want,
+concerning lines, polygons, points, etc, as well as extra explanatory or
+annotations</li>
+</ul></li>
+<li>The general plan is to import the shapefile information into its own
+table within our database</li>
+</ul>
+</section>
+<section id="shp2pgsql" class="slide level2">
+<h2>shp2pgsql</h2>
+<ul>
+<li>PostGIS comes with a command line utility called
+<code class="python">shp2pgsql</code> on all operating systems
+<ul>
+<li>Windows users can run a graphical version of the same program, but
+it is not available on Mac and Linux
+<ul>
+<li>If you want to run the graphical version, I’ll direct you to the
+book’s explanation, which is covered in depth</li>
+</ul></li>
+</ul></li>
+<li>Like many command line utilities,
+<code class="python">shp2pgsql</code> utilizes several flags to control
+its behavior
+<ul>
+<li><code class="python">-I</code> – sets up a GIST index on the
+geometry column</li>
+<li><code class="python">-s</code> – specifies a specific SRID</li>
+<li><code class="python">-W</code> – specifies a particular encoding if
+needed (sometimes necessary for location names)</li>
+</ul>
+<code class="python">shp2pgsql -I -s SRID -W ENCODING SHAPEFILE.SHP TABLE_NAME</code></li>
+</ul>
+</section>
+<section id="bringing-into-pgsql" class="slide level2">
+<h2>Bringing Into PGSQL</h2>
+<ul>
+<li>By itself, <code class="python">shp2pgsql</code> will just generate
+SQL</li>
+<li>It can be more useful to pass that SQL directly into your
+database</li>
+<li>This can be done with the <code class="python">|</code>
+operator</li>
+<li>All together then, the command would look like below (all on one
+line)</li>
+</ul>
+<p><code class="python">shp2pgsql -I -s SRID -W ENCODING SHAPEFILE.SHP TABLE_NAME | pgsql -d DATABASE -U postgres</code></p>
+</section>
+<section id="back-to-text" class="slide level2">
+<h2>Back to Text</h2>
+<ul>
+<li>Since the shapefile spatial information will be encoded directly to
+a geometry type, it can be tricky to know what exactly you are working
+with at times</li>
+<li>You can call the <code class="python">ST_AsText()</code> function on
+any geometry (or geography) object to output its WKT representation
+<ul>
+<li>This can also be useful if you need to get it into a text form to
+copy into another location</li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql">SELECT ST_AsText(geom)
+FROM table_name
+LIMIT 1;</code></pre>
+</section>
+<section id="postgis-polygon-functions" class="slide level2">
+<h2>PostGIS Polygon Functions</h2>
+<ul>
+<li>Working with shapefiles gives an easy way to gain access to complex
+polygonal spatial information</li>
+<li>PostGIS has several useful functions to interact with polygons:
+<ul>
+<li><code class="python">ST_Area(poly)</code> will return the area of
+the provided polygon. This will be in SRID specified units if geometry
+or square meters if geography</li>
+<li><code class="python">ST_Within(point, poly)</code> will return a
+True/False as to whether the given point lies within the provided
+polygon
+<ul>
+<li>Make sure your SRID values match for point and poly! Or you could
+get bizarre results!</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="crossings" class="slide level2">
+<h2>Crossings</h2>
+<ul>
+<li>PostGIS can also determine information about intersections between
+various geometries</li>
+<li><code class="python">ST_Intersects(geom1, geom2)</code> will return
+a True/False if there exists an intersection between the two
+geometries</li>
+<li><code class="python">ST_Intersection(geom1, geom2)</code> will
+return a new geometry representing the intersection between the two
+geometries
+<ul>
+<li>This might be a point for the intersection between two lines or a
+line for the intersection between a line and a polygon, or a polygon for
+the intersection between two polygons</li>
+</ul></li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveal.js-d3/reveald3.js"></script>
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+            //{ src: "../html_srcs/revealjs/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

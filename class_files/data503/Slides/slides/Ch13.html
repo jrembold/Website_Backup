@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Regular Text</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Regular Text</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Tuesday, March 15, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Test on Thursday!
+<ul>
+<li>Study Guide is posted (and solutions too!)</li>
+<li>Feedback on HW6 has been posted</li>
+<li>Working to have feedback on HW7 to you by the end of the day</li>
+</ul></li>
+<li>Today is the last day to withdraw, if that is something you need to be considering</li>
+<li>I am going to need to shift my office hours after class for about the next month or so
+<ul>
+<li>On Tuesdays, I’ll only have 30 minutes after class. I’ll move those office hours to Wednesday afternoons.</li>
+<li>On Thursdays, I can still be around until 5, and will move the other hour to Wednesday afternoons as well.</li>
+<li>I’ll update the webpage to reflect the changes</li>
+</ul></li>
+<li><a href="../images/pdfs/DataFestFlyer_2022.pdf">Datafest!</a></li>
+<li>Polling today: www.PollEv.com/jedrembold441</li>
+</ul>
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<p>Given the starting table called <code class="python">rev</code>, what is the output of the query?</p>
+<div class="cols">
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>name</th>
+<th>num</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>E</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col" style="flex-grow:3">
+<pre ><code class="pgsql" style="font-size:1em">SELECT
+  CASE
+    WHEN num < 3 THEN name
+    WHEN name < 'D' THEN 'E'
+    ELSE 'B'
+  END
+FROM rev
+WHERE num < 4 AND name > 'B';</code></pre>
+</div>
+</div>
+</section>
+<section id="section" class="slide level2" data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/vsV6gmklvw6AThUayH1Z0?controls=none&amp;short_poll=true">
+<h2 data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/vsV6gmklvw6AThUayH1Z0?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="text-power" class="slide level2">
+<h2>Text Power</h2>
+<ul>
+<li>Time to focus on everything we can do with strings!</li>
+<li>Chapter topic fall into several main ideas:
+<ul>
+<li>Manipulating strings</li>
+<li>More complicated pattern matching</li>
+<li>Full text searching using normalization and lexemes</li>
+</ul></li>
+<li>All are geared around making using text and strings much more powerful and flexible</li>
+</ul>
+</section>
+<section id="stringy-functions-core" class="slide level2">
+<h2>Stringy Functions (CORE)</h2>
+<div style="font-size:.9em">
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">str1 || str2</code></td>
+<td>Concatenates string 1 and string 2 together</td>
+</tr>
+<tr class="even">
+<td><code class="python">upper(str)</code></td>
+<td>Converts a string to all uppercase characters</td>
+</tr>
+<tr class="odd">
+<td><code class="python">lower(str)</code></td>
+<td>Converts a string to all lowercase characters</td>
+</tr>
+<tr class="even">
+<td><code class="python">char_length(str)</code></td>
+<td>Returns the number of characters in the string</td>
+</tr>
+<tr class="odd">
+<td><code class="python">position(str IN substr)</code></td>
+<td>Find the number of the character where the substring begins</td>
+</tr>
+<tr class="even">
+<td><code class="python">trim(opt chr FROM str)</code></td>
+<td>Removes the given characters from the string, optionally taking from the <em>leading</em> or <em>trailing</em> edge</td>
+</tr>
+<tr class="odd">
+<td><code class="python">substring(str FROM n FOR l)</code></td>
+<td>Returns the portion of the string starting at position n and continuing for l characters</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="string-functions-postgres" class="slide level2">
+<h2>String Functions (Postgres)</h2>
+<div style="font-size:.9em">
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 73%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">initcap(str)</code></td>
+<td>Converts the first character of each word to uppercase, and the rest lower</td>
+</tr>
+<tr class="even">
+<td><code class="python">left(str,n)</code></td>
+<td>Returns the first n characters of the string</td>
+</tr>
+<tr class="odd">
+<td><code class="python">right(str,n)</code></td>
+<td>Returns the last n characters of the string</td>
+</tr>
+<tr class="even">
+<td><code class="python">ltrim(str,chr)</code></td>
+<td>Remove the characters (space by default) from the start of the string</td>
+</tr>
+<tr class="odd">
+<td><code class="python">rtrim(str,chr)</code></td>
+<td>Remove the characters (space by default) from the end of the string</td>
+</tr>
+<tr class="even">
+<td><code class="python">replace(str,from,to)</code></td>
+<td>Replaces all occurance of <em>from</em> in the string to <em>to</em></td>
+</tr>
+<tr class="odd">
+<td><code class="python">length(str)</code></td>
+<td>Returns the number of characters in the string</td>
+</tr>
+<tr class="even">
+<td><code class="python">substr(str, n, l)</code></td>
+<td>Returns the portion of the string starting at position n and continuing l characters</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="enhanced-pattern-matching" class="slide level2">
+<h2>Enhanced Pattern Matching</h2>
+<ul>
+<li>We’ve already seen basic pattern matching with <code class="python">LIKE</code> and <code class="python">LIKE</code>
+<ul>
+<li>Some flexibility with wildcard characters: <code class="python">%</code> and <code class="python">_</code></li>
+</ul></li>
+<li>To get (much) more flexibility, we need to pivot to something made for exactly this purpose: <em>regular expressions</em> (or <em>regex</em>)</li>
+<li>Regular expressions are a sequence of mostly single character symbols that denote exactly what patterns one could wish for
+<ul>
+<li>These sequences of characters can initially look very inscrutable! Stick with it!</li>
+</ul></li>
+<li>Regex’s are useful all over, and supported in almost all programming languages as well. Learning at least the basics is time very well spent.</li>
+</ul>
+</section>
+<section id="basic-regex-terms" class="slide level2">
+<h2>Basic Regex Terms</h2>
+<div style="font-size:.7em">
+<div class="cols">
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">.</code></td>
+<td>Matches <em>any</em> character except a new line</td>
+</tr>
+<tr class="even">
+<td><code class="python">[abc]</code></td>
+<td>Matches any character in the square brackets (a or b or c)</td>
+</tr>
+<tr class="odd">
+<td><code class="python">[a-z]</code></td>
+<td>Matches a range of characters (all lowercase letters here)</td>
+</tr>
+<tr class="even">
+<td><code class="python">[^a-z]</code></td>
+<td>Caret negates what follows (so no lowercase letters here)</td>
+</tr>
+<tr class="odd">
+<td><code class="python">\w</code></td>
+<td>Any word character, digit or underscore</td>
+</tr>
+<tr class="even">
+<td><code class="python">\d</code></td>
+<td>Any digit</td>
+</tr>
+<tr class="odd">
+<td><code class="python">\s</code></td>
+<td>A space</td>
+</tr>
+<tr class="even">
+<td><code class="python">\t</code></td>
+<td>A tab character</td>
+</tr>
+<tr class="odd">
+<td><code class="python">\n</code></td>
+<td>A newline character</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">^</code></td>
+<td>Match at the start of the string</td>
+</tr>
+<tr class="even">
+<td><code class="python">$</code></td>
+<td>Match at the end of the string</td>
+</tr>
+<tr class="odd">
+<td><code class="python">?</code></td>
+<td>Get the preceding match 0 or one time</td>
+</tr>
+<tr class="even">
+<td><code class="python">*</code></td>
+<td>Get the preceding match zero or more times</td>
+</tr>
+<tr class="odd">
+<td><code class="python">+</code></td>
+<td>Get the preceding match one or more times</td>
+</tr>
+<tr class="even">
+<td><code class="python">{m}</code></td>
+<td>Get the preceding match exactly m times</td>
+</tr>
+<tr class="odd">
+<td><code class="python">{m,n}</code></td>
+<td>Get the preceding match between m and n times</td>
+</tr>
+<tr class="even">
+<td><code class="python">a|b</code></td>
+<td>Match on either a or b</td>
+</tr>
+<tr class="odd">
+<td><code class="python">( )</code></td>
+<td>Create a capture group or set precedence</td>
+</tr>
+<tr class="even">
+<td><code class="python">(?: )</code></td>
+<td>Negate reporting a capture group</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="other-regex-concepts" class="slide level2">
+<h2>Other Regex Concepts</h2>
+<ul>
+<li>If you ever want to match off a symbol that has special meaning in regex (a parenthese, for instance) you must <em>escape it</em> with a backslash: <code class="python">\(</code></li>
+<li>Reserved characters include: <code class="python">{ } [ ] / \ + * . $ ^ | ?</code></li>
+<li>Flags can be added at the end to tweak matching
+<ul>
+<li><code class="python">/i</code> means that matches will be case insensitive</li>
+<li><code class="python">/g</code> means that all instances of the match will be returned, not just the first</li>
+<li><code class="python">/m</code> allows the anchor characters (<code class="python">^</code> and <code class="python">$</code>) to operate on each line, not just across the entire string.</li>
+</ul></li>
+</ul>
+</section>
+<section id="section-1" class="slide level2" data-background-iframe="https://regexr.com/6hfai">
+<h2 data-background-iframe="https://regexr.com/6hfai"></h2>
+</section>
+<section id="your-turn" class="slide level2">
+<h2>Your Turn!</h2>
+<ul>
+<li>The link <a href="https://regexone.com/problem/matching_phone_numbers">here</a> has a nice sequence of short problems to test your skills against</li>
+<li>Most problems consist of:
+<ul>
+<li>Terms that you want to match correctly</li>
+<li>Terms that you want to <strong>not</strong> match</li>
+<li>Capture groups that you’d like to capture</li>
+</ul></li>
+<li>In the below pairings, see how many you can figure out in the next 20 minutes
+<ul>
+<li>Hayden and Maya</li>
+<li>Madeline and Jack</li>
+<li>Paul, Douglas and Malie</li>
+<li>Gordy and Leo</li>
+<li>Seth and Aidan</li>
+</ul></li>
+</ul>
+<!--
+## Back to SQL
+- One of the main ways we previously used pattern matching was for filtering
+- You can also use regexes for pattern matching!
+  - `~` is a case sensitive match using the following regex
+  - `~*` is a case insensitive match using the following regex
+  - Either can have a `!` in front to negate the search (where things do **not** match the regex)
+
+```pgsql
+SELECT colname
+FROM tablename
+WHERE colname ~ '[a-z]*\s\d{2}';
+```
+
+## Extracting Data
+- Another hugely common use of regex is to extract only the data you want from a much larger string
+- This can be particularly useful when cleaning data or constructing useful database tables
+- `regexp_match(str, regex)` returns the first matching instance in the string
+  - What is returned is whatever is in any _capture groups_ you may have included in your regex, or the entire match if there are no capture groups
+  - Output is returned as an array, to allow for potentially multiple capture groups
+  - If you just have one capture group and don't want it in an array, index it out using `[1]` at the end after wrapping entire expression in ()
+
+```{.pgsql style='font-size:.9em'}
+SELECT (regexp_match('today is March 15, 2022', '\d{4}'))[1];
+```
+
+
+## Back to You!
+- In the same pairings as previously, take a look at [this](../activity_data/regex_parsing.csv) CSV file, which contains a simple subset of artists and dimensions from the MoMA data set
+- Create the simple table and import in the data from the CSV
+- See if you can achieve the following:
+  - Create and populate new columns for first, middle, and last name
+  - Create and populate new columns to hold the width and height in inches (in `1 1/4` form)
+  - If feeling good about the above, create new columns to hold decimal equivalents of the width and height
+-->
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

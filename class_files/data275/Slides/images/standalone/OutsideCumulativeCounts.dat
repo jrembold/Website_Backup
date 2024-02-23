@@ -1,0 +1,12 @@
+#List of Cumulative Impacts from other outside sources
+#Created Oct 26 visually from graphs from Brown paper
+BrownX	BrownY	LinearX	LinearY	Linear2X	Linear2Y SpacewatchX	SpacewatchY
+
+8E-2	2.5E1	2E3	7E-3	3E5	6E-5	6E0	2E0
+2.5E-1	1E1	4E3	2E-3	1.5E6	4.5E-5	8E1	4E-2
+7E-1	4E0	1E4	1E-3	7E6	0.5E-5	1.5E3	4E-3
+2E0	2E0	2E4	6E-4	2E7	5E-6	2E4	8E-5
+4E0	9E-1	4E4	3E-4	2E8	2E-6			
+1E1	2E-1	9E4	2E-4				
+2E1	1.9E-1	1.9E5	1E-4				
+

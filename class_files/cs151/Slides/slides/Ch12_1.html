@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2021-04-16">
+  <meta name="dcterms.date" content="2021-11-15">
   <title>Token Slides</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -29,22 +29,39 @@
 <section id="title-slide">
   <h1 class="title">Token Slides</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">April 16, 2021</p>
+  <p class="date">November 15, 2021</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
+<div class="columns">
+<div class="column">
 <ul>
 <li>Keep making progress on Project 4!</li>
-<li>Lab today is open for project questions</li>
-<li>Guidelines for Project 5 will go out on Sunday</li>
+<li>Optional PS6 deadline is tonight</li>
 <li>The final contest of the semester will be a “Make a Game” contest!
 <ul>
-<li>I will get details out by tomorrow.</li>
+<li>I will get details out this week in case you want to make a start while you have some time over Thanksgiving.</li>
 <li>I’m less interested in game complexity and more about a good polished implementation.</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<ul>
+<li>Potential Spring Classes
+<ul>
+<li>Datastructures</li>
+<li>Fundamentals of Data Science</li>
+<li>Intro to Data Engineering</li>
+</ul></li>
+<li>Final Exam times:
+<ul>
+<li>AM Section: Friday, Dec 17, 8-11am</li>
+<li>PM Section: Tuesday, Dec 14, 2-5pm</li>
 </ul></li>
 <li>Polling: <a href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
+</div>
+</div>
 </section>
 <section id="review-question" class="slide level2" data-notes="Solution: 1">
 <h2 data-notes="Solution: 1">Review Question</h2>
@@ -54,7 +71,7 @@
 <p>and that I then wrote a dictionary with a bucket hashing algorithm that utilized <strong>5</strong> buckets. If keys below were assigned to buckets according to our usual</p>
 <pre ><code class="python">abs(hash(key)) % num_buckets</code></pre>
 <p>how many would end up assigned to the index 2 bucket?</p>
-<pre ><code >keys = "beast", "goat", "five", "skeleton", "turkey", 1011011</code></pre>
+<pre ><code style="font-size:.8em;">keys = "beast", "goat", "five", "skeleton", "turkey", 1011011</code></pre>
 <div class="hpoll">
 <ol>
 <li>0</li>
@@ -363,15 +380,59 @@ def to_pig_latin(text):
 <li>JSON is particularly interesting to us, because its syntax almost exactly matches Python’s (even though it was made for Javascript)</li>
 <li>Python has a built in library to read and write JSON files
 <ul>
-<li><code class="python">json.load(file)</code>
+<li><code class="python">json.load(file_handle)</code>
 <ul>
 <li>Loads the JSON data structure from the specified file into its Python equivalent</li>
 </ul></li>
-<li><code class="python">json.dump(object, file)</code>
+<li><code class="python">json.dump(data_object, file_handle)</code>
 <ul>
-<li>Writes a JSON text representation of the object to the given file</li>
+<li>Writes a JSON text representation of the data object to the given file</li>
 </ul></li>
 <li>Both methods are used inside our normal <code class="python">with open() as fhandle:</code> syntax</li>
+</ul></li>
+</ul>
+</section>
+<section id="class-method-types" class="slide level2">
+<h2>Class Method Types</h2>
+<ul>
+<li>When creating classes, we have been looking at <em>instance methods</em> so far
+<ul>
+<li>Each method is tied to a particular object that it will act on</li>
+</ul></li>
+<li>There are class methods, but we won’t see or spend time with those</li>
+<li>An alternative type of method are called <em>static methods</em>
+<ul>
+<li>Static methods are <strong>not</strong> tied to a particular object</li>
+<li>They do <strong>not</strong> have self as the first parameter</li>
+<li>Makes them very similar to just a normal function</li>
+<li>Only in the class because they are related to everything else</li>
+</ul></li>
+</ul>
+</section>
+<section id="creating-static-methods" class="slide level2">
+<h2>Creating Static Methods</h2>
+<ul>
+<li>Create a static method using what is called a <em>decorator</em> in Python</li>
+<li>You can imagine that decorators are special flags to Python that it should treat a particular method in a certain fashion.</li>
+<li>Decorators come immediately <strong>before</strong> the method header line, and start with the <code class="python">@</code> symbol</li>
+</ul>
+<pre ><code class="python">class MyNewClass:
+    
+    @staticmethod
+    def my_method(not_self_1, not_self_2):
+        print(not_self_1, not_self_2)</code></pre>
+</section>
+<section id="calling-static-methods" class="slide level2">
+<h2>Calling Static Methods</h2>
+<ul>
+<li>Because the method is not attached to an object, you should not call it with the receiver dot syntax</li>
+<li>Must call them using the functional syntax, beginning with the class name
+<ul>
+<li><code class="python">MyNewClass.my_method(1,2)</code></li>
+</ul></li>
+<li>Frequently used for functions that are related to the class but could otherwise be independent of the class
+<ul>
+<li>Examples: <code class="python">GImage.get_red(pixel)</code> and <code class="python">GImage.create_rgb_pixel(a,r,g,b)</code></li>
 </ul></li>
 </ul>
 <!--
@@ -406,7 +467,7 @@ def to_pig_latin(text):
 <li>Having the questions and answers in some sort of data structure would make sense</li>
 <li>The teacher would generally be who comes up with the questions and progression though, and most teachers are not experts at writing code
 <ul>
-<li>Need a format that is more not code based where teachers could construct the questions and progression</li>
+<li>Need a format that is largely not code based where teachers could construct the questions and progression</li>
 <li>Need to translate that format into more common data structures that the computer can then understand and act on</li>
 </ul></li>
 </ul>
@@ -1050,6 +1111,18 @@ d: RemQ2
 		//autoAnimateEasing: 'ease-in',
 		//autoAnimateDuration: 1.0,
 		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
         // Display the page number of the current slide
         slideNumber: true,
         // Add the current slide number to the URL hash so that reloading the
@@ -1057,15 +1130,70 @@ d: RemQ2
         hash: true,
         // Push each slide change to the browser history
         history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
         // Vertical centering of slides
         center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
         // Transition style
         transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
         height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
 		math: {
 		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
 		  <!--config: 'tex-mml-chtml',-->

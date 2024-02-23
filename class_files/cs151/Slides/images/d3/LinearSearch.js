@@ -35,7 +35,7 @@ var labels = svg.selectAll("labels").data(data).enter()
 	.attr("text-anchor", "middle")
 	.attr("font-size", "1em")
 	.attr("fill", Green)
-	.attr("alignment-baseline", "central")
+	.attr("alignment-baseline", "mathematical")
 
 
 function play() {
@@ -59,7 +59,7 @@ function play() {
 	labels.filter(d => d.text == target)
 		.transition()
 		.delay(d => (d.text-start)*100+1000)
-		.attr("font-size", "2em")
+		.attr("font-size", "1.8em")
 		.attr("fill", "black")
 		.duration(1000)
 }

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="1920"
    height="1080"
    viewBox="0 0 508 285.75"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
-   sodipodi:docname="Counting_Base2.svg">
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="Counting_Base2.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2">
     <marker
@@ -39,19 +39,22 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="911.7508"
-     inkscape:cy="490.23109"
+     inkscape:cx="891.78571"
+     inkscape:cy="491.07143"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
      units="px"
-     inkscape:window-width="2528"
-     inkscape:window-height="1381"
-     inkscape:window-x="1096"
-     inkscape:window-y="43"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:snap-global="false" />
+     inkscape:snap-global="false"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#2c2c2c" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -60,7 +63,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -311,42 +314,6 @@
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:27.5221px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264584;fill:#66d9ef;">8</tspan></text>
     </g>
     <g
-       id="Num"
-       class="fragment"
-       transform="matrix(1.4210118,0,0,1.4223432,-33.61606,-5.5400398)"
-       style="stroke-width:0.703395">
-      <path
-         d="m 205.73938,120.87176 v 3.24609 h -18.83681 v -3.24609 h 8.0323 V 95.803399 l -7.48733,4.549271 -1.72967,-2.843295 9.71458,-6.018302 h 3.48303 v 29.380687 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.2035px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186107"
-         id="path905" />
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186106"
-         x="221.11581"
-         y="123.56979"
-         id="text934"><tspan
-           sodipodi:role="line"
-           id="tspan932"
-           x="221.11581"
-           y="123.56979"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#f8f8f2;stroke-width:0.186106">0</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186106"
-         x="261.55167"
-         y="123.56979"
-         id="text2434"><tspan
-           sodipodi:role="line"
-           id="tspan2432"
-           x="261.55167"
-           y="123.56979"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#f8f8f2;stroke-width:0.186106">0</tspan></text>
-      <path
-         d="m 166.72785,120.87176 v 3.24609 h -18.83681 v -3.24609 h 8.0323 V 95.803399 l -7.48733,4.549271 -1.72967,-2.843295 9.71458,-6.018302 h 3.48303 v 29.380687 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.2035px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186107"
-         id="path2436" />
-    </g>
-    <g
        id="Total"
        class="fragment">
       <text
@@ -514,6 +481,42 @@
            x="326.14975"
            y="199.62709"
            style="fill:#f92672;stroke-width:0.264583">+</tspan></text>
+    </g>
+    <g
+       id="Num"
+       class="fragment"
+       transform="matrix(1.4210118,0,0,1.4223432,-33.61606,-5.5400398)"
+       style="stroke-width:0.703395">
+      <path
+         d="m 205.73938,120.87176 v 3.24609 h -18.83681 v -3.24609 h 8.0323 V 95.803399 l -7.48733,4.549271 -1.72967,-2.843295 9.71458,-6.018302 h 3.48303 v 29.380687 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.2035px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186107"
+         id="path905" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186106"
+         x="221.11581"
+         y="123.56979"
+         id="text934"><tspan
+           sodipodi:role="line"
+           id="tspan932"
+           x="221.11581"
+           y="123.56979"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#f8f8f2;stroke-width:0.186106">0</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186106"
+         x="261.55167"
+         y="123.56979"
+         id="text2434"><tspan
+           sodipodi:role="line"
+           id="tspan2432"
+           x="261.55167"
+           y="123.56979"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#f8f8f2;stroke-width:0.186106">0</tspan></text>
+      <path
+         d="m 166.72785,120.87176 v 3.24609 h -18.83681 v -3.24609 h 8.0323 V 95.803399 l -7.48733,4.549271 -1.72967,-2.843295 9.71458,-6.018302 h 3.48303 v 29.380687 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.2035px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186107"
+         id="path2436" />
     </g>
   </g>
 </svg>

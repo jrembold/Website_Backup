@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2023-04-26">
+  <title>Shapes and Fates of the Universe</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Shapes and Fates of the Universe</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">April 26, 2023</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Be working on HW5!
+<ul>
+<li>If you had started Problem 1 and hadn’t seen my announcement, the
+assignment was originally missing some negatives in the function. Those
+have been added now.</li>
+</ul></li>
+<li>Final Projects
+<ul>
+<li>Groupings sent out</li>
+<li>Monday: Workday, but with scheduled meetings with me to discuss the
+project your group is proposing</li>
+<li>Wednesday: Quiz 3, course evaluations, then work day</li>
+</ul></li>
+</ul>
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap</h2>
+<ul>
+<li>Using an MCMC package like <code class="python">emcee</code> can
+facilitate some actions or add some quality of life improvements</li>
+<li>Hubble’s law showcases a relationship between the distance something
+is from us and the rate at which it is moving away from us
+<ul>
+<li>Primary explanation is that the universe as a whole is
+expanding</li>
+<li>Hubble’s constant gives us information about the rate of
+expansion</li>
+</ul></li>
+</ul>
+</section>
+<section id="today" class="slide level2">
+<h2>Today</h2>
+<ul>
+<li>Ultimate Questions of the Universe
+<ul>
+<li>Is it infinite?</li>
+<li>Is it curved or flat?</li>
+<li>Is the rate of expansion growing or shrinking?</li>
+</ul></li>
+<li>What do we know about the Big Bang?</li>
+</ul>
+</section>
+<section id="mass-always-the-answer" class="slide level2">
+<h2>Mass: Always the Answer</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>The simplest GR models predict that the expansion of the universe
+should be slowing</li>
+<li>Big Bang caused an explosion of outward movement, but gravity slowly
+wins</li>
+<li>Rate would be dependent on the mass density parameter (<span
+class="math inline">\(\Omega\)</span>)</li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/93c97234787c74b24a55e26f517a406051d93870.svg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="curved-geometry" class="slide level2">
+<h2>Curved Geometry</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>The total mass density also determines the shape of the universe:
+<ul>
+<li><strong><span class="math inline">\(\Omega &gt; 1\)</span></strong>
+implies a positive curvature</li>
+<li><strong><span class="math inline">\(\Omega &lt; 1\)</span></strong>
+implies a negative curvature</li>
+<li><strong><span class="math inline">\(\Omega = 1\)</span></strong>
+implies no curvature (flat)</li>
+</ul></li>
+<li>Later we will specify this more directly with an <span
+class="math inline">\(\Omega_k\)</span> value, but the above holds for
+overall values of <span class="math inline">\(\Omega\)</span></li>
+</ul>
+</div>
+<div class="col">
+<figure>
+<img data-src="../images/ch18_curvature.png" style="width:100.0%"
+alt="Different curvature geometries" />
+<figcaption aria-hidden="true">Different curvature
+geometries</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="measuring-omega" class="slide level2">
+<h2>Measuring <span class="math inline">\(\Omega\)</span></h2>
+<ul>
+<li>There are several approaches to measuring <span
+class="math inline">\(\Omega\)</span>:
+<ul>
+<li>Look at all the mass, and try to figure out the density parameter
+directly
+<ul>
+<li>From visible mass: <span class="math inline">\(\Omega \approx
+0.02\)</span></li>
+<li>Including dark matter: <span class="math inline">\(\Omega \approx
+0.3\)</span></li>
+</ul></li>
+<li>Try to measure very precise triangles and look for angles that add
+up to <span class="math inline">\(&gt;\)</span> or <span
+class="math inline">\(&lt; 180^\circ\)</span></li>
+<li>Look for changes in the expansion rate (Hubble constant)
+<ul>
+<li>This “deceleration parameter” is often denoted <span
+class="math inline">\(q_0\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="a-geometrical-conundrum" class="slide level2">
+<h2>A Geometrical Conundrum!</h2>
+<ul>
+<li>Based on adding up all the mass we know of, including dark matter,
+we get a density parameter of <span class="math inline">\(\Omega \approx
+0.3\)</span>
+<ul>
+<li>This should imply a open, negative curvature universe</li>
+</ul></li>
+<li>Recent results from Baryon Acoustic Oscillations (BAO) experiments
+though predicts the universe of being flat, to within 0.4%
+certainty!</li>
+<li>Are we missing something? Or is some physical law flawed?</li>
+</ul>
+</section>
+<section id="returning-to-hubble" class="slide level2">
+<h2>Returning to Hubble</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Simple GR models predict that gravity should slow the rate of
+expansion</li>
+<li>Looking at the Hubble relation out to very large distances then, we
+don’t expect as straight line</li>
+<li>Measuring that deviation from straight was a long-standing goal of
+observational cosmology</li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/256ecd91cedfe8834299e9bfedd9bfc35d332b2e.svg"
+style="width:90.0%" /></p>
+</div>
+</div>
+</section>
+<section id="and-the-results-are-in" class="slide level2">
+<h2>And the results are in!</h2>
+<ul>
+<li>So what did astronomers finally see?</li>
+</ul>
+<p><img data-src="../images/python/hubbledeep.png" /></p>
+</section>
+<section id="oh-what" class="slide level2">
+<h2>Oh @#$%! What?!</h2>
+<ul>
+<li><p>Observations at the turn of the millenia suggest that the
+expansion of the universe is <strong>not</strong> slowing</p>
+<ul>
+<li>The expansion rate is now higher than it was in the past!</li>
+<li><span class="math inline">\(q_0 &lt; 0\)</span></li>
+<li>Thus the universe may actually be <em>older</em> that the predicted
+Hubble time</li>
+</ul></li>
+<li><p>Important to realize that <strong>none</strong> of the basic GR
+models predicted this. Everyone was taken completely off guard.</p></li>
+<li><p>Was Einstein’s “cosmological constant” correct after all?</p>
+<p><span class="math display">\[ R_{ab}-\frac{1}{2}Rg_{ab} = -8\pi
+T_{ab} + \Lambda g_{ab}\]</span></p></li>
+</ul>
+</section>
+<section id="explanations" class="slide level2">
+<h2>Explanations?</h2>
+<ul>
+<li>For the universal expansion to be accelerating, we need something to
+be counteracting the attractive forces of gravity</li>
+<li>The most obvious candidate would be for some excessive energy that
+is driving the universe outwards
+<ul>
+<li>Similar to how increasing thermal energy of a gas in a balloon
+pushes the balloon outwards</li>
+</ul></li>
+<li>No idea yet of the source of this energy
+<ul>
+<li>This commonly called <em>dark energy</em></li>
+<li>Energies are tied to forces, but there are no known forces that
+would result in this invisible and excess energy!</li>
+</ul></li>
+</ul>
+</section>
+<section id="how-does-dark-energy-help" class="slide level2">
+<h2>How does Dark Energy help?</h2>
+<ul>
+<li>Current models break the density parameter up into various
+contributions:
+<ul>
+<li><span class="math inline">\(\Omega_m\)</span> describes the portion
+of the density parameter coming from light and dark matter</li>
+<li><span class="math inline">\(\Omega_k\)</span> describes the
+curvature of the universe</li>
+<li><span class="math inline">\(\Omega_\Lambda\)</span> describes the
+portion of the density parameter coming from dark energy</li>
+</ul></li>
+<li>The sum of all contributions must sum to 1, indicating that we have
+accounted for everything</li>
+<li>Currently GR models can solve for Hubble’s constant in terms of
+these parameters and the redshift <span
+class="math inline">\(z\)</span>: <span class="math display">\[ H(z) =
+H_0\sqrt{\Omega_m(1 + z)^3 + \Omega_k(1+z)^2 + \Omega_\Lambda}
+\]</span></li>
+</ul>
+</section>
+<section id="revamped-hubble" class="slide level2">
+<h2>Revamped Hubble</h2>
+<ul>
+<li>Hubble’s constant changes with redshift (<span
+class="math inline">\(z\)</span>), because when looking at objects
+further away, we are looking at them from a much earlier era of the
+universe!
+<ul>
+<li>The speed of light is constant, and thus the light we measure from
+extremely distant objects was emitted much earlier in the lifetime of
+the universe, when the expansion of the universe was different</li>
+</ul></li>
+<li>Relating this back to the distance therefore requires taking into
+account all the historical values of the Hubble constant enroute to its
+current value
+<ul>
+<li>Mathematically, this means needing to integrate <span
+class="math display">\[ d = (1+z)c \int_0^z
+\frac{dz^\prime}{H(z^\prime)} \]</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="flat-and-expanding" class="slide level2">
+<h2>Flat and Expanding</h2>
+<ul>
+<li>As you’ll see in the homework, fitting the density parameters to the
+data currently predicts:
+<ul>
+<li><span class="math inline">\(\Omega_k \approx 0\)</span>, implying
+that the universe seems to be flat (in agreement with BAO
+measurements!)</li>
+<li><span class="math inline">\(\Omega_\Lambda \approx 0.7\)</span>,
+impling that dark energy makes up a very large amount of the
+universe</li>
+</ul></li>
+<li>These results end up predicting an age of the universe that is very
+similar to the 14 billion years estimated from our constant expansion
+rate</li>
+</ul>
+</section>
+<section id="taking-it-back" class="slide level2">
+<h2>Taking it Back</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Long ago the universe was denser</li>
+<li>And hotter</li>
+<li>Can we look back far enough to “see” this “era”?</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/ch18_expanding.png"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="how-far-back-could-we-see" class="slide level2">
+<h2>How far back COULD we see?</h2>
+<ul>
+<li>Assuming perfect and huge telescopes, how far back <em>could</em> we
+see?</li>
+<li>Early universe was very very hot
+<ul>
+<li>Hot enough for fusion</li>
+<li>Hot enough that particles are charged (ionized)</li>
+<li>Fusion releases radiation that interacts with charged particles</li>
+<li>Light gets scattered <span
+class="math inline">\(\Rightarrow\)</span> opaque</li>
+</ul></li>
+<li>Once the universe cooled enough for non-ionized atoms to form,
+radiation no longer interacts
+<ul>
+<li>Can travel long distances without scattering, becoming
+transparent</li>
+</ul></li>
+<li>The transition called <em>Recombination</em></li>
+</ul>
+</section>
+<section id="recombination" class="slide level2">
+<h2>Recombination</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Recombination is when the universe cooled to a point that atoms
+could become un-ionized</li>
+<li>Allowed photons (radiation) to pass through unhindered</li>
+<li>Allows the universe to become transparent (mostly)</li>
+<li>Models predict recombination should have happened several hundred
+thousand years after the big bang</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/ch18_recombination.png"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="background-radiation" class="slide level2">
+<h2>Background Radiation</h2>
+<div class="cols">
+<div class="col">
+<p><img data-src="../images/ch18_cmb_telescope.jpg" /></p>
+</div>
+<div class="col" style="flex-grow:1.75; font-size:.9em">
+<ul>
+<li>Such an age would predict a great distance from us, and thus a very
+high redshift (<span class="math inline">\(z\approx 1100\)</span>)</li>
+<li>If the universe was originally as hot and glowing as a star:
+<ul>
+<li>light should be redshifted all the way into microwave wavelengths
+these days</li>
+</ul></li>
+<li>1965: Found a weird radio signal coming equally from all parts of
+the universe
+<ul>
+<li>Like a background noise</li>
+<li>Cleaning or calibrating their telescope couldn’t get rid of it!</li>
+</ul></li>
+<li>Now known as the <em>Cosmic Microwave Background</em>, or CMB</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="the-cosmic-microwave-background" class="slide level2">
+<h2>The Cosmic Microwave Background</h2>
+<figure>
+<img data-src="../images/ch18_cmb_1965.png" style="width:90.0%"
+alt="1965 Image" />
+<figcaption aria-hidden="true">1965 Image</figcaption>
+</figure>
+</section>
+<section id="the-cosmic-microwave-background-1" class="slide level2">
+<h2>The Cosmic Microwave Background</h2>
+<figure>
+<img data-src="../images/ch18_cmb_cobe.png" style="width:90.0%"
+alt="Cobe Satellite Image (2006)" />
+<figcaption aria-hidden="true">Cobe Satellite Image (2006)</figcaption>
+</figure>
+</section>
+<section id="the-cosmic-microwave-background-2" class="slide level2">
+<h2>The Cosmic Microwave Background</h2>
+<figure>
+<img data-src="../images/ch18_cmb_wmap.png" style="width:90.0%"
+alt="WMAP Satellite Image (2013)" />
+<figcaption aria-hidden="true">WMAP Satellite Image (2013)</figcaption>
+</figure>
+</section>
+<section id="the-cosmic-microwave-background-3" class="slide level2">
+<h2>The Cosmic Microwave Background</h2>
+<figure>
+<img data-src="../images/ch18_cmb_plank.png" style="width:90.0%"
+alt="Planck Satellite Image (2016)" />
+<figcaption aria-hidden="true">Planck Satellite Image
+(2016)</figcaption>
+</figure>
+</section>
+<section id="cmb-observations" class="slide level2">
+<h2>CMB Observations</h2>
+<ul>
+<li>Originally about 3000K, now about 2.7260K</li>
+<li>The different colors indicate different temperatures
+<ul>
+<li>Differ by less than <span
+class="math inline">\(1\times10^{-5}\)</span>K!</li>
+<li>Incredibly smooth</li>
+</ul></li>
+<li>This is the furthest we can look back directly</li>
+</ul>
+<p><img data-src="../images/ch18_cmb_plank.png"
+style="width:50.0%" /></p>
+</section>
+<section id="cmb-conclusions" class="slide level2">
+<h2>CMB Conclusions</h2>
+<ul>
+<li>The early universe was much smoother than it is today
+<ul>
+<li>We see temperature variations of thousands of kelvin, not <span
+class="math inline">\(10^{-5}\)</span>…</li>
+</ul></li>
+<li>The early universe was still not <strong>perfectly</strong> smooth
+<ul>
+<li>Some matter was still clumped before stars and galaxies began to
+form</li>
+</ul></li>
+<li>The sizes of these hot and cold patches serve as a valuable tool for
+model fitting</li>
+</ul>
+<p><img data-src="../images/ch18_cmb_plank.png"
+style="width:40.0%" /></p>
+</section>
+<section id="peering-past-the-cmb" class="slide level2">
+<h2>Peering Past the CMB</h2>
+<ul>
+<li>Could we peer back further than the CMB?</li>
+<li>Not using radiation, for sure, but other methods?
+<ul>
+<li>Neutrinos
+<ul>
+<li>Can we observe enough coming from that time to make a reasonable
+picture?</li>
+</ul></li>
+<li>Gravity Waves
+<ul>
+<li>Recently confirmed to have been observed</li>
+<li>Fluctuations in space-time, so “opacity” wouldn’t matter</li>
+<li>How can we best use them? Still extremely new (and exciting!)</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="questions-from-the-cmb" class="slide level2">
+<h2>Questions from the CMB</h2>
+<ul>
+<li>There are some issues the CMB data raises that need to be answered
+<ul>
+<li>The Lumpy Problem (Anisotropy): Why is the universe so smooth on
+large scales but so lumpy on small scales?</li>
+<li>The Flatness Problem: There are <strong>infinitely</strong> more
+ways to be curved than flat, so what are the odds that we ended up with
+a flat universe?</li>
+<li>The Horizon Problem: Things on opposite sides of the universe look
+similar, but they should have had no way to “communicate”, so how did
+they stay similar?</li>
+</ul></li>
+</ul>
+</section>
+<section id="inflation-a-issue-since-day-1" class="slide level2">
+<h2>Inflation! A issue since day 1…</h2>
+<div class="cols">
+<div class="col" style="flex-grow: 1.5">
+<ul>
+<li>Theorized that there must have been a period of
+<strong>extreme</strong> expansion in the <strong>very</strong> early
+universe</li>
+<li>Growing by approximately 58 orders of magnitude in maybe <span
+class="math inline">\(10^{-32}\)</span> seconds…</li>
+<li>Solves all three issues:
+<ul>
+<li>Anything curved looks flat when large enough</li>
+<li>Opposite sides of universe could “talk” before inflation,
+equalizing</li>
+<li>Quantum fluctuations in the early universe got smeared out in the
+expansion</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/e5223b473f35db4ff6cb94f0060de69627959c5b.svg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2021-10-13">
+  <meta name="dcterms.date" content="2023-10-20">
   <title>Do You Comprehend?</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,10 +14,15 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
   </style>
   <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
   <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
@@ -29,20 +34,28 @@
 <section id="title-slide">
   <h1 class="title">Do You Comprehend?</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">October 13, 2021</p>
+  <p class="date">October 20, 2023</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Be making progress on Project 2!</li>
-<li>Graphical Contest is posted</li>
-<li>Section meetings today or tomorrow deal directly with problems that you’ll encounter in Project 2</li>
-<li>No class (or lab) on Friday!</li>
-<li>Polling: <a href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>Welcome to Eaton :)
+<ul>
+<li>We’ll be back in Ford on Monday</li>
+</ul></li>
+<li>Project 2: Breakout due on Monday! Be making progress!!</li>
+<li>I’m still working on grade reports, but am trying to get them out
+this weekend</li>
+<li>You’ve hopefully gotten feedback about Project 1 by now?</li>
+<li>I’ll be around from noon - 2 today for questions, but then have
+another lovely afternoon of meetings…</li>
+<li>Polling: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
 </section>
-<section id="review" class="slide level2" data-notes="Solution: None of the above, as it errors">
+<section id="review" class="slide level2"
+data-notes="Solution: None of the above, as it errors">
 <h2 data-notes="Solution: None of the above, as it errors">Review!</h2>
 <p>What would the below expression evaluate to?</p>
 <center>
@@ -62,12 +75,15 @@
 <div class="cols">
 <div class="col">
 <ul>
-<li>To better understand how Python works with strings, lets take a look at the code to the right in PythonTutor</li>
-<li><a href="http://www.pythontutor.com/visualize.html#code=cool%20%3D%20%5B&#39;blue&#39;,%20&#39;violet&#39;%5D%0Awarm%20%3D%20%5B&#39;red&#39;,%20&#39;orange&#39;%5D%0A%0Acolors%20%3D%20%5Bcool,%20warm%5D%0A%0Aother_colors%20%3D%20%5B%5B&#39;blue&#39;,%20&#39;violet&#39;%5D,%5B&#39;red&#39;,%20&#39;orange&#39;%5D%5D%0A%0Aprint%28colors%20%3D%3D%20other_colors%29%0Aprint%28colors%20is%20other_colors%29%0A%0A%0Acool%5B0%5D%20%3D%20&#39;indigo&#39;%0A%0Aprint%28colors%29%0Aprint%28other_colors%29%0Aprint%28colors%20%3D%3D%20other_colors%29%0Aprint%28colors%20is%20other_colors%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">Link here</a></li>
+<li>Thinking about mutable objects requires a shift in how we visualize
+our code interacting with the objects in memory</li>
+<li><a
+href="https://pythontutor.com/render.html#code=cool%20%3D%20%5B&#39;blue&#39;,%20&#39;violet&#39;%5D%0Awarm%20%3D%20%5B&#39;red&#39;,%20&#39;orange&#39;%5D%0A%0Acolors%20%3D%20%5Bcool,%20warm%5D%0Aother_colors%20%3D%20%5B%5B&#39;blue&#39;,%20&#39;violet&#39;%5D,%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5B&#39;red&#39;,%20&#39;orange&#39;%5D%5D%0A%0Aprint%28colors%20%3D%3D%20other_colors%29%0Aprint%28colors%20is%20other_colors%29%0A%0Acool%5B0%5D%20%3D%20&#39;indigo&#39;%0Awarm%20%3D%20%5B&#39;orange&#39;,%20&#39;yellow&#39;%5D%0A%0Aprint%28colors%29%0Aprint%28other_colors%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">Link
+here</a></li>
 </ul>
 </div>
 <div class="col" style="flex-grow:2;">
-<pre ><code class="python" style="max-height:900px; font-size:.8em;">cool = ['blue', 'violet']
+<pre ><code class="python" style="max-height:900px; font-size:0.8em;">cool = ['blue', 'violet']
 warm = ['red', 'orange']
 
 colors = [cool, warm]
@@ -78,23 +94,83 @@ print(colors == other_colors)
 print(colors is other_colors)
 
 cool[0] = 'indigo'
+warm = ['orange', 'yellow']
 
 print(colors)
-print(other_colors)
-print(colors == other_colors)
-print(colors is other_colors)</code></pre>
+print(other_colors)</code></pre>
 </div>
 </div>
+</section>
+<section id="for-reference" class="slide level2">
+<h2>For Reference</h2>
+<ul>
+<li>When working with mutable objects, it is better to think of the
+variable as holding a <em>reference</em> to the object, rather than the
+actual contents of the object</li>
+<li>I find it useful to think of a reference as the “address” in memory
+where that object’s contents can be found</li>
+<li>This undeniably complicates things, as referencing a mutable object
+lets you change it, which will immediately be reflected in anything
+<em>else</em> that referenced that object</li>
+<li>Mutable objects can be terrific to work with, as their mutability
+makes them very flexible, but be wary of unexpected behavior</li>
+</ul>
 </section>
 <section id="lists-as-arguments" class="slide level2">
 <h2>Lists as Arguments</h2>
 <ul>
-<li>When you pass a list as an argument to a function or return a list as a result, only the <strong>reference</strong> to the list is actually passed back and forth</li>
-<li>Means that the elements of the list are effectively shared between the function and the caller
+<li>When you pass a list as an argument to a function or return a list
+as a result, only the <strong>reference</strong> to the list is actually
+passed back and forth</li>
+<li>This means that the elements of the list are effectively shared
+between the function and the caller
 <ul>
-<li>Changes that the function makes to the elements <strong>will</strong> persist after the function returns</li>
+<li>Changes that the function makes to the elements
+<strong>will</strong> persist after the function returns</li>
 </ul></li>
-<li>Example of reversing a list in PythonTutor: <a href="http://www.pythontutor.com/visualize.html#code=def%20reverse_in_place%28array%29%3A%0A%20%20%20%20for%20lh%20in%20range%28len%28array%29//2%29%3A%0A%20%20%20%20%20%20%20%20rh%20%3D%20len%28array%29%20-%20lh%20-%201%0A%20%20%20%20%20%20%20%20array%5Blh%5D,%20array%5Brh%5D%20%3D%20array%5Brh%5D,%20array%5Blh%5D%0A%0Aarray%20%3D%20%5B0,%201,%202,%203,%204,%205,%206,%207,%208,%209%5D%0Aprint%28f%22Forward%3A%20%7Barray%7D%22%29%0Areverse_in_place%28array%29%0Aprint%28f%22Reverse%3A%20%7Barray%7D%22%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">here</a></li>
+<li>Example of reversing a list in PythonTutor: <a
+href="http://www.pythontutor.com/visualize.html#code=def%20reverse_in_place%28array%29%3A%0A%20%20%20%20for%20lh%20in%20range%28len%28array%29//2%29%3A%0A%20%20%20%20%20%20%20%20rh%20%3D%20len%28array%29%20-%20lh%20-%201%0A%20%20%20%20%20%20%20%20array%5Blh%5D,%20array%5Brh%5D%20%3D%20array%5Brh%5D,%20array%5Blh%5D%0A%0Aarray%20%3D%20%5B0,%201,%202,%203,%204,%205,%206,%207,%208,%209%5D%0Aprint%28f%22Forward%3A%20%7Barray%7D%22%29%0Areverse_in_place%28array%29%0Aprint%28f%22Reverse%3A%20%7Barray%7D%22%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">here</a></li>
+</ul>
+</section>
+<section id="sneaky-mutability" class="slide level2">
+<h2>Sneaky Mutability</h2>
+<ul>
+<li>List’s mutability can frequently be very nice to work with, but as
+with lists as arguments to functions, you need to be careful in some
+instances to ensure you understand how Python is treating the list</li>
+<li>I’ve encountered a few other problems where it can be easy to mess
+up:
+<ul>
+<li>Initializing a list to look like another list, wanting to make
+changes and then compare it to the original
+<ul>
+<li><a
+href="http://www.pythontutor.com/visualize.html#code=A%20%3D%20%5B&#39;Aardvark&#39;,%20&#39;Butterfly&#39;,%20&#39;Centipede&#39;%5D%0AB%20%3D%20A%0A%0AB.append%28&#39;Deer&#39;%29%0AB.remove%28&#39;Butterfly&#39;%29%0A%0Aprint%28A%29%0Aprint%28B%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">Example</a></li>
+</ul></li>
+<li>Looping over a mutating list
+<ul>
+<li><a
+href="http://www.pythontutor.com/visualize.html#code=A%20%3D%20%5B1,2,3,4,5,6,7,8,9%5D%0A%0Afor%20i%20in%20range%28len%28A%29%29%3A%0A%20%20%20%20print%28&#39;Current%20index%3A%20%7B%7D,%20Current%20value%3A%20%7B%7D&#39;.format%28i,A%5Bi%5D%29%29%0A%20%20%20%20if%203%20%3C%20A%5Bi%5D%20%3C%206%3A%0A%20%20%20%20%20%20%20%20A.remove%28A%5Bi%5D%29%0A%20%20%20%0Aprint%28A%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">Example</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="cloning" class="slide level2">
+<h2>Cloning</h2>
+<ul>
+<li>What can we do in these sorts of instances to not let mutability
+trip us up?</li>
+<li><em>Clone</em> the list instead of just assigning a reference
+<ul>
+<li>Creates a <strong>new</strong> object in memory</li>
+</ul></li>
+<li>Several ways you can make a shallow clone (in code)
+<ul>
+<li>Using the <code class="python">.copy()</code> list method</li>
+<li>Any slice always returns a new object</li>
+<li>Using the <code class="python">list()</code> function will return a
+new object</li>
+</ul></li>
 </ul>
 </section>
 <section id="common-useful-list-methods" class="slide level2">
@@ -121,11 +197,13 @@ print(colors is other_colors)</code></pre>
 </tr>
 <tr class="odd">
 <td><code class="python">list.insert(idx, val)</code></td>
-<td>Inserts <code class="python">val</code> before the specified <code class="python">idx</code></td>
+<td>Inserts <code class="python">val</code> before the specified
+<code class="python">idx</code></td>
 </tr>
 <tr class="even">
 <td><code class="python">list.remove(value)</code></td>
-<td>Removes the first instance of <code class="python">value</code> from the list, or errors</td>
+<td>Removes the first instance of <code class="python">value</code> from
+the list, or errors</td>
 </tr>
 <tr class="odd">
 <td><code class="python">list.reverse()</code></td>
@@ -133,61 +211,40 @@ print(colors is other_colors)</code></pre>
 </tr>
 <tr class="even">
 <td><code class="python">list.sort()</code></td>
-<td>Sorts the elements of the list. Can take an optional argument <code class="python">key</code> to specify how to sort</td>
+<td>Sorts the elements of the list. Can take an optional argument
+<code class="python">key</code> to specify how to sort</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="sneaky-mutability" class="slide level2">
-<h2>Sneaky Mutability</h2>
-<ul>
-<li>List’s mutability can frequently be very nice to work with, but as with lists as arguments to functions, you need to be careful in some instances to ensure you understand how Python is treating the list</li>
-<li>I’ve encountered a few other problems where it can be easy to mess up:
-<ul>
-<li>Initializing a list to look like another list, wanting to make changes and then compare it to the original
-<ul>
-<li><a href="http://www.pythontutor.com/visualize.html#code=A%20%3D%20%5B&#39;Aardvark&#39;,%20&#39;Butterfly&#39;,%20&#39;Centipede&#39;%5D%0AB%20%3D%20A%0A%0AB.append%28&#39;Deer&#39;%29%0AB.remove%28&#39;Butterfly&#39;%29%0A%0Aprint%28A%29%0Aprint%28B%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">Example</a></li>
-</ul></li>
-<li>Looping over a mutating list
-<ul>
-<li><a href="http://www.pythontutor.com/visualize.html#code=A%20%3D%20%5B1,2,3,4,5,6,7,8,9%5D%0A%0Afor%20i%20in%20range%28len%28A%29%29%3A%0A%20%20%20%20print%28&#39;Current%20index%3A%20%7B%7D,%20Current%20value%3A%20%7B%7D&#39;.format%28i,A%5Bi%5D%29%29%0A%20%20%20%20if%203%20%3C%20A%5Bi%5D%20%3C%206%3A%0A%20%20%20%20%20%20%20%20A.remove%28A%5Bi%5D%29%0A%20%20%20%0Aprint%28A%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">Example</a></li>
-</ul></li>
-</ul></li>
-</ul>
-</section>
-<section id="cloning" class="slide level2">
-<h2>Cloning</h2>
-<ul>
-<li>What can we do in these sorts of instances to not let mutability trip us up?</li>
-<li><em>Clone</em> the list instead of just assigning a reference
-<ul>
-<li>Creates a <strong>new</strong> object in memory</li>
-</ul></li>
-<li>Several ways you can make a clone (in code)
-<ul>
-<li>Using the <code class="python">.copy()</code> method</li>
-<li>Any slice returns a clone</li>
-<li>Using the <code class="python">list()</code> function will return a clone</li>
-</ul></li>
-</ul>
-</section>
 <section id="functions-on-iterators" class="slide level2">
 <h2>Functions on Iterators</h2>
 <ul>
-<li>The <code class="python">.sort</code> and <code class="python">.reverse</code> methods reorder the list <strong>in place</strong> and do not return anything</li>
-<li>Commonly, you might want to loop through a list in a particular order, but not change the original list</li>
-<li>Python gives you two matching functions to do this, which return a new ordered version of the list, without changing the original
+<li>The <code class="python">.sort</code> and
+<code class="python">.reverse</code> methods reorder the list <strong>in
+place</strong> and do not return anything</li>
+<li>Commonly, you might want to loop through a list in a particular
+order, but not change the original list</li>
+<li>Python gives you two matching functions to do this, which return a
+<strong>new</strong> ordered version of the list, without changing the
+original
 <ul>
-<li>The <code class="python">reversed()</code> function creates a new iterable object that returns its elements in the opposite order</li>
-<li>The <code class="python">sorted()</code> function creates a new iterable object that returns its elements in ascending order</li>
+<li>The <code class="python">reversed()</code> function creates a new
+iterable object that returns its elements in the opposite order</li>
+<li>The <code class="python">sorted()</code> function creates a new
+iterable object that returns its elements in ascending order</li>
 </ul></li>
 </ul>
 </section>
-<section id="understanding-check" class="slide level2" data-notes="Solution: [&#39;Fox&#39;, &#39;Hippo&#39;, &#39;Iguana&#39;]">
-<h2 data-notes="Solution: [&#39;Fox&#39;, &#39;Hippo&#39;, &#39;Iguana&#39;]">Understanding Check</h2>
+<section id="understanding-check" class="slide level2"
+data-notes="Solution: [&#39;Fox&#39;, &#39;Hippo&#39;, &#39;Iguana&#39;]">
+<h2
+data-notes="Solution: [&#39;Fox&#39;, &#39;Hippo&#39;, &#39;Iguana&#39;]">Understanding
+Check</h2>
 <div class="cols">
 <div class="col">
-<p>Given the code to the right, what would be the final printed value of <code class="python">A</code>?</p>
+<p>Given the code to the right, what would be the final printed value of
+<code class="python">A</code>?</p>
 <div class="poll">
 <ol>
 <li><code class="python">['Fox', 'Giraffe', 'Hippo', 'Iguana']</code></li>
@@ -218,7 +275,9 @@ print(A)</code></pre>
 <ul>
 <li><p>Commonly will make lists with a simple:</p>
 <pre ><code class="python">even_digits = [ 2, 4, 6, 8 ]</code></pre></li>
-<li><p>But in many cases, it is easier to specify the elements of a list using a sequence of values generated by a <code class="python">for</code> loop. For instance</p>
+<li><p>But in many cases, it is easier to specify the elements of a list
+using a sequence of values generated by a
+<code class="python">for</code> loop. For instance</p>
 <pre ><code class="python">even_digits = [ ]
 for i in range(0, 10, 2):
     even_digits.append(i)</code></pre></li>
@@ -234,11 +293,16 @@ for i in range(0, 10, 2):
 <ul>
 <li><p>The simplest list comprehension syntax is:</p>
 <pre ><code class="python">[ expression iterator ]</code></pre>
-<p>where <code class="python">expression</code> is any Python expression and <code class="python">iterator</code> is a <code class="python">for</code> loop header</p></li>
-<li><p>The iterator component can be followed by any number of additional modifiers</p>
+<p>where <code class="python">expression</code> is any Python expression
+and <code class="python">iterator</code> is a
+<code class="python">for</code> loop header</p></li>
+<li><p>The iterator component can be followed by any number of
+additional modifiers</p>
 <ul>
-<li>More <code class="python">for</code> loop headers for nested loops</li>
-<li>or <code class="python">if</code> statements to select specific values</li>
+<li>More <code class="python">for</code> loop headers for nested
+loops</li>
+<li>or <code class="python">if</code> statements to select specific
+values</li>
 </ul></li>
 <li><p>Example: all even numbers to 20 not also visible by 3</p>
 <pre ><code class="python">[i for i in range(0,2,20) if i % 3 != 0]</code></pre></li>
@@ -247,7 +311,8 @@ for i in range(0, 10, 2):
 <section id="where-strings-and-lists-meet" class="slide level2">
 <h2>Where Strings and Lists Meet</h2>
 <ul>
-<li>There are a handful of methods that transition between strings and lists</li>
+<li>There are a handful of methods that transition between strings and
+lists</li>
 </ul>
 <table>
 <colgroup>
@@ -263,55 +328,162 @@ for i in range(0, 10, 2):
 <tbody>
 <tr class="odd">
 <td><code class="python">str.split()</code></td>
-<td>Splits a string into a list of its components using whitespace as a separator</td>
+<td>Splits a string into a list of its components using whitespace as a
+separator</td>
 </tr>
 <tr class="even">
 <td><code class="python">str.split(sep)</code></td>
-<td>Sprits a string into a list using the specified separator <code class="python">sep</code></td>
+<td>Sprits a string into a list using the specified separator
+<code class="python">sep</code></td>
 </tr>
 <tr class="odd">
 <td><code class="python">str.splitlines()</code></td>
-<td>Splits a string into of list of strings at the newline character</td>
+<td>Splits a string into of list of strings at the newline
+character</td>
 </tr>
 <tr class="even">
 <td><code class="python">str.join(list)</code></td>
-<td>Joins the elements of the <code class="python">list</code> into a string, using <code class="python">str</code> as the separator</td>
+<td>Joins the elements of the <code class="python">list</code> into a
+string, using <code class="python">str</code> as the separator</td>
 </tr>
 </tbody>
 </table>
+<!--
+## Reading
+- Programs often need to work with lists that are too large to reasonable exist typed all out in the code
+    - Easier to read in the values of a list from some external data file
+- A _file_ is the generic name for any named collection of data maintained on some permanent storage media attached to a computer
+- Files can contain information of many different types and encodings
+    - Most common is the _text file_
+    - Contains character data like you'd fine in a string
+
+
+## Strings vs Text Files
+- While strings and text files both store characters, there are some important differences:
+    - **The longevity of the data stored**
+        - The value of a string variable lasts only as long as the string exists, is not overridden, or is not thrown out when a function completes
+        - Information in a text file exists until the file is deleted
+    - **How data is read in**
+        - You have access to all the characters in a string variable pretty much immediately
+        - Data from text files is generally read in sequentially, starting from the beginning and proceeding until the end of the file is reached
+-->
 </section>
-<section id="reading" class="slide level2">
-<h2>Reading</h2>
+<section id="tabulation" class="slide level2">
+<h2>Tabulation</h2>
 <ul>
-<li>Programs often need to work with lists that are too large to reasonable exist typed all out in the code
+<li>Arrays can also be useful when you have a set of values and you need
+to count how many values fall into a different ranges
 <ul>
-<li>Easier to read in the values of a list from some external data file</li>
+<li>Process is called <em>tabulation</em></li>
 </ul></li>
-<li>A <em>file</em> is the generic name for any named collection of data maintained on some permanent storage media attached to a computer</li>
-<li>Files can contain information of many different types and encodings
-<ul>
-<li>Most common is the <em>text file</em></li>
-<li>Contains character data like you’d fine in a string</li>
-</ul></li>
+<li>The idea is that for each piece of data we encounter, we figure out
+a corresponding index in our tabular array and then increment the value
+of that element</li>
+<li>Your book shows this for seeing how many times each letter of the
+alphabet appears in a text sequence</li>
+<li>Let’s instead look at an example of determining how many students
+got different letters grades on a made-up final</li>
 </ul>
-</section>
-<section id="strings-vs-text-files" class="slide level2">
-<h2>Strings vs Text Files</h2>
-<ul>
-<li>While strings and text files both store characters, there are some important differences:
-<ul>
-<li><strong>The longevity of the data stored</strong>
-<ul>
-<li>The value of a string variable lasts only as long as the string exists, is not overridden, or is not thrown out when a function completes</li>
-<li>Information in a text file exists until the file is deleted</li>
-</ul></li>
-<li><strong>How data is read in</strong>
-<ul>
-<li>You have access to all the characters in a string variable pretty much immediately</li>
-<li>Data from text files is generally read in sequentially, starting from the beginning and proceeding until the end of the file is reached</li>
-</ul></li>
-</ul></li>
-</ul>
+<!--
+
+## Multidimensional Arrays
+- We know that elements of a list can be lists in and of themselves. If the lengths of all the lists making up the elements of a list remain fixed, then the list of lists is called a _multidimensional array_
+- In Python, we can create multidimensional arrays just by creating lists of constant length as the elements to another list
+  ```python
+  magic = [ [2, 9, 4], [7, 5, 3], [6, 1, 8] ]
+  ```
+- We can always get the individual element of one of the inner lists by using **2** indices.
+    - `magic[1][1] = 5`
+    - `magic[-1][0] = 6`
+
+
+## Picturing Multidimensional Arrays
+- Multidimensional arrays are commonly pictured as each inner list being stacked beneath the previous
+- In such a representation, the outermost/first elements/indices represent the row, and the inner/second elements/indices represent the column
+
+`[ [2, 9, 4], [7, 5, 3], [6, 1, 8] ]`{style="display: block; margin: auto; text-align: center;"}
+
+<br>
+
+\begin{tikzpicture}%%width=80%
+[
+block/.style = {draw, MGreen, outer sep=0pt, font=\Large, minimum size=1cm},
+]
+\node[block](00) at (0,0) {2};
+\node[block,below=0 of 00](10) {7};
+\node[block,below=0 of 10](20) {6};
+
+\node[block,right=0 of 00](01) {9};
+\node[block,right=0 of 10](11) {5};
+\node[block,right=0 of 20](21) {1};
+
+\node[block,right=0 of 01](02) {4};
+\node[block,right=0 of 11](12) {3};
+\node[block,right=0 of 21](22) {8};
+
+
+\node[block,color=MBlue,font=\tt,](00) at (5,0) {magic[0][0]};
+\node[block,color=MBlue,font=\tt,below=0 of 00](10) {magic[1][0]};
+\node[block,color=MBlue,font=\tt,below=0 of 10](20) {magic[2][0]};
+
+\node[block,color=MBlue,font=\tt,right=0 of 00](01) {magic[0][1]};
+\node[block,color=MBlue,font=\tt,right=0 of 10](11) {magic[1][1]};
+\node[block,color=MBlue,font=\tt,right=0 of 20](21) {magic[2][1]};
+
+\node[block,color=MBlue,font=\tt,right=0 of 01](02) {magic[0][2]};
+\node[block,color=MBlue,font=\tt,right=0 of 11](12) {magic[1][2]};
+\node[block,color=MBlue,font=\tt,right=0 of 21](22) {magic[2][2]};
+\end{tikzpicture}
+
+
+## Initialize a Chessboard {data-transition="slide-in fade-out" data-transition-speed="slow"}
+![\ ](../images/Chess-Board-And-Pieces.svg){data-id="test" data-auto-animate-easing=ease-out}
+
+## Initialize a Chessboard{data-transition="fade-in fade-out" data-transition-speed="slow"}
+![\ ](../images/Chess-Board-And-Pieces2.svg){data-id="test"}
+
+## Initialize a Chessboard{data-transition="fade-in slide-out" data-transition-speed="slow"}
+![\ ](../images/Chess-Board-And-Pieces3.svg){data-id="test"}
+
+
+
+## The `GImage` Class
+- You can display an image from a file in PGL using the `GImage` class.
+`GImage(filename, x, y)`{.inlinecode}
+    - `filename` is the string containing the name of the file which contains the image
+    - `x` and `y` are the coordinates of the upper left corner of the image
+- Best to use one of the common image formats
+    - Graphical Interchange Format (GIF): `fish.gif`
+    - Joint Photographic Experts Group (JPEG): `fish.jpg`
+    - Portable Network Graphics (PNG): `fish.png`
+
+
+## Images and Copyrights
+- Most images that you might find on the web are protected by copyright under international law.
+- Ensure you have the necessary permissions before using an image
+    - On the web, the image hosting site will often specify what rules apply to that image
+        - Example: Images from `www.nasa.gov` can be freely used as long as you add an attribution line
+    - Non-commercial use of an image can sometimes fall under "fair use" doctrine, but academic integrity and common courtesy both demand you cite or acknowledge any material you have obtained from others.
+
+
+## Example: VLA Moonset
+```{.python style='max-height: 800px; font-size:.7em;'}
+from pgl import GImage, GWindow, GLabel
+
+def image_example():
+    gw = GWindow(800, 550)
+    image = GImage("VLA_Moonset.jpg")
+    image.scale(gw.get_width() / image.get_width())
+    gw.add(image)
+
+    citation = GLabel("Image Credit: Jeff Hellermann, NRAO / AUI / NSF")
+    citation.set_font("15px 'Sans-Serif'")
+    x = gw.get_width() - citation.get_width() - 10
+    y = image.get_height() + citation.get_ascent()
+    gw.add(citation, x, y)
+```
+
+-->
 </section>
     </div>
   </div>
@@ -327,6 +499,7 @@ for i in range(0, 10, 2):
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
 
   <script>
 
@@ -336,6 +509,7 @@ for i in range(0, 10, 2):
 		//autoAnimateEasing: 'ease-in',
 		//autoAnimateDuration: 1.0,
 		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
         // Display controls in the bottom right corner
         controls: true,
         // Help the user learn the controls by providing hints, for example by
@@ -354,7 +528,7 @@ for i in range(0, 10, 2):
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -444,6 +618,12 @@ for i in range(0, 10, 2):
 			disableCheckFile: false, //default false
 		 },
 
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -456,7 +636,7 @@ for i in range(0, 10, 2):
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
-        chalkWidth: 7,
+        chalkWidth: 5,
 		boardmarkers : [
                 { color: 'rgba(248,248,242,1)', cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                 { color: 'rgba(102,217,239,1)', cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
@@ -481,6 +661,20 @@ for i in range(0, 10, 2):
 			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
 		],
       });
+      
     </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>

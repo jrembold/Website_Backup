@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2021-09-27">
-  <title>Getting Animated</title>
+  <meta name="dcterms.date" content="2023-10-08">
+  <title>Clicky Clicky</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -14,10 +14,18 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
   </style>
   <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
   <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
@@ -27,78 +35,379 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Getting Animated</h1>
+  <h1 class="title">Clicky Clicky</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">September 27, 2021</p>
+  <p class="date">October 8, 2023</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Problem Set 3 due tonight!
+<li>Nothing due tonight! :)</li>
+<li>Problem Set 4 will go out this afternoon</li>
+<li>A few people still need to take the exam owing to sickness, so
+please don’t discuss it yet.</li>
+<li>Graphics Contest is going live! Deadline is end of October.</li>
+<li>No class on Friday!
 <ul>
-<li>I’m working through PS2 feedback still, so keep an eye out for that.</li>
+<li>I will actually be out of town from Wednesday afternoon through
+Sunday, so email or Discord DM me if you have questions</li>
 </ul></li>
-<li>Project 1 guide is posted!
-<ul>
-<li>Due a week from today</li>
-<li>Get started on it tomorrow! If you can have the first two milestones completed before heading into your section meetings in the middle of the week, you’ll be in a great place.</li>
-<li>Last info that you really need for it is discussed today</li>
-</ul></li>
-<li>Polling: <a href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>Polling: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
+<!--
+## Review Question
+::::::cols
+::::col
+Which of the below images is the mostly likely output of the code to the right?
+
+<div style="display: flex; flex-wrap: wrap; justify-content:center;">
+<div><img src="../images/random_revq1.png" style="flex-grow:1; object-fit:cover; height:330px; border:solid white 2px;"/></div>
+<div><img src="../images/random_revq2.png" style="flex-grow:1; object-fit:cover; height:330px; border:solid white 2px;"/></div>
+<div><img src="../images/random_revq3.png" style="flex-grow:1; object-fit:cover; height:330px; border:solid white 2px;"/></div>
+<div><img src="../images/random_revq4.png" style="flex-grow:1; object-fit:cover; height:330px; border:solid white 2px;"/></div>
+</div>
+::::
+
+::::{.col style='flex-grow:1.2;'}
+```{.python style='max-height:950px; font-size:.75em;'}
+def make_circle(x,y,r):
+    c = GOval(x-r, y-r, 2*r, 2*r)
+    c.set_filled(True)
+    if randint(1, 100) > 75:
+        c.set_color("#F92672") #pink
+    else:
+        c.set_color("#66D9EF") #blue
+    return c
+
+gw = GWindow(500, 500)
+for i in range(50):
+    gw.add(make_circle(
+            randint(50,450), 
+            randint(50,450), 
+            randint(5,50)
+            )
+          )
+```
+::::
+::::::
+-->
 </section>
-<section id="review-question" class="slide level2" data-notes="Solution: Shrinks and then filled">
-<h2 data-notes="Solution: Shrinks and then filled">Review Question!</h2>
+<section id="understanding-check" class="slide level2"
+data-notes="Answer is 50">
+<h2 data-notes="Answer is 50">Understanding Check</h2>
 <div class="cols">
 <div class="col">
-<p>When the function <code class="python">rev_q</code> is called, what happens when the mouse is clicked?</p>
+<p>What would be the final value of <code class="python">c</code>
+printed in the code to the right?</p>
 <div class="poll">
 <ol>
-<li>The square shrinks</li>
-<li>The square gets filled</li>
-<li>The square shrinks and then gets filled</li>
-<li>The square gets filled and then shrinks</li>
+<li>-15</li>
+<li>20</li>
+<li>50</li>
+<li>None of the above</li>
 </ol>
 </div>
 </div>
-<div class="col" style="flex-grow:2">
-<pre ><code class="python" style="max-height:900px; font-size:.75em">def rev_q():
-    def act_A(e):
-        sq.set_filled(True)
-    def act_B(e):
-        sq.set_size(
-            sq.get_width() - 10,
-            sq.get_height() - 10
-        )
-    gw = GWindow(500, 500)
-    sq = GRect(200, 200, 100, 100)
-    sq.set_color("blue")
-    gw.add(sq)
-    gw.add_event_listener("mousedown", act_B)
-    gw.add_event_listener("click", act_A)</code></pre>
+<div class="col">
+<pre ><code class="mypython" style="max-height:800px; font-size:.8em">def f(a, b=5, c=True):
+    if c:
+        return a + b
+    else:
+        return a * b
+
+def g(c):
+    for i in range(2):
+        c+=b
+    return c > b
+
+a = -3
+b = 2
+c = f(10, c=g(a))
+print(c)</code></pre>
+</div>
+</div>
+<!--
+## Understanding Check
+::::cols
+:::col
+```python
+def f(x,y):
+    return x**2 + y
+
+def g(z,n):
+    x = 2
+    for i in range(n):
+        x += z(i,n)
+    return x
+
+print(g(f,2))
+```
+:::
+:::col
+What value will be printed to the screen when the code to the left is run?
+
+:::::{.poll}
+#. 2
+#. 4
+#. 7
+#. This will give an error
+:::::
+
+:::
+::::
+## New Methods
+:::{style='font-size:.9em'}
+- A new method that acts on a `GWindow`:
+
+ |
+:---|:----
+`get_element_at(x,y)`{.no-highlight} | Returns the frontmost object at (x,y) or `None`
+
+- And more new methods that act on any `GObject`
+
+ | 
+:---|:---------
+`set_location(x,y)`{.no-highlight} | Resets the location of the object to the specified point
+`move(dx,dy)`{.no-highlight} | Moves the object `dx` and `dy` pixels from its current position
+`move_polar(dr,theta)`{.no-highlight} | Moves the object `dr` pixel units in direction `theta`
+`contains(x,y)`{.no-highlight} | Returns `True` if the object contains the specified point
+`get_color()`{.no-highlight} | Returns the color currently assigned to the object
+
+:::
+
+-->
+</section>
+<section id="previously" class="slide level2">
+<h2>Previously…</h2>
+<ul>
+<li>Graphical applications usually make it possible for the user to
+control the action of a program by using an input device such as a
+mouse.
+<ul>
+<li>Programs supporting this type of control are called <em>interactive
+programs</em>.</li>
+</ul></li>
+<li>User actions such as clicking the mouse are called
+<em>events</em>.</li>
+<li>Programs that respond to events are said to be <em>event
+driven</em>.</li>
+<li>User input does not generally occur at predictable times. As the
+events are not controlled by the program, they are said to be
+<em>asynchronous</em>.</li>
+<li>In Python, you write a function that acts as a <em>listener</em> for
+a particular event type. When the event happens, the listener is
+called.</li>
+</ul>
+</section>
+<section id="first-class-functions" class="slide level2">
+<h2>First Class Functions</h2>
+<ul>
+<li>Functions in Python are treated as objects just like anything else!
+<ul>
+<li>We will need to take advantage of this to write listener
+functions.</li>
+</ul></li>
+<li>You can assign a function to a variable, pass it as a parameter,
+return it as a result, etc.</li>
+<li>Functions treated like any other data objects are called
+<em>first-class functions</em></li>
+<li>To work with a function itself, you leave off the
+<code class="python">()</code>. Including the parentheses is how you
+<em>call</em> the function!</li>
+</ul>
+</section>
+<section id="a-first-class-example" class="slide level2">
+<h2>A First Class Example</h2>
+<pre ><code class="python" style="max-height:900px">import math
+
+def evaluate_numbers(func):
+    print(func)
+    print(func(0))
+    print(func(2))
+    print(func(10))
+
+A = evaluate_numbers
+
+A(math.sqrt)
+A(math.exp)</code></pre>
+</section>
+<section id="closures" class="slide level2">
+<h2>Closures</h2>
+<div class="cols">
+<div class="col">
+<p>Consider the code to the right.</p>
+<div>
+<ul>
+<li class="fragment">Why does the line 12 not error?
+<ul>
+<li class="fragment">Nothing named <code class="python">a</code> should
+still exist when it is called!</li>
+</ul></li>
+<li class="fragment"><a
+href="http://www.pythontutor.com/visualize.html#code=b%20%3D%201%0Adef%20f1%28a%29%3A%0A%20%20%20%20print%28a%29%0A%20%20%20%20print%28b%29%0A%20%20%20%20def%20f2%28%29%3A%0A%20%20%20%20%20%20%20%20c%20%3D%20a%20%2B%20b%0A%20%20%20%20%20%20%20%20return%20c%20*%203%0A%20%20%20%20return%20f2%20%0Af2%20%3D%20f1%2810%29%0Ac%20%3D%20f2%28%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">Python
+Tutor</a></li>
+<li class="fragment"><code class="python">f2</code> must also keep track
+of any local variables!</li>
+<li class="fragment">The local variables that are included as part of a
+function are called its <em>closure</em></li>
+</ul>
+</div>
+</div>
+<div class="col">
+<pre ><code class="python" style="max-height:800px" data-line-numbers="">b = 1
+def f1(a):
+    print(a)
+    print(b)
+
+    def f2():
+        c = a + b
+        return c * 3
+    return f2 
+
+f2 = f1(10) 
+c = f2()</code></pre>
 </div>
 </div>
 </section>
-<section id="using-gstate" class="slide level2">
-<h2>Using <code class="python">GState</code></h2>
+<section id="our-first-interactive-example" class="slide level2">
+<h2>Our First Interactive Example</h2>
+<div style="font-size:.9em">
 <ul>
-<li>The PGL library has a <code class="python">GState</code> object type that we can import to use for sharing data between callback functions</li>
-<li>Create a variable, conventionally called <code class="python">gs</code> immediately after creating the window:</li>
-</ul>
-<pre ><code class="python">gw = GWindow(WIDTH, HEIGHT)
-gs = GState()</code></pre>
+<li><p>Consider the simple program below, where we’ve imported the
+basics and some of our helper functions</p>
+<pre ><code class="python">def draw_dots():
+    def click_action(event):
+        c = create_filled_rect(
+            event.get_x(), event.get_y(), 
+            10,10, random_color())
+        gw.add(c)
+
+    gw = GWindow(500, 500)
+    gw.add_event_listener("click", click_action)</code></pre></li>
+<li><p>The <code class="python">click_action</code> function specifies
+what to do when the mouse is clicked</p>
 <ul>
-<li>Value to be shared can be stored as part of the <code class="python">gs</code> variable as an object attribute, which we will talk much more about in Ch 9
-<ul>
-<li>For now, shared variables should include <code class="python">gs</code> and then a period before the variable name. Eg: <code class="python">gs.my_variable</code></li>
-<li>So <code class="python">line</code> will become <code class="python">gs.line</code> everywhere in our example</li>
+<li>Note that it has access to the <code class="python">gw</code>
+variable since it is in the enclosing function and thus in the
+closure.</li>
 </ul></li>
 </ul>
+</div>
 </section>
-<section id="fixed-line-drawing" class="slide level2">
-<h2>Fixed Line-Drawing</h2>
-<pre ><code class="python" style="max-height:900px;">from pgl import GWindow, GLine, GState
+<section id="registering-a-listener" class="slide level2">
+<h2>Registering a Listener</h2>
+<ul>
+<li><p>The last line of our example function:</p>
+<pre ><code class="python">gw.add_event_listener("click", click_action)</code></pre>
+<p>tells the graphics window (<code class="python">gw</code>) to call
+the <code class="python">click_action</code> function whenever a mouse
+“click” occurs within the window.</p></li>
+<li><p>When the user clicks the mouse, the graphics window, in essense,
+calls the client (your program) back to let it know that a click has
+occured. Thus, functions such as
+<code class="python">click_action</code> are known as <em>callback
+functions</em>.</p></li>
+<li><p>The parameter <code class="python">event</code> given to the
+callback function is a special data structure called a <em>mouse
+event</em>, which contains details about the specifics of the event that
+triggered the action.</p></li>
+</ul>
+</section>
+<section id="mouse-events" class="slide level2">
+<h2>Mouse Events</h2>
+<ul>
+<li>We have a fairly comprehensive list of mouse-events that we can
+trigger callbacks on:</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;"><code class="python">"click"</code></td>
+<td style="text-align: left;">The user clicks the mouse in the
+window</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><code class="python">"dblclk"</code></td>
+<td style="text-align: left;">The user double-clicks the mouse in the
+window</td>
+</tr>
+<tr class="odd">
+<td
+style="text-align: right;"><code class="python">"mousedown"</code></td>
+<td style="text-align: left;">The user presses the mouse button
+down</td>
+</tr>
+<tr class="even">
+<td
+style="text-align: right;"><code class="python">"mouseup"</code></td>
+<td style="text-align: left;">The user releases the mouse button</td>
+</tr>
+<tr class="odd">
+<td
+style="text-align: right;"><code class="python">"mousemove"</code></td>
+<td style="text-align: left;">The user moves the mouse</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><code class="python">"drag"</code></td>
+<td style="text-align: left;">The user moves the mouse with the button
+down</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="event-details" class="slide level2">
+<h2>Event Details</h2>
+<ul>
+<li>Certain actions can trigger more than one event
+<ul>
+<li>Clicking generates a “mousedown”, “mouseup”, and then “click” event,
+in that order</li>
+</ul></li>
+<li>Events trigger no action unless the window is listening for that
+event
+<ul>
+<li>If I drag my mouse in the <code class="python">draw_dots()</code>
+function, you’ll notice that nothing happens</li>
+</ul></li>
+<li>You can setup however many listeners you feel you need in order to
+make your program behave as desired</li>
+</ul>
+<pre ><code class="mypython">gw.add_event_listener("click", click_action)
+gw.add_event_listener("dblclk", dblclk_action)</code></pre>
+</section>
+<section id="line-drawing" class="slide level2">
+<h2>Line Drawing</h2>
+<div>
+<ul>
+<li class="fragment">Say we wanted to write a simple program that allows
+the user to draw lines by clicking and dragging the mouse</li>
+<li class="fragment">Using two event listeners would be useful:
+<ul>
+<li class="fragment">“mousedown” could start drawing a zero-length line
+at the current mouse position (and add it to the window)</li>
+<li class="fragment">“drag” could update the end-point of that line</li>
+</ul></li>
+<li class="fragment">The strategy would allow the user to have visual
+feedback as they drag around, helping them to position the line
+<ul>
+<li class="fragment">Since the line stretches and contracts as you move
+the cursor around, the technique is commonly called
+<em>rubber-banding</em></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="attempt-1" class="slide level2">
+<h2>Attempt #1</h2>
+<pre ><code class="mypython badcode" style="max-height:800px;">from pgl import GWindow, GLine
 
 WIDTH = 500
 HEIGHT = 500
@@ -107,15 +416,105 @@ def draw_lines():
     def mousedown_event(e):
         x = e.get_x()
         y = e.get_y()
-        gs.line = GLine(x,y,x,y)
-        gw.add(gs.line)
+        line = GLine(x,y,x,y)
+        gw.add(line)
 
     def drag_action(e):
-        gs.line.set_end_point(e.get_x(), e.get_y())
+        line.set_end_point(e.get_x(), e.get_y())
 
     gw = GWindow(WIDTH, HEIGHT)
-    gs = GState()
-    gs.line = None
+    line = None
+    gw.add_event_listener("mousedown", mousedown_event)
+    gw.add_event_listener("drag", drag_action)
+
+if __name__ == '__main__':
+    draw_lines()</code></pre>
+</section>
+<section id="what-happened" class="slide level2">
+<h2>What Happened?</h2>
+<ul>
+<li>Remember that if you define a variable in a function, that variable
+is assumed to be local!
+<ul>
+<li>Keeps you from accidentally overwriting variables you may not have
+meant to</li>
+<li>It works against us here, since we WANT to override the original
+value</li>
+</ul></li>
+<li>We can’t pass in the info as a parameter, since it is not part of
+the event information</li>
+<li>Python <em>does</em> have a <code class="python">nonlocal</code>
+keyword, which allows you to state that a specific variable is
+<em>not</em> local, but it tends to just confuse students</li>
+</ul>
+</section>
+<section id="in-the-window" class="slide level2">
+<h2>In the Window</h2>
+<ul>
+<li>A common tactic is to store all variables that need to be shared
+between two or more functions in a <em>state object</em></li>
+<li>A state object is just a single object which serves as a storage
+space for a collection of values</li>
+<li>The object is created in such a location as to ensure it is in the
+closure of any functions that need to access its contents</li>
+<li>We will most often encounter this issue with graphics applications,
+where we actually already have an object that could serve as a state
+object
+<ul>
+<li>The <code class="python">GWindow</code> object (mostly commonly
+named <code class="python">gw</code>)!</li>
+</ul></li>
+</ul>
+</section>
+<section id="storage-and-retrieval" class="slide level2">
+<h2>Storage and Retrieval</h2>
+<ul>
+<li>Do you want to store a value in your state object?
+<ul>
+<li>We can store it as an <em>attribute</em> to the
+<code class="python">gw</code> object</li>
+<li>Requires specifying the object name, followed by a dot and then your
+desired attribute name:</li>
+</ul>
+<pre ><code class="mypython">gw.my_attribute_name = some_cool_value</code></pre></li>
+<li>Do you want to retrieve a value from your state object?
+<ul>
+<li><p>Just refer to the object and attribute name:</p>
+<pre ><code class="python">print(gw.my_attribute_name)</code></pre></li>
+</ul></li>
+</ul>
+<!--
+## Using `GState`
+- The PGL library has a `GState` object type that we can import to use for sharing data between callback functions
+- Create a variable, conventionally called `gs` immediately after creating the window:
+```python
+gw = GWindow(WIDTH, HEIGHT)
+gs = GState()
+```
+- Value to be shared can be stored as part of the `gs` variable as an object attribute, which we will talk much more about in Ch 9
+    - For now, shared variables should include `gs` and then a period before the variable name.
+    - So `line` will become `gs.line` everywhere in our example
+-->
+</section>
+<section id="fixed-line-drawing" class="slide level2">
+<h2>Fixed Line-Drawing</h2>
+<pre ><code class="mypython" style="max-height:800px;">from pgl import GWindow, GLine
+
+WIDTH = 500
+HEIGHT = 500
+
+def draw_lines():
+    def mousedown_event(e):
+        x = e.get_x()
+        y = e.get_y()
+        gw.line = GLine(x,y,x,y)
+        gw.add(gw.line)
+
+    def drag_action(e):
+        gw.line.set_end_point(e.get_x(), e.get_y())
+
+    gw = GWindow(WIDTH, HEIGHT)
+    gw.line = None
     gw.add_event_listener("mousedown", mousedown_event)
     gw.add_event_listener("drag", drag_action)
 
@@ -125,12 +524,17 @@ if __name__ == '__main__':
 <section id="timer-events" class="slide level2">
 <h2>Timer Events</h2>
 <ul>
-<li>Previously we looked at how to our programs could react to mouse events</li>
-<li>Can also listen for <em>timer events</em>, which occur after a specific time interval</li>
-<li>You specify the listener for a timer event in the form of a callback function that is invoked at the end of the time interval</li>
-<li>Can add animation to our graphics by creating a timer whose callback makes small updates to the graphical objects in the window
+<li>Previously we looked at how to our programs could react to mouse
+events</li>
+<li>Can also listen for <em>timer events</em>, which occur after a
+specific time interval</li>
+<li>You specify the listener for a timer event in the form of a callback
+function that is invoked at the end of the time interval</li>
+<li>Can add animation to our graphics by creating a timer whose callback
+makes small updates to the graphical objects in the window
 <ul>
-<li>If the time interval is short enough (usually sub 30 milliseconds), the animations will appear smooth to the human eye</li>
+<li>If the time interval is short enough (usually sub 30 milliseconds),
+the animations will appear smooth to the human eye</li>
 </ul></li>
 </ul>
 </section>
@@ -139,19 +543,25 @@ if __name__ == '__main__':
 <ul>
 <li>PGL supports two kinds of timers:
 <ul>
-<li>A <em>one-shot timer</em> invokes its callback only once after a specified delay
+<li>A <em>one-shot timer</em> invokes its callback <strong>only
+once</strong> after a specified delay
 <ul>
 <li><p>Created with</p>
 <pre ><code class="python">gw.set_timeout(function, delay)</code></pre>
-<p>where <code class="python">function</code> is the callback function and <code class="python">delay</code> is the time interval in milliseconds</p></li>
+<p>where <code class="python">function</code> is the callback function
+and <code class="python">delay</code> is the time interval in
+milliseconds</p></li>
 </ul></li>
-<li>An <em>interval timer</em> invokes its callback function repeatedly at regular intervals
+<li>An <em>interval timer</em> invokes its callback function
+<strong>repeatedly</strong> at regular intervals
 <ul>
 <li><p>Created with</p>
 <pre ><code class="python">gw.set_interval(function, delay)</code></pre></li>
 </ul></li>
 </ul></li>
-<li>Both methods return a <code class="python">GTimer</code> object that identifies the timer, and can be stopped by invoking the <code class="python">.stop()</code> method on that timer</li>
+<li>Both methods return a <code class="python">GTimer</code> object that
+identifies the timer, and can be stopped by invoking the
+<code class="python">.stop()</code> method on that timer</li>
 </ul>
 </section>
 <section id="moving-square" class="slide level2">
@@ -169,109 +579,6 @@ if __name__ == '__main__':
     gw.add(square)
     timer = gw.set_interval(step, 20)</code></pre>
 </section>
-<section id="growing-circles" class="slide level2">
-<h2>Growing Circles</h2>
-<figure>
-<img data-src="../images/GrowingCircles.gif" style="width:60.0%" alt="These circles are growing!" /><figcaption aria-hidden="true">These circles are growing!</figcaption>
-</figure>
-</section>
-<section id="waiting-vs-events" class="slide level2">
-<h2>Waiting vs Events</h2>
-<ul>
-<li>Many would probably try to approach this doing something like as follows:</li>
-</ul>
-<pre ><code class="python">def growing_circles():
-    gw = GWindow(WIDTH, HEIGHT)
-    for i in range(NUM_CIRCLES):
-        # Create a new circle
-        # Animate the circle to grow it
-        # Wait for the animation to complete</code></pre>
-<ul>
-<li>The problem here is that there is no clear way to “wait” for an animation to complete
-<ul>
-<li>There leaves no point in the program where a new event could “butt-in”</li>
-</ul></li>
-<li>Instead need an event that takes care of all the circle creation and animations</li>
-</ul>
-</section>
-<section id="using-events-wisely" class="slide level2">
-<h2>Using Events Wisely</h2>
-<ul>
-<li>Need to keep track of what the program <strong>should</strong> be doing, and then have the timer callback function handle whatever is needed</li>
-<li>Conceptually, for these circles, might look more like this:</li>
-</ul>
-<pre ><code class="python">def step():
-    if """ there is a circle still growing """
-        """then increase its size """
-    elif """ a new circle needs to be created """
-        """ then create one """
-    else:
-        timer.stop()</code></pre>
-</section>
-<section id="making-those-circles-grow" class="slide level2">
-<h2>Making those circles grow!</h2>
-<pre ><code class="python" style="max-height:900px;">from pgl import GWindow, GState, GOval
-import random
-
-GWIDTH = 500
-GHEIGHT = 400
-N_CIRCLES = 20
-MIN_RADIUS = 15
-MAX_RADIUS = 100
-DELTA_TIME = 10
-DELTA_SIZE = 1
-
-def random_color():
-    color = "#"
-    for i in range(6):
-        color += random.choice("0123456789ABCDEF")
-    return color
-
-def create_filled_circle(x, y, r, color="black"):
-    circ = Goval(x-r, y-r, 2*r, 2*r)
-    circ.set_filled(True)
-    circ.set_color(color)
-    return circ
-
-def growing_circles():
-    def start_new_circle():
-        r = random.uniform(MIN_RADIUS, MAX_RADIUS)
-        x = random.uniform(r, GWIDTH - r)
-        y = random.uniform(r, GHEIGHT - r)
-        gs.circle = create_filled_circle(
-                            x, y, 
-                            0, random_color()
-                        )
-        gs.desired_size = 2 * r
-        gs.current_size = 0
-        gs.circles_created += 1
-        return gs.circle
-
-    def step():
-        # Grow a circle if needed
-        if gs.current_size < gs.desired_size:
-            gs.current_size += DELTA_SIZE
-            x = gs.circle.get_x() - DELTA_SIZE / 2
-            y = gs.circle.get_y() - DELTA_SIZE / 2
-            gs.circle.set_bounds(
-                            x, y, 
-                            gs.current_size,
-                            gs.current_size
-                        )
-        # or add a circle if you can
-        elif gs.circles_created < N_CIRCLES:
-            gw.add(start_new_circle())
-        # or stop
-        else:
-            timer.stop()
-
-    gw = GWindow(GWIDTH, GHEIGHT)
-    gs = GState()
-    gs.circles_created = 0
-    gs.current_size = 0
-    gs.desired_size = 0
-    timer = gw.set_interval(step, DELTA_TIME)</code></pre>
-</section>
     </div>
   </div>
 
@@ -286,6 +593,7 @@ def growing_circles():
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
 
   <script>
 
@@ -295,6 +603,7 @@ def growing_circles():
 		//autoAnimateEasing: 'ease-in',
 		//autoAnimateDuration: 1.0,
 		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
         // Display controls in the bottom right corner
         controls: true,
         // Help the user learn the controls by providing hints, for example by
@@ -313,7 +622,7 @@ def growing_circles():
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -322,27 +631,16 @@ def growing_circles():
         center: false,
         // Enables touch navigation on devices with touch input
         touch: true,
-        // Loop the presentation
-        loop: false,
-        // Change the presentation direction to be RTL
-        rtl: false,
         // see https://revealjs.com/vertical-slides/#navigation-mode
         navigationMode: 'default',
-        // Randomizes the order of slides each time the presentation loads
-        shuffle: false,
         // Turns fragments on and off globally
         fragments: true,
         // Flags whether to include the current fragment in the URL,
         // so that reloading brings you to the same fragment position
         fragmentInURL: true,
-        // Flags if the presentation is running in an embedded mode,
-        // i.e. contained within a limited portion of the screen
-        embedded: false,
         // Flags if we should show a help overlay when the questionmark
         // key is pressed
         help: true,
-        // Flags if speaker notes should be visible to all viewers
-        showNotes: false,
         // Global override for autoplaying embedded media (video/audio/iframe)
         // - null: Media will only autoplay if data-autoplay is present
         // - true: All media will autoplay, regardless of individual setting
@@ -366,14 +664,10 @@ def growing_circles():
         // presenting each slide. This is used to show a pacing timer in the
         // speaker view
         defaultTiming: null,
-        // Enable slide navigation via mouse wheel
-        mouseWheel: false,
         // Hide cursor if inactive
         hideInactiveCursor: true,
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
-        // Opens links in an iframe preview overlay
-        previewLinks: false,
         // Transition style
         transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
@@ -390,7 +684,7 @@ def growing_circles():
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
-        height: 1200,
+        height: 1080,
         // The display mode that will be used to show slides
         display: 'block',
 		math: {
@@ -418,6 +712,12 @@ def growing_circles():
 			disableCheckFile: false, //default false
 		 },
 
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -430,7 +730,7 @@ def growing_circles():
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
-        chalkWidth: 7,
+        chalkWidth: 5,
 		boardmarkers : [
                 { color: 'rgba(248,248,242,1)', cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                 { color: 'rgba(102,217,239,1)', cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
@@ -455,6 +755,20 @@ def growing_circles():
 			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
 		],
       });
+      
     </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>

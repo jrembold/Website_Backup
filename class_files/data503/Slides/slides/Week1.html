@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>And So It Begins</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">And So It Begins</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">January 18/23, 2024</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Welcome to DATA 503: Fundamentals of Data Engineering!</li>
+<li>Things to do / be aware of:
+<ul>
+<li>Access the course webpage <a
+href="http://www.willamette.edu/~jjrembold/classes/data503/data503/">here</a>
+<ul>
+<li>Also linked to from Canvas</li>
+</ul></li>
+<li>Read over the full syllabus</li>
+<li>You now have your SQL book</li>
+<li>Join the class Discord channel, to facilitate remote questions,
+answers, and general communication
+<ul>
+<li>Invite link in announcement on Canvas</li>
+</ul></li>
+<li>Homework will be channeled through GitHub Classroom, so you’ll need
+to get a GitHub account if you don’t already have one</li>
+</ul></li>
+<li>First homework assignment is up!</li>
+</ul>
+</section>
+<section id="who-am-i" class="slide level2">
+<h2>Who Am I?</h2>
+<div class="cols">
+<div class="col" style="font-size:.9em">
+<dl>
+<dt>Name:</dt>
+<dd>
+Jed Rembold
+</dd>
+<dt>Background:</dt>
+<dd>
+PhD in Physics with specialization in Astrophysics
+</dd>
+<dd>
+<ul>
+<li>Astronomy is essentially a data science field these days</li>
+</ul>
+</dd>
+<dd>
+<ul>
+<li>Have been teaching CS now for past 4 years</li>
+</ul>
+</dd>
+<dt>Office:</dt>
+<dd>
+Ford 214
+</dd>
+<dt>Hours:</dt>
+<dd>
+MW 2:00-4:00, TTh 3:00-4:30, or anytime online or by appointment!
+</dd>
+<dt>Email:</dt>
+<dd>
+jjrembold@willamette.edu
+</dd>
+</dl>
+</div>
+<div class="col">
+<p><img data-src="../images/about_me.png" style="width:80.0%" /></p>
+</div>
+</div>
+</section>
+<section id="grade-breakdown" class="slide level2">
+<h2>Grade Breakdown</h2>
+<ul>
+<li>The grade breakdown in the class is fairly straightforward</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Category</th>
+<th>Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Homework</td>
+<td>55%</td>
+</tr>
+<tr class="even">
+<td>Project</td>
+<td>30%</td>
+</tr>
+<tr class="odd">
+<td>Midterm Video</td>
+<td>15%</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="homework" class="slide level2">
+<h2>Homework</h2>
+<ul>
+<li>Homework due the night before class at midnight</li>
+<li>Will be submitted through GitHub Classroom</li>
+<li>Problems will commonly require a mix of written and coded pieces:
+<ul>
+<li>Both will have either template files that you can add to and
+re-upload, or clear instructions as to what filename you should save
+your code or resulting data as.</li>
+</ul></li>
+<li>72 cumulative, unpenalized hours allotted over the semester for late
+submissions
+<ul>
+<li>Late work past that point will drop by 20% credit each day</li>
+<li>Talk to me if something major comes up, and we can make a plan</li>
+</ul></li>
+</ul>
+</section>
+<section id="project" class="slide level2">
+<h2>Project</h2>
+<ul>
+<li>I continue to grow the project in this course, and that trend will
+continue this semester</li>
+<li>Plan to incorporate:
+<ul>
+<li>Data acquisition</li>
+<li>Data pipelines (ETL)</li>
+<li>Database modeling</li>
+<li>Data Serving</li>
+</ul></li>
+<li>Projects are linked to partners, though certain parts will be more
+or less independent</li>
+<li>At the end of the semester, you and your partner will take the
+culmination of your efforts and then make a presentation on it</li>
+</ul>
+</section>
+<section id="midterm-video" class="slide level2">
+<h2>Midterm Video</h2>
+<ul>
+<li>I have done away with exams in this course
+<ul>
+<li>Oral exams were most effective and great practice for technical
+interviews, but I can’t do them with 45 students</li>
+</ul></li>
+<li>Instead you will prepare a midterm video
+<ul>
+<li>There will be a list of skills and techniques to showcase</li>
+<li>You choose a data set that will allow you to demonstrate those
+skills, and then prepare a video showcasing those skills and explaining
+what you are doing</li>
+<li>Videos should be 10-15 minutes.</li>
+<li>Happens in lieu of homework, so you have a week to work on it. Can
+practice as much as you want, split it across multiple takes, etc.</li>
+</ul></li>
+</ul>
+</section>
+<section id="expectations" class="slide level2">
+<h2>Expectations</h2>
+<ul>
+<li>Most of you will not end up being data engineers</li>
+<li>Trying to teach you “enough to be dangerous”
+<ul>
+<li>If you end up in a data scientist position, you will almost
+assuredly need to interface and work with your engineer</li>
+<li>If you end up in charge of data at a smaller enterprise, your
+responsibilities may well entail both the work of a data scientist
+<em>and</em> the work of a data engineer</li>
+<li>It is always useful in the modern era to understand how to store
+information</li>
+</ul></li>
+</ul>
+</section>
+<section id="what-even-is-data-engineering" class="slide level2">
+<h2>What even is Data Engineering?</h2>
+<div class="r-stack">
+<div class="fragment quote current-visible fade-up">
+<blockquote>
+<p>Data engineering is a set of operations aimed at creating interfaces
+and mechanisms for the flow and access of information. It takes
+dedicated specialists—data engineers— to maintain data so that it
+remains available and usable by others. In short, data engineers set up
+and operate the organization’s data infrastructure, preparing it for
+further analysis by data analysts and scientists</p>
+</blockquote>
+<div class="attribution">
+<p>“Data Engineering and Its Main Concepts” by AlexSoft</p>
+</div>
+</div>
+<div class="fragment quote current-visible fade-right">
+<blockquote>
+<p>The first type of data engineering is SQL-focused. The work and
+primary storage of the data is in relational databases. All of the data
+processing is done with SQL or a SQL-based language. Sometimes, this
+data processing is done with an ETL tool. The second type of data
+engineering is Big Data–focused. The work and primary storage of the
+data is in Big Data technologies like Hadoop, Cassandra, and HBase. All
+of the data processing is done in Big Data frameworks like MapReduce,
+Spark, and Flink. While SQL is used, the primary processing is done with
+programming languages like Java, Scala, and Python.</p>
+</blockquote>
+<div class="attribution">
+<p>“The Two Types of Data Engineering” Jesse Anderson</p>
+</div>
+</div>
+<div class="fragment quote current-visible fade-down">
+<blockquote>
+<p>In relation to previously existing roles, the data engineering field
+could be thought of as a superset of business intelligence and data
+warehousing that brings more elements from software engineering. This
+discipline also integrates specialization around the operation of
+so-called “big data” distributed systems, along with concepts around the
+extended Hadoop ecosystem, stream processing, and in computation at
+scale.</p>
+</blockquote>
+<div class="attribution">
+<p>“The Rise of the Data Engineer” Maxime Beauchemin</p>
+</div>
+</div>
+<div class="fragment quote current-visible fade-left">
+<blockquote>
+<p>Data engineering is all about the movement, manipulation, and
+management of data.</p>
+</blockquote>
+<div class="attribution">
+<p>“What is Data Engineering?” Lewis Gavin</p>
+</div>
+</div>
+<div class="fragment quote current-visible fade-left">
+<blockquote>
+<p>Data engineering is the development, implementation, and maintenance
+of systems and processes that take in raw data and produce high-quality,
+consistent information that supports downstream use cases, such as
+analysis and machine learning.</p>
+</blockquote>
+<div class="attribution">
+<p>“Fundamentals of Data Engineering” Joe Reiss &amp; Matt Housley</p>
+</div>
+</div>
+</div>
+</section>
+<section id="the-data-engineers-role" class="slide level2">
+<h2>The Data Engineer’s Role</h2>
+<div class="cols" style="align-items: center">
+<div class="col">
+<ul>
+<li>Data Engineers are responsible for ensuring that the right people
+can find and access the data they need as efficiently as possible
+<ul>
+<li>Who are the right people? Usually Data Scientists / Analysts</li>
+</ul></li>
+<li>Data Engineers are focused on the task of data collection,
+organization, and preparation</li>
+<li>The tasks of the Data Scientists are <strong>impossible</strong>
+without the Data Engineer!</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/DS_heirarchy_of_needs.png"
+style="width:100.0%" /></p>
+</div>
+</div>
+<!--
+## The Five V's
+- Data Engineers need to contend with multiple facets of data
+    
+  Volume:
+    : the quantity of data points
+
+  Variety:
+    : the type and nature of the data (text, images, video, audio)
+
+  Velocity:
+    : the speed at which new data is generated and processed
+
+  Veracity:
+    : how trustworthy the sources are
+
+  Value:
+    : how actionable the data is
+-->
+</section>
+<section id="the-data-software-landscape" class="slide level2">
+<h2>The Data Software Landscape</h2>
+<p><img data-src="../images/Landscape.png" style="width:80.0%" /></p>
+</section>
+<section id="sampling-the-landscape" class="slide level2">
+<h2>Sampling the Landscape</h2>
+<ul>
+<li>Clearly, I neither know all of those nor could teach them in a
+semester</li>
+<li>My goal for you in this class is three-fold:
+<ul>
+<li>Understand the big picture
+<ul>
+<li>Where do many of these pieces of software fit in a pipeline or
+day-to-day work?</li>
+</ul></li>
+<li>Understand what some options are in common use-case categories
+<ul>
+<li>What is out there for databases?</li>
+<li>What is out there for data ingestion?</li>
+</ul></li>
+<li>Gain experience using a few representative pieces of software</li>
+</ul></li>
+</ul>
+<!--
+## Quick Note On Data Types
+- Notice that in a relational database we can specify what _type_ of information is allowed in each column
+- Will discuss more in Ch 3, but you have the basic types you might expect
+    - `int` for integers
+    - `varchar` for text
+    - `date` for dates
+- This keeps information consistent and predictable
+-->
+<!--
+## Alternative Storage Structures
+
+|  | Structured | Semi-Structured | Unstructured |
+| ---|---|---|--- |
+| <span style="font-weight: bold;">Ability to search and organize data?</span> | Easy | Moderate | Difficult |
+| <span style="font-weight: bold;">Format of Data?</span> | Tables of numbers and some text | Tables, lists of numbers and text | Images, videos, detailed text |
+| <span style="font-weight: bold;">Where is it stored?</span> | Relational databases | NoSQL, XML, JSON | Data Lakes |
+-->
+</section>
+<section id="languages-to-know" class="slide level2">
+<h2>Languages to Know?</h2>
+<dl>
+<dt>SQL</dt>
+<dd>
+The most common interface for databases and data lakes
+</dd>
+<dt>Python</dt>
+<dd>
+The bridge language between data engineering and data science
+</dd>
+<dt>JVM languages (Java or Scala)</dt>
+<dd>
+Prevalent for common open source Apache projects like Spark and Hive
+</dd>
+<dt>Bash</dt>
+<dd>
+The command line interface for Linux operating systems
+</dd>
+</dl>
+</section>
+<section id="the-data-engineering-lifecycle" class="slide level2">
+<h2>The Data Engineering Lifecycle</h2>
+<ul>
+<li>We are going to be largely concerned with the area between
+generation and final usage</li>
+<li>This three-step process is commonly given the name ETL, standing for
+Extract, Transform, Load</li>
+</ul>
+<p><img
+data-src="../images/svg_cache/fe9677b08de9c06659bb88ece26208d84e217331.svg"
+style="width:100.0%" /></p>
+</section>
+<section id="when-to-organize" class="slide level2">
+<h2>When to Organize</h2>
+<ul>
+<li>There tend to be two different paradigms for when to run ETL
+operations</li>
+<li>Batch processing
+<ul>
+<li>ETL operations are run on a particular interval, and all the most
+recent data is processed at once as a single “batch”</li>
+<li>Can take a while to run, depending on the size of the batch</li>
+</ul></li>
+<li>Stream processing
+<ul>
+<li>ETL operations are run on the data as it is generated, in
+real-time</li>
+<li>Speed depends on how fast new data is being generated</li>
+</ul></li>
+</ul>
+</section>
+<section id="undercurrents" class="slide level2">
+<h2>Undercurrents</h2>
+<ul>
+<li>There are several items to consider throughout the lifecycle that we
+will also occasionally touch on
+<ul>
+<li>Security</li>
+<li>Data management</li>
+<li>DataOps</li>
+<li>Data architecture</li>
+<li>Orchestration</li>
+<li>Software Engineering</li>
+</ul></li>
+</ul>
+</section>
+<section id="group-activity" class="slide level2">
+<h2>Group Activity</h2>
+<ul>
+<li>Use LinkedIn and perform a job search on “Data Engineer” jobs in a
+US metro area of your choice. Identify 3 returned job listings per group
+member to investigate in detail (so a group of 3 should look at 9 total
+postings). Across your 3 listings, identify the following:
+<ul>
+<li>Goals/objectives/purpose/responsibilities of the position</li>
+<li>Qualifications required / preferred</li>
+<li>Skills desired</li>
+</ul></li>
+<li>Spend <em>15 minutes</em> on independent investigation and then
+<em>15 minutes</em> on group synthesis
+<ul>
+<li>Produce a concise group-wide bullet-point list summarizing a
+“competitive applicant” in the field of Data Engineering based on the
+above 3 dimensions</li>
+<li>We’ll summarize at the end what people found</li>
+</ul></li>
+</ul>
+</section>
+<section id="dinner-break" class="slide level2">
+<h2>Dinner Break!</h2>
+<ul>
+<li>Take 30 minutes to relax, grab a bite, and stretch your legs!</li>
+</ul>
+<p><img data-src="../images/nomming_catepillar.png" /></p>
+<!-- SQL SECTION STARTS -->
+</section>
+<section id="how-to-store-data" class="slide level2">
+<h2>How to store data?</h2>
+<ul>
+<li>There are many different ways information can be stored, with
+varying trade-offs!</li>
+<li>Suppose you wanted to keep track of your friend’s birthdays</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>First Name</th>
+<th>Last Name</th>
+<th>Birthday</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Frank</td>
+<td>Stein</td>
+<td>4/2/2000</td>
+</tr>
+<tr class="even">
+<td>Tessa</td>
+<td>Loch</td>
+<td>8/23/2003</td>
+</tr>
+<tr class="odd">
+<td>Bobby</td>
+<td>Wolf</td>
+<td>12/14/2005</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="options" class="slide level2">
+<h2>Options!</h2>
+<div class="cols">
+<div class="col">
+<div class="block" name="Tables">
+<p>As the previous slide may have suggested, you could store the
+information in some sort of table or comma separate values file:</p>
+<table>
+<thead>
+<tr class="header">
+<th>First Name</th>
+<th>Last Name</th>
+<th>Birthday</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Frank</td>
+<td>Stein</td>
+<td>4/2/2000</td>
+</tr>
+<tr class="even">
+<td>Tessa</td>
+<td>Loch</td>
+<td>8/23/2003</td>
+</tr>
+<tr class="odd">
+<td>Bobby</td>
+<td>Wolf</td>
+<td>12/14/2005</td>
+</tr>
+</tbody>
+</table>
+<pre ><code class="text" style="font-size:.9em">First Name,Last Name,Birthday
+Frank,Stein,4/2/2000
+Tessa,Loch,8/23/2003
+Bobby,Wolf,12/14/2005</code></pre>
+</div>
+</div>
+<div class="col">
+<div class="block" name="JSON">
+<p>Alternatively, you might use some other form of common data structure
+like JSON to store the information:</p>
+<pre ><code class="json" style="font-size:.9em">[
+  {"First Name": "Frank",
+   "Last Name": "Stein",
+   "Birthday": "4/2/2000"},
+  {"First Name": "Tessa",
+   "Last Name": "Loch",
+   "Birthday": "8/23/2003"},
+  {"First Name": "Bobby",
+   "Last Name": "Wolf",
+   "Birthday": "12/14/2005"}
+]
+</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="the-plot-thickens" class="slide level2">
+<h2>The Plot Thickens…</h2>
+<ul>
+<li>Suppose now you’d also like to keep track of what courses they are
+currently taking, and what times those courses are held</li>
+<li>Suppose each is taking 2-3 classes, some of which overlap</li>
+<li>This significantly complicates both example storage methods!</li>
+</ul>
+</section>
+<section id="example-table-storage" class="slide level2">
+<h2>Example Table Storage</h2>
+<ul>
+<li>We can’t store tables inside of tables, so we usually need to
+duplicate information over multiple rows:</li>
+</ul>
+<div style="font-size:.9em">
+<table>
+<thead>
+<tr class="header">
+<th>First Name</th>
+<th>Last Name</th>
+<th>Birthday</th>
+<th>Class</th>
+<th>Class Day</th>
+<th>Class Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Frank</td>
+<td>Stein</td>
+<td>4/2/2000</td>
+<td>CS151</td>
+<td>MWF</td>
+<td>1:00pm</td>
+</tr>
+<tr class="even">
+<td>Frank</td>
+<td>Stein</td>
+<td>4/2/2000</td>
+<td>MATH256</td>
+<td>MWF</td>
+<td>9:00am</td>
+</tr>
+<tr class="odd">
+<td>Tessa</td>
+<td>Loch</td>
+<td>8/23/2003</td>
+<td>CS151</td>
+<td>MWF</td>
+<td>1:00pm</td>
+</tr>
+<tr class="even">
+<td>Tessa</td>
+<td>Loch</td>
+<td>8/23/2003</td>
+<td>IDS236</td>
+<td>TTh</td>
+<td>1:00pm</td>
+</tr>
+<tr class="odd">
+<td>Tessa</td>
+<td>Loch</td>
+<td>8/23/2003</td>
+<td>HIST123</td>
+<td>MWF</td>
+<td>12:00pm</td>
+</tr>
+<tr class="even">
+<td>Bobby</td>
+<td>Wolf</td>
+<td>12/14/2005</td>
+<td>IDS236</td>
+<td>TTh</td>
+<td>1:00pm</td>
+</tr>
+<tr class="odd">
+<td>Bobby</td>
+<td>Wolf</td>
+<td>12/14/2005</td>
+<td>MATH256</td>
+<td>MWF</td>
+<td>9:00am</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>Duplication is generally <strong>bad</strong>!</li>
+</ul>
+</section>
+<section id="example-json-storage" class="slide level2">
+<h2>Example JSON Storage</h2>
+<ul>
+<li>We still have duplication issues with JSON as well.</li>
+</ul>
+<pre ><code class="json" style="font-size:.7em; max-height:800px;">[
+  {"First Name": "Frank", "Last Name": "Stein", "Birthday": "4/2/2000",
+   "Classes": [
+     {"class": "CS151", "day": "MWF", "time":"1:00pm"},
+     {"class": "MATH256", "day": "MWF", "time":"9:00am"}
+    ]},
+  {"First Name": "Tessa", "Last Name": "Loch", "Birthday": "8/23/2003",
+   "Classes": [
+     {"class": "CS151", "day": "MWF", "time":"1:00pm"},
+     {"class": "IDS236", "day": "TTh", "time":"1:00pm"},
+     {"class": "HIST123", "day": "MWF", "time":"12:00pm"}
+    ]},
+  {"First Name": "Bobby", "Last Name": "Wolf", "Birthday": "12/14/2005",
+   "Classes": [
+     {"class": "IDS236", "day": "TTh", "time":"1:00pm"},
+     {"class": "MATH256", "day": "MWF", "time":"9:00am"}
+    ]},
+]
+</code></pre>
+</section>
+<section id="relational-tables" class="slide level2">
+<h2>Relational Tables</h2>
+<ul>
+<li>One solution to this issue is realizing that we are trying to
+actually keep track of two things: friends and classes.</li>
+<li>So we break things up into <em>two</em> tables, and then create
+relationships between them</li>
+<li>This is the core of what occurs in a <em>relational
+database</em>!</li>
+</ul>
+<div class="cols">
+<div class="col" style="font-size:.8em;">
+<table>
+<thead>
+<tr class="header">
+<th>First Name</th>
+<th>Last Name</th>
+<th>Birthday</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Frank</td>
+<td>Stein</td>
+<td>4/2/2000</td>
+</tr>
+<tr class="even">
+<td>Tessa</td>
+<td>Loch</td>
+<td>8/23/2003</td>
+</tr>
+<tr class="odd">
+<td>Bobby</td>
+<td>Wolf</td>
+<td>12/14/2005</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col" style="font-size:.8em">
+<table>
+<thead>
+<tr class="header">
+<th>Class</th>
+<th>Day</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CS151</td>
+<td>MWF</td>
+<td>1:00pm</td>
+</tr>
+<tr class="even">
+<td>MATH256</td>
+<td>MWF</td>
+<td>9:00am</td>
+</tr>
+<tr class="odd">
+<td>IDS236</td>
+<td>TTh</td>
+<td>1:00pm</td>
+</tr>
+<tr class="even">
+<td>HIST123</td>
+<td>MWF</td>
+<td>12:00pm</td>
+</tr>
+<tr class="odd">
+<td>PHYS221</td>
+<td>MWF</td>
+<td>10:00pm</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="viewing-relational-databases" class="slide level2">
+<h2>Viewing Relational Databases</h2>
+<ul>
+<li>In general, you’d probably use a third table to represent all the
+linkages</li>
+<li>Unique id keys are used to connect the different tables</li>
+</ul>
+<figure>
+<img data-src="../images/friend_classes_schema.png" style="width:90.0%"
+alt="Relational Database Schema" />
+<figcaption aria-hidden="true">Relational Database Schema</figcaption>
+</figure>
+</section>
+<section id="relational-databases-and-sql" class="slide level2">
+<h2>Relational Databases and SQL</h2>
+<ul>
+<li>SQL is a language that allows you to define and query relational
+databases</li>
+<li>These days it is pronounced “ESS-CUE-ELL”, though you may still hear
+it occasionally referred to in an older form of “SEQUEL”</li>
+<li>Does <strong>not</strong> stand for “Structured Query Language”!
+<ul>
+<li>Is not structured in a programming sense</li>
+<li>Does far more than just query</li>
+<li>Is not Turing complete in a language sense</li>
+</ul></li>
+<li>Comes in several variants, though the core standards are governed by
+ANSI and ISO, so none stray too far from the standards
+<ul>
+<li>We’ll be focusing on a variant called <em>PostgreSQL</em> this
+semester</li>
+</ul></li>
+</ul>
+</section>
+<section id="sql-servers" class="slide level2">
+<h2>SQL Servers</h2>
+<ul>
+<li>PostgreSQL (Postgres for short) operates on a server model, where
+clients contact the server and ask it to manipulate or query a
+particular database
+<ul>
+<li>Multiple databases can exist on the server at a time</li>
+</ul></li>
+<li>Works well for large distributions, but you can also just run a
+local server on your computer, where you are the only client that can
+connect</li>
+<li>Several ways you can interact with the server once it is running
+<ul>
+<li>From a terminal prompt (Ch 18)</li>
+<li>Using pgAdmin as detailed in the text</li>
+<li>Using an alternative database client like <a
+href="https://github.com/beekeeper-studio/beekeeper-studio/releases/tag/v4.1.13">Beekeeper
+Studio (Community Edition)</a>
+<ul>
+<li>This is my absolute favorite SQL client at the moment, and I’d
+highly recommend it. It is what I’ll showcase much of the semester</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="adding-a-new-database" class="slide level2">
+<h2>Adding a New Database</h2>
+<ul>
+<li><p>SQL has commands to help with the administration of the database,
+as well as creating, manipulating, and querying specific tables within
+the database</p></li>
+<li><p>New installs will come with a database already existing (called
+<code class="python">postgres</code>), but it is a good idea to create a
+new one and leave the default untouched.</p></li>
+<li><p>Can run SQL commands either by opening the terminal or running
+the command in a query.</p>
+<ul>
+<li>The commands look the same regardless</li>
+</ul></li>
+<li><p>To create a new database, the syntax is: <!----></p>
+<pre ><code class="pgsql">CREATE DATABASE |||name of database|||;</code></pre></li>
+</ul>
+</section>
+<section id="adding-a-new-table" class="slide level2">
+<h2>Adding a new Table</h2>
+<ul>
+<li>Creating tables is one of the more fundamental actions you may need
+to take with a database</li>
+<li>Need to specify several things upon creation
+<ul>
+<li>The name of the table</li>
+<li>The names of the columns and associated data types</li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql">CREATE TABLE |||table name||| (
+    |||column_name_1||| |||type_1|||,
+    |||column_name_2||| |||type_2|||,
+    etc...
+);</code></pre>
+</section>
+<section id="a-note-on-syntax" class="slide level2">
+<h2>A Note on Syntax</h2>
+<ul>
+<li>SQL in general requires no special formatting in the form of
+capitalization or tabbing</li>
+<li>Following some conventions can help make your commands easier to
+read though:
+<ul>
+<li>Use uppercase for SQL keywords</li>
+<li>Use lowercase and underscores for table or column names</li>
+<li>Indent clauses and blocks of code for ease of readability</li>
+</ul></li>
+<li>A semicolon does indicate the end of a command though</li>
+<li>Text and dates will need <em>single</em> quotes, numbers do not</li>
+</ul>
+</section>
+<section id="adding-values-to-a-table" class="slide level2">
+<h2>Adding Values to a Table</h2>
+<ul>
+<li>Your tables are initially empty!</li>
+<li>You add data to the table by inserting new values into the
+columns</li>
+<li>New rows are concatenated to the end of the table</li>
+<li>Need to include an entry for each column (rows can’t be unequal in
+length)</li>
+</ul>
+<pre ><code class="pgsql">INSERT INTO |||table name||| (|||column A|||, |||column C|||)
+VALUES ('row1a', 'row1b'),
+       ('row2a', 'row2b'),
+       ('row3a', 'row3b');</code></pre>
+</section>
+<section id="query-time" class="slide level2">
+<h2>Query Time</h2>
+<ul>
+<li><p>The prime use of SQL for individuals <em>not</em> in charge of
+managing a database is using it to <em>query</em> the database for
+information</p></li>
+<li><p>Queries return only a subset of information from the database,
+and don’t alter the database in any way</p></li>
+<li><p>The keyword that begins any query is
+<code class="python">SELECT</code>, followed by:</p>
+<ul>
+<li>The column name(s) you would like information from, and</li>
+<li>The table you want to get the information from</li>
+</ul></li>
+<li><p>Basic syntax then could look something like:</p>
+<pre ><code class="pgsql">SELECT |||column 1|||, |||column 2||| FROM |||table name|||;</code></pre></li>
+<li><p>An asterisk <code class="python">*</code>, can stand in for the
+column names to stand for “all the columns”</p>
+<pre ><code class="pgsql">SELECT * FROM |||table name|||;</code></pre></li>
+</ul>
+</section>
+<section id="you-are-distinct" class="slide level2">
+<h2>You are Distinct</h2>
+<ul>
+<li>In many instances, a particular column may have duplicate entries
+<ul>
+<li>Each <em>row</em> should be unique, but if looking at just a single
+column, there very well could be duplicates</li>
+</ul></li>
+<li>The <code class="python">DISTINCT</code> keyword allows you to only
+display the <em>unique</em> values that appear in a column
+<ul>
+<li>Appears before the names of the desired columns</li>
+</ul>
+<pre ><code class="pgsql">SELECT DISTINCT |||column||| FROM |||table name|||;</code></pre></li>
+<li>Can be applied to multiple columns at a time
+<ul>
+<li>Then interpreted as “For each X in the table, what are all the Y
+values?”</li>
+</ul>
+<pre ><code class="pgsql">SELECT DISTINCT |||column 1|||, |||column 2|||
+FROM |||table name|||;</code></pre></li>
+</ul>
+</section>
+<section id="reversing-entropy" class="slide level2">
+<h2>Reversing Entropy</h2>
+<ul>
+<li>Sometimes patterns can be more evident if some ordering is applied
+to the query results
+<ul>
+<li>The ordering only applies to the query, the original data is
+untouched</li>
+</ul></li>
+<li>If you do <strong>not</strong> specify an ordering, you have
+<strong>no</strong> guarantee about what order results will come out
+in!</li>
+<li>SQL provides the <code class="python">ORDER BY</code> keyword to
+indicate a column to use for ordering</li>
+<li>Can use <code class="python">ASC</code> (the default) or
+<code class="python">DESC</code> to specify the direction of
+ordering</li>
+<li>Can also order by multiple columns (separate by comma)</li>
+</ul>
+<pre ><code class="pgsql">SELECT |||column 1|||, |||column 2|||
+FROM |||table name|||
+ORDER BY |||column 2||| DESC;</code></pre>
+</section>
+<section id="ordering-basics" class="slide level2">
+<h2>Ordering Basics</h2>
+<div style="font-size:.9em">
+<ul>
+<li>When your database was created, Postgres assigned it a
+<em>collation</em> method based on your systems <em>locale</em>
+<ul>
+<li>You can see the provided collation method for a connected database
+using: <code class="python">SHOW lc_collate;</code></li>
+</ul></li>
+<li>This collation method is what determines what characters “come
+before” other characters
+<ul>
+<li>On my system, the collation method looks like:
+<code class="python">en_US.utf8</code></li>
+</ul></li>
+<li>If your system is using a different collation method, then your
+sorting might come out slightly different!
+<ul>
+<li>In particular, be aware of this on MacOS</li>
+<li>You can choose a different collation method by providing one after
+the <code class="python">ORDER BY</code> statement</li>
+</ul>
+<pre ><code class="pgsql">SELECT |||column|||
+FROM |||table name|||
+ORDER BY |||column||| DESC COLLATE C</code></pre></li>
+</ul>
+</div>
+</section>
+<section id="filtration" class="slide level2">
+<h2>Filtration</h2>
+<ul>
+<li><p>Especially in tables with thousands to millions of rows, you
+likely don’t want <em>all</em> of the information pertaining to a
+column</p></li>
+<li><p>Instead it makes sense to filter or only return rows that meet
+certain criteria</p></li>
+<li><p>SQL’s <code class="python">WHERE</code> keyword provides exactly
+this functionality:</p>
+<pre ><code class="pgsql">SELECT |||column||| FROM |||table name|||
+WHERE |||some condition|||;</code></pre></li>
+<li><p>Each condition is some sort of comparison check, which could be
+summarized as a true / false question</p></li>
+</ul>
+</section>
+<section id="comparison-operations" class="slide level2">
+<h2>Comparison Operations</h2>
+<div style="font-size:.9em">
+<table>
+<thead>
+<tr class="header">
+<th>Operator</th>
+<th>Function</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">=</code></td>
+<td>Equal to</td>
+<td><code class="python">WHERE colname = 5</code></td>
+</tr>
+<tr class="even">
+<td><code class="python"><></code> or
+<code class="python">!=</code></td>
+<td>Not equal to</td>
+<td><code class="python">WHERE colname != 'fish'</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">></code></td>
+<td>Greater than</td>
+<td><code class="python">WHERE colname > 0</code></td>
+</tr>
+<tr class="even">
+<td><code class="python"><</code></td>
+<td>Less than</td>
+<td><code class="python">WHERE colname < 100</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">>=</code></td>
+<td>Greater than or equal to</td>
+<td><code class="python">WHERE colname >= 0</code></td>
+</tr>
+<tr class="even">
+<td><code class="python"><=</code></td>
+<td>Less than or equal to</td>
+<td><code class="python">WHERE colname <= 1000</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">BETWEEN</code></td>
+<td>Within a range</td>
+<td><code class="python">WHERE colname BETWEEN 50 and 100</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">IN</code></td>
+<td>Matches one of a set</td>
+<td><code class="python">WHERE colname IN ('red', 'blue')</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">LIKE</code> or
+<code class="python">ILIKE</code></td>
+<td>Match a pattern</td>
+<td><code class="python">WHERE colname LIKE '%ed'</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">NOT</code></td>
+<td>Negates a condition</td>
+<td><code class="python">WHERE colname NOT LIKE '%ed'</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="pattern-matching" class="slide level2">
+<h2>Pattern Matching</h2>
+<ul>
+<li><code class="python">LIKE</code> and
+<code class="python">ILIKE</code> differ only in whether capitalization
+matters in the match
+<ul>
+<li><code class="python">LIKE</code> is capitalization sensitive,
+<code class="python">ILIKE</code> is not</li>
+</ul></li>
+<li>Each can use several special characters in the desired pattern
+<ul>
+<li><code class="python">%</code> is a wildcard matching one or more of
+any character</li>
+<li><code class="python">_</code> is a wildcard matching just a single
+character</li>
+<li>If you want to actually match off one of these characters, you need
+to “escape” it with a backslash (<code class="python">\_</code> or
+<code class="python">\%</code>)</li>
+</ul></li>
+</ul>
+</section>
+<section id="conditional-combinations" class="slide level2">
+<h2>Conditional Combinations</h2>
+<ul>
+<li>Often, you might need to filter or several or more complicated
+conditions</li>
+<li>SQL also has the boolean <code class="python">AND</code> and
+<code class="python">OR</code> operators that you can use to stitch
+together multiple conditions</li>
+<li>Order of operations is left to right, so surround terms in
+parentheses if you need them evaluated earlier</li>
+</ul>
+<pre ><code class="pgsql">SELECT *
+FROM |||table name|||
+WHERE |||column 1||| LIKE 'F%' AND
+      (|||column 2||| > 50 OR |||column 3||| <= 10);</code></pre>
+</section>
+<section id="reaching-your-limit" class="slide level2">
+<h2>Reaching Your Limit</h2>
+<ul>
+<li>Often times, especially if sorting, you may not even be interested
+in <em>all</em> the results</li>
+<li>Maybe you just want the first few, or even just the first
+result</li>
+<li>You can control the maximum number of rows returned using
+<code class="python">LIMIT</code></li>
+<li>Comes last, after all the other keywords</li>
+</ul>
+<pre ><code class="pgsql" data-line-numbers="|4">SELECT * FROM |||table_name|||
+WHERE |||some_condition|||
+ORDER BY |||some_column|||
+LIMIT 5;</code></pre>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<p>Introduce yourself to a neighbor and then work together to construct
+a query to solve the following situation:</p>
+<ul>
+<li>Suppose you are particularly short and thus can only access cereals
+on the first two shelves. You’d like to grab the cereal with “Cheerios”
+somewhere in its name that has the highest amount of sugar per serving.
+Construct a query that could help you figure out what cereal you should
+be grabbing!</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveal.js-d3/reveald3.js"></script>
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+            //{ src: "../html_srcs/revealjs/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    <script>
+    // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+      function remove_bars() {
+        var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+        console.log(pseudoBlocks);
+        for ( var i = 0; i < pseudoBlocks.length; i++) {
+          pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+        }
+        }
+      // omg this is even more hacky now, but I need this to run after hljs has done its thing
+      setTimeout(remove_bars, 100);
+    </script>
+    </body>
+</html>

@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Data Engineering</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: 1;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Data Engineering</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Monday, August 29, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Welcome to DATA 351: Data Management with SQL!</li>
+<li>Things to do:
+<ul>
+<li>Access the course webpage at <a
+href="http://www.willamette.edu/~jjrembold/classes/data351/data351/">http://www.willamette.edu/~jjrembold/classes/data351/data351/</a>
+<ul>
+<li>Also link to from WISE</li>
+</ul></li>
+<li>Read over the full syllabus</li>
+<li>Get yourself a copy of the book</li>
+<li>Make sure you can find and access the class forum on Discord</li>
+<li>Get a free GitHub account if you don’t already have one</li>
+</ul></li>
+</ul>
+</section>
+<section id="who-am-i" class="slide level2">
+<h2>Who Am I?</h2>
+<dl>
+<dt>Name:</dt>
+<dd>
+Jed Rembold
+</dd>
+<dt>Background:</dt>
+<dd>
+PhD in Physics with specialization in Astrophysics
+</dd>
+<dd>
+<ul>
+<li>Currently full time in the CS and DS departments</li>
+</ul>
+</dd>
+<dd>
+<ul>
+<li>Teaching you the database skills I wish I’d had years ago</li>
+</ul>
+</dd>
+<dt>Office:</dt>
+<dd>
+Ford 214
+</dd>
+<dd>
+Hours: MW 2:30-4, TTh 2-4, or anytime online or when my door is open!
+</dd>
+<dt>Email:</dt>
+<dd>
+jjrembold@willamette.edu
+</dd>
+</dl>
+</section>
+<section id="motivations" class="slide level2">
+<h2>Motivations</h2>
+<ul>
+<li>Data science is fundamentally tied to the data that it analyzes</li>
+<li>Before <em>any</em> analysis can be done, we need to know:
+<ul>
+<li>In what way we want to store the data</li>
+<li>How we want to organize the data with that storage</li>
+<li>How we can easily retrieve the desired data when we need it</li>
+</ul></li>
+<li>All the above also need to be:
+<ul>
+<li>Reliable: If a hard-drive goes corrupt, we can’t just lose all of
+our data.</li>
+<li>Scalable: We may need ways for thousands of individuals across the
+world to access at the same time.</li>
+<li>Maintainable: The needs of an organization or the data itself can
+shift over time. The storage needs to be flexible enough to handle these
+shifts.</li>
+</ul></li>
+<li>This is the work of a data engineer</li>
+</ul>
+</section>
+<section id="data-storage" class="slide level2">
+<h2>Data Storage</h2>
+<ul>
+<li>There are many different ways information can be stored, with
+varying trade-offs!</li>
+<li>Suppose you wanted to keep track of your friend’s birthdays</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>First Name</th>
+<th>Last Name</th>
+<th>Birthday</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Frank</td>
+<td>Stein</td>
+<td>4/2/2000</td>
+</tr>
+<tr class="even">
+<td>Tessa</td>
+<td>Loch</td>
+<td>8/23/2003</td>
+</tr>
+<tr class="odd">
+<td>Bobby</td>
+<td>Wolf</td>
+<td>12/14/2005</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="options" class="slide level2">
+<h2>Options!</h2>
+<div class="cols">
+<div class="col">
+<div class="block" name="Tables">
+<p>As the previous slide may have suggested, you could store the
+information in some sort of table or comma separate values file:</p>
+<table>
+<thead>
+<tr class="header">
+<th>First Name</th>
+<th>Last Name</th>
+<th>Birthday</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Frank</td>
+<td>Stein</td>
+<td>4/2/2000</td>
+</tr>
+<tr class="even">
+<td>Tessa</td>
+<td>Loch</td>
+<td>8/23/2003</td>
+</tr>
+<tr class="odd">
+<td>Bobby</td>
+<td>Wolf</td>
+<td>12/14/2005</td>
+</tr>
+</tbody>
+</table>
+<pre ><code class="text" style="font-size:.9em">First Name,Last Name,Birthday
+Frank,Stein,4/2/2000
+Tessa,Loch,8/23/2003
+Bobby,Wolf,12/14/2005</code></pre>
+</div>
+</div>
+<div class="col">
+<div class="block" name="JSON">
+<p>Alternatively, you might use some other form of common data structure
+like JSON to store the information:</p>
+<pre ><code class="json" style="font-size:.9em">[
+  {"First Name": "Frank",
+   "Last Name": "Stein",
+   "Birthday": "4/2/2000"},
+  {"First Name": "Tessa",
+   "Last Name": "Loch",
+   "Birthday": "8/23/2003"},
+  {"First Name": "Bobby",
+   "Last Name": "Wolf",
+   "Birthday": "12/14/2005"}
+]
+</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="the-plot-thickens" class="slide level2">
+<h2>The Plot Thickens…</h2>
+<ul>
+<li>Suppose now you’d also like to keep track of what courses they are
+currently taking, and what times those courses are held</li>
+<li>Suppose each is taking 2-3 classes, some of which overlap</li>
+<li>This significantly complicates both example storage methods!</li>
+</ul>
+</section>
+<section id="example-table-storage" class="slide level2">
+<h2>Example Table Storage</h2>
+<ul>
+<li>We can’t store tables inside of tables, so we usually need to
+duplicate information over multiple rows:</li>
+</ul>
+<div style="font-size:.9em">
+<table>
+<thead>
+<tr class="header">
+<th>First Name</th>
+<th>Last Name</th>
+<th>Birthday</th>
+<th>Class</th>
+<th>Class Day</th>
+<th>Class Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Frank</td>
+<td>Stein</td>
+<td>4/2/2000</td>
+<td>CS151</td>
+<td>MWF</td>
+<td>1:00pm</td>
+</tr>
+<tr class="even">
+<td>Frank</td>
+<td>Stein</td>
+<td>4/2/2000</td>
+<td>MATH256</td>
+<td>MWF</td>
+<td>9:00am</td>
+</tr>
+<tr class="odd">
+<td>Tessa</td>
+<td>Loch</td>
+<td>8/23/2003</td>
+<td>CS151</td>
+<td>MWF</td>
+<td>1:00pm</td>
+</tr>
+<tr class="even">
+<td>Tessa</td>
+<td>Loch</td>
+<td>8/23/2003</td>
+<td>IDS236</td>
+<td>TTh</td>
+<td>1:00pm</td>
+</tr>
+<tr class="odd">
+<td>Tessa</td>
+<td>Loch</td>
+<td>8/23/2003</td>
+<td>HIST123</td>
+<td>MWF</td>
+<td>12:00pm</td>
+</tr>
+<tr class="even">
+<td>Bobby</td>
+<td>Wolf</td>
+<td>12/14/2005</td>
+<td>IDS236</td>
+<td>TTh</td>
+<td>1:00pm</td>
+</tr>
+<tr class="odd">
+<td>Bobby</td>
+<td>Wolf</td>
+<td>12/14/2005</td>
+<td>MATH256</td>
+<td>MWF</td>
+<td>9:00am</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>Duplication is generally <strong>bad</strong>!</li>
+</ul>
+</section>
+<section id="example-json-storage" class="slide level2">
+<h2>Example JSON Storage</h2>
+<ul>
+<li>We still have duplication issues with JSON as well.</li>
+</ul>
+<pre ><code class="json" style="font-size:.7em; max-height:800px;">[
+  {"First Name": "Frank", "Last Name": "Stein", "Birthday": "4/2/2000",
+   "Classes": [
+     {"class": "CS151", "day": "MWF", "time":"1:00pm"},
+     {"class": "MATH256", "day": "MWF", "time":"9:00am"}
+    ]},
+  {"First Name": "Tessa", "Last Name": "Loch", "Birthday": "8/23/2003",
+   "Classes": [
+     {"class": "CS151", "day": "MWF", "time":"1:00pm"},
+     {"class": "IDS236", "day": "TTh", "time":"1:00pm"},
+     {"class": "HIST123", "day": "MWF", "time":"12:00pm"}
+    ]},
+  {"First Name": "Bobby", "Last Name": "Wolf", "Birthday": "12/14/2005",
+   "Classes": [
+     {"class": "IDS236", "day": "TTh", "time":"1:00pm"},
+     {"class": "MATH256", "day": "MWF", "time":"9:00am"}
+    ]},
+]
+</code></pre>
+</section>
+<section id="relational-tables" class="slide level2">
+<h2>Relational Tables</h2>
+<ul>
+<li>One solution to this issue is realizing that we are trying to
+actually keep track of two things: friends and classes.</li>
+<li>So we break things up into <em>two</em> tables, and then create
+relationships between them</li>
+<li>This is the core of what occurs in a <em>relational
+database</em>!</li>
+</ul>
+<div class="cols">
+<div class="col" style="font-size:.8em;">
+<table>
+<thead>
+<tr class="header">
+<th>First Name</th>
+<th>Last Name</th>
+<th>Birthday</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Frank</td>
+<td>Stein</td>
+<td>4/2/2000</td>
+</tr>
+<tr class="even">
+<td>Tessa</td>
+<td>Loch</td>
+<td>8/23/2003</td>
+</tr>
+<tr class="odd">
+<td>Bobby</td>
+<td>Wolf</td>
+<td>12/14/2005</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col" style="font-size:.8em">
+<table>
+<thead>
+<tr class="header">
+<th>Class</th>
+<th>Day</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CS151</td>
+<td>MWF</td>
+<td>1:00pm</td>
+</tr>
+<tr class="even">
+<td>MATH256</td>
+<td>MWF</td>
+<td>9:00am</td>
+</tr>
+<tr class="odd">
+<td>IDS236</td>
+<td>TTh</td>
+<td>1:00pm</td>
+</tr>
+<tr class="even">
+<td>HIST123</td>
+<td>MWF</td>
+<td>12:00pm</td>
+</tr>
+<tr class="odd">
+<td>PHYS221</td>
+<td>MWF</td>
+<td>10:00pm</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="viewing-relational-databases" class="slide level2">
+<h2>Viewing Relational Databases</h2>
+<ul>
+<li>In general, you’d probably use a third table to represent all the
+linkages</li>
+<li>Unique id keys are used to connect the different tables</li>
+</ul>
+<figure>
+<img data-src="../images/friend_classes_schema.png" style="width:90.0%"
+alt="Relational Database Schema" />
+<figcaption aria-hidden="true">Relational Database Schema</figcaption>
+</figure>
+</section>
+<section id="quick-note-on-data-types" class="slide level2">
+<h2>Quick Note On Data Types</h2>
+<ul>
+<li>Notice that in a relational database we can specify what
+<em>type</em> of information is allowed in each column</li>
+<li>Will discuss more in Ch 3, but you have the basic types you might
+expect
+<ul>
+<li><code class="python">int</code> for integers</li>
+<li><code class="python">varchar</code> for text</li>
+<li><code class="python">date</code> for dates</li>
+</ul></li>
+<li>This keeps information consistent and predictable</li>
+</ul>
+</section>
+<section id="relational-databases-and-sql" class="slide level2">
+<h2>Relational Databases and SQL</h2>
+<ul>
+<li>SQL is a language that allows you to define and query relational
+databases</li>
+<li>These days it is pronounced “ESS-CUE-ELL”, though you may still hear
+it occasionally referred to in an older form of “SEQUEL”</li>
+<li>Does <strong>not</strong> stand for “Structured Query Language”!
+<ul>
+<li>Is not structured in a programming sense</li>
+<li>Does far more than just query</li>
+<li>Is not Turing complete in a language sense</li>
+</ul></li>
+<li>Comes in several variants, though the core standards are governed by
+ANSI and ISO, so none stray too far from the standards
+<ul>
+<li>We’ll be focusing on a variant called <em>Postgresql</em> this
+semester</li>
+</ul></li>
+</ul>
+</section>
+<section id="sql-servers" class="slide level2">
+<h2>SQL Servers</h2>
+<ul>
+<li>Postgresql operates on a server model, where clients contact the
+server and ask it to manipulate or query a particular database
+<ul>
+<li>Multiple databases can exist on the server at a time</li>
+</ul></li>
+<li>Works well for large distributions, but you can also just run a
+local server on your computer, where you are the only client that can
+connect</li>
+<li>Several ways you can interact with the server once it is running
+<ul>
+<li>From a terminal prompt (Ch 16)</li>
+<li>Using pgAdmin as detailed in the text</li>
+<li>Using VSCode with an extension
+<ul>
+<li>Will by my primary method</li>
+<li>Guide to setup posted on the website</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="adding-a-new-database" class="slide level2">
+<h2>Adding a New Database</h2>
+<ul>
+<li><p>SQL has commands to help with the administration of the database,
+as well as creating, manipulating, and querying specific tables within
+the database</p></li>
+<li><p>New installs will come with a database already existing (called
+<code class="python">postgres</code>), but it is a good idea to create a
+new one and leave the default untouched.</p></li>
+<li><p>Can run SQL commands either by opening the terminal or running
+the command in a query.</p>
+<ul>
+<li>The commands look the same regardless</li>
+</ul></li>
+<li><p>To create a new database, the syntax is: <!----></p>
+<pre ><code class="sql">CREATE DATABASE name_of_database;</code></pre></li>
+</ul>
+</section>
+<section id="adding-a-new-table" class="slide level2">
+<h2>Adding a new Table</h2>
+<ul>
+<li>Creating tables is one of the more fundamental actions you may need
+to take with a database</li>
+<li>Need to specify several things upon creation
+<ul>
+<li>The name of the table</li>
+<li>The names of the columns and associated data types</li>
+</ul></li>
+</ul>
+<pre ><code class="sql">CREATE TABLE table_name (
+    colname_1 type1,
+    colname_2 type2,
+    etc...
+);</code></pre>
+</section>
+<section id="a-note-on-syntax" class="slide level2">
+<h2>A Note on Syntax</h2>
+<ul>
+<li>SQL in general requires no special formatting in the form of
+capitalization or tabbing</li>
+<li>Following some conventions can help make your commands easier to
+read though:
+<ul>
+<li>Use uppercase for SQL keywords</li>
+<li>Use lowercase and underscores for table or column names</li>
+<li>Indent clauses and blocks of code for ease of readability</li>
+</ul></li>
+<li>A semicolon does indicate the end of a command though</li>
+<li>Text and date will need <em>single</em> quotes, numbers do not</li>
+</ul>
+<!--
+## Adding Values to a Table
+- Your tables are initially empty!
+- You add data to the table by inserting new values into the columns
+- New rows are concatenated to the end of the table
+- Need to include an entry for each column (rows can't be unequal in length)
+
+```sql
+INSERT INTO table_name (colname_1, colname_2)
+VALUES ('row1a', 'row1b'),
+       ('row2a', 'row2b'),
+       ('row3a', 'row3b');
+```
+
+-->
+</section>
+<section id="grade-breakdown" class="slide level2">
+<h2>Grade Breakdown</h2>
+<ul>
+<li>The grade breakdown in the class is fairly straightforward</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Category</th>
+<th>Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Homework</td>
+<td>40%</td>
+</tr>
+<tr class="even">
+<td>Project</td>
+<td>20%</td>
+</tr>
+<tr class="odd">
+<td>Exam 1</td>
+<td>10%</td>
+</tr>
+<tr class="even">
+<td>Exam 2</td>
+<td>10%</td>
+</tr>
+<tr class="odd">
+<td>Final</td>
+<td>20%</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="homework" class="slide level2">
+<h2>Homework</h2>
+<ul>
+<li>Homework due Wednesday nights at midnight</li>
+<li>Will be submitted through GitHub Classroom</li>
+<li>Problems will largely involve writing SQL, but will occassionally be
+more conceptual
+<ul>
+<li>All problems will come with an existing text template into which you
+can add your conceptual explanations, SQL code, determined answer,
+etc.</li>
+<li>You’ll add your material to this template and then upload the files
+back to GitHub to submit them</li>
+</ul></li>
+<li>72 cumulative, unpenalized hours allotted over the semester for late
+submissions
+<ul>
+<li>Late work past that point loses 20% value per day</li>
+<li>After 5 days is worth nothing</li>
+</ul></li>
+</ul>
+</section>
+<section id="project" class="slide level2">
+<h2>Project</h2>
+<ul>
+<li>There will be a project at the end of the semester where you can get
+some experience stitching all the skills you’ve learned over the
+semester together</li>
+<li>Will involve compiling a database that takes information from
+several different sources and uses relations to join the data</li>
+<li>Will also involve doing some basic querying to attempt to answer an
+interesting question or explore and interesting relationship in the
+data</li>
+<li>Will be pairs based</li>
+<li>We will have short presentations about findings on the last day of
+class</li>
+</ul>
+</section>
+<section id="exams" class="slide level2">
+<h2>Exams</h2>
+<ul>
+<li>We will have a total of 3 exams over the semester</li>
+<li>Will involve a mix of theory, writing SQL statements, and
+interpreting SQL code</li>
+<li>I have old exams to give you, as well as a study guide with
+“exam-like” questions on it to give you an idea of what to expect</li>
+</ul>
+</section>
+<section id="for-wednesday" class="slide level2">
+<h2>For Wednesday</h2>
+<ul>
+<li>Read over Ch 2 in the text, as that is what we will be
+discussing</li>
+<li>See about getting Postgresql installed on your personal system.
+Instructions in Intro of book for various operating systems.</li>
+<li>First assignment is posted!</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

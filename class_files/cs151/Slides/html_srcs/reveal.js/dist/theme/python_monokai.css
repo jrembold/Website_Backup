@@ -23,6 +23,11 @@
 }
 
 @font-face{
+  font-family: FiraCode Nerd Font Mono;
+  src: url("fonts/nerd-fonts/NerdFontComplete_Mono_FiraCode.ttf");
+}
+
+@font-face{
 	font-family: NerdFont;
 	src: url("fonts/nerd-fonts/Ubuntu Nerd Font Complete.ttf");
 }
@@ -88,6 +93,7 @@ svg {
   /*width: 100%;*/
   border-radius: 10px;
   border: 5px solid var(--blue);
+  border-color: inherit;
   padding-left: 10px;
   padding-right: 10px;
   /*padding-top: -5px;*/
@@ -395,6 +401,18 @@ margin-left: 1em;*/ }
 .reveal blockquote p:last-child {
   display: inline-block; }
 
+.reveal .quote .attribution {
+  display: block;
+  position: relative;
+  width: 70%;
+  margin: auto;
+  font-size:.9em;
+}
+.reveal .quote .attribution p {
+  text-align: right;
+  color: var(--fg);
+}
+
 .reveal q {
   font-style: italic; }
 
@@ -402,7 +420,7 @@ margin-left: 1em;*/ }
   display: block;
   position: relative;
   width: 90%;
-  margin: 20px 1em;
+  margin: 20px 0px;
   text-align: left;
   /*font-size: 0.55em;*/
   font-family: "FiraCode";
@@ -424,6 +442,18 @@ margin-left: 1em;*/ }
 	border: 4px solid;
 	border-color: var(--red);
 }
+.badcode::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  background-image: url('images/badcode.png');
+  background-size: 100% 100%;
+  height: 4em;
+  width: 3em;
+  right:20px;
+  bottom:10px;
+
+}
 
 .inlinecode {
 	display: block !important;
@@ -440,6 +470,17 @@ margin-left: 1em;*/ }
 	margin-bottom: 15px;
 	display: block;
 	text-align: center;
+}
+
+.reveal .file:before {
+	content: attr(name);
+    font-style: italic;
+	color: var(--gray4);
+	width: 100%;
+	border-bottom: 2px solid;
+	margin-bottom: 15px;
+	display: block;
+	text-align: left;
 }
 
 .reveal pre code {
@@ -626,6 +667,9 @@ margin-left: 1em;*/ }
 .reveal .slides section .fragment.highlight-current-green.current-fragment {
 	color: var(--green);
 }
+.reveal .slides section .fragment.highlight-current-red.current-fragment {
+	color: var(--red);
+}
 
 /*Hides and removes from the window any thing in an only-fragment class not currently being shown*/
 .only-fragment.fragment.visible:not(.current-fragment){
@@ -657,3 +701,24 @@ margin-left: 1em;*/ }
 	color: white;
 	min-height: 500px;
 }
+
+/*********************************************
+ * Quip Styling
+ *********************************************/
+.reveal .quip {
+  width: 80%;
+  margin: 1em auto 2em auto;
+  padding: 30px;
+  border-radius: 30px;
+  background-color: #232418;
+  border: 5px solid;
+  border-color: var(--gray2);
+}
+
+.reveal .quip p {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: var(--blue);
+  text-align: center;
+}
+

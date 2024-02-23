@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>It’s a Date</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">It’s a Date</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Thursday, March 3, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 6 due tonight</li>
+<li>We’ll be starting in on Chapter 12 on Tuesday</li>
+<li>Interesting talk tonight!
+<ul>
+<li><em>Artificial Intelligence in Clinical Medicine: What makes a good machine learning model for clinical applications?</em></li>
+<li>7:15pm in Ford 122 or on <a href="https://willametteuniversity.zoom.us/j/92184920258">Zoom</a></li>
+</ul></li>
+<li>Polling today: www.PollEv.com/jedrembold441</li>
+</ul>
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<p>A transaction is best used to accomplish all of the following except for which?</p>
+<div class="poll">
+<ol>
+<li>Recovering from a possible drive failure mid-query</li>
+<li>Prevent two simultaneous database accesses from getting different values</li>
+<li>Transfer information from one table to another</li>
+<li>Correcting a mistake</li>
+</ol>
+</div>
+</section>
+<section id="section" class="slide level2" data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/G1eMo7DnhPuLpWPGDPuq7?controls=none&amp;short_poll=true">
+<h2 data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/G1eMo7DnhPuLpWPGDPuq7?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="reminders" class="slide level2">
+<h2>Reminders</h2>
+<ul>
+<li>We have about 4 current date or time related data types</li>
+<li>Date time types:
+<ul>
+<li><code class="python">DATE</code>: holds a single individual day</li>
+<li><code class="python">TIME</code>: holds a single individual time</li>
+<li><code class="python">TIMESTAMP</code> or variants with <code class="python">TIMESTAMPZ</code>: holds a combination of date and time, along with a potential time zone</li>
+</ul></li>
+<li>Interval types:
+<ul>
+<li><code class="python">INTERVAL</code>: holds a duration of time</li>
+</ul></li>
+</ul>
+</section>
+<section id="extracting-pieces" class="slide level2">
+<h2>Extracting Pieces</h2>
+<ul>
+<li>Having all the information in one value is convenient, but sometimes you only need pieces
+<ul>
+<li>The hour from the time, or the month from the date</li>
+</ul></li>
+<li>These can be particularly important with aggregates!</li>
+<li>Two methods to extract pieces of any datetime or interval type:
+<ul>
+<li>SQL standard: <code class="python">extract( text FROM datetime_value )</code></li>
+<li>Postgres specific: <code class="python">date_part( text, datetime_value )</code></li>
+</ul></li>
+<li>Both will return a <code class="python">DOUBLE PRECISION</code> value of whatever part was requested</li>
+</ul>
+</section>
+<section id="parts-of-extract" class="slide level2">
+<h2>Parts of Extract</h2>
+<ul>
+<li>You have a wide variety of what you can extract</li>
+</ul>
+<div style="font-size:.7em">
+<div class="cols">
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>text</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>century</td>
+<td>What century the date is in. 1st century starts 0001-01-01★</td>
+</tr>
+<tr class="even">
+<td>day</td>
+<td>What day of the month</td>
+</tr>
+<tr class="odd">
+<td>decade</td>
+<td>The year divided by 10</td>
+</tr>
+<tr class="even">
+<td>dow</td>
+<td>The day of the week (0-6, starting with Sunday)</td>
+</tr>
+<tr class="odd">
+<td>doy</td>
+<td>The day of the year</td>
+</tr>
+<tr class="even">
+<td>epoch</td>
+<td>Number of seconds since 1970-01-01</td>
+</tr>
+<tr class="odd">
+<td>hour</td>
+<td>The current hour (0-23)</td>
+</tr>
+<tr class="even">
+<td>microseconds</td>
+<td>The number of microseconds</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>text</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>milliseconds</td>
+<td>The number of milliseconds</td>
+</tr>
+<tr class="even">
+<td>minute</td>
+<td>The minute</td>
+</tr>
+<tr class="odd">
+<td>month</td>
+<td>The month (1-12)</td>
+</tr>
+<tr class="even">
+<td>quarter</td>
+<td>What quarter of the year (1-4)</td>
+</tr>
+<tr class="odd">
+<td>second</td>
+<td>The number of seconds</td>
+</tr>
+<tr class="even">
+<td>timezone</td>
+<td>The timezone offset in seconds</td>
+</tr>
+<tr class="odd">
+<td>timezone_hour</td>
+<td>The timezone offset in hours</td>
+</tr>
+<tr class="even">
+<td>week</td>
+<td>What week of the year. ISO weeks start on Monday</td>
+</tr>
+<tr class="odd">
+<td>year</td>
+<td>The year</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<hr>
+<div style="font-size:.5em">
+<p>★ – If you disagree with this, please write your complaint to: Pope, Cathedral Saint-Peter of Roma, Vatican.</p>
+</div>
+</section>
+<section id="reversing-it" class="slide level2">
+<h2>Reversing it</h2>
+<ul>
+<li>Often times existing data sets have already separated out different aspects of the date or time
+<ul>
+<li>Year, month, and day might be in different columns for example</li>
+</ul></li>
+<li>It can be useful to “stitch” these together into an actual datetime type for further use.</li>
+<li>Postgres gives you a handful of functions to do so:
+<ul>
+<li><code class="python">make_date( year, month, day )</code>: Returns a new <code class="python">DATE</code> type value</li>
+<li><code class="python">make_time( hour, minute, seconds )</code>: Returns a new <code class="python">TIME</code> type value (with no timezone)</li>
+<li><code class="python">make_timestampz(year,month,day,hour,minute,second,time zone)</code>: Returns a new <code class="python">TIMESTAMPZ</code> type value</li>
+<li><code class="python">make_timestamp</code> and <code class="python">make_interval</code> also exist</li>
+</ul></li>
+</ul>
+</section>
+<section id="aging-well" class="slide level2">
+<h2>Aging well</h2>
+<ul>
+<li>Subtracting two <code class="python">DATE</code> type values will give just an <code class="python">INT</code> (in days)</li>
+<li>Subtracting two <code class="python">TIMESTAMP</code> type values will give an <code class="python">INTERVAL</code>, with the biggest “unit” in days</li>
+<li>Using Postgres’s <code class="python">age()</code> function can smooth over both and give units larger than days
+<ul>
+<li><code class="python">age( datetime1, datetime2 )</code>: Subtracts datetime2 from datetime1</li>
+</ul></li>
+<li>This can <strong>still</strong> give you awkward interval units at times though, so also consider using <code class="python">justify_interval( interval )</code>, which breaks intervals into divisions that don’t exceed a categories max
+<ul>
+<li>Hours would always be between 0 and 23 for instance, or months between 1 and 12</li>
+<li>Especially if you want to extract a particular part, this is highly recommended</li>
+</ul></li>
+</ul>
+</section>
+<section id="what-time-is-it" class="slide level2">
+<h2>What time is it?</h2>
+<ul>
+<li>Standard SQL also provides constants for grabbing the current system time and date</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>function</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">current_date</code></td>
+<td>Returns the current date</td>
+</tr>
+<tr class="even">
+<td><code class="python">current_time</code></td>
+<td>Returns the current time with timezone</td>
+</tr>
+<tr class="odd">
+<td><code class="python">localtime</code></td>
+<td>Returns the current time without timezone</td>
+</tr>
+<tr class="even">
+<td><code class="python">current_timestamp</code><span class="orange">★</span></td>
+<td>Returns the current date and time with timezone</td>
+</tr>
+<tr class="odd">
+<td><code class="python">localtimestamp</code></td>
+<td>Returns the current date and time without timezone</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><span class="orange">★</span> – Postgres also offers the shorter <code class="python">now()</code> <em>function</em> to do the same thing</p>
+</section>
+<section id="current-vs-clock" class="slide level2">
+<h2>Current vs Clock</h2>
+<ul>
+<li>Any query using <code class="python">current_timestamp</code> has it computed once at the start of a query
+<ul>
+<li>This is frequently desired for logging, so that you just get 1 consistent time for any records added from a single query</li>
+</ul></li>
+<li>If you <strong>want</strong> record-by-record time keeping, you should use <code class="python">clock_timestamp()</code> instead, which will work the same way but be updated before every value written to the table</li>
+</ul>
+</section>
+<section id="time-zones" class="slide level2">
+<h2>Time Zones</h2>
+<ul>
+<li>Dealing with time zones can be a headache, and it is a very nice feature that Postgres can work with them smoothly</li>
+<li>By default, Postgres will <em>display</em> any timestamp with a time zone with the time as you would measure it in your current system timezone</li>
+<li>What is your current system timezone?
+<ul>
+<li><code class="python">SHOW timezone;</code></li>
+</ul></li>
+<li>Getting general information about timezones:
+<ul>
+<li>Getting abbreviations:
+<ul>
+<li><code class="python">SELECT * FROM pg_timezone_abbrevs;</code></li>
+</ul></li>
+<li>Getting full names:
+<ul>
+<li><code class="python">SELECT * FROM pg_timezone_names;</code></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="teleportation" class="slide level2">
+<h2>Teleportation</h2>
+<ul>
+<li>It can sometimes be useful to switch your “current” time zone
+<ul>
+<li>Maybe it is easier to compare times to someone else living in that time zone</li>
+</ul></li>
+<li>Several methods to make the switch:
+<ul>
+<li><p>Change your <code class="python">postgressql.conf</code> file, which controls your Postgres server. Only recommended if you have permanently moved elsewhere and the database time zone has not updated appropriately.</p></li>
+<li><p>Set future queries in a single session to be from a new timezone:</p>
+<p><code class="python">SET timezone TO time_zone_name_or_abbrv;</code></p>
+<ul>
+<li>This will also adjust what values your <code class="python">localtime</code> or <code class="python">localtimestamp</code> report!</li>
+</ul></li>
+<li><p>Transform a single query to be reported in a different time zone:</p>
+<pre ><code class="pgsql">SELECT dt_col_name AT TIME ZONE tz_name_or_abbrv
+FROM tablename;</code></pre></li>
+</ul></li>
+</ul>
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity</h2>
+<ul>
+<li>Using the taxi rides dataset see if you can:
+<ul>
+<li>Compute the number of rides given each hour of the day</li>
+<li>Compute the average cost of rides over each day of the month</li>
+<li>Compute the median cost of rides over each day of the week</li>
+<li>Compute the average duration of each ride over each hour of the day</li>
+</ul></li>
+<li>Groups!
+<ul>
+<li>Aidan and Leo</li>
+<li>Hayden and Malie</li>
+<li>Maya and Madeline</li>
+<li>Jack and Seth</li>
+<li>Gordy, Paul and Douglas</li>
+</ul></li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

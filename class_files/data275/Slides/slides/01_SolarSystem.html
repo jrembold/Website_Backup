@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2024-01-18">
+  <title>Locating the Cosmos</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Locating the Cosmos</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">January 18, 2024</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Welcome to DATA-275: Data in the Cosmos!</li>
+<li>Things to do:
+<ul>
+<li>Access the course webpage <a
+href="https://willamette.edu/~jjrembold/classes/data275/data275/">here!</a>
+<ul>
+<li>This page is also linked from Canvas</li>
+</ul></li>
+<li>Read over the full syllabus</li>
+<li>Join the class Discord server for ease of communication and
+announcements
+<ul>
+<li>Invite information in an announcement on Canvas</li>
+</ul></li>
+<li>If you don’t already have a GitHub account, sign up for one</li>
+</ul></li>
+<li>Homework 1 will be posted tomorrow. Not due for two weeks.</li>
+</ul>
+</section>
+<section id="who-am-i" class="slide level2">
+<h2>Who Am I?</h2>
+<div class="cols">
+<div class="col">
+<dl>
+<dt>Name</dt>
+<dd>
+Jed Rembold
+</dd>
+<dt>Background</dt>
+<dd>
+PhD in Physics with specialization in Astrophysics
+</dd>
+<dt>Office</dt>
+<dd>
+Ford 214
+</dd>
+</dl>
+</div>
+<div class="col">
+<dl>
+<dt>Office Hours</dt>
+<dd>
+M, W 2:00 - 4:00
+</dd>
+<dd>
+T, Th 3:00 - 4:30
+</dd>
+<dd>
+Online or anytime my door is open
+</dd>
+<dt>Email</dt>
+<dd>
+jjrembold at willamette.edu
+</dd>
+</dl>
+</div>
+</div>
+</section>
+<section id="why-this-course" class="slide level2">
+<h2>Why This Course?</h2>
+<ul>
+<li>The amount of data that telescopes produce is growing…astronomically
+<ul>
+<li>LSST to collect 20 TB <em>per night</em> starting in 2024</li>
+<li>Square Kilometre Array will generate 10 PB <em>compressed</em> daily
+starting in 2028</li>
+</ul></li>
+<li>One of the largest sky surveys currently, SDSS, has collected 40 TB
+over <strong>the past 20 years</strong></li>
+<li>As such, the field of astronomy is becoming a data science field
+<ul>
+<li>Astrophysicists adopting data science skills</li>
+<li>Collaboration between astronomers and data scientists only going to
+build</li>
+</ul></li>
+</ul>
+</section>
+<section id="deliverables-and-scoring" class="slide level2">
+<h2>Deliverables and Scoring</h2>
+<div class="cols" style="align-items: center">
+<div class="col">
+<ul>
+<li>Standard 90/80/70 etc grade cut-offs
+<ul>
+<li>Top 2% get +’s, bottom 2% get -’s</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Homework (5)</td>
+<td style="text-align: right;">45%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Checkins (15)</td>
+<td style="text-align: right;">5%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Quizzes (3)</td>
+<td style="text-align: right;">30%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Projects (1)</td>
+<td style="text-align: right;">20%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="homework" class="slide level2">
+<h2>Homework</h2>
+<ul>
+<li>One assignment due after each unit, so approximately 1 every 2
+weeks</li>
+<li>Assignments will be done in pairs
+<ul>
+<li>Pseudo-randomly assigned (You won’t be with the same person more
+than once)</li>
+<li>3-4 problems per assignment</li>
+<li>Solutions should be written up as short computational essays, using
+a Jupyter Notebook, RMarkdown, or Quarto, and exported to HTML before
+being submitted</li>
+</ul></li>
+<li>Distribution and submission of materials managed through GitHub
+Classroom</li>
+<li>3 cumulative late days over the semester without penalty, then a 20%
+loss of credit per 24 hours late
+<ul>
+<li>Late days count against <strong>both</strong> partners, so don’t be
+that person who tanks your partner’s grade because <em>you</em> had the
+days</li>
+</ul></li>
+</ul>
+</section>
+<section id="check-ins-and-debriefings" class="slide level2">
+<h2>Check-ins and Debriefings</h2>
+<ul>
+<li>A large portion of this course revolves around working with peers
+who may have very different skill sets to your own
+<ul>
+<li>Doing this well is difficult!</li>
+</ul></li>
+<li>Each week an assignment is <strong>not</strong> due, you will have
+the weekend to complete a very short check-in
+<ul>
+<li>Asks about what you’ve accomplished that week, and how you and your
+partner have planned the upcoming week to finish the assignment</li>
+</ul></li>
+<li>Each week an assignment <strong>is</strong> due, you will have a
+short debriefing reflection
+<ul>
+<li>Reflect on what you did well as a partner, where you dropped the
+ball, and how you could improve going forward</li>
+</ul></li>
+<li>You have the weekend to complete these. They can not use late
+days.</li>
+</ul>
+</section>
+<section id="quizzes" class="slide level2">
+<h2>Quizzes</h2>
+<ul>
+<li>This course is a mix of science and data analysis techniques
+<ul>
+<li>Quizzes are about the science</li>
+</ul></li>
+<li>After every 2 units, there will be a short quiz (30 min) at the end
+of class
+<ul>
+<li>A handful of multiple choice or short answer questions pertaining to
+the scientific topics we have discussed in the previous 2 topics</li>
+</ul></li>
+<li>I’ll have example questions and study materials for you well before
+the first quiz</li>
+</ul>
+</section>
+<section id="projects" class="slide level2">
+<h2>Projects</h2>
+<ul>
+<li>One final project at the end of the semester</li>
+<li>Projects will be group based, most likely of 3-4</li>
+<li>Projects are a chance for you to dive deeper into a topic that has
+been discussed, or look to bring several topics together to look at
+something that interests you
+<ul>
+<li>Can also be an opportunity to introduce the class to a concept that
+we haven’t discussed, if your topic of interest necessitates</li>
+</ul></li>
+<li>Project deliverables will be an approximately 10-12 minute
+presentation to the class</li>
+</ul>
+</section>
+<section id="outline" class="slide level2">
+<h2>Outline</h2>
+<ul>
+<li>Core units this semester will focus on:
+<ul>
+<li>The Solar System</li>
+<li>Stars</li>
+<li>Exoplanets</li>
+<li>Galaxies</li>
+<li>Dark Matter</li>
+<li>Cosmology</li>
+</ul></li>
+<li>Expect to spend about 4-5 classes, or about two weeks, on each
+unit</li>
+<li>Class lectures will be a mix of background science, analysis
+techniques, and interactive tutorials
+<ul>
+<li>Plan to bring a laptop if possible to work on</li>
+</ul></li>
+</ul>
+</section>
+<section id="remain-flexible" class="slide level2">
+<h2>Remain Flexible!</h2>
+<ul>
+<li>This is the second time this class is being taught!
+<ul>
+<li>While I try immensely hard to be good at what I do, I can not (yet)
+see the future</li>
+<li>Things <strong>will</strong> come up that are probably non-ideal
+<ul>
+<li>Timing of topics may vary unpredictably</li>
+<li>Execution of assignments, quizzes, or presentations may have
+stumbles</li>
+</ul></li>
+</ul></li>
+<li>I am <em>incredibly</em> excited to teach this class again, and that
+so many were interested in the material</li>
+<li>I ask in return that you be patient and forgiving if some things do
+not go perfectly</li>
+<li>I promise to engage you and solicit feedback about any changes or
+tweaks we need to make on the fly</li>
+</ul>
+</section>
+<section id="topics-for-today" class="slide level2">
+<h2>Topics for Today</h2>
+<ul>
+<li>Positions on the Sky
+<ul>
+<li>What can we tell about the position of an astronomical object?</li>
+<li>How do we describe those positions?
+<ul>
+<li>What are the common methods?</li>
+<li>How can we transition between those methods?</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="looking-to-the-heavens" class="slide level2">
+<h2>Looking to the heavens</h2>
+<p><img data-src="../images/night_sky.png" style="width:100.0%" /></p>
+</section>
+<section id="looks-can-be-deceiving" class="slide level2">
+<h2>Looks can be deceiving</h2>
+<ul>
+<li>Stars (or other bright objects) may only <em>appear</em> to be next
+to one another
+<ul>
+<li>In reality, they are almost certainly separated by massive
+distances</li>
+<li>Stars are so far away that we lose essentially all depth perception
+<ul>
+<li>Comparable to looking at far away headlights on a dark road</li>
+</ul></li>
+</ul></li>
+<li>Looking upward, we could not tell the difference between space (as
+we know it to be) and us living inside a huge dark bubble with holes
+poked in it to let in light</li>
+<li>Embracing this analogy, we commonly refer to the <em>Celestial
+Sphere</em>, which could be envisioned as this giant dark bubble with
+holes poked in it</li>
+</ul>
+</section>
+<section id="the-celestial-sphere" class="slide level2">
+<h2>The Celestial Sphere</h2>
+<ul>
+<li>Defined to align with Earth’s sphere:
+<ul>
+<li>The celestial North pole is directly above Earth’s North pole</li>
+<li>The celestial South pole is directly below Earth’s South pole</li>
+<li>The celestial “equator” aligns with Earth’s equator</li>
+</ul></li>
+<li>The celestial equator does <strong>not</strong> align with the disk
+of the Solar System, because Earth is tilted
+<ul>
+<li>The <em>ecliptic</em> traces the intersection of the celestial
+sphere and the disk of the Solar System, and is the path that the Sun
+and planets follow through our sky</li>
+</ul></li>
+<li>Similar to Earth, positions on the celestial sphere are determined
+with, essentially, a latitude and longitude
+<ul>
+<li>Declination = latitude, Right ascension = longitude</li>
+</ul></li>
+</ul>
+</section>
+<section id="orientation-and-vocabulary" class="slide level2">
+<h2>Orientation and Vocabulary</h2>
+<div class="cols">
+<div class="col">
+<p><img
+data-src="../images/svg_cache/89990ef667ef91ee8dff685e81511f5b6108a65a.svg"
+style="width:90.0%" /></p>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/63bfcea71aae9a376ead5d34c68290418def3477.svg"
+style="width:90.0%" /></p>
+</div>
+</div>
+</section>
+<section id="from-our-perspective" class="slide level2">
+<h2>From Our Perspective</h2>
+<p><img
+data-src="../images/svg_cache/66d7de4de9acab503534599150b718ca2cd0931f.svg"
+style="width:50.0%" /></p>
+</section>
+<section id="section" class="slide level2"
+data-background-iframe="http://astro.unl.edu/naap/motion2/animations/ce_hc.html">
+<h2
+data-background-iframe="http://astro.unl.edu/naap/motion2/animations/ce_hc.html"></h2>
+</section>
+<section id="movement" class="slide level2">
+<h2>Movement</h2>
+<ul>
+<li>The further away something is from us, the more it seems to be
+“locked” to the celestial sphere
+<ul>
+<li>Stars are essentially motionless, with basically fixed declination
+and right ascension</li>
+<li>Solar system objects, like planets or the Sun, slowly traverse along
+the ecliptic</li>
+<li>The Moon follows a curve quite close to the ecliptic, but not
+exactly, at a faster pace</li>
+<li>Objects in orbit, like satellites, do not seem fixed to the
+celestial sphere at all</li>
+</ul></li>
+<li>The Milky Way, being comprised of stars, is fixed to the celestial
+sphere
+<ul>
+<li>The galactic plane lines up with neither Earth’s equator nor the
+disk of the Solar System, and thus stretches across the sky at an
+alternative angle</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-equatorial-coordinate-system" class="slide level2">
+<h2>The Equatorial coordinate system</h2>
+<ul>
+<li>Celestial latitude (Declination)
+<ul>
+<li>Varies from -90 to +90 degrees</li>
+<li>High precision uses arc-minutes, where 60 arc-minute <span
+class="math inline">\(=60^\prime = 1^\circ\)</span></li>
+<li>Can also use arc-seconds, where 60 arc-second <span
+class="math inline">\(=60^{\prime\prime} = 1^\prime\)</span></li>
+<li>Thus <span class="math inline">\(15^\circ45^\prime30^{\prime\prime}
+= (15 + 45/60 + 30/3600)^\circ = 115.75833^\circ\)</span></li>
+</ul></li>
+<li>Celestial longitude (Right Ascension)
+<ul>
+<li>Varies from 0 to 360 degrees</li>
+<li>Because the celestial sphere rotates about its poles once every 24
+hours, Right ascension is also commonly indicated in units of hours,
+minutes, and seconds</li>
+<li>1 hr = 15 degrees</li>
+<li><span class="math inline">\(14h32m14s = (14 + 32/60 + 14/3600)h =
+14.5372h = (14.5372 \times 15)^\circ = 218.0583^\circ\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="the-local-system" class="slide level2">
+<h2>The Local System</h2>
+<ul>
+<li>Determined by <strong>where</strong> and <strong>when</strong> you
+are looking at the sky</li>
+<li>Still commonly uses two coordinates:
+<ul>
+<li>The direction you are looking (<em>Azimuth</em>)
+<ul>
+<li>Generally determined by something like a compass bearing</li>
+</ul></li>
+<li>The angle above the horizon that the object appears
+(<em>Altitude</em>)
+<ul>
+<li>Generally determined with a sextant, possible with rough hand
+measurements</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="other-coordinate-systems" class="slide level2">
+<h2>Other Coordinate systems</h2>
+<ul>
+<li>Astronomy will frequently utilize other coordinate systems as well:
+<ul>
+<li>Solar barycentric coordinates: based on the center of mass of the
+Sun</li>
+<li>Galactic coordinates: also centered on the Sun, but with different
+orientation</li>
+</ul></li>
+<li>Even Equatorial coordinates can vary some owing to the precession of
+the Earth, and thus often specify an <em>epoch</em></li>
+<li>All can be transformed between one another using geometry
+<ul>
+<li>Not always very nice geometry: we’ll try to leverage existing
+libraries to do this wherever possible</li>
+</ul></li>
+</ul>
+</section>
+<section id="celestial-sphere-demonstrations" class="slide level2">
+<h2>Celestial Sphere Demonstrations</h2>
+<ul>
+<li>How long is the Sun up today (not that you can see it…) here on the
+45th parallel?</li>
+<li>How long is the Sun up in Alaska (roughly on the 65th
+parallel)?</li>
+<li>How long after sunset will the bright star Arcturus rise today in
+Salem?</li>
+</ul>
+</section>
+<section id="plotting-coordinates-demonstration" class="slide level2">
+<h2>Plotting Coordinates Demonstration</h2>
+<ul>
+<li>The file <a href="../demos/brightest_200.csv">here</a> is a CSV file
+containing the names and coordinates of the brightest 200 stars</li>
+<li>Suppose we want to visualize this arrangement of stars to see if we
+could identify any constellations</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>

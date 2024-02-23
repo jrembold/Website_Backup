@@ -1,0 +1,83 @@
+---
+title: Plotting the brightest 200 stars
+format:
+    html:
+        copy-code: true
+        embed-resources: true
+fig-responsive: true
+fig-width: 8
+---
+
+Here we try to replicate what we did previously in the Jupyter notebook?
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+from math import pi
+plt.style.use('seaborn-v0_8-darkgrid')
+```
+
+Then we can load in our data:
+```{python}
+stars = pd.read_csv(
+    './brightest_200.csv',
+    header=None,
+    names=['Official', 'Common', 'RA', 'DEC'])
+stars
+```
+
+Our main task here is to get the Right Ascension values into a decimal form, so that we can meaningfully plot them. Writing a quick function to handle a single RA value:
+```{python}
+def to_ra_deg(ra_str):
+    hours = float(ra_str[:2])
+    minutes = float(ra_str[3:5])
+    return (hours + minutes/60) * 15 #15 deg per hour
+```
+
+Then we can apply it to create a new column:
+```{python}
+stars['RA_deg'] = stars.RA.apply(to_ra_deg)
+stars
+```
+
+And finally we can plot it up:
+```{python}
+#| echo: False
+plt.subplot(111, projection='aitoff')
+plt.plot(stars.RA_deg, stars.DEC, '.')
+plt.show()
+```
+
+Suppose I wanted to highlight the star Betelgeuse:
+```{python}
+b = stars[stars.Common == 'Betelgeuse']
+b
+```
+```{python}
+#| echo: false
+plt.subplot(111, projection='aitoff')
+plt.plot(stars.RA_deg, stars.DEC, '.')
+plt.plot(b.RA_deg, b.DEC, '.')
+plt.show()
+```
+
+And it was at this point that I realized that the projection is NOT working as I'd have expected. Turns out it wants _radian_ values between -$\pi$ and $\pi$. Fair enough.
+```{python}
+def convert(deg):
+    rad = deg * pi / 180
+    if rad > pi:
+        rad -= 2 * pi
+    return rad
+
+
+plt.subplot(111, projection='aitoff')
+plt.plot(
+    stars.RA_deg.apply(convert), 
+    stars.DEC.apply(convert), '.')
+plt.plot(
+    b.RA_deg.apply(convert), 
+    b.DEC.apply(convert), '.')
+plt.show()
+```
+
+Still kinda hard to see Orion, as it is mirrored, but it is at least visible in the correct region now.

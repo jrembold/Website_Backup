@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Remote Joins</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Remote Joins</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">February 8/13, 2024</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework
+<ul>
+<li>Did HW3 get submitted?</li>
+<li>I’m lagging a touch on getting feedback on HW2 back to you, as I’ve
+had to implement a few things</li>
+<li>In general, only a randomly selected subset of problems will be
+scored on most assignments, and then I’ll make solutions available if
+you want to check your others
+<ul>
+<li>It is the only way I can reasonably keep up</li>
+</ul></li>
+</ul></li>
+<li>I’ll have Homework 4 posted soon</li>
+<li>Polling: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>For next week, read:
+<ul>
+<li>DeBarros: Ch 8</li>
+</ul></li>
+</ul>
+<!--
+## The Big Picture
+![Storage and Retrieval Island](../images/ch3_island.png){width=60%}
+
+
+## Why so technical?
+> "On a most fundamental level, a database needs to do two things: when you give it some data, it should store the data, and when you ask it again later, it should give the data back to you"
+
+- Why should a data engineer care about the ins and outs of database storage and retrieval?
+  - **Not** so you can try to design better storage systems from scratch
+  - _So you can choose a storage engine to match your needs_
+    - A real focus here is on knowing just enough of the field and terminology so that you could make informed decisions and understand documentation that might help you make those decisions.
+
+
+## A case of indexing
+- Writing data to storage and reading the data back from storage frequently have very different needs
+- Most methods will enact tradeoffs between the two
+  - Storing something quickly will likely make it more difficult to find later
+    - Example: Tossing a book into an empty spot on your bookcase
+  - Storing something so that it can be quickly found likely takes longer
+    - Example: Placing your book in the alphabetically correct location by author
+- Using an _index_ will generally assist with retrieval, but costs time on writes to update the index
+  - Often only some columns will be indexed for fast retrieval
+
+
+## Beavers Love them
+::::::cols
+::::col
+- A _log_ in a database sense is an **append-only** sequence of records
+- Updated records just have new values assigned later in the log
+- Most recent entries to the log have priority
+::::
+
+::::col
+![A Log](../images/db_log.png)
+
+::::
+::::::
+
+
+## #Hash Indexing
+- Stores key-value pairs, where the key is used to determine a _hash_
+- Imagine a hash as a sign that says: "Look right here for this value"
+- Log of transactions and values are stored on disk, but the hash-map is stored in memory
+- When a log gets too large, a new one is started and the old log is compacted
+  - New log segment gets a new hash-map in memory
+  - Logs are later merged to further compact them
+- Pros: sequential writes are good! Crash recovery is simple
+- Cons: All the hash maps need to fit in memory. Range queries inefficient
+
+
+## SSTables
+- Still a form of log, so append-only
+- Keys are stored in segments in sorted order
+
+![Example SSTable structure$^1$](../images/sstable.png)
+
+
+## LSM-Tree: Writing
+- A _log-structure merge-tree_ stores new writes initially in a _memtable_
+- The memtable is really a tree structure that sorts the keys as they come in
+- When the tree gets too large, the keys are flushed to a new SSTable on disk
+
+![LSM to SSTable$^1$](../images/lsm_to_sstable.png){width=70%}
+
+## LSM-Tree: Reading
+- Would normally still look for a corresponding key in the most recent segment
+- Segments can often use an in-memory _sparse index_ that takes advantage of the ordered state of the keys for faster look-ups
+
+![Improving finding speed with a sparse index$^1$](../images/sparse_index.png)
+
+
+## LSM Cost/Benefit
+- Pros
+  - Faster look-ups owing to ordered keys
+  - Not all keys need to exist in memory
+  - Works very well for write-heavy situations, as it only performs sequential writes (which require less disk scanning)
+- Cons
+  - A crash would lose all the data currently in the memtable that hasn't been written to an SSTable
+    - Can also keep an unordered hash table log on disk of all writes whose only existence is to restore the memtable in case of crash
+  - Searching for files not in the database still takes a long time as all segments must be searched
+    - Using _bloom filters_ can help by immediately reporting if the key is not in the database
+
+
+## B-Trees
+- Most widely used storage architecture
+- Constrains segments of key-value pairings by size (often around 4 KB)
+- Keys can either point to the value in memory, or they can point to another segment
+  - Segments pointing to other segments is where the tree structure comes in
+
+
+## B-Tree Look-up
+![Showing the structure and looking up a key in a B-Tree](../images/b-tree-loopup.png){width=80%}
+
+## B-Tree Writing
+- The tree is traversed and the key is attempted to be found
+  - If it is, the reference to the value is change **in place**
+  - If not, the key and value are added to that correct segment
+- If a segment is full (fixed size remember), then it is split into two new segments, each half full.
+  - This also forces the parent segment to need to be updated (and possibly split)
+
+
+## B-Tree Cost/Benefit
+- Pros
+  - Most values can be accessed in less than 4 segments, making for **very fast read speeds**
+    - Also leads to more predictable response times
+  - Store each key in only one location, so less chance of competing processes getting confused
+- Cons
+  - Crashes mid-write can be highly problematic
+    - Often keeps a _write-ahead log_ of what is going to be done in case of crash, but this doubles the amount to be written
+  - More easily fragment as a result of small amounts of space left between segments
+
+
+## Different Use Cases
+- Large-scale differences in how databases will be used
+- OLTP: Online Transaction Processing
+- OLAP: Online Analytic Processing
+
+![View of a typical pipeline](../images/oltp_vs_olap.png){width=50%}
+
+
+## Transaction vs Analytics
+
+| Property    | Transaction Processing (OLTP)                | Analytic Processing (OLAP)              |
+|-------------|----------------------------------------------|-----------------------------------------|
+| Read trend  | Small number of records per query            | Aggregate over large numbers of records |
+| Write trend | Random-access, low latency writes from users | Bulk import (ELT)                       |
+| Used by     | End user or customers                        | Internal analyst                        |
+| Represents  | Latest state of data                         | History of data events                  |
+| Sizes       | Gigabytes to terabytes                       | Terabytes to petabytes                  |
+
+
+## Analytic Processing
+::::::cols
+::::col
+- Needs to focus on handling huge queries and aggregates
+  - Relational databases a good fit for this
+- Frequently end up with "star" or "snowflake" type schematics
+  - One central fact table with other surrounding tables containing details
+::::
+
+::::col
+![A simple star schema](../images/star_schema.png)
+
+::::
+::::::
+
+## Analytic Optimizations
+- Column-data stored together
+  - As opposed to OLTP solutions, where data from a row is stored together
+  - Most analysis looks at a single column over all rows, so this makes reads faster
+- Compressing column data as bitmaps
+  - Makes boolean searches very speedy, as binary arithmetic can be used
+- Computing _data cubes_
+  - Pre-computing common (and computationally heavy) aggregates in their own table
+
+## Back to the Big Picture
+![Storage and Retrieval Island](../images/ch3_island.png){width=60%}
+-->
+</section>
+<section id="remote-sessions" class="slide level2">
+<h2>Remote Sessions</h2>
+<ul>
+<li><p>An extremely useful aspect of working in a shell is the
+simplicity with which you can connect to other remote systems</p></li>
+<li><p>The program usually used to do so is called
+<code class="python">ssh</code>, standing for “secure shell”</p></li>
+<li><p>To log into a remote server, the command looks something
+like:</p>
+<pre ><code class="bash">ssh {user name}@{ip address or domain name}</code></pre>
+<p>where</p>
+<ul>
+<li><code class="python">user name</code> is your user name on the
+<em>remote</em> server (which may be different than your local
+name)</li>
+<li><code class="python">ip address or domain name</code> is either the
+direct ip address of the server (eg. 165.213.13.194) or the domain name
+(myserver.net)</li>
+<li>Some servers may require a special port as well, which can be
+indicated with <code class="python">-p</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="working-remotely" class="slide level2">
+<h2>Working Remotely</h2>
+<ul>
+<li>Upon remote connection to a server, you will just end up in another
+shell</li>
+<li>This is where being comfortable in a shell can really shine!
+<ul>
+<li>Anything you could normally do in a shell, you can do here instead,
+but it happens on the remote system</li>
+</ul></li>
+<li>When you are done, you can type <code class="python">exit</code> to
+leave the remote connection and return to your local shell</li>
+</ul>
+</section>
+<section id="executing-commands-directly" class="slide level2">
+<h2>Executing commands directly</h2>
+<ul>
+<li><p>If you just need to run a quick command on the remote system, you
+can do so directly from <code class="python">ssh</code></p></li>
+<li><p>Simply add the desired command as the last
+<code class="python">ssh</code> argument</p>
+<pre ><code class="bash">ssh username@server mycommand</code></pre>
+<ul>
+<li>This runs the command on the remote server, but then gets the stdout
+and brings it back to be displayed in your local stdout</li>
+<li>This means you could then pipe <em>that</em> output into a program
+that only exists locally on your system to further process the
+data!</li>
+</ul></li>
+</ul>
+</section>
+<section id="streamlining-security" class="slide level2">
+<h2>Streamlining Security</h2>
+<ul>
+<li>Entering in your account password each time isn’t onerous but can be
+inconvenient
+<ul>
+<li>It makes it impossible to schedule automatic tasks that would
+connect to a server, for instance</li>
+</ul></li>
+<li>Instead of a password, you can take advantage of an <em>ssh
+key</em>, which uses a public/private key authentication system
+<ul>
+<li>You generate (or use an existing) public and private key pair on
+your system</li>
+<li>You upload the public key to the server you want to be able to
+connect to</li>
+<li>The private key always stays only on your system. It is not
+shared!</li>
+</ul></li>
+</ul>
+</section>
+<section id="using-keys" class="slide level2">
+<h2>Using Keys</h2>
+<ul>
+<li><p>To create a new key, you can use</p>
+<pre ><code class="bash" style="font-size:.9em">ssh-keygen -t ed25519 -C {desc comment}</code></pre>
+<ul>
+<li>You will be asked for a passphrase for the key. You can go without
+and the key will still be much more secure than most password systems,
+but you could also add a passphrase necessary to “unlock” the key</li>
+<li>Two files will be created inside your
+<code class="python">.ssh</code> folder in your home directory: one with
+just <code class="python">id_ed25519</code> and one with
+<code class="python">id_ed25519.pub</code></li>
+</ul></li>
+<li><p>To copy the public key over to the desired server:</p>
+<pre ><code class="bash" style="font-size:.9em">ssh-copy-id {username}@{servername}</code></pre>
+<ul>
+<li>You’ll need to enter in your password one more time, but then the
+key contents will be copied over</li>
+</ul></li>
+</ul>
+</section>
+<section id="ssh-config" class="slide level2">
+<h2>SSH Config</h2>
+<ul>
+<li><p>Often, you are connecting to the same servers again and again</p>
+<ul>
+<li>It would be nice not to have to repeat information about user name,
+server location, ports, etc</li>
+</ul></li>
+<li><p>Instead, you can set up “profiles” in your
+<code class="python">.ssh/config</code> file</p></li>
+<li><p>A general profile entry might look something like:</p>
+<pre ><code class="text">Host {profile_name}
+  User {username}
+  HostName {domain name or ip address}
+  Port {port, if not default}</code></pre></li>
+<li><p>There are more options and settings that can be configured. See
+<code class="python">man ssh_config</code>.</p></li>
+</ul>
+</section>
+<section id="copy-that" class="slide level2">
+<h2>Copy That</h2>
+<ul>
+<li>One important thing that you might frequently need to do is copy
+files between your local system and remote server</li>
+<li>Here you have options
+<ul>
+<li><p>SSH + <code class="python">tee</code>: The
+<code class="python">tee</code> command “splits” a stream, displaying it
+both to stdout and writing it to a file at the same time. You can thus
+do things like:</p>
+<pre ><code class="bash">cat local_file | ssh remote_server tee remote_file</code></pre>
+<p>using normal pipes</p></li>
+<li><p><code class="python">scp</code>: The
+<code class="python">scp</code> command combines normal
+<code class="python">cp</code> and <code class="python">ssh</code>,
+allowing you to include a remote server in the standard format</p>
+<pre ><code class="bash">scp local_file remote_server:remote_file</code></pre></li>
+</ul></li>
+</ul>
+</section>
+<section id="sync-it" class="slide level2">
+<h2>Sync it!</h2>
+<div style="font-size:.9em">
+<ul>
+<li><p>The previous options can be nice for just copying single files,
+but what if you need to copy over entire folders?</p></li>
+<li><p><code class="python">rsync</code> is probably your best
+option</p>
+<pre ><code class="bash">rsync -avP local_folder/ remote_server:remote_path</code></pre>
+<ul>
+<li>Clever about what is transferred: only copying over necessary data
+that isn’t already present on the other system</li>
+<li>Can maintain file/folder permissions, links, etc</li>
+</ul></li>
+<li><p>Common options</p>
+<ul>
+<li><code class="python">-a</code> is for archive, and basically means:
+“make a perfect copy”</li>
+<li><code class="python">-v</code> is for verbose, to output more
+information as it is copied</li>
+<li><code class="python">-P</code> is for partial and progress, so that
+partial transfers will resume and progress output to the screen</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="your-turn" class="slide level2">
+<h2>Your Turn!</h2>
+<div style="font-size:.9em">
+<p>I emailed you all earlier with a server address and login
+information. Use that to work through the following:</p>
+<ul>
+<li>SSH into the server using your information and change your password
+using <code class="python">passwd</code>. Note that when you type in
+passwords on most shells, they will not <strong>show anything</strong>
+for security but are indeed recording what you type.</li>
+<li>How many files are in your remote home directory initially? Some
+might be hidden!</li>
+<li>Exit out, and on your <em>local</em> system generate an SSH key.
+Copy the public key over to the server. Ensure you can log in to the
+server now without needing your server password!</li>
+<li>Set up a simple profile in your
+<code class="python">.ssh/config</code> file to facilitate connecting to
+this server</li>
+</ul>
+</div>
+</section>
+<section id="children-processes" class="slide level2">
+<h2>Children Processes</h2>
+<ul>
+<li>Whenever another program launches another, the program that is
+launched is said to be a <em>child process</em>
+<ul>
+<li>This includes any program launched from the shell being a child
+process of the shell itself!</li>
+</ul></li>
+<li>When a parent program is terminated, part of a “clean” termination
+involves shutting down any child processes that were spawned by the
+parent
+<ul>
+<li>This helps prevent unnecessary or unwanted programs from continuing
+to run in the background and essentially doing nothing</li>
+</ul></li>
+<li>This can be unfortunate when remotely connecting, as it means you
+can not leave a program running
+<ul>
+<li>Running a multiplexer like tmux can assist with this</li>
+</ul></li>
+</ul>
+</section>
+<section id="break-time" class="slide level2">
+<h2>Break Time!</h2>
+<ul>
+<li>Stretch! Eat! Don’t think about data for half an hour!</li>
+</ul>
+</section>
+<section id="understanding-check" class="slide level2">
+<h2>Understanding Check</h2>
+<div class="cols">
+<div class="col">
+<p>Suppose you have a table of items with the schema shown below and
+wanted to find the most common difference between Price A and Price B.
+You are looking for bargains, so in the case of a tie, you’d like to
+know the biggest. Which query will deliver on your wish?</p>
+<pre ><code class="pgsql" style="font-size:.8em">CREATE TABLE rev (
+  "name" TEXT,
+  "pa" NUMERIC(4,2),
+  "pb" NUMERIC(4,2)
+);</code></pre>
+</div>
+<div class="col" style="flex-grow:1.2">
+<pre ><code class="pgsql answer" style="font-size:.6em" name="A">SELECT mode(pb - pa) FROM rev;</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.6em" name="B">SELECT
+  mode() WITHIN GROUP (ORDER BY pb) -
+  mode() WITHIN GROUP (ORDER BY pa)
+FROM rev;</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.6em" name="C">SELECT
+  mode() WITHIN GROUP (ORDER BY (pb-pa))
+FROM rev;</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.6em" name="D">SELECT
+  mode() WITHIN GROUP (ORDER BY (pb-pa) DESC)
+FROM rev;</code></pre>
+</div>
+</div>
+</section>
+<section id="linking-tables" class="slide level2">
+<h2>Linking Tables</h2>
+<div class="cols" style="align-items: center">
+<div class="col">
+<ul>
+<li>Our whole idea of breaking apart data across multiple tables was
+prefaced on the fact that we could pull it back together when
+needed</li>
+<li>There is nothing special about the linkages: we can link any rows
+that we want</li>
+<li>The act of collecting data from multiple tables based on particular
+rows and columns is called a <em>join</em> in SQL</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/join-me-vader.jpg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="creating-the-join" class="slide level2">
+<h2>Creating the Join</h2>
+<ul>
+<li>A join pulls information from multiple tables into a new table
+(since all queries return a table)</li>
+<li>The columns that are matched across tables are called
+<em>keys</em></li>
+<li>The general idea is then to:
+<ul>
+<li>Set up your selection as usual from a single table</li>
+<li>Join to that table another table</li>
+<li>Specifying what columns in each table will act as keys along with a
+conditional relating them
+<ul>
+<li>Most common condition is equality</li>
+</ul></li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql" style="font-size:0.6em">SELECT * FROM table_a
+JOIN table_b
+ON table_a.key_col = table_b.key_col;</code></pre>
+</section>
+<section id="column-names" class="slide level2">
+<h2>Column Names</h2>
+<ul>
+<li>When you start refering to multiple table names in your query, you
+might get overlapping column names
+<ul>
+<li>Columns names must be unique <strong>within a table</strong> but
+might be the same <strong>across tables</strong></li>
+</ul></li>
+<li>To avoid ambiguity, you can preface a column name with the table it
+is coming from, separated by a period</li>
+<li>This is useful both for selecting the join key columns, but also for
+selecting particular columns you want out of the joined table</li>
+</ul>
+<pre ><code class="pgsql">SELECT tab1.name, tab1.age, tab2.name
+FROM tab1
+JOIN tab2 ON tab1.age = tab2.age;</code></pre>
+</section>
+<section id="inner-join" class="slide level2">
+<h2>(Inner) Join</h2>
+<ul>
+<li>The basic join only keeps rows from table 1 and table 2 that matched
+on the given column keys
+<ul>
+<li>This is also called an <em>inner join</em></li>
+</ul></li>
+<li>Any row in table 1 that had no counterpart in table 2 is left out
+<ul>
+<li>Identically for any row in table 2 that had no counterpart in table
+1</li>
+</ul></li>
+<li>The key take-away is that it keeps what was in <strong>both</strong>
+tables</li>
+<li>If a value appears twice in one table, it will be duplicated in the
+joined table as well
+<ul>
+<li>One reason that many times people try to join on columns that hold
+unique values, but not always necesarry</li>
+</ul></li>
+</ul>
+</section>
+<section id="inner-joins-visualized" class="slide level2">
+<h2>Inner Joins Visualized</h2>
+<div class="fig-container" data-file="../images/d3/InnerJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
+</section>
+<section id="left-and-right-join" class="slide level2">
+<h2>Left and Right Join</h2>
+<ul>
+<li>Sometimes, you don’t want to include <em>only</em> the rows that
+were in both table</li>
+<li>Maybe you want <strong>all</strong> the rows from one table, but
+joining the other data when it is available</li>
+<li>In these cases, you can use a <code class="python">LEFT JOIN</code>
+or <code class="python">RIGHT JOIN</code>
+<ul>
+<li><code class="python">LEFT JOIN</code> is decidedly the more common,
+and you can make any <code class="python">RIGHT JOIN</code> a
+<code class="python">LEFT JOIN</code> just by flipping the table
+ordering</li>
+</ul></li>
+<li>Rows still need to have the same number of columns, so
+<code class="python">NULL</code> values will be inserted for the
+secondary table columns if it is missing a match</li>
+</ul>
+</section>
+<section id="left-joins-visualized" class="slide level2">
+<h2>Left Joins Visualized</h2>
+<div class="fig-container" data-file="../images/d3/LeftJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
+</section>
+<section id="full-outer-join" class="slide level2">
+<h2>FULL OUTER JOIN</h2>
+<ul>
+<li>On occasion, you just want <em>all</em> the data from both tables
+<ul>
+<li>Matching where possible</li>
+<li>But keeping data from both left or right tables if no match</li>
+</ul></li>
+<li>In these cases, a <code class="python">FULL OUTER JOIN</code> will
+do what you want
+<ul>
+<li>Essentially does a <code class="python">LEFT JOIN</code> followed by
+a <code class="python">RIGHT JOIN</code> with the existing table</li>
+</ul></li>
+<li>Anything without a match is still represented with
+<code class="python">NULL</code> values</li>
+</ul>
+</section>
+<section id="outer-joins-visualized" class="slide level2">
+<h2>Outer Joins Visualized</h2>
+<div class="fig-container" data-file="../images/d3/OuterJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
+</section>
+<section id="cross-join" class="slide level2">
+<h2>Cross Join</h2>
+<ul>
+<li>Lastly, sometimes you want to see <em>all the possible</em>
+combinations between the rows of two tables
+<ul>
+<li>Sometimes called a <em>cartesian product</em></li>
+</ul></li>
+<li>A <code class="python">CROSS JOIN</code> will return a table of all
+of these possibilities</li>
+<li>Could imagine cross joining all the values with all the suits to
+generate your standard 52 card deck of playing cards.</li>
+<li>These can get very large very fast!
+<ul>
+<li>Do <strong>not</strong> run on tables of millions of rows!</li>
+</ul></li>
+</ul>
+</section>
+<section id="cross-joins-visualized" class="slide level2">
+<h2>Cross Joins Visualized</h2>
+<div class="fig-container" data-file="../images/d3/CrossJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
+</section>
+<section id="practice" class="slide level2">
+<h2>Practice</h2>
+<p><img data-src="../images/hw_assignment_schema.png"
+style="width:70.0%" /></p>
+<div class="center quip">
+<p>First names of students who have submitted any assignment?</p>
+</div>
+</section>
+<section id="practice-1" class="slide level2">
+<h2>Practice</h2>
+<p><img data-src="../images/hw_assignment_schema.png"
+style="width:70.0%" /></p>
+<div class="center quip">
+<p>Student ID and name of the assignment for all perfect scores?</p>
+</div>
+</section>
+<section id="practice-2" class="slide level2">
+<h2>Practice</h2>
+<p><img data-src="../images/hw_assignment_schema.png"
+style="width:70.0%" /></p>
+<div class="center quip">
+<p>Number of assignments with no submissions?</p>
+</div>
+</section>
+<section id="practice-3" class="slide level2">
+<h2>Practice</h2>
+<p><img data-src="../images/hw_assignment_schema.png"
+style="width:70.0%" /></p>
+<div class="center quip">
+<p>All combinations of students and homework assignments?</p>
+</div>
+</section>
+<section id="multiple-join-conditionals" class="slide level2">
+<h2>Multiple Join Conditionals</h2>
+<ul>
+<li>You are not limited to just a single condition in your
+<code class="python">ON</code> statement!</li>
+<li>You can chain multiple conditions together with
+<code class="python">AND</code> or <code class="python">OR</code>, just
+like you could with <code class="python">WHERE</code></li>
+<li>Just recall when comparing two rows that ALL the conditions must be
+true for the data to be included in the joined table</li>
+</ul>
+<pre ><code class="pgsql">SELECT *
+FROM table1
+JOIN table2
+ON table1.col1 = table2.col1 
+   AND table1.col2 > table2.col2;</code></pre>
+</section>
+<section id="table-aliases" class="slide level2">
+<h2>Table Aliases</h2>
+<ul>
+<li>Including long table names before each column name when referring to
+information from two different tables can get tedious</li>
+<li>You can define aliases for table names just like you can for column
+names!</li>
+<li>Syntax looks just like column aliases, using
+<code class="python">AS</code></li>
+<li>Can come immediately after you first reference a table name
+<ul>
+<li>Usually after a <code class="python">FROM</code> or
+<code class="python">JOIN</code> statement</li>
+</ul></li>
+<li>In truth, the <code class="python">AS</code> is optional, but it
+helps some with readability</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT *
+FROM tablename AS tn
+JOIN tablename2 AS tn2
+ON tn.col1 = tn2.col2;</code></pre>
+</section>
+<section id="multiple-joins" class="slide level2">
+<h2>Multiple Joins</h2>
+<ul>
+<li>Nothing stops you from including multiple joins in your query</li>
+<li>Each additional join links back to the current growing joined table
+<ul>
+<li>This means a second join is treating the entire initial join as the
+“left” table</li>
+<li>Commonly, you’ll just be joining back to the original table, so it
+won’t be apparent</li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql">SELECT *
+FROM tablename AS t1
+JOIN tablename2 AS t2 ON t1.col1 = t2.col1
+JOIN tablename3 AS t3 ON t1.col2 = t3.col1;</code></pre>
+</section>
+<section id="self-joins" class="slide level2">
+<h2>Self Joins</h2>
+<ul>
+<li>You can actually join a table to itself!</li>
+<li>Why would you want to do this?
+<ul>
+<li>Hierarchy data can frequently be explored in this fashion</li>
+<li>Comparisons between rows of a table</li>
+</ul></li>
+<li>You <strong>need</strong> to give unique aliases when doing this, or
+else you won’t have a way to distinguish between which columns you
+want</li>
+</ul>
+</section>
+<section id="joins-as-venn-diagrams" class="slide level2">
+<h2>Joins as Venn Diagrams</h2>
+<ul>
+<li>Sometimes it may help to think of different types of joins as Venn
+diagrams</li>
+</ul>
+<p><img data-src="../images/joins_venn_diagrams.png"
+style="width:65.0%" /></p>
+<!--
+## Image/Animation Credits
+- [1] https://yetanotherdevblog.com/
+- https://dataschool.com/how-to-teach-people-sql
+-->
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveal.js-d3/reveald3.js"></script>
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+            //{ src: "../html_srcs/revealjs/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    <script>
+    // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+      function remove_bars() {
+        var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+        console.log(pseudoBlocks);
+        for ( var i = 0; i < pseudoBlocks.length; i++) {
+          pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+        }
+        }
+      // omg this is even more hacky now, but I need this to run after hljs has done its thing
+      setTimeout(remove_bars, 100);
+    </script>
+    </body>
+</html>

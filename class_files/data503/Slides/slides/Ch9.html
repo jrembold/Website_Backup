@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Some Slight Alterations</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Some Slight Alterations</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Thursday, February 24, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 5 due tonight!
+<ul>
+<li>Homework 6 will be posted by tomorrow afternoon</li>
+<li>Sorry I haven’t gotten HW4 feedback to you yet. It is my priority once HW6 is posted</li>
+</ul></li>
+<li>Polling today: www.PollEv.com/jedrembold441</li>
+</ul>
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<div class="cols">
+<div class="col">
+<p>Considering the table to the right, all of the below queries would fail except for which?</p>
+</div>
+<div class="col">
+<pre ><code class="pgsql" style="font-size:.8em">CREATE TABLE rev (
+  id SERIAL,
+  fname TEXT,
+  occupation TEXT,
+  age INT );</code></pre>
+</div>
+</div>
+<div class="cols">
+<div class="col">
+<pre ><code class="pgsql answer" style="font-size:.7em" name="A">SELECT fname, avg(age)
+FROM rev
+GROUP BY occupation;</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.7em" name="C">SELECT fname, avg(age)
+FROM rev
+GROUP BY age;</code></pre>
+</div>
+<div class="col">
+<pre ><code class="pgsql answer" style="font-size:.7em" name="B">SELECT fname, avg(age)
+FROM rev
+GROUP BY fname;</code></pre>
+<pre ><code class="pgsql answer" style="font-size:.7em" name="D">SELECT fname, avg(age)
+FROM rev
+GROUP BY avg(fname);</code></pre>
+</div>
+</div>
+</section>
+<section id="section" class="slide level2" data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/Rv4AruLzFdMXbUOLVpeWu?controls=none&amp;short_poll=true">
+<h2 data-background-iframe="https://embed.polleverywhere.com/multiple_choice_polls/Rv4AruLzFdMXbUOLVpeWu?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="overview" class="slide level2">
+<h2>Overview</h2>
+<ul>
+<li>Chapter 9 is essentially a tale in two parts, which are closely entwined
+<ul>
+<li>Data is likely going to be messy. How do you go about cleaning up data for further analysis. What sorts of anomolies should you keep an eye out for?</li>
+<li>Tables are usually not static entities, but stores of data that might be changing. How you can make adjustments not only to the contents of a table but to the design of the table itself?</li>
+</ul></li>
+<li>We could look at either piece first, but let’s look first at cleaning data to provide the motivation for altering our tables
+<ul>
+<li>Many of the issues we’ll look at could have been avoided with good use of constraints. But for now we are supposing that the data was generate outside of the table and you have just imported it in naively.</li>
+</ul></li>
+</ul>
+</section>
+<section id="cleaning-checking-for-duplicates" class="slide level2">
+<h2>Cleaning: Checking for Duplicates</h2>
+<ul>
+<li>We’ve already seen in homework sample sets that there are sometimes duplicate row entries</li>
+<li>Duplicate entries across <em>many</em> columns is usually the sign <!--- A duplicate entry in just one or two columns is frequently not cause for concern (unless you were expecting that column to have unique values)--></li>
+<li><code class="python">GROUP BY</code> and <code class="python">HAVING</code> can be very useful here!
+<ul>
+<li><code class="python">GROUP BY</code> all the columns that you want to check for repetition</li>
+<li>Use <code class="python">HAVING</code> to only grab those groups that have more than one element (and thus a repetition)</li>
+</ul>
+<pre ><code class="pgsql">SELECT col1, col2, col3, col4, COUNT(*)
+FROM table_name
+GROUP BY col1, col2, col3, col4
+HAVING COUNT(*) > 1;</code></pre></li>
+</ul>
+</section>
+<section id="cleaning-checking-for-missing" class="slide level2">
+<h2>Cleaning: Checking for Missing</h2>
+<ul>
+<li>Data sets can sometimes (often even) be missing data that really should be present</li>
+<li>Fixing this generally requires some knowledge of what the data is representing</li>
+<li>Finding missing values can still tell you important things about the quality of your data though</li>
+<li>A nice way to count the number of nulls in different columns is:</li>
+</ul>
+<pre ><code class="pgsql">SELECT
+  COUNT(*) - COUNT(col1) as col1,
+  COUNT(*) - COUNT(col2) as col2
+FROM table_name;</code></pre>
+</section>
+<section id="cleaning-inconsistent-data" class="slide level2">
+<h2>Cleaning: Inconsistent Data</h2>
+<ul>
+<li>Especially for textual fields, there can be variation in how data is entered
+<ul>
+<li>Typos happen, or people just refer to the same thing in different ways</li>
+</ul></li>
+<li>To use <code class="python">GROUP BY</code> effectively, you really need categories to be consistently named across the data set</li>
+<li>Several possible approaches to identify:
+<ul>
+<li>Scanning over a distinct column for quasi-duplications: phrases that are just a bit distinct
+<ul>
+<li><code class="python">GROUP BY</code> could do similar but add counts</li>
+</ul></li>
+<li>Use pattern matching to look for duplicates matching a single approximate pattern</li>
+<li>Use the fuzzystrmatch module to check Levershtein distances</li>
+</ul></li>
+</ul>
+</section>
+<section id="cleaning-checking-text-length" class="slide level2">
+<h2>Cleaning: Checking Text Length</h2>
+<ul>
+<li>For certain fields, you’d expect text of a certain number of characters
+<ul>
+<li>2 for state abbreviations</li>
+<li>5 for zip codes</li>
+<li>13 for isbn13</li>
+</ul></li>
+<li>Can be a good idea to check these using the <code class="python">LENGTH</code> string function
+<ul>
+<li><code class="python">LENGTH(str)</code> just returns the number of characters in said string</li>
+</ul>
+<pre ><code class="pgsql">SELECT *
+FROM table_name
+WHERE LENGTH(col1) != 5;</code></pre></li>
+</ul>
+</section>
+<section id="damage-control" class="slide level2">
+<h2>Damage Control</h2>
+<ul>
+<li>It can be a lot of work to clean up a table</li>
+<li>Evaluate whether it is worth it!
+<ul>
+<li>Maybe a better, cleaner data set exists?</li>
+</ul></li>
+<li>Sometimes, data will be missing that you simply can’t fill in
+<ul>
+<li>Can your analysis work around those columns?</li>
+</ul></li>
+</ul>
+</section>
+<section id="making-adjustments" class="slide level2">
+<h2>Making Adjustments</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Changing existing tables can generally be broken down into two categories:
+<ul>
+<li>Changing the structure of the table itself
+<ul>
+<li>Uses keywords <code class="python">ALTER TABLE</code></li>
+</ul></li>
+<li>Changing the row content within the table
+<ul>
+<li>Uses keyword <code class="python">UPDATE</code></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/altering_table.jpg" style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="table-altering-part-1" class="slide level2">
+<h2>Table Altering: Part 1</h2>
+<ul>
+<li><code class="python">ALTER TABLE</code> is generally followed by the table name and then another keyword command, depending on what you want to do</li>
+</ul>
+<pre ><code class="pgsql">ALTER TABLE table_name ...</code></pre>
+<ul>
+<li><p>Adding columns:</p>
+<pre ><code class="pgsql">... ADD COLUMN col_name data_type;</code></pre></li>
+<li><p>Removing columns</p>
+<pre ><code class="pgsql">... DROP COLUMN col_name;</code></pre></li>
+</ul>
+</section>
+<section id="table-altering-part-2" class="slide level2">
+<h2>Table Altering: Part 2</h2>
+<pre ><code class="pgsql">ALTER TABLE table_name ...</code></pre>
+<ul>
+<li><p>Changing columns</p>
+<pre ><code class="pgsql" style="font-size:.9em">... ALTER COLUMN col_name SET DATA TYPE data_type;
+... ALTER COLUMN col_name SET NOT NULL;</code></pre></li>
+<li><p>Renaming columns</p>
+<pre ><code class="pgsql" style="font-size:.9em">... RENAME col_name TO new_col_name;</code></pre></li>
+<li><p>Rename entire table</p>
+<pre ><code class="pgsql" style="font-size:.9em">... RENAME TO new_table_name;</code></pre></li>
+</ul>
+</section>
+<section id="updating-tables" class="slide level2">
+<h2>Updating Tables</h2>
+<ul>
+<li>If you want to change the values in a particular row (or many rows), you don’t want to alter the table, you want to <code class="python">UPDATE</code> it</li>
+<li><code class="python">UPDATE</code> sets particular columns to a particular value
+<ul>
+<li><strong>BE CAREFUL!</strong> If you do not specify <em>which</em> rows, then <strong>ALL</strong> of the rows will have that column changed to that value
+<ul>
+<li>This is partly why having primary keys is so nice: it gives you a method to update just a single row should you need</li>
+</ul>
+<pre ><code class="pgsql">UPDATE table_name
+SET col_name = new_value;</code></pre></li>
+</ul></li>
+<li>You can specify which rows should be changed by filtering with <code class="python">WHERE</code></li>
+</ul>
+</section>
+<section id="table-to-table" class="slide level2">
+<h2>Table to Table</h2>
+<ul>
+<li>In some cases, you’ll want to update information across tables
+<ul>
+<li>Maybe one table has newer values that you want to use to update the original table</li>
+</ul></li>
+<li>In core SQL, you’d need to use subqueries, which we’ll be talking about in a few chapters</li>
+<li>In Postgres, you can use <code class="python">FROM</code>:</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:1em">UPDATE table_name
+SET col_name = table_name2.col_name
+FROM table_name2
+WHERE table_name.col_name = table_name2.col_name</code></pre>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

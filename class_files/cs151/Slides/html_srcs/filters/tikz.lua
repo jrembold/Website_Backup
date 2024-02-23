@@ -5,6 +5,7 @@ local tikz_doc_template = [[
 \usepackage{xcolor}
 \usepackage{tikz}
 \usepackage{python-commands}
+\usepackage{monokai-colors}
 \begin{document}
 \nopagecolor
 %s

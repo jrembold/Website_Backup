@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Webscraping in R and Python</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Webscraping in R and Python</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Thursday, April 7, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 9 due on Friday</li>
+<li>One last homework will be posted tomorrow on the PostGIS content</li>
+<li>Next Tuesday will be a project workday in class
+<ul>
+<li>You do not need to come, but I will be here to answer questions and it would be an excellent time to make sure you have gotten started and are making progress on your project with your partner</li>
+</ul></li>
+<li>Next Thursday and the following Tuesday we’ll cover the Ch 15 material</li>
+<li>Polling today: www.PollEv.com/jedrembold441</li>
+</ul>
+</section>
+<section id="back-to-text" class="slide level2">
+<h2>Back to Text</h2>
+<ul>
+<li>Since the shapefile spatial information will be encoded directly to a geometry type, it can be tricky to know what exactly you are working with at times</li>
+<li>You can call the <code class="python">ST_AsText()</code> function on any geometry (or geography) object to output its WKT representation
+<ul>
+<li>This can also be useful if you need to get it into a text form to copy into another location</li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql">SELECT ST_AsText(geom)
+FROM table_name
+LIMIT 1;</code></pre>
+</section>
+<section id="visualization" class="slide level2">
+<h2>Visualization</h2>
+<ul>
+<li>In general, you would need to take your information to another program for visualization purposes</li>
+<li>For a quick view though, <a href="https://clydedacruz.github.io/openstreetmap-wkt-playground/">this</a> site will let you enter in a WKT which it will then display</li>
+<li>Can be used in conjunction with <code class="python">ST_AsText</code> to grab results for quick visualization</li>
+<li>You can use <code class="python">ST_Collect</code> to aggregate an entire column of singular geometries into one Multi-geometry object for each of representation</li>
+</ul>
+</section>
+<section id="postgis-polygon-functions" class="slide level2">
+<h2>PostGIS Polygon Functions</h2>
+<ul>
+<li>Working with shapefiles gives an easy way to gain access to complex polygonal spatial information</li>
+<li>PostGIS has several useful functions to interact with polygons:
+<ul>
+<li><code class="python">ST_Area(poly)</code> will return the area of the provided polygon. This will be in SRID specified units if geometry or square meters if geography</li>
+<li><code class="python">ST_Within(point, poly)</code> will return a True/False as to whether the given point lies within the provided polygon
+<ul>
+<li>Make sure your SRID values match for point and poly! Or you could get bizarre results!</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="crossings" class="slide level2">
+<h2>Crossings</h2>
+<ul>
+<li>PostGIS can also determine information about intersections between various geometries</li>
+<li><code class="python">ST_Intersects(geom1, geom2)</code> will return a True/False if there exists an intersection between the two geometries</li>
+<li><code class="python">ST_Intersection(geom1, geom2)</code> will return a new geometry representing the intersection between the two geometries
+<ul>
+<li>This might be a point for the intersection between two lines or a line for the intersection between a line and a polygon, or a polygon for the intersection between two polygons</li>
+</ul></li>
+</ul>
+</section>
+<section id="webscraping" class="slide level2">
+<h2>Webscraping</h2>
+<ul>
+<li>Webscraping is the act of extracting information from a webpage so that it can be collected or otherwise used elsewhere</li>
+<li>It can take multiple forms, with varying degrees of complexity (most of which depends on the website)
+<ul>
+<li>Extracting information from a table of data</li>
+<li>Extracting other information on a webpage that in not necessarily formatted</li>
+<li>Extracting information using a provided API endpoint</li>
+</ul></li>
+<li>Our goal today is to touch on how you could do each of these in either Python or R
+<ul>
+<li>In Python we’ll be using the <code class="python">requests</code>, <code class="python">pandas</code>, <code class="python">beautifulsoup</code> and <code class="python">json</code> libraries</li>
+<li>In R we’ll be using <code class="python">rvest</code> (with comes as part of tidyverse) and <code class="python">jsonlite</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="step-1-get-the-html" class="slide level2">
+<h2>Step 1: Get the HTML</h2>
+<ul>
+<li>Regardless of what language you are using, the first step is to grab the necessary html</li>
+<li>This is exactly what your browser is doing when it accesses a webpage</li>
+<li>In Python, this is done using the <code class="python">requests</code> library <code class="python">get</code> function:</li>
+</ul>
+<pre ><code class="python">html = requests.get(url).text</code></pre>
+<ul>
+<li>In R, this is done using the <code class="python">read_html</code> function:</li>
+</ul>
+<pre ><code class="r">html <- read_html(url)</code></pre>
+</section>
+<section id="step-2-understanding-tags" class="slide level2">
+<h2>Step 2: Understanding Tags</h2>
+<ul>
+<li>HTML is comprised by information nested within what are called <em>tags</em>
+<ul>
+<li>Tags can also be nested inside other tags</li>
+</ul></li>
+<li>Extracting information from a webpage is frequently about knowing which tags have the information you want</li>
+<li>Take advantage of the “Inspect” tool on most browsers, accessed by right clicking on a web page
+<ul>
+<li>Will give you the option to explore both the html and mouse around the webpage and highlight the corresponding html tags</li>
+</ul></li>
+<li>At the very least, you should normally try to identify the overall tag that surrounds your data of interest</li>
+</ul>
+</section>
+<section id="option-1-data-from-tables" class="slide level2">
+<h2>Option 1: Data from Tables</h2>
+<ul>
+<li>One method in which data is frequently stored on a webpage is in tables
+<ul>
+<li>These are surrounded by the <code class="html">< table ></code> tag</li>
+</ul></li>
+<li>So long as the table is fairly simple, both Python and R have very easy ways of grabbing the table information directly into a corresponding dataframe
+<ul>
+<li>Python</li>
+</ul>
+<pre ><code class="python">df = pandas.read_html(html)</code></pre>
+<ul>
+<li>R</li>
+</ul>
+<pre ><code class="r">df <- html %>% html_table</code></pre></li>
+<li>These will automatically correct for things like cells spanning multiple rows, which is very nice</li>
+<li>By default, both options technically return a list of dataframes for every table on the page</li>
+</ul>
+</section>
+<section id="option-2-other-data-on-a-page" class="slide level2">
+<h2>Option 2: Other Data on a Page</h2>
+<ul>
+<li>Sometimes the data you want on from a page isn’t clearly going to be the text in a table
+<ul>
+<li>Maybe it is the url from a link, or an image, or any other text or number not in a table</li>
+</ul></li>
+<li>In these cases you need to rely on the tag structure of the html document to select purely what you are interested
+<ul>
+<li>You may also need to access the tag <em>attributes</em> to get information such as link or image urls</li>
+</ul></li>
+<li>When selecting the tags you want, you can provide multiple separated by spaces to provide a hierarchy of what you are looking for
+<ul>
+<li>Looking for <code class="python">'tr td'</code> says you can all the <code class="python">td</code> tags that are inside a <code class="python">tr</code> tag</li>
+</ul></li>
+<li>Gathering the data in this way may generate a list of content, but it won’t generally create more complicated tables of information, so you would need to craft those yourself</li>
+</ul>
+</section>
+<section id="option-2-selecting-the-desired-tags" class="slide level2">
+<h2>Option 2: Selecting the desired tags</h2>
+<ul>
+<li><p>In Python, when parsing an html document by tag, it helps greatly to parse the raw html using the BeautifulSoup library</p>
+<ul>
+<li>Beautiful soup then gives you each methods to select only certain tags from the larger structure</li>
+</ul>
+<pre ><code class="python">soup = bs4.BeautifulSoup(html)
+links = soup.select('td a')</code></pre></li>
+<li><p>In R, if you are using the <code class="python">rvest</code> library, you just need to pass the html into the proper function: <code class="python">html_elements</code></p>
+<pre ><code class="r">links <- html %>% html_elements('td a')</code></pre></li>
+</ul>
+</section>
+<section id="option-2-information-from-tags" class="slide level2">
+<h2>Option 2: Information from tags</h2>
+<ul>
+<li>Both the previous methods will get you a list of the tags that match what you want</li>
+<li>Generally, you then want some information <em>from</em> those tags, either the enclosed text or some attribute</li>
+<li>To get the text associated with a tag:
+<ul>
+<li>In Python: <code class="inlinecode python hljs">link_text = [tag.text for tag in links]</code></li>
+<li>In R: <code class="inlinecode r">link_text <- only_links %>% html_text()</code></li>
+</ul></li>
+<li>To get an attribute value of a tag (content inside the <code class="python"><</code> <code class="python">></code> parts of the tag)
+<ul>
+<li><p>In Python: <code class="inlinecode">link_url = [tag['href'] for tag in links]</code></p></li>
+<li><p>In R: <code class="inlinecode">link_url <- only_links %>% html_attr('href')</code></p></li>
+</ul></li>
+</ul>
+</section>
+<section id="option-3-apis" class="slide level2">
+<h2>Option 3: APIs</h2>
+<ul>
+<li>Sometimes the amount of information in just so large that it can’t fit nicely on a webpage, or data providers don’t want to make you “scrape” a webpage for the information</li>
+<li>Since, they might make available of public API where you can access the information</li>
+<li>Most REST APIs look just like a web address, but if you navigate to that url, instead of getting HTML to render a webpage, you get the data directly, most often in a JSON format
+<ul>
+<li>Some APIs also let you add extra information to the url to better specify <em>exactly</em> what information you want back</li>
+</ul></li>
+<li>Some APIs will require you to register for a key, which is often free. This is to safeguard against people slamming their servers with billions of requests. <strong>Be respectful in both your API and webscraping usage!</strong></li>
+</ul>
+</section>
+<section id="option-3-accessing-api-data" class="slide level2">
+<h2>Option 3: Accessing API data</h2>
+<ul>
+<li>The information can be downloaded just like html information was downloaded
+<ul>
+<li><code class="python">data = requests.get(url).text</code></li>
+<li><code class="python">data <- read_html(url)</code></li>
+</ul></li>
+<li>Commonly, the output will be a string of JSON data, so it helps to use a JSON package to convert it to your language’s natural data structures
+<ul>
+<li>In Python</li>
+</ul>
+<pre ><code class="python">output = json.loads(data)</code></pre>
+<ul>
+<li>In R</li>
+</ul>
+<pre ><code class="r">output <- data %>% html_text %>% fromJSON</code></pre></li>
+</ul>
+</section>
+<section id="practice-time" class="slide level2">
+<h2>Practice Time!</h2>
+<ul>
+<li>In your language of choice, see if you can:
+<ul>
+<li>Extract information about our class schedule <a href="http://willamette.edu/~jjrembold/classes/data403/schedule/">here</a> into a dataframe that you could then export to CSV</li>
+<li>Suppose you only wanted to get the days of tests from that table (the red options). Could you extract only those dates?</li>
+<li>The API <a href="http://api.open-notify.org/astros.json">here</a> will get you information on all the humans currently in space. Create a table of the names of the astronauts and what vessel they are currently on.</li>
+</ul></li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

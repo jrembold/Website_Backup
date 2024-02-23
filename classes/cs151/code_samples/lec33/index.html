@@ -4,25 +4,25 @@
 	<head>
 		<title>Lecture 33 Code</title>
 		<meta name='viewport' content='width=device-width, initial-scale=1'/>
-		<link rel='stylesheet' href="/Website_Backup/css/main.css"/>
-		<link rel='icon' href="/Website_Backup/images/favicon.png">
-		<script src="/Website_Backup/js/jquery-2.1.4.min.js"></script>
-		<script src="/Website_Backup/js/TweenLite.min.js"></script>
-		<script src="/Website_Backup/js/CSSPlugin.min.js"></script>
-		<script src="/Website_Backup/js/skel.min-2.2.js"></script>
-		<script src="/Website_Backup/js/main.js"></script>
-		<script src="/Website_Backup/js/BigPicture.min.js"></script>
+		<link rel='stylesheet' href="/website_copy/css/main.css" />
+		<link rel='icon' href="/website_copy/images/favicon.png">
+		<script src="/website_copy/js/jquery-2.1.4.min.js"></script>
+		<script src="/website_copy/js/TweenLite.min.js"></script>
+		<script src="/website_copy/js/CSSPlugin.min.js"></script>
+		<script src="/website_copy/js/skel.min-2.2.js"></script>
+		<script src="/website_copy/js/main.js"></script>
+		<script src="/website_copy/js/BigPicture.min.js"></script>
 
 		<header>
-	<p><a href="/Website_Backup/">JED REMBOLD</a></p>
+	<p><a href="/website_copy/">JED REMBOLD</a></p>
 	<nav>
 		<div class='topmenu'>
 			<ul>
-				<li><a href="/Website_Backup/about">About Me</a></li>
+				<li><a href="/website_copy/about">About Me</a></li>
 				<li>
 					<div class='class-drop'>
 						<div class='class-hover'>
-							<a href="/Website_Backup/classes">Classes</a>
+							<a href="/website_copy/classes">Classes</a>
 						</div>
 						<div class='class-menu'>
 							
@@ -43,11 +43,69 @@
 							
 							
 							
-							<a href="/Website_Backup/classes/cs151/cs151/">Intro Python</a><br>
 							
 							
 							
-							<a href="/Website_Backup/classes/phys221/phys221/">Physics I</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/website_copy/classes/data275/data275/">Cosmos</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/website_copy/classes/data503/data503/">Data Eng</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
 							
 							
 							
@@ -234,17 +292,17 @@
 						</div>
 					</div>
 				</li>
-				<li><a href="/Website_Backup/wu_schedule">Schedule</a></li>
+				<li><a href="/website_copy/wu_schedule">Schedule</a></li>
 				<li>
 					<div class='class-drop'>
 						<div class='class-hover'>
-							<a href="/Website_Backup/resources">Resources</a>
+							<a href="/website_copy/resources">Resources</a>
 						</div>
 						<div class='class-menu'>
 							
-							<a href="/Website_Backup/resources/python_guides/guides/">Python Guides</a><br>
+							<a href="/website_copy/resources/python_guides/guides/">Python Guides</a><br>
 							
-							<a href="/Website_Backup/resources/grad_resources/grad_resources/">Grad Notes</a><br>
+							<a href="/website_copy/resources/grad_resources/grad_resources/">Grad Notes</a><br>
 							
 						</div>
 					</div>
@@ -266,10 +324,10 @@
 	<div class='slideout-menu'>
 		<h3>Menu <span class='slide-toggle' href="#"><i class='fa fa-times'></i></span></h3>
 		<ul>
-			<li><a href="/Website_Backup/about">About Me</a></li>
-			<li><a href="/Website_Backup/classes">Classes</a></li>
-			<li><a href="/Website_Backup/wu_schedule">Schedule</a></li>
-			<li><a href="/Website_Backup/resources">Resources</a></li>
+			<li><a href="/website_copy/about">About Me</a></li>
+			<li><a href="/website_copy/classes">Classes</a></li>
+			<li><a href="/website_copy/wu_schedule">Schedule</a></li>
+			<li><a href="/website_copy/resources">Resources</a></li>
 		</ul>
 	</div>
 
@@ -361,73 +419,73 @@
 </span><span class="lnt">66
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">arcade</span>
-<span class="kn">import</span> <span class="nn">random</span>
-
-<span class="k">class</span> <span class="nc">Ball</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">YELLOW_ORANGE</span><span class="p">,</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">APPLE_GREEN</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">xdir</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="mi">2</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ydir</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="mi">2</span>
-
-    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">arcade</span><span class="o">.</span><span class="n">draw_circle_filled</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xdir</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ydir</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">width</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">xdir</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">height</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ydir</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-
-    <span class="k">def</span> <span class="nf">change_col</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">),</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">),</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">))</span>
-
-
-
-<span class="k">class</span> <span class="nc">MyPicture</span><span class="p">(</span><span class="n">arcade</span><span class="o">.</span><span class="n">Window</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
-        <span class="n">arcade</span><span class="o">.</span><span class="n">Window</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
-        <span class="n">arcade</span><span class="o">.</span><span class="n">set_background_color</span><span class="p">(</span><span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BLUE</span><span class="p">)</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">balls</span> <span class="o">=</span> <span class="p">[</span><span class="n">Ball</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">)]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">space_pressed</span> <span class="o">=</span> <span class="kc">False</span>
-
-        <span class="n">arcade</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">on_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">arcade</span><span class="o">.</span><span class="n">start_render</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="p">:</span>
-            <span class="n">ball</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">on_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="p">:</span>
-            <span class="n">ball</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">space_pressed</span><span class="p">:</span>
-                <span class="n">ball</span><span class="o">.</span><span class="n">change_col</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">on_key_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">modifiers</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">symbol</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">SPACE</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">space_pressed</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">elif</span> <span class="n">symbol</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">Q</span><span class="p">:</span>
-                <span class="n">arcade</span><span class="o">.</span><span class="n">close_window</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">on_key_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">mod</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">SPACE</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">space_pressed</span> <span class="o">=</span> <span class="kc">False</span>
-
-
-<span class="n">MyPicture</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">500</span><span class="p">,</span><span class="s1">&#39;Hi!&#39;</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">arcade</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">random</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Ball</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">YELLOW_ORANGE</span><span class="p">,</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">APPLE_GREEN</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">xdir</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="mi">2</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">ydir</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="mi">2</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">arcade</span><span class="o">.</span><span class="n">draw_circle_filled</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xdir</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ydir</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">width</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">xdir</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">height</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">ydir</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">change_col</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">),</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">),</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MyPicture</span><span class="p">(</span><span class="n">arcade</span><span class="o">.</span><span class="n">Window</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">arcade</span><span class="o">.</span><span class="n">Window</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">arcade</span><span class="o">.</span><span class="n">set_background_color</span><span class="p">(</span><span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BLUE</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">balls</span> <span class="o">=</span> <span class="p">[</span><span class="n">Ball</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">space_pressed</span> <span class="o">=</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">arcade</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">on_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">arcade</span><span class="o">.</span><span class="n">start_render</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ball</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">on_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ball</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">space_pressed</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ball</span><span class="o">.</span><span class="n">change_col</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">on_key_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">modifiers</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">symbol</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">SPACE</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">space_pressed</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">symbol</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">Q</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">arcade</span><span class="o">.</span><span class="n">close_window</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">on_key_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">mod</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">SPACE</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">space_pressed</span> <span class="o">=</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">MyPicture</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">500</span><span class="p">,</span><span class="s1">&#39;Hi!&#39;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h6 id="platformers-and-physics-engines">Platformers and Physics Engines</h6>
 <div class="highlight"><div class="chroma">
@@ -500,73 +558,73 @@
 </span><span class="lnt">66
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">arcade</span>
-
-<span class="k">class</span> <span class="nc">Platformer</span><span class="p">(</span><span class="n">arcade</span><span class="o">.</span><span class="n">Window</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">arcade</span><span class="o">.</span><span class="n">Window</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;Arcade Example&#39;</span><span class="p">)</span>
-        <span class="n">arcade</span><span class="o">.</span><span class="n">set_background_color</span><span class="p">(</span><span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">DARK_LAVA</span><span class="p">)</span>
-
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">player_list</span> <span class="o">=</span> <span class="n">arcade</span><span class="o">.</span><span class="n">SpriteList</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">terrain_list</span> <span class="o">=</span> <span class="n">arcade</span><span class="o">.</span><span class="n">SpriteList</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span> <span class="o">=</span> <span class="n">arcade</span><span class="o">.</span><span class="n">Sprite</span><span class="p">(</span><span class="s1">&#39;Sprites/PNG/Characters/platformChar_idle.png&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_x</span> <span class="o">=</span> <span class="mi">200</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_y</span> <span class="o">=</span> <span class="mi">250</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">player_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span><span class="mi">200</span><span class="p">),</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">)]:</span>
-            <span class="n">terrain</span> <span class="o">=</span> <span class="n">arcade</span><span class="o">.</span><span class="n">Sprite</span><span class="p">(</span><span class="s1">&#39;Sprites/PNG/Tiles/platformPack_tile019.png&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">terrain</span><span class="o">.</span><span class="n">center_x</span><span class="p">,</span> <span class="n">terrain</span><span class="o">.</span><span class="n">center_y</span> <span class="o">=</span> <span class="n">loc</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">terrain_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">terrain</span><span class="p">)</span>
-
-
-        <span class="c1"># Add the physics engine. The first input should have been the player SPRITE, not the list</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">physics</span> <span class="o">=</span> <span class="n">arcade</span><span class="o">.</span><span class="n">PhysicsEnginePlatformer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain_list</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
-
-        <span class="c1"># This should always be at the bottom, don&#39;t move it up!</span>
-        <span class="n">arcade</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">on_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">arcade</span><span class="o">.</span><span class="n">start_render</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">player_list</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">terrain_list</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">on_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">player_list</span><span class="o">.</span><span class="n">update</span><span class="p">()</span> <span class="c1"># Updates my movement</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">update</span><span class="p">()</span> <span class="c1"># Updates the physics engines movement</span>
-
-        <span class="c1"># Wrap the screen around both top/bottom and left/right sides</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">50</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_y</span> <span class="o">=</span> <span class="mi">600</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_x</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">25</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_x</span> <span class="o">=</span> <span class="mi">525</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_x</span> <span class="o">&gt;</span> <span class="mi">525</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">25</span>
-
-    <span class="c1"># change the velocity when a key is pressed</span>
-    <span class="k">def</span> <span class="nf">on_key_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">mod</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">change_x</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">change_x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">SPACE</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">can_jump</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">change_y</span> <span class="o">=</span> <span class="mi">10</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">Q</span><span class="p">:</span>
-            <span class="n">arcade</span><span class="o">.</span><span class="n">close_window</span><span class="p">()</span>
-
-    <span class="c1"># When the key is released set the horizontal velocity back to 0</span>
-    <span class="k">def</span> <span class="nf">on_key_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">mod</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">RIGHT</span> <span class="ow">or</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">change_x</span> <span class="o">=</span> <span class="mi">0</span>
-
-
-<span class="n">Platformer</span><span class="p">()</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">arcade</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Platformer</span><span class="p">(</span><span class="n">arcade</span><span class="o">.</span><span class="n">Window</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">arcade</span><span class="o">.</span><span class="n">Window</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;Arcade Example&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">arcade</span><span class="o">.</span><span class="n">set_background_color</span><span class="p">(</span><span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">DARK_LAVA</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">player_list</span> <span class="o">=</span> <span class="n">arcade</span><span class="o">.</span><span class="n">SpriteList</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">terrain_list</span> <span class="o">=</span> <span class="n">arcade</span><span class="o">.</span><span class="n">SpriteList</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span> <span class="o">=</span> <span class="n">arcade</span><span class="o">.</span><span class="n">Sprite</span><span class="p">(</span><span class="s1">&#39;Sprites/PNG/Characters/platformChar_idle.png&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_x</span> <span class="o">=</span> <span class="mi">200</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_y</span> <span class="o">=</span> <span class="mi">250</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">player_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span><span class="mi">200</span><span class="p">),</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">)]:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">terrain</span> <span class="o">=</span> <span class="n">arcade</span><span class="o">.</span><span class="n">Sprite</span><span class="p">(</span><span class="s1">&#39;Sprites/PNG/Tiles/platformPack_tile019.png&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">terrain</span><span class="o">.</span><span class="n">center_x</span><span class="p">,</span> <span class="n">terrain</span><span class="o">.</span><span class="n">center_y</span> <span class="o">=</span> <span class="n">loc</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">terrain_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">terrain</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># Add the physics engine. The first input should have been the player SPRITE, not the list</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">physics</span> <span class="o">=</span> <span class="n">arcade</span><span class="o">.</span><span class="n">PhysicsEnginePlatformer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain_list</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># This should always be at the bottom, don&#39;t move it up!</span>
+</span></span><span class="line"><span class="cl">        <span class="n">arcade</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">on_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">arcade</span><span class="o">.</span><span class="n">start_render</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">player_list</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">terrain_list</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">on_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">player_list</span><span class="o">.</span><span class="n">update</span><span class="p">()</span> <span class="c1"># Updates my movement</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">update</span><span class="p">()</span> <span class="c1"># Updates the physics engines movement</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># Wrap the screen around both top/bottom and left/right sides</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">50</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_y</span> <span class="o">=</span> <span class="mi">600</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_x</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">25</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_x</span> <span class="o">=</span> <span class="mi">525</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_x</span> <span class="o">&gt;</span> <span class="mi">525</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">center_x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">25</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># change the velocity when a key is pressed</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">on_key_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">mod</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">change_x</span> <span class="o">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">change_x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">SPACE</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">can_jump</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">                <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">change_y</span> <span class="o">=</span> <span class="mi">10</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">Q</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">arcade</span><span class="o">.</span><span class="n">close_window</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># When the key is released set the horizontal velocity back to 0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">on_key_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">mod</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">RIGHT</span> <span class="ow">or</span> <span class="n">key</span> <span class="o">==</span> <span class="n">arcade</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">player_sprite</span><span class="o">.</span><span class="n">change_x</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Platformer</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div>
 		<br>
@@ -574,6 +632,6 @@
 	</div>
 
 </body>
-<script src="/Website_Backup/js/click_handling.js" ></script>
+<script src="/website_copy/js/click_handling.js"></script>
 </html>
 

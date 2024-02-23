@@ -1,0 +1,103 @@
+---
+title: Pluto's Closest Approach
+author: Jed Rembold
+date: 2023-01-27
+title-block-banner: true
+format: 
+  html:
+    embed-resources: true
+    theme: cosmo
+---
+
+In this problem we have been tasked with determining the closest approach the minor planet Pluto makes with the Sun. As a starting point, we have been given a CSV which contains X, Y and Z coordinates of Pluto ranging from the year 1800 until nearly 2100. All coordinate positions are given in units of astronomical units, or AU.
+
+We'll be using Python for analysis in this problem, and thus will start things off by importing the libraries that we will be using, as well as applying my prefered default plot style.
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+plt.style.use('seaborn-v0_8-darkgrid')
+import numpy as np
+```
+
+Here we are using the Pandas library to facilitate reading in and working with data series. We'll be using the Matplotlib library for visualization purposes, and the Numpy library to give access to some mathematical functions.
+
+Importing in our data, we can take a quick look at what we are working with:
+```{python}
+pluto = pd.read_csv('../Lectures/demos/pluto_positions.csv')
+pluto
+```
+
+Ideally, one of the coordinates would be much smaller than the others at all times. This is because we need to fit a 2D ellipse to this data, and therefore it would be preferable if the ellipse that the data encodes was contained in purely 2 of the 3 axes. In this case, if we look at some descriptive statistics:
+```{python}
+pluto.describe()
+```
+then we see that the Z coordinate is, on average, about an order of magnitude (10x) smaller than the other two coordinates. As such, we will assume that our ellipse lies mostly in the X-Y plane, even if that isn't perfectly true. To give us some visual to work with, and to confirm that the provided information fully describes the arc of an ellipse, we go ahead and plot the X coordinates vs the Y coordinates below.
+```{python}
+#| code-fold: true
+#| fig-align: center
+plt.plot(pluto.X, pluto.Y, '.')
+plt.gca().set_aspect('equal')
+plt.xlabel('X (AU)')
+plt.ylabel('Y (AU)')
+plt.title('Orbit of Pluto from 1800 to ~2100')
+plt.show()
+```
+
+That looks pretty elliptical, and it has full coverage around the edge, so our fitting algorithm will hopefully work well. We need to determine, in particular, the semi-major and semi-minor axes, as they will be necessary to compute the final perihelion distance.
+
+Here we will utilize the provided ellipse fitting library to extract the desired parameters, starting with importing / running the library to define the necessary functions.
+
+```{python}
+from fitellipse import fit_ellipse, get_ellipse
+```
+
+And then we'll apply the `fit_ellipse` function to our X and Y data:
+```{python}
+efit = fit_ellipse(pluto.X, pluto.Y)
+```
+which gives a semi-major axis of
+```{python}
+efit['major']
+```
+and a semi-minor axis of
+```{python}
+efit['minor']
+```
+Both are in units of AU. To use these values now to try to determine our perihelion distance, it can help to look at a picture:
+
+![](./perihelion.svg){width=50% fig-align='center'}
+
+So the semi-major axis minus the foci distance $f$ will get us the distance that we want. We know that the foci distance $f$ is given in terms of the semi-major and minor axes via:
+$$ f = \sqrt{a^2 - b^2} $$
+where $a$ is the semi-major axis and $b$ the semi-minor axis. We have both of those values now, and can thus calculate the foci distance.
+```{python}
+f = np.sqrt(efit['major'] ** 2 - efit['minor'] ** 2)
+f
+```
+
+which would thus give us a perihelion distance of:
+```{python}
+efit['major'] - f
+```
+in units of AU. So the closest that Pluto ever gets to the Sun is still over 21 times further away than Earth is from the Sun.
+
+### Appendix
+As an aside, the perihelion distance reported on Wikipedia is 29.658 AU, which makes for a fairly substantial 28% error in our estimate. Most likely, this is owing to Pluto's more extreme than usual tilt relative to the ecliptic plane. We might be able to see this if we plot our coordinates instead in 3 dimensions:
+```{python}
+#| code-fold: true
+from mpl_toolkits.mplot3d import Axes3D
+
+with plt.style.context(('default')):
+  plt.figure(figsize=(10,6))
+  ax = plt.subplot(111, projection='3d')
+  ax.plot(pluto.X, pluto.Y, pluto.Z)
+  ax.set_xlabel('X (AU)')
+  ax.set_ylabel('Y (AU)')
+  ax.set_zlabel('Z (AU)')
+  ax.set_aspect('equal')
+
+  ax.view_init(elev=20, azim=45)
+  plt.show()
+```
+Here we can see that yes, we _definitely_ have a bit of tilt still, which we aren't accounting for in our about fitting. That means our semi-major axis is measured to be slightly smaller than it should be, which then results in the lower than expected perihelion distance.

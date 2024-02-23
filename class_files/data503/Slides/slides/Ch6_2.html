@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Joining Joins</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Joining Joins</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Thursday, February 3, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>HW3 due tonight!
+<ul>
+<li>Last chance for HW2 submissions as well.</li>
+</ul></li>
+<li>No new homework for next week, but instead a study guide for the test will be posted tomorrow</li>
+<li>First test is a week from today on Ch 1 - 5
+<ul>
+<li>You’ll have the full class duration to take it, but it will be written for an hour</li>
+<li>Pen and paper exam: no computers</li>
+</ul></li>
+<li>Polling today: www.PollEv.com/jedrembold441</li>
+</ul>
+</section>
+<section id="review" class="slide level2">
+<h2>Review!</h2>
+<p><img data-src="../images/hw_assignment_schema.png" /></p>
+<div class="center quip">
+<p>Percentage of all submitted homework that was submitted late?</p>
+</div>
+</section>
+<section id="section" class="slide level2" data-background-iframe="https://embed.polleverywhere.com/clickable_images/vBMWVNFSghU5JJ1fr0rLq?controls=none&amp;short_poll=true">
+<h2 data-background-iframe="https://embed.polleverywhere.com/clickable_images/vBMWVNFSghU5JJ1fr0rLq?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="joins-as-venn-diagrams" class="slide level2">
+<h2>Joins as Venn Diagrams</h2>
+<ul>
+<li>Sometimes it may help to think of different types of joins as Venn diagrams</li>
+</ul>
+<p><img data-src="../images/joins_venn_diagrams.png" style="width:65.0%" /></p>
+</section>
+<section id="multiple-join-conditionals" class="slide level2">
+<h2>Multiple Join Conditionals</h2>
+<ul>
+<li>You are not limited to just a single condition in your <code class="python">ON</code> statement!</li>
+<li>You can chain multiple conditions together with <code class="python">AND</code> or <code class="python">OR</code>, just like with <code class="python">WHERE</code></li>
+<li>Just recall when comparing two rows that ALL the conditions must be true for the data to be included in the joined table</li>
+</ul>
+<pre ><code class="pgsql">SELECT *
+FROM table1
+JOIN table2
+ON table1.col1 = table2.col1 
+   AND table1.col2 > table2.col2;</code></pre>
+</section>
+<section id="word-of-warning" class="slide level2">
+<h2>Word of Warning</h2>
+<ul>
+<li>For <strong>inner joins</strong>, joining on multiple conditions would look the same as joining on one condition and then filtering out the others using <code class="python">WHERE</code></li>
+<li>For <strong>other</strong> types of joins though, this isn’t necessarily the case!
+<ul>
+<li>A <code class="python">LEFT JOIN</code> would still give you everything in the left table, for instance, along with <code class="python">NULL</code> values that a <code class="python">WHERE</code> would likely have filtered out</li>
+</ul></li>
+<li>Main take-away:
+<ul>
+<li>Join conditions and filtering conditions <em>are</em> doing different things, but they may seem interchangeable if you are just using inner joins.</li>
+</ul></li>
+</ul>
+</section>
+<section id="table-aliases" class="slide level2">
+<h2>Table Aliases</h2>
+<ul>
+<li>Including long table names before each column name when referring to information from two different tables can get tedious</li>
+<li>You can define aliases for table names just like you can for column names!</li>
+<li>Syntax looks just like column aliases, using <code class="python">AS</code></li>
+<li>Can come immediately after you first reference a table name
+<ul>
+<li>Usually after a <code class="python">FROM</code> or <code class="python">JOIN</code> statement</li>
+</ul></li>
+<li>In truth, the <code class="python">AS</code> is optional, but it helps some with readability</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT *
+FROM tablename AS tn
+JOIN tablename2 AS tn2
+ON tn.col1 = tn2.col2;</code></pre>
+</section>
+<section id="multiple-joins" class="slide level2">
+<h2>Multiple Joins</h2>
+<ul>
+<li>Nothing stops you from including multiple joins in your query</li>
+<li>Each additional join links back to the current growing joined table
+<ul>
+<li>This means a second join is treating the entire initial join as the “left” table</li>
+<li>Commonly, you’ll just be joining back to the original table, so it won’t be apparent</li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql">SELECT *
+FROM tablename AS t1
+JOIN tablename2 AS t2 ON t1.col1 = t2.col1
+JOIN tablename3 AS t3 ON t1.col2 = t3.col1;</code></pre>
+</section>
+<section id="a-super-example" class="slide level2">
+<h2>A Super Example</h2>
+<p><img data-src="../images/superhero_erd.png" /></p>
+<div class="center quip">
+<p>How many blue-eyed superheros can fly?</p>
+</div>
+</section>
+<section id="section-1" class="slide level2" data-background-iframe="https://embed.polleverywhere.com/discourses/9rB4q6fuUydRxgt5iLwJ0?controls=none&amp;short_poll=true">
+<h2 data-background-iframe="https://embed.polleverywhere.com/discourses/9rB4q6fuUydRxgt5iLwJ0?controls=none&amp;short_poll=true"></h2>
+</section>
+<section id="self-joins" class="slide level2">
+<h2>Self Joins</h2>
+<ul>
+<li>You can actually join a table to itself!</li>
+<li>Why would you want to do this?
+<ul>
+<li>Hierarchy data can frequently be explored in this fashion</li>
+<li>Comparisons between rows of a table</li>
+</ul></li>
+<li>You <strong>need</strong> to give unique aliases when doing this, or else you won’t have a way to distinguish between which columns you want</li>
+</ul>
+</section>
+<section id="a-familial-example" class="slide level2">
+<h2>A Familial Example</h2>
+<ul>
+<li>We have a table containing the names and relationships between a multi-generational family tree.</li>
+<li>What sorts of questions could we answer using just that table and some self joins?</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>

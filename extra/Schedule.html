@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <title>Poster Schedules</title>
+<style>
+    .poster {
+        flex-basis: 80%;
+        flex-grow: 0;
+        flex-shrink: 0;
+        border: 4pt solid lightgray;
+        border-radius: 20px;
+        margin: 10pt;
+        padding: 5pt;
+    }
+
+    .ptitle {
+        font-size: 2em;
+        width: 100%;
+        text-align: center;
+
+    }
+
+    .author {
+        width: 100%;
+        font-size: 3em;
+        color: darkred;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .posterlist {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+
+    h1 {
+        font-size: 5em;
+        text-align: center;
+    }
+</style>
+    </head>
+
+    <body>
+        <h1>Presenting Schedule</h1>
+        <div class="posterlist">
+        <div class="poster">
+            <div class="author">6:15 - 7:00</div>
+            <div class="ptitle">North Room</div>
+        </div>
+        <div class="poster">
+            <div class="author">7:05 - 7:50</div>
+            <div class="ptitle">West Room</div>
+        </div>
+        <div class="poster">
+            <div class="author">7:55 - 8:40</div>
+            <div class="ptitle">East Room</div>
+        </div>
+        </div>
+    </body>
+</html>

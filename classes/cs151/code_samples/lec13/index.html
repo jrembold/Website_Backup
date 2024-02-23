@@ -4,25 +4,25 @@
 	<head>
 		<title>Lecture 13 Code</title>
 		<meta name='viewport' content='width=device-width, initial-scale=1'/>
-		<link rel='stylesheet' href="/Website_Backup/css/main.css"/>
-		<link rel='icon' href="/Website_Backup/images/favicon.png">
-		<script src="/Website_Backup/js/jquery-2.1.4.min.js"></script>
-		<script src="/Website_Backup/js/TweenLite.min.js"></script>
-		<script src="/Website_Backup/js/CSSPlugin.min.js"></script>
-		<script src="/Website_Backup/js/skel.min-2.2.js"></script>
-		<script src="/Website_Backup/js/main.js"></script>
-		<script src="/Website_Backup/js/BigPicture.min.js"></script>
+		<link rel='stylesheet' href="/website_copy/css/main.css" />
+		<link rel='icon' href="/website_copy/images/favicon.png">
+		<script src="/website_copy/js/jquery-2.1.4.min.js"></script>
+		<script src="/website_copy/js/TweenLite.min.js"></script>
+		<script src="/website_copy/js/CSSPlugin.min.js"></script>
+		<script src="/website_copy/js/skel.min-2.2.js"></script>
+		<script src="/website_copy/js/main.js"></script>
+		<script src="/website_copy/js/BigPicture.min.js"></script>
 
 		<header>
-	<p><a href="/Website_Backup/">JED REMBOLD</a></p>
+	<p><a href="/website_copy/">JED REMBOLD</a></p>
 	<nav>
 		<div class='topmenu'>
 			<ul>
-				<li><a href="/Website_Backup/about">About Me</a></li>
+				<li><a href="/website_copy/about">About Me</a></li>
 				<li>
 					<div class='class-drop'>
 						<div class='class-hover'>
-							<a href="/Website_Backup/classes">Classes</a>
+							<a href="/website_copy/classes">Classes</a>
 						</div>
 						<div class='class-menu'>
 							
@@ -43,11 +43,69 @@
 							
 							
 							
-							<a href="/Website_Backup/classes/cs151/cs151/">Intro Python</a><br>
 							
 							
 							
-							<a href="/Website_Backup/classes/phys221/phys221/">Physics I</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/website_copy/classes/data275/data275/">Cosmos</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<a href="/website_copy/classes/data503/data503/">Data Eng</a><br>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
 							
 							
 							
@@ -234,17 +292,17 @@
 						</div>
 					</div>
 				</li>
-				<li><a href="/Website_Backup/wu_schedule">Schedule</a></li>
+				<li><a href="/website_copy/wu_schedule">Schedule</a></li>
 				<li>
 					<div class='class-drop'>
 						<div class='class-hover'>
-							<a href="/Website_Backup/resources">Resources</a>
+							<a href="/website_copy/resources">Resources</a>
 						</div>
 						<div class='class-menu'>
 							
-							<a href="/Website_Backup/resources/python_guides/guides/">Python Guides</a><br>
+							<a href="/website_copy/resources/python_guides/guides/">Python Guides</a><br>
 							
-							<a href="/Website_Backup/resources/grad_resources/grad_resources/">Grad Notes</a><br>
+							<a href="/website_copy/resources/grad_resources/grad_resources/">Grad Notes</a><br>
 							
 						</div>
 					</div>
@@ -266,10 +324,10 @@
 	<div class='slideout-menu'>
 		<h3>Menu <span class='slide-toggle' href="#"><i class='fa fa-times'></i></span></h3>
 		<ul>
-			<li><a href="/Website_Backup/about">About Me</a></li>
-			<li><a href="/Website_Backup/classes">Classes</a></li>
-			<li><a href="/Website_Backup/wu_schedule">Schedule</a></li>
-			<li><a href="/Website_Backup/resources">Resources</a></li>
+			<li><a href="/website_copy/about">About Me</a></li>
+			<li><a href="/website_copy/classes">Classes</a></li>
+			<li><a href="/website_copy/wu_schedule">Schedule</a></li>
+			<li><a href="/website_copy/resources">Resources</a></li>
 		</ul>
 	</div>
 
@@ -327,39 +385,39 @@
 </span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">arcade</span>
-
-<span class="n">WIDTH</span> <span class="o">=</span> <span class="mi">600</span>
-<span class="n">HEIGHT</span> <span class="o">=</span> <span class="mi">300</span>
-
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="k">global</span> <span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span>
-    <span class="n">arcade</span><span class="o">.</span><span class="n">open_window</span><span class="p">(</span><span class="n">WIDTH</span><span class="p">,</span> <span class="n">HEIGHT</span><span class="p">,</span> <span class="s1">&#39;Example&#39;</span><span class="p">)</span>
-    <span class="n">arcade</span><span class="o">.</span><span class="n">set_background_color</span><span class="p">(</span><span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BLUE_SAPPHIRE</span><span class="p">)</span>
-    <span class="n">bx</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">WIDTH</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">HEIGHT</span><span class="o">/</span><span class="mi">2</span>
-    <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span>
-    <span class="n">arcade</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">on_draw</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">60</span><span class="p">)</span>
-    <span class="n">arcade</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-
-<span class="k">def</span> <span class="nf">draw_happy_box</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
-    <span class="n">arcade</span><span class="o">.</span><span class="n">draw_rectangle_filled</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">RED_DEVIL</span><span class="p">)</span>
-    <span class="n">arcade</span><span class="o">.</span><span class="n">draw_circle_filled</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">7</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BLACK</span><span class="p">)</span>
-    <span class="n">arcade</span><span class="o">.</span><span class="n">draw_circle_filled</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BLACK</span><span class="p">)</span>
-    <span class="n">arcade</span><span class="o">.</span><span class="n">draw_arc_filled</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BLACK</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">on_draw</span><span class="p">(</span><span class="n">time_step</span><span class="p">):</span>
-    <span class="k">global</span> <span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span>
-    <span class="n">arcade</span><span class="o">.</span><span class="n">start_render</span><span class="p">()</span>
-    <span class="n">draw_happy_box</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">)</span>
-    <span class="n">bx</span> <span class="o">+=</span> <span class="n">vx</span>
-    <span class="n">by</span> <span class="o">+=</span> <span class="n">vy</span>
-    <span class="k">if</span> <span class="n">bx</span> <span class="o">&gt;</span> <span class="n">WIDTH</span> <span class="ow">or</span> <span class="n">bx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">vx</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="k">if</span> <span class="n">by</span> <span class="o">&gt;</span> <span class="n">WIDTH</span> <span class="ow">or</span> <span class="n">by</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">vy</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-
-<span class="n">main</span><span class="p">()</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">arcade</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">WIDTH</span> <span class="o">=</span> <span class="mi">600</span>
+</span></span><span class="line"><span class="cl"><span class="n">HEIGHT</span> <span class="o">=</span> <span class="mi">300</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">global</span> <span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arcade</span><span class="o">.</span><span class="n">open_window</span><span class="p">(</span><span class="n">WIDTH</span><span class="p">,</span> <span class="n">HEIGHT</span><span class="p">,</span> <span class="s1">&#39;Example&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arcade</span><span class="o">.</span><span class="n">set_background_color</span><span class="p">(</span><span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BLUE_SAPPHIRE</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bx</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">WIDTH</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">HEIGHT</span><span class="o">/</span><span class="mi">2</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arcade</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">on_draw</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">60</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arcade</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">draw_happy_box</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arcade</span><span class="o">.</span><span class="n">draw_rectangle_filled</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">RED_DEVIL</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arcade</span><span class="o">.</span><span class="n">draw_circle_filled</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">7</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BLACK</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arcade</span><span class="o">.</span><span class="n">draw_circle_filled</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BLACK</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arcade</span><span class="o">.</span><span class="n">draw_arc_filled</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">arcade</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">BLACK</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">on_draw</span><span class="p">(</span><span class="n">time_step</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">global</span> <span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arcade</span><span class="o">.</span><span class="n">start_render</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">draw_happy_box</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bx</span> <span class="o">+=</span> <span class="n">vx</span>
+</span></span><span class="line"><span class="cl">    <span class="n">by</span> <span class="o">+=</span> <span class="n">vy</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">bx</span> <span class="o">&gt;</span> <span class="n">WIDTH</span> <span class="ow">or</span> <span class="n">bx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vx</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">by</span> <span class="o">&gt;</span> <span class="n">WIDTH</span> <span class="ow">or</span> <span class="n">by</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vy</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">main</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div>
 		<br>
@@ -367,6 +425,6 @@
 	</div>
 
 </body>
-<script src="/Website_Backup/js/click_handling.js" ></script>
+<script src="/website_copy/js/click_handling.js"></script>
 </html>
 

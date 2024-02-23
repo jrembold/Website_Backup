@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2021-02-24">
+  <meta name="dcterms.date" content="2023-09-18">
   <title>10 Representations</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,10 +14,18 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
   </style>
   <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
   <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
@@ -29,92 +37,163 @@
 <section id="title-slide">
   <h1 class="title">10 Representations</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">February 24, 2021</p>
+  <p class="date">September 18, 2023</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li><strong>Be working on Project 1!</strong>
+<li>Homework
 <ul>
-<li>If you aren’t done with Milestone 2 yet, you really need to get on things.</li>
-<li>If you are getting stuck or having issues, don’t hesitate to contact me or your section leader for some help!</li>
-</ul></li>
-<li>Lab today on complex shapes.</li>
-<li>CS Tea tomorrow:
+<li>Problem Set 1 feedback got posted last night!
 <ul>
-<li>11:30am, Zoom link on Discord</li>
-<li>Lilly Irani talking about incorporating more democratic control over the digital networks and constructs that are engrained in everyday modern life.</li>
+<li>Look at the comments even if you got full points!</li>
 </ul></li>
-<li>Polling: <a href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>Problem Set 2 due tonight!</li>
+<li>Problem Set 3 posted by the end of today</li>
+</ul></li>
+<li>Wordle Project coming up after PSet 3</li>
+<li>Polling: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
 </section>
-<section id="review-question" class="slide level2">
-<h2>Review Question</h2>
-<div class="cols">
-<div class="col">
-<p>Which of the below blocks of code will create the image to the right? The window measures 500 x 200 pixels.</p>
-</div>
-<div class="col">
-<figure>
-<img data-src="../images/GArc_RevQ.png" style="width:60.0%" alt=" " /><figcaption aria-hidden="true"> </figcaption>
-</figure>
-</div>
-</div>
+<section id="today" class="slide level2">
+<h2>Today</h2>
+<ul>
+<li>Touch on last debugging strategies</li>
+<li>Focusing today on how a computer can internally store more complex
+and abstract information</li>
+<li>Initially will look at numbers</li>
+<li>New data type coming Wednesday though!</li>
+</ul>
+</section>
+<section id="review-question" class="slide level2"
+data-notes="Answer is B, as it would not print the 0">
+<h2 data-notes="Answer is B, as it would not print the 0">Review
+Question</h2>
+<p>Which of the below blocks of code would print something different
+from the others?</p>
 <div class="cols">
 <div class="col">
 <div class="block" name="A">
-<pre ><code class="python">d = 150
-x, y = 250 - d / 2, 100 - d / 2
-a1 = GArc(x, y, d, d, 90, -180)
-gw.add(a1)</code></pre>
+<pre ><code class="python" style="margin-left:1em">for n in range(10):
+    if n % 2 == 0:
+        print(n)</code></pre>
 </div>
-<div class="block" name="C">
-<pre ><code class="python">d = 150
-x, y = 250 - d, 100 - d
-a1 = GArc(x, y, d, d, -180, 90)
-gw.add(a1)</code></pre>
+<div class="block" name="B">
+<pre ><code class="python" style="margin-left:1em">for i in range(0,10,2):
+    if i > 0:
+        print(i)</code></pre>
 </div>
 </div>
 <div class="col">
-<div class="block" name="B">
-<pre ><code class="python">d = 150
-x, y = 250 - d / 2, 100 - d / 2
-a1 = GArc(x, y, d, d, 90, 180)
-gw.add(a1)</code></pre>
+<div class="block" name="C">
+<pre ><code class="python" style="margin-left:1em">for j in range(0,20,4):
+    L = j // 2
+    print(L)
+</code></pre>
 </div>
 <div class="block" name="D">
-<pre ><code class="python">d = 150
-x, y = 250 - d / 2, 100 - d / 2
-a1 = GArc(x, y, d, 180, -90)
-gw.add(a1)</code></pre>
+<pre ><code class="python" style="margin-left:1em">for k in range(0,10):
+    if not (k % 2 > 0):
+        print(k)</code></pre>
 </div>
 </div>
 </div>
 </section>
-<section id="representations" class="slide level2">
-<h2>Representations</h2>
+<section id="strategy-4" class="slide level2">
+<h2>Strategy #4</h2>
+<div class="quip">
+<p>Use PythonTutor or a debugger to track EXACTLY what is happening in
+your program.</p>
+</div>
+<iframe width="888" height="500" src="https://www.youtube.com/embed/X3jw1JVNdPE?start=223&amp;end=261" title="how to never write bug" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+</section>
+<section id="strategy-7" class="slide level2">
+<h2>Strategy #7</h2>
+<div class="quip">
+<p>Test your code as you go! Either manually or automatically.</p>
+</div>
 <ul>
-<li>Focusing today on how a computer can internally store more complex and abstract information</li>
-<li>Initially will look at numbers</li>
-<li>Then we’ll bring it back to strings</li>
+<li>Know that <em>everyone</em> makes mistakes. The longer you go
+without testing that something in your program works, the harder it is
+to find where the mistake eventually is.</li>
+<li>Write code that you test in small pieces as you go
+<ul>
+<li>Decomposition into smaller functions is great for this: test each
+function individually as you go</li>
+<li>In the projects we try to construct the Milestones for this exact
+same purpose</li>
+</ul></li>
 </ul>
+</section>
+<section id="assertions" class="slide level2">
+<h2>Assertions</h2>
+<ul>
+<li><p>You can use Python’s <code class="python">assert</code> statement
+to write test functions, which take the form:</p>
+<pre ><code class="python">assert condition</code></pre>
+<p>where <code class="python">condition</code> is any operation that
+returns a <code class="python">True</code> or
+<code class="python">False</code></p></li>
+<li><p>Assert statements “expect” a condition to yield a
+<code class="python">True</code>, and if they do, nothing happens</p>
+<ul>
+<li>No news is good news in this case</li>
+</ul></li>
+<li><p>If an <code class="python">assert</code> condition evaluates to
+<code class="python">False</code>, an error is raised</p></li>
+<li><p>Naming your test functions starting with the word
+<code class="python">test_</code> will make them automatically
+discoverable by other tools</p></li>
+</ul>
+</section>
+<section id="testing-example" class="slide level2">
+<h2>Testing Example</h2>
+<ul>
+<li>Suppose we wanted to write some checks of the
+<code class="python">greatest_factor</code> function from earlier</li>
+</ul>
+<pre ><code class="python">def test_greatest_factor():
+    """Runs several tests on the function greatest_factor"""
+    assert greatest_factor(10) == 5
+    assert greatest_factor(7) == 1
+    assert greatest_factor(51) == 17
+    assert greatest_factor(9) == 3</code></pre>
+<!-- make a video of this?
+## Showcasing Autochecks
+- When you submit code to GitHub, my pre-written tests are run
+    - If **any** check fails, you'll see the red X (and possibly get an email)
+    - Let's look at how to get information about what went wrong
+- VSCode actually can run all the tests locally as well
+    - Let's also walk through how that works (and looks)
+-->
 </section>
 <section id="bit-power" class="slide level2">
 <h2>Bit Power</h2>
 <ul>
-<li>The fundamental unit of memory inside a computer is called a <em>bit</em>
+<li>The fundamental unit of memory inside a computer is called a
+<em>bit</em>
 <ul>
 <li>Coined from a contraction of the words binary and digit</li>
 </ul></li>
-<li>An individual bit exists in one of two states, usually denoted as <strong>0</strong> or <strong>1</strong>.</li>
-<li>More complex data can be represented by combining larger numbers of bits:
+<li>An individual bit exists in one of two states, usually denoted as
+<strong>0</strong> or <strong>1</strong>.</li>
+<li>More complex data can be represented by combining larger numbers of
+bits:
 <ul>
-<li>Two bits can represent 4 (<span class="math inline">\(2\times 2\)</span>) values</li>
-<li>Three bits can represent 8 (<span class="math inline">\(2\times2\times2\)</span>) values</li>
-<li>Four bits can represent 16 (<span class="math inline">\(2\times2\times2\times2\)</span> or <span class="math inline">\(2^4\)</span>) values, etc</li>
+<li>Two bits can represent 4 (<span class="math inline">\(2\times
+2\)</span>) values</li>
+<li>Three bits can represent 8 (<span
+class="math inline">\(2\times2\times2\)</span>) values</li>
+<li>Four bits can represent 16 (<span
+class="math inline">\(2\times2\times2\times2\)</span> or <span
+class="math inline">\(2^4\)</span>) values, etc</li>
 </ul></li>
-<li>My laptop here has 8GB of system memory, and can therefore keep track of approximately <span class="math inline">\(2^{80000000000}\)</span> states!</li>
+<li>My laptop here has 16GB of system memory, and can therefore keep
+track of approximately <span
+class="math inline">\(2^{16,000,000,000}\)</span> states!</li>
 </ul>
 </section>
 <section id="an-old-code-but-it-checks-out" class="slide level2">
@@ -126,19 +205,25 @@ gw.add(a1)</code></pre>
 <ul>
 <li>Described by German mathematician Leibniz back in 1703</li>
 </ul></li>
-<li>Leibniz describes his use of binary notation in an easy to follow style</li>
-<li>Leibniz’s paper notes that the Chinese had discovered binary arithmetic 2000 years earlier, as illustrated by the patterns of lines in the <em>I Ching</em>!</li>
+<li>Leibniz describes his use of binary notation in an easy-to-follow
+style</li>
+<li>Leibniz’s paper notes that the Chinese had discovered binary
+arithmetic 2000 years earlier, as illustrated by the patterns of lines
+in the <em>I Ching</em>!</li>
 </ul>
 </div>
 <div class="col">
 <figure>
-<img data-src="../images/Leibniz.jpg" style="width:70.0%" alt="Gottfried Wilhelm von Leibniz" /><figcaption aria-hidden="true">Gottfried Wilhelm von Leibniz</figcaption>
+<img data-src="../images/Leibniz.jpg" style="width:70.0%"
+alt="Gottfried Wilhelm von Leibniz" />
+<figcaption aria-hidden="true">Gottfried Wilhelm von
+Leibniz</figcaption>
 </figure>
 </div>
 </div>
 </section>
-<section id="back-to-gradeschool" class="slide level2">
-<h2>Back to Gradeschool</h2>
+<section id="back-to-grade-school" class="slide level2">
+<h2>Back to Grade school</h2>
 <div class="center">
 <p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
@@ -517,20 +602,20 @@ gw.add(a1)</code></pre>
 <div class="center">
 <p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="1920"
    height="1080"
    viewBox="0 0 508 285.75"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
-   sodipodi:docname="Counting_Base2.svg">
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="Counting_Base2.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2">
     <marker
@@ -556,19 +641,22 @@ gw.add(a1)</code></pre>
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="911.7508"
-     inkscape:cy="490.23109"
+     inkscape:cx="891.78571"
+     inkscape:cy="491.07143"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
      units="px"
-     inkscape:window-width="2528"
-     inkscape:window-height="1381"
-     inkscape:window-x="1096"
-     inkscape:window-y="43"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:snap-global="false" />
+     inkscape:snap-global="false"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#2c2c2c" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -577,7 +665,7 @@ gw.add(a1)</code></pre>
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -828,42 +916,6 @@ gw.add(a1)</code></pre>
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:27.5221px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264584;fill:#66d9ef;">8</tspan></text>
     </g>
     <g
-       id="Num"
-       class="fragment"
-       transform="matrix(1.4210118,0,0,1.4223432,-33.61606,-5.5400398)"
-       style="stroke-width:0.703395">
-      <path
-         d="m 205.73938,120.87176 v 3.24609 h -18.83681 v -3.24609 h 8.0323 V 95.803399 l -7.48733,4.549271 -1.72967,-2.843295 9.71458,-6.018302 h 3.48303 v 29.380687 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.2035px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186107"
-         id="path905" />
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186106"
-         x="221.11581"
-         y="123.56979"
-         id="text934"><tspan
-           sodipodi:role="line"
-           id="tspan932"
-           x="221.11581"
-           y="123.56979"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#f8f8f2;stroke-width:0.186106">0</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186106"
-         x="261.55167"
-         y="123.56979"
-         id="text2434"><tspan
-           sodipodi:role="line"
-           id="tspan2432"
-           x="261.55167"
-           y="123.56979"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#f8f8f2;stroke-width:0.186106">0</tspan></text>
-      <path
-         d="m 166.72785,120.87176 v 3.24609 h -18.83681 v -3.24609 h 8.0323 V 95.803399 l -7.48733,4.549271 -1.72967,-2.843295 9.71458,-6.018302 h 3.48303 v 29.380687 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.2035px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186107"
-         id="path2436" />
-    </g>
-    <g
        id="Total"
        class="fragment">
       <text
@@ -1032,6 +1084,42 @@ gw.add(a1)</code></pre>
            y="199.62709"
            style="fill:#f92672;stroke-width:0.264583">+</tspan></text>
     </g>
+    <g
+       id="Num"
+       class="fragment"
+       transform="matrix(1.4210118,0,0,1.4223432,-33.61606,-5.5400398)"
+       style="stroke-width:0.703395">
+      <path
+         d="m 205.73938,120.87176 v 3.24609 h -18.83681 v -3.24609 h 8.0323 V 95.803399 l -7.48733,4.549271 -1.72967,-2.843295 9.71458,-6.018302 h 3.48303 v 29.380687 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.2035px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186107"
+         id="path905" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186106"
+         x="221.11581"
+         y="123.56979"
+         id="text934"><tspan
+           sodipodi:role="line"
+           id="tspan932"
+           x="221.11581"
+           y="123.56979"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#f8f8f2;stroke-width:0.186106">0</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186106"
+         x="261.55167"
+         y="123.56979"
+         id="text2434"><tspan
+           sodipodi:role="line"
+           id="tspan2432"
+           x="261.55167"
+           y="123.56979"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.466px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#f8f8f2;stroke-width:0.186106">0</tspan></text>
+      <path
+         d="m 166.72785,120.87176 v 3.24609 h -18.83681 v -3.24609 h 8.0323 V 95.803399 l -7.48733,4.549271 -1.72967,-2.843295 9.71458,-6.018302 h 3.48303 v 29.380687 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.2035px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#f8f8f2;fill-opacity:1;stroke:none;stroke-width:0.186107"
+         id="path2436" />
+    </g>
   </g>
 </svg>
 </p>
@@ -1040,7 +1128,8 @@ gw.add(a1)</code></pre>
 <section id="representing-integers" class="slide level2">
 <h2>Representing Integers</h2>
 <ul>
-<li>The number of symbols available to count with determines the <em>base</em> of a number system
+<li>The number of symbols available to count with determines the
+<em>base</em> of a number system
 <ul>
 <li>Decimal is base 10, as we have 10 symbols (0-9) to count with
 <ul>
@@ -1051,56 +1140,105 @@ gw.add(a1)</code></pre>
 <li>Each new number counts for twice as much as the previous</li>
 </ul></li>
 </ul></li>
-<li>Can always determine what number a representation corresponds to by adding up the individual contributions</li>
+<li>Can always determine what number a representation corresponds to by
+adding up the individual contributions</li>
 </ul>
 <br>
-<p><img data-src="../images/svg_cache/040073a4bc4dc3a823e8c7d7a368c4d97c67005b.svg" style="width:50.0%" /></p>
+<p><img
+data-src="../images/svg_cache/040073a4bc4dc3a823e8c7d7a368c4d97c67005b.svg"
+style="width:50.0%" /></p>
 </section>
 <section id="specifying-bases" class="slide level2">
 <h2>Specifying Bases</h2>
 <ul>
-<li>So the binary number 00101010 is equivalent to the decimal number 42</li>
-<li>We distinguish by subsetting the bases: <span class="math display">\[ 00101010_2 = 42_{10}\]</span></li>
-<li><strong>The number itself still is the same! All that changes is how we represent that number.</strong>
+<li>So the binary number 00101010 is equivalent to the decimal number
+42</li>
+<li>We distinguish by subsetting the bases: <span
+class="math display">\[ 00101010_2 = 42_{10}\]</span></li>
+<li><strong>The number itself still is the same! All that changes is how
+we represent that number.</strong>
 <ul>
-<li>Numbers do not have bases – representations of numbers have bases</li>
+<li>Numbers do not have bases – representations of numbers have
+bases</li>
 </ul></li>
 </ul>
 </section>
-<section id="binary-clocks" class="slide level2" data-background-iframe="https://jeffreypierce.net/binary-clock/" data-background-interactive="true">
-<h2 data-background-iframe="https://jeffreypierce.net/binary-clock/" data-background-interactive="true">Binary Clocks</h2>
+<section id="understanding-check" class="slide level2">
+<h2>Understanding Check</h2>
+<div class="cols">
+<div class="col">
+<p>How could you represent the number of items shown to the right in a
+binary representation?</p>
+<div class="poll">
+<ol>
+<li>1011</li>
+<li>10110</li>
+<li>10010</li>
+<li>11010</li>
+</ol>
+</div>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/45409201b004e856928b4c30b5bde518fc6c73c3.svg"
+style="width:80.0%" /></p>
+</div>
+</div>
+</section>
+<section id="binary-clocks" class="slide level2"
+data-background-iframe="https://clock.sasaya.me/"
+data-background-interactive="true">
+<h2 data-background-iframe="https://clock.sasaya.me/"
+data-background-interactive="true">Binary Clocks</h2>
 </section>
 <section id="other-bases" class="slide level2">
 <h2>Other Bases</h2>
 <ul>
-<li>Binary is not a particularly compact representation to write out, so computer scientists will often use more compact representations as well
+<li>Binary is not a particularly compact representation to write out, so
+computer scientists will often use more compact representations as well
 <ul>
 <li><em>Octal</em> (base 8) uses the digits 0 to 7</li>
-<li><em>Hexadecimal</em> (base 16) uses the digits 0 to 9 and then the letters A through F <br></li>
+<li><em>Hexadecimal</em> (base 16) uses the digits 0 to 9 and then the
+letters A through F <br></li>
 </ul></li>
 </ul>
 <div class="cols">
 <div class="col">
-<p><img data-src="../images/svg_cache/64bced99eea6bd3384b8007c432d60850b7a4cc9.svg" style="width:30.0%" /></p>
+<p><img
+data-src="../images/svg_cache/64bced99eea6bd3384b8007c432d60850b7a4cc9.svg"
+style="width:30.0%" /></p>
 </div>
 <div class="col">
-<p><img data-src="../images/svg_cache/118af6af2185cd24bc8783a5e553ef26e22e04fe.svg" style="width:30.0%" /></p>
+<p><img
+data-src="../images/svg_cache/118af6af2185cd24bc8783a5e553ef26e22e04fe.svg"
+style="width:30.0%" /></p>
 </div>
 </div>
-<p><br><br><br></p>
+<p><br></p>
+<div>
 <ul>
-<li>Why octal or hexadecimal over our trusty old decimal system?
+<li class="fragment">Why octal or hexadecimal over our trusty old
+decimal system?
 <ul>
-<li>Both are powers of 2, so it makes it easy to convert back to decimal</li>
+<li class="fragment">Both are powers of 2, so it makes it easy to
+convert back to decimal
+<ul>
+<li class="fragment">1 octal digit = 3 binary digit, 1 hex digit = 4
+binary digit</li>
+</ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="baseic-practice" class="slide level2">
 <h2>Base(ic) Practice</h2>
 <ul>
-<li>The Java compiler has a fun quirk where every binary file is produces begins with <br><br></li>
+<li>The Java compiler has a fun quirk where every binary file is
+produces begins with <br><br></li>
 </ul>
-<p><img data-src="../images/svg_cache/38a2a7ef46568f0cf282498b982d5f09874d7e60.svg" style="width:70.0%" /></p>
+<p><img
+data-src="../images/svg_cache/38a2a7ef46568f0cf282498b982d5f09874d7e60.svg"
+style="width:70.0%" /></p>
 <p><br></p>
 <ul>
 <li>What is this in decimal? octal? hexadecimal?</li>
@@ -1111,45 +1249,41 @@ gw.add(a1)</code></pre>
 <ul>
 <li>Sequences of bits have no intrinsic meaning!
 <ul>
-<li>Just the representations we assign to them by convention or by building certain operations into hardware</li>
-<li>A 32-bit sequence represents an integer only because we have designed hardware to manipulate those sequences arithmetically: applying operations like addition, subtraction, etc</li>
+<li>Just the representations we assign to them by convention or by
+building certain operations into hardware</li>
+<li>A 32-bit sequence represents an integer only because we have
+designed hardware to manipulate those sequences arithmetically: applying
+operations like addition, subtraction, etc</li>
 </ul></li>
-<li>By choosing an appropriate representation, you can use bits to represent any value you could imagine!
+<li>By choosing an appropriate representation, you can use bits to
+represent any value you could imagine!
 <ul>
 <li>Characters represented by numeric character codes</li>
 <li>Floating-point representations to support real numbers</li>
 <li>Two-dimensional arrays of bits representing images</li>
-<li>Sequences of images representing video, etc</li>
 </ul></li>
-<li>To be useful though, everyone needs to agree on a representation!</li>
+<li>To be useful though, everyone needs to agree on a
+representation!</li>
 </ul>
 </section>
 <section id="representation-pitfalls" class="slide level2">
 <h2>Representation Pitfalls</h2>
-<div class="cols">
-<div class="col">
-<pre ><code class="python">A = 1
-B = 0
-for i in range(10):
-    B += 0.1
-print(A == B)</code></pre>
-</div>
-<div class="col" style="flex-grow:1.25">
 <ul>
-<li>The left code will print out <code class="python">False</code>!</li>
-<li>Python represents floating point (fractional) numbers using two integers
+<li>How we choose to represent values has consequences!</li>
+<li>Python represents floating point (fractional) numbers using two
+integers
 <ul>
 <li>One to represent the significant digits</li>
-<li>One to represent the exponent</li>
+<li>One to represent the exponent (where the decimal place is)</li>
 </ul></li>
-</ul>
-</div>
-</div>
-<ul>
 <li><span class="math inline">\(1\frac{1}{4}\)</span> Example
 <ul>
-<li>In decimal: <span class="math inline">\(\quad\displaystyle 1\frac{1}{4} = \frac{1}{1} + \frac{2}{10} + \frac{5}{100} = 1.25 = (125, -2)\)</span></li>
-<li>In binary: <span class="math inline">\(\quad\displaystyle 1\frac{1}{4} = \frac{1}{1} + \frac{0}{2} + \frac{1}{4} = 1.01 = (101, -10)\)</span></li>
+<li>In decimal: <span class="math inline">\(\quad\displaystyle
+1\frac{1}{4} = \frac{1}{1} + \frac{2}{10} + \frac{5}{100} = 1.25 = (125,
+-2)\)</span></li>
+<li>In binary: <span class="math inline">\(\quad\displaystyle
+1\frac{1}{4} = \frac{1}{1} + \frac{0}{2} + \frac{1}{4} = 1.01 = (101,
+-10)\)</span></li>
 </ul></li>
 </ul>
 </section>
@@ -1157,11 +1291,22 @@ print(A == B)</code></pre>
 <h2>Floating Binary</h2>
 <div>
 <ul>
-<li class="fragment">Say we wanted to convert the value <span class="math inline">\(\tfrac{7}{8}\)</span> to a binary floating point representation: <span class="math display">\[\frac{7}{8} = \frac{0}{1} + \frac{1}{2} + \frac{1}{4} + \frac{1}{8} = 0.111 = (111, -11)\]</span></li>
-<li class="fragment">Now how would we convert <span class="math inline">\(\frac{1}{10}\)</span> to binary??
+<li class="fragment">Say we wanted to convert the value <span
+class="math inline">\(\tfrac{7}{8}\)</span> to a binary floating point
+representation: <span class="math display">\[\frac{7}{8} = \frac{0}{1} +
+\frac{1}{2} + \frac{1}{4} + \frac{1}{8} = 0.111 = (111,
+-11)\]</span></li>
+<li class="fragment">Now how would we convert <span
+class="math inline">\(\frac{1}{10}\)</span> to binary??
 <ul>
-<li class="fragment">We run into a problem! An infinitely repeating sequence! <span class="math display">\[\frac{1}{10} = \frac{0}{1} + \frac{0}{2} + \frac{0}{8} + \frac{1}{16} + \frac{1}{32} + \frac{0}{64} + \frac{0}{128} + \frac{1}{256} +  \cdots = 0.0001100110011\ldots\]</span></li>
-<li class="fragment">Have to stop the sequence somewhere and approximate it: <span class="math display">\[\frac{3}{32} = 0.09375\quad\text{or}\quad\frac{25}{256} = 0.09765625\]</span></li>
+<li class="fragment">We run into a problem! An infinitely repeating
+sequence! <span class="math display">\[\frac{1}{10} = \frac{0}{1} +
+\frac{0}{2} + \frac{0}{8} + \frac{1}{16} + \frac{1}{32} + \frac{0}{64} +
+\frac{0}{128} + \frac{1}{256} +  \cdots =
+0.0001100110011\ldots\]</span></li>
+<li class="fragment">Have to stop the sequence somewhere and approximate
+it: <span class="math display">\[\frac{3}{32} =
+0.09375\quad\text{or}\quad\frac{25}{256} = 0.09765625\]</span></li>
 </ul></li>
 </ul>
 </div>
@@ -1169,29 +1314,35 @@ print(A == B)</code></pre>
 <section id="consequences" class="slide level2">
 <h2>Consequences</h2>
 <ul>
-<li>The best we can do within the range of normal integers <span class="math display">\[\frac{3602879701896397}{2^{55}} = 0.10000000000000000555111512312578270\]</span></li>
-<li>When doing operations on these numbers, extra decimals will sometimes get rounded off, suddenly making the number look precise, but you might always have a tiny bit of this rounding error showing up in floating point values.</li>
-<li>So be <em>careful</em> using <code class="python">==</code> for numeric comparisons! Rounding might result in unexpected falsehoods
+<li>The best we can do within the range of normal integers <span
+class="math display">\[\frac{3602879701896397}{2^{55}} =
+0.10000000000000000555111512312578270\]</span></li>
+<li>When doing operations on these numbers, extra decimals will
+sometimes get rounded off, suddenly making the number look precise, but
+you might always have a tiny bit of this rounding error showing up in
+floating point values.</li>
+<li>So be <em>careful</em> using <code class="python">==</code> for
+floating numeric comparisons! Rounding might result in unexpected
+falsehoods
 <ul>
-<li>Far better to check if two numbers are within a small margin of one another, or greater or less than the other</li>
-</ul></li>
-<li>Errors will usually average out over being a bit too large or two small
-<ul>
-<li>Repeated calculation of some types can sometimes accumulate errors in the same direction and cause more of an issue</li>
+<li><code class="python">0.1 + 0.1 + 0.1 != 0.3</code></li>
+<li>Far better to check if two numbers are within a small margin of one
+another, or greater or less than the other</li>
 </ul></li>
 </ul>
-</section>
-<section id="representing-characters" class="slide level2">
-<h2>Representing Characters</h2>
-<ul>
-<li>Use numeric encodings to represent character data inside the machine, where each character is assigned an integer value.</li>
-<li>Character codes are not very useful unless standardized though!
-<ul>
-<li>Competing encodings in the early years made it difficult to share data across machines</li>
-</ul></li>
-<li>First widely adopted character encoding was ASCII (American Standard Code for Information Interchange)</li>
-<li>With only 256 possible characters, ASCII proved inadequate in the international world, and has therefore been superseded by Unicode.</li>
-</ul>
+<!-- To next day
+## Representing Characters
+- Use numeric encodings to represent character data inside the machine, where each character is assigned an integer value.
+- Character codes are not very useful unless standardized though!
+    - Competing encodings in the early years made it difficult to share data across machines
+- First widely adopted character encoding was ASCII (American Standard Code for Information Interchange)
+- With only 256 possible characters, ASCII proved inadequate in the international world, and has therefore been superseded by Unicode.
+
+## ASCII
+
+![The ASCII subset of Unicode](../images/ASCII.svg){width=100%}
+
+-->
 </section>
     </div>
   </div>
@@ -1216,6 +1367,7 @@ print(A == B)</code></pre>
 		//autoAnimateEasing: 'ease-in',
 		//autoAnimateDuration: 1.0,
 		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
         // Display controls in the bottom right corner
         controls: true,
         // Help the user learn the controls by providing hints, for example by
@@ -1234,7 +1386,7 @@ print(A == B)</code></pre>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -1243,27 +1395,16 @@ print(A == B)</code></pre>
         center: false,
         // Enables touch navigation on devices with touch input
         touch: true,
-        // Loop the presentation
-        loop: false,
-        // Change the presentation direction to be RTL
-        rtl: false,
         // see https://revealjs.com/vertical-slides/#navigation-mode
         navigationMode: 'default',
-        // Randomizes the order of slides each time the presentation loads
-        shuffle: false,
         // Turns fragments on and off globally
         fragments: true,
         // Flags whether to include the current fragment in the URL,
         // so that reloading brings you to the same fragment position
         fragmentInURL: true,
-        // Flags if the presentation is running in an embedded mode,
-        // i.e. contained within a limited portion of the screen
-        embedded: false,
         // Flags if we should show a help overlay when the questionmark
         // key is pressed
         help: true,
-        // Flags if speaker notes should be visible to all viewers
-        showNotes: false,
         // Global override for autoplaying embedded media (video/audio/iframe)
         // - null: Media will only autoplay if data-autoplay is present
         // - true: All media will autoplay, regardless of individual setting
@@ -1287,14 +1428,10 @@ print(A == B)</code></pre>
         // presenting each slide. This is used to show a pacing timer in the
         // speaker view
         defaultTiming: null,
-        // Enable slide navigation via mouse wheel
-        mouseWheel: false,
         // Hide cursor if inactive
         hideInactiveCursor: true,
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
-        // Opens links in an iframe preview overlay
-        previewLinks: false,
         // Transition style
         transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
@@ -1311,7 +1448,7 @@ print(A == B)</code></pre>
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
-        height: 1200,
+        height: 1080,
         // The display mode that will be used to show slides
         display: 'block',
 		math: {
@@ -1351,7 +1488,7 @@ print(A == B)</code></pre>
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
-        chalkWidth: 7,
+        chalkWidth: 5,
 		boardmarkers : [
                 { color: 'rgba(248,248,242,1)', cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                 { color: 'rgba(102,217,239,1)', cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
@@ -1376,6 +1513,7 @@ print(A == B)</code></pre>
 			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
 		],
       });
+      
     </script>
     </body>
 </html>

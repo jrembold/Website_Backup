@@ -1,0 +1,7 @@
+# Fireball count rate as determined from Suggs 2011 paper
+# For comparison to values determined from Halliday 1996
+# Energy (kton TNT)	Number of Strikes per year
+X   Y
+1.2E-5	8E4
+1.6E-4	2.5E4
+5E-4	7E3

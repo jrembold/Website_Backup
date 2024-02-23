@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2021-03-22">
+  <meta name="dcterms.date" content="2023-12-01">
   <title>Emerging Recursion</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,10 +14,15 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
   </style>
   <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
   <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
@@ -29,30 +34,38 @@
 <section id="title-slide">
   <h1 class="title">Emerging Recursion</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">March 22, 2021</p>
+  <p class="date">December 1, 2023</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Midterm on Wednesday!
+<li>Adventure due next Wednesday!</li>
+<li>I’ll be putting final review materials up on the website this
+weekend
 <ul>
-<li>All study materials available online!</li>
-<li>Sections will also be focused on going over the study materials</li>
-<li>Email will go out at 9am on Wednesday, and you’ll have until 9pm to submit to Github</li>
+<li>Will include a sample exam as well as objective list</li>
 </ul></li>
-<li>I’m trying really hard to get through as much grading as I can so that you can have as much feedback as possible before the Midterm
+<li>Advent of Code has started!
 <ul>
-<li>My apologies I’m not further along, I was answering a lot of questions yesterday</li>
+<li>Can join my leaderboard using code
+<code class="text">3198345-61d515c2</code></li>
+<li>I’ll give you some class participation points for each day’s puzzles
+that you complete</li>
 </ul></li>
-<li>Project 3 guidelines will be released Thursday in case you want to get an early jump on it, but also please enjoy your break! You’ve earned it!</li>
-<li>Polling: <a href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>I’ll be giving you time at the end of class next Wednesday to fill
+out the evaluations for this course that should have arrived in your
+email</li>
+<li>Polling: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
 </section>
-<section id="review-question" class="slide level2" data-notes="Solution: 6 times">
+<section id="review-question" class="slide level2"
+data-notes="Solution: 6 times">
 <h2 data-notes="Solution: 6 times">Review Question</h2>
-<p>Last Friday we looked at the selection sort, which had following form:</p>
-<pre ><code class="python" data-line-numbers="">def selection_sort(array):
+<p>On Wednesday we looked at the selection sort, which had the following
+form:</p>
+<pre ><code class="mypython" data-line-numbers="">def selection_sort(array):
     for lh in range(len(array)):
         rh = lh
         for i in range(lh+1, len(array)):
@@ -61,8 +74,9 @@
         array[lh], array[rh] = array[rh], array[lh]
 L = [3,2,6,1]
 selection_sort(L)</code></pre>
-<p>How many times would line 5 be reached in sorting the shown list <code class="python">L</code>?</p>
-<div class="poll">
+<p>How many times would line 5 be reached in sorting the shown list
+<code class="python">L</code>?</p>
+<div class="hpoll">
 <ol>
 <li>4</li>
 <li>6</li>
@@ -107,47 +121,58 @@ $$\mathcal{O}\left(\frac{N^2 + N}{2}\right)$$
 <ul>
 <li>Even 10,000 elements get sorted in just over 1 second</li>
 </ul></li>
-<li>Less attractive to commercial applications with <strong>huge</strong> arrays though
+<li>Less attractive to commercial applications with
+<strong>huge</strong> arrays though
 <ul>
 <li>Sorting a million values to take over 3 hours?!</li>
 </ul></li>
-<li>The <span class="math inline">\(\mathcal{O}(N^2)\)</span> complexity does offer a little hope though
+<li>The <span class="math inline">\(\mathcal{O}(N^2)\)</span> complexity
+does offer a little hope though
 <ul>
 <li>Sorting twice as many elements takes four times as long = BAD</li>
-<li>But sorting half as many elements takes only a quarter the time = GOOD!</li>
-<li>Can we break the array into smaller pieces and just work with those?</li>
+<li>But sorting half as many elements takes only a quarter the time =
+GOOD!</li>
+<li>Can we break the array into smaller pieces and just work with
+those?</li>
 </ul></li>
 </ul>
 </section>
 <section id="a-diversion-to-recursion" class="slide level2">
 <h2>A Diversion to Recursion</h2>
 <ul>
-<li><em>Recursion</em> is the practice of dividing a problem up into smaller problems <strong>of the same form</strong>.
+<li><em>Recursion</em> is the practice of dividing a problem up into
+smaller problems <strong>of the same form</strong>.
 <ul>
-<li>The sub-problems <strong>must</strong> have the same form as the larger problem, or it isn’t recursion</li>
+<li>The sub-problems <strong>must</strong> have the same form as the
+larger problem, or it isn’t recursion</li>
 </ul></li>
-<li>Since the sub-problems have the same form as the larger problem, they can be solved using the <strong>same</strong> function
+<li>Since the sub-problems have the same form as the larger problem,
+they can be solved using the <strong>same</strong> function
 <ul>
-<li>From a code perspective, the defining characteristic of recursion is a function which calls itself internally</li>
+<li>From a code perspective, the defining characteristic of recursion is
+a function which calls itself internally</li>
 </ul></li>
 </ul>
 </section>
 <section id="solving-the-same-simpler-problem" class="slide level2">
 <h2>Solving the same (simpler) problem</h2>
 <ul>
-<li>Say you needed to fundraise a $1000 for an important cause
+<li>Say you needed to fundraise $1000 for an important cause
 <ul>
 <li>Tough to get a single $1000 donation</li>
 <li>Could instead task 10 friends with raising $100
 <ul>
 <li>Each friend could task 10 other friends with raising $10</li>
-<li>Then those friends could find 10 people who would each donate a dollar</li>
+<li>Then those friends could find 10 people who would each donate a
+dollar</li>
 </ul></li>
 </ul></li>
 <li>Solving the problem the same way each time:
 <ul>
-<li>Dividing up the problem and asking those people to solve a simpler (cheaper) problem</li>
-<li>It <strong>must</strong> end somewhere, generally called the <em>base case</em>
+<li>Dividing up the problem and asking those people to solve a simpler
+(cheaper) problem</li>
+<li>It <strong>must</strong> end somewhere, generally called the
+<em>base case</em>
 <ul>
 <li>Here that would have been at the $1 donation point</li>
 </ul></li>
@@ -157,40 +182,67 @@ $$\mathcal{O}\left(\frac{N^2 + N}{2}\right)$$
 <section id="recursive-factorial" class="slide level2">
 <h2>Recursive Factorial</h2>
 <ul>
-<li>The factorial function can be defined in two different ways, one of which lends itself nicely to recursion <span class="math display">\[n! = (n-1) \times (n-2) \times (n-3) \times \cdots \times 1\]</span> or <span class="math display">\[n! = \begin{cases} 1 &amp; \text{if $n$ is 0} \\ n \times (n-1)! &amp; \text{otherwise}\end{cases}\]</span></li>
-<li>The second can be expression computationally as:</li>
-</ul>
-<pre ><code class="python">def factorial(n):
-    if n == 0:  # Our base case
+<li><p>The factorial function can be defined in two different ways, one
+of which lends itself nicely to recursion <span
+class="math display">\[n! = (n-1) \times (n-2) \times (n-3) \times
+\cdots \times 1\]</span> or <span class="math display">\[n! =
+\begin{cases} 1 &amp; \text{if $n$ is 0} \\ n \times (n-1)! &amp;
+\text{otherwise}\end{cases}\]</span></p></li>
+<li><p>The second can be expression computationally as:</p>
+<pre ><code class="mypython">def factorial(n):
+    if n == 0:    # Our base case
         return 1
-    else:       # Our recursive case
-        return n * factorial(n - 1)</code></pre>
+    else:     # Our recursive case
+        return n * factorial(n - 1)</code></pre></li>
+</ul>
+</section>
+<section id="the-recursive-paradigm" class="slide level2">
+<h2>The Recursive Paradigm</h2>
+<ul>
+<li><p>Most recursive functions you encounter will have bodies that fit
+in the following general pattern:</p>
+<pre ><code class="mypython" style="font-size:.7em">if |||test for simple case|||:
+    |||Compute and return simple solution without recursion|||
+else:
+    |||Divide the problem into one or more subproblems of the same form|||
+    |||Call this same function recursively to solve those subproblems|||
+    |||Return the solutions of the various subproblems|||</code></pre></li>
+<li><p>Finding a recursive solution is thus commonly a matter of:</p>
+<ul>
+<li>Identifying <em>simple cases</em> that you can solve without
+recursion</li>
+<li>Finding a <em>recursive decomposition</em> that breaks each problem
+up into smaller, simpler subproblems of the same type</li>
+</ul></li>
+</ul>
 </section>
 <section id="the-merge-sort-plan" class="slide level2">
 <h2>The Merge Sort Plan</h2>
+<p>The plan with merge sort is thus to:</p>
 <ol>
-<li>Divide the array into two halves: <code class="python">a1</code> and <code class="python">a2</code></li>
-<li>Sort each of <code class="python">a1</code> and <code class="python">a2</code> recursively</li>
-<li>Merge elements into the original array by choosing the smallest element from <code class="python">a1</code> or <code class="python">a2</code> on each cycle</li>
+<li>Divide the array into two halves: <code class="python">a1</code> and
+<code class="python">a2</code></li>
+<li>Sort each of <code class="python">a1</code> and
+<code class="python">a2</code> recursively</li>
+<li>Merge elements into the original array by choosing the smallest
+element from <code class="python">a1</code> or
+<code class="python">a2</code> on each cycle</li>
 </ol>
-<p>We’ll follow this process all the way through on pen and paper now to see that it works!</p>
-</section>
-<section id="merge-sort-walkthrough" class="slide level2">
-<h2>Merge Sort Walkthrough</h2>
-<div class="fig-container" data-file="https://visualgo.net/en/sorting" data-style="width:100%; height:900px;">
-
-</div>
+<p>We’ll follow this process all the way through on pen and paper now to
+see that it works!</p>
+<!--## Merge Sort Walkthrough-->
+<!--<div class="fig-container" data-file="https://visualgo.net/en/sorting" data-style="width:100%; height:900px;"></div>-->
 <!--<div class="fig-container" data-file="https://www.hackerearth.com/practice/algorithms/sorting/merge-sort/visualize/&output=embed"></div>-->
 <!--<iframe src="https://www.hackerearth.com/practice/algorithms/sorting/merge-sort/visualize/&output=embed"></iframe>-->
 </section>
 <section id="merge-sort-code-implementation" class="slide level2">
 <h2>Merge Sort Code Implementation</h2>
-<pre ><code class="python" style="max-height:900px">def merge_sort(array):
-    if len(array) > 1:
-        mid = len(array)//2
+<pre ><code class="mypython" style="max-height:900px">def merge_sort(array):
+    if len(array) > 1: #base case check
+        mid = len(array) // 2
         a1 = array[:mid]
         a2 = array[mid:]
-        merge_sort(a1)
+        merge_sort(a1) #recursive calls
         merge_sort(a2)
         merge(array, a1, a2)
 
@@ -616,19 +668,24 @@ def merge(array, a1, a2):
 </svg>
 </p>
 <ul>
-<li>The work done at each level (all the work done by calls at that level) is proportional to the size of the array</li>
-<li>Running time is therefore proportional to <span class="math inline">\(N\)</span> times the number of levels</li>
+<li>The work done at each level (all the work done by calls at that
+level) is proportional to the size of the array</li>
+<li>Running time is therefore proportional to <span
+class="math inline">\(N\)</span> times the number of levels</li>
 </ul>
 </section>
 <section id="so-how-many-levels" class="slide level2">
 <h2>So how many levels?</h2>
 <ul>
-<li>Same division by two situation we had with Binary Search!
+<li>Same division-by-two situation we had with Binary Search!
 <ul>
-<li>Equal to the number of times you can divide the array in half until only a single element remaining</li>
-<li>Number of steps <span class="math inline">\(k\)</span> was given by: <span class="math display">\[k = \log_2(N)\]</span></li>
+<li>Equal to the number of times you can divide the array in half until
+only a single element remaining</li>
+<li>Number of steps <span class="math inline">\(k\)</span> was given by:
+<span class="math display">\[k = \log_2(N)\]</span></li>
 </ul></li>
-<li>Total complexity of merge sort is thus <span class="math display">\[\mathcal{O}(N \log_2(N))\]</span></li>
+<li>Total complexity of merge sort is thus <span
+class="math display">\[\mathcal{O}(N \log_2(N))\]</span></li>
 </ul>
 </section>
 <section id="comparing" class="slide level2">
@@ -675,15 +732,22 @@ def merge(array, a1, a2):
 </tbody>
 </table>
 <ul>
-<li>Based on this, the merge sort would be over 50,000x faster than selection sort for an array of 1 million values!</li>
+<li>Based on this, the merge sort would be over 50,000x faster than
+selection sort for an array of 1 million values!</li>
 </ul>
 </section>
 <section id="standard-complexity-classes" class="slide level2">
 <h2>Standard Complexity Classes</h2>
 <ul>
-<li>Most tend to fall into one of a small number of complexity classes</li>
+<li>Most tend to fall into one of a small number of complexity
+classes</li>
 </ul>
 <table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 60%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
@@ -730,7 +794,8 @@ def merge(array, a1, a2):
 </tbody>
 </table>
 <ul>
-<li>In general, any problem who complexity can not be expressed as a polynomial is considered <em>intractable</em></li>
+<li>In general, any problem whose complexity can not be expressed as a
+polynomial is considered <em>intractable</em></li>
 </ul>
 </section>
 <section id="p-vs-np" class="slide level2">
@@ -935,6 +1000,7 @@ def merge(array, a1, a2):
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
 
   <script>
 
@@ -944,22 +1010,90 @@ def merge(array, a1, a2):
 		//autoAnimateEasing: 'ease-in',
 		//autoAnimateDuration: 1.0,
 		//autoAnimateUnmatched: false,
+        pdfSeparateFragments: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
         // Display the page number of the current slide
         slideNumber: true,
         // Add the current slide number to the URL hash so that reloading the
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
         // Vertical centering of slides
         center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
         // Transition style
         transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
         height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
 		math: {
 		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
 		  <!--config: 'tex-mml-chtml',-->
@@ -985,6 +1119,12 @@ def merge(array, a1, a2):
 			disableCheckFile: false, //default false
 		 },
 
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -997,7 +1137,7 @@ def merge(array, a1, a2):
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
-        chalkWidth: 7,
+        chalkWidth: 5,
 		boardmarkers : [
                 { color: 'rgba(248,248,242,1)', cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                 { color: 'rgba(102,217,239,1)', cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
@@ -1022,6 +1162,20 @@ def merge(array, a1, a2):
 			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
 		],
       });
+      
     </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>

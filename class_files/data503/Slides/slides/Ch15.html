@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>A Functional View</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">A Functional View</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Thursday, April 14, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 10 due tomorrow</li>
+<li>Be making progress on your partner project!</li>
+<li>For next week:
+<ul>
+<li>Tuesday - rest of Ch 15</li>
+<li>Thursday - Window functions and group work time</li>
+</ul></li>
+<li>Polling today: www.PollEv.com/jedrembold441</li>
+</ul>
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<p>Which of the following is not a library needed in either R or Python for webscraping?</p>
+<div class="poll">
+<ol>
+<li>requests</li>
+<li>rvest</li>
+<li>beautifulsoup</li>
+<li>htmlget</li>
+</ol>
+</div>
+</section>
+<section id="dry" class="slide level2">
+<h2>DRY</h2>
+<ul>
+<li>A common programming term is that of <em>DRY</em>: Don’t repeat yourself
+<ul>
+<li>For convenience sake (why redo work you have already done?)</li>
+<li>For debugging/maintenance sake (in case of a change, each replicate needs to be found and changed)</li>
+</ul></li>
+<li>Here we want to look at several methods in SQL that we can utilize to bettere adhere to DRY principles
+<ul>
+<li>Views</li>
+<li>Custom functions</li>
+<li>Triggers (on Tuesday)</li>
+</ul></li>
+</ul>
+</section>
+<section id="views" class="slide level2">
+<h2>Views</h2>
+<ul>
+<li>A view in SQL is essentially a saved query output</li>
+<li>Existing views can be treated just like tables, selecting from their contents
+<ul>
+<li>You can even, to a limited extent, add, remove, or update contents</li>
+</ul></li>
+<li>Syntax similar to creating a new table, just with <code class="python">VIEW</code></li>
+</ul>
+<pre ><code class="pgsql">CREATE VIEW view_name AS
+SELECT colnames
+FROM tablename</code></pre>
+</section>
+<section id="view-vs-table" class="slide level2">
+<h2>View vs Table</h2>
+<ul>
+<li>Despite seeming similar, views are different from tables
+<ul>
+<li>A view stores no new internal information in the database, whereas creating a new table copies that information
+<ul>
+<li>This means a view will always reflect the latest data, whereas a created table would need to be updated</li>
+</ul></li>
+<li>Views can give users access only to particular columns
+<ul>
+<li>This can be a boon for security and giving only those who need them permissions to change various tables</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="view-operations" class="slide level2">
+<h2>View Operations</h2>
+<ul>
+<li>You can drop views just like tables: <code class="python">DROP VIEW view_name;</code></li>
+<li>You can create or <em>replace</em> views if the original column number and type are still present: <code class="python">CREATE OR REPLACE VIEW view_name ...</code>
+<ul>
+<li>Avoids having to drop first to recreate</li>
+<li>New view could have more columns, but can not have less</li>
+</ul></li>
+<li>Insertions, updates and removes can be made on <em>simple views</em>, which will propogate back to the original table!
+<ul>
+<li>Views must reference single tables (no joins) and have no distinct or group by type clauses</li>
+<li>Data in the original table <strong>not</strong> present in the view will be given <code class="python">NULL</code> values (if not further restrictions on the view)</li>
+</ul></li>
+</ul>
+</section>
+<section id="further-limiting-views" class="slide level2">
+<h2>Further Limiting Views</h2>
+<ul>
+<li>Can also add <code class="python">WITH LOCAL CHECK OPTION</code> to the end of a view creation query</li>
+<li>This will enforce that <strong>only data visible within the view</strong> can be edited with inserts, updates or removes
+<ul>
+<li>This includes any filtering done by the view!</li>
+</ul></li>
+<li>Can be an excellent way to limit what data can be changed</li>
+<li>Can replace <code class="python">LOCAL</code> with <code class="python">CASCADE</code> if you are referencing several nested views and want the restrictions to apply based on all the views</li>
+</ul>
+</section>
+<section id="functions" class="slide level2">
+<h2>Functions</h2>
+<ul>
+<li>Postgres has many prebuilt functions that we have used over the semester</li>
+<li>Sometimes you need something a bit more bespoke though, for which Postgres gives you some “easy” methods of writing your own functions</li>
+<li>What language you use to write your own function can be exceptionally flexible:
+<ul>
+<li>Pure SQL</li>
+<li>PL/pgSQL is an extension of SQL that offers more programming logic</li>
+<li>Python</li>
+</ul></li>
+<li>All functions will follow a similar structure, but the body will depend on the details of your chosen language
+<ul>
+<li>Documentation for all the languages (and functions in general) can be found <a href="https://www.postgresql.org/docs/current/server-programming.html">here</a></li>
+</ul></li>
+</ul>
+</section>
+<section id="structure-of-function" class="slide level2">
+<h2>Structure of Function</h2>
+<ul>
+<li>The structure of any defined function will generally look like:</li>
+</ul>
+<pre ><code class="pgsql">CREATE FUNCTION func_name(func_arguments)
+RETURNS return_type AS
+'function_body'
+LANGUAGE func_lang;</code></pre>
+<ul>
+<li><code class="python">func_name</code> - The desired name of the function</li>
+<li><code class="python">func_arguments</code> - A comma separated list of paired arguments and types</li>
+<li><code class="python">return_type</code> - The variable type of what will be returned (selected)</li>
+<li><code class="python">func_lang</code> - The language used for the function body</li>
+<li><code class="python">function_body</code> - a <strong>string</strong> containing the query or logic to process whenever the function is run</li>
+</ul>
+</section>
+<section id="in-sql" class="slide level2">
+<h2>In SQL</h2>
+<ul>
+<li><code class="python">LANGUAGE SQL</code></li>
+<li>Using the basic SQL language gives you access to any existing SQL queries that you already know</li>
+<li>To return something you should use the <code class="python">SELECT</code></li>
+<li>You can also write functions that do <strong>not</strong> return something by specifying <code class="python">RETURNS void</code> and then using <code class="python">INSERT</code>, <code class="python">UPDATE</code>, <code class="python">REMOVE</code>, etc.</li>
+<li>Using <code class="python">$$</code> to quote the body is recommended so that you do not need to double up any single quotes</li>
+</ul>
+</section>
+<section id="in-pgsql" class="slide level2">
+<h2>In pgSQL</h2>
+<ul>
+<li><code class="python">LANGUAGE plpgsql</code></li>
+<li>Extends SQL to add classic programming control structures</li>
+<li>Needs to be wrapped in <code class="python">BEGIN</code>, <code class="python">END</code> keywords</li>
+<li>Operates like a hybrid between SQL and a more typical programming language</li>
+<li>Each phrase needs a terminating semicolon at the end</li>
+</ul>
+</section>
+<section id="pgsql-structures" class="slide level2">
+<h2>pgSQL Structures</h2>
+<ul>
+<li>You can define variables</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:1em">x := 56;</code></pre>
+<ul>
+<li>Control statements</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:1em">IF x > 5 THEN
+  ...do something...
+ELSE
+  ...do something else...
+END IF;</code></pre>
+<ul>
+<li>Returns</li>
+</ul>
+<pre ><code class="pgsql" style="font-size:1em">RETURN x;</code></pre>
+</section>
+<section id="in-python" class="slide level2">
+<h2>In Python</h2>
+<ul>
+<li><code class="python">LANGUAGE plpython3u</code></li>
+<li>Python is another supported language in which functions can be written</li>
+<li>Requires an extension to be active:</li>
+</ul>
+<pre ><code class="pgsql">CREATE EXTENSION plpython3u;</code></pre>
+<ul>
+<li>Most common data types with corresponding types are converted, anything else (like timestamps!) are just utilized as strings, so plan accordingly</li>
+<li>I’d generally write the Python in a more Python suited editor and then copy it in</li>
+</ul>
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity!</h2>
+<ul>
+<li>I’ve given you a simple starter bit of sql <a href="../activity_data/boxes.sql">here</a> to create and populate some tables. Use them to practice the below in the shown pairings.</li>
+<li>Tasks:
+<ul>
+<li>Create a view called <code class="python">newest</code> that will only show the “new” boxes from <code class="python">best_boxes</code></li>
+<li>Create a view called <code class="python">newred</code> that will only show new and red boxes using only <code class="python">newest</code></li>
+<li>Adjust the <code class="python">CHECK OPTION</code> setting for both views so that you could add <code class="python">('Jane', 2, 7, 9, 'red', 'new')</code> to <code class="python">newred</code> but not <code class="python">('Bart', 6, 10, 12, 'red', 'used')</code> to <code class="python">newred</code></li>
+<li>Write a function named <code class="python">box_volume</code> to compute the volume of a cubic object, and use that function to populate a new <code class="python">volume</code> column in <code class="python">best_boxes</code></li>
+<li>Write a function called <code class="python">scale_boxes</code> which updates the <code class="python">best_boxes</code> table to scale the value in the named <code class="python">width</code>, <code class="python">height</code>, or <code class="python">depth</code> columns by the provided argument. Run it to ensure it is working.</li>
+</ul></li>
+</ul>
+</section>
+<section id="pairs" class="slide level2">
+<h2>Pairs</h2>
+<ul>
+<li>Leo and Aidan</li>
+<li>Madeline and Jack</li>
+<li>Seth and Hayden</li>
+<li>Maya and Gordy</li>
+<li>Douglas and Paul</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
+		],
+      });
+    </script>
+    </body>
+</html>
