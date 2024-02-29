@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-03-06">
-  <title>Transits</title>
+  <meta name="dcterms.date" content="2024-02-29">
+  <title>Exo-Techniques</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -17,8 +17,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -32,147 +35,63 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Transits</h1>
+  <h1 class="title">Exo-Techniques</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">March 6, 2023</p>
+  <p class="date">February 29, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>HW3 is posted!
-<ul>
-<li>Due on Friday</li>
-</ul></li>
-<li>HW2 Partner Reflections <a
-href="https://docs.google.com/forms/d/e/1FAIpQLSc8jEwlZoUezUi5JMH-LFiqt0aawXizwr1kln0ql40CF55yww/viewform?usp=sf_link">here</a>
-<ul>
-<li>Last chance to fill out! I’ll deduct 7.5% from your personal HW2
-score otherwise</li>
-<li>Responses otherwise have no effect on scoring</li>
-</ul></li>
-<li>On Wednesday we’ll start into our new unit on galaxies</li>
+<li>Happy Leap Day!</li>
+<li>Homework 3 deadline moved to Tuesday at midnight</li>
+<li>Debriefing poll will be available from next Wednesday through
+Friday</li>
+<li>Homework 4 will come out Tuesday or Thursday</li>
+<li>On Tuesday we’ll start into our new unit on galaxies</li>
 </ul>
 </section>
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li>We can use phase-folding to better visualize and analyze a period
-signal once we know the period
-<ul>
-<li>Be warned: phase-folding can be very sensitive to the exact found
-period!</li>
-</ul></li>
-<li>We can not detect most exoplanets directly, but instead look for
-their telltale affects on the star they are orbiting</li>
-<li>Because masses orbit about the center of mass, we can look for
-“wobbles” in the star
-<ul>
-<li>Can be measured directly by something likely precise like GAIA
-(Astrometric method)</li>
-<li>Can be measure for tilted system by looking at Doppler velocities as
-stars move towards or away from us (Doppler method)</li>
 <li>By utilizing Kepler’s 3rd law and the definition of center of mass,
 we can extract the mass of the exoplanet (assuming the star’s mass is
 much larger)</li>
-</ul></li>
+<li>If a planet orbits such that it happens to pass between its host
+star and Earth, we will detect a dip in the brightness observed. This is
+called a <em>transit</em>.</li>
+<li>The depth of the transit dip corresponds to the ratio of the planet
+radius to the star’s radius: <span class="math display">\[\text{% light
+lost} = \frac{R_{planet}^2}{R_{star}^2}\]</span></li>
 </ul>
 </section>
 <section id="discussing-today" class="slide level2">
 <h2>Discussing Today</h2>
 <ul>
-<li>Transit Methods</li>
+<li>Transit Example</li>
 <li>Rolling Averages</li>
-<li>Partner HW Time</li>
+<li>Rebinning</li>
+<li>HW3 work time?</li>
 </ul>
 </section>
-<section id="transits" class="slide level2">
-<h2>Transits</h2>
+<section id="a-transit-example" class="slide level2">
+<h2>A Transit Example</h2>
 <ul>
-<li>If a planet system is oriented towards us <strong>just
-right</strong>, then on occasion we should see a planet pass in front of
-the star
-<ul>
-<li>This is a much narrower restriction than what we had with Doppler,
-which was just that we needed the planet system to be tilted toward or
-away from us at all</li>
-</ul></li>
-<li>The effect is similar to a solar eclipse on Earth
-<ul>
-<li>Light from the Sun/star is blocked for a certain amount of time</li>
-</ul></li>
-<li>Some important differences owing to perspective though:
-<ul>
-<li>Our Moon is of a size and distance that it can totally block our
-Sun. That is not the case for exoplanets</li>
-<li>Our Moon orbits Earth, not the Sun as exoplanets do</li>
-</ul></li>
-<li>We <strong>can</strong> observe these same effects for Mercury and
-Venus though</li>
+<li>The data <a href="../demos/transit_averaging.csv">here</a> contains
+some transit information on a simulated exoplanet. How does the
+exoplanet’s radius compare to it’s parent star’s?</li>
 </ul>
 </section>
-<section id="venus-transit" class="slide level2"
-data-background-iframe="https://www.youtube.com/embed/ku7YjMol1k4">
-<h2
-data-background-iframe="https://www.youtube.com/embed/ku7YjMol1k4">Venus
-Transit</h2>
-</section>
-<section id="transit-info" class="slide level2">
-<h2>Transit Info</h2>
-<div class="cols">
-<div class="col">
+<section id="dealing-with-noise" class="slide level2">
+<h2>Dealing with Noise</h2>
 <ul>
-<li>The most important information from a transit involves the depth of
-the brightness reduction
-<ul>
-<li>This directly correlates to the ratio of the cross-sectional area of
-the star and the planet</li>
-</ul></li>
-<li>Duration of transit can give other useful information, but tougher
-to extract
-<ul>
-<li>Planet speed</li>
-<li>Inclination angle</li>
-</ul></li>
-</ul>
-</div>
-<div class="col">
-<p><img
-data-src="../images/svg_cache/3edc4ec0cb3cb1672f8e03362e3b252cb891c45d.svg"
-style="width:100.0%" /></p>
-</div>
-</div>
-</section>
-<section id="planetary-radii" class="slide level2">
-<h2>Planetary Radii</h2>
-<div class="cols">
-<div class="col">
-<ul>
-<li>As long as your transit shows a flat portion at the bottom of the
-dip, then you know that the planet fully covered the star</li>
-<li>Then you can work out the planet radius</li>
-</ul>
-</div>
-<div class="col">
-<p><span class="math display">\[\begin{aligned}
-\text{% of light } &amp;= \frac{\text{Area of planet}}{\text{Area of
-star}} \\
-&amp;= \frac{\pi R^2_p}{\pi R^2_s} \\
-&amp;= \left(\frac{R_p}{R_s}\right)^2
-\end{aligned}\]</span></p>
-</div>
-</div>
-</section>
-<section id="averaging-out-noise" class="slide level2">
-<h2>Averaging out Noise</h2>
-<ul>
-<li>There will often times be noise that detracts from or obscurs a
+<li>There will often times be noise that detracts from or obscures a
 signal</li>
 <li>In astronomy, this commonly comes from thermal sensor noise or
 atmospheric effects
 <ul>
 <li>Can show up in any signal though where measurement-to-measurement
-variations obscur a longer pattern in the signal</li>
+variations obscure a longer pattern in the signal</li>
 </ul></li>
 <li>One method to try to eliminate this noise is with Fourier Transforms
 <ul>
@@ -335,6 +254,7 @@ that now</strong></li>
   <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
 
@@ -455,27 +375,28 @@ that now</strong></li>
           RevealZoom,
 		  RevealChalkboard,
           RevealMenu,
+          Reveald3,
         ],
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
