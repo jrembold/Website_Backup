@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <title>Modeling and Transforming</title>
+  <title>Scraping a Railway on Schedule</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -16,8 +16,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -31,1277 +34,853 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Modeling and Transforming</h1>
+  <h1 class="title">Scraping a Railway on Schedule</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Wednesday, March 1, 2023</p>
+  <p class="date">Feb 29/Mar 5, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Homework 6 is due on Sunday
+<li>Midterm video deadline!</li>
+<li>Upcoming Project Starts
 <ul>
-<li>Homework 7 should be good to come out by this weekend</li>
+<li>We are coming up on a point where it would be useful to strategize
+with your partner about possible project ideas</li>
+<li>I’m sending out a poll later tonight about who you might want (or
+not want) to work with, and then I’ll make the pairings and announce
+them tomorrow.</li>
+<li>You will be setting up (individually) a scraper in the coming week
+to be collecting data on a daily basis from some website or API</li>
+<li>You should strategize with your partner about what two difference
+sources you both can be collecting data for that would have interesting
+relationships that you could later analyze</li>
+<li>Most obvious join options would be date, but could be more
+interesting relationships depending on what you are both gathering</li>
 </ul></li>
-<li>I’ll have a moment to give feedback on the midterms this weekend,
-but in general I thought everyone did well</li>
-<li>Anyone with PATH issues on running the
-<code class="python">psql -f hw6.sql</code> command for the hw?</li>
-<li>In class polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>Homework 6 coming out</li>
+</ul>
+<!-------- Scraping ----------------->
+</section>
+<section id="webscraping" class="slide level2">
+<h2>Webscraping</h2>
+<ul>
+<li>Webscraping is the act of extracting information from a URL so that
+it can be collected or otherwise used elsewhere</li>
+<li>It can take multiple forms, with varying degrees of complexity (most
+of which depends on the website)
+<ul>
+<li>Extracting information from a table of data</li>
+<li>Extracting other information on a webpage that is not necessarily
+formatted</li>
+<li>Extracting information using a provided API endpoint</li>
+</ul></li>
+<li>The method we’ll showcase today will let you approach situations
+where you want to grab information from a particular table on a website,
+or in accessing an API</li>
 </ul>
 </section>
-<section id="scripting-prep" class="slide level2">
-<h2>Scripting Prep</h2>
+<section id="web2db" class="slide level2">
+<h2>Web2DB</h2>
 <ul>
-<li>Next week, I want to introduce how to scrape data from websites or
-API</li>
-<li>Doing so generally requires some sort of scripting language, and I’m
-aware that not everyone in here as experience with a scripting language
-(yet)</li>
-<li>What I’m playing around with is something as follows:
+<li><p>To focus on the acquisition of data, without worrying about the
+scripting details, I have created a Docker container you can use</p>
+<pre ><code class="bash">docker pull jrembold/web2db:latest</code></pre></li>
+<li><p>This container will handle:</p>
 <ul>
-<li>Providing simple scripts in different languages that will scrape a
-website for tables or access an API at a given URL, and return a JSON
-structure of the resulting data</li>
-<li>Introduce the functionality Postgres has for natively working with
-JSON data</li>
+<li>Grabbing a static table from a webpage, or</li>
+<li>Retrieving a response from an API endpoint, and</li>
+<li>Optionally: Writing the data as JSON to a file</li>
+<li>Optionally: Adding the data as JSON to an indicated PostgreSQL
+table</li>
+<li>Optionally: scheduling the same operation to run with a provided
+frequency</li>
 </ul></li>
-<li>I think this will provide the necessary flexibility for what you’ll
-need later, as well as introducing something I haven’t covered in the
-past that I think is quite useful to know</li>
 </ul>
-<!--------  Scraping ------------------>
-<!--
-## Webscraping
-- Webscraping is the act of extracting information from a webpage so that it can be collected or otherwise used elsewhere
-- It can take multiple forms, with varying degrees of complexity (most of which depends on the website)
-  - Extracting information from a table of data
-  - Extracting other information on a webpage that in not necessarily formatted
-  - Extracting information using a provided API endpoint
-- Our goal today is to touch on how you could do each of these in R
-  - In R we'll be using `rvest` (with comes as part of tidyverse) and `jsonlite`
-
-
-## Step 1: Get the HTML
-- Regardless of what language you are using to scrape a website, the first step is to grab the necessary html
-- This is exactly what your browser is doing when it accesses a webpage
-- You can only scrape what is made available as part of a page's html.
-  - Many modern webpages use Javascript to tweak or modify aspects of the html on a page. Basic webscraping will not work for these sites, unfortunately.
-- In R, this is done using the `read_html` function:
-```R
-html <- read_html(url)
-```
-
-## Step 2: Understanding Tags
-- HTML is comprised by information stored within what are called _tags_
-  - Tags can also be nested inside other tags
-- Extracting information from a webpage is frequently about knowing which tags have the information you want
-- Take advantage of the "Inspect" tool on most browsers, accessed by right-clicking on a web page
-  - Will give you the option to explore both the html and mouse around the webpage and highlight the corresponding html tags
-  - This is essentially a mandatory aspect of scraping data from a given page
-- At the very least, you should normally try to identify the overall tag that surrounds your data of interest
-
-
-## Option 1: Data from Tables
-- One method in which data is frequently stored on a webpage is in tables
-  - These are surrounded by the `< table >`{.html} tag
-- So long as the table is fairly simple, R has a very easy way of grabbing the table information directly into a corresponding dataframe
-  ```R
-  df <- html %>% html_table
-  ```
-- These will automatically correct for things like cells spanning multiple rows, which is very nice
-- By default, this technically returns a list of dataframes for every table on the page
-
-
-## Option 2: Other Data on a Page
-- Sometimes the data you want on from a page isn't clearly going to be the text in a table
-  - Maybe it is the url from a link, or an image, or any other text or number not in a table
-- In these cases you need to rely on the tag structure of the html document to select purely what you are interested
-  - You may also need to access the tag _attributes_ to get information such as link or image urls
-- When selecting the tags you want, you can provide multiple separated by spaces to provide a hierarchy of what you are looking for
-  - Looking for `'tr td'` says you can all the `td` tags that are inside a `tr` tag
-- Gathering the data in this way may generate a list of content, but it won't generally create more complicated tables of information, so you would need to craft those yourself
-
-
-## Option 2: Selecting the desired tags
-- In R, if you are using the `rvest` library, you just need to pass the html into the proper function: `html_elements`
-  ```R
-  links <- html %>% html_elements('td a')
-  ```
-  - This will return a list of _all_ the tags matching this hierarchy on the page
-- If you only want a single tag, you could just use `html_element()`
-
-## Option 2: Information from tags
-- The previous methods will get you a list of the tags that match what you want
-- Generally though, you then want some information _from_ those tags, either the enclosed text or some attribute of the tag
-- To get the text associated with a tag:
-  - `link_text <- only_links %>% html_text()`
-
-- To get an attribute value of a tag (content inside the `<` `>` parts of the tag)
-
-  - `link_url <- only_links %>% html_attr('href')`
-
-## Option 3: APIs
-- Sometimes the amount of information in just so large that it can't fit nicely on a webpage, or data providers don't want to make you "scrape" a webpage for the information
-- Instead, they might make available a public API where you can access the information
-- Most REST APIs look just like a web address, but if you navigate to that url, instead of getting HTML to render a webpage, you get the data directly, most often in a JSON format
-  - Many APIs also let you add extra information to the url to better specify _exactly_ what information you want back
-  - These generally take the form of parameter strings, and come after a `?` in the url
-- Some APIs will require you to register for a key, which is often free. This is to safeguard against people slamming their servers with billions of requests. **Be respectful in both your API and webscraping usage!**
-
-## Option 3: Understanding Endpoints
-- Many API's will offer a host of different _endpoints_
-- And endpoint is essentially just a specific url that will get you a particular piece of information
-- How do you know what endpoints are available?
-  - RTFM: You read the @#%!ing manual
-  - Any API worth anything will have extensive documentation describing what endpoints are available and what customizations you can apply to each endpoint to get the data you want
-
-## Option 3: Accessing API data
-- The information can be downloaded just like html information was downloaded
-  - `data <- read_html(url)`
-- Commonly, the output will be a string of JSON data, so it helps to use a JSON package to convert it to your language's natural data structures
-  - If using the `jsonlite` library, you can just use `fromJSON` to parse the structure into something R can work with
-    - `fromJSON` parses _text_, not tags, so be sure to extract the text
-  - `output <- data %>% html_text %>% fromJSON`
-
-
-## Practice Time!
-- In your language of choice, see if you can:
-  - Extract information about our class schedule [here](http://willamette.edu/~jjrembold/classes/data503/schedule/) into a dataframe that you could then export to CSV
-  - Suppose you only wanted to get the text of the days that are red in the table. How could you extract only that text?
-  - The API endpoint [here](http://api.open-notify.org/astros.json) will get you information on all the humans currently in space, in JSON format. Create a table of the names of the astronauts and what vessel they are currently on.
-
-
--->
+</section>
+<section id="controlling-the-environment" class="slide level2">
+<h2>Controlling the Environment</h2>
+<ul>
+<li><p>You control the behavior of the Web2DB container through
+environment variables</p></li>
+<li><p>Keeps you have needing to build your own images on top for
+customization</p></li>
+<li><p>Usually a good idea to store secrets such as database passwords
+in environment variables anyway</p></li>
+<li><p>Locally, the easiest way to handle the variables is to create a
+<code class="python">vars.env</code> file and provide it to the docker
+container</p>
+<pre ><code class="bash">docker run --rm --env-file vars.env web2db</code></pre></li>
+<li><p>You <em>can</em> specify them individually, one after each
+<code class="python">-E</code> flag</p></li>
+</ul>
+</section>
+<section id="web2db-environment-variables" class="slide level2">
+<h2>Web2DB Environment Variables</h2>
+<ul>
+<li><p>web2db recognizes (or requires) 6 environment variables:</p>
+<ul>
+<li><code class="python">SITE_URL</code> (required)</li>
+<li><code class="python">TABLE_NUM</code> (situational/optional)</li>
+<li><code class="python">FILE_NAME</code> (optional)</li>
+<li><code class="python">DATABASE_URL</code> (optional)</li>
+<li><code class="python">TABLE_NAME</code> (situational)</li>
+<li><code class="python">SCHED</code> (optional)</li>
+</ul></li>
+<li><p>When providing in <code class="python">vars.env</code>, use no
+spaces:</p>
+<pre ><code class="bash">SITE_URL=https://willamette.edu/~jjrembold  </code></pre></li>
+</ul>
+</section>
+<section id="site_url-for-tables" class="slide level2">
+<h2>SITE_URL for Tables</h2>
+<ul>
+<li>If you are trying to scrape a static table off a site, provide:
+<ul>
+<li>The URL of the site as <code class="python">SITE_URL</code></li>
+<li>Indicate the number of which table you want as
+<code class="python">TABLE_NUM</code>
+<ul>
+<li>Defaults to 0 for the first table on the page</li>
+</ul></li>
+</ul></li>
+<li>The table will get converted to JSON format, with each row
+containing the column headers as keys</li>
+<li>If a table is populated from a backend database on loading the
+webpage (a dynamic table) this method will unfortunately not work</li>
+</ul>
+</section>
+<section id="understanding-apis" class="slide level2">
+<h2>Understanding APIs</h2>
+<ul>
+<li>Instead of posting a table on a webpage, information providers might
+make available a public API where you can access the information</li>
+<li>Most REST APIs look just like a web address, but if you navigate to
+that URL, instead of getting HTML to render a webpage, you get the data
+directly, most often in a JSON format
+<ul>
+<li>Many APIs also let you add extra information to the URL to better
+specify <em>exactly</em> what information you want back</li>
+<li>These generally take the form of parameter strings, and come after a
+<code class="python">?</code> in the URL</li>
+</ul></li>
+<li>Some APIs will require you to register for a key, which is often
+free. This is to safeguard against people slamming their servers with
+billions of requests. <strong>Be respectful in both your API and
+webscraping usage!</strong></li>
+</ul>
+</section>
+<section id="understanding-endpoints" class="slide level2">
+<h2>Understanding Endpoints</h2>
+<ul>
+<li>Many API’s will offer a variety of different <em>endpoints</em></li>
+<li>An endpoint is essentially just a specific URL that will get you a
+particular piece of information</li>
+<li>How do you know what endpoints are available?
+<ul>
+<li>Classic RTFM: You read the @#%!ing manual</li>
+<li>Any API worth anything will have extensive documentation describing
+what endpoints are available and what customizations you can apply to
+each endpoint to get the data you want</li>
+</ul></li>
+</ul>
+</section>
+<section id="site_url-for-apis" class="slide level2">
+<h2>SITE_URL for APIs</h2>
+<ul>
+<li>web2db is currently configured to handle REST GET APIs
+<ul>
+<li>I may be able to add <code class="python">POST</code> functionality
+if needed</li>
+</ul></li>
+<li>You just need to provide the desired endpoint to
+<code class="python">SITE_URL</code></li>
+<li>If you have parameters to include at the end (following a
+<code class="python">?</code>), <strong>include them in your
+URL</strong></li>
+<li>web2db assumes that the response will be in JSON, which is probably
+the case in over 95% of APIs, but it will break if given something in
+another format</li>
+</ul>
+</section>
+<section id="writing-to-file" class="slide level2">
+<h2>Writing to File</h2>
+<ul>
+<li>If you include the <code class="python">FILE_NAME</code> environment
+variable, the data will be written to a newline JSON file with this name
+in the container’s <code class="python">/app/output</code> folder</li>
+<li>This format is perfect for copying directly into Postgres tables
+using <code class="python">COPY</code>
+<ul>
+<li>Instead of having a list of entries, it has 1 entry on each new
+line</li>
+</ul></li>
+<li>If you want to access these files from outside your container,
+you’ll need to set up a volume bind!</li>
+</ul>
+</section>
+<section id="writing-to-database" class="slide level2">
+<h2>Writing to Database</h2>
+<ul>
+<li>web2db can write the information directly to your database, provided
+you fill out the <code class="python">DATABASE_URL</code> and
+<code class="python">TABLE_NAME</code> variables</li>
+<li><code class="python">DATABASE_URL</code> contains
+<strong>all</strong> the info to connect to your database
+<ul>
+<li>Form:
+<code class="python">username:password@hostname:port/database</code></li>
+</ul></li>
+<li><code class="python">TABLE_NAME</code> should be a table that
+<em>already</em> exists in the database and has a column named
+<code class="python">raw_json</code>
+<ul>
+<li>It can have other columns, but web2db will only fill out the
+<code class="python">raw_json</code> column</li>
+<li>I like adding a timestamp column with a
+<code class="python">DEFAULT now()</code> to automatically add the time
+each entry is added to the database</li>
+</ul></li>
+<li>If connecting to a local database, may need to include
+<code class="python">--network=host</code> option when running the
+docker container</li>
+</ul>
+</section>
+<section id="scheduling-with-cron" class="slide level2">
+<h2>Scheduling with CRON</h2>
+<ul>
+<li>If no <code class="python">SCHED</code> variable is provided, the
+Docker container runs the program once and then exits</li>
+<li>If a <code class="python">SCHED</code> variable is provided, then
+the Docker container will schedule a recurring job using
+<code class="python">cron</code>
+<ul>
+<li>This will effectively run the program at some given interval</li>
+<li>The Docker container is kept open in this case, indefinitely</li>
+</ul></li>
+<li><code class="python">SCHED</code> needs to be a
+<code class="python">cron</code> expression that describes the desired
+schedule</li>
+</ul>
+</section>
+<section id="cron-scheduling" class="slide level2">
+<h2>CRON Scheduling</h2>
+<figure>
+<img data-src="../images/cron_expression_syntax.png"
+style="width:100.0%" alt="From crontogo.com" />
+<figcaption aria-hidden="true">From <a
+href="https://crontogo.com/blog/the-complete-guide-to-cron/">crontogo.com</a></figcaption>
+</figure>
+</section>
+<section id="practice" class="slide level2">
+<h2>Practice!</h2>
+<ul>
+<li>See if you can do the following:
+<ul>
+<li>Create a table in your local database with at least one column with
+the <code class="python">jsonb</code> data type (to be discussed more
+later!)</li>
+<li>Use the Docker container to dump the table containing our class
+schedule <a
+href="https://willamette.edu/~jjrembold/classes/data503/schedule/">here</a>
+into your Postgres table</li>
+<li>Use the Docker container to dump the results from the API endpoint
+<a href="http://api.open-notify.org/astros.json">here</a> into your
+Postgres table. The API gives information about all the humans currently
+in space.</li>
+</ul></li>
+<li>Note that although these two results have very different schema, you
+can dump them both into the same <code class="python">jsonb</code>
+column in Postgres!</li>
+</ul>
 <!--------  THEORY ------------------>
-</section>
-<section id="data-modeling" class="slide level2">
-<h2>Data Modeling</h2>
-<ul>
-<li>Data Modeling is the act of best deciding how to represent and store
-data such that it relates to the real world</li>
-<li>As much as possible, it is generally desirable to:
-<ul>
-<li>ensure the model can easily help answer the types of questions you
-will want to ask</li>
-<li>operate at as low a level of granularity as possible</li>
-<li>remove redundancy</li>
-<li>ensure referential integrity</li>
-</ul></li>
-</ul>
-</section>
-<section id="normalization" class="slide level2">
-<h2>Normalization</h2>
-<ul>
-<li>First introduced by Edgar Codd in the early 1970s</li>
-<li>Codd outlined the following goals:
-<ul>
-<li>to free the collection of relations from undesirable insertion,
-update, and deletion dependencies</li>
-<li>To reduce the need for restructuring the collection of relations as
-new types of data are introduced</li>
-<li>To make the relational model more informative to users</li>
-<li>To make the collection of relations neutral to what queries are
-being run on them</li>
-</ul></li>
-<li>To assist in these efforts, Codd introduced the idea of <em>normal
-forms</em></li>
-</ul>
-</section>
-<section id="what-is-normal" class="slide level2">
-<h2>What is normal?</h2>
-<ul>
-<li>Each normal form builds on those before</li>
-<li>The primary normal forms are:</li>
-</ul>
-<dl>
-<dt>Denormalized</dt>
-<dd>
-No normalization. Nested and redundant data is allowed
-</dd>
-<dt>First normal form (1NF)</dt>
-<dd>
-Each column is unique and has a single value. The table has a unique
-primary key.
-</dd>
-<dt>Second normal form (2NF)</dt>
-<dd>
-Partial dependencies are removed (only necessary if compound primary
-key)
-</dd>
-<dt>Third normal form (3NF)</dt>
-<dd>
-Each table contains fields only relevant to its primary key, and has no
-transitive dependencies
-</dd>
-</dl>
-</section>
-<section id="denormalized" class="slide level2">
-<h2>Denormalized</h2>
-<div class="cols">
-<div class="col">
-<ul>
-<li>APIs will commonly give denormalized data, since they tend to return
-JSON type entries</li>
-<li>Consider the entry to the right about a particular order</li>
-</ul>
-</div>
-<div class="col" style="flex-grow:2">
-<pre ><code class="json" style="max-height:1000px">{ "OrderID": 100,
-  "OrderItems": [
-    {
-      "sku": 1,
-      "price": 10,
-      "quantity": 1,
-      "name": "Thingmajig"
-    },
-    {
-      "sku": 2,
-      "price": 25,
-      "quantity": 2,
-      "name": "Whatchamacalit"
-    }],
-  "CustomerID": 5,
-  "CustomerName": "Jed Rembold",
-  "OrderDate": "2022-11-09" }</code></pre>
-</div>
-</div>
-</section>
-<section id="initial-attempt" class="slide level2">
-<h2>Initial Attempt</h2>
-<table style="font-size:.9em">
-<tr>
-<th>
-OrderID
-</th>
-<th style="width:35%">
-OrderItems
-</th>
-<th>
-CustomerID
-</th>
-<th>
-CustomerName
-</th>
-<th>
-OrderDate
-</th>
-</tr>
-<tr>
-<td>
-100
-</td>
-<td>
-<pre><code class='json' style='font-size:.5em'>
-  [
-    {
-      "sku": 1,
-      "price": 10,
-      "quantity": 1,
-      "name": "Thingmajig"
-    },
-    {
-      "sku": 2,
-      "price": 25,
-      "quantity": 2,
-      "name": "Whatchamacalit"
-    }
-  ]
-    </code></pre>
-</td>
-<td>
-5
-</td>
-<td>
-Jed Rembold
-</td>
-<td>
-2022-11-09
-</td>
-</tr>
-</table>
-</section>
-<section id="st-normal-form" class="slide level2">
-<h2>1st Normal Form</h2>
-<div style="font-size: .8em">
-<table>
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 5%" />
-<col style="width: 8%" />
-<col style="width: 11%" />
-<col style="width: 18%" />
-<col style="width: 14%" />
-<col style="width: 16%" />
-<col style="width: 14%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>OrderID</th>
-<th>Sku</th>
-<th>Price</th>
-<th>Quantity</th>
-<th>ProductName</th>
-<th>CustomerID</th>
-<th>CustomerName</th>
-<th>OrderDate</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>100</td>
-<td>1</td>
-<td>50</td>
-<td>1</td>
-<td>Thingmajig</td>
-<td>5</td>
-<td>Jed Rembold</td>
-<td>2022-11-09</td>
-</tr>
-<tr class="even">
-<td>100</td>
-<td>2</td>
-<td>25</td>
-<td>2</td>
-<td>Whatchamacalit</td>
-<td>5</td>
-<td>Jed Rembold</td>
-<td>2022-11-09</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="st-normal-form-pk" class="slide level2">
-<h2>1st Normal Form (PK)</h2>
-<div style="font-size: .7em">
-<table>
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 10%" />
-<col style="width: 5%" />
-<col style="width: 7%" />
-<col style="width: 10%" />
-<col style="width: 16%" />
-<col style="width: 12%" />
-<col style="width: 14%" />
-<col style="width: 12%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">OrderID</th>
-<th style="text-align: center;">ItemNum</th>
-<th style="text-align: center;">Sku</th>
-<th style="text-align: center;">Price</th>
-<th style="text-align: center;">Quantity</th>
-<th style="text-align: left;">ProductName</th>
-<th style="text-align: center;">CustomerID</th>
-<th>CustomerName</th>
-<th>OrderDate</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">100</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">50</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: left;">Thingmajig</td>
-<td style="text-align: center;">5</td>
-<td>Jed Rembold</td>
-<td>2022-11-09</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">100</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">25</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: left;">Whatchamacalit</td>
-<td style="text-align: center;">5</td>
-<td>Jed Rembold</td>
-<td>2022-11-09</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="evaluating-2nf" class="slide level2">
-<h2>Evaluating 2NF</h2>
-<ul>
-<li>To be in second normal form, there can be no partial dependencies,
-where columns depend on only one of the compound keys</li>
-<li>Here though the last 3 columns all depend only on OrderID
-<ul>
-<li>Solution: Split to new tables!</li>
-</ul></li>
-</ul>
-</section>
-<section id="nd-normal-form" class="slide level2">
-<h2>2nd Normal Form</h2>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">OrderID</th>
-<th style="text-align: center;">CustomerID</th>
-<th>CustomerName</th>
-<th>OrderDate</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">100</td>
-<td style="text-align: center;">5</td>
-<td>Jed Rembold</td>
-<td>2022-11-09</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">OrderID</th>
-<th style="text-align: center;">ItemNum</th>
-<th style="text-align: center;">Sku</th>
-<th style="text-align: center;">Price</th>
-<th style="text-align: center;">Quantity</th>
-<th>ProductName</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">100</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">50</td>
-<td style="text-align: center;">1</td>
-<td>Thingmajig</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">100</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">25</td>
-<td style="text-align: center;">2</td>
-<td>Whatchamacalit</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="evaluating-3nf" class="slide level2">
-<h2>Evaluating 3NF</h2>
-<ul>
-<li>The third normal form prohibits transitive dependencies, where a
-column depends on another (that depends on the primary key), instead of
-depending directly on the primary key</li>
-<li>Here we have 2! One in each table:
-<ul>
-<li><code class="python">ProductName</code> depends on
-<code class="python">Sku</code></li>
-<li><code class="python">CustomerName</code> depends on
-<code class="python">CustomerID</code></li>
-</ul></li>
-<li>Solution? More tables!</li>
-</ul>
-</section>
-<section id="rd-normal-form" class="slide level2">
-<h2>3rd Normal Form</h2>
-<div style="font-size:.9em">
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Sku</th>
-<th>ProductName</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">1</td>
-<td>Thingmajig</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">2</td>
-<td>Whatchamacalit</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">CustomerID</th>
-<th>CustomerName</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">5</td>
-<td>Jed Rembold</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">OrderID</th>
-<th style="text-align: center;">ItemNum</th>
-<th style="text-align: center;">Sku</th>
-<th style="text-align: center;">Price</th>
-<th style="text-align: center;">Quantity</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">100</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">50</td>
-<td style="text-align: center;">1</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">100</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">25</td>
-<td style="text-align: center;">2</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">OrderID</th>
-<th style="text-align: center;">CustomerID</th>
-<th>OrderDate</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">100</td>
-<td style="text-align: center;">5</td>
-<td>2022-11-09</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="visually" class="slide level2">
-<h2>Visually</h2>
-<p><img data-src="../images/normal_forms_example.png"
-style="width:100.0%" /></p>
-</section>
-<section id="beyond" class="slide level2">
-<h2>Beyond</h2>
-<ul>
-<li>Other normal forms exist (up to 6NF in the Boyce-Codd system)</li>
-<li>Most people only care about the first 3 to get data in a
-“normalized” state</li>
-<li>Unless you have specific performance reasons for wanting otherwise,
-you really should strive for normalized tables in your relational
-database, as they make maintaining, adding, updating, and adjusting your
-database and tables much easier</li>
-</ul>
+<!--
+## An Interface
+- SQL is brilliant for working within our databases
+  - It is not generally as flexible to handle other common scripting tasks
+- You may at times need an _interface_ between a common scripting language (say R or Python) and SQL
+- These interfaces generally allow two major things to happen:
+  - You can trigger certain SQL commands to happen in the database from within your other script
+  - You can query results _out_ of a database using SQL and bring them directly into your scripting language, ready for use
+
+
+## All about the connection
+- Regardless of the scripting language, an interface is generally built around an initial _connection_ object that gets defined in the language
+- The connection object is initially formed by requiring information about the database you desire to connect to
+  - IP address / Port
+  - Database name
+  - User you'll be connecting as
+  - User password
+- All other commands will use the connection object as a method to communicate with the database
+- Frequently will form one connecting at the start and then maintain it, but you could connect and disconnect as needed
+
+
+## Package Management
+- Tidyverse already has the dbplyr package for working with databases, which brings along with it the necessary DBI package
+  - The DBI package is the one responsible for facilitating the connection and providing many common functions for interacting with the database
+  - Other packages are built on top of DBI to allow connections to different types of databases, all using a similar syntax
+- You will also need `RPostgreSQL`, which is built on top of DBI to allow for connections to PostgreSQL databases
+
+
+## Making a connection
+- The `dBConnect` command is used to create a connection object
+- Needs at least one input, corresponding to a DBI object representing the type of database to connect to
+  - For Postgres, that can be `RPostgreSQL::PostgreSQL()`
+- Further parameters can customize aspects of what database is connected to
+  - `dbname` for the database name
+  - `host` for the IP address (or localhost if on same system)
+  - `port` for a specific port
+  - `user` for the connecting username
+  - `password` for the corresponding password
+- Save the connection object as something! You will need it!
+
+
+## Example Connection
+- Connecting to a generic postgres database living on the same computer:
+  ```R
+  con <- dbConnect(RPostgreSQL::PostgreSQL(),
+                   dbname = 'analysis',
+                   host = 'localhost',
+                   port = 5432,
+                   user = 'postgres',
+                   password = 'postgres')
+  ```
+
+## Reading information
+- Once you have a connection, you can query the database and bring that information into R!
+- Several approaches
+  - Using DBI directly:
+    ```R
+    output <- dbGetQuery(con, "SELECT * FROM pokemon")
+    ```
+    - This reads the resulting table directly into a dataframe stored in local memory
+  - Using dbplyr:
+    ```R
+    output <- tbl(con, sql("SELECT * FROM pokemon"))
+    ```
+    - This stores in the `output` a database table object, which is essentially a map to the information in the database
+    - You can filter, aggregate, etc on this object as if it were a local dataframe, but _it is actually still on the server_!
+    - dplyr converts all the R commands into corresponding SQL that is run serverside
+
+
+## Writing information
+- For writing information to the database, or any other SQL commands that don't return a table, things are more straightforward (kinda)
+- I would recommend using `dbExecute`, as I've found it to be the most straightforward and convenient
+- Takes two required arguments:
+  - The desired connection object
+  - A string containing the SQL you desire to run
+  ```R
+  dbExecute(
+    con, 
+    "INSERT INTO test VALUES ('Jed', 1985)"
+  )
+  ```
+
+
+## Parameterizing Information
+- Often, you have gotten information from another source that you want to embed inside an SQL query
+- You could do this directly through string processing, using something like `paste` or `glue`
+  - Doing this blindly though can open you up to SQL-Injection attacks!
+- A better way is through _query parameterization_
+  - Indicate placeholders in the query where you want information to be subbed in, and then supply that information
+  - The interface library then takes care of sanitizing the input and making sure nothing nefarious is going on before inserting the desired strings
+
+
+## RPostgresql Parameterization
+- Uses ordered placeholders using a dollar sign followed by a number: `$1`, `$2`, etc
+  - This is a bit different than many implementations, which let you just use `?` marks
+- Can provide a parameterization list after the query:
+  ```R
+  dbExecute(con, "INSERT INTO test VALUES ($1, $2)", list('Jed', 1985))
+  ```
+- Could also provide a 1-row tibble of the necessary length
+- In RPostgreSQL, there seems to be no way to do bulk inserts using parameterization, unfortunately
+- Can also work with `dbGetQuery` statements:
+  ```R
+  dbGetQuery(con, "SELECT * FROM pokemon WHERE hp > $1", params=list(50))
+  ```
+
+## Sleeping
+- For long running data acquisition scripts, it is often useful to have the program "wait" a set amount of time between grabbing data
+- You can do this in R with the `Sys.sleep(duration)`
+  - Duration is given in seconds
+- Such statements are generally embedded in long running or infinite loops:
+  ```R
+  while (TRUE) {
+    ...do something cool...
+    Sys.sleep(60) # Wait a minute 
+  }
+  ```
+
+## Activity
+- Take some time now to:
+  - From within R, create a new table in your database of choice
+    - You can name it anything you want, and have whatever columns you want
+    - Ensure after creating it that you can access and query this table from your client of choice!
+  - From within R, read in a dataframe of all the number of superheros who have each available superhero power and use that to create a histogram in ggplot.
+-->
 </section>
 <section id="break-time" class="slide level2">
 <h2>Break Time!</h2>
-<p><img data-src="../images/nomming_catepillar.png" /></p>
+<!--![](../images/nomming_catepillar.png)-->
+<p><img
+data-src="https://64.media.tumblr.com/tumblr_lpc46oU6Cy1qi1pnpo1_500.gifv"
+style="width:50.0%" /></p>
+</section>
+<section id="railway-introduction" class="slide level2">
+<h2>Railway Introduction</h2>
+<ul>
+<li>There are many different webhosting options these days</li>
+<li>For this class, I was looking for:
+<ul>
+<li>Something fairly straightforward</li>
+<li>Something free or very cheap</li>
+<li>Something that could easily handle both a database and data
+acquisition</li>
+</ul></li>
+<li><a href="https://railway.app/">Railway.app</a> is what I found</li>
+</ul>
+</section>
+<section id="railway-details" class="slide level2">
+<h2>Railway Details</h2>
+<ul>
+<li>As a new user, you get $5 free credit that does not expire
+<ul>
+<li>For what we are using, monthly costs are usually around $2-$2.50, so
+you <em>probably</em> will not need to pay anything to get through the
+end of the semester</li>
+<li>I am looking into and working with Railway to see if we can get some
+educational rate, but absolute worse case it costs $5</li>
+</ul></li>
+<li>Can spin up a Postgres database easily, in the cloud</li>
+<li>Can also launch a Docker container
+<ul>
+<li>Can build an image directly from a Dockerfile and supporting files
+in a GitHub repository</li>
+<li>Can launch an image directly from DockerHub</li>
+</ul></li>
+<li>You can sign up for Railway using your GitHub account</li>
+</ul>
+</section>
+<section id="creating-a-db" class="slide level2">
+<h2>Creating a DB</h2>
+<ul>
+<li>Creating a new Postgres database is drop dead simple:
+<ul>
+<li>Create a new project</li>
+<li>Select “Provision PostgreSQL”</li>
+<li>Give it a moment, and then it will be up and running!</li>
+</ul></li>
+<li>You can click on it in your project to bring up options where you
+can:
+<ul>
+<li>Add tables</li>
+<li>Query the data directly</li>
+<li>Get the all important connection information</li>
+</ul></li>
+<li>Test it! You should be able to connect using this connection
+information from your client of choice!</li>
+</ul>
+</section>
+<section id="deploying-a-docker-container-easy-way"
+class="slide level2">
+<h2>Deploying a Docker Container: Easy Way</h2>
+<ul>
+<li>Recently, Railway added the option to deploy a Docker container
+directly from an image hosted on DockerHub</li>
+<li>This makes it <strong>very</strong> easy to deploy the
+<code class="python">jrembold/web2db</code> image!</li>
+<li>When it first is added to your project, it will not be running. It
+gives you some time to make any adjustments or corrections before you
+can then hit “Deploy” to get it going.</li>
+</ul>
+</section>
+<section id="deploying-a-custom-docker-container" class="slide level2">
+<h2>Deploying a Custom Docker Container</h2>
+<ul>
+<li>Railway can deploy Docker containers by building a Dockerfile in a
+provided GitHub repository</li>
+<li>In your project, select “New” and then choose “GitHup Repo”</li>
+<li>You’ll then need to choose Configure/Install GitHub App
+<ul>
+<li>This will link Railway.app to your GitHub account</li>
+<li>You can choose to either link it to all your repositories, or, like
+me, choose specific repositories</li>
+<li>In that repository, all you need is a Dockerfile and any supporting
+files that you would normally need to build the image</li>
+</ul></li>
+<li>Whenever you commit a new change to that repo, Railway will
+automatically rebuild the Docker image and redeploy it, which is pretty
+slick</li>
+</ul>
+</section>
+<section id="railway-environmental-variables" class="slide level2">
+<h2>Railway Environmental Variables</h2>
+<ul>
+<li>Railway has available all the database environment variables, but
+you just need to import which ones you need over to the web2db image
+(the <code class="python">DATABASE_URL</code> one!)</li>
+<li>Select the Docker container and then click on the “variables”
+tab</li>
+<li>Here you can click the <code class="python">+ New Variable</code>
+button to add the same variables and corresponding values you had in
+your <code class="python">var.env</code> file!
+<ul>
+<li>This way you never need to have something like a password or similar
+saved in text as part of your deployment</li>
+<li>If you make changes to these variables, Railway will automatically
+restart the Docker container to ensure it sees the new values!</li>
+</ul></li>
+</ul>
 <!---------------- SQL ------------------>
 </section>
-<section id="overview" class="slide level2">
-<h2>Overview</h2>
+<section id="showdown-time" class="slide level2">
+<h2>SHOWDOWN TIME!</h2>
 <ul>
-<li>Chapter 9 is essentially a tale in two parts, which are closely
-entwined
+<li>Teams to be announced on next slide</li>
+<li>Whoever want to be in charge of submitting your answer can change
+your polling name to a fun team name :)</li>
+<li>Only one computer can be used by the pair of you at a time
 <ul>
-<li>Data is likely going to be messy. How do you go about cleaning up
-data for further analysis. What sorts of anomalies should you keep an
-eye out for?</li>
-<li>Tables are usually not static entities, but stores of data that
-might be changing. How you can make adjustments not only to the contents
-of a table but to the design of the table itself?</li>
+<li>We’ll be using the superhero dataset from HW4</li>
+<li>4 rounds: each round switch who is typing</li>
 </ul></li>
-<li>We could look at either piece first, but let’s look first at
-cleaning data to provide the motivation for altering our tables
+<li>You’ll have 5 minutes to answer each question. After 2 minutes you
+can submit a <em>single</em> answer.
 <ul>
-<li>Many of the issues we’ll look at could have been avoided with good
-use of constraints. But for now we are supposing that the data was
-generated outside the table, and you have just imported it in
-naively.</li>
+<li>Submitting an answer sooner gets you more points, but you have to
+wait at least the two minutes.</li>
 </ul></li>
 </ul>
 </section>
-<section id="cleaning-checking-for-duplicates" class="slide level2">
-<h2>Cleaning: Checking for Duplicates</h2>
+<section id="showdown-teams" class="slide level2">
+<h2>Showdown Teams</h2>
 <ul>
-<li>We’ve already seen in homework sample sets that there are sometimes
-duplicate row entries</li>
-<li>Duplicate entries across <em>many</em> columns is usually the sign
-<!--- A duplicate entry in just one or two columns is frequently not cause for concern (unless you were expecting that column to have unique values)--></li>
-<li><code class="python">GROUP BY</code> and
-<code class="python">HAVING</code> can be very useful here!
-<ul>
-<li><code class="python">GROUP BY</code> all the columns that you want
-to check for repetition</li>
-<li>Use <code class="python">HAVING</code> to only grab those groups
-that have more than one element (and thus a repetition)</li>
-</ul>
-<pre ><code class="pgsql">SELECT col1, col2, col3, col4, COUNT(*)
-FROM table_name
-GROUP BY col1, col2, col3, col4
-HAVING COUNT(*) > 1;</code></pre></li>
+<li>Frances and Miles</li>
+<li>Cristian, Jill and Oscar</li>
+<li>Micah and Alaina</li>
+<li>Aaryan and Phil</li>
 </ul>
 </section>
-<section id="cleaning-checking-for-missing" class="slide level2">
-<h2>Cleaning: Checking for Missing</h2>
+<section id="aging-well" class="slide level2">
+<h2>Aging well</h2>
 <ul>
-<li>Data sets can sometimes (often even) be missing data that really
-should be present</li>
-<li>Fixing this generally requires some knowledge of what the data is
-representing</li>
-<li>Finding missing values can still tell you important things about the
-quality of your data though</li>
-<li>A nice way to count the number of nulls in different columns
-is:</li>
-</ul>
-<pre ><code class="pgsql">SELECT
-  COUNT(*) - COUNT(col1) as col1,
-  COUNT(*) - COUNT(col2) as col2
-FROM table_name;</code></pre>
-</section>
-<section id="cleaning-inconsistent-data" class="slide level2">
-<h2>Cleaning: Inconsistent Data</h2>
+<li>Subtracting two <code class="python">DATE</code> type values will
+give just an <code class="python">INT</code> (in days)</li>
+<li>Subtracting two <code class="python">TIMESTAMP</code> type values
+will give an <code class="python">INTERVAL</code>, with the biggest
+“unit” in days</li>
+<li>Using Postgres’s <code class="python">age()</code> function can
+smooth over both and give units larger than days
 <ul>
-<li>Especially for textual fields, there can be variation in how data is
-entered
-<ul>
-<li>Typos happen, or people just refer to the same thing in different
-ways</li>
+<li><code class="python">age( datetime1, datetime2 )</code>: Subtracts
+datetime2 from datetime1</li>
 </ul></li>
-<li>To use <code class="python">GROUP BY</code> effectively, you really
-need categories to be consistently named across the data set</li>
-<li>Several possible approaches to identify:
+<li>This can <strong>still</strong> give you awkward interval units at
+times though, so also consider using
+<code class="python">justify_interval( interval )</code>, which breaks
+intervals into divisions that don’t exceed a categories max
 <ul>
-<li>Scanning over a sorted distinct column for quasi-duplications:
-phrases that are just a bit distinct
-<ul>
-<li><code class="python">GROUP BY</code> could do similar but add
-counts</li>
-</ul></li>
-<li>Use pattern matching to look for duplicates matching a single
-approximate pattern</li>
-<li>Use the fuzzystrmatch module to check Levershtein distances
-(probably rather slow)</li>
+<li>Hours would always be between 0 and 23 for instance, or months
+between 1 and 12</li>
+<li>Especially if you want to extract a particular part, this is highly
+recommended</li>
 </ul></li>
 </ul>
 </section>
-<section id="cleaning-checking-text-length" class="slide level2">
-<h2>Cleaning: Checking Text Length</h2>
+<section id="what-time-is-it" class="slide level2">
+<h2>What time is it?</h2>
 <ul>
-<li>For certain fields, you’d expect text of a certain number of
-characters
-<ul>
-<li>2 for state abbreviations</li>
-<li>5 for zip codes</li>
-<li>13 for isbn13</li>
-</ul></li>
-<li>Can be a good idea to check these using the
-<code class="python">LENGTH</code> string function
-<ul>
-<li><code class="python">LENGTH(str)</code> just returns the number of
-characters in said string</li>
+<li>Standard SQL also provides constants for grabbing the current system
+time and date</li>
 </ul>
-<pre ><code class="pgsql">SELECT *
-FROM table_name
-WHERE LENGTH(col1) != 5;</code></pre></li>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>function</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">current_date</code></td>
+<td>Returns the current date</td>
+</tr>
+<tr class="even">
+<td><code class="python">current_time</code></td>
+<td>Returns the current time with timezone</td>
+</tr>
+<tr class="odd">
+<td><code class="python">localtime</code></td>
+<td>Returns the current time without timezone</td>
+</tr>
+<tr class="even">
+<td><code class="python">current_timestamp</code><span
+class="orange">★</span></td>
+<td>Returns the current date and time with timezone</td>
+</tr>
+<tr class="odd">
+<td><code class="python">localtimestamp</code></td>
+<td>Returns the current date and time without timezone</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><span class="orange">★</span> – Postgres also offers the shorter
+<code class="python">now()</code> <em>function</em> to do the same
+thing</p>
+<!--## Current vs Clock-->
+<!--- Any query using `current_timestamp` has it computed once at the start of a query-->
+<p><!--- This is frequently desired for logging, so that you just get 1 consistent time for any records added from a single query-->
+<!--- If you **want** record-by-record time keeping, you should use `clock_timestamp()` instead, which will work the same way but be updated before every value written to the table--></p>
+</section>
+<section id="time-zones" class="slide level2">
+<h2>Time Zones</h2>
+<ul>
+<li>Dealing with time zones can be a headache, and it is a very nice
+feature that Postgres can work with them smoothly</li>
+<li>By default, Postgres will <em>display</em> any timestamp with a time
+zone with the time as you would measure it in your current system
+timezone</li>
+<li>What is your current system timezone?
+<ul>
+<li><code class="python">SHOW timezone;</code></li>
+</ul></li>
+<li>Getting general information about timezones:
+<ul>
+<li>Getting abbreviations:
+<ul>
+<li><code class="python">SELECT * FROM pg_timezone_abbrevs;</code></li>
+</ul></li>
+<li>Getting full names:
+<ul>
+<li><code class="python">SELECT * FROM pg_timezone_names;</code></li>
+</ul></li>
+</ul></li>
 </ul>
 </section>
-<section id="damage-control" class="slide level2">
-<h2>Damage Control</h2>
+<section id="teleportation" class="slide level2">
+<h2>Teleportation</h2>
 <ul>
-<li>It can be a lot of work to clean up a table</li>
-<li>Evaluate whether it is worth it!
+<li>It can sometimes be useful to switch your “current” time zone
 <ul>
-<li>Maybe a better, cleaner data set exists?</li>
+<li>Maybe it is easier to compare times to someone else living in that
+time zone</li>
 </ul></li>
-<li>Sometimes, data will be missing that you simply can’t fill in
+<li>Several methods to make the switch:
 <ul>
-<li>Can your analysis work around those columns?</li>
+<li><p>Change your <code class="python">postgressql.conf</code> file,
+which controls your Postgres server. Only recommended if you have
+permanently moved elsewhere and the database time zone has not updated
+appropriately.</p></li>
+<li><p>Set future queries in a single session to be from a new
+timezone:</p>
+<p><code class="python">SET timezone TO time_zone_name_or_abbrv;</code></p>
+<ul>
+<li>This will also adjust what values your
+<code class="python">localtime</code> or
+<code class="python">localtimestamp</code> report!</li>
 </ul></li>
-</ul>
-</section>
-<section id="making-adjustments" class="slide level2">
-<h2>Making Adjustments</h2>
-<div class="cols">
-<div class="col">
-<ul>
-<li>Changing existing tables can generally be broken down into two
-categories:
-<ul>
-<li>Changing the structure of the table itself
-<ul>
-<li>Uses keywords <code class="python">ALTER TABLE</code></li>
-</ul></li>
-<li>Changing the row content within the table
-<ul>
-<li>Uses keyword <code class="python">UPDATE</code></li>
-</ul></li>
-</ul></li>
-</ul>
-</div>
-<div class="col">
-<p><img data-src="../images/altering_table.jpg"
-style="width:100.0%" /></p>
-</div>
-</div>
-</section>
-<section id="table-altering-part-1" class="slide level2">
-<h2>Table Altering: Part 1</h2>
-<ul>
-<li><p><code class="python">ALTER TABLE</code> is generally followed by
-the table name and then another keyword command, depending on what you
-want to do</p>
-<pre ><code class="pgsql">ALTER TABLE table_name ...</code></pre>
-<ul>
-<li><p>Adding columns:</p>
-<pre ><code class="pgsql">... ADD COLUMN col_name data_type;</code></pre></li>
-<li><p>Removing columns</p>
-<pre ><code class="pgsql">... DROP COLUMN col_name;</code></pre></li>
+<li><p>Transform a single query to be reported in a different time
+zone:</p>
+<pre ><code class="pgsql">SELECT dt_col_name AT TIME ZONE tz_name_or_abbrv
+FROM tablename;</code></pre></li>
 </ul></li>
 </ul>
 </section>
-<section id="table-altering-part-2" class="slide level2">
-<h2>Table Altering: Part 2</h2>
-<pre ><code class="pgsql">ALTER TABLE table_name ...</code></pre>
+<section id="activity" class="slide level2">
+<h2>Activity</h2>
 <ul>
-<li><p>Changing columns</p>
-<pre ><code class="pgsql" style="font-size:.9em">... ALTER COLUMN col_name SET DATA TYPE data_type;
-... ALTER COLUMN col_name SET NOT NULL;</code></pre></li>
-<li><p>Renaming columns</p>
-<pre ><code class="pgsql" style="font-size:.9em">... RENAME col_name TO new_col_name;</code></pre></li>
-<li><p>Rename entire table</p>
-<pre ><code class="pgsql" style="font-size:.9em">... RENAME TO new_table_name;</code></pre></li>
-</ul>
-</section>
-<section id="updating-tables" class="slide level2">
-<h2>Updating Tables</h2>
+<li>Using the taxi rides dataset, see if you can:
 <ul>
-<li>If you want to change the values in a particular row (or many rows),
-you don’t want to alter the table, you want to
-<code class="python">UPDATE</code> it</li>
-<li><code class="python">UPDATE</code> sets particular columns to a
-particular value
-<ul>
-<li><strong>BE CAREFUL!</strong> If you do not specify <em>which</em>
-rows, then <strong>ALL</strong> of the rows will have that column
-changed to that value
-<ul>
-<li>This is partly why having primary keys is so nice: it gives you a
-method to update just a single row should you need</li>
-</ul>
-<pre ><code class="pgsql">UPDATE table_name
-SET col_name = new_value;</code></pre></li>
+<li>Compute the number of rides given each hour of the day</li>
+<li>Compute the average cost of rides over each day of the month</li>
+<li>Compute the median cost of rides over each day of the week</li>
+<li>Compute the average duration of each ride over each hour of the
+day</li>
 </ul></li>
-<li>You can specify which rows should be changed by filtering with
-<code class="python">WHERE</code></li>
 </ul>
 </section>
-<section id="understanding-check" class="slide level2">
-<h2>Understanding Check</h2>
-<div class="cols">
-<div class="col">
-<p>The table named <code class="python">revq</code> to the right is
-acted upon by the below SQL queries. What entries in the table are left
-untouched once all queries have been run? Each choice corresponds to
-those highlighted cells.</p>
-</div>
-<div class="col">
-<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<section id="results-to-compare-against" class="slide level2">
+<h2>Results to compare against</h2>
+<p><img data-src="../images/taxi_datetime_activity_results.png"
+style="width:80.0%" /></p>
+<!--
+## Subqueries
+- A _subquery_ is simply a query embedded within another piece of SQL
+- Commonly used to prepare some data or compute a value to be used by the surrounding SQL
+- We have already seen very simple versions
+  - Creating a new table, for example
+    
+  ```pgsql
+  CREATE TABLE new_table AS (
+    SELECT * FROM og_table
+  );
+  ```
+- Often, you could have saved the subquery as its own table and then used that directly, but not always
 
-<svg
-   width="153.30701mm"
-   height="102.056mm"
-   viewBox="0 0 153.30701 102.056"
-   version="1.1"
-   id="svg5"
-   xml:space="preserve"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
-   sodipodi:docname="uc_ch9_2.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
-     id="namedview7"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     showgrid="false"
-     inkscape:zoom="0.84096521"
-     inkscape:cx="306.79034"
-     inkscape:cy="202.14867"
-     inkscape:window-width="1680"
-     inkscape:window-height="1020"
-     inkscape:window-x="0"
-     inkscape:window-y="30"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" /><defs
-     id="defs2" /><g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(-94.538953,-23.838356)"><path
-       style="fill:#000000;stroke:#000000;stroke-width:0.9816;stroke-linecap:round;stroke-dasharray:none"
-       d="M 97.029611,26.329082 H 211.65658"
-       id="path296" /><path
-       style="fill:#000000;stroke:#000000;stroke-width:0.9816;stroke-linecap:round;stroke-dasharray:none"
-       d="M 97.029611,122.165 H 211.65658"
-       id="path975" /><path
-       style="fill:#000000;stroke:#000000;stroke-width:0.434336;stroke-linecap:round;stroke-dasharray:none"
-       d="M 97.029611,62.699642 H 211.65658"
-       id="path977" /><text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:none;stroke-width:0.989595;stroke-linecap:round;stroke-dasharray:none"
-       x="101.53363"
-       y="41.13623"
-       id="text1033"><tspan
-         sodipodi:role="line"
-         id="tspan1031"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:0.989595"
-         x="101.53363"
-         y="41.13623">col1</tspan></text><text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:none;stroke-width:0.989595;stroke-linecap:round;stroke-dasharray:none"
-       x="141.62927"
-       y="41.13623"
-       id="text1037"><tspan
-         sodipodi:role="line"
-         id="tspan1035"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:0.989595"
-         x="141.62927"
-         y="41.13623">col2</tspan></text><text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:none;stroke-width:0.989595;stroke-linecap:round;stroke-dasharray:none"
-       x="182.6946"
-       y="41.13623"
-       id="text1041"><tspan
-         sodipodi:role="line"
-         id="tspan1039"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:0.989595"
-         x="182.6946"
-         y="41.13623">col3</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke:none;stroke-width:0.956942;stroke-linecap:round;stroke-dasharray:none"
-       x="100.15795"
-       y="56.296406"
-       id="text1095"><tspan
-         sodipodi:role="line"
-         id="tspan1093"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke-width:0.956942"
-         x="100.15795"
-         y="56.296406">TEXT</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke:none;stroke-width:0.956942;stroke-linecap:round;stroke-dasharray:none"
-       x="141.11984"
-       y="56.296406"
-       id="text1822"><tspan
-         sodipodi:role="line"
-         id="tspan1820"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke-width:0.956942"
-         x="141.11984"
-         y="56.296406">REAL</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke:none;stroke-width:0.956942;stroke-linecap:round;stroke-dasharray:none"
-       x="185.97403"
-       y="56.296406"
-       id="text1826"><tspan
-         sodipodi:role="line"
-         id="tspan1824"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke-width:0.956942"
-         x="185.97403"
-         y="56.296406">INT</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="108.8076"
-       y="77.305122"
-       id="text1932"><tspan
-         sodipodi:role="line"
-         id="tspan1930"
-         style="fill:#000000;stroke-width:0.492176"
-         x="108.8076"
-         y="77.305122">A</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="154.84677"
-       y="77.305122"
-       id="text1956"><tspan
-         sodipodi:role="line"
-         id="tspan1954"
-         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
-         x="154.84677"
-         y="77.305122">0.24</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="195.58284"
-       y="77.305122"
-       id="text1968"><tspan
-         sodipodi:role="line"
-         id="tspan1966"
-         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
-         x="195.58284"
-         y="77.305122">15</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="108.42769"
-       y="96.991028"
-       id="text1936"><tspan
-         sodipodi:role="line"
-         id="tspan1934"
-         style="fill:#000000;stroke-width:0.492176"
-         x="108.42769"
-         y="96.991028">B</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="156.08406"
-       y="96.991028"
-       id="text1960"><tspan
-         sodipodi:role="line"
-         id="tspan1958"
-         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
-         x="156.08406"
-         y="96.991028">9.1</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="195.85854"
-       y="96.991028"
-       id="text1972"><tspan
-         sodipodi:role="line"
-         id="tspan1970"
-         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
-         x="195.85854"
-         y="96.991028">4</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="108.61933"
-       y="116.69038"
-       id="text1940"><tspan
-         sodipodi:role="line"
-         id="tspan1938"
-         style="fill:#000000;stroke-width:0.492176"
-         x="108.61933"
-         y="116.69038">C</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="155.09892"
-       y="116.69038"
-       id="text1964"><tspan
-         sodipodi:role="line"
-         id="tspan1962"
-         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
-         x="155.09892"
-         y="116.69038">4</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="195.52232"
-       y="116.69038"
-       id="text1976"><tspan
-         sodipodi:role="line"
-         id="tspan1974"
-         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
-         x="195.52232"
-         y="116.69038">10</tspan></text><rect
-       style="fill:#ff0000;fill-opacity:0.297502;stroke:none;stroke-width:0.403014;stroke-linecap:round;stroke-dasharray:none"
-       id="rect2072"
-       width="74.09626"
-       height="17.42337"
-       x="134.86285"
-       y="63.780529"
-       ry="5.1545014" /><rect
-       style="fill:#00e2ff;fill-opacity:0.297502;stroke:none;stroke-width:0.390717;stroke-linecap:round;stroke-dasharray:none"
-       id="rect3478"
-       width="21.745987"
-       height="55.799976"
-       x="185.08685"
-       y="63.54591"
-       ry="6.433053" /><rect
-       style="fill:#00d779;fill-opacity:0.297502;stroke:none;stroke-width:0.391625;stroke-linecap:round;stroke-dasharray:none"
-       id="rect3480"
-       width="70.689957"
-       height="17.245436"
-       x="84.162178"
-       y="162.00232"
-       ry="5.1018615"
-       transform="matrix(0.89292302,-0.45020938,0.40934778,0.91237843,0,0)" /><rect
-       style="fill:#d700cc;fill-opacity:0.297502;stroke:none;stroke-width:0.434336;stroke-linecap:round;stroke-dasharray:none"
-       id="rect3534"
-       width="36.34494"
-       height="37.63588"
-       x="138.1024"
-       y="64.224426"
-       ry="6.2449827" /><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.2824px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#d700cc;fill-opacity:0.8;stroke:none;stroke-width:0.867818;stroke-linecap:round;stroke-dasharray:none"
-       x="238.46535"
-       y="48.250973"
-       id="text4890"><tspan
-         sodipodi:role="line"
-         id="tspan4888"
-         style="fill:#d700cc;fill-opacity:0.8;stroke-width:0.867818"
-         x="238.46535"
-         y="48.250973">A</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.2824px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#ff0000;fill-opacity:0.8;stroke:none;stroke-width:0.867818;stroke-linecap:round;stroke-dasharray:none"
-       x="238.46535"
-       y="71.033676"
-       id="text4894"><tspan
-         sodipodi:role="line"
-         id="tspan4892"
-         style="fill:#ff0000;fill-opacity:0.8;stroke-width:0.867818"
-         x="238.46535"
-         y="71.033676">B</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.2824px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#00d779;fill-opacity:0.8;stroke:none;stroke-width:0.867818;stroke-linecap:round;stroke-dasharray:none"
-       x="238.46535"
-       y="94.065376"
-       id="text5243"><tspan
-         sodipodi:role="line"
-         id="tspan5241"
-         style="fill:#00d779;fill-opacity:0.8;stroke-width:0.867818"
-         x="238.46535"
-         y="94.065376">C</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.2824px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#00e1ff;fill-opacity:0.8;stroke:none;stroke-width:0.867818;stroke-linecap:round;stroke-dasharray:none"
-       x="238.46535"
-       y="117.08521"
-       id="text5247"><tspan
-         sodipodi:role="line"
-         id="tspan5245"
-         style="fill:#00e1ff;fill-opacity:0.8;stroke-width:0.867818"
-         x="238.46535"
-         y="117.08521">D</tspan></text></g></svg>
-</p>
-</div>
-</div>
-<pre ><code class="pgsql" style="font-size:.85em;">ALTER TABLE revq ADD COLUMN col4 INT;
-UPDATE revq SET col4 = col2;
-UPDATE revq SET (col2,col3)=(col3, col2) WHERE col1 IN ('B','C');
-UPDATE revq SET col3 = col3 - col4;
-UPDATE revq SET col2 = col2 + col4 WHERE col3 > 10;
-ALTER TABLE revq DROP COLUMN col4;</code></pre>
-</section>
-<section id="backup-tables" class="slide level2">
-<h2>Backup Tables</h2>
-<ul>
-<li><p>Frequently, if you are about to heavily modify a table, you
-should consider working on a backup copy</p></li>
-<li><p>We actually have already seen the basic machinery for this:</p>
-<pre ><code class="pgsql" style="font-size:0.9em">CREATE TABLE new_table AS
-SELECT * FROM og_table;</code></pre></li>
-<li><p><strong>Note:</strong> Indexes and constraints are stored
-separately, and so are NOT copied over using this process!</p></li>
-<li><p>For including constraints and indexes, you can use a Postgres
-specific syntax, it the newly created table will initially be missing
-the data</p>
-<pre ><code class="pgsql" style="font-size:0.9em">CREATE TABLE new_table
-(LIKE og_table INCLUDING ALL);</code></pre></li>
-</ul>
-</section>
-<section id="table-to-table" class="slide level2">
-<h2>Table to Table</h2>
-<ul>
-<li><p>In some cases, you’ll want to update or pass information across
-tables</p>
-<ul>
-<li>Maybe one table has newer values that you want to use to update the
-original table</li>
-</ul></li>
-<li><p>In core SQL, you’d need to use subqueries, which we’ll be talking
-about in a few chapters</p></li>
-<li><p>In Postgres, to update, you can use
-<code class="python">FROM</code>:</p>
-<pre ><code class="pgsql" style="font-size:.9em">UPDATE table_name1
-SET col_name = table_name2.col_name
-FROM table_name2
-WHERE table_name.col1 = table_name2.col1;</code></pre></li>
-<li><p>To insert values from another table into another:</p>
-<pre ><code class="pgsql" style="font-size:.9em">INSERT INTO new_table SELECT * FROM old_table;</code></pre></li>
-</ul>
-</section>
-<section id="deletions" class="slide level2">
-<h2>Deletions</h2>
-<ul>
-<li>Similar to changing tables, removing things from tables has two main
-keywords:
-<ul>
-<li><code class="python">DROP</code> for removing aspects of a table
-like columns, constraints, indexes, or the table itself</li>
-<li><code class="python">DELETE FROM</code> for removing rows from
-tables</li>
-</ul></li>
-<li><code class="python">DROP</code> will frequently come after an
-<code class="python">ALTER TABLE</code> unless you are dropping the
-table itself</li>
-<li><code class="python">DELETE FROM</code> without a filter will
-<strong>delete all rows</strong>
-<ul>
-<li>Make absolutely sure you are using a filter if you don’t want that
-to happen!</li>
-<li>Another good reason to make up your tables before editing them</li>
-</ul></li>
-</ul>
-</section>
-<section id="getting-deleted" class="slide level2">
-<h2>Getting Deleted</h2>
-<pre ><code class="pgsql">ALTER TABLE tname DROP COLUMN colname;
-ALTER TABLE tname DROP CONSTRAINT const_name;
-DROP INDEX index_name;
-DROP TABLE tname;
 
-DELETE FROM tname; -- All rows gone!
-DELETE FROM tname WHERE condition;</code></pre>
-<ul>
-<li>In general, unless you have an important reason, don’t remove actual
-data from a table
-<ul>
-<li>You can filter it, you can create new tables that are missing that
-data, etc.</li>
-</ul></li>
-</ul>
-</section>
-<section id="transactions" class="slide level2">
-<h2>Transactions</h2>
-<ul>
-<li><em>Atomicity</em> is an important aspect of most database changes
-<ul>
-<li>The idea that related changes should happen in a single,
-self-contained step</li>
-</ul></li>
-<li>Many changes you might make to a database have several steps though!
-<ul>
-<li>Need to change one value in one table and another value in another
-table</li>
-<li>Need to create a new row and then copy some information into it</li>
-</ul></li>
-<li>Remember that, in general, others can access the database at the
-same time
-<ul>
-<li>What if they tried to access the data you were working on
-mid-operation?</li>
-</ul></li>
-<li>To solve these issues, SQL has the concept of a
-<em>transaction</em></li>
-</ul>
-</section>
-<section id="bundling-up" class="slide level2">
-<h2>Bundling Up</h2>
-<ul>
-<li>A <em>transaction</em> is essentially a bundling of several
-statements into one, discrete change to the database</li>
-<li>Commands within the transaction have not yet modified the database,
-but exist only in local memory</li>
-<li>Changes get written to the database all at once upon the conclusion
-of the transaction</li>
-<li>Starting a transaction?
-<ul>
-<li><code class="python">START TRANSACTION;</code> or
-<code class="python">BEGIN;</code></li>
-</ul></li>
-<li>Ending a transaction?
-<ul>
-<li><code class="python">COMMIT;</code> actually makes the changes</li>
-<li><code class="python">ROLLBACK;</code> throws out everything within
-the transaction</li>
-</ul></li>
-</ul>
-</section>
-<section id="uses-of-transactions" class="slide level2">
-<h2>Uses of Transactions</h2>
-<ul>
-<li>Protecting against system faults
-<ul>
-<li>What if you have a system crash in the middle of an operation?
-<ul>
-<li>What commands had been run? What commands had not?</li>
-</ul></li>
-<li>Transactions actually write to a log what they are <em>going</em> to
-do before they actually do it. So in case of a crash, then the
-transaction can then simply be rerun</li>
-</ul></li>
-<li>Protecting against simultaneous access
-<ul>
-<li>Changes occur all at once, so it is impossible for another database
-user to access data “mid-change”</li>
-<li>Other users of the database will see none of your changes until
-actually committed</li>
-</ul></li>
-<li>Testing changes
-<ul>
-<li>Sometimes it is useful to check to see that some changes look the
-way you wanted before actually changing the database</li>
-<li>Embedding within a transaction block always gives you the option to
-rollback</li>
-</ul></li>
-</ul>
-</section>
-<section id="practice-activity" class="slide level2">
-<h2>Practice Activity</h2>
-<ul>
-<li>There is a simple CSV of presidents and debt <a
-href="../activity_data/presidents.csv">here</a></li>
-<li>It has some problems regarding missing, duplicated, or inconsistent
-data which you should determine and fix <em>before</em> answering the
-following questions:
-<ul>
-<li>What are the top 5 presidents to have the greatest average annual
-increase in national debt over the years of their presidency?</li>
-<li>How do the median values of annual increases in national debt
-compare across party lines?</li>
-<li>Trickier: What is the average <em>change</em> in the annual increase
-percentage of national debt each year over all the years?</li>
-</ul></li>
-</ul>
-</section>
-<section id="groups" class="slide level2">
-<h2>Groups</h2>
-<ul>
-<li>You’ll be working in pairs, one computer used per group
-<ul>
-<li>Rotate who is typing periodically!</li>
-</ul></li>
-<li>Pairs:
-<ul>
-<li>Group A: Oscar, Phil, and Frances</li>
-<li>Group B: Alaina and Cristian</li>
-<li>Group C: Jill and Miles</li>
-<li>Group D: Aaryan And Micah</li>
-</ul></li>
-</ul>
-</section>
-<section id="question-answers" class="slide level2">
-<h2>Question Answers</h2>
-<ul>
-<li>What are the top 5 presidents to have the greatest average annual
-increase in national debt over the years of their presidency?
-<ul>
-<li>Reagan, HW Bush, Ford, Carter, Obama</li>
-</ul></li>
-<li>How do the median values of annual increases in national debt
-compare across party lines?
-<ul>
-<li>Democrats: 3.65%</li>
-<li>Republicans: 7.40%</li>
-</ul></li>
-<li>Trickier: What is the average <em>change</em> in the annual increase
-percentage of national debt overall all the years?
-<ul>
-<li>Only about 0.05%, but seemingly a slight steady increase</li>
-</ul></li>
-</ul>
+## Common Uses of Subqueries
+- Computing a single value to use in comparisons
+- Computing a single column or list of values to use either directly in a table or in comparisons
+- Performing "join-like" operations (potentially in a more flexible manner)
+- Filtering one table based on the contents of another table
+- Otherwise combining operations that would otherwise have taken several steps
+
+
+## Filter on single value
+- Think back to HW3 where you needed to filter out all the outlier taxi-ride speeds
+  - There you had to compute the quartiles, the whisker edges, and then filter directly by typing that number back in
+- Subqueries can combine those steps! You can directly compare a value to the subquery output **so long as the query outputs only a single value**
+
+```{.pgsql style='font-size:1em'}
+SELECT *
+FROM tablename
+WHERE colname > (
+  SELECT avg(colname2)
+  FROM tablename2
+);
+```
+
+## Derived Tables
+- You can use the output of a subquery anywhere you would normally reference a table name
+- Such a table is then called a _derived table_
+- You **must** give such subqueries a table alias, else you have no way to refer to them
+
+```pgsql
+SELECT *
+FROM (
+  SELECT col1, col2
+  FROM tablename
+) AS mytable; -- Worlds most boring table alias
+```
+
+## Repeating Column Values
+- Sometimes it is very useful to have a constant value assigned to an entire column
+  - We can't just use an aggregate function (or similar) though, else we get mismatched column lengths
+- You can include a subquery _in your selected columns_ if it outputs only a **single value**
+  - That value will be propagated to all the rows
+- Give it an alias so the column heading has some meaning!
+
+```{.pgsql style='font-size:.9em'}
+SELECT
+  col1,
+  col2,
+  (SELECT avg(col2) FROM tablename2) as const_value
+FROM tablename;
+```
+
+
+## Subquery Expressions
+- Can also use subqueries to filter based on whether certain content is present within the subquery output
+- Combinations of a keyword followed by the subquery
+  - `expr IN (subquery)` and `expr NOT IN (subquery)`
+  - `EXISTS (subquery)` and `NOT EXISTS (subquery)`
+  - `expr op ANY (subquery)`
+  - `expr op ALL (subquery)`
+- `expr` is a column name or value, and `op` is a boolean operator (`=,>,>=`,etc)
+- All subquery expressions are evaluated in short-circuit mode: they will return an answer as soon as they can
+
+
+## IN Subquery
+- Will check to see if a term appears anywhere in the subquery output
+- The subquery must output a **single column** (though it could be empty)
+- `NOT IN` just reverses the situation
+- **Be careful of NULLs**
+  - `1 IN (1,2,3)` gives True
+  - `1 IN (2,3)` gives False
+  - `1 IN (NULL,2,3)` gives `NULL`
+  - Most dangerous with `NOT IN`, since `1 NOT IN (NULL,2,3)` will give `NULL`, and not True as you might expect
+
+
+## EXISTS Subquery
+- Checks just to see if the subquery has **any** rows in the output
+  - No expression to compare to, just looking at subquery output
+- The _contents_ of the subquery do not matter at all, so a simple `SELECT 1 FROM ...` is usually used
+- To be useful, the subquery is frequently what is called a _correlated subquery_, where it references the table in the outer query
+  - These types of subqueries can **not** be run in isolation
+
+```{.pgsql style='font-size:.9em'}
+SELECT col1, col2
+FROM table1
+WHERE EXISTS (
+  SELECT 1
+  FROM table2
+  WHERE table1.col1 = table2.col2
+);
+```
+
+
+## ANY and ALL
+- At times you don't want to see if a value is _in_ the subquery output, but rather how it _compares_ to the output
+- A boolean expression needs to return a single True or False though
+- `ANY` and `ALL` "broadcast" the boolean comparison across all the subquery rows
+  - `ANY` will return True if _any_ of the rows evaluate to True with the expression
+  - `ALL` will only return True if _all_ of the rows evaluate to True with the expression
+- `expr = ANY (subquery)` is thus identical to `expr IN (subquery)`
+```{.pgsql style='font-size:.9em'}
+SELECT col1
+FROM table1
+WHERE col1 < ALL ( SELECT col2
+                   FROM table2);
+```
+
+## Subqueries vs Joins
+- You may have realized that subqueries can do many similar things to what we used joins for!
+- When should each be used?
+  - Subqueries are great when you only need information from a single table, but what information depends on another table
+  - Joins are necessary when you need information from multiple tables
+- Historically, most RDMS were better optimized for joins, but many have improved substantially in recent years for subqueries
+  - If in doubt, use the form that makes the most sense for what you _semantically_ want to accomplish. You can always convert it later if better optimization is needed and could be achieved
+
+
+## Be careful!
+- It can be pretty easy to leap off the deep end with subqueries
+- Always keep in mind what you want the subquery to achieve, and test it individually to make sure it is doing what you expect
+  - Use them where they fit the needs of the situation
+  - A nice aspect of subqueries is that you can work from the "bottom-up", starting with smaller subqueries you know and building on them
+- **Organize your queries nicely!**
+  - This becomes even more important with subqueries
+
+
+## Pair Activity!
+- I've prepped a simple grades database [here](../activity_data/assignment_submission.sql) that you can download and run the sql file to create a `mar09` schema in your database of choice which will contain three common tables: `roster`, `assignments`, `submissions`
+- See if you can answer the following **without using joins** and only subqueries (as practice).
+  - Which student(s) have turned in _nothing_?
+  - Which assignment name has the worst scored average overall?
+  - Which students scored below average on every quiz?
+- Pairings
+  - Karol and Jullian
+  - Megan and Rochelle
+  - Nina and Ellie
+  - Andrew and Liam
+  - Maribel and Connor
+
+## Common Table Expressions
+- Sometimes you may want to use the same derived tables multiple places in a query
+- You could copy and paste those subqueries, but there is a better way
+- _Common Table Expressions_ or CTEs are a way for you to define up front a derived table that can be referenced anywhere in the rest of the query
+- To do so, you use a `WITH` keyword:
+```pgsql
+WITH
+  derived_table_name (new_col_names) AS (
+    subquery
+  )
+SELECT ...
+```
+
+## CTE Details
+- The number of columns returned by your subquery **must** match the number of column names you initially define
+  - If you aren't going to rename the columns, you do not even really need to include the new column names, but it can be nice for clarity
+- You do not need to include data types, as these will be inherited from the subquery columns
+- You can include multiple derived tables in the CTE statement, separated with a comma
+- Good use of CTE's can help clarify and simplify queries
+  - _Especially_ if you have a subquery that you need to reference a few times, use a CTE!
+-->
 </section>
     </div>
   </div>
@@ -1320,6 +899,7 @@ percentage of national debt overall all the years?
   <script src="../html_srcs/revealjs/../other_plugins/reveal.js-d3/reveald3.js"></script>
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
 
   <script>
 
@@ -1437,6 +1017,11 @@ percentage of national debt overall all the years?
 			tryFallbackURL: true, // true/false, default false
 			disableCheckFile: false, //default false
 		 },
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
 
         // reveal.js plugins
         plugins: [
@@ -1477,6 +1062,18 @@ percentage of national debt overall all the years?
             //{ src: "../html_srcs/revealjs/plugin/d3/reveald3.js" },
 		],
       });
+    </script>
+    <script>
+    // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+      function remove_bars() {
+        var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+        console.log(pseudoBlocks);
+        for ( var i = 0; i < pseudoBlocks.length; i++) {
+          pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+        }
+        }
+      // omg this is even more hacky now, but I need this to run after hljs has done its thing
+      setTimeout(remove_bars, 100);
     </script>
     </body>
 </html>
