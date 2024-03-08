@@ -16,8 +16,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -874,7 +877,7 @@ rollback</li>
 <h2>Practice Activity</h2>
 <ul>
 <li>There is a simple CSV of presidents and debt <a
-href="../activity_data/presidents.csv">here</a></li>
+href="../activity_data/public_debt_increases.sql">here</a></li>
 <li>It has some problems regarding missing, duplicated, or inconsistent
 data which you should determine and fix <em>before</em> answering the
 following questions:
@@ -891,16 +894,11 @@ percentage of national debt each year over all the years?</li>
 <section id="groups" class="slide level2">
 <h2>Groups</h2>
 <ul>
-<li>You’ll be working in pairs, one computer used per group
+<li>Work on these problems in pairs
 <ul>
-<li>Rotate who is typing periodically!</li>
-</ul></li>
-<li>Pairs:
-<ul>
-<li>Group A: Oscar, Phil, and Frances</li>
-<li>Group B: Alaina and Cristian</li>
-<li>Group C: Jill and Miles</li>
-<li>Group D: Aaryan And Micah</li>
+<li>Only one computer used for SQL at a time (the other can be used for
+documentation/slides)</li>
+<li>Rotate who is typing every 5 mins.</li>
 </ul></li>
 </ul>
 </section>
