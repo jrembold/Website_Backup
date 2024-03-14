@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-03-22">
+  <meta name="dcterms.date" content="2024-03-14">
   <title>Such Pretty Trees</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -34,830 +34,67 @@
 <section id="title-slide">
   <h1 class="title">Such Pretty Trees</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">March 22, 2023</p>
+  <p class="date">March 14, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>HW4 will have all its problems by Friday
+<li>Homework 4!
 <ul>
-<li>I’m hoping to have most added tomorrow</li>
-<li>I have no expectation of you working on things over break, to be
-clear</li>
+<li>Keep in mind that some folks might be leaving early next week, so
+plan with your partner accordingly</li>
+<li>A second check-in this weekend–don’t forget!</li>
 </ul></li>
-<li>HW3 Partner Reflections <a
-href="https://docs.google.com/forms/d/e/1FAIpQLSfudKsVqGtKv_cgSlaa02VgmSlHQTiFNjYVRuuuqYA2ke_Isg/viewform?usp=sf_link">here</a>
-(for the 2 of you who haven’t responded)</li>
+<li>I don’t think anyone is in this position, but if you are considering
+withdrawing for whatever reason, the deadline is Tuesday</li>
 </ul>
 </section>
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li>Classification models commonly use confusion matrices to judge the
-relative quality of the model
+<li>Split data into training and testing sets before fitting to have
+something to compare against</li>
+<li>Logistic (and Multinomial) Regression labels categories by
+determining lines/planes/hyperplanes to separate groups</li>
+<li>The general flow of supervised classification learning looks like:
 <ul>
-<li>There are ways to attach numbers to these for comparison, but the
-goal is almost never to just optimize a number</li>
+<li>Split your data</li>
+<li>Choose your model and initialize it</li>
+<li>Fit the model to your training data</li>
+<li>Use the fitted model to predict labels for your testing data</li>
+<li>Evaluate how the model did: confusion matrix</li>
 </ul></li>
-<li>Machine Learning methods are more concerned with predicting
-individuals, as opposed to statistical methods focusing on
-inherence</li>
-<li>Supervised learning requires labeled data for training, where the
-categories are already known</li>
-<li>Logistic Regression creates categories by determining
-lines/planes/hyperplanes to separate groups</li>
-<li>Scikit-learn is the predominant package for doing different types of
-machine learning in Python</li>
 </ul>
 </section>
 <section id="discussing-today" class="slide level2">
 <h2>Discussing Today</h2>
 <ul>
-<li>Drawing/understanding decision boundaries</li>
-<li>Understanding decision trees</li>
+<li>Understanding model results
+<ul>
+<li>Category probabilities</li>
+<li>Visualizing decision boundaries (when reasonable)</li>
+</ul></li>
+<li>Practice time!</li>
+<li>Introducing model #2: Decision Trees</li>
 </ul>
 </section>
-<section id="behind-the-scenes-multi-logistic-regression"
-class="slide level2">
-<h2>Behind the Scenes: Multi-Logistic Regression</h2>
+<section id="understanding-probabilities" class="slide level2">
+<h2>Understanding Probabilities</h2>
 <ul>
-<li>Scikit learns handling of multi-nomial logistic regression uses a
-“one-vs-rest” model</li>
-<li>Binary logistic regressions are run on each category vs
-<strong>all</strong> the <strong>other</strong> categories</li>
-<li>Final assignment is determined by whichever model is most confident
-about that points category
+<li><p>Classification models usually internally assign a probability to
+a point as to what label it should have</p>
 <ul>
-<li>Confidence usually builds as you move away from the division
-line</li>
+<li>The dominant probability is what wins, and that label gets
+assigned</li>
 </ul></li>
+<li><p>It can be useful sometimes to see the predicted probabilities for
+each point, rather than the final category</p>
+<pre ><code class="python">model_fit.predict_proba(test_df[[feature_cols])</code></pre>
+<pre ><code class="r">predict(model_fit, test_df, type='prob')</code></pre></li>
+<li><p>You might need to get creative about how to visualize these,
+depending on the number of categories</p></li>
 </ul>
-<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   width="373.21942mm"
-   height="80.704262mm"
-   viewBox="0 0 373.21942 80.704262"
-   version="1.1"
-   id="svg5"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   sodipodi:docname="one_vs_rest.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview7"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     showgrid="false"
-     inkscape:zoom="0.5946522"
-     inkscape:cx="646.59645"
-     inkscape:cy="228.70512"
-     inkscape:window-width="1680"
-     inkscape:window-height="1020"
-     inkscape:window-x="0"
-     inkscape:window-y="30"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <defs
-     id="defs2">
-    <marker
-       style="overflow:visible"
-       id="TriangleStart"
-       refX="0"
-       refY="0"
-       orient="auto-start-reverse"
-       inkscape:stockid="TriangleStart"
-       markerWidth="5.3244081"
-       markerHeight="6.155385"
-       viewBox="0 0 5.3244081 6.1553851"
-       inkscape:isstock="true"
-       inkscape:collect="always"
-       preserveAspectRatio="xMidYMid">
-      <path
-         transform="scale(0.5)"
-         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
-         d="M 5.77,0 -2.88,5 V -5 Z"
-         id="path135" />
-    </marker>
-  </defs>
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(-0.69387532,140.0695)">
-    <path
-       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
-       d="M 7.5383175,-59.950233 V -135.91474"
-       id="path236" />
-    <path
-       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
-       d="M 1.2788753,-66.85752 H 77.243382"
-       id="path1143" />
-    <circle
-       style="fill:#7a0000;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1199"
-       cx="18.129221"
-       cy="-123.26812"
-       r="2.1576226" />
-    <circle
-       style="fill:#7a0000;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1201"
-       cx="25.660347"
-       cy="-123.64897"
-       r="2.1576226" />
-    <circle
-       style="fill:#7a0000;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1203"
-       cx="17.79431"
-       cy="-112.26627"
-       r="2.1576226" />
-    <circle
-       style="fill:#7a0000;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1205"
-       cx="29.145889"
-       cy="-115.25043"
-       r="2.1576226" />
-    <circle
-       style="fill:#7a0000;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1207"
-       cx="33.562138"
-       cy="-126.18491"
-       r="2.1576226" />
-    <path
-       sodipodi:type="star"
-       style="fill:#007367;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1261"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484" />
-    <path
-       sodipodi:type="star"
-       style="fill:#007367;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1263"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(9.3407505,0.8864813)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#007367;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1265"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(3.7330903,5.4079827)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#007367;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1267"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(9.594124,8.4901163)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#007367;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1269"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(-2.5951908,13.037566)" />
-    <rect
-       style="fill:#452981;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1323"
-       width="4.5208559"
-       height="4.5208559"
-       x="16.75536"
-       y="-87.337654" />
-    <rect
-       style="fill:#452981;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1325"
-       width="4.5208559"
-       height="4.5208559"
-       x="22.36602"
-       y="-83.67305" />
-    <rect
-       style="fill:#452981;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1327"
-       width="4.5208559"
-       height="4.5208559"
-       x="24.595503"
-       y="-90.016129" />
-    <rect
-       style="fill:#452981;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1329"
-       width="4.5208559"
-       height="4.5208559"
-       x="32.771442"
-       y="-84.199249" />
-    <rect
-       style="fill:#452981;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1331"
-       width="4.5208559"
-       height="4.5208559"
-       x="29.101437"
-       y="-79.967873" />
-    <rect
-       style="fill:#452981;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1333"
-       width="4.5208559"
-       height="4.5208559"
-       x="15.395031"
-       y="-77.807068" />
-    <path
-       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
-       d="M 121.41829,-59.950233 V -135.91474"
-       id="path1337" />
-    <path
-       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
-       d="m 115.15885,-66.85752 h 75.96451"
-       id="path1339" />
-    <circle
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1341"
-       cx="132.0092"
-       cy="-123.26812"
-       r="2.1576226" />
-    <circle
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1343"
-       cx="139.54033"
-       cy="-123.64897"
-       r="2.1576226" />
-    <circle
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1345"
-       cx="131.67429"
-       cy="-112.26627"
-       r="2.1576226" />
-    <circle
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1347"
-       cx="143.02586"
-       cy="-115.25043"
-       r="2.1576226" />
-    <circle
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1349"
-       cx="147.44211"
-       cy="-126.18491"
-       r="2.1576226" />
-    <path
-       sodipodi:type="star"
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1351"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(113.87998)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1353"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(123.22073,0.8864813)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1355"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(117.61307,5.4079827)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1357"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(123.4741,8.4901163)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1359"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(111.28479,13.037566)" />
-    <rect
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1361"
-       width="4.5208559"
-       height="4.5208559"
-       x="130.63533"
-       y="-87.337654" />
-    <rect
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1363"
-       width="4.5208559"
-       height="4.5208559"
-       x="136.246"
-       y="-83.67305" />
-    <rect
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1365"
-       width="4.5208559"
-       height="4.5208559"
-       x="138.47548"
-       y="-90.016129" />
-    <rect
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1367"
-       width="4.5208559"
-       height="4.5208559"
-       x="146.65141"
-       y="-84.199249" />
-    <rect
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1369"
-       width="4.5208559"
-       height="4.5208559"
-       x="142.98141"
-       y="-79.967873" />
-    <rect
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1371"
-       width="4.5208559"
-       height="4.5208559"
-       x="129.27501"
-       y="-77.807068" />
-    <path
-       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
-       d="M 212.47007,-59.950233 V -135.91474"
-       id="path1377" />
-    <path
-       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
-       d="m 206.21063,-66.85752 h 75.9645"
-       id="path1379" />
-    <circle
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1381"
-       cx="223.06097"
-       cy="-123.26812"
-       r="2.1576226" />
-    <circle
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1383"
-       cx="230.5921"
-       cy="-123.64897"
-       r="2.1576226" />
-    <circle
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1385"
-       cx="222.72606"
-       cy="-112.26627"
-       r="2.1576226" />
-    <circle
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1387"
-       cx="234.07764"
-       cy="-115.25043"
-       r="2.1576226" />
-    <circle
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1389"
-       cx="238.4939"
-       cy="-126.18491"
-       r="2.1576226" />
-    <path
-       sodipodi:type="star"
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1391"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(204.93175)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1393"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(214.2725,0.8864813)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1395"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(208.66484,5.4079827)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1397"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(214.52588,8.4901163)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1399"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(202.33656,13.037566)" />
-    <rect
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1401"
-       width="4.5208559"
-       height="4.5208559"
-       x="221.68712"
-       y="-87.337654" />
-    <rect
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1403"
-       width="4.5208559"
-       height="4.5208559"
-       x="227.29778"
-       y="-83.67305" />
-    <rect
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1405"
-       width="4.5208559"
-       height="4.5208559"
-       x="229.52725"
-       y="-90.016129" />
-    <rect
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1407"
-       width="4.5208559"
-       height="4.5208559"
-       x="237.7032"
-       y="-84.199249" />
-    <rect
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1409"
-       width="4.5208559"
-       height="4.5208559"
-       x="234.03319"
-       y="-79.967873" />
-    <rect
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1411"
-       width="4.5208559"
-       height="4.5208559"
-       x="220.32678"
-       y="-77.807068" />
-    <path
-       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
-       d="M 300.05347,-59.950233 V -135.91474"
-       id="path1417" />
-    <path
-       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
-       d="m 293.79402,-66.85752 h 75.96451"
-       id="path1419" />
-    <circle
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1421"
-       cx="310.64438"
-       cy="-123.26812"
-       r="2.1576226" />
-    <circle
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1423"
-       cx="318.17551"
-       cy="-123.64897"
-       r="2.1576226" />
-    <circle
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1425"
-       cx="310.30945"
-       cy="-112.26627"
-       r="2.1576226" />
-    <circle
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1427"
-       cx="321.66104"
-       cy="-115.25043"
-       r="2.1576226" />
-    <circle
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="circle1429"
-       cx="326.0773"
-       cy="-126.18491"
-       r="2.1576226" />
-    <path
-       sodipodi:type="star"
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1431"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(292.51515)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1433"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(301.8559,0.8864813)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1435"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(296.24824,5.4079827)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1437"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(302.10927,8.4901163)" />
-    <path
-       sodipodi:type="star"
-       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="path1439"
-       inkscape:flatsided="false"
-       sodipodi:sides="3"
-       sodipodi:cx="50.627159"
-       sodipodi:cy="-108.59898"
-       sodipodi:r1="3.6124482"
-       sodipodi:r2="1.8062241"
-       sodipodi:arg1="0.56408693"
-       sodipodi:arg2="1.6112845"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
-       inkscape:transform-center-x="0.07311134"
-       inkscape:transform-center-y="-0.83905484"
-       transform="translate(289.91996,13.037566)" />
-    <rect
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1441"
-       width="4.5208559"
-       height="4.5208559"
-       x="309.27051"
-       y="-87.337654" />
-    <rect
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1443"
-       width="4.5208559"
-       height="4.5208559"
-       x="314.88116"
-       y="-83.67305" />
-    <rect
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1445"
-       width="4.5208559"
-       height="4.5208559"
-       x="317.11066"
-       y="-90.016129" />
-    <rect
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1447"
-       width="4.5208559"
-       height="4.5208559"
-       x="325.28659"
-       y="-84.199249" />
-    <rect
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1449"
-       width="4.5208559"
-       height="4.5208559"
-       x="321.61658"
-       y="-79.967873" />
-    <rect
-       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect1451"
-       width="4.5208559"
-       height="4.5208559"
-       x="307.91019"
-       y="-77.807068" />
-    <g
-       id="divisions"
-       class="fragment">
-      <path
-         style="fill:#485a6c;fill-opacity:1;stroke:#485a6c;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:4.68, 4.68;stroke-dashoffset:0"
-         d="m 123.94243,-89.382967 51.49331,-44.482113"
-         id="path1509" />
-      <path
-         style="fill:#485a6c;fill-opacity:1;stroke:#485a6c;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:4.68, 4.68;stroke-dashoffset:0"
-         d="m 245.93399,-127.09857 1.03405,55.366285"
-         id="path1511" />
-      <path
-         style="fill:#485a6c;fill-opacity:1;stroke:#485a6c;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:4.68, 4.68;stroke-dashoffset:0"
-         d="m 305.77729,-102.64168 47.75144,26.197111"
-         id="path1513" />
-    </g>
-    <path
-       style="fill:#485a6c;fill-opacity:1;stroke:#485a6c;stroke-width:0.597696;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 83.590827,-102.2171 h 6.586344 v -5.14285 l 9.612986,7.714279 -9.612986,7.714283 v -5.142855 h -6.586344 z"
-       id="path1637"
-       sodipodi:nodetypes="cccccccc" />
-  </g>
-</svg>
-</p>
 </section>
 <section id="decision-boundaries" class="slide level2">
 <h2>Decision Boundaries</h2>
@@ -869,8 +106,8 @@ lie</li>
 <li>This is not quite as simple as extracting the lines that bisect each
 region, since the decision regions will involve the areas of most
 confidence in a particular classification</li>
-<li>Easiest method is to use Scikit-learn’s
-<code class="python">DecisionBoundaryDisplay</code></li>
+<li>Really only reasonable for data with 2 independent variables or
+features</li>
 </ul>
 </div>
 <div class="col">
@@ -879,19 +116,51 @@ style="width:100.0%" /></p>
 </div>
 </div>
 </section>
-<section id="decision-boundary" class="slide level2">
-<h2>Decision Boundary</h2>
+<section id="decision-boundary-python" class="slide level2">
+<h2>Decision Boundary (Python)</h2>
 <ul>
 <li><p>Need to import:</p>
 <pre ><code class="python" style="font-size:.87em">from sklearn.inspection import DecisionBoundaryDisplay as DBD</code></pre></li>
 <li><p>Create the plot from the estimator:</p>
 <pre ><code class="python">DBD.from_estimator(model, df[[features]])</code></pre>
 <ul>
-<li>Unlike the confusion matrix, here the estimate needs both the model
+<li>Unlike the confusion matrix, here the estimator needs both the model
 and the feature values to predict from</li>
-<li>Can also pass in other arguments, like axis labels or the actual
+<li>Can also pass in other arguments, like axis labels or the matplotlib
 axis you want to add the plot to</li>
 </ul></li>
+</ul>
+</section>
+<section id="decision-boundary-r" class="slide level2">
+<h2>Decision Boundary (R)</h2>
+<div style="font-size:.9em">
+<ul>
+<li><p>Tidymodels doesn’t really have a comparable function to
+DecisionBoundaryDisplay, but it can be computed directly with other
+tools</p></li>
+<li><p>Main idea is to compute a fine grid of points in feature-space
+that you’ll use to get predictions</p>
+<pre ><code class="r">pred_df <- expand.grid(
+              feat1 = seq(low, high, length.out=1000),
+              feat2 = seq(low, high, length.out=1000))</code></pre></li>
+<li><p>Then get predictions from your model</p>
+<pre ><code class="r">pred_cat <- model_fit %>% predict(pred_df)</code></pre></li>
+<li><p>Plot the results with a raster plot with the fill determined by
+the predicted label</p>
+<pre ><code class="r">ggplot(pred_df, aes(feat1, feat2, fill=.pred_class)) +
+  geom_raster(alpha = 0.5)</code></pre></li>
+</ul>
+</div>
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity!</h2>
+<ul>
+<li>The dataset <a href="../demos/basic_labeling.csv">here</a> has two
+independent variables and then a label column that can be one of three
+options</li>
+<li>Fit a Logistic Multinomial Regression model to the data and compute
+the resulting confusion matrix and model accuracy</li>
+<li>If time, plot the decision boundaries</li>
 </ul>
 </section>
 <section id="why-other-models" class="slide level2">
@@ -919,15 +188,15 @@ style="width:80.0%" /></p>
 </section>
 <section id="planting-trees-1" class="slide level2">
 <h2>Planting Trees 1</h2>
-<p><img data-src="../images/banana_tree1.png" style="width:80.0%" /></p>
+<p><img data-src="../images/banana_tree1.png" style="width:90.0%" /></p>
 </section>
 <section id="planting-trees-2" class="slide level2">
 <h2>Planting Trees 2</h2>
-<p><img data-src="../images/banana_tree2.png" style="width:80.0%" /></p>
+<p><img data-src="../images/banana_tree2.png" style="width:90.0%" /></p>
 </section>
 <section id="planting-trees-3" class="slide level2">
 <h2>Planting Trees 3</h2>
-<p><img data-src="../images/banana_tree3.png" style="width:80.0%" /></p>
+<p><img data-src="../images/banana_tree3.png" style="width:90.0%" /></p>
 </section>
 <section id="minimizing-impurity" class="slide level2">
 <h2>Minimizing Impurity</h2>
@@ -942,15 +211,16 @@ y} p_{mk}\log(p_{mk}) \]</span></li>
 <ul>
 <li><span class="math inline">\(y\)</span> are all the different
 classes</li>
-<li><span class="math inline">\(p_m\)</span> is the distribution or
-proportion of points that are of that class in node <span
+<li><span class="math inline">\(p_mk\)</span> is the distribution or
+proportion of points that are of class <span
+class="math inline">\(k\)</span> in node <span
 class="math inline">\(m\)</span></li>
 </ul></li>
 </ul></li>
 </ul>
 </section>
-<section id="creating-decision-trees" class="slide level2">
-<h2>Creating Decision Trees</h2>
+<section id="creating-decision-trees-python" class="slide level2">
+<h2>Creating Decision Trees (Python)</h2>
 <ul>
 <li><p>Import the classifier:</p>
 <pre ><code class="python">from sklearn.tree import DecisionTreeClassifier</code></pre></li>
@@ -962,10 +232,21 @@ be more important here</p></li>
 models!</p></li>
 </ul>
 </section>
-<section id="visualizing-decision-trees" class="slide level2">
-<h2>Visualizing Decision Trees</h2>
+<section id="creating-decision-trees-r" class="slide level2">
+<h2>Creating Decision Trees (R)</h2>
 <ul>
-<li><p>Can also import a plotter for matplotlib to sketch out nice
+<li><p>You already have the model as part of the parsnip
+library</p></li>
+<li><p>Create your model:</p>
+<pre ><code class="r">tree <- decision_tree(mode="classification")</code></pre></li>
+<li><p>Everything else works the same as the logistic regression
+models!</p></li>
+</ul>
+</section>
+<section id="visualizing-decision-trees-python" class="slide level2">
+<h2>Visualizing Decision Trees (Python)</h2>
+<ul>
+<li><p>Can also import a plotter for Matplotlib to sketch out nice
 trees</p>
 <pre ><code class="python">from sklearn.tree import plot_tree</code></pre></li>
 <li><p>Then just pass the tree model after fitting it</p>
@@ -973,6 +254,18 @@ trees</p>
 <li><p>Can adjust the <code class="python">filled</code> option to color
 the nodes, or <code class="python">feature_names</code> to show better
 comparisons</p></li>
+</ul>
+</section>
+<section id="visualizing-decision-trees-r" class="slide level2">
+<h2>Visualizing Decision Trees (R)</h2>
+<ul>
+<li><p>You need another package to plot the decision trees nicely</p>
+<pre ><code class="r">library(rpart.plot)</code></pre></li>
+<li><p>Then just pass the tree model after fitting it</p>
+<pre ><code class="r">rpart.plot(tree_fit$fit)</code></pre></li>
+<li><p>Can adjust the <code class="python">type</code> and
+<code class="python">extra</code> to different numbers to further
+customize</p></li>
 </ul>
 </section>
 <section id="parameter-tuning" class="slide level2">
@@ -983,14 +276,30 @@ to adjust the proportions of the tree</li>
 <li>Often called <em>pruning</em>, and falls into either
 <em>pre-pruning</em> or <em>post-pruning</em> categories
 <ul>
-<li>Pre-pruning limits the tree’s size as it is build (pick one, maybe
-two)
+<li><p>Pre-pruning limits the tree’s size as it is build (pick one,
+maybe two)</p>
+<div class="cols" style="align-items:flex-start">
+<div class="col">
+<ul>
+<li>Python
 <ul>
 <li><code class="python">max_depth</code></li>
 <li><code class="python">max_leaf_nodes</code></li>
 <li><code class="python">min_samples_split</code></li>
 <li><code class="python">min_impurity_decrease</code></li>
 </ul></li>
+</ul>
+</div>
+<div class="col">
+<ul>
+<li>R
+<ul>
+<li><code class="python">tree_depth</code></li>
+<li><code class="python">min_n</code></li>
+</ul></li>
+</ul>
+</div>
+</div></li>
 </ul></li>
 </ul>
 </section>
@@ -1012,8 +321,10 @@ nodes</li>
 is chosen</li>
 </ul></li>
 </ul></li>
-<li>Indicate with <code class="python">ccp_alpha</code> when creating
-tree</li>
+<li>In Python: indicate with <code class="python">ccp_alpha</code> when
+creating the tree</li>
+<li>In R: indicate with <code class="python">cost_complexity</code> when
+creating the tree</li>
 </ul>
 </section>
 <section id="instability" class="slide level2">
@@ -1025,9 +336,9 @@ unstable</li>
 test sets</li>
 <li>They might do a similarly good job of prediction, but they can look
 wildly different</li>
-<li>The <code class="python">random_state</code> option in examples have
-been fixing this so far. But remove that and run the same trial multiple
-times</li>
+<li>The <code class="python">random_state</code> option (or setting a
+seed) in examples have been fixing this so far. But remove that and run
+the same trial multiple times</li>
 </ul>
 </section>
 <section id="feature-importance" class="slide level2">
@@ -1038,11 +349,15 @@ important in constructing the tree</p></li>
 <li><p>Once the model has been fit, you can query the model to get this
 information:</p>
 <pre ><code class="python">tree.feature_importances_</code></pre></li>
-<li><p>This returns a list of relative importances, in the same order as
-the features you passed into the model originally</p></li>
+<li><p>This returns a list of relative importance for each feature, in
+the same order as the features you passed into the model
+originally</p></li>
+<li><p>In R you need the <code class="python">vip</code> library</p>
+<pre ><code class="r">library(vip)
+vip(tree_fit)</code></pre></li>
 </ul>
 </section>
-<section id="activity" class="slide level2">
+<section id="activity-1" class="slide level2">
 <h2>Activity</h2>
 <ul>
 <li>Taking the same dataset from Monday (<a
@@ -1066,6 +381,7 @@ compare its confusion matrix to the others</li>
   <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
 
@@ -1186,27 +502,28 @@ compare its confusion matrix to the others</li>
           RevealZoom,
 		  RevealChalkboard,
           RevealMenu,
+          Reveald3,
         ],
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
