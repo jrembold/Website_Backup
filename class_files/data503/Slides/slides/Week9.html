@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <title>Subqueries, Pivots and Windows</title>
+  <title>Subqueries, Pivots and Patterns</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -16,8 +16,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -31,54 +34,48 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Subqueries, Pivots and Windows</h1>
+  <h1 class="title">Subqueries, Pivots and Patterns</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Wednesday, November 2, 2022</p>
+  <p class="date">March 14/19, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Try to have HW8 completed by next Wednesday
+<li>HW7 is out!
 <ul>
-<li>I was hugely behind it getting this posted, plus as out of town the
-next 3 days and worried about being able to respond to your
-questions</li>
-<li>It is mostly just important to try to get your data being collected
-as soon as possible</li>
+<li>Deals with table modifications and cleaning</li>
 </ul></li>
-<li>Today is going to be entirely SQL focused</li>
-<li>In class polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
-</ul>
-</section>
-<section id="current-vs-clock" class="slide level2">
-<h2>Current vs Clock</h2>
+<li>HW8 will come out next Monday</li>
+<li>Today is going to be mostly SQL focused</li>
+<li>Projects
 <ul>
-<li>Any query using <code class="python">current_timestamp</code> has it
-computed once at the start of a query
-<ul>
-<li>This is frequently desired for logging, so that you just get 1
-consistent time for any records added from a single query</li>
-</ul></li>
-<li>If you <strong>want</strong> record-by-record time keeping, you
-should use <code class="python">clock_timestamp()</code> instead, which
-will work the same way but be updated before every value written to the
-table</li>
-</ul>
-</section>
-<section id="quick-review-activity" class="slide level2">
-<h2>Quick Review Activity</h2>
-<ul>
-<li>Using the taxi rides dataset, see if you can:
-<ul>
-<li>Compute the number of rides given each hour of the day</li>
-<li>Compute the average cost of rides over each day of the month</li>
-<li>Compute the median cost of rides over each day of the week</li>
-<li>Compute the average duration of each ride over each hour of the
-day</li>
+<li>I am getting at least part 1 of the project guide out by the end of
+the weekend</li>
+<li>I will augment it over next week with further guidance on later
+parts</li>
+<li>Railway is working on getting all of you verified, I will confirm
+that with you as soon as they confirm it with me</li>
+<li>In general, the goal should be to have your Railway database and
+scraper deployed and running before the start of Spring Break</li>
+<li>Next week we will talk about how to set up some automatic
+transformation steps / pipeline</li>
 </ul></li>
 </ul>
+<!--
+## Current vs Clock
+- Any query using `current_timestamp` has it computed once at the start of a query
+  - This is frequently desired for logging, so that you just get 1 consistent time for any records added from a single query
+- If you **want** record-by-record time keeping, you should use `clock_timestamp()` instead, which will work the same way but be updated before every value written to the table
+
+
+## Quick Review Activity
+- Using the taxi rides dataset, see if you can:
+  - Compute the number of rides given each hour of the day
+  - Compute the average cost of rides over each day of the month
+  - Compute the median cost of rides over each day of the week
+  - Compute the average duration of each ride over each hour of the day
+-->
 </section>
 <section id="subqueries" class="slide level2">
 <h2>Subqueries</h2>
@@ -91,11 +88,11 @@ the surrounding SQL</li>
 <ul>
 <li>Creating a new table, for example</li>
 </ul>
-<pre ><code class="pgsql">CREATE TABLE new_table AS (
-  SELECT * FROM og_table
+<pre ><code class="pgsql">CREATE TABLE |||new table||| AS (
+  SELECT * FROM |||og table|||
 );</code></pre></li>
-<li>Often, you could have saved the subquery as its own table and then
-used that directly, but not always</li>
+<li>Often, you could have alternatively saved the subquery as its own
+table and then used that directly, but not always</li>
 </ul>
 </section>
 <section id="common-uses-of-subqueries" class="slide level2">
@@ -124,10 +121,10 @@ filter directly by typing that number back in</li>
 value to the subquery output <strong>so long as the query outputs only a
 single value</strong></p>
 <pre ><code class="pgsql" style="font-size:1em">SELECT *
-FROM tablename
-WHERE colname > (
-  SELECT avg(colname2)
-  FROM tablename2
+FROM |||table 1|||
+WHERE |||column 1||| > (
+  SELECT avg(|||column 2|||)
+  FROM |||table 2|||
 );</code></pre></li>
 </ul>
 </section>
@@ -141,9 +138,9 @@ reference a table name</p></li>
 else you have no way to refer to them</p>
 <pre ><code class="pgsql">SELECT *
 FROM (
-  SELECT col1, col2
-  FROM tablename
-) AS mytable; -- World's most boring table alias</code></pre></li>
+  SELECT |||column 1, column 2|||
+  FROM |||table name|||
+) AS |||table alias|||; </code></pre></li>
 </ul>
 </section>
 <section id="repeating-column-values" class="slide level2">
@@ -154,6 +151,7 @@ an entire column</p>
 <ul>
 <li>We can’t just use an aggregate function (or similar) though, else we
 get mismatched column lengths</li>
+<li>Window functions could work, but only if within the same table</li>
 </ul></li>
 <li><p>You can include a subquery <em>in your selected columns</em> if
 it outputs only a <strong>single value</strong></p>
@@ -162,10 +160,10 @@ it outputs only a <strong>single value</strong></p>
 </ul></li>
 <li><p>Give it an alias so the column heading has some meaning!</p>
 <pre ><code class="pgsql" style="font-size:.9em">SELECT
-  col1,
-  col2,
-  (SELECT avg(col2) FROM tablename2) as const_value
-FROM tablename;</code></pre></li>
+  |||column 1|||,
+  |||column 2|||,
+  (SELECT avg(|||column 3|||) FROM |||table 2|||) as |||column alias|||
+FROM |||table 1|||;</code></pre></li>
 </ul>
 </section>
 <section id="subquery-expressions" class="slide level2">
@@ -227,11 +225,11 @@ query
 <li>These types of subqueries can <strong>not</strong> be run in
 isolation</li>
 </ul>
-<pre ><code class="pgsql" style="font-size:.9em">SELECT col1, col2
-FROM table1
+<pre ><code class="pgsql" style="font-size:.9em">SELECT |||column 1, column 2|||
+FROM |||table 1|||
 WHERE EXISTS (
   SELECT 1
-  FROM table2
+  FROM |||table 2|||
   WHERE table1.col1 = table2.col2
 );</code></pre></li>
 </ul>
@@ -255,10 +253,9 @@ the rows evaluate to True with the expression</li>
 </ul></li>
 <li><p><code class="python">expr = ANY (subquery)</code> is thus
 identical to <code class="python">expr IN (subquery)</code></p>
-<pre ><code class="pgsql" style="font-size:.9em">SELECT col1
-FROM table1
-WHERE col1 < ALL ( SELECT col2
-                   FROM table2);</code></pre></li>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT |||column|||
+FROM |||table 1|||
+WHERE |||column||| < ALL ( SELECT |||column||| FROM |||table 2|||);</code></pre></li>
 </ul>
 </section>
 <section id="subqueries-vs-joins" class="slide level2">
@@ -315,9 +312,9 @@ which will contain three common tables:
 joins</strong> and only subqueries (as practice).
 <ul>
 <li>Which student(s) have turned in <em>nothing</em>?</li>
-<li>Which assignment name has the worst scored average overall?
-<!--- Which students scored below average on every quiz?-->
-<!--- Pairings--> <!--- Karol and Jullian--> <!--- Megan and Rochelle-->
+<li>Which assignment name has the worst scored average overall?</li>
+<li>Which students scored below average on every quiz? <!--- Pairings-->
+<!--- Karol and Jullian--> <!--- Megan and Rochelle-->
 <!--- Nina and Ellie--> <!--- Andrew and Liam-->
 <!--- Maribel and Connor--></li>
 </ul></li>
@@ -336,8 +333,8 @@ rest of the query</li>
 <li>To do so, you use a <code class="python">WITH</code> keyword:</li>
 </ul>
 <pre ><code class="pgsql">WITH
-  derived_table_name (new_col_names) AS (
-    subquery
+  |||derived table name||| (|||new column names|||) AS (
+    |||subquery|||
   )
 SELECT ...</code></pre>
 </section>
@@ -468,7 +465,7 @@ more which add some functionality to a particular database</li>
 </ul></li>
 <li><p>To use an extension, you need only enable it for your particular
 database</p>
-<pre ><code class="pgsql">CREATE EXTENSION extension_name;</code></pre></li>
+<pre ><code class="pgsql">CREATE EXTENSION |||extension_name|||;</code></pre></li>
 <li><p>To facilitate making pivot tables, we need to add the
 <code class="python">tablefunc</code> extension to our database, which
 will add the <code class="python">crosstab</code> function</p></li>
@@ -486,16 +483,17 @@ on, so let’s break things down</li>
 <div class="col">
 <pre ><code class="pgsql" style="max-height:800px">SELECT *
 FROM crosstab(
-  'subquery 1',
-  'subquery 2'
+  |||subquery 1 string|||,
+  |||subquery 2 string|||
   )
 AS (
-  col1 dtype1,
-  col2 dtype2,
+  |||row label column||| TEXT,
+  |||column 1||| |||type 1|||,
+  |||column 2||| |||type 2|||,
   ⋮
 );</code></pre>
 </div>
-<div class="col" style="font-size:.9em">
+<div class="col" style="font-size:.8em">
 <div>
 <ul>
 <li class="fragment">Subquery 1 must return 3 columns
@@ -541,10 +539,10 @@ blocks</li>
 </ul></li>
 </ul>
 <pre ><code class="pgsql">CASE 
-  WHEN some_condition1 THEN output1
-  WHEN some_condition2 THEN output2
+  WHEN |||some condition||| THEN |||output|||
+  WHEN |||some other condition||| THEN |||different output|||
   ⋮
-  ELSE outputX
+  ELSE |||fallback output|||
 END</code></pre>
 </section>
 <section id="a-case-study" class="slide level2">
@@ -634,181 +632,95 @@ Feel free to use joins here.</li>
 of this will look really similar to what you did in the first part, but
 there will be some important differences.</li>
 </ul>
-</section>
-<section id="window-functions" class="slide level2">
-<h2>Window Functions</h2>
-<ul>
-<li>One useful piece of kit that is not included in the text is that of
-<em>window functions</em></li>
-<li>A window function is like a mix between a normal column value and an
-aggregate function
-<ul>
-<li>Unlike aggregate functions, a window function returns a value for
-each row</li>
-<li>Unlike normal column values, a window function can utilize other
-rows included within its “window” in making an aggregation</li>
-</ul></li>
-<li>Any normal aggregate function can be used as a window function,
-though there are specific window functions as well</li>
-<li>Window functions can only be used inside
-<code class="python">SELECT</code> or
-<code class="python">ORDER BY</code> statements
-<ul>
-<li>They are evaluated <em>after</em> any filtering, grouping, or normal
-aggregations</li>
-</ul></li>
-</ul>
-</section>
-<section id="over-the-hill" class="slide level2">
-<h2>Over the Hill</h2>
-<ul>
-<li>The defining characteristic of any window function is the
-<code class="python">OVER ()</code> keyword, which comes after the
-aggregating window function</li>
-<li>Content inside the <code class="python">()</code> determines the
-“window” of the window function</li>
-<li>By default, if nothing is provided, the entire column is the
-window</li>
-<li>The below would output the average of the column in every row
-<ul>
-<li>This means it is technically no different from accomplishing this
-with a subquery</li>
-</ul>
-<pre ><code class="pgsql">SELECT AVG(col1) OVER()
-FROM table_name;</code></pre></li>
-</ul>
-</section>
-<section id="dedicated-window-functions" class="slide level2">
-<h2>Dedicated Window Functions</h2>
-<ul>
-<li>You can use any existing aggregate function as a window function,
-but there are also more specific window functions</li>
-</ul>
-<div style="font-size:.9em">
-<table>
-<colgroup>
-<col style="width: 18%" />
-<col style="width: 81%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Function</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code class="python">row_number()</code></td>
-<td>Assigns an ascending row number to each row in a window</td>
-</tr>
-<tr class="even">
-<td><code class="python">rank()</code></td>
-<td>Assigns an ascending rank to each row, with possible ties skipping
-the next value</td>
-</tr>
-<tr class="odd">
-<td><code class="python">dense_rank()</code></td>
-<td>Assigns an ascending rank to each row, with possible ties not
-skipping the next value</td>
-</tr>
-<tr class="even">
-<td><code class="python">first_value(col)</code></td>
-<td>Returns the first value in the window of column
-<code class="python">col</code></td>
-</tr>
-<tr class="odd">
-<td><code class="python">last_value(col)</code></td>
-<td>Returns the last value in the window of column
-<code class="python">col</code></td>
-</tr>
-<tr class="even">
-<td><code class="python">lag(col)</code></td>
-<td>Returns the previous row of column
-<code class="python">col</code></td>
-</tr>
-<tr class="odd">
-<td><code class="python">lead(col)</code></td>
-<td>Returns the next row of column <code class="python">col</code></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="determining-order" class="slide level2">
-<h2>DETERMINING ORDER</h2>
-<ul>
-<li>Often, to be useful, you may want to define an ordering inside the
-<code class="python">OVER()</code> statement</li>
-<li>As soon as you specify an ordering, <strong>the default window
-changes</strong>
-<ul>
-<li>By default, each window now encompasses everything from the start,
-up to that current row
-<ul>
-<li>Easiest to see with classic aggregate functions</li>
-</ul></li>
-</ul></li>
-</ul>
-<pre ><code class="pgsql">SELECT COUNT(*) OVER(ORDER BY col2)
-FROM table_name;</code></pre>
-</section>
-<section id="tweaking-the-window" class="slide level2">
-<h2>Tweaking the Window</h2>
-<ul>
-<li><p>You can tweak this window by specifying the starting and stopping
-point, using the syntax:</p>
-<pre ><code class="pgsql">... ROWS BETWEEN offset1 PRECEDING AND offset2 FOLLOWING</code></pre>
-<p>which appears in the <code class="python">OVER</code> clause, after
-any provided ordering</p></li>
-<li><p>Can also exclude the current row or group from the window:</p>
-<pre ><code class="pgsql">... EXCLUDE CURRENT ROW</code></pre>
-<ul>
-<li>Group here refers to all other rows tied with the current row</li>
-</ul></li>
-<li><p>Can be used to compute “rolling” averages and similar</p></li>
-</ul>
-</section>
-<section id="partitioning" class="slide level2">
-<h2>Partitioning</h2>
-<ul>
-<li>Additionally, you can specify a partition for the window</li>
-<li>The default partition is the entire column</li>
-<li>Partitioning here is determined <em>before</em> the rows comprising
-the window are computed
-<ul>
-<li>This has a similar feel to <code class="python">GROUP BY</code>, but
-<em>every</em> row will get a value here</li>
-</ul></li>
-<li>Window functions evaluated within each window within each
-partition</li>
-</ul>
-<pre ><code class="pgsql">SELECT AVG(col1) OVER (
+<!--
+## Window Functions
+- One useful piece of kit that is not included in the text is that of _window functions_
+- A window function is like a mix between a normal column value and an aggregate function
+  - Unlike aggregate functions, a window function returns a value for each row
+  - Unlike normal column values, a window function can utilize other rows included within its "window" in making an aggregation
+- Any normal aggregate function can be used as a window function, though there are specific window functions as well
+- Window functions can only be used inside `SELECT` or `ORDER BY` statements
+  - They are evaluated _after_ any filtering, grouping, or normal aggregations
+
+
+## Over the Hill
+- The defining characteristic of any window function is the `OVER ()` keyword, which comes after the aggregating window function
+- Content inside the `()` determines the "window" of the window function
+- By default, if nothing is provided, the entire column is the window
+- The below would output the average of the column in every row
+  - This means it is technically no different from accomplishing this with a subquery
+```pgsql
+SELECT AVG(col1) OVER()
+FROM table_name;
+```
+
+## Dedicated Window Functions
+- You can use any existing aggregate function as a window function, but there are also more specific window functions
+
+
+:::{style='font-size:.9em'}
+
+| Function           | Description                                                                           |
+|--------------------|---------------------------------------------------------------------------------------|
+| `row_number()`     | Assigns an ascending row number to each row in a window                               |
+| `rank()`           | Assigns an ascending rank to each row, with possible ties skipping the next value     |
+| `dense_rank()`     | Assigns an ascending rank to each row, with possible ties not skipping the next value |
+| `first_value(col)` | Returns the first value in the window of column `col`                                 |
+| `last_value(col)`  | Returns the last value in the window of column `col`                                  |
+| `lag(col)`         | Returns the previous row of column `col`                                              |
+| `lead(col)`        | Returns the next row of column `col`                                                  |
+
+:::
+
+## DETERMINING ORDER
+- Often, to be useful, you may want to define an ordering inside the `OVER()` statement
+- As soon as you specify an ordering, **the default window changes**
+  - By default, each window now encompasses everything from the start, up to that current row
+    - Easiest to see with classic aggregate functions
+
+```pgsql
+SELECT COUNT(*) OVER(ORDER BY col2)
+FROM table_name;
+```
+
+## Tweaking the Window
+- You can tweak this window by specifying the starting and stopping point, using the syntax:
+  ```pgsql
+  ... ROWS BETWEEN offset1 PRECEDING AND offset2 FOLLOWING
+  ```
+  which appears in the `OVER` clause, after any provided ordering
+- Can also exclude the current row or group from the window:
+  ```pgsql
+  ... EXCLUDE CURRENT ROW
+  ```
+  - Group here refers to all other rows tied with the current row
+- Can be used to compute "rolling" averages and similar
+
+## Partitioning
+- Additionally, you can specify a partition for the window
+- The default partition is the entire column
+- Partitioning here is determined _before_ the rows comprising the window are computed
+  - This has a similar feel to `GROUP BY`, but _every_ row will get a value here
+- Window functions evaluated within each window within each partition
+```pgsql
+SELECT AVG(col1) OVER (
     PARTITION BY col2
   )
-FROM table_name;</code></pre>
-</section>
-<section id="activity-2" class="slide level2">
-<h2>Activity!</h2>
-<ul>
-<li>Contained <a href="../activity_data/halloween.sql">here</a> is an
-SQL file to generate a table of Halloween trick-or-treater data, which
-contains two columns:
-<ul>
-<li>The minute within an hour span when a trick-or-treater visited</li>
-<li>What candy was given to the trick-or-treater</li>
-</ul></li>
-<li>You started out with a supply of 40 of each type of candy</li>
-<li>Using this information, answer the following questions:
-<ul>
-<li>Between the 20th and 30th minutes, what were the three most popular
-candies given?</li>
-<li>At what minute of the hour did you run out of Starburst?</li>
-<li>Which candy did you run out of first?</li>
-<li>Construct a 5-minute rolling average of the number of
-trick-or-treaters you saw each minute of the evening. According to this,
-about when were things busiest?</li>
-</ul></li>
-</ul>
+FROM table_name;
+```
+
+
+## Activity!
+- Contained [here](../activity_data/halloween.sql) is an SQL file to generate a table of Halloween trick-or-treater data, which contains two columns:
+  - The minute within an hour span when a trick-or-treater visited
+  - What candy was given to the trick-or-treater
+- You started out with a supply of 40 of each type of candy
+- Using this information, answer the following questions:
+  - Between the 20th and 30th minutes, what were the three most popular candies given?
+  - At what minute of the hour did you run out of Starburst?
+  - Which candy did you run out of first?
+  - Construct a 5-minute rolling average of the number of trick-or-treaters you saw each minute of the evening. According to this, about when were things busiest?
+-->
 <!--## Pairs-->
 <!--- Andrew and Liam-->
 <!--- Nina and Rochelle-->
@@ -821,88 +733,289 @@ about when were things busiest?</li>
 <!--- More complicated pattern matching-->
 <!--- Full text searching using normalization and lexemes-->
 <!--- All are geared around making using text and strings much more powerful and flexible--></p>
-<!--## Stringy Functions (CORE)-->
-<!--:::{style='font-size:.9em'}-->
-<!--| Function                  | Description                                                                                           |-->
-<!--|-----------------------------------|---------------------------------------------|-->
-<!--| `str1 || str2` | Concatenates string 1 and string 2 together |-->
-<!--| `upper(str)`              | Converts a string to all uppercase characters                                                         |-->
-<!--| `lower(str)`              | Converts a string to all lowercase characters                                                         |-->
-<!--| `char_length(str)`        | Returns the number of characters in the string                                                        |-->
-<!--| `position(str IN substr)` | Find the number of the character where the substring begins                                           |-->
-<!--| `trim(opt chr FROM str)`  | Removes the given characters from the string, optionally taking from the _leading_ or _trailing_ edge |-->
-<!--| `substring(str FROM n FOR l)` | Returns the portion of the string starting at position n and continuing for l characters |-->
-<!--:::-->
-<!--## String Functions (Postgres)-->
-<!--:::{style='font-size:.9em'}-->
-<!--| Function                  | Description                                                                              |-->
-<!--|--------------------------------|------------------------------------------------------------------------------------------|-->
-<!--| `initcap(str)`            | Converts the first character of each word to uppercase, and the rest lower               |-->
-<!--| `left(str,n)`             | Returns the first n characters of the string                                             |-->
-<!--| `right(str,n)`            | Returns the last n characters of the string                                              |-->
-<!--| `ltrim(str,chr)`          | Remove the characters (space by default) from the start of the string                    |-->
-<!--| `rtrim(str,chr)`          | Remove the characters (space by default) from the end of the string                      |-->
-<!--| `replace(str,from,to)`    | Replaces all occurance of _from_ in the string to _to_                                   |-->
-<!--| `length(str)`             | Returns the number of characters in the string                                           |-->
-<!--| `substr(str, n, l)` | Returns the portion of the string starting at position n and continuing l characters |-->
-<!--:::-->
-<!--## Enhanced Pattern Matching-->
-<!--- We've already seen basic pattern matching with `LIKE` and `LIKE`-->
-<p><!--- Some flexibility with wildcard characters: `%` and `_`-->
-<!--- To get (much) more flexibility, we need to pivot to something made for exactly this purpose: _regular expressions_ (or _regex_)-->
-<!--- Regular expressions are a sequence of mostly single character symbols that denote exactly what patterns one could wish for-->
-<!--- These sequences of characters can initially look very inscrutable! Stick with it!-->
-<!--- Regex's are useful all over, and supported in almost all programming languages as well. Learning at least the basics is time very well spent.--></p>
-<!--## Basic Regex Terms-->
-<!--:::{style='font-size:.7em'}-->
-<!--::::::cols-->
-<!--::::col-->
-<!--| Expression | Description                                                |-->
-<!--|------------|------------------------------------------------------------|-->
-<!--| `.`        | Matches _any_ character except a new line                  |-->
-<!--| `[abc]`    | Matches any character in the square brackets (a or b or c) |-->
-<!--| `[a-z]`    | Matches a range of characters (all lowercase letters here) |-->
-<!--| `[^a-z]`   | Caret negates what follows (so no lowercase letters here)  |-->
-<!--| `\w`       | Any word character, digit or underscore                    |-->
-<!--| `\d`       | Any digit                                                  |-->
-<!--| `\s`       | A space                                                    |-->
-<!--| `\t`       | A tab character                                            |-->
-<!--| `\n`       | A newline character                                        |-->
-<!--::::-->
-<!--::::col-->
-<!--| Expression | Description                                   |-->
-<!--|------------|-----------------------------------------------|-->
-<!--| `^`        | Match at the start of the string                           |-->
-<!--| `$`        | Match at the end of the string                             |-->
-<!--| `?`        | Get the preceding match 0 or one time         |-->
-<!--| `*`        | Get the preceding match zero or more times    |-->
-<!--| `+`        | Get the preceding match one or more times     |-->
-<!--| `{m}`      | Get the preceding match exactly m times       |-->
-<!--| `{m,n}`    | Get the preceding match between m and n times |-->
-<!--| `a|b`      | Match on either a or b                        |-->
-<!--| `( )`      | Create a capture group or set precedence      |-->
-<!--| `(?: )`    | Negate reporting a capture group              |-->
-<!--::::-->
-<!--::::::-->
-<!--:::-->
-<!--## Other Regex Concepts-->
-<!--- If you ever want to match off a symbol that has special meaning in regex (a parenthese, for instance) you must _escape it_ with a backslash: `\(`-->
-<!--- Reserved characters include: `{ } [ ] / \ + * . $ ^ | ?`-->
-<!--- Flags can be added at the end to tweak matching-->
-<p><!--- `/i` means that matches will be case insensitive-->
-<!--- `/g` means that all instances of the match will be returned, not just the first-->
-<!--- `/m` allows the anchor characters (`^` and `$`) to operate on each line, not just across the entire string.--></p>
-<!--## {data-background-iframe="https://regexr.com/6hfai"}-->
-<!--## Your Turn!-->
-<!--- The link [here](https://regexone.com/problem/matching_phone_numbers) has a nice sequence of short problems to test your skills against-->
-<!--- Most problems consist of:-->
-<p><!--- Terms that you want to match correctly-->
-<!--- Terms that you want to **not** match-->
-<!--- Capture groups that you'd like to capture-->
-<!--- In the below pairings, see how many you can figure out in the next 20 minutes-->
-<!--- Andrew and Megan--> <!--- Nina and Connor-->
-<!--- Ellie, Rochelle, and Liam-->
-<!--- Karol, Maribel, and Jullian--></p>
+</section>
+<section id="stringy-functions-core" class="slide level2">
+<h2>Stringy Functions (CORE)</h2>
+<div style="font-size:.9em">
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">str1 || str2</code></td>
+<td>Concatenates string 1 and string 2 together</td>
+</tr>
+<tr class="even">
+<td><code class="python">upper(str)</code></td>
+<td>Converts a string to all uppercase characters</td>
+</tr>
+<tr class="odd">
+<td><code class="python">lower(str)</code></td>
+<td>Converts a string to all lowercase characters</td>
+</tr>
+<tr class="even">
+<td><code class="python">char_length(str)</code></td>
+<td>Returns the number of characters in the string</td>
+</tr>
+<tr class="odd">
+<td><code class="python">position(str IN substr)</code></td>
+<td>Find the number of the character where the substring begins</td>
+</tr>
+<tr class="even">
+<td><code class="python">trim(opt chr FROM str)</code></td>
+<td>Removes the given characters from the string, optionally taking from
+the <em>leading</em> or <em>trailing</em> edge</td>
+</tr>
+<tr class="odd">
+<td><code class="python">substring(str FROM n FOR l)</code></td>
+<td>Returns the portion of the string starting at position n and
+continuing for l characters</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="string-functions-postgres" class="slide level2">
+<h2>String Functions (Postgres)</h2>
+<div style="font-size:.9em">
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 73%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">initcap(str)</code></td>
+<td>Converts the first character of each word to uppercase, and the rest
+lower</td>
+</tr>
+<tr class="even">
+<td><code class="python">left(str,n)</code></td>
+<td>Returns the first n characters of the string</td>
+</tr>
+<tr class="odd">
+<td><code class="python">right(str,n)</code></td>
+<td>Returns the last n characters of the string</td>
+</tr>
+<tr class="even">
+<td><code class="python">ltrim(str,chr)</code></td>
+<td>Remove the characters (space by default) from the start of the
+string</td>
+</tr>
+<tr class="odd">
+<td><code class="python">rtrim(str,chr)</code></td>
+<td>Remove the characters (space by default) from the end of the
+string</td>
+</tr>
+<tr class="even">
+<td><code class="python">replace(str,from,to)</code></td>
+<td>Replaces all occurance of <em>from</em> in the string to
+<em>to</em></td>
+</tr>
+<tr class="odd">
+<td><code class="python">length(str)</code></td>
+<td>Returns the number of characters in the string</td>
+</tr>
+<tr class="even">
+<td><code class="python">substr(str, n, l)</code></td>
+<td>Returns the portion of the string starting at position n and
+continuing l characters</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="enhanced-pattern-matching" class="slide level2">
+<h2>Enhanced Pattern Matching</h2>
+<ul>
+<li>We’ve already seen basic pattern matching with
+<code class="python">LIKE</code> and <code class="python">LIKE</code>
+<ul>
+<li>Some flexibility with wildcard characters:
+<code class="python">%</code> and <code class="python">_</code></li>
+</ul></li>
+<li>To get (much) more flexibility, we need to pivot to something made
+for exactly this purpose: <em>regular expressions</em> (or
+<em>regex</em>)</li>
+<li>Regular expressions are a sequence of mostly single character
+symbols that denote exactly what patterns one could wish for
+<ul>
+<li>These sequences of characters can initially look very inscrutable!
+Stick with it!</li>
+</ul></li>
+<li>Regex’s are useful all over, and supported in almost all programming
+languages as well. Learning at least the basics is time very well
+spent.</li>
+</ul>
+</section>
+<section id="basic-regex-terms" class="slide level2">
+<h2>Basic Regex Terms</h2>
+<div style="font-size:.7em">
+<div class="cols">
+<div class="col">
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 83%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">.</code></td>
+<td>Matches <em>any</em> character except a new line</td>
+</tr>
+<tr class="even">
+<td><code class="python">[abc]</code></td>
+<td>Matches any character in the square brackets (a or b or c)</td>
+</tr>
+<tr class="odd">
+<td><code class="python">[a-z]</code></td>
+<td>Matches a range of characters (all lowercase letters here)</td>
+</tr>
+<tr class="even">
+<td><code class="python">[^a-z]</code></td>
+<td>Caret negates what follows (so no lowercase letters here)</td>
+</tr>
+<tr class="odd">
+<td><code class="python">\w</code></td>
+<td>Any word character, digit or underscore</td>
+</tr>
+<tr class="even">
+<td><code class="python">\d</code></td>
+<td>Any digit</td>
+</tr>
+<tr class="odd">
+<td><code class="python">\s</code></td>
+<td>A space</td>
+</tr>
+<tr class="even">
+<td><code class="python">\t</code></td>
+<td>A tab character</td>
+</tr>
+<tr class="odd">
+<td><code class="python">\n</code></td>
+<td>A newline character</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col">
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">^</code></td>
+<td>Match at the start of the string</td>
+</tr>
+<tr class="even">
+<td><code class="python">$</code></td>
+<td>Match at the end of the string</td>
+</tr>
+<tr class="odd">
+<td><code class="python">?</code></td>
+<td>Get the preceding match 0 or one time</td>
+</tr>
+<tr class="even">
+<td><code class="python">*</code></td>
+<td>Get the preceding match zero or more times</td>
+</tr>
+<tr class="odd">
+<td><code class="python">+</code></td>
+<td>Get the preceding match one or more times</td>
+</tr>
+<tr class="even">
+<td><code class="python">{m}</code></td>
+<td>Get the preceding match exactly m times</td>
+</tr>
+<tr class="odd">
+<td><code class="python">{m,n}</code></td>
+<td>Get the preceding match between m and n times</td>
+</tr>
+<tr class="even">
+<td><code class="python">a|b</code></td>
+<td>Match on either a or b</td>
+</tr>
+<tr class="odd">
+<td><code class="python">( )</code></td>
+<td>Create a capture group or set precedence</td>
+</tr>
+<tr class="even">
+<td><code class="python">(?: )</code></td>
+<td>Negate reporting a capture group</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="other-regex-concepts" class="slide level2">
+<h2>Other Regex Concepts</h2>
+<ul>
+<li>If you ever want to match off a symbol that has special meaning in
+regex (a parenthese, for instance) you must <em>escape it</em> with a
+backslash: <code class="python">\(</code></li>
+<li>Reserved characters include:
+<code class="python">{ } [ ] / \ + * . $ ^ | ?</code></li>
+<li>Flags can be added at the end to tweak matching
+<ul>
+<li><code class="python">/i</code> means that matches will be case
+insensitive</li>
+<li><code class="python">/g</code> means that all instances of the match
+will be returned, not just the first</li>
+<li><code class="python">/m</code> allows the anchor characters
+(<code class="python">^</code> and <code class="python">$</code>) to
+operate on each line, not just across the entire string.</li>
+</ul></li>
+</ul>
+</section>
+<section id="section" class="slide level2"
+data-background-iframe="https://regexr.com/6hfai">
+<h2 data-background-iframe="https://regexr.com/6hfai"></h2>
+</section>
+<section id="your-turn" class="slide level2">
+<h2>Your Turn!</h2>
+<ul>
+<li>The link <a
+href="https://regexone.com/problem/matching_phone_numbers">here</a> has
+a nice sequence of short problems to test your skills against</li>
+<li>Most problems consist of:
+<ul>
+<li>Terms that you want to match correctly</li>
+<li>Terms that you want to <strong>not</strong> match</li>
+<li>Capture groups that you’d like to capture</li>
+</ul></li>
+<li>Working with a partner, see how many you can figure out in our
+remaining time tonight</li>
+</ul>
 <!--## Back to SQL-->
 <!--- One of the main ways we previously used pattern matching was for filtering-->
 <!--- You can also use regexes for pattern matching!-->
@@ -949,6 +1062,7 @@ about when were things busiest?</li>
   <script src="../html_srcs/revealjs/../other_plugins/reveal.js-d3/reveald3.js"></script>
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
 
   <script>
 
@@ -1039,7 +1153,7 @@ about when were things busiest?</li>
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
-        height: 1200,
+        height: 1080,
         // The display mode that will be used to show slides
         display: 'block',
 		math: {
@@ -1066,6 +1180,11 @@ about when were things busiest?</li>
 			tryFallbackURL: true, // true/false, default false
 			disableCheckFile: false, //default false
 		 },
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
 
         // reveal.js plugins
         plugins: [
@@ -1106,6 +1225,18 @@ about when were things busiest?</li>
             //{ src: "../html_srcs/revealjs/plugin/d3/reveald3.js" },
 		],
       });
+    </script>
+    <script>
+    // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+      function remove_bars() {
+        var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+        console.log(pseudoBlocks);
+        for ( var i = 0; i < pseudoBlocks.length; i++) {
+          pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+        }
+        }
+      // omg this is even more hacky now, but I need this to run after hljs has done its thing
+      setTimeout(remove_bars, 100);
     </script>
     </body>
 </html>
