@@ -2,12 +2,13 @@ var width = 10;
 var height = 10;
 var gap_vert = 2;
 var gap_hor = 25;
-var colors = [Blue, Purple, Green, Yellow, Red]
+var colors = [Blue, Purple, Green, Yellow, Red, Orange, Cyan, DGray]
 var data = [];
 var group1 = [];
+var rows = 8;
 var butt_x = 5 + (5*width)/2 - (3*width)/2
-var butt_y = 5 + (height + gap_vert) * 5
-for ( let i=0; i < 5; i += 1) {
+var butt_y = 5 + (height + gap_vert) * rows
+for ( let i=0; i < rows; i += 1) {
 	for (let j=0; j < 5; j++) {
 		data.push({
 			"x":5+(j*width),
@@ -21,7 +22,7 @@ for ( let i=0; i < 5; i += 1) {
 }
 var svg = d3.select("body")
 	.append("svg")
-	.attr("viewBox", "0 0 " + (2)*(5*width+gap_hor) + " " + (6*(height+gap_vert)+10))
+	.attr("viewBox", "0 0 " + (2)*(5*width+gap_hor) + " " + ((rows+1)*(height+gap_vert)+10))
 	.attr("width", "100%")
 	.attr("height", "100%")
 
@@ -106,7 +107,7 @@ function draw_5() {
 	// Draws and animates 5 random draws with replacement after removing the existing entries
 	group1.length = 0;
 	svg.selectAll('#group1').data(group1, d => d.id).exit().remove()
-	for (var i = 0; i < 5; i++ ) {
+	for (var i = 0; i < rows; i++ ) {
 		grab(group1)
 	}
 }

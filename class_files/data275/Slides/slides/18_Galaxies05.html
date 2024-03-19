@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-04-03">
+  <meta name="dcterms.date" content="2024-03-19">
   <title>The Dark Forest</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -34,24 +34,16 @@
 <section id="title-slide">
   <h1 class="title">The Dark Forest</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">April 3, 2023</p>
+  <p class="date">March 19, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
 <li>HW4 is due on Friday evening!</li>
-<li>Quiz 2 on Exoplanets and Galaxies next Wednesday
-<ul>
-<li>I bumped this back a day to try to ensure I could have graded galaxy
-data back to you in time</li>
-<li>I’ll see about generating some study materials by the end of
-Thursday</li>
-</ul></li>
-<li>May move HW5 to April 21, or it may just be short</li>
-<li>I’m actively working my way through HW2. Planning to have feedback
-back to you before I head home for the night.</li>
-<li>Will start our unit on dark matter on Wednesday</li>
+<li>Quiz 2 on Exoplanets and Galaxies on Thursday</li>
+<li>Progress on HW2 feedback continues. Last week was a week.</li>
+<li>Will start our final unit on Thursday</li>
 </ul>
 </section>
 <section id="recap" class="slide level2">
@@ -75,9 +67,29 @@ depend on the randomized initial training data</li>
 <section id="discussing-today" class="slide level2">
 <h2>Discussing Today</h2>
 <ul>
-<li>Creating model ensembles</li>
-<li>Understanding why an ensemble might result in better results</li>
+<li>Feature importance</li>
+<li>Combining Models
+<ul>
+<li>When and why might an ensemble of models give better results?</li>
+<li>How can we easily generate new “models”?</li>
+</ul></li>
 <li>Introducing and understanding random forest models</li>
+</ul>
+</section>
+<section id="feature-importance" class="slide level2">
+<h2>Feature Importance</h2>
+<ul>
+<li><p>It can be useful to get an idea of what features are most
+important in constructing the tree</p></li>
+<li><p>Once the model has been fit, you can query the model to get this
+information:</p>
+<pre ><code class="python">tree.feature_importances_</code></pre></li>
+<li><p>This returns a list of relative importance for each feature, in
+the same order as the features you passed into the model
+originally</p></li>
+<li><p>In R you need the <code class="python">vip</code> library</p>
+<pre ><code class="r">library(vip)
+vip(tree_fit)</code></pre></li>
 </ul>
 </section>
 <section id="why-ensembles" class="slide level2">
@@ -98,18 +110,27 @@ close to the correct answer</li>
 <section id="voting-classifiers" class="slide level2">
 <h2>Voting Classifiers</h2>
 <ul>
-<li>You can construct your own simple ensembles</li>
+<li><p>You can construct your own arbitrary ensembles</p></li>
+<li><p>In Python:</p>
+<pre ><code class="python">combo = VotingClassifier( 
+            [ 
+              ('logreg',log_mod), # first model
+              ('dec_tree',tree)   # second model
+            ], 
+            voting='soft')
+combo.fit(training_df[['x','y']])</code></pre></li>
+<li><p>I haven’t yet found an equivalent in R, but I’d imagine it is out
+there</p></li>
 </ul>
-<pre ><code class="python">combo = VotingClassifier(
-    [('logreg',log_mod), ('dec_tree',tree)],
-    voting='soft')
-combo.fit(train[['x','y']], train.type)</code></pre>
+</section>
+<section id="gerrymandering-voting-boundaries" class="slide level2">
+<h2>Gerrymandering (Voting Boundaries)</h2>
 <p><img data-src="../images/python/VotingClassifier.png"
-style="width:80.0%" /></p>
+style="width:100.0%" /></p>
 </section>
 <section id="creating-model-variations" class="slide level2">
 <h2>Creating Model Variations</h2>
-<div class="cols" style="align-items: start">
+<div class="cols" style="align-items: center">
 <div class="col">
 <ul>
 <li>Changing the <code class="python">random_state</code> won’t always
@@ -120,11 +141,11 @@ element</li>
 </ul></li>
 <li>A better way is using <em>bagging</em> (Bootstrap Aggregation)</li>
 <li>In SkLearn as <code class="python">BaggingClassifier</code></li>
-<li>Resamples the data randomly</li>
+<li>In R from <code class="python">baguette</code> library</li>
 </ul>
 </div>
 <div class="col">
-<div class="fig-container" data-file="../images/d3/Bagging.html" data-scroll="no", data-style="width:100%; display:inline;"></div>
+<div class="fig-container" data-file="../images/d3/Bagging.html" data-scroll="no", data-style="width:100%; display:block; height:700px"></div>
 </div>
 </div>
 </section>
@@ -136,7 +157,7 @@ style="width:50.0%" /></p>
 <section id="applications-to-ensembles" class="slide level2">
 <h2>Applications to Ensembles</h2>
 <ul>
-<li>The ability of a ensemble of classifiers to generalize depends on:
+<li>The ability of an ensemble of classifiers to generalize depends on:
 <ul>
 <li>The strength of the individual classifiers (how well does each
 individual model do at predicting a class?)</li>
@@ -145,7 +166,7 @@ individual model do at predicting a class?)</li>
 <li>100 of essentially the same model isn’t going to gain you anything
 in the averaging</li>
 <li>The most distinct the models are in their own unique errors, the
-better the ensemble will work</li>
+better the ensemble will operate</li>
 </ul></li>
 </ul></li>
 <li>Often worth making an individual model worse if it uncorrelates the
@@ -171,25 +192,26 @@ style="width:70.0%" /></p>
 </ul>
 </div>
 <div class="col">
-<div class="fig-container" data-file="../images/d3/Forest.html" data-scroll="no", data-style="width:100%; display:inline;"></div>
+<div class="fig-container" data-file="../images/d3/Forest.html" data-scroll="no", data-style="width:100%; display:inline; height:700px"></div>
 </div>
 </div>
 </section>
 <section id="creating-a-random-forest" class="slide level2">
 <h2>Creating a Random Forest</h2>
 <ul>
-<li><p>Random forest models come from the Scikit-learn
+<li><p>In Python, random forest models come from the Scikit-learn
 <code class="python">ensemble</code> module</p>
 <pre ><code class="python">from sklearn.ensemble import RandomForestClassifier
 
 forest = RandomForestClassifier()</code></pre></li>
+<li><p>In R, they are one of Parsnips available models</p>
+<pre ><code class="r">forest <- rand_forest(mode="classification")</code></pre></li>
 <li><p>Fitting, computing confusion matrices, visualizing classification
-boundaries, etc. procede exactly as they have for other sklearn
-models</p></li>
+boundaries, etc. proceed exactly as they have for other models</p></li>
 </ul>
 </section>
-<section id="tuning-forests" class="slide level2">
-<h2>Tuning Forests</h2>
+<section id="tuning-forests-python" class="slide level2">
+<h2>Tuning Forests (Python)</h2>
 <ul>
 <li>How many trees in the forest?
 <ul>
@@ -207,6 +229,24 @@ this is the default</li>
 <li>If nothing else with model size and training time</li>
 <li>Still <code class="python">max_depth</code>,
 <code class="python">max_leaf_nodes</code>, etc.</li>
+</ul></li>
+</ul>
+</section>
+<section id="tuning-forests-r" class="slide level2">
+<h2>Tuning Forests (R)</h2>
+<ul>
+<li>How many trees in the forest?
+<ul>
+<li><code class="python">trees</code> (default=100)</li>
+</ul></li>
+<li>Main tuning parameter: <code class="python">mtry</code>
+<ul>
+<li>Determines how many features to keep at each split</li>
+</ul></li>
+<li>Tree pre-pruning can still help!
+<ul>
+<li><code class="python">min_n</code> is the minimum number of points
+still in a node to be split further</li>
 </ul></li>
 </ul>
 </section>
@@ -230,7 +270,7 @@ style="width:100.0%" /></p>
 <section id="activity" class="slide level2">
 <h2>Activity</h2>
 <ul>
-<li>Taking the same dataset from before break (<a
+<li>Taking the same dataset from before (<a
 href="../demos/basic_labeling.csv">here!</a>) build a classifier using a
 random forest</li>
 <li>For several sizes of forest and pre-pruning parameters, create a
@@ -390,22 +430,22 @@ potentially myself</li>
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
