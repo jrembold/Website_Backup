@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <title>Modeling Regular Expressions</title>
+  <title>Transforming Regular Expressions</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -16,8 +16,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -31,20 +34,85 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Modeling Regular Expressions</h1>
+  <h1 class="title">Transforming Regular Expressions</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Wednesday, March 22, 2023</p>
+  <p class="date">March 21/April 9, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Homework 9 due Sunday</li>
-<li>Believe it or not, I am actually trying to get caught up on
-grading</li>
-<li>We’ll talk project and end of semester details next week</li>
-<li>In class polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li><p>Homework 8 due Monday after break</p></li>
+<li><p>My grading quest continues. I’m optimistic to get a good chunk
+done over break</p></li>
+<li><p>Reminder about 2 week schedule after Spring break:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Tues</th>
+<th>Thurs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>No class</td>
+<td>Remote Class</td>
+</tr>
+<tr class="even">
+<td>Remote Class</td>
+<td>No Class</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+</section>
+<section id="transforming-data" class="slide level2">
+<h2>Transforming Data</h2>
+<ul>
+<li>Often you will need to move data from one location to another to
+organize it, possibly cleaning it along the way</li>
+<li>There are a variety of automation setups that can aid with this,
+though most all require some scripting knowledge</li>
+<li>For many transformations though, we can accomplish what is necessary
+purely through SQL and some scheduling</li>
+</ul>
+</section>
+<section id="project-transformation-checklist" class="slide level2">
+<h2>Project Transformation Checklist</h2>
+<ul>
+<li>Create a GitHub repository of your own using the template repository
+<a
+href="https://github.com/rembold-data-engineering-master/db_transformation_template">here</a></li>
+<li>Download the created repository to your system</li>
+<li>Edit the <code class="python">clean.sql</code> file to add whatever
+commands you need to move, organize, and clean your data.</li>
+<li>Upload the new <code class="python">clean.sql</code> file back to
+your repository, keeping the filename the same!</li>
+<li>In your project on Railway, click New and then “GitHub Repo”
+<ul>
+<li>You’ll have to agree to let Railway access your account, and you can
+specify only certain repositories</li>
+<li>Select your created repository</li>
+</ul></li>
+<li>Selecting the repository, go to settings and then scroll down to the
+CRON schedule to set up a schedule</li>
+</ul>
+</section>
+<section id="things-to-keep-in-mind" class="slide level2">
+<h2>Things to keep in mind</h2>
+<ul>
+<li><p>You’ll need to create more tables to organize your data. These
+get run a <strong>single</strong> time, so they should not go in
+<code class="python">clean.sql</code>!</p></li>
+<li><p>It can be useful to empty out your original dumping table after
+you organize things each time so that you don’t “double process”
+anything</p></li>
+<li><p>If you are getting duplicate information occassionally through
+your API, it can be useful to understand:</p>
+<pre ><code class="pgsql">INSERT INTO |||new table||| VALUES
+SELECT |||special id, other cols||| FROM |||old table|||
+ON CONFLICT |||column or constraint name|||
+DO NOTHING</code></pre></li>
 </ul>
 <!--
 ## Project Information
@@ -539,12 +607,8 @@ a nice sequence of short problems to test your skills against</li>
 <li>Terms that you want to <strong>not</strong> match</li>
 <li>Capture groups that you’d like to capture</li>
 </ul></li>
-<li>In the following pairs, see how many you can figure out in the next
-20 minutes:
-<ul>
-<li>Alaina and Aaryan, Miles and Jill, Phil and Oscar, Micah and
-Frances</li>
-</ul></li>
+<li>Working with your neighbors, see how many you can figure out in the
+next 20 minutes</li>
 </ul>
 </section>
 <section id="back-to-sql" class="slide level2">
@@ -569,10 +633,20 @@ WHERE colname ~ '[a-z]*\s\d{2}';</code></pre>
 <section id="extracting-data" class="slide level2">
 <h2>Extracting Data</h2>
 <ul>
-<li>Another hugely common use of regex is to extract only the data you
-want from a much larger string</li>
-<li>This can be particularly useful when cleaning data or constructing
-useful database tables</li>
+<li><p>Another hugely common use of regex is to extract only the data
+you want from a much larger string</p></li>
+<li><p>This can be particularly useful when cleaning data or
+constructing useful database tables</p></li>
+<li><p>Since PostgreSQL 15, you have had a perfect tool to accomplish
+this easily: <code class="python">regexp_substr</code></p>
+<pre ><code class="pgsql">SELECT
+  regexp_substr('today is March 21, 2024', '\d{4}');</code></pre></li>
+</ul>
+</section>
+<section id="further-extracting-data" class="slide level2">
+<h2>Further Extracting Data</h2>
+<ul>
+<li>What if you have multiple capture groups though?</li>
 <li><code class="python">regexp_match(str, regex)</code> returns the
 first matching instance in the string
 <ul>
@@ -581,9 +655,9 @@ may have included in your regex, or the entire match if there are no
 capture groups</li>
 <li>Output is returned as an array, to allow for potentially multiple
 capture groups</li>
-<li>If you just have one capture group and don’t want it in an array,
-index it out using <code class="python">[1]</code> at the end after
-wrapping entire expression in ()</li>
+<li>Index it out specific values using <code class="python">[N]</code>
+at the end after wrapping entire expression in ()</li>
+<li>Can also <code class="python">UNNEST</code></li>
 </ul></li>
 </ul>
 <pre ><code class="pgsql" style="font-size:.9em">SELECT (regexp_match('today is March 15, 2022', '\d{4}'))[1];</code></pre>
@@ -621,13 +695,6 @@ name</li>
 inches (in <code class="python">1 1/4</code> form)</li>
 <li>If the above was easy and you finish quickly, create new columns to
 hold decimal equivalents of the width and height</li>
-</ul></li>
-<li>New Pairs!
-<ul>
-<li>Frances and Alaina</li>
-<li>Phil and Micah</li>
-<li>Miles and Aaryan</li>
-<li>Jill and Oscar</li>
 </ul></li>
 </ul>
 </section>
@@ -787,8 +854,6 @@ new partner, see if you can use the data to answer the following:</p>
 <li>In what chapter does the word “mushroom” appear the most? How many
 times does it appear?</li>
 </ul>
-<p>Partners: Alaina and Aaryan, Micah and Miles, Phil and Jill, Frances
-and Oscar</p>
 </section>
     </div>
   </div>
@@ -807,6 +872,7 @@ and Oscar</p>
   <script src="../html_srcs/revealjs/../other_plugins/reveal.js-d3/reveald3.js"></script>
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
 
   <script>
 
@@ -897,7 +963,7 @@ and Oscar</p>
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
-        height: 1200,
+        height: 1080,
         // The display mode that will be used to show slides
         display: 'block',
 		math: {
@@ -924,6 +990,11 @@ and Oscar</p>
 			tryFallbackURL: true, // true/false, default false
 			disableCheckFile: false, //default false
 		 },
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
 
         // reveal.js plugins
         plugins: [
@@ -964,6 +1035,18 @@ and Oscar</p>
             //{ src: "../html_srcs/revealjs/plugin/d3/reveald3.js" },
 		],
       });
+    </script>
+    <script>
+    // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+      function remove_bars() {
+        var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+        console.log(pseudoBlocks);
+        for ( var i = 0; i < pseudoBlocks.length; i++) {
+          pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+        }
+        }
+      // omg this is even more hacky now, but I need this to run after hljs has done its thing
+      setTimeout(remove_bars, 100);
     </script>
     </body>
 </html>
