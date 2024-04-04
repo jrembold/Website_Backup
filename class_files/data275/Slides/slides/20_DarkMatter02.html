@@ -17,8 +17,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -35,27 +38,21 @@
 <section id="title-slide">
   <h1 class="title">Fitting</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">April 10, 2023</p>
+  <p class="date">April 4, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Due to the fact that both the next sections were going to focus
-analytically on the process of fitting models to data, I’m going to
-combine their homework assignments.
+<li>HW5 should hopefully be coming out over the coming weekend
 <ul>
-<li>The last homework assignment (HW5) will thus be due April 26</li>
-<li>This will leave the last few days of class for project work</li>
-<li>I’m working to have it up by the end of the week</li>
+<li>Things have been a bit slowed by my travel</li>
 </ul></li>
-<li>HW4 Partner Reflection! (<a
-href="https://docs.google.com/forms/d/e/1FAIpQLSfvLl2EobtSOSnv2SBEeqNQvc7IklGVXmi5__iK3DQIrexx8w/viewform?usp=sf_link">Here!</a>)</li>
-<li>Quiz 2 on Exoplanets and Galaxies on Wednesday
-<ul>
-<li>Study materials have been out! Look them over!</li>
-</ul></li>
-<li>I’m working through HW3 feedback</li>
+<li>I almost got through HW2 feedback before I left, but not quite. I’m
+so sorry.</li>
+<li>If my current connection does not allow a decent stream, then I’ll
+make a recording and post it.</li>
+<li>On Tuesday we will have another remote lecture</li>
 </ul>
 </section>
 <section id="recap" class="slide level2">
@@ -88,10 +85,16 @@ thus leading to conjectures about dark matter</li>
 model</li>
 <li>In science, and in astronomy in particular, such models are usually
 derived from fundamental first principles, and thus those constants are
-linked to physical properties or laws</li>
-<li>Individual fits themselves are often still not that important:
-rather they tend to contribute to a overall story that the data is
-telling</li>
+linked to physical properties or laws
+<ul>
+<li>The <code class="python">T</code> when we fit Planck’s Law, for
+instance</li>
+</ul></li>
+<li>Individual fits themselves may still not be that important: rather,
+they can contribute to an overall story that the data is telling
+<ul>
+<li>“Hotter things emit more light and bluer light”</li>
+</ul></li>
 </ul>
 </section>
 <section id="fitting-neglect" class="slide level2">
@@ -100,15 +103,21 @@ telling</li>
 <li>In the fitting that we have done so far this semester, we have been
 leaving some important things out
 <ul>
-<li>What role does the known error or variance play in our input
+<li>What role does any known error or variance play in our fitting of
 data?</li>
 <li>How confident should we be in our fit parameters? That is, what
 variance should we expect in the fit parameters?</li>
 </ul></li>
+<li>All of these things can <em>sometimes</em> be estimated easily from
+current techniques, and can <em>sometimes</em> have easy analytic
+results.
+<ul>
+<li>But what about in more complicated situations?</li>
+</ul></li>
 </ul>
 </section>
-<section id="solving-integrals" class="slide level2">
-<h2>Solving Integrals</h2>
+<section id="a-seeming-aside-solving-integrals" class="slide level2">
+<h2>A seeming aside: Solving Integrals</h2>
 <ul>
 <li>Suppose you want to find the area under a function <span
 class="math inline">\(f(x)\)</span> between <span
@@ -132,14 +141,15 @@ get an output, without seeing what happens in the middle?</li>
 <li>When posed with an intractable integral, most folks these days look
 to:
 <ul>
-<li>Wolfram Alpha, or some other computation engine, for aid</li>
+<li>Wolfram Alpha, or some other computation engine, for aid with
+analytic integration</li>
 <li>Numerical techniques</li>
 </ul></li>
 <li>Numerical techniques rely on breaking the integral up into simple
 approximations
 <ul>
-<li>The key here is that they are approximations (midpoint rule,
-trapezoid rule, simpson’s rule, etc.)</li>
+<li>The key here is that they are always approximations (midpoint rule,
+trapezoid rule, Simpson’s rule, etc.)</li>
 <li>As approximations, there will always be some inherent error
 associated with using these methods</li>
 </ul></li>
@@ -155,7 +165,7 @@ parameters? <span class="math display">\[ f(x,y,z,a,b,c)
 \quad\rightarrow\quad \int\int\int\int\int\int
 f(x,y,z,a,b,c)\,dx\,dy\,dz\,da\,db\,dc \]</span></li>
 <li>The trapezoid rule is a decent approximation method, but if you work
-it out, it’s error scales as: <span class="math display">\[ \epsilon
+it out, its error scales as: <span class="math display">\[ \epsilon
 \propto \frac{1}{N^{2/d}} \]</span> where <span
 class="math inline">\(N\)</span> is the number of sample points (how
 skinny are the rectangles) and <span class="math inline">\(d\)</span>
@@ -203,9 +213,9 @@ point, this will be the height of your rectangle</li>
 </ul></li>
 <li>Some points will overestimate the area, and some will underestimate
 the area</li>
-<li>The amazing aspect is that the <strong>average</strong> of the point
-areas <strong>will</strong> closely approximate the actual area under
-the curve</li>
+<li>The amazing aspect is that given enough points, the
+<strong>average</strong> of the point areas <strong>will</strong>
+closely approximate the actual area under the curve</li>
 </ul>
 </section>
 <section id="example" class="slide level2">
@@ -213,37 +223,191 @@ the curve</li>
 <p>Suppose we wanted to evaluate the area under the curve <span
 class="math display">\[ f(x) = -\frac{4}{5}x + 4 \]</span> from <span
 class="math inline">\(x=0\)</span> to <span
-class="math inline">\(x=5\)</span>, using Monte Carlo methods.</p>
+class="math inline">\(x=5\)</span>, using Monte Carlo methods. This
+describes a triangle with height 4 and width 5, and thus should have an
+area of 20. Is that what we get?</p>
+</section>
+<section id="example-2" class="slide level2">
+<h2>Example 2</h2>
+<p>What if we slightly complicate this function by looking instead at a
+piece-wise function: <span class="math display">\[
+f(x) = \begin{cases}
+0 &amp; x &lt; 3; \\
+-\frac{4}{5}x + 4 &amp; 3 \leq x \leq 5; \\
+0 &amp; x &gt; 5 \end{cases}
+\]</span> This now describes a triangle with height of 1.6 and width of
+2, thus having an area of 1.6. Does the Monte Carlo method still
+work?</p>
+</section>
+<section id="probability-distributions" class="slide level2">
+<h2>Probability Distributions</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>A <em>probability distribution</em> describes the likelihood of
+selecting a particular value over a range of values.</li>
+<li>The area under the probability distribution <strong>must</strong>
+sum to 1, so the odds add up.</li>
+<li>In our current examples, any number between 0 and 5 was
+<em>equally</em> likely, which would have led to the probability
+distribution to the right.</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/python/constant_pdf.png" /></p>
+</div>
+</div>
 </section>
 <section id="importance" class="slide level2">
 <h2>Importance</h2>
 <ul>
-<li>For some functions, all points might not be equally
-interesting.</li>
+<li>For some functions, all points might not be equally interesting, and
+thus a constant probability distribution makes no sense.</li>
 <li>We instead might want to weigh certain regions higher in our random
 selection, as that is where the interesting things are happening</li>
 <li>If we do so, we need to recognize that in computing our areas, we
-are now doing <span class="math display">\[ \frac{f(x_k)}{p(x_k)}
+are now doing <span class="math display">\[ A = \frac{f(x_k)}{p(x_k)}
 \]</span> where <span class="math inline">\(p(x_k)\)</span> is the
 probability of selecting a particular <span
 class="math inline">\(x\)</span>
 <ul>
 <li>This is the same as what we were doing before, since for a uniform
-sampling, the probability weights looked like <span
-class="math inline">\(\tfrac{1}{b-a}\)</span></li>
+sampling, the probability weights looked like 0.2, and 1/0.2 is 5.</li>
 </ul></li>
 </ul>
 </section>
-<section id="example-2" class="slide level2">
-<h2>Example 2</h2>
-<p>Now suppose we wanted to evaluate the area under the piece-wise
-function: <span class="math display">\[ f(x) = \begin{cases}0 &amp; x
-\leq 4;\\ 5x-20 &amp; 4 &lt; x \leq 5;\\ -5x+30 &amp; 5 &lt; x \leq 6;\\
-0 &amp; x &gt; 6;\end{cases} \]</span> from <span
-class="math inline">\(x=0\)</span> to <span
-class="math inline">\(x=10\)</span>, using Monte Carlo methods. Check
-into both uniform sampling and sampling targeted about the central
-peak.</p>
+<section id="selecting-from-a-probability-distribution"
+class="slide level2">
+<h2>Selecting from a probability distribution</h2>
+<ul>
+<li><p>Trying to select from a continuous probability distribution
+discretely is not ideal, but that is all that is immediately available
+through Numpy</p></li>
+<li><p>For a better option, roll your own selector:</p>
+<pre ><code class="python" style="line-height:1.2em">def sample_from_prob_dist(pdf, lower, upper, num):
+    samples = []
+    while len(samples) < num:
+        x = np.random.uniform(lower, upper)
+        p = pdf(x)
+        if np.random.uniform(0,1) <= p:
+            samples.append(x)
+    return np.array(samples)</code></pre></li>
+</ul>
+</section>
+<section id="example-3" class="slide level2">
+<h2>Example 3</h2>
+<p>Now suppose we wanted to evaluate the area under the same piece-wise
+function as earlier: <span class="math display">\[
+f(x) = \begin{cases}
+0 &amp; x &lt; 3; \\
+-\frac{4}{5}x + 4 &amp; 3 \leq x \leq 5; \\
+0 &amp; x &gt; 5 \end{cases}
+\]</span> But this time choosing points based on two different
+probability distributions: <span class="math display">\[
+{p(x) = \begin{cases}
+0 &amp; x &lt; 3; \\
+0.5 &amp; 3 \leq x \leq 5; \\
+0 &amp; x &gt; 5 \end{cases}}\qquad
+{p(x) = \begin{cases}
+0 &amp; x &lt; 3; \\
+\frac{1}{2}\left(x - 3\right) &amp; 3 \leq x \leq 5; \\
+0 &amp; x &gt; 5 \end{cases}}
+\]</span></p>
+</section>
+<section id="an-unknown-pdf" class="slide level2">
+<h2>An Unknown PDF</h2>
+<ul>
+<li>What if we don’t know or have a PDF to work with?</li>
+<li>The <em>perfect</em> PDF would look just like the function we are
+trying to integrate, but scaled to have area = 1
+<ul>
+<li>But if we could easily calculate the area, we wouldn’t be doing this
+integration in the first place</li>
+</ul></li>
+<li>Instead we will construct a Markov Chain to semi-randomly “walk”
+it’s way around our initial function
+<ul>
+<li>Goal is to have it spend more of its time near “higher” parts of the
+function</li>
+<li>Then we’ll look at the distribution of where it spent time</li>
+</ul></li>
+</ul>
+</section>
+<section id="markov-chains" class="slide level2">
+<h2>Markov Chains</h2>
+<ul>
+<li>A Markov chain is a model that represents a sequence of events where
+the probability of the next event is determined only by the current
+event</li>
+<li>In our case, the point we are currently “at” will make it likely
+that our next point is nearby</li>
+<li>Our process will then follow that of Metropolis-Hastings and is
+shown below. Note that you must keep track of the visited points along
+the way!
+<ul>
+<li>Choose a starting point</li>
+<li>For some number of iterations:
+<ul>
+<li>Randomly choose a nearby point</li>
+<li>Compare that point to your current point, to see if it would move
+you “higher” up the function</li>
+<li>If above a random threshold, move to that point, otherwise stay
+where you are at</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="choosing-a-nearby-point" class="slide level2">
+<h2>Choosing a Nearby Point</h2>
+<ul>
+<li><p>Randomly choosing a nearby point inherently pulls from a
+probability distribution centered on the current point</p></li>
+<li><p>Most frequently used is a Gaussian probability distribution</p>
+<ul>
+<li>Centered (mean) on the current point</li>
+<li>Spread (std) can be tuned, but 1 is a reasonable starting value</li>
+</ul>
+<pre ><code class="python">np.random.normal(loc=0, spread=1)</code></pre></li>
+<li><p>Working in higher dimensions? A multi-variate Gaussian will still
+work!</p>
+<pre ><code class="python">np.random.multivariate_normal(mean=VEC, cov=MAT)</code></pre></li>
+</ul>
+</section>
+<section id="move-onward-or-stay" class="slide level2">
+<h2>Move onward or stay?</h2>
+<ul>
+<li>Once you have the new point candidate, you need to decide whether to
+keep it or your current point</li>
+<li>In Metropolis-Hastings, you:
+<ul>
+<li>Take the ratio of your sampled function evaluated at the new point
+over the sampled function evaluated at the current <span
+class="math display">\[ \frac{f(x^\prime)}{f(x)} \]</span> where <span
+class="math inline">\(x\)</span> is your current position and <span
+class="math inline">\(x^\prime\)</span> your proposed new position</li>
+<li>Compare that ratio to a randomly generated number between 0 and 1
+<ul>
+<li>If bigger, keep the new position, making it your new current</li>
+<li>If smaller, keep the old position (but still add it to your visited
+list again)</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="backing-out-a-pdf" class="slide level2">
+<h2>Backing out a PDF</h2>
+<ul>
+<li>The history of the random walk contains information about where the
+walker spent the most time
+<ul>
+<li>Due to how we constructed the walk, this <strong>should</strong> be
+near the maximum portions of our function</li>
+</ul></li>
+<li>Creating a histogram or KDE plot will allow us to visualize the
+probability distribution.</li>
+<li>We could use the histogram information to directly sample from the
+distribution</li>
+</ul>
 </section>
     </div>
   </div>
@@ -386,22 +550,22 @@ peak.</p>
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
