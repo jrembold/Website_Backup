@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <title>Automation and PostGIS</title>
+  <title>Connections and PostGIS</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -16,8 +16,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -31,40 +34,26 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Automation and PostGIS</h1>
+  <h1 class="title">Connections and PostGIS</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Wednesday, April 5, 2023</p>
+  <p class="date">April 4/17, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Homework 9 due on Sunday (last one!)
+<li>Last HW coming out!</li>
+<li>Progress was made grading over break!</li>
+<li>Then just the project to work on
 <ul>
-<li>My progress grading for this class didn’t go as well as I’d hoped
-over break, but I’m making progress</li>
+<li>Make sure your scraper is running
+<ul>
+<li>If you still aren’t verified, just give Railway a credit card and it
+should verify you. I’m so sorry for that lengthy process (and I’m very
+frustrated with Railway)</li>
 </ul></li>
-<li>Other news if you don’t check Discord:
-<ul>
-<li>Scrapped the oral final (points to be spread across the project and
-homework)</li>
-<li>Project presentations will be on the last week of class (April 19th)
-<ul>
-<li>Presentation details and rubric coming soon</li>
-</ul></li>
-</ul></li>
-<li>Should leave you with nothing to work on but the project after
-Sunday</li>
-</ul>
-</section>
-<section id="useful-project-ideas" class="slide level2">
-<h2>Useful Project Ideas</h2>
-<ul>
-<li>There are a few ideas I want to touch on at the start today that
-should prove useful to your project
-<ul>
-<li>Automating cleaning / transforming tasks</li>
-<li>Connecting databases</li>
+<li>See about setting up the cleaning automation in the coming week
+(seen last week or in separate tutorial video)</li>
 </ul></li>
 </ul>
 </section>
@@ -73,20 +62,19 @@ should prove useful to your project
 <ul>
 <li>Postgres has a few ways you can access tables from one database
 while in another</li>
-<li>Both are extensions that you would need to activate
+<li>Both are extensions that you would <strong>need to activate</strong>
 <ul>
 <li>dblink: Simple for one-off data access</li>
 <li>postgres_fdw: Better if you need a more permanent connection</li>
 </ul></li>
-<li>For your purposes, dblink will probably suffice, so that is what I’m
-going to cover</li>
+<li>Both can be useful, so I’ll try to touch on each</li>
 </ul>
 </section>
 <section id="the-connection" class="slide level2">
 <h2>The Connection</h2>
 <ul>
-<li><p>Accessing data using <code class="python">dblink</code> is a two
-step process: connect and then query</p></li>
+<li><p>Accessing data using <code class="python">dblink</code> is a
+two-step process: connect and then query</p></li>
 <li><p>To connect, use <code class="python">dblink_connect</code>
 (shocking!)</p>
 <pre ><code class="pgsql">SELECT dblink_connect('connection_string')</code></pre></li>
@@ -125,54 +113,63 @@ remote table.</p>
 );</code></pre></li>
 </ul>
 </section>
-<section id="automating-transforms" class="slide level2">
-<h2>Automating Transforms</h2>
+<section id="foreign-data-wrapper" class="slide level2">
+<h2>Foreign Data Wrapper</h2>
 <ul>
-<li>Frequently you can write SQL statements that you’d like to be run on
-an automatic or periodic basis</li>
-<li>One method is to use CRON, which can be paired with a Docker
-container for remote deployment</li>
-<li>At the moment, there is an issue with the
-<code class="python">crontab</code> file not detecting environment
-variables
+<li>Using the <code class="python">postgres_fdw</code> extension is a
+bit more of a setup, but makes working with remote tables a breeze</li>
+<li>Multistep process:
 <ul>
-<li>Can still “hardcode” in your connection URL</li>
-<li>I’m hoping to get a fix worked out though</li>
+<li>Activate the extension</li>
+<li>Create a foreign server object, representing the remote database
+server</li>
+<li>Create a user wrapping which allows that user to access that foreign
+server</li>
+<li>Create the foreign tables</li>
 </ul></li>
 </ul>
 </section>
-<section id="basic-usage" class="slide level2">
-<h2>Basic Usage</h2>
+<section id="the-foreign-server-objects" class="slide level2">
+<h2>The Foreign Server Objects</h2>
 <ul>
-<li><p>You <em>will</em> need to build your own image, but it can be
-based off my starting point</p></li>
-<li><p>All you need to add to the <code class="python">Dockerfile</code>
-would be the commands to copy over the necessary script(s) and
-crontab</p>
-<pre ><code >FROM jrembold/cronsql
-WORKDIR /app
-COPY mycrons .
-COPY script1 .
-COPY script2 .</code></pre></li>
-<li><p>Where the scripts should just be <code class="python">.sql</code>
-files with valid SQL that you have tested</p></li>
+<li><p>You first need to define a foreign server</p>
+<pre ><code class="pgsql">CREATE SERVER |||server_name|||
+FOREIGN DATA WRAPPER postgres_fdw
+OPTIONS (|||server config settings|||)</code></pre></li>
+<li><p>Server name can be whatever you like, provided it is
+unique</p></li>
+<li><p>Server settings are a comma delimited, space separated sequence
+of host, port, dbname, etc</p></li>
 </ul>
 </section>
-<section id="mycron" class="slide level2">
-<h2>Mycron</h2>
+<section id="the-user-wrapper" class="slide level2">
+<h2>The User Wrapper</h2>
 <ul>
-<li><p>The <code class="python">mycron</code> file lists all your cron
-tasks, their schedule, and what should happen</p>
-<pre ><code class="text" style="font-size:.9em">* * * * * psql -h localhost -d analysis -f myscript.sql</code></pre>
+<li><p>You essentially need to give your user permission to access the
+remote server</p>
+<pre ><code class="pgsql">CREATE USER MAPPING FOR CURRENT_USER
+SERVER |||server_name|||
+OPTIONS (|||user options|||)</code></pre></li>
+<li><p>Server name will be the name you just used for the created
+server</p></li>
+<li><p>User options should include the corresponding <em>remote</em>
+user info like username and password</p></li>
+</ul>
+</section>
+<section id="bring-on-the-tables" class="slide level2">
+<h2>Bring On the Tables!</h2>
 <ul>
-<li>The first part is the schedule, which will work just like it did
-with the scraper</li>
-<li>After that is the <code class="python">psql</code> command, to
-connect to your database</li>
-<li>Finally, you need to add the
-<code class="python">-f <scriptname></code> for which script you want to
-be run on that schedule</li>
-</ul></li>
+<li><p>Last but not least, you can import in the tables you
+want</p></li>
+<li><p>Can do one at a time with
+<code class="python">CREATE FOREIGN TABLE</code>, but I far prefer
+<code class="python">IMPORT FOREIGN SCHEMA</code></p>
+<pre ><code class="pgsql">IMPORT FOREIGN SCHEMA |||schema name|||
+FROM SERVER |||server_name|||
+INTO |||local schema name|||</code></pre></li>
+<li><p>Can also include <code class="python">LIMIT TO</code> or
+<code class="python">EXCEPT</code> followed by a list of table names to
+fine-tune which tables are imported</p></li>
 </ul>
 <!--
 ## Poster Sessions
@@ -303,7 +300,7 @@ extensions:</p>
 <section id="geometries" class="slide level2">
 <h2>Geometries</h2>
 <figure>
-<img data-src="../images/postgis_types.png"
+<img data-src="../images/postgis_types.png" style="width:65.0%"
 alt="PostGIS introduces geometries to describe various features" />
 <figcaption aria-hidden="true">PostGIS introduces geometries to describe
 various features</figcaption>
@@ -315,7 +312,7 @@ various features</figcaption>
 <li>Most of the new geometries will be constructed by passing in a
 well-known text string (or WKT)</li>
 </ul>
-<div style="font-size:.8em">
+<div style="font-size:.65em">
 <table>
 <colgroup>
 <col style="width: 10%" />
@@ -367,6 +364,7 @@ grouping polygons</td>
 </section>
 <section id="coordinate-systems" class="slide level2">
 <h2>Coordinate Systems</h2>
+<div style="font-size:.9em">
 <ul>
 <li>To be able to relate and compare locations to one another, a
 consistent coordinate system needs to be used
@@ -387,9 +385,11 @@ check its coordinate system</strong></li>
 <code class="python">spatial_ref_sys</code> table, so you can query to
 find necessary SRIDs</li>
 </ul>
+</div>
 </section>
 <section id="new-data-types" class="slide level2">
 <h2>New Data Types</h2>
+<div style="font-size:.9em">
 <ul>
 <li>While PostGIS introduces many new spatial geometries, only a few new
 data types are added to Postgres.</li>
@@ -413,11 +413,12 @@ system</li>
 <li>Both types can hold all of the spatial geometries mentioned
 earlier</li>
 </ul>
+</div>
 </section>
 <section id="creating-spatial-types" class="slide level2">
 <h2>Creating Spatial Types</h2>
 <ul>
-<li>Two main methods of creating geography or geometry types:
+<li><p>Two main methods of creating geography or geometry types:</p>
 <ul>
 <li><code class="python">ST_GeomFromText(WKT, SRID)</code> creates a
 geometry object to hold the spatial object given by the WKT with the
@@ -432,15 +433,16 @@ optional given SRID
 <li>If no SRID is given, WGS 84 (SRID 4326) is the assumed default</li>
 </ul></li>
 </ul></li>
-<li>If you look at the output of one of these data types, it is
-<strong>not</strong> human-readable</li>
+<li><p>If you look at the output of one of these data types, it is
+<strong>not</strong> human-readable</p>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT ST_GeogFromText('POINT(-75 42)');
+>>> 0101000020E61000000000000000C052400000000000004540
+SELECT ST_GeomFromText('POINT(-75 42)', 4326);
+>>> 0101000020E61000000000000000C052C00000000000004540</code></pre></li>
 </ul>
-<pre ><code class="pgsql" style="font-size:1em">SELECT ST_GeogFromText('POINT(-75 42)');
->> 0101000020E61000000000000000C052C00000000000004540
-SELECT ST_GeomFromText('POINT(-75 42)', 4326);</code></pre>
 </section>
-<section id="making-spatial-objects" class="slide level2">
-<h2>Making Spatial Objects</h2>
+<section id="making-spatial-objects-pt1" class="slide level2">
+<h2>Making Spatial Objects (Pt1)</h2>
 <ul>
 <li>Using a WKT to create spatial objects can be clunky if you already
 have latitude and longitude values in your table as
@@ -457,12 +459,24 @@ well.</li>
 <li><code class="python">ST_MakePolygon(geometry_linestring, [cutout_linestring])</code>
 will create a geometric polygon using the provided linestring with
 optional cutouts</li>
-<li>These can have an SRID attached to them and be cast to geography
-data types as desired
+</ul></li>
+</ul>
+</section>
+<section id="making-spatial-objects-pt2" class="slide level2">
+<h2>Making Spatial Objects (Pt2)</h2>
+<ul>
+<li>Since these all by default make <code class="python">geometry</code>
+type objects with no SRID, it can be desirable to set or convert as
+needed</li>
+<li>Can have an SRID attached to them:
 <ul>
 <li><code class="python">ST_SetSRID(object, SRID)</code> will attach the
 given SRID metadata to the object</li>
 </ul></li>
+<li>Can be converted:
+<ul>
+<li><code class="python">object::geography</code> will convert to the
+new type (maintaining any attached SRID</li>
 </ul></li>
 </ul>
 <pre ><code class="pgsql" style="font-size:1em">SELECT ST_SetSRID(ST_MakePoint(75,45), 4326);</code></pre>
@@ -509,14 +523,16 @@ geometry</li>
 <section id="your-turn" class="slide level2">
 <h2>Your Turn!</h2>
 <ul>
-<li>With your neighbors, import in the data <a
+<li>With your digital neighbors, import in the data <a
 href="../activity_data/nwcolleges.sql">here</a>, which is a collection
 of the small liberal art NW colleges along with their latitude and
 longitudes. See if you can add a new column with the necessary data
-type, add an index, and then answer the following questions:
+type, add an index, populate the column with point type objects, and
+then answer the following questions:
 <ul>
 <li>What other schools are within 100km of Willamette?</li>
-<li>What two schools are the closest together?</li>
+<li>What two schools are the closest together? Which two are the
+furthest apart?</li>
 </ul></li>
 </ul>
 </section>
@@ -543,6 +559,7 @@ table within our database</li>
 </section>
 <section id="shp2pgsql" class="slide level2">
 <h2>shp2pgsql</h2>
+<div style="font-size:.9em">
 <ul>
 <li>PostGIS comes with a command line utility called
 <code class="python">shp2pgsql</code> on all operating systems
@@ -566,6 +583,7 @@ needed (sometimes necessary for location names)</li>
 </ul>
 <code class="python">shp2pgsql -I -s SRID -W ENCODING SHAPEFILE.SHP TABLE_NAME</code></li>
 </ul>
+</div>
 </section>
 <section id="bringing-into-pgsql" class="slide level2">
 <h2>Bringing Into PGSQL</h2>
@@ -597,6 +615,22 @@ copy into another location</li>
 <pre ><code class="pgsql">SELECT ST_AsText(geom)
 FROM table_name
 LIMIT 1;</code></pre>
+</section>
+<section id="visualization" class="slide level2">
+<h2>Visualization</h2>
+<ul>
+<li>In general, you would need to take your information to another
+program for visualization purposes</li>
+<li>For a quick view though, <a
+href="https://clydedacruz.github.io/openstreetmap-wkt-playground/">this</a>
+site will let you enter in a WKT which it will then display</li>
+<li>Can be used in conjunction with
+<code class="python">ST_AsText</code> to grab results for quick
+visualization</li>
+<li>You can use <code class="python">ST_Collect</code> to aggregate an
+entire column of singular geometries into one Multi-geometry object for
+each of representation</li>
+</ul>
 </section>
 <section id="postgis-polygon-functions" class="slide level2">
 <h2>PostGIS Polygon Functions</h2>
@@ -653,6 +687,7 @@ the intersection between two polygons</li>
   <script src="../html_srcs/revealjs/../other_plugins/reveal.js-d3/reveald3.js"></script>
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
 
   <script>
 
@@ -743,7 +778,7 @@ the intersection between two polygons</li>
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
-        height: 1200,
+        height: 1080,
         // The display mode that will be used to show slides
         display: 'block',
 		math: {
@@ -770,6 +805,11 @@ the intersection between two polygons</li>
 			tryFallbackURL: true, // true/false, default false
 			disableCheckFile: false, //default false
 		 },
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
 
         // reveal.js plugins
         plugins: [
@@ -810,6 +850,18 @@ the intersection between two polygons</li>
             //{ src: "../html_srcs/revealjs/plugin/d3/reveald3.js" },
 		],
       });
+    </script>
+    <script>
+    // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+      function remove_bars() {
+        var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+        console.log(pseudoBlocks);
+        for ( var i = 0; i < pseudoBlocks.length; i++) {
+          pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+        }
+        }
+      // omg this is even more hacky now, but I need this to run after hljs has done its thing
+      setTimeout(remove_bars, 100);
     </script>
     </body>
 </html>
