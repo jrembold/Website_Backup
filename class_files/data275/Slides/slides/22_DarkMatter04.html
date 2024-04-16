@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-04-17">
+  <meta name="dcterms.date" content="2024-04-16">
   <title>Likelihood Models</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -35,7 +35,7 @@
 <section id="title-slide">
   <h1 class="title">Likelihood Models</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">April 17, 2023</p>
+  <p class="date">April 16, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -43,16 +43,16 @@
 <ul>
 <li>Only 1 more homework assignment!
 <ul>
-<li>I worked on one of the questions for over 8 hours yesterday, sorry
-it isn’t quite up</li>
 <li>The last homework assignment (HW5) will thus be due April 26</li>
 </ul></li>
-<li>HW4 Partner Reflection! (<a
-href="https://docs.google.com/forms/d/e/1FAIpQLSfvLl2EobtSOSnv2SBEeqNQvc7IklGVXmi5__iK3DQIrexx8w/viewform?usp=sf_link">Here!</a>)</li>
-<li>Still a few people to take the quiz: Sorry I can’t hand them back
-today</li>
-<li>No class on Wednesday! Go to talks (if you aren’t already giving
-them)!</li>
+<li>Quiz 2 handed back!</li>
+<li>HW2 feedback continues</li>
+<li>Poll will be going out about partner preferences on final group
+project
+<ul>
+<li>Please respond promptly, as I want to get groups made by
+Thursday</li>
+</ul></li>
 </ul>
 </section>
 <section id="recap" class="slide level2">
@@ -652,7 +652,7 @@ consequence to us</li>
 <h2>Logging</h2>
 <ul>
 <li>We can get a pretty huge dynamic range when computing the values of
-the left-hand side</li>
+the right-hand side</li>
 <li>Recall that we compute these for each step to see if we take the
 random step or not</li>
 <li>To avoid computational overflow/underflow errors, it can be
@@ -671,12 +671,12 @@ class="math display">\[\frac{f(\theta^\prime)}{f(\theta)} &gt; r
 always (0 in ln-space)</p></li>
 <li><p>If bounded, check the parameters and return 1 (0 in ln-space) if
 within the bounds or <span class="math inline">\(-\infty\)</span>
-otherwise (<code class="python">-np.inf</code>)</p></li>
-<li><p>Example:</p>
-<pre ><code class="python">def ln_prior(params):
-  m,b = params
-  if m < 0:
-    return -np.inf
+otherwise (<code class="python">-np.inf</code> in Python,
+<code class="python">-Inf</code> in R)</p></li>
+<li><p>Pseudo-example:</p>
+<pre ><code class="mypython">|||function ln_prior(|||params|||)|||
+  if |||illegal condition|||
+    return -|||infinity|||
   return 0</code></pre></li>
 </ul>
 </section>
@@ -696,32 +696,43 @@ values with more error have less weight</li>
 y_{i,\theta})^2}{\sigma_{i,D}^2} \]</span></li>
 </ul>
 </section>
-<section id="the-right-hand-side-in-code" class="slide level2">
-<h2>The Right-hand Side (In Code)</h2>
+<section id="the-likelihood-in-code" class="slide level2">
+<h2>The Likelihood (In Code)</h2>
 <ul>
 <li><p>The ln-likelihood then could look like:</p>
-<pre ><code class="python">def ln_likelihood(params, data):
+<pre ><code class="mypython" style="font-size:.9em">|||function ln_likelihood(|||params, data|||)|||
   m,b = params
-  x,y,errY = data
-  y_model = m * x + b
-  return - 0.5 * np.sum((y - y_model)**2/errY**2)</code></pre></li>
-<li><p>And all together:</p>
-<pre ><code class="python">def ln_pdf(params, data):
-  p = ln_prior(params)
-  if p == -np.inf:
-    return -np.inf
+  x,y,errY = data # extract data
+  y_model = m * x + b # compute model result
+  return - 0.5 * |||sum(|||
+    (y - y_model) ** 2 / errY ** 2
+  |||)|||</code></pre></li>
+</ul>
+</section>
+<section id="all-together-now" class="slide level2">
+<h2>All together now…</h2>
+<ul>
+<li><p>Bring both pieces together (since we don’t care about <span
+class="math inline">\(P(D)\)</span>):</p>
+<pre ><code class="mypython" style="font-size:.9em">|||function ln_pdf(|||params, data|||)|||
+  p = |||call ln_prior|||
+  if p == -|||infinity||| # no sense continuing
+    return -|||infinity|||
   return p + ln_likelihood(params, data)</code></pre></li>
 </ul>
 </section>
-<section id="example" class="slide level2">
-<h2>Example</h2>
+<section id="extended-example" class="slide level2">
+<h2>Extended Example</h2>
 <div class="cols">
 <div class="col">
 <ul>
 <li><p>Suppose we want to evaluate the uncertainties in our parameters
 for a fit to the data to the right.</p></li>
 <li><p>Our model will look something like: <span
-class="math display">\[y = ax^2 + bx \]</span></p></li>
+class="math display">\[y = ax^2 + bx\]</span></p></li>
+<li><p><strong>MCMC does not tell you about the <em>quality</em> of a
+fit. It tells you about the variability in the fit
+parameters.</strong></p></li>
 </ul>
 </div>
 <div class="col">
@@ -733,12 +744,67 @@ style="width:100.0%" /></p>
 <section id="burnin" class="slide level2">
 <h2>Burnin’</h2>
 <ul>
-<li>Often times it takes a bit of time for the chain to find its way to
-the most probably area and start bouncing around</li>
-<li>We don’t care about this initial time period!</li>
-<li>Commonly called burn-in, and we throw away a certain number of
-iterations before we start keeping track</li>
+<li>If you have not started your parameter chain near the max, it takes
+a bit of time for the chain to find its way to the most probably area
+and start bouncing around</li>
+<li><strong>We don’t care about this initial time period!</strong></li>
+<li>Commonly called <em>burn-in</em>, and we throw away a certain number
+of iterations before we start keeping track.
+<ul>
+<li>This generally requires you to look at your parameters vs
+interations to decide when things reasonably leveled off.</li>
+</ul></li>
 </ul>
+</section>
+<section id="visualizing-the-best-fit-with-errors" class="slide level2">
+<h2>Visualizing the Best Fit with Errors</h2>
+<ul>
+<li>There are a few ways you can visualize the best fit model with
+uncertainties in the parameters reflected</li>
+<li>My go-to looks like:
+<ul>
+<li>Randomly select some number of indices from your leveled chain</li>
+<li>For each index, grab the corresponding parameters and compute your
+model output with those parameters, appending the result to a list</li>
+<li>Compute the median and standard deviation of the results in your
+list, being sure to specify <code class="python">axis=0</code></li>
+<li>Plot the median values for your best approximation, and shade the
+region between the median - std and the median + std</li>
+</ul></li>
+</ul>
+</section>
+<section id="homework-5-pairings" class="slide level2">
+<h2>Homework 5 Pairings!</h2>
+<ul>
+<li>Last homework pairings!</li>
+</ul>
+<div class="cols" style="align-items:start">
+<div class="col">
+<ul>
+<li>Left side:
+<ul>
+<li>Dash and Siera</li>
+<li>Indi and Leila</li>
+<li>Trajan and Kara</li>
+<li>Michael and Alex</li>
+<li>Zachary and Owyn</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<ul>
+<li>Right side:
+<ul>
+<li>Sam and Matthew</li>
+<li>Nathaniel and Nico</li>
+<li>Teddy and Brandon</li>
+<li>Mia and Ben</li>
+<li>Paul and Sophia</li>
+<li>Kendall, Teo, and Jennifer</li>
+</ul></li>
+</ul>
+</div>
+</div>
 </section>
     </div>
   </div>
@@ -757,6 +823,7 @@ iterations before we start keeping track</li>
   <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
 
   <script>
 
@@ -866,6 +933,12 @@ iterations before we start keeping track</li>
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -881,22 +954,22 @@ iterations before we start keeping track</li>
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
@@ -904,5 +977,17 @@ iterations before we start keeping track</li>
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
