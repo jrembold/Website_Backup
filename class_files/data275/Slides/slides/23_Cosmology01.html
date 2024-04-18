@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-04-24">
-  <title>Emcee and the Cosmos</title>
+  <meta name="dcterms.date" content="2024-04-18">
+  <title>Emcee and the Expanding Cosmos</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -17,8 +17,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -33,43 +36,22 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Emcee and the Cosmos</h1>
+  <h1 class="title">Emcee and the Expanding Cosmos</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">April 24, 2023</p>
+  <p class="date">April 18, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>It was a bit of a Herculean struggle, but the last HW assignment is
-posted!
-<ul>
-<li>Only two questions, the third is purely extra credit</li>
-<li>Technically I have it due at the end of the week, but I’ll still
-accept them until a week from Wednesday without penalty. I just wanted
-you to be able to move forward and focus on your final project and
-presentation</li>
-<li>I’m sending out emails with the HW 5 partners after class today
-(couldn’t quite get the formed)</li>
-</ul></li>
-<li>Also in that email: a link to a poll to indicate your final project
-partner preferences (if any)
+<li>Checkin for HW5 this weekend! <strong>Don’t forget!</strong> Ensure
+that you have met with your partner at least for planning!</li>
+<li>Email just sent (link <a
+href="https://forms.gle/ovEtsKm1SJpBGGb49">here</a>): a link to a poll
+to indicate your final project partner preferences (if any)
 <ul>
 <li>I’ll send these groupings out tomorrow afternoon, so don’t dally in
 responding please!</li>
-</ul></li>
-<li>Quiz 2 back to you!</li>
-</ul>
-</section>
-<section id="quiz-2-results" class="slide level2">
-<h2>Quiz 2 Results</h2>
-<ul>
-<li>You can add a 0.5 point to the score listed on the back</li>
-<li>Aggregates:
-<ul>
-<li>Mean: 87.44 %</li>
-<li>Median: 90 %</li>
-<li>Stdev: 9.8 %</li>
 </ul></li>
 </ul>
 </section>
@@ -112,6 +94,9 @@ to install through <code class="python">pip</code></li>
 <li><code class="python">Emcee</code> operates as an abstract data type,
 wherein you create a sampling object and then can interact with it and
 run samples using defined methods</li>
+<li>In the R landscape, there is the <code class="python">mcmc</code>
+package, which also seems reasonably strong, though it doesn’t seem to
+have all of the flexibility of <code class="python">emcee</code></li>
 </ul>
 </section>
 <section id="emcee-creation" class="slide level2">
@@ -143,7 +128,8 @@ take</p></li>
 random gaussian near a starting point:</p>
 <pre ><code class="python">starts = np.random.multivariate_normal(
             mean = [0,1,10],
-            cov = [[1,0,0],[0,0.5,0], [0,0,5]]
+            cov = [[1,0,0],[0,0.5,0], [0,0,5]],
+            size = num_dims
             )</code></pre></li>
 <li><p>Then you can just run the sampler:</p>
 <pre ><code class="python">sampler.run_mcmc(starts, num_iterations)</code></pre></li>
@@ -184,28 +170,20 @@ using the <code class="python">corner</code> package
 individual parameter distributions and all pair-wise 2D histograms</li>
 </ul></li>
 </ul>
-</section>
-<section id="visualizing-the-best-fit-with-errors" class="slide level2">
-<h2>Visualizing the Best Fit with Errors</h2>
-<ul>
-<li>To visualize the best fit with errors, my favorite approach is to:
-<ul>
-<li>Randomly select some number of indices from your flattened
-chain</li>
-<li>For each index, grab the corresponding parameters and compute your
-model output with those parameters, appending the result to a list</li>
-<li>Compute the median and standard deviation of the results in your
-list, being sure to specify <code class="python">axis=0</code></li>
-<li>Plot the median values for your best approximation, and shade the
-region between the median - std and the median + std</li>
-</ul></li>
-</ul>
+<!--
+## Visualizing the Best Fit with Errors
+- To visualize the best fit with errors, my favorite approach is to:
+  - Randomly select some number of indices from your flattened chain
+  - For each index, grab the corresponding parameters and compute your model output with those parameters, appending the result to a list
+  - Compute the median and standard deviation of the results in your list, being sure to specify `axis=0`
+  - Plot the median values for your best approximation, and shade the region between the median - std and the median + std
+-->
 </section>
 <section id="the-distance-ladder" class="slide level2">
 <h2>The Distance Ladder</h2>
 <p><img
 data-src="../images/svg_cache/1fce4974e08417c30a58b37822b330c3e1cf205e.svg"
-style="width:80.0%" /></p>
+style="width:75.0%" /></p>
 </section>
 <section id="a-red-tale" class="slide level2">
 <h2>A Red Tale</h2>
@@ -232,7 +210,7 @@ us!</p>
 <section id="hubbles-law" class="slide level2">
 <h2>Hubble’s Law</h2>
 <p><img data-src="../images/python/hubble.png"
-style="width:100.0%" /></p>
+style="width:80.0%" /></p>
 </section>
 <section id="the-hubble-constant" class="slide level2">
 <h2>The Hubble Constant</h2>
@@ -620,7 +598,7 @@ style="width:30.0%" /></p>
            id="path1961" /></g></g></g></svg>
 </p>
 </div>
-<div class="col">
+<div class="col" style="font-size:.9em">
 <ul>
 <li>Suppose now we connected the ends of the paper to make it into a
 perfect sphere</li>
@@ -638,6 +616,7 @@ perfect sphere</li>
 </section>
 <section id="expanding-space" class="slide level2">
 <h2>Expanding Space</h2>
+<div style="font-size:.9em">
 <ul>
 <li>Galaxies appear to move only because the space between is expanding
 <ul>
@@ -653,9 +632,10 @@ immense regions of space</li>
 <li>Light is redshifted because the space expands, stretching the
 wavelength</li>
 </ul>
+</div>
 <p><img
 data-src="../images/svg_cache/31927d7063489826e68667adcfc0dc4584c8592e.svg"
-style="width:90.0%" /></p>
+style="width:80.0%" /></p>
 </section>
 <section id="einsteins-demon" class="slide level2">
 <h2>Einstein’s Demon</h2>
@@ -669,7 +649,7 @@ to his equations to allow for a static, unchanging universe</li>
 <div class="cols">
 <div class="col">
 <p><img data-src="../images/ch16_fieldeqns.jpg"
-style="width:100.0%" /></p>
+style="width:80.0%" /></p>
 </div>
 <div class="col">
 <p><span class="math display">\[R_{ab}-\frac{1}{2}Rg_{ab} = -8\pi T_{ab}
@@ -706,6 +686,7 @@ constant!</li>
   <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
 
   <script>
 
@@ -815,6 +796,12 @@ constant!</li>
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -830,22 +817,22 @@ constant!</li>
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
@@ -853,5 +840,17 @@ constant!</li>
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
