@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <title>SQL Utilities</title>
+  <title>Serving and SQL Utilities</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -16,8 +16,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -31,31 +34,137 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">SQL Utilities</h1>
+  <h1 class="title">Serving and SQL Utilities</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Wednesday, April 12, 2023</p>
+  <p class="date">April 18/23, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
+<li>Thursday cohort: Your missing recorded lecture is the one I gave
+Portland on Tuesday. Watch it for some especially useful bits about how
+to combine databases!</li>
 <li>You just have the project to be working on now!</li>
-<li>I myself am terribly behind in this class, and for that I sincerely
-apologize</li>
-<li>Please understand it has been a conscious choice (for better or
-worse) because I felt everyone in here was generally doing well and
-keeping up</li>
-<li>For next week, we just have the presentations planned, which will
-<em>not</em> take up the full time
+<li>I continue to be terribly behind in my grading for this class, and
+for that I sincerely apologize</li>
+<li>For next week, we just have the presentations planned. I’ll put
+together and post and order soon.</li>
+<li>Make sure you are meeting the requirements on the project guide and
+scoring rubric!</li>
+<li>The supplementary GitHub repo will be available soon.</li>
+</ul>
+<!--------- SERVING ------------->
+</section>
+<section id="serving-it-up-hot" class="slide level2">
+<h2>Serving it up hot</h2>
 <ul>
-<li>I’m ok with it being short, but also want to ask if there are other
-things that you were hoping to see in this class or have an interest in
-seeing</li>
-<li>Just send me an email if you have a topic and I’ll see what I can
-do</li>
+<li>The last step of the data engineering pipeline is to make the data
+available to others, commonly called <em>serving</em></li>
+<li>There are many ways this could be achieved, but often might look
+like:
+<ul>
+<li>Moving data into other shared databases</li>
+<li>Making data available via an API</li>
+<li>Displaying data in live dashboards for decisions makers</li>
 </ul></li>
-<li>Project details should hopefully have just recently been sent
-out?</li>
+</ul>
+</section>
+<section id="serving-options" class="slide level2">
+<h2>Serving Options</h2>
+<ul>
+<li>For the project, I see largely two options here
+<ul>
+<li>Many of you have been taking PowerBI this semester. You could make a
+dashboard and link it to your database</li>
+<li>I have created a Docker container to create a simple API for you,
+given a few customizations</li>
+</ul></li>
+<li>If you have a strong desire for something else, I’m open to your
+ideas. But it should be something that will reflect a live view of the
+data.</li>
+</ul>
+</section>
+<section id="db2api" class="slide level2">
+<h2>DB2API</h2>
+<ul>
+<li>The DB2API container is similar to that used for your data
+transformation, in that is is best built with slight
+customizations.</li>
+<li>You can access the template repository <a
+href="https://github.com/rembold-data-engineering-master/db_serving_api_template">here</a>,
+from which you should make your own repo.</li>
+<li>For an extremely simple API, you should just need to edit the
+<code class="python">endpoints.yaml</code> file, which is a plain-text
+format.
+<ul>
+<li>Syntax is: <code class="python">/endpoint</code>:
+<code class="python">SQL QUERY</code></li>
+</ul></li>
+<li>Try to construct queries that return a reasonable amount of
+information at a time.</li>
+</ul>
+</section>
+<section id="getting-fancier" class="slide level2">
+<h2>Getting fancier</h2>
+<ul>
+<li>The API is written using Python’s FastAPI library, which is really
+nice to use if you have any Python background</li>
+<li>You can add more customized API endpoints by adding functions to the
+bottom of the <code class="python">db2api.py</code> file</li>
+<li>Extra options:
+<ul>
+<li>Endpoints with a parameter in them:
+<code class="python">/cities/{pagenum}</code>
+<ul>
+<li>Add the parameter to the defined function as well</li>
+<li>You can use the parameter in your SQL query with
+<code class="python">:pagenum</code></li>
+</ul></li>
+<li>Endpoints with optional query parameters:
+<code class="python">/cities?state=OR</code>
+<ul>
+<li>Add the parameter to the defined function with a default value</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="deployment" class="slide level2">
+<h2>Deployment</h2>
+<ul>
+<li>Within your Railway project, add a new GitHub Repo, and choose the
+one you made</li>
+<li>The API needs to be able to connect to your database, so add the
+<code class="python">DATABASE_URL</code> environment variable to it,
+similar to how you did with the scraper.</li>
+<li>Deploy the container.</li>
+<li>Go into the container settings and find the part about Public
+Networking. Hit the “Generate Domain” button to get a URL on Railways
+servers. This is your new API root endpoint!</li>
+<li>Need some documentation? It is built in! Just add
+<code class="python">/docs</code> to the root endpoint.</li>
+</ul>
+</section>
+<section id="project-serving" class="slide level2">
+<h2>Project Serving</h2>
+<ul>
+<li>Try to serve up the data from your project that you think might be
+most useful</li>
+<li>If an API, what endpoints make the most sense?
+<ul>
+<li>In what form might someone most want the data? You don’t need to
+just make an endpoint for every single table, nor is that probably a
+great idea.</li>
+</ul></li>
+<li>If a dashboard, what are the main insights you want your dashboard
+to display?
+<ul>
+<li>Don’t just throw numbers on the screen. Make it cohesive and telling
+a story.</li>
+<li>If you are making a dashboard, please ensure that you can share it
+with me in a way that I can actually access and view it! Send me a test
+run beforehand to check.</li>
+</ul></li>
 </ul>
 <!----------- SQL --------------->
 </section>
@@ -69,8 +178,8 @@ yourself
 <li>For debugging/maintenance sake (in case of a change, each replicate
 needs to be found and changed)</li>
 </ul></li>
-<li>Want to look at several methods in SQL that we can utilize to
-bettere adhere to DRY principles
+<li>Want to look at several methods in SQL that we can utilize to better
+adhere to DRY principles
 <ul>
 <li>Views</li>
 <li>Custom functions</li>
@@ -90,9 +199,9 @@ contents</li>
 </ul></li>
 <li><p>Syntax similar to creating a new table, just with
 <code class="python">VIEW</code></p>
-<pre ><code class="pgsql">CREATE VIEW view_name AS (
-  SELECT colnames
-  FROM tablename
+<pre ><code class="pgsql">CREATE VIEW |||view name||| AS (
+  SELECT |||colnames|||
+  FROM |||tablename|||
 )</code></pre></li>
 </ul>
 </section>
@@ -184,17 +293,17 @@ href="https://www.postgresql.org/docs/current/server-programming.html">here</a><
 <ul>
 <li><p>The structure of any defined function will generally look
 like:</p>
-<pre ><code class="pgsql">CREATE FUNCTION func_name(func_arguments)
-RETURNS return_type AS
+<pre ><code class="pgsql">CREATE FUNCTION |||function name|||(|||func_arguments|||)
+RETURNS |||return type||| AS
 'function_body'
-LANGUAGE func_lang;</code></pre></li>
-<li><p><code class="python">func_name</code> - The desired name of the
-function</p></li>
+LANGUAGE |||func lang|||;</code></pre></li>
+<li><p><code class="python">function name</code> - The desired name of
+the function</p></li>
 <li><p><code class="python">func_arguments</code> - A comma separated
 list of paired arguments and types</p></li>
-<li><p><code class="python">return_type</code> - The variable type of
+<li><p><code class="python">return type</code> - The variable type of
 what will be returned (selected)</p></li>
-<li><p><code class="python">func_lang</code> - The language used for the
+<li><p><code class="python">func lang</code> - The language used for the
 function body</p></li>
 <li><p><code class="python">function_body</code> - a
 <strong>string</strong> containing the query or logic to process
@@ -234,9 +343,9 @@ but has additional syntax to learn</li>
 <pre ><code class="pgsql" style="font-size:1em">x := 56;</code></pre></li>
 <li><p>Control statements</p>
 <pre ><code class="pgsql" style="font-size:1em">IF x > 5 THEN
-  ...do something...
+  |||...do something...|||
 ELSE
-  ...do something else...
+  |||...do something else...|||
 END IF;</code></pre></li>
 <li><p>Returns</p>
 <pre ><code class="pgsql" style="font-size:1em">RETURN x;</code></pre></li>
@@ -286,8 +395,6 @@ the value in the named <code class="python">width</code>,
 <code class="python">height</code>, or <code class="python">depth</code>
 columns by the provided argument. Run it to ensure it is working.</li>
 </ul></li>
-<li>Pairs: Miles &amp; Jill, Phil &amp; Aaryan, Alaina &amp; Oscar &amp;
-Cristian, Frances &amp; Micah</li>
 </ul>
 </div>
 </section>
@@ -366,11 +473,11 @@ entire event</li>
 <ul>
 <li>This is the earlier defined trigger function</li>
 </ul>
-<pre ><code class="pgsql">CREATE TRIGGER trig_name
+<pre ><code class="pgsql">CREATE TRIGGER |||trigger name|||
 AFTER UPDATE
-ON table_name
+ON |||table_name|||
 FOR EACH ROW
-EXECUTE FUNCTION func_name();</code></pre></li>
+EXECUTE FUNCTION |||func_name|||();</code></pre></li>
 </ul>
 </section>
 <section id="when-to-trigger" class="slide level2">
@@ -402,7 +509,7 @@ the event occuring, but we won’t cover that here</li>
 too broad</p></li>
 <li><p>Can localize to just a single (or few) columns by using
 <code class="python">OF colname1, colname2</code></p>
-<pre ><code class="pgsql">AFTER UPDATE OF colname1</code></pre></li>
+<pre ><code class="pgsql">AFTER UPDATE OF |||column name 1|||</code></pre></li>
 <li><p>Can localize to only triggering off certain rows by inserting a
 <code class="python">WHEN</code> condition before the
 <code class="python">EXECUTE</code> line</p>
@@ -410,8 +517,8 @@ too broad</p></li>
 <li>Can use <code class="python">NEW</code> and
 <code class="python">OLD</code> within this condition</li>
 </ul>
-<pre ><code class="pgsql">WHEN OLD.name != NEW.name
-EXECUTE FUNCTION myfunc();</code></pre></li>
+<pre ><code class="pgsql">WHEN OLD.|||name||| != NEW.|||name|||
+EXECUTE FUNCTION |||myfunc|||();</code></pre></li>
 </ul>
 </section>
 <section id="how-much-triggering" class="slide level2">
@@ -452,7 +559,7 @@ change that triggers B, which makes a change that then triggers A again,
 etc
 <ul>
 <li>Postgres does not have built-in tools to prevent this, and it is up
-to you not to trigger you way into bad situations!</li>
+to you not to trigger your way into bad situations!</li>
 </ul></li>
 </ul>
 <!--
@@ -488,8 +595,6 @@ would be <code class="python">'insert'</code> and the
 (like, from your scaling function), the volume is automatically
 recomputed.</li>
 </ul></li>
-<li><p>Last pairs: Frances &amp; Phil, Aaryan &amp; Jill &amp; Oscar,
-Cristian &amp; Miles, Alaina &amp; Micah</p></li>
 </ul>
 </section>
     </div>
@@ -509,6 +614,7 @@ Cristian &amp; Miles, Alaina &amp; Micah</p></li>
   <script src="../html_srcs/revealjs/../other_plugins/reveal.js-d3/reveald3.js"></script>
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
 
   <script>
 
@@ -626,6 +732,11 @@ Cristian &amp; Miles, Alaina &amp; Micah</p></li>
 			tryFallbackURL: true, // true/false, default false
 			disableCheckFile: false, //default false
 		 },
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
 
         // reveal.js plugins
         plugins: [
@@ -666,6 +777,18 @@ Cristian &amp; Miles, Alaina &amp; Micah</p></li>
             //{ src: "../html_srcs/revealjs/plugin/d3/reveald3.js" },
 		],
       });
+    </script>
+    <script>
+    // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+      function remove_bars() {
+        var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+        console.log(pseudoBlocks);
+        for ( var i = 0; i < pseudoBlocks.length; i++) {
+          pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+        }
+        }
+      // omg this is even more hacky now, but I need this to run after hljs has done its thing
+      setTimeout(remove_bars, 100);
     </script>
     </body>
 </html>
