@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-04-26">
+  <meta name="dcterms.date" content="2024-04-23">
   <title>Shapes and Fates of the Universe</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -35,7 +35,7 @@
 <section id="title-slide">
   <h1 class="title">Shapes and Fates of the Universe</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">April 26, 2023</p>
+  <p class="date">April 23, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -43,24 +43,28 @@
 <ul>
 <li>Be working on HW5!
 <ul>
-<li>If you had started Problem 1 and hadn’t seen my announcement, the
-assignment was originally missing some negatives in the function. Those
-have been added now.</li>
+<li>You have everything you need after today</li>
 </ul></li>
 <li>Final Projects
 <ul>
-<li>Groupings sent out</li>
-<li>Monday: Workday, but with scheduled meetings with me to discuss the
-project your group is proposing</li>
-<li>Wednesday: Quiz 3, course evaluations, then work day</li>
+<li>Groupings being sent out, along with guide</li>
+</ul></li>
+<li>Upcoming
+<ul>
+<li>Thursday: Workday, for either project planning or homework. I’ll be
+in this room for the usual time.</li>
+<li>Tuesday: Quiz 3, scheduled group meeting with me to discuss project
+proposals, workday</li>
+<li>Tuesday, May 7th: Project presentations</li>
 </ul></li>
 </ul>
 </section>
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li>Using an MCMC package like <code class="python">emcee</code> can
-facilitate some actions or add some quality of life improvements</li>
+<li>Using an MCMC package like <code class="python">emcee</code> or
+<code class="python">mcmc</code> can facilitate some actions or add some
+quality of life improvements</li>
 <li>Hubble’s law showcases a relationship between the distance something
 is from us and the rate at which it is moving away from us
 <ul>
@@ -166,8 +170,8 @@ we get a density parameter of <span class="math inline">\(\Omega \approx
 <ul>
 <li>This should imply a open, negative curvature universe</li>
 </ul></li>
-<li>Recent results from Baryon Acoustic Oscillations (BAO) experiments
-though predicts the universe of being flat, to within 0.4%
+<li>Recent(ish) results from Baryon Acoustic Oscillations (BAO)
+experiments though predicts the universe to be flat, to within 0.4%
 certainty!</li>
 <li>Are we missing something? Or is some physical law flawed?</li>
 </ul>
@@ -528,6 +532,7 @@ style="width:100.0%" /></p>
   <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
 
   <script>
 
@@ -637,6 +642,12 @@ style="width:100.0%" /></p>
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -652,22 +663,22 @@ style="width:100.0%" /></p>
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
@@ -675,5 +686,17 @@ style="width:100.0%" /></p>
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
