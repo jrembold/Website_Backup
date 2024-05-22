@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2024-05-14">
+  <title>Capping Things Off</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Capping Things Off</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">May 14, 2024</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Some structural parts of the course are still coming together, and
+should be up by the end of the week
+<ul>
+<li>Website</li>
+<li>Canvas page</li>
+</ul></li>
+<li>From you:
+<ul>
+<li>Review the syllabus (especially dates of deadlines)</li>
+<li>Fill out the interest form that will be sent out after tonight by
+Friday</li>
+<li>Be looking for inspiration!</li>
+</ul></li>
+</ul>
+</section>
+<section id="esoteric-about-me" class="slide level2">
+<h2>Esoteric About Me</h2>
+<div class="cols">
+<div class="col">
+<div>
+<ul>
+<li class="fragment">You all already know me, so here are a few more
+random bits of Jed trivia:
+<ul>
+<li class="fragment">I wanted to be an astronaut when I was little</li>
+<li class="fragment">I use the Dvorak keyboard layout instead of
+Qwerty</li>
+<li class="fragment">Ice cream is the best food</li>
+<li class="fragment">I have one cat whose name is Mittens</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div class="col">
+<figure>
+<img data-src="../images/Mittens.png" alt="Mittens" />
+<figcaption aria-hidden="true">Mittens</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="so-what-is-a-capstone" class="slide level2">
+<h2>So what is a Capstone?</h2>
+<ul>
+<li>A culmination project meant to demonstrate and showcase your mastery
+in the core areas of data science:
+<ul>
+<li>Statistics</li>
+<li>Data visualization and presentation</li>
+<li>Data engineering</li>
+<li>Machine Learning</li>
+</ul></li>
+<li>A capstone project should embody <em>all</em> of those aspects and
+synthesize them into a cohesive and compelling narrative</li>
+<li>Projects will be done in small groups of 2-3, assigned by
+myself</li>
+</ul>
+</section>
+<section id="but-wait-theres-more" class="slide level2">
+<h2>But wait, there’s more!</h2>
+<ul>
+<li>Gotta get a job (or keep your options open)</li>
+<li>There is a lot that entails:
+<ul>
+<li>Understanding what you want to do</li>
+<li>Networking</li>
+<li>Marketing yourself</li>
+<li>Interviewing</li>
+<li>Professional conduct</li>
+</ul></li>
+<li>While not technical skills, these skills can be just important for
+actually landing a position as technical skills</li>
+</ul>
+</section>
+<section id="the-capstone-class" class="slide level2">
+<h2>The Capstone Class</h2>
+<ul>
+<li>This class will fundamentally stand on two legs:
+<ul>
+<li>Professional development</li>
+<li>Creation and presentation of a capstone project</li>
+</ul></li>
+<li>Bonus: Being aware and able to discuss the current trends and news
+in the data science industry</li>
+</ul>
+</section>
+<section id="objectives" class="slide level2">
+<h2>Objectives</h2>
+<p>Upon conclusion, you should be able to:</p>
+<ul>
+<li>Navigate the job market and leverage your skills and talents in job
+searches and job interviews</li>
+<li>Advertise yourself to potential employers, showcasing your past
+work</li>
+<li>Plan out and execute a large, extended research project, meeting
+deadlines along the way</li>
+<li>Present research findings to technical and non-technical individuals
+in a interactive, verbal setting</li>
+<li>Write up and communicate research findings in a clear and concise
+manner suitable for publication</li>
+</ul>
+</section>
+<section id="deliverables" class="slide level2">
+<h2>Deliverables</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Professional Development Activities</td>
+<td>20%</td>
+</tr>
+<tr class="even">
+<td>GitHub Pages Portfolio</td>
+<td>5%</td>
+</tr>
+<tr class="odd">
+<td>Project Proposal</td>
+<td>10%</td>
+</tr>
+<tr class="even">
+<td>Data Summary</td>
+<td>10%</td>
+</tr>
+<tr class="odd">
+<td>Rough Draft Write-up</td>
+<td>10%</td>
+</tr>
+<tr class="even">
+<td>Final Presentation</td>
+<td>20%</td>
+</tr>
+<tr class="odd">
+<td>Final Draft Write-up</td>
+<td>20%</td>
+</tr>
+<tr class="even">
+<td>Weekly Check-ins</td>
+<td>5%</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="professional-development" class="slide level2">
+<h2>Professional Development</h2>
+<ul>
+<li>Approximately every other week Ruthie will be visiting and running
+the first half of class to focus on various professional development
+skills
+<ul>
+<li>The goal is to have you as prepared as possible as your apply for
+jobs</li>
+</ul></li>
+<li>Several rounds of mock interviews over the course of the
+semester</li>
+<li>Not currently looking for a new job? <strong>This still
+applies</strong>
+<ul>
+<li>The tech job market is a rapidly evolving beast, and the vast
+majority of tech-workers switch job multiple times over their career.
+Even if not immediately applicable to you, it almost assuredly will be
+at some point.</li>
+</ul></li>
+<li>Credit/no credit given for accomplishing the in-class activities.
+<ul>
+<li>Miss a week? You are responsible for getting the content and
+completing the activities, and showing them to me.</li>
+</ul></li>
+<li>Ruthie will start visiting us next week</li>
+</ul>
+</section>
+<section id="github-pages-portfolio" class="slide level2">
+<h2>GitHub Pages Portfolio</h2>
+<ul>
+<li>You need a publically visible location to market yourself and
+showcase your talents and past work</li>
+<li>Should be polished and informative</li>
+<li>Many ways this could be done, but hosting a site on GitHub Pages is
+probably the most straightforward method to get up and running
+<ul>
+<li>Many templates available so that you don’t need a ton of front-end
+knowledge to make something nice</li>
+</ul></li>
+<li>Blogs are a method of raising your personal brand, and such pages
+can also serve as a platform for that sort of writing if you are
+interested.</li>
+</ul>
+</section>
+<section id="project-milestones" class="slide level2">
+<h2>Project Milestones</h2>
+<ul>
+<li>The capstone project is a large project that extends over multiple
+months, which is outside the typical student scheduling and organizing
+sweet spot.</li>
+<li>As such we have provided about one goal a month to ensure that you
+are staying on track and to help with your planning and scheduling
+<ul>
+<li>End of May: Project Proposal</li>
+<li>End of June: Data Summary</li>
+<li>End of July: Rough draft of write-up</li>
+</ul></li>
+</ul>
+</section>
+<section id="milestones-project-proposal" class="slide level2">
+<h2>Milestones: Project Proposal</h2>
+<ul>
+<li>A short write-up that details all of the planned ideas and steps
+that will bring the project to fruition
+<ul>
+<li>What is your central research question?</li>
+<li>Where are you going to get your data from, and have you confirmed
+that is possible?</li>
+<li>What statistics would you be looking at to help answer and provide
+confidence in your research question?</li>
+<li>How will you be incorporating some aspect of machine learning into
+the project?</li>
+<li>What general visuals would you imagine using to demonstrate your
+findings?</li>
+</ul></li>
+<li>While a proposal does not lock you in stone, it is an efficient
+roadmap. Deviating from it should only be done when unexpected things
+happen, as doing so is generally going to add time or other
+complications. The better you design the proposal, the more likely
+things will go smoothly.</li>
+</ul>
+</section>
+<section id="milestones-data-summary" class="slide level2">
+<h2>Milestones: Data Summary</h2>
+<ul>
+<li>June is to be data aquisition month, and upon the end of June you
+are expected to have your data largely in hand</li>
+<li>If collecting live data, you should have your pipelines up and
+running and transforming data automatically into something immediately
+useful</li>
+<li>If collecting static data, you should have it all gathered and
+modeled/organized into tables for easy access</li>
+<li>Your data should be replicated on at <em>least</em> two devices</li>
+<li>Past this point, you should not need to be devoting time and effort
+to your data collection.</li>
+</ul>
+</section>
+<section id="aside-data-sources" class="slide level2">
+<h2>Aside: Data Sources</h2>
+<ul>
+<li>Analyzing the same data as everyone else for new insights is very
+difficult</li>
+<li>Far better to leverage a data collection that is unique and curated
+by you</li>
+<li>The data that you collect and use for your capstone project should
+be data that is unique to your project.
+<ul>
+<li>That might mean that you scrape or pull together data that hasn’t
+been compiled before</li>
+<li>That might mean that you pull from many large datasets to construct
+an amalgamated dataset that has not been compiled before.</li>
+</ul></li>
+<li>Want a project that makes you marketable? Stay away from Kaggle or
+similar sites for primary data sources.</li>
+</ul>
+</section>
+<section id="milestones-rough-draft-of-write-up" class="slide level2">
+<h2>Milestones: Rough Draft of Write-up</h2>
+<ul>
+<li>The project write-up will be a web publication detailing your
+research question, your data, your methodology, and your
+conclusions.</li>
+<li>This rough draft should already include sections on all the projects
+main requirements.</li>
+<li>Going from the rough draft to the final draft should be about
+fine-tuning and clarifying, <em>not</em> adding significant
+content.</li>
+</ul>
+</section>
+<section id="final-presentation" class="slide level2">
+<h2>Final Presentation!</h2>
+<ul>
+<li>The combined cohorts will present their projects on the last day of
+class, here in Portland</li>
+<li>You will have 15 minutes (12 + 3 for questions) to convey your
+project to an audience of your peers, faculty, and industry
+professionals.</li>
+<li>12 minutes is <strong>not</strong> enough time to go into all the
+details of a 3-month project, so you need to prioritize and constrain
+yourself to telling the best story.</li>
+<li>Should be professional in appearance, delivery, and
+presentation.</li>
+<li>You <strong>must</strong> be present on this day. Put it on your
+calendar now.</li>
+</ul>
+</section>
+<section id="final-draft" class="slide level2">
+<h2>Final Draft</h2>
+<ul>
+<li>Builds on the rough draft</li>
+<li>Extensively proofread and polished
+<ul>
+<li>Text and visuals should be as good as you can make them</li>
+</ul></li>
+<li>Published online and linked or otherwise connected to student’s
+portfolios</li>
+</ul>
+</section>
+<section id="check-ins" class="slide level2">
+<h2>Check-ins</h2>
+<ul>
+<li>Even monthly milestones can be a long time to plan</li>
+<li>It helps to remain cognizant and introspective of what you should be
+doing so that things do not fall by the wayside</li>
+<li>Every weekend, there will be a check-in form available
+<ul>
+<li>Should take less than 5 mins to complete</li>
+<li>Asks questions like:
+<ul>
+<li>What was accomplished the previous week?</li>
+<li>Rate how productive your group was over the previous week.</li>
+<li>What are the plans for the upcoming week?</li>
+<li>Where are you currently at in meeting the monthly milestone?</li>
+</ul></li>
+</ul></li>
+<li>Scored credit/no-credit and ONLY available Sat-Mon, so remember to
+fill them out!</li>
+</ul>
+</section>
+<section id="late-policy" class="slide level2">
+<h2>Late Policy</h2>
+<ul>
+<li>The milestones are not recommendations, they are deadlines</li>
+<li>For each milestone you have a 24hr grace period that you can submit
+it without penalty.</li>
+<li>Past that it is 20% off each day.</li>
+<li>The final presentation and check-ins are exempt from this policy and
+must be completed on time for credit.</li>
+</ul>
+</section>
+<section id="questions" class="slide level2">
+<h2>Questions?!</h2>
+<ul>
+<li>I’ve been thinking about this a ton and have tried to get it all
+down here, but there are probably some things I have forgotten. What
+questions can I answer?</li>
+</ul>
+</section>
+<section id="research-questions-vs-eda" class="slide level2">
+<h2>Research Questions vs EDA</h2>
+<ul>
+<li>Exploratory Data Analysis != Research Question</li>
+<li>EDA might inform how you approach a research question, but
+<strong>it is not the question (or the answer)</strong></li>
+<li>A research question needs to:
+<ul>
+<li>Be clear and focused</li>
+<li>Address a particular problem</li>
+<li>Be empirically answerable with credible sources</li>
+<li>Be complex enough to merit a detailed answer (just yes/no probably
+isn’t enough)</li>
+</ul></li>
+</ul>
+</section>
+<section id="good-vs-bad-research-questions" class="slide level2">
+<h2>Good vs Bad Research Questions</h2>
+<div class="cols">
+<div class="col">
+<div class="block" name="Good Research Questions">
+<ul>
+<li>Have no simple answer – are open-ended and consider
+cause/effect</li>
+<li>Are “researchable” – can be answered with accessible research, facts
+and data</li>
+<li>Often begin with: how, why, what, and which</li>
+<li>Are interesting to others</li>
+<li>An answer can be hypothesized and tested</li>
+<li>Focuses on a single topic and question</li>
+<li>Are as specific as possible about what they are asking, using
+well-defined concepts</li>
+</ul>
+</div>
+</div>
+<div class="col">
+<div class="block bad" name="Bad Research Questions">
+<ul>
+<li>Have simple or easy answers – can be answered with one word, a
+number, or a list</li>
+<li>Can not be answered because the facts and data don’t exist, or only
+answered with an opinion</li>
+<li>Often begin with: who, when, where, how much, or how many</li>
+<li>Nobody cares about the answer</li>
+<li>No specific hypothesis can be formed that addresses the
+question</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="good-and-bad-questions" class="slide level2">
+<h2>Good and Bad Questions</h2>
+<ul>
+<li>Poll <a
+href="https://www.polleverywhere.com/multiple_choice_polls/khA6wDi8ilekGQ9bjbIAF?preview=true&amp;controls=none">link</a></li>
+</ul>
+</section>
+<section id="break-time" class="slide level2">
+<h2>Break Time!</h2>
+</section>
+<section id="brainstorm-speed-dating" class="slide level2">
+<h2>Brainstorm Speed Dating!</h2>
+<div style="font-size:.9em">
+<ul>
+<li>The key to starting any good project is to think of a topic you’d be
+interested in answering a question in</li>
+<li>There are a <strong>huge</strong> number of possible topics with
+data science implications</li>
+<li>Using the back row of tables, I need 3 people sitting on each side
+facing one another (6 on each)</li>
+<li>If you are facing the front of the room, you will move each
+round</li>
+<li>If you are facing the back, you will be handed a stack of 12 cards.
+<strong>Do not reorder them.</strong></li>
+<li>Each round, flip over the top card. Then you have 6 minutes to
+brainstorm with your partner as many ideas as possible around that
+theme</li>
+<li>After 6 minutes are up, I’ll give you one minute to write down any
+last thoughts you have and then movers will move one position to their
+left (wrapping around)</li>
+</ul>
+</div>
+</section>
+<section id="group-synthesis" class="slide level2">
+<h2>Group Synthesis</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>For the next 20 or so minutes, I’d like you to try to choose your
+1-3 ideas from each theme and add them to the <a
+href="https://jamboard.google.com/d/1A3ws__5NOuuYfgWUtvtgd9lkejBtlOvYnK0Oy49YbkM/edit?usp=sharing">linked</a>
+Jamboard as sticky notes</li>
+<li>The purpose is to try to disperse the great ideas you had in your
+pairings to the group as a whole</li>
+<li>Don’t worry yet about distilling down to a research question, just
+the ideas you had</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/Brainstorm_Jamboard.png" /></p>
+</div>
+</div>
+</section>
+<section id="thats-it-folks" class="slide level2">
+<h2>Thats it folks!</h2>
+<ul>
+<li>Look for an email from me with a poll to help me determine
+pairs/groups, and fill out by Friday</li>
+<li>No check-in this first week</li>
+<li>Look around for further inspiration at different topics and ideas
+for what you might want to investigate!</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>
