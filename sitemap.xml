@@ -2,8 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>/Website_Backup/tags/active_class/</loc>
+    <lastmod>2024-05-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/Website_Backup/classes/data510/data510/</loc>
+    <lastmod>2024-05-22T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>/Website_Backup/</loc>
-    <lastmod>2024-01-17T00:00:00+00:00</lastmod>
+    <lastmod>2024-05-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/Website_Backup/classes/data510/schedule/</loc>
+    <lastmod>2024-05-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/Website_Backup/tags/</loc>
+    <lastmod>2024-05-22T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/Website_Backup/classes/data275/schedule/</loc>
     <lastmod>2024-01-17T00:00:00+00:00</lastmod>
@@ -18,9 +30,6 @@
     <lastmod>2023-12-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/Website_Backup/classes/cs151/editor/</loc>
-    <lastmod>2023-12-06T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/Website_Backup/tags/</loc>
     <lastmod>2023-12-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/Website_Backup/classes/cs151/schedule/</loc>
@@ -40,9 +49,6 @@
   </url><url>
     <loc>/Website_Backup/classes/data503/schedule/</loc>
     <lastmod>2023-01-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/Website_Backup/tags/active_class/</loc>
-    <lastmod>2023-01-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/Website_Backup/classes/data275/data275/</loc>
     <lastmod>2023-01-10T00:00:00+00:00</lastmod>
@@ -78,6 +84,9 @@
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/Website_Backup/classes/data503/hw/</loc>
+    <lastmod>2022-08-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/Website_Backup/classes/data510/deliverables/</loc>
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/Website_Backup/tags/hw/</loc>
@@ -126,6 +135,9 @@
     <lastmod>2021-01-19T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/Website_Backup/classes/data503/slides/</loc>
+    <lastmod>2021-01-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/Website_Backup/classes/data510/slides/</loc>
     <lastmod>2021-01-19T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/Website_Backup/tags/slides/</loc>

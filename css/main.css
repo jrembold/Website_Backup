@@ -515,6 +515,22 @@ tr:nth-child(even) {
 
 }
 
+/*In-class Nav*/
+.inclass-nav {
+	font-size: 2em;
+	text-align: center;
+	padding-top: 10px;
+}
+
+.inclass-nav i {
+	padding: 5px;
+}
+
+
+
+
+
+
 .highlight-wrapper {
     position: relative;
 	border-radius: 20px;
