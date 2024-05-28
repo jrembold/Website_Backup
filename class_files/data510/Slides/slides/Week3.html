@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2024-05-28">
+  <title>Gitting Proposed</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Gitting Proposed</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">May 28, 2024</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Websites are up and running: both Canvas and main website</li>
+<li>I’m going to try to keep announcements synchronized between Discord
+and Canvas, but will usually post to Discord first</li>
+<li>I am going to be gone next week!
+<ul>
+<li>My brother won the hiking permit lottery so we’ll be backpacking in
+to Havasu Falls</li>
+<li>Ruthie will be running the first half of class</li>
+<li>Calvin will be covering for me if you have questions or issues in
+the latter half, but it will otherwise be open for you to make progress
+on your data acquisition</li>
+</ul></li>
+<li>Due on Monday night:
+<ul>
+<li>Project Proposal!</li>
+</ul></li>
+</ul>
+</section>
+<section>
+<section id="the-project-proposal" class="title-slide slide level1">
+<h1>The Project Proposal</h1>
+
+</section>
+<section id="the-guide" class="slide level2">
+<h2>The Guide</h2>
+<ul>
+<li>The official project guide has been posted <a href="">here</a></li>
+<li>2-3 pages covering:
+<ul>
+<li>Title</li>
+<li>Research Question</li>
+<li>Motivation</li>
+<li>Data</li>
+<li>Methodology requirements</li>
+</ul></li>
+<li>How you want to organize is up to you, but it should be full prose:
+not just bullet points of sentence fragments.</li>
+<li>Export as PDF and upload to your team working repository</li>
+</ul>
+</section>
+<section id="the-example" class="slide level2">
+<h2>The Example</h2>
+<ul>
+<li>Assuming I found time, I have written an example project proposal
+available <a href="">here</a></li>
+<li>Its format is just one I found convenient and aesthetic while
+covering all the requirements.
+<ul>
+<li>It isn’t the only way to meet the requirements, it is just
+<em>A</em> way</li>
+</ul></li>
+<li>Please let me know if you find issues or have questions about it:
+I’ve passed over it a few times but it was still written over a single
+day.</li>
+</ul>
+</section></section>
+<section>
+<section id="gittin-good" class="title-slide slide level1">
+<h1>Gittin’ Good</h1>
+
+</section>
+<section id="git" class="slide level2">
+<h2>Git</h2>
+<figure>
+<img data-src="https://imgs.xkcd.com/comics/git.png" style="width:30.0%"
+alt="XKCD 1597" />
+<figcaption aria-hidden="true">XKCD 1597</figcaption>
+</figure>
+</section>
+<section id="understanding-git" class="slide level2">
+<h2>Understanding Git</h2>
+<ul>
+<li>Git is a form of <em>version-control software</em></li>
+<li>Git exists <strong>independently of GitHub</strong>
+<ul>
+<li>Best of think of GitHub as just one possible site where you can
+store Git repositories remotely</li>
+</ul></li>
+<li>Git is a bit notorious for having commands that are perhaps
+unintuitive or overly complicated</li>
+<li>Goal for today is to:
+<ul>
+<li>Get you some understanding of what is happening “under the hood” so
+the commands have some meaning attached to them</li>
+<li>Go over the basic commands and workflows</li>
+<li>Explain how to connect GitHub and Git for easier collaboration</li>
+</ul></li>
+</ul>
+</section>
+<section id="version-control" class="slide level2">
+<h2>Version Control</h2>
+<ul>
+<li>It can be useful to think of version control as a history of what
+happens in a particular folder</li>
+<li>Imagine a series of “snapshots” of what the contents of a directory
+look like</li>
+<li>Means you essentially need to store two things:
+<ul>
+<li>The contents of the snapshot (folders and files)
+<ul>
+<li>Git refers to these as <em>trees</em> and <em>blobs</em>,
+respectively</li>
+</ul></li>
+<li>How the latest snapshot is related to previous snapshots
+<ul>
+<li>To be able to trace back a full history, you need to know what the
+previous snapshot was</li>
+<li>Git stores this information in what it calls a <em>commit</em></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="trees-and-blobs" class="slide level2">
+<h2>Trees and Blobs</h2>
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="268.27988mm"
+   height="156.7067mm"
+   viewBox="0 0 268.27988 156.7067"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   sodipodi:docname="git_tree.svg"
+   inkscape:export-filename="/home/jedediah/Teaching/DS_in_the_NS/Materials/Lectures/images/git_tree.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     fit-margin-left="10"
+     fit-margin-top="10"
+     fit-margin-right="10"
+     fit-margin-bottom="10"
+     lock-margins="true"
+     inkscape:zoom="1.3273709"
+     inkscape:cx="502.49707"
+     inkscape:cy="448.63119"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs2">
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect12048"
+       is_visible="true"
+       lpeversion="1"
+       satellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,4.4979167,0,1 @ F,0,0,1,0,0,0,1"
+       unit="px"
+       method="auto"
+       mode="F"
+       radius="17"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false"
+       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,4.4979167,0,1 @ F,0,0,1,0,0,0,1" />
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect12042"
+       is_visible="true"
+       lpeversion="1"
+       satellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,4.4979167,0,1 @ F,0,0,1,0,0,0,1"
+       unit="px"
+       method="auto"
+       mode="F"
+       radius="17"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false"
+       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,4.4979167,0,1 @ F,0,0,1,0,0,0,1" />
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect11762"
+       is_visible="true"
+       lpeversion="1"
+       satellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,4.4979167,0,1 @ F,0,0,1,0,0,0,1"
+       unit="px"
+       method="auto"
+       mode="F"
+       radius="17"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false"
+       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,4.4979167,0,1 @ F,0,0,1,0,0,0,1" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-329.31055,-49.156483)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.6135px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#485e30;stroke-width:1.68803"
+       x="302.05701"
+       y="68.370316"
+       id="text2344"
+       transform="scale(1.0821687,0.92407034)"><tspan
+         sodipodi:role="line"
+         id="tspan2342"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.6135px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#485e30;stroke-width:1.68803"
+         x="302.05701"
+         y="68.370316">( root)</tspan></text>
+    <g
+       id="g2"
+       class="fragment">
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.6135px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#485e30;stroke-width:1.68803"
+         x="348.03381"
+         y="100.88857"
+         id="text5010"
+         transform="scale(1.0821687,0.92407033)"><tspan
+           sodipodi:role="line"
+           id="tspan5008"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.6135px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#485e30;stroke-width:1.68803"
+           x="348.03381"
+           y="100.88857"> my_folder</tspan></text>
+      <path
+         style="fill:none;stroke:#343b58;stroke-width:3.6514;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 356.5023,84.711317 v 23.921443 a 4.4979167,4.4979167 45 0 0 4.49792,4.49792 h 36.3372"
+         id="path11684"
+         inkscape:path-effect="#path-effect11762"
+         inkscape:original-d="m 356.5023,84.711317 v 28.419363 h 40.83512"
+         sodipodi:nodetypes="ccc"
+         transform="matrix(0.61716566,0,0,0.61684551,125.76562,18.8986)" />
+    </g>
+    <g
+       id="g3"
+       class="fragment">
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.6135px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#166775;stroke-width:1.68803"
+         x="348.03381"
+         y="200.99524"
+         id="text8802"
+         transform="scale(1.0821687,0.92407033)"><tspan
+           sodipodi:role="line"
+           id="tspan8800"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.6135px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#166775;stroke-width:1.68803"
+           x="348.03381"
+           y="200.99524"> file_b.txt</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#34548a;stroke-width:1.33243"
+         x="401.13892"
+         y="199.45026"
+         id="text11205"
+         transform="scale(1.0002595,0.99974058)"><tspan
+           sodipodi:role="line"
+           id="tspan11203"
+           style="font-size:10.5833px;fill:#34548a;stroke-width:1.33243"
+           x="401.13892"
+           y="199.45026">&quot;I'm some content from file b!&quot;</tspan></text>
+      <path
+         style="fill:none;stroke:#343b58;stroke-width:3.6514;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 356.5023,84.711317 V 258.16334 a 4.4979167,4.4979167 45 0 0 4.49792,4.49792 h 36.3372"
+         id="path12044"
+         inkscape:path-effect="#path-effect12048"
+         inkscape:original-d="M 356.5023,84.711317 V 262.66126 h 40.83512"
+         sodipodi:nodetypes="ccc"
+         transform="matrix(0.61716566,0,0,0.61684551,125.76562,18.8986)" />
+      <rect
+         style="fill:none;fill-opacity:0;stroke:#9699a3;stroke-width:1.34093;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:4.80983"
+         id="rect2"
+         width="158.36595"
+         height="39.144901"
+         x="397.75208"
+         y="166.04781"
+         ry="4.843236" />
+    </g>
+    <g
+       id="g4"
+       class="fragment">
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.6135px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#166775;stroke-width:1.68803"
+         x="386.51935"
+         y="138.64755"
+         id="text6554"
+         transform="scale(1.0821687,0.92407034)"><tspan
+           sodipodi:role="line"
+           id="tspan6552"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.6135px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#166775;stroke-width:1.68803"
+           x="386.51935"
+           y="138.64755"> file_a.txt</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#34548a;stroke-width:1.33243"
+         x="442.47464"
+         y="141.82167"
+         id="text10793"
+         transform="scale(1.0002595,0.99974057)"><tspan
+           sodipodi:role="line"
+           id="tspan10791"
+           style="font-size:10.5833px;fill:#34548a;stroke-width:1.33243"
+           x="442.47464"
+           y="141.82167">&quot;I'm some content from file a!&quot;</tspan></text>
+      <path
+         style="fill:none;stroke:#343b58;stroke-width:3.6514;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 425.29108,139.29896 v 23.92145 a 4.4979167,4.4979167 45 0 0 4.49792,4.49792 h 36.3372"
+         id="path12038"
+         inkscape:path-effect="#path-effect12042"
+         inkscape:original-d="m 425.29108,139.29896 v 28.41937 h 40.83512"
+         sodipodi:nodetypes="ccc"
+         transform="matrix(0.61716566,0,0,0.61684551,122.8652,18.8986)" />
+      <rect
+         style="fill:none;fill-opacity:0;stroke:#9699a3;stroke-width:1.33985;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:4.80983"
+         id="rect1"
+         width="158.10727"
+         height="39.145977"
+         x="438.81323"
+         y="111.57696"
+         ry="4.8433695" />
+    </g>
+  </g>
+</svg>
+</p>
+<ul>
+<li>Trees can be envisioned as a mapping from a directory name to a list
+of other trees or blobs inside</li>
+<li>Blobs are just a sequence of bytes that store their contents</li>
+</ul>
+</section>
+<section id="commits" class="slide level2">
+<h2>Commits</h2>
+<p><img data-src="../images/git_history.png" style="width:70.0%" /></p>
+<ul>
+<li>Commits contain several pieces of information:
+<ul>
+<li>A list of the parent (preceding) commits: Frequently just one, but
+can be more!</li>
+<li>The author of the commit</li>
+<li>When the commit occurred</li>
+<li>A message describing the commit</li>
+<li>The snapshot information itself, which is a tree</li>
+</ul></li>
+</ul>
+</section>
+<section id="objects" class="slide level2">
+<h2>Objects</h2>
+<ul>
+<li>Git thinks of all three of these things (trees, blobs, and commits)
+as more general <em>objects</em></li>
+<li>Git maintains a mapping of all objects, which use the <em>hash</em>
+of the object as the key to look up the specific object contents in
+memory
+<ul>
+<li>Sha1 hashes are used, and thus are comprised of 40 hexadecimal
+characters</li>
+</ul></li>
+<li>This hash is important! In <em>any</em> object, when it contains
+information about another object, it just contains the hash of that
+object, not the actual data</li>
+<li>You’ll be able to frequently see (and use) these hashes when using
+Git</li>
+</ul>
+</section>
+<section id="getting-started" class="slide level2">
+<h2>Getting Started</h2>
+<ul>
+<li><p>If you are just getting started tracking a folder, you need to
+initialize Git in that folder</p>
+<pre ><code class="bash">git init</code></pre>
+<ul>
+<li>This might not look like it does anything initially, but will add a
+<code class="python">.git</code> folder to your folder, where Git stores
+all its content</li>
+</ul></li>
+<li><p>Perhaps the most used command will be to check the current status
+of Git in your folder</p>
+<pre ><code class="bash">git status</code></pre>
+<p>which will print out information regarding the current state of the
+files</p></li>
+</ul>
+</section>
+<section id="making-a-snapshot" class="slide level2">
+<h2>Making a Snapshot</h2>
+<ul>
+<li>Taking a “snapshot” is actually a two step process in Git
+<ul>
+<li>Gives more flexibility that you might not want <em>everything</em>
+in the folder to be part of the snapshot</li>
+</ul></li>
+<li><strong>Step 1: Staging the desired files</strong>
+<ul>
+<li>Staging a file says “I want this file to be part of the next
+snapshot”</li>
+<li>Done with <code class="python">git add {file/folder name}</code>
+<ul>
+<li>If given a folder instead of a file, adds everything within that
+folder</li>
+</ul></li>
+</ul></li>
+<li><strong>Step 2: Taking the snapshot of the staged files</strong>
+<ul>
+<li>Actually create the commit using
+<code class="python">git commit</code></li>
+<li>A Vim window will open where you can type a short descriptive
+message, and then save and exit</li>
+</ul></li>
+</ul>
+</section>
+<section id="references" class="slide level2">
+<h2>References</h2>
+<ul>
+<li>Referring to objects through hashes is precise, but not hugely easy
+for us mere humans to remember</li>
+<li>Git will also maintain a list of <em>references</em> which are more
+human labels that map to a specific hash</li>
+<li>The Git history can be added to but not otherwise changed, and is
+thus immutable
+<ul>
+<li>“You can’t change the past”</li>
+</ul></li>
+<li>References <strong>can</strong> be changed though, to point to new
+hashes</li>
+</ul>
+</section>
+<section id="seeing-the-history" class="slide level2">
+<h2>Seeing the history</h2>
+<ul>
+<li><p>Git has a logging function that will allow you to see information
+about your repository history</p>
+<pre ><code class="bash">git log</code></pre></li>
+<li><p>There are a ton of customizations you can do to this output, but
+some include</p>
+<ul>
+<li><code class="python">--all</code> shows the log of all branches, not
+just the current</li>
+<li><code class="python">--graph</code> shows the connecting lines
+between commits, including branching</li>
+<li><code class="python">--decorate</code> prints short names of
+references</li>
+<li><code class="python">--oneline</code> compresses snapshot output to
+fit on a single line for compactness</li>
+</ul></li>
+</ul>
+</section>
+<section id="seeing-the-differences" class="slide level2">
+<h2>Seeing the differences</h2>
+<ul>
+<li><p>Sometimes you might need to see what has changed between two
+states</p>
+<ul>
+<li>This can be between the current state and the last commit or between
+two different commits</li>
+</ul></li>
+<li><p>The Git <code class="python">diff</code> command will display an
+output of all changes between two points</p>
+<pre ><code class="bash">git diff {initial} {final} {filename}</code></pre>
+<ul>
+<li>By default, <code class="python">{initial}</code> is taken to be the
+last commit and <code class="python">{final}</code> to be the current
+state of the files</li>
+<li>If <code class="python">{filename}</code> is not given, it will show
+diffs on all files that have changed</li>
+</ul></li>
+</ul>
+</section>
+<section id="checkout-time" class="slide level2">
+<h2>Checkout Time</h2>
+<ul>
+<li><p>A history is of limited use if you can’t backtrack or move
+through it</p></li>
+<li><p>The Git <code class="python">checkout</code> command allows you
+to “move” what you are currently looking at to a different commit</p>
+<pre ><code class="bash">git checkout {desired commit}</code></pre>
+<ul>
+<li>You can use either a piece of the hash to indicate the commit or a
+reference name</li>
+</ul></li>
+<li><p>Note that checking out a past commit actually changes the
+contents of your folder to reflect what it looked like at that time!</p>
+<ul>
+<li>This can be a good/bad thing if you have current edits you were
+working on that haven’t been committed</li>
+</ul></li>
+</ul>
+</section>
+<section id="branching" class="slide level2">
+<h2>Branching</h2>
+<ul>
+<li>One powerful feature of Git is that it can allow branching histories
+<ul>
+<li>Most often, these are eventually merged back together into a final
+product</li>
+<li>All multiple people to work on a project at the same time without
+constantly stepping on each other’s toes</li>
+</ul></li>
+<li>The <code class="python">git branch</code> command will take care of
+all our branching needs
+<ul>
+<li><p>Without anything else, it will just print out a current listing
+of all branches and which is currently checked out</p></li>
+<li><p>To create a new branch, you include a name for the new branch at
+the end of the command</p>
+<pre ><code class="bash">git branch my_new_branch</code></pre></li>
+</ul></li>
+</ul>
+</section>
+<section id="merging" class="slide level2">
+<h2>Merging</h2>
+<ul>
+<li><p>Merging is the act of creating a new commit based on the
+histories of multiple different commits</p></li>
+<li><p>Git is pretty good at doing this intelligently, and often will
+just “figure things out”</p>
+<ul>
+<li>If it has an issue, it will ask you to resolve it manually</li>
+</ul></li>
+<li><p>To merge, have checked out the branch you want to merge
+<em>into</em>, and then</p>
+<pre ><code class="bash">git merge {branch to merge into current}</code></pre>
+<ul>
+<li>If all goes well, you’ll be prompted for a new commit message for
+the new merged commit</li>
+<li>If there was an unresolvable conflict, Git will tell you where and
+ask you to fix it manually before adding and committing</li>
+</ul></li>
+</ul>
+</section>
+<section id="dealing-with-remotes" class="slide level2">
+<h2>Dealing with Remotes</h2>
+<ul>
+<li><p>So far we have great ways to manage our local histories, but
+still not great ways to collaborate</p></li>
+<li><p>Git has a concept of <em>remotes</em>, which are basically just
+copies of a repository kept on a (most of the time) remote
+server</p></li>
+<li><p>Git works locally 99% of the time, so there are special commands
+to use when you want to “sync” contents between your <em>local</em>
+repository and the <em>remote</em> repository</p></li>
+<li><p>Before either can be done, we need to inform Git of where the
+remote for a given repository exists</p>
+<pre ><code class="bash">git remote add {name} {url}</code></pre>
+<ul>
+<li><code class="python">{name}</code> is by convention
+<code class="python">origin</code> unless you are connecting multiple
+remotes</li>
+<li><code class="python">{url}</code> is the address where that remote
+can be reached</li>
+</ul></li>
+</ul>
+</section>
+<section id="upload-changes-to-a-remote" class="slide level2">
+<h2>Upload Changes to a Remote</h2>
+<ul>
+<li><p>In order for the remote to be useful, we need to let it know what
+we have done locally</p></li>
+<li><p>Git calls this <em>pushing</em> changes to the remote</p>
+<pre ><code class="bash">git push {remote name} {local branch}:{remote branch}</code></pre></li>
+<li><p>Typing all that in can get old, so we can specify it once by
+saying</p>
+<pre ><code class="bash">git branch --set-upstream-to={remote name}/{remote branch}</code></pre>
+<p>at which point in the future we could just do</p>
+<pre ><code class="bash">git push</code></pre></li>
+</ul>
+</section>
+<section id="getting-the-latest-updates" class="slide level2">
+<h2>Getting the latest updates</h2>
+<ul>
+<li><p>On multi-computer setups, it is possible that another system
+uploaded content to the remote that you do not yet have locally</p>
+<ul>
+<li>Git does not check for this sort of thing automatically! You need to
+be clear about checking for an update</li>
+</ul></li>
+<li><p>Git calls this <em>fetching</em> from the remote</p>
+<pre ><code class="bash">git fetch</code></pre>
+<ul>
+<li>If there is more than one remote, you can specify the remote after
+<code class="python">fetch</code></li>
+</ul></li>
+<li><p>Gets the remote information, but does <strong>not</strong> merge
+it with your local content</p></li>
+<li><p>To do both at the same time, you can do</p>
+<pre ><code class="bash">git pull</code></pre></li>
+</ul>
+</section>
+<section id="cloning" class="slide level2">
+<h2>Cloning</h2>
+<ul>
+<li><p>Often, you might be given a remote address initially, and need to
+copy that repository over to your local system</p></li>
+<li><p>Git calls this <em>cloning</em> a repository</p>
+<pre ><code class="bash">git clone {remote url} {directory name}</code></pre>
+<ul>
+<li><code class="python">{remote url}</code> is the url of where the
+remote lives</li>
+<li><code class="python">{directory name}</code> is the local directory
+you want to copy that remote repository into
+<ul>
+<li>If not given, it will create a directory with the same name as the
+remote repository</li>
+</ul></li>
+</ul></li>
+<li><p>This automatically sets up a remote for the new local git
+repository</p></li>
+</ul>
+</section></section>
+<section id="break-time" class="title-slide slide level1">
+<h1>Break Time</h1>
+
+</section>
+
+<section>
+<section id="team-proposal-work" class="title-slide slide level1">
+<h1>Team Proposal Work</h1>
+
+</section>
+<section id="team-work" class="slide level2">
+<h2>Team work</h2>
+<ul>
+<li>The rest of the evening is set aside for you to work on your project
+proposal with your team</li>
+<li>My recommendations for before you leave:
+<ul>
+<li>Have your research question worked out</li>
+<li>Have your data sources pinned down</li>
+</ul></li>
+</ul>
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   id="svg13322"
+   version="1.1"
+   viewBox="0 0 609.93756 175.93075"
+   height="175.93074mm"
+   width="609.93756mm"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04, custom)"
+   sodipodi:docname="git_history.svg"
+   inkscape:export-filename="/home/jedediah/Teaching/DS_in_the_NS/Materials/Lectures/images/git_history.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview13324"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.46929649"
+     inkscape:cx="1254.0047"
+     inkscape:cy="72.448869"
+     inkscape:window-width="2528"
+     inkscape:window-height="1381"
+     inkscape:window-x="1096"
+     inkscape:window-y="43"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     fit-margin-top="10"
+     fit-margin-bottom="10"
+     fit-margin-left="10"
+     fit-margin-right="10" />
+  <defs
+     id="defs13319">
+    <marker
+       style="overflow:visible"
+       id="marker17758"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Send"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path17756" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Send"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Send"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.2,0,0,-0.2,-1.2,0)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path16233" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker17740"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Send"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path17738" />
+    </marker>
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect17555"
+       is_visible="true"
+       lpeversion="1"
+       satellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,14.022917,0,1 @ F,0,0,1,0,14.022917,0,1 @ F,0,0,1,0,0,0,1"
+       unit="px"
+       method="auto"
+       mode="F"
+       radius="53"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect17469"
+       is_visible="true"
+       lpeversion="1"
+       satellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,14.022917,0,1 @ F,0,0,1,0,14.022917,0,1 @ F,0,0,1,0,0,0,1"
+       unit="px"
+       method="auto"
+       mode="F"
+       radius="53"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+    <marker
+       style="overflow:visible"
+       id="Arrow2Send"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Send"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path16251" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-259.14347,-64.578289)">
+    <circle
+       style="fill:#8f5e15;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.99938;stop-color:#000000"
+       id="path13405"
+       cx="293.08255"
+       cy="98.517365"
+       r="23.939075" />
+    <circle
+       style="fill:#8f5e15;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.99938;stop-color:#000000"
+       id="circle13559"
+       cx="428.59738"
+       cy="98.517365"
+       r="23.939075" />
+    <circle
+       style="fill:#8f5e15;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.99938;stop-color:#000000"
+       id="circle13561"
+       cx="564.11224"
+       cy="98.517365"
+       r="23.939075" />
+    <circle
+       style="fill:#8f5e15;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.99938;stop-color:#000000"
+       id="circle13563"
+       cx="699.62708"
+       cy="98.517365"
+       r="23.939075" />
+    <circle
+       style="fill:#8f5e15;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.99938;stop-color:#000000"
+       id="circle13565"
+       cx="699.62708"
+       cy="206.56995"
+       r="23.939075" />
+    <circle
+       style="fill:#8f5e15;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.99938;stop-color:#000000"
+       id="circle13649"
+       cx="835.14197"
+       cy="98.517365"
+       r="23.939075" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.9501px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#dfdfe6;stroke-width:3.29626"
+       x="279.5369"
+       y="114.13655"
+       id="text14907"><tspan
+         sodipodi:role="line"
+         id="tspan14905"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.9501px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#dfdfe6;stroke-width:3.29626"
+         x="279.5369"
+         y="114.13655">A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.9501px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#dfdfe6;stroke-width:3.29626"
+       x="415.65274"
+       y="114.13655"
+       id="text15269"><tspan
+         sodipodi:role="line"
+         id="tspan15267"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.9501px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#dfdfe6;stroke-width:3.29626"
+         x="415.65274"
+         y="114.13655">B</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.9501px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#dfdfe6;stroke-width:3.29626"
+       x="548.47937"
+       y="114.14782"
+       id="text15609"><tspan
+         sodipodi:role="line"
+         id="tspan15607"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.9501px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#dfdfe6;stroke-width:3.29626"
+         x="548.47937"
+         y="114.14782">C</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.9501px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#dfdfe6;stroke-width:3.29626"
+       x="688.01898"
+       y="114.13655"
+       id="text15715"><tspan
+         sodipodi:role="line"
+         id="tspan15713"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.9501px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#dfdfe6;stroke-width:3.29626"
+         x="688.01898"
+         y="114.13655">D</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.9501px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#dfdfe6;stroke-width:3.29626"
+       x="686.00641"
+       y="222.18913"
+       id="text15875"><tspan
+         sodipodi:role="line"
+         id="tspan15873"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.9501px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#dfdfe6;stroke-width:3.29626"
+         x="686.00641"
+         y="222.18913">E</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.9501px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#dfdfe6;stroke-width:3.29626"
+       x="821.21387"
+       y="114.13655"
+       id="text15981"><tspan
+         sodipodi:role="line"
+         id="tspan15979"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.9501px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#dfdfe6;stroke-width:3.29626"
+         x="821.21387"
+         y="114.13655">F</tspan></text>
+    <path
+       style="fill:none;stroke:#343b58;stroke-width:6.965;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker17740)"
+       d="M 398.95798,99.113548 H 329.3326"
+       id="path16118"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#343b58;stroke-width:6.965;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker17758)"
+       d="M 534.47713,99.113548 H 464.85175"
+       id="path16792"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#343b58;stroke-width:6.965;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker17758)"
+       d="M 669.51674,99.113548 H 599.89136"
+       id="path16794"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#343b58;stroke-width:6.965;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker17758)"
+       d="M 805.39556,99.113548 H 735.77018"
+       id="path16796"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#343b58;stroke-width:6.965;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker17758)"
+       d="M 669.51674,205.9791 H 649.16417 A 14.022917,14.022917 45 0 1 635.14125,191.95618 V 113.13646 A 14.022917,14.022917 45 0 0 621.11833,99.113548 h -21.22697"
+       id="path16798"
+       sodipodi:nodetypes="cccc"
+       inkscape:path-effect="#path-effect17469"
+       inkscape:original-d="M 669.51674,205.9791 H 635.14125 V 99.113548 h -35.24989" />
+    <path
+       style="fill:none;stroke:#343b58;stroke-width:6.965;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker17758)"
+       d="m 805.39556,99.113548 h -20.35257 a 14.022917,14.022917 135 0 0 -14.02292,14.022912 v 78.81972 a 14.022917,14.022917 135 0 1 -14.02292,14.02292 h -21.22697"
+       id="path17551"
+       sodipodi:nodetypes="cccc"
+       inkscape:path-effect="#path-effect17555"
+       inkscape:original-d="M 805.39556,99.113548 H 771.02007 V 205.9791 h -35.24989" />
+  </g>
+</svg>

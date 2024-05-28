@@ -36,8 +36,9 @@
 }
 
 @font-face{
-  font-family: FiraCode;
-  src: url("fonts/nerd-fonts/NerdFontComplete_Mono_FiraCode.ttf");
+  font-family: FiraCode Nerd Font Mono;
+  /*src: url("fonts/nerd-fonts/NerdFontComplete_Mono_FiraCode.ttf");*/
+  src: url("fonts/nerd-fonts/FiraCodeNerdFontMono-Regular.ttf");
 }
 
 @font-face{
@@ -449,14 +450,14 @@ margin-left: 1em;*/ }
   /*margin: auto;*/
   text-align: left;
   /*font-size: 0.55em;*/
-  font-family: "FiraCode";
+  font-family: "FiraCode Nerd Font Mono";
   line-height: 1.2em;
   border-radius: 10px;
   word-wrap: break-word;
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3); }
 
 .reveal code {
-  font-family: "FiraCode";
+  font-family: "FiraCode Nerd Font Mono";
   font-variant-ligatures: none;
   border-radius: 10px;
   display: inline;
