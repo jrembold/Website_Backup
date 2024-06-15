@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2024-06-11">
+  <title>Mock Interviews and Data Acquisition</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Mock Interviews and Data Acquisition</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">June 11, 2024</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>I’m back!
+<ul>
+<li>I’ll show some pics in just a moment :)</li>
+</ul></li>
+<li>I will get this week’s slides posted, but I lost connection to my
+home server and came here straight from the trip</li>
+<li>Next week: Crash course in creating an online profile</li>
+<li>Due at the end of the month: Data Summary</li>
+</ul>
+</section>
+<section id="internal-mock-interviews" class="title-slide slide level1">
+<h1>Internal Mock Interviews</h1>
+
+</section>
+
+<section>
+<section id="connecting-db-to-script" class="title-slide slide level1">
+<h1>Connecting DB to Script</h1>
+
+</section>
+<section id="an-interface" class="slide level2">
+<h2>An Interface</h2>
+<ul>
+<li>SQL is brilliant for working within a relational database
+<ul>
+<li>It is not generally as flexible to handle other common scripting
+tasks</li>
+</ul></li>
+<li>You may at times need an <em>interface</em> between a common
+scripting language (say R or Python) and SQL</li>
+<li>These interfaces generally allow two major things to happen:
+<ul>
+<li>You can trigger certain SQL commands to happen in the database from
+within your other script</li>
+<li>You can query results <em>out</em> of a database using SQL and bring
+them directly into your scripting language, ready for use</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-triad" class="slide level2">
+<h2>The Triad</h2>
+<ul>
+<li>In my experience, there are 2 fundamental “pieces” to
+<strong>connecting</strong> a scripting language to a database
+<ul>
+<li>A library to facilitate the interactions with the database (the main
+scripting tool)</li>
+<li>A library to facilitate the connection to the database type (the
+database <em>driver</em>)</li>
+</ul></li>
+<li>Then you have the individual commands to interact with the
+database</li>
+</ul>
+</section>
+<section id="fundamental-database-libraries" class="slide level2">
+<h2>Fundamental Database Libraries</h2>
+<ul>
+<li>In R:
+<ul>
+<li><code class="python">DBI</code> handles much of the general
+interaction and background processing</li>
+<li><code class="python">dbplyr</code> uses
+<code class="python">DBI</code> to seamlessly mesh database tables with
+R dataframes</li>
+</ul></li>
+<li>In Python:
+<ul>
+<li><code class="python">SQLAlchemy</code> is my favorite (and generally
+seems like the most popular) for handling database interaction</li>
+<li><code class="python">Pandas</code> provides the dataframes and
+meshes smoothly with SQLAlchemy to query your database tables</li>
+</ul></li>
+</ul>
+</section>
+<section id="driving-the-connection" class="slide level2">
+<h2>Driving the Connection</h2>
+<ul>
+<li>Regardless of the scripting language, an interface is generally
+built around an initial <em>connection</em> object that gets defined in
+the chosen language</li>
+<li>These connection objects are often tailored to different types of
+databases, and thus a particular library might be needed to provide a
+<em>driver</em> to your database type of choice
+<ul>
+<li>In R: <code class="python">RPostgres</code> or
+<code class="python">RPostgreSQL</code></li>
+<li>In Python: <code class="python">psycopg2</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="making-the-connection" class="slide level2">
+<h2>Making the Connection</h2>
+<ul>
+<li>The connection object is initially formed by requiring information
+about the database you desire to connect to
+<ul>
+<li>IP address / Port</li>
+<li>Database name</li>
+<li>User you’ll be connecting as</li>
+<li>User password</li>
+</ul></li>
+<li>All other commands will use the connection object as a method to
+communicate with the database</li>
+<li>Frequently will form one connecting at the start and then maintain
+it, but you could connect and disconnect as needed</li>
+</ul>
+</section>
+<section id="making-a-connection-r" class="slide level2">
+<h2>Making a connection: R</h2>
+<div style="font-size:.9em">
+<ul>
+<li>The <code class="python">dBConnect</code> command from
+<code class="python">DBI</code> is used to create a connection
+object</li>
+<li>Needs at least one input, corresponding to a DBI object representing
+the type of database to connect to, provided by your driver
+<ul>
+<li>For Postgres, that can be
+<code class="python">RPostgres::Postgres()</code> or
+<code class="python">RPostgreSQL::PostgreSQL()</code></li>
+</ul></li>
+<li>Further parameters can customize aspects of what database is
+connected to
+<ul>
+<li><code class="python">dbname</code> for the database name</li>
+<li><code class="python">host</code> for the IP address (or localhost if
+on same system)</li>
+<li><code class="python">port</code> for a specific port</li>
+<li><code class="python">user</code> for the connecting username</li>
+<li><code class="python">password</code> for the corresponding
+password</li>
+</ul></li>
+<li>Save the connection object as something! You will need it!</li>
+</ul>
+</div>
+</section>
+<section id="making-a-connection-python" class="slide level2">
+<h2>Making a connection: Python</h2>
+<ul>
+<li>You use the <code class="python">create_engine</code> command from
+SQLAlchemy to create the connection object</li>
+<li>While you won’t need to specify the driver, it does need to be
+installed or SQLAlchemy will fail to make the connection</li>
+<li>You still need to specify all the same pieces of information to make
+the connection, but you can do so with either a connection string or
+have SQLAlchemy assemble the pieces for you
+<ul>
+<li>Connection string:
+<code class="python">'postgresql://username:password@host:port/dbname'</code></li>
+<li>Assembly from
+<code class="python">URL.create('postgresql', username=<username>, password=<password>, etc)</code></li>
+</ul></li>
+<li>Still save the connection object as something! You will need
+it!</li>
+</ul>
+</section>
+<section id="example-connections" class="slide level2">
+<h2>Example Connections</h2>
+<ul>
+<li><p>Connecting to a generic Postgres database living on the same
+computer:</p>
+<pre ><code class="r">con <- dbConnect(RPostgres::Postgres(),
+                 dbname = 'analysis',
+                 host = 'localhost',
+                 port = 5432,
+                 user = 'postgres',
+                 password = 'postgres')</code></pre>
+<pre ><code class="python">con = create_engine(URL.create('postgres',
+                 database = 'analysis',
+                 host = 'localhost',
+                 port = 5432,
+                 username = 'postgres',
+                 password = 'postgres'))</code></pre></li>
+</ul>
+</section>
+<section id="reading-information" class="slide level2">
+<h2>Reading information</h2>
+<div style="font-size:.9em">
+<ul>
+<li>Once you have a connection, you can query the database and output
+native script dataframes!
+<ul>
+<li><p>Using dbplyr in R:</p>
+<pre ><code class="r">output <- tbl(con, sql("SELECT * FROM pokemon"))</code></pre>
+<ul>
+<li>This stores in the <code class="python">output</code> a database
+table object, which is essentially a map to the information in the
+database</li>
+<li>You can filter, aggregate, etc on this object as if it were a local
+dataframe, but <em>it is actually still on the server</em>!</li>
+<li>dplyr converts all the R commands into corresponding SQL that is run
+serverside</li>
+</ul></li>
+<li><p>Using pandas in Python:</p>
+<pre ><code class="python">output = pd.read_sql(text("SELECT * FROM cereal"), con=con)</code></pre>
+<ul>
+<li>This reads the resulting table directly into a dataframe stored in
+local memory</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="writing-information" class="slide level2">
+<h2>Writing information</h2>
+<div style="font-size:.9em">
+<ul>
+<li><p>For writing information to the database, or any other SQL
+commands that don’t return a table, things are more straightforward
+(kinda)</p></li>
+<li><p>Takes two required arguments: the connection and the SQL</p></li>
+<li><p>For R, I would recommend using
+<code class="python">DBI::dbExecute</code>, as I’ve found it to be the
+most straightforward and convenient</p>
+<pre ><code class="r">DBI::dbExecute(con, "INSERT INTO test VALUES ('Jed', 1985)")</code></pre></li>
+<li><p>In Python, you need to open a transaction and then execute</p>
+<pre ><code class="python">with con.begin() as trans:
+  trans.execute(text("INSERT INTO test VALUES ('Jed', 1985)"))</code></pre></li>
+</ul>
+</div>
+</section>
+<section id="parameterizing-information" class="slide level2">
+<h2>Parameterizing Information</h2>
+<ul>
+<li>Often, you have gotten information from another source that you want
+to embed inside an SQL query</li>
+<li>You could do this directly through string processing, using
+something like <code class="python">paste</code> or
+<code class="python">glue</code> or Python’s f-strings
+<ul>
+<li>Doing this blindly though can open you up to SQL-Injection
+attacks!</li>
+</ul></li>
+<li>A better way is through <em>query parameterization</em>
+<ul>
+<li>Indicate placeholders in the query where you want information to be
+subbed in, and then supply that information when you execute</li>
+<li>The interface library then takes care of sanitizing the input and
+making sure nothing nefarious is going on before inserting the desired
+data</li>
+</ul></li>
+</ul>
+</section>
+<section id="rpostgres-parameterization" class="slide level2">
+<h2>RPostgres Parameterization</h2>
+<div style="font-size:.9em">
+<ul>
+<li><p>Uses ordered placeholders using a dollar sign followed by a
+number: <code class="python">$1</code>, <code class="python">$2</code>,
+etc</p>
+<ul>
+<li>This exact syntax can vary some from library to library</li>
+</ul></li>
+<li><p>Can provide a parameterization list after the query:</p>
+<pre ><code class="r">dbExecute(con, "INSERT INTO test VALUES ($1, $2)", list('Jed', 1985))</code></pre></li>
+<li><p>Could also provide a 1-row tibble of the necessary
+length</p></li>
+<li><p>In Python, labeled placeholders are referenced in a
+dictionary:</p>
+<pre ><code class="python">trans.execute(
+  text("INSERT INTO test VALUES (:name, :year)"), 
+  {'name': 'Jed', 'year': 1985}
+  )</code></pre></li>
+</ul>
+</div>
+</section></section>
+<section id="break-time" class="title-slide slide level1">
+<h1>Break Time!</h1>
+
+</section>
+
+<section>
+<section id="team-data-work" class="title-slide slide level1">
+<h1>Team Data Work</h1>
+
+</section>
+<section id="team-work" class="slide level2">
+<h2>Team work</h2>
+<ul>
+<li>The rest of the evening is set aside for you to work on making
+progress gathering and wrangling!</li>
+<li>Start planning out how you will organize all your information!</li>
+</ul>
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>
