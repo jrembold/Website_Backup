@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2024-06-17">
+  <title>Portfolio Websites and Data Summary Work</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Portfolio Websites and Data Summary Work</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">June 17, 2024</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Don’t be forgetting the weekend check-ins!
+<ul>
+<li>And remember to update the tasks in your GitHub repo</li>
+</ul></li>
+<li>Next week we’ll have a talk on technical interviews</li>
+<li>Due at the end of the month: Data Summary
+<ul>
+<li>Details posted?</li>
+</ul></li>
+</ul>
+</section>
+<section>
+<section id="an-online-presence" class="title-slide slide level1">
+<h1>An Online Presence</h1>
+
+</section>
+<section id="importance" class="slide level2">
+<h2>Importance</h2>
+<ul>
+<li>Building a personal brand demands having a central location where
+people can come to learn more about you and what you do</li>
+<li>This generally goes beyond most social presences:
+<ul>
+<li>Needs more clarity and explanation than a GitHub profile entails
+(though you can make some very nice GitHub profiles)</li>
+<li>Needs more flexibility and room to showcase than LinkedIn or most
+other social media provides</li>
+</ul></li>
+<li>Can be more than just a collection or showcase of your projects</li>
+<li>Good communication and polish are the name of the game here</li>
+</ul>
+</section>
+<section id="contents" class="slide level2">
+<h2>Contents</h2>
+<ul>
+<li>A good profile / portfolio should minimally include:
+<ul>
+<li>Who you are</li>
+<li>Links to or a digital version of your resume</li>
+<li>Links to and descriptions of projects worked on</li>
+<li>A method to contact you</li>
+</ul></li>
+<li>Additionally, they might include:
+<ul>
+<li>Education or past work experience</li>
+<li>Primary skills</li>
+<li>Blog posts</li>
+<li>Links to other professional social media accounts</li>
+</ul></li>
+</ul>
+</section>
+<section id="web-basics" class="slide level2">
+<h2>Web Basics</h2>
+<ul>
+<li>Building and publishing a website requires 3 things:
+<ul>
+<li>A <em>domain name</em>: this is the “address” that directs someone
+to your server where the website content lives</li>
+<li>A <em>hosting platform</em>: this is the physical server that
+contains the contents of the website, which the domain name directs
+traffic to</li>
+<li>The <em>content</em>: this is the HTML/CSS/JS content that drives
+your website and provides the actual meat and potatoes of what you are
+showcasing
+<ul>
+<li>Content can be either:
+<ul>
+<li><strong>Static</strong>: essentially just a document of the website
+contents. A user seeing something different would require changing the
+content.</li>
+<li><strong>Dynamic</strong>: when a user visits the page background
+calls to a database supply the content that should be shown. Different
+users can see different content.</li>
+</ul></li>
+<li>We’ll just focus on static websites here, since they work nicely for
+portfolios</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="domain-names" class="slide level2">
+<h2>Domain Names</h2>
+<div style="font-size:.9em">
+<ul>
+<li>You don’t technically <strong>need</strong> a domain name: if you
+know the IP address of the server, that can always technically work
+<!--- But IP addresses can change, and a 12 digit string of numbers is not memorable to anyone--></li>
+<li>Many hosts will provide some version of a domain name, likely
+restricted in some way
+<ul>
+<li>Railway’s provided URLs for instance all end in
+<code class="python">.up.railway.app</code></li>
+<li>GitHub pages URLs looks like
+<code class="python">{username}.github.io</code></li>
+<li>If you don’t mind the restriction, this can be a low cost or free
+method to get a somewhat customized domain name</li>
+</ul></li>
+<li>If you want something more bespoke, you just need to purchase a
+domain
+<ul>
+<li>A variety of places these can be purchased: cloudflare.com,
+godaddy.com, namecheap.com, ionos.com, etc.</li>
+<li>Most range from 5 to 15 dollars per year (though be aware of
+introductory offers)</li>
+<li>Many also provide hosting, which you may or may not need</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="hosting" class="slide level2">
+<h2>Hosting</h2>
+<ul>
+<li>The domain name is just the fancy address, you still need an actual
+home for your website to live</li>
+<li>Any server can work if it has internet access and is running the
+appropriate website server software</li>
+<li>Most likely going to be somewhere in the cloud though
+<ul>
+<li>Any remote VM could work, but likely going to be something setup
+specifically for web hosting</li>
+<li>Many of the domain name providers will also host if you get a domain
+name through them</li>
+<li>GitHub will <strong>freely</strong> host a static webpage (which
+<em>can</em> use a custom domain if you want)</li>
+</ul></li>
+</ul>
+</section>
+<section id="content" class="slide level2">
+<h2>Content</h2>
+<ul>
+<li>The content of your webpage might take a few different forms,
+depending on your hosting solution
+<ul>
+<li>Raw HTML, CSS, and JS files generated manually or by an outside
+build process</li>
+<li>Markdown and a Jekyll theme on GitHub Pages</li>
+<li>WordPress documents if on a hosting solution with WordPress</li>
+</ul></li>
+<li>If you are comfortable with front-end dev and creating your own
+HTML/CSS/JS, then the sky is the limit</li>
+<li>If front-end dev is terrifying then you have some options:
+<ul>
+<li>Use a templating engine like GitHub’s Jekyll implementation, as you
+can mostly just pick a theme and then work with Markdown</li>
+<li>Fork templates that others have created and then edit in your
+content</li>
+</ul></li>
+</ul>
+</section>
+<section id="templating" class="slide level2">
+<h2>Templating</h2>
+<ul>
+<li>Templating engines allow you to write the content of your site in a
+(usually) nicer form, and then “compile” to actual HTML</li>
+<li>There are many possible engines:
+<ul>
+<li>Jekyll: Uses Ruby under the hood. Natively supported on GitHub
+pages</li>
+<li>Hugo: Uses Go under the hood.</li>
+<li>Pelican: Uses Python under the hood.</li>
+</ul></li>
+<li>All generally take a theme as a starting point (unless you want to
+roll your own from scratch)</li>
+<li>If using something besides Jekyll, you’ll need to compile to HTML
+manually and then copy that content into your repo
+<!--- It can be a bit more complex to view updates in real-time without a local Jekyll install (but Docker can help!)--></li>
+</ul>
+</section>
+<section id="finding-other-templates" class="slide level2">
+<h2>Finding other templates</h2>
+<ul>
+<li>You can also search around for other created templates, some of
+which are quite nice</li>
+<li>If not created with a template engine though, you will usually need
+to edit the HTML directly to adopt things to your needs
+<ul>
+<li>While more tedious, this can be worth it if you find a site style
+you really like and won’t need to edit it often</li>
+</ul></li>
+</ul>
+</section>
+<section id="getting-started" class="slide level2">
+<h2>Getting Started</h2>
+<div>
+<ul>
+<li class="fragment">Create a new public repository with name
+<code class="python">{yourgithubname}.github.io</code>
+<ul>
+<li class="fragment">If starting from scratch, this can be an empty
+directory</li>
+<li class="fragment">More likely, find a theme you like and
+<em>fork</em> or <em>Use this template</em>, and then <strong>rename the
+repo</strong> in its settings</li>
+<li class="fragment">Starting option <a
+href="https://github.com/jrembold/simple_portfolio_starter">here</a>
+though more linked later</li>
+</ul></li>
+<li class="fragment">Clean up unneeded content as described in the
+theme/template you are using</li>
+<li class="fragment">In your repo settings, under “Code and automation”,
+select the “Pages” option
+<ul>
+<li class="fragment">You want to deploy from branch, and select either
+the master/main branch or the gh-pages branch. From
+<code class="python">/root</code> unless you are doing something
+special. Then click save!</li>
+</ul></li>
+<li class="fragment">Give it a moment, but then you should be able to
+visit <code class="python">{yourgithubname}.github.io</code> in your
+browser! You have a public page!</li>
+</ul>
+</div>
+</section>
+<section id="making-changes" class="slide level2">
+<h2>Making Changes</h2>
+<ul>
+<li>GitHub Pages will automatically recompile and deploy your page
+whenever you push a new commit to your remote repo</li>
+<li>Clone the repo to your local computer so that you can make edits
+more easily</li>
+<li>Jekyll can work with markdown files natively, so you can generate
+new content easily
+<ul>
+<li>Links to other pages or files in the repo can be referenced from the
+root of the repo</li>
+</ul></li>
+<li><strong>Read the theme/template documentation!</strong> It will
+often highlight how you can make certain changes.</li>
+<li>Commit and push any changes back to your remote repo, and then wait
+a moment for the page to compile</li>
+</ul>
+</section>
+<section id="local-previews" class="slide level2">
+<h2>Local Previews</h2>
+<ul>
+<li><p>When getting started, making small changes and then checking to
+make sure they worked is best. But that makes for a lot of uploads back
+to GitHub and waiting around</p></li>
+<li><p>If you are editing HTML directly, then you can just open the file
+locally to see the changes</p></li>
+<li><p>If using a templating engine like Jekyll though, you would need
+to have Jekyll installed locally to build the site. Which is not
+trivial.</p></li>
+<li><p>Docker to the rescue! From your local website folder:</p>
+<pre ><code class="bash">docker run -it --rm -v .:/srv/jekyll -p 4000:4000 \
+  jekyll/jekyll jekyll serve --watch --force_polling \
+  --verbose --livereload --host 0.0.0.0</code></pre></li>
+</ul>
+</section>
+<section id="other-template-ideas" class="slide level2">
+<h2>Other template ideas</h2>
+<ul>
+<li>You can find many free Jekyll themes <a
+href="https://github.com/search?q=jekyll+theme+portfolio&amp;type=repositories&amp;s=stars&amp;o=desc&amp;p=1">here</a></li>
+<li>Others I think look nice include:</li>
+</ul>
+<div style="display: flexbox; justify-content: space-evenly;">
+<p><a style='display: inline-block' href="https://github.com/YoussefRaafatNasry/portfolYOU"><img src="../images/webthumbs_portfolyou.png" width="300px"></a>
+<a style='display: inline-block' href="https://github.com/artemsheludko/flexible-jekyll?tab=readme-ov-file"><img src="../images/webthumbs_flexiblejekyll.png" width="300px"></a>
+<a style='display: inline-block' href="https://github.com/jeromelachaud/freelancer-theme?tab=readme-ov-file"><img src="../images/webthumbs_freelancer.png" width="300px"></a>
+<a style='display: inline-block' href="https://github.com/alshedivat/al-folio"><img src="../images/webthumbs_alfolio.png" width="300px"></a>
+<a style='display: inline-block' href="https://github.com/sharu725/online-cv?tab=readme-ov-file"><img src="../images/webthumbs_onlinecv.png" width="300px"></a>
+<a style='display: inline-block' href="https://github.com/daattali/beautiful-jekyll?tab=readme-ov-file"><img src="../images/webthumbs_beautifuljekyll.png" width="300px"></a></p>
+</div>
+</section>
+<section id="your-turn" class="slide level2">
+<h2>Your Turn</h2>
+<ul>
+<li>Take the next 15 or so minutes to browse themes and find something
+you like</li>
+<li>Fork or create a new template from the theme and try to at least
+have a public website up and running</li>
+</ul>
+</section></section>
+<section id="break-time" class="title-slide slide level1">
+<h1>Break Time!</h1>
+
+</section>
+
+<section>
+<section id="team-data-work" class="title-slide slide level1">
+<h1>Team Data Work</h1>
+
+</section>
+<section id="team-work" class="slide level2">
+<h2>Team work</h2>
+<ul>
+<li>The rest of the evening is set aside for you to work on making
+progress gathering and wrangling!</li>
+<li>Start planning out how you will organize all your information!</li>
+</ul>
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>
