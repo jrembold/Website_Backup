@@ -17,8 +17,13 @@ const getSHA256Hash = async (input) => {
 
 setClickHandler('vid', async function(e) {
 		var className = e.target.className;
-		var pswd = await getSHA256Hash(prompt("Please enter the password:"));
-		if (pswd === "bbf891a3236707a4ac429cce2b8117a2b8f0c0edcf57977126cb6714accc7e1f") {
+		var en_pswd = e.target.getAttribute("data-video-password");
+		console.log(en_pswd);
+		var pswd = "";
+		if (en_pswd) {
+			var pswd = await getSHA256Hash(prompt("Please enter the password:"));
+		}
+		if (!en_pswd | pswd === en_pswd) {
 			if (~className.indexOf('htmlvid')) {
 				BigPicture({
 					el: e.target,

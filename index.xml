@@ -2,843 +2,885 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Jeds Digital Home</title>
-    <link>/Website_Backup/</link>
+    <link>/</link>
     <description>Recent content on Jeds Digital Home</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 22 May 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/Website_Backup/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Data Science Capstone</title>
-      <link>/Website_Backup/classes/data510/data510/</link>
+      <link>/classes/data510/data510/</link>
       <pubDate>Wed, 22 May 2024 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data510/data510/</guid>
+      <guid>/classes/data510/data510/</guid>
       <description>General Information Welcome to DATA 510: Data Science Capstone! Over the course of the semester you will designing and completing a large project synthesizing all aspects of the core classes you have taken in this program. Additionally, we will pay particular attention to professional development and job searching skills to aid you in securing future employment.&#xA;Syllabus If you need a quick reference or review, you can find my syllabus here: Syllabus Deliverables While the project is the main deliverable this semester, it has several milestones scattered throughout and there are a few other related items to submit.</description>
     </item>
     <item>
-      <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/data510/schedule/</link>
+      <title>MSCS Bridge</title>
+      <link>/classes/cs500/cs500/</link>
       <pubDate>Wed, 22 May 2024 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data510/schedule/</guid>
+      <guid>/classes/cs500/cs500/</guid>
+      <description>General Information Welcome to CS 500: MSCS Bridge! This is the main location where content will be posted this semester.&#xA;Syllabus If you need a quick reference or review, you can find my syllabus here: Syllabus The Book We will be using the reader written by Professor Eric Roberts this semester. The book is specifically tailored to the content we&amp;rsquo;ll be covering in this course, and is available as a free PDF!</description>
+    </item>
+    <item>
+      <title>Semester&#39;s Schedule</title>
+      <link>/classes/cs500/schedule/</link>
+      <pubDate>Wed, 22 May 2024 00:00:00 +0000</pubDate>
+      <guid>/classes/cs500/schedule/</guid>
+      <description>&#xA;Week Date Description Due 1 Jul 10 Syllabus, Types and Operations 2 Jul 17 Functions and Graphics Jul 18 Roman Numeral Calculator 3 Jul 24 Interactive Graphics Jul 25 Optical Illusions 4 Jul 31 Mutable Types Aug 01 Breakout 5 Aug 07 Classes Aug 08 Fingerprint Validation 6 Aug 14 Data Structures and Complexity Aug 15 The Enigma Machine 7 Aug 20 Linked Labyrinths </description>
+    </item>
+    <item>
+      <title>Semester&#39;s Schedule</title>
+      <link>/classes/data510/schedule/</link>
+      <pubDate>Wed, 22 May 2024 00:00:00 +0000</pubDate>
+      <guid>/classes/data510/schedule/</guid>
       <description>&#xA;Week Date Description Due 1 May 14 Syllabus and Research vs EDA Project Brainstorming 2 May 21 Prof Dev: Targeting and Networking Partner/Group Meet-ups and Brainstorming 3 May 28 TBD Work on Proposals 4 Jun 03 Project Proposal Jun 04 Prof Dev: Behavioral Interviews Guest Faculty - Data Acquisition work 5 Jun 11 Prof Dev: Internal Mock Interviews Scraping and modeling refresher 6 Jun 18 Publishing a homepage/portfolio with GH Pages TBD 7 Jun 25 Prof Dev: Prepping for technical interviews Data Summary work 8 Jul 01 Data Summary Jul 02 Technical writing with Quarto Statistics Consultations 9 Jul 09 TBD Machine Learning Consultations 10 Jul 15 Personal Portfolio Jul 16 External Mock Interviews 11 Jul 23 Prof Dev: Alumni Panel Alumni Consultations 12 Jul 29 Rough Draft Write-up Jul 30 Prof Dev Drop-ins / TBD Data Visualization Consulting 13 Aug 06 Prof Dev Drop-ins / TBD Peer Presentation Practice 14 Aug 13 Project Presentations Aug 15 Final Draft Write-up </description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/data275/schedule/</link>
+      <link>/classes/data275/schedule/</link>
       <pubDate>Wed, 17 Jan 2024 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data275/schedule/</guid>
+      <guid>/classes/data275/schedule/</guid>
       <description>&#xA;Week Date Chapter Description Due 1 Jan 18 Solar System 2 Jan 23 Solar System Jan 25 Solar System 3 Jan 30 Solar System Feb 01 Stars Feb 02 HW1: SS 4 Feb 06 Stars Feb 08 Stars 5 Feb 13 Stars Feb 15 Exoplanets Quiz 1 Feb 16 HW2: Stars 6 Feb 20 Exoplanets Feb 22 Exoplanets 7 Feb 27 Exoplanets Feb 29 Exoplanets Mar 01 HW3: Exoplanets 8 Mar 05 Galaxies Mar 07 Galaxies 9 Mar 12 Galaxies Mar 14 Galaxies 10 Mar 19 Galaxies Mar 21 Dark Matter Quiz 2 Mar 22 HW4: Galaxies 11 Mar 26 Spring Break Mar 28 Spring Break 12 Apr 02 Jed traveling (no class) Apr 04 Dark Matter 13 Apr 09 Dark Matter Apr 11 Jed traveling (no class) 14 Apr 16 Dark Matter Apr 18 Cosmology 15 Apr 23 Cosmology Apr 25 Project Workday Quiz 3 Apr 26 HW5: MCMC Methods 16 Apr 30 Project Workday 17 May 07 Project Presentations </description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/data503/schedule1/</link>
+      <link>/classes/data503/schedule1/</link>
       <pubDate>Wed, 17 Jan 2024 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data503/schedule1/</guid>
+      <guid>/classes/data503/schedule1/</guid>
       <description>&#xA;Week Date Chapter Description Due 1 Jan 23 Data Engineering Described SQL: Ch 2-3 Tables and SELECT 2 Jan 29 HW 1 Jan 30 Data Sources SQL: Ch 4-5 Data Types and I/O 3 Feb 05 HW 2 Feb 06 The Shell SQL: Ch 6 Calculations with SQL 4 Feb 12 HW 3 Feb 13 Remote Connections SQL: Ch 6-7 Joining Tables 5 Feb 19 HW 4 Feb 20 Docker Containers SQL: Ch 7 Constraining Tables 6 Feb 26 Midterm Recording Feb 27 Scraping SQL: Ch 8-9 Grouping Showdown 7 Mar 04 HW 5 Mar 05 Modeling and Normalization SQL: Ch 12-13 JSON and Date-Time 8 Mar 11 HW 6 Mar 12 Automating Transforms SQL: Ch 10 Inspecting and Modifying Data 9 Mar 18 HW 7 Mar 19 Subqueries, Crosstabs, and Window Functions 10 Mar 26 Spring Break 11 Apr 02 Jed in Mexico for Eclipse 12 Apr 08 HW 8 Apr 09 Regular Expressions SQL: Ch 14 Mining Text 13 Apr 15 HW 9 Apr 16 Serving Data SQL: Ch 15 Spatial Data with POSTGIS 14 Apr 22 HW 10 Apr 23 Ch 16 Views, Functions, and Triggers 15 Apr 30 Project Presentations </description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/data503/schedule2/</link>
+      <link>/classes/data503/schedule2/</link>
       <pubDate>Mon, 15 Jan 2024 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data503/schedule2/</guid>
+      <guid>/classes/data503/schedule2/</guid>
       <description>&#xA;Week Date Chapter Description Due 1 Jan 18 Data Engineering Described SQL: Ch 2-3 Tables and SELECT 2 Jan 24 HW 1 Jan 25 Data Sources SQL: Ch 4-5 Data Types and I/O 3 Jan 31 HW 2 Feb 01 The Shell SQL: Ch 6 Calculations with SQL 4 Feb 07 HW 3 Feb 08 Remote Connections SQL: Ch 6-7 Joining Tables 5 Feb 14 HW 4 Feb 15 Docker Containers SQL: Ch 7 Constraining Tables 6 Feb 21 HW 5 Feb 22 Scraping SQL: Ch 8-9 Grouping Showdown 7 Feb 28 Midterm Recording Feb 29 Modeling and Normalization SQL: Ch 12-13 JSON and Date-Time 8 Mar 06 HW 6 Mar 07 Automating Transforms SQL: Ch 10 Inspecting and Modifying Data 9 Mar 13 HW 7 Mar 14 Subqueries, Crosstabs, and Window Functions 10 Mar 20 HW 8 Mar 21 Regular Expressions SQL: Ch 14 Mining Text 11 Mar 28 Spring Break 12 Apr 03 HW 9 Apr 04 Serving Data SQL: Ch 15 Spatial Data with POSTGIS 13 Apr 10 HW 10 Apr 11 Jed in Mexico for Eclipse 14 Apr 18 Ch 16 Views, Functions, and Triggers 15 Apr 25 Project Presentations </description>
     </item>
     <item>
       <title>Editor</title>
-      <link>/Website_Backup/classes/cs151/editor/</link>
+      <link>/classes/cs151/editor/</link>
       <pubDate>Wed, 06 Dec 2023 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/editor/</guid>
+      <guid>/classes/cs151/editor/</guid>
       <description> Copy </description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/cs151/schedule/</link>
+      <link>/classes/cs151/schedule/</link>
       <pubDate>Sun, 27 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/schedule/</guid>
+      <guid>/classes/cs151/schedule/</guid>
       <description>&#xA;Week Date Chapter Description Due 1 Aug 28 Karel the Robot Aug 30 Karel the Robot Sep 01 Karel the Robot 2 Sep 04 Labor Day Sep 06 Karel the Robot Sep 08 Ch 1 Introducing Python 3 Sep 11 Ch 1 Introducing Python Problem Set 1 Sep 13 Ch 2 Control Statements Sep 15 Ch 3 Algorithms 4 Sep 18 Ch 7 Strings Problem Set 2 Sep 20 Ch 7 Strings Sep 22 Ch 7 Strings 5 Sep 25 Ch 4 Simple Graphics Problem Set 3 Sep 27 Ch 4 Simple Graphics Sep 29 Ch 5 Functions 6 Oct 02 Ch 6 Writing Interactive Programs Project 1: Wordle Oct 04 Ch 6 Writing Interactive Programs Oct 06 Midterm 1 (Ch 1 - 4, 7) 7 Oct 09 Ch 6 Writing Interactive Programs Oct 11 Ch 6 Writing Interactive Programs Oct 13 Mid-Semester Day Graphics Contest 8 Oct 16 Ch 8 Lists Problem Set 4 Oct 18 Ch 8 Lists Oct 20 Ch 8 Lists 9 Oct 23 Ch 8 Lists Project 2: Breakout Oct 25 Debugging Oct 27 Imageshop Overview 10 Oct 30 Ch 10 Classes and Objects Problem Set 5 Nov 01 Ch 10 Classes and Objects Nov 03 Ch 10 Classes and Objects 11 Nov 06 Ch 11 Dictionaries and Sets Project 3: ImageShop Nov 08 Enigma Overview Nov 10 Midterm 2 (Ch 5, 6, 8) 12 Nov 13 Ch 11 Dictionaries and Sets Nov 15 Ch 12 Data Structures Nov 17 Ch 12 Data Structures 13 Nov 20 Ch 9 Algorithmic Analysis Project 4: Enigma Nov 22 Thanksgiving Break Nov 24 Thanksgiving Break 14 Nov 27 Adventure Overview Nov 29 Ch 9 Algorithmic Analysis Dec 01 Ch 9 Algorithmic Analysis 15 Dec 04 Fun Libraries Dec 06 Fun Algorithms Project 5: Adventure, Game Contest 16 Dec 13 Final </description>
     </item>
     <item>
       <title>Guides</title>
-      <link>/Website_Backup/classes/data275/guides/</link>
+      <link>/classes/data275/guides/</link>
       <pubDate>Fri, 27 Jan 2023 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data275/guides/</guid>
+      <guid>/classes/data275/guides/</guid>
       <description>&#xA;Sample HTML output of Computational Essay Quarto Markdown that generated above HTML Pandas Guide (WIP) Learning GitHub Classroom </description>
     </item>
     <item>
       <title>Guides</title>
-      <link>/Website_Backup/classes/data299/guides/</link>
+      <link>/classes/data299/guides/</link>
       <pubDate>Fri, 27 Jan 2023 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data299/guides/</guid>
+      <guid>/classes/data299/guides/</guid>
       <description>&#xA;Sample HTML output of Computational Essay Quarto Markdown that generated above HTML Pandas Guide (WIP) Learning GitHub Classroom </description>
     </item>
     <item>
       <title>Start of Semester Setup</title>
-      <link>/Website_Backup/classes/cs151/software_setup/</link>
+      <link>/classes/cs151/software_setup/</link>
       <pubDate>Thu, 19 Jan 2023 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/software_setup/</guid>
+      <guid>/classes/cs151/software_setup/</guid>
+      <description>Installing Python Installing Python Navigate to python.org Mouse over &amp;ldquo;Downloads&amp;rdquo; and then choose your OS Download the latest stable version that will work on your system. Anything 3.8 and beyond should be fine for this class. Run the installer. On the first screen, click the bottom box! The the rest of the installation can go with the default options. Once done, you can test that everything went well by trying to launch IDLE.</description>
+    </item>
+    <item>
+      <title>Start of Semester Setup</title>
+      <link>/classes/cs500/software_setup/</link>
+      <pubDate>Thu, 19 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>/classes/cs500/software_setup/</guid>
       <description>Installing Python Installing Python Navigate to python.org Mouse over &amp;ldquo;Downloads&amp;rdquo; and then choose your OS Download the latest stable version that will work on your system. Anything 3.8 and beyond should be fine for this class. Run the installer. On the first screen, click the bottom box! The the rest of the installation can go with the default options. Once done, you can test that everything went well by trying to launch IDLE.</description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/data299/schedule/</link>
+      <link>/classes/data299/schedule/</link>
       <pubDate>Wed, 18 Jan 2023 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data299/schedule/</guid>
+      <guid>/classes/data299/schedule/</guid>
       <description>&#xA;Week Date Chapter Description Due 1 Jan 18 Solar System 2 Jan 23 Solar System Jan 25 Solar System 3 Jan 30 Solar System Feb 01 Stars Feb 03 HW1: SS 4 Feb 06 Stars Feb 08 Stars 5 Feb 13 Stars Feb 15 Exoplanets Feb 17 HW2: Stars 6 Feb 20 Mid-Semester Break Feb 22 Exoplanets Quiz 1 7 Feb 27 Exoplanets Mar 01 Exoplanets Mar 03 HW3: Exoplanets 8 Mar 06 Project 1 Workday Mar 08 Project 1 Presentations 9 Mar 13 Galaxies Mar 15 Galaxies 10 Mar 20 Galaxies Mar 22 Galaxies 11 Mar 27 Spring Break Mar 29 Spring Break 12 Apr 03 Galaxies Apr 05 Dark Matter Apr 07 HW4: Galaxies 13 Apr 10 Dark Matter Quiz 2 Apr 12 Dark Matter Apr 14 HW5: Dark Matter 14 Apr 17 Cosmology Apr 19 SSRD 15 Apr 24 Cosmology Apr 26 Cosmology 16 May 01 Cosmology HW6: Cosmology May 03 Project 2 Workday Quiz 3 17 May 12 Project 2 Presentations </description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/data503/schedule/</link>
+      <link>/classes/data503/schedule/</link>
       <pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data503/schedule/</guid>
+      <guid>/classes/data503/schedule/</guid>
       <description>&#xA;Week Date Chapter Description Due 1 Jan 11 Ch 2-3 Tables and SELECT 2 Jan 18 Ch 4-5 Data Types and I/O 3 Jan 22 HW 1 Jan 25 Ch 6 Math and Stats with SQL 4 Jan 29 HW 2 Feb 01 Ch 6-7 Math and Joining Tables 5 Feb 05 HW 3 Feb 08 Ch 7 Joining Tables 6 Feb 12 HW 4 Feb 15 Ch 8-9 Designing and Grouping 7 Feb 19 HW 5 Feb 22 Midterm 8 Mar 01 Ch 10 Inspecting and Modifying Data 9 Mar 05 HW 6 Mar 08 Ch 12-13 Datetimes and Advanced Queries 10 Mar 12 HW 7 Mar 15 Ch 14 Mining Text 11 Mar 19 HW 8 Mar 22 Ch 16 Views, Functions, and Triggers 12 Mar 26 HW 9 Mar 29 Spring Break 13 Apr 05 Ch 15 Spatial Data with POSTGIS 14 Apr 09 HW 10 Apr 12 Project Presentations 15 Apr 19 Final </description>
     </item>
     <item>
       <title>Data in the Cosmos</title>
-      <link>/Website_Backup/classes/data275/data275/</link>
+      <link>/classes/data275/data275/</link>
       <pubDate>Tue, 10 Jan 2023 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data275/data275/</guid>
+      <guid>/classes/data275/data275/</guid>
       <description>General Information Welcome to DATA 275: Data in the Cosmos! This is my personal website, and will be the main location where I post things throughout the semester. Anything posted elsewhere will be clearly indicated and announced in class! In general this should be your one-stop-shop for everything class related.&#xA;Syllabus If you need a quick reference or review, you can find my syllabus here: Syllabus Homework We will be using GitHub Classroom this semester for managing and submitting homework.</description>
     </item>
     <item>
       <title>Data in the Cosmos</title>
-      <link>/Website_Backup/classes/data299/data299/</link>
+      <link>/classes/data299/data299/</link>
       <pubDate>Tue, 10 Jan 2023 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data299/data299/</guid>
+      <guid>/classes/data299/data299/</guid>
       <description>General Information Welcome to DATA 299: Data in the Cosmos! This is my personal website, and will be the main location where I post things throughout the semester. Anything posted elsewhere will be clearly indicated and announced in class! In general this should be your one-stop-shop for everything class related.&#xA;Syllabus If you need a quick reference or review, you can find my syllabus here: Syllabus Homework We will be using GitHub Classroom this semester for managing and submitting homework.</description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/data351/schedule/</link>
+      <link>/classes/data351/schedule/</link>
       <pubDate>Mon, 29 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data351/schedule/</guid>
+      <guid>/classes/data351/schedule/</guid>
       <description>&#xA;Week Date Chapter Description Due 1 Aug 29 Ch 1 First Database and Table Aug 31 Ch 2 Using SELECT 2 Sep 05 Labor Day Sep 07 Ch 3 Understanding Data Types HW 1 due 3 Sep 12 Ch 4 Importing and Exporting Data Sep 14 Ch 5 Math and Stats with SQL HW 2 due 4 Sep 19 Ch 5 Math and Stats with SQL Sep 21 Ch 6 Joining Tables HW 3 due 5 Sep 26 Ch 6 Joining Tables Sep 28 Test 1 (Ch 1-5) 6 Oct 03 Ch 7 Designing Tables Oct 05 Ch 7 Designing Tables HW 4 due 7 Oct 10 Ch 8 Grouping and Summarizing Oct 12 Ch 9 Inspecting and Modifying Data HW 5 due 8 Oct 17 Ch 9 Inspecting and Modifying Data Oct 19 Ch 11 Dates and Times HW 6 due 9 Oct 24 Window Functions Oct 26 Ch 12 Advanced Queries HW 7 due 10 Oct 31 Ch 12 Advanced Queries Nov 02 Ch 12 Test 2 (Ch 6-11) 11 Nov 07 Ch 13 Mining Text Nov 09 Ch 13 Mining Text HW 8 due 12 Nov 14 Ch 14 Spatial Data with POSTGIS Nov 16 Ch 14 Spatial Data with POSTGIS HW 9 due 13 Nov 21 Fall Break Nov 23 Fall Break 14 Nov 28 Webscraping Nov 30 Ch 15 Views, Functions, and Triggers HW 10 due 15 Dec 05 Ch 15 Views, Functions, and Triggers Dec 07 Ch 17 Project Presentations 16 Dec 14 Final </description>
     </item>
     <item>
       <title>Data Management with SQL</title>
-      <link>/Website_Backup/classes/data351/data351/</link>
+      <link>/classes/data351/data351/</link>
       <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data351/data351/</guid>
+      <guid>/classes/data351/data351/</guid>
       <description>General Information Welcome to DATA 351: Data Management with SQL! This is my personal website, and will be the main location where I post things throughout the semester. Anything posted elsewhere will be clearly indicated and announced in class! In general this should be your one-stop-shop for everything class related.&#xA;Syllabus If you need a quick reference or review, you can find my syllabus here: Syllabus The Book We will be using this semester is Practical SQL: A Beginner&amp;rsquo;s Guide to Storytelling with Data by Anthony DeBarros.</description>
     </item>
     <item>
       <title>Fundamentals of Data Engineering</title>
-      <link>/Website_Backup/classes/data503/data503/</link>
+      <link>/classes/data503/data503/</link>
       <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data503/data503/</guid>
+      <guid>/classes/data503/data503/</guid>
       <description>General Information Welcome to DATA 503: Fundamentals of Data Engineering! This is my personal website, and will be the main location where I post things throughout the semester. Anything posted elsewhere will be clearly indicated and announced in class! In general this should be your one-stop-shop for everything class related.&#xA;Syllabus If you need a quick reference or review, you can find my syllabus here: Syllabus The Book We will be using this semester is Practical SQL: A Beginner&amp;rsquo;s Guide to Storytelling with Data by Anthony DeBarros.</description>
     </item>
     <item>
       <title>Guides</title>
-      <link>/Website_Backup/classes/cs151/guides/</link>
+      <link>/classes/cs151/guides/</link>
       <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/guides/</guid>
+      <guid>/classes/cs151/guides/</guid>
       <description>&#xA;Software Setup for Fall 2023 </description>
     </item>
     <item>
       <title>Guides</title>
-      <link>/Website_Backup/classes/data351/guides/</link>
+      <link>/classes/data351/guides/</link>
       <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data351/guides/</guid>
+      <guid>/classes/data351/guides/</guid>
       <description>&#xA;Learning GitHub Classroom </description>
     </item>
     <item>
       <title>Homework</title>
-      <link>/Website_Backup/classes/data275/hw/</link>
+      <link>/classes/data275/hw/</link>
       <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data275/hw/</guid>
+      <guid>/classes/data275/hw/</guid>
       <description>&#xA;Name Due Date Homework 1 Fri, Feb 2 Homework 2 Fri, Feb 16 Homework 3 Fri, Mar 1 Homework 4 Fri, Mar 22 Homework 5 Fri, Apr 26 </description>
     </item>
     <item>
       <title>Homework</title>
-      <link>/Website_Backup/classes/data299/hw/</link>
+      <link>/classes/data299/hw/</link>
       <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data299/hw/</guid>
+      <guid>/classes/data299/hw/</guid>
       <description>&#xA;Name Due Date Homework 1 Fri, Feb 3 Homework 2 Fri, Feb 17 Homework 3 Fri, Mar 10 Homework 4 Fri, Mar 24 Homework 5 Sat, Apr 29 </description>
     </item>
     <item>
       <title>Homework</title>
-      <link>/Website_Backup/classes/data351/hw/</link>
+      <link>/classes/data351/hw/</link>
       <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data351/hw/</guid>
+      <guid>/classes/data351/hw/</guid>
       <description>&#xA;Name Due Date Homework 1 Wed, Sep 7 Homework 2 Wed, Sep 14 Homework 3 Thu, Sep 22 Homework 4 Thu, Oct 6 Homework 5 Thu, Oct 13 Homework 6 Thu, Oct 20 Homework 7 Thu, Oct 27 Homework 8 Thu, Nov 10 Homework 9 Fri, Nov 18 Homework 10 Fri, Dec 9 </description>
     </item>
     <item>
       <title>Homework</title>
-      <link>/Website_Backup/classes/data503/hw/</link>
+      <link>/classes/data503/hw/</link>
       <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data503/hw/</guid>
+      <guid>/classes/data503/hw/</guid>
       <description>&#xA;Name Due Date (Salem) Due Date (Portland) Homework 1 Wed, Jan 24 Mon, Jan 29 Homework 2 Wed, Jan 31 Mon, Feb 5 Homework 3 Wed, Feb 7 Mon, Feb 12 Homework 4 Wed, Feb 14 Mon, Feb 19 Homework 5 Wed, Feb 21 Mon, Feb 26 Homework 6 Mon, Mar 11 Mon, Mar 11 Homework 7 Mon, Mar 18 Mon, Mar 18 Homework 8 Mon, Apr 1 Sat, Apr 1 Homework 9 Mon, Apr 15 Mon, Apr 15 </description>
     </item>
     <item>
       <title>Homework</title>
-      <link>/Website_Backup/classes/data510/deliverables/</link>
+      <link>/classes/data510/deliverables/</link>
       <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data510/deliverables/</guid>
+      <guid>/classes/data510/deliverables/</guid>
       <description>&#xA;Name Due Date Project Proposal Mon, Jun 3 Data Summary Mon, Jul 1 Personal Portfolio Mon, Jul 15 Rough Draft Write-up Mon, Jul 29 </description>
     </item>
     <item>
       <title>Intro to Programming with Python</title>
-      <link>/Website_Backup/classes/cs151/cs151/</link>
+      <link>/classes/cs151/cs151/</link>
       <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/cs151/</guid>
+      <guid>/classes/cs151/cs151/</guid>
       <description>General Information Welcome to CS 151: Intro to Programming with Python! This is my personal website, and will be the main location where I post things throughout the semester. Anything posted elsewhere will be clearly indicated and announced in class! In general this should be your one-stop-shop for everything class related.&#xA;Syllabus If you need a quick reference or review, you can find my syllabus here: Syllabus The Book We will be using the reader written by Professor Eric Roberts this semester.</description>
     </item>
     <item>
+      <title>Projects</title>
+      <link>/classes/cs500/projects/</link>
+      <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>/classes/cs500/projects/</guid>
+      <description>&#xA;Name Due Date </description>
+    </item>
+    <item>
       <title>Test Preparation</title>
-      <link>/Website_Backup/classes/cs151/testprep/</link>
+      <link>/classes/cs151/testprep/</link>
       <pubDate>Wed, 17 Mar 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/testprep/</guid>
+      <guid>/classes/cs151/testprep/</guid>
       <description>Exam 1 [Learning Objectives] - A good summary of what you should feel decent about going into the test. Practice Exam 1 - [Test] [Solutions] Practice Exam 2 - [Test] [Solutions] Exam 2 [Learning Objectives] - A summary of concepts from the Exam 1 until Exam 2. Practice Exam 1 - [Test] [Solutions] Practice Exam 2 - [Test] [Solutions] Final [Learning Objectives] - A summary of concepts from Exam 2 until the end.</description>
     </item>
     <item>
       <title>Test Preparation</title>
-      <link>/Website_Backup/classes/data275/testprep/</link>
+      <link>/classes/data275/testprep/</link>
       <pubDate>Wed, 17 Mar 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data275/testprep/</guid>
+      <guid>/classes/data275/testprep/</guid>
       <description>&#xA;Quiz 1 Prep Quiz 2 Prep Quiz 3 Prep </description>
     </item>
     <item>
       <title>Test Preparation</title>
-      <link>/Website_Backup/classes/data299/testprep/</link>
+      <link>/classes/data299/testprep/</link>
       <pubDate>Wed, 17 Mar 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data299/testprep/</guid>
+      <guid>/classes/data299/testprep/</guid>
       <description>&#xA;Quiz 1 Prep Quiz 2 Prep Quiz 3 Prep </description>
     </item>
     <item>
       <title>Test Preparation</title>
-      <link>/Website_Backup/classes/data351/testprep/</link>
+      <link>/classes/data351/testprep/</link>
       <pubDate>Wed, 17 Mar 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data351/testprep/</guid>
+      <guid>/classes/data351/testprep/</guid>
       <description>&#xA;Test 1 [Study Guide] [Solutions] [Old Test] [Solutions] Test 2 [Study Guide] [Solutions] [Old Test] [Solutions] Final [Study Guide] [Solutions] [Old Test] [Solutions] </description>
     </item>
     <item>
       <title>Test Preparation</title>
-      <link>/Website_Backup/classes/data503/testprep/</link>
+      <link>/classes/data503/testprep/</link>
       <pubDate>Wed, 17 Mar 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data503/testprep/</guid>
+      <guid>/classes/data503/testprep/</guid>
       <description>&#xA;Oral Midterm Prep </description>
     </item>
     <item>
       <title>Python Extras</title>
-      <link>/Website_Backup/classes/cs151/extras/</link>
+      <link>/classes/cs151/extras/</link>
       <pubDate>Wed, 10 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/extras/</guid>
+      <guid>/classes/cs151/extras/</guid>
       <description>&#xA;Summary and Documentation The below python summary is a pdf containing tables of all the most commonly used functions and a quick description about each for easy reference. It will be added to over the course of the semester as we introduce new content. While most of the PGL functions are included there, I&amp;rsquo;m also linking to the official PGL documentation below in case that is also useful.&#xA;Python Summary [PDF] Python Summary [HTML] Official PGL Documentation </description>
     </item>
     <item>
       <title>Python Extras</title>
-      <link>/Website_Backup/classes/data299/extras/</link>
+      <link>/classes/cs500/extras/</link>
       <pubDate>Wed, 10 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data299/extras/</guid>
+      <guid>/classes/cs500/extras/</guid>
+      <description>&#xA;Summary and Documentation The below python summary is a pdf containing tables of all the most commonly used functions and a quick description about each for easy reference. It will be added to over the course of the semester as we introduce new content. While most of the PGL functions are included there, I&amp;rsquo;m also linking to the official PGL documentation below in case that is also useful.&#xA;Python Summary [PDF] Python Summary [HTML] Official PGL Documentation </description>
+    </item>
+    <item>
+      <title>Python Extras</title>
+      <link>/classes/data299/extras/</link>
+      <pubDate>Wed, 10 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>/classes/data299/extras/</guid>
       <description>Summary and Documentation The below python summary is a pdf containing tables of all the most commonly used functions and a quick description about each for easy reference. It will be added to over the course of the semester as we introduce new content. While most of the PGL functions are included there, I&amp;rsquo;m also linking to the official PGL documentation below in case that is also useful.&#xA;Python Summary Official PGL Documentation Chapter Review Materials These are being put together by Professor Roberts in his free time this semester, and so may lag a bit behind when we cover the material.</description>
     </item>
     <item>
       <title>Python Extras</title>
-      <link>/Website_Backup/classes/data351/extras/</link>
+      <link>/classes/data351/extras/</link>
       <pubDate>Wed, 10 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data351/extras/</guid>
+      <guid>/classes/data351/extras/</guid>
       <description>Summary and Documentation The below python summary is a pdf containing tables of all the most commonly used functions and a quick description about each for easy reference. It will be added to over the course of the semester as we introduce new content. While most of the PGL functions are included there, I&amp;rsquo;m also linking to the official PGL documentation below in case that is also useful.&#xA;Python Summary Official PGL Documentation Chapter Review Materials These are being put together by Professor Roberts in his free time this semester, and so may lag a bit behind when we cover the material.</description>
     </item>
     <item>
       <title>Lecture Slides</title>
-      <link>/Website_Backup/classes/cs151/slides/</link>
+      <link>/classes/cs151/slides/</link>
       <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/slides/</guid>
+      <guid>/classes/cs151/slides/</guid>
       <description>&#xA;Number Date Description Video Lecture 38 Wed, Dec 6 RSA and Wrap-up Lecture 37 Mon, Dec 4 Fun Libraries Lecture 36 Fri, Dec 1 Emerging Recursion Lecture 35 Wed, Nov 29 Big-O Sorting Lecture 34 Mon, Nov 27 Token Efficiency Lecture 33 Mon, Nov 20 Adventure Lecture 32 Fri, Nov 17 The Teaching Machine Lecture 31 Wed, Nov 15 JSON Lecture 30 Mon, Nov 13 Dictionaries and Sets Lecture 29 Wed, Nov 8 Advising Enigma Lecture 28 Mon, Nov 6 Dictionaries Lecture 27 Fri, Nov 3 Methodical Representation Lecture 26 Wed, Nov 1 Class Constructors Lecture 25 Mon, Oct 30 Pressing Record Lecture 24 Fri, Oct 27 Writing ImageShop Lecture 23 Wed, Oct 25 Thresholding and Reading Lecture 22 Mon, Oct 23 Tabulating Multidimensional Arrays Lecture 21 Fri, Oct 20 Comprehending Mutability Lecture 20 Wed, Oct 18 Lists Lecture 19 Mon, Oct 16 Complex Shapes Lecture 18 Wed, Oct 11 Getting Animated Lecture 17 Mon, Oct 9 Mouse Events Lecture 16 Wed, Oct 4 Scoping out Events Lecture 15 Mon, Oct 2 Stacking Functions Lecture 14 Fri, Sep 29 Functional Labels Lecture 13 Wed, Sep 27 Drawing in Python Lecture 12 Mon, Sep 25 Formatting Wordle Lecture 11 Fri, Sep 22 Transforming Strings Lecture 10 Wed, Sep 20 Pythonic Strings Lecture 9 Mon, Sep 18 10 Representations Lecture 8 Fri, Sep 15 Creation to Debugging Lecture 7 Wed, Sep 13 Booleans and Control Lecture 6 Mon, Sep 11 Functional Code Lecture 5 Fri, Sep 8 Types and Variables Lecture 4 Wed, Sep 6 For Stepwise Refinement Lecture 3 Fri, Sep 1 Clever Karel Lecture 2 Wed, Aug 30 Functional Karel Lecture 1 Mon, Aug 28 Introducing Karel </description>
     </item>
     <item>
       <title>Lecture Slides</title>
-      <link>/Website_Backup/classes/data275/slides/</link>
+      <link>/classes/cs500/slides/</link>
       <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data275/slides/</guid>
+      <guid>/classes/cs500/slides/</guid>
+      <description>&#xA;Number Date Description Video </description>
+    </item>
+    <item>
+      <title>Lecture Slides</title>
+      <link>/classes/data275/slides/</link>
+      <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>/classes/data275/slides/</guid>
       <description>&#xA;Number Date Description Video Lecture 24 Tue, Apr 23 Shape and Future of the Universe Lecture 22 Thu, Apr 18 Emcee and Hubble Lecture 21 Tue, Apr 16 Likelihood Models Lecture 20 Thu, Apr 4 Monte Carlo Lecture 19 Thu, Mar 21 Dark Matter Lecture 18 Tue, Mar 19 Random Forests Lecture 17 Thu, Mar 14 Decision Trees Lecture 16 Tue, Mar 12 Logistic Regression Lecture 15 Thu, Mar 7 Other Galaxies Lecture 14 Tue, Mar 5 The Milky Way Lecture 13 Thu, Feb 29 Transits and Rolling Averages Lecture 12 Tue, Feb 27 Exoplanets and Transits Lecture 11 Thu, Feb 22 Lomb-Scargle and Wobbles Lecture 10 Tue, Feb 20 Convolutions and Discrete Fourier Effects Lecture 9 Thu, Feb 15 Fourier Transforms Lecture 8 Tue, Feb 13 HR Trends and Clusters Lecture 7 Thu, Feb 8 Peak Star Types Lecture 6 Tue, Feb 6 Absorption and Doppler Lecture 5 Thu, Feb 1 Some Light Plancking Lecture 4 Tue, Jan 30 Asteroids and Resonance Lecture 3 Thu, Jan 25 Kepler Continued and Distributions Lecture 2 Tue, Jan 23 Kepler&amp;#39;s Ellipses Lecture 1 Thu, Jan 18 Locating the Cosmos </description>
     </item>
     <item>
       <title>Lecture Slides</title>
-      <link>/Website_Backup/classes/data299/slides/</link>
+      <link>/classes/data299/slides/</link>
       <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data299/slides/</guid>
+      <guid>/classes/data299/slides/</guid>
       <description>&#xA;Number Date Description Video Lecture 24 Wed, Apr 26 Shape and Future of the Universe Lecture 23 Mon, Apr 24 Emcee and Hubble Lecture 22 Mon, Apr 17 MCMC Models Lecture 21 Wed, Apr 12 Markov Chaining Lecture 20 Mon, Apr 10 Monte Carlo Lecture 19 Wed, Apr 5 Dark Matter Lecture 18 Mon, Apr 3 Random Forests Lecture 17 Wed, Mar 22 Decision Trees Lecture 16 Mon, Mar 20 Classification Lecture 15 Wed, Mar 15 Other Galaxies Lecture 14 Mon, Mar 13 The Milky Way Lecture 13 Mon, Mar 6 Transits and Rolling Averages Lecture 12 Wed, Mar 1 Exoplanets and Doppler Lecture 11 Mon, Feb 27 Non-Uniform Sampling and Lomb-Scargle Lecture 10 Wed, Feb 22 Convolutions and Discrete Fourier Effects Lecture 9 Wed, Feb 15 Fourier Transforms Lecture 8 Mon, Feb 13 HR Trends and Clusters Lecture 7 Wed, Feb 8 Peak Star Types Lecture 6 Mon, Feb 6 Absorption and Doppler Lecture 5 Wed, Feb 1 Some Light Plancking Lecture 4 Mon, Jan 30 Asteroids and Resonance Lecture 3 Wed, Jan 25 Ellipses and Distributions Lecture 2 Mon, Jan 23 Kepler is Kool Lecture 1 Wed, Jan 18 Locating the Cosmos </description>
     </item>
     <item>
       <title>Lecture Slides</title>
-      <link>/Website_Backup/classes/data351/slides/</link>
+      <link>/classes/data351/slides/</link>
       <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data351/slides/</guid>
+      <guid>/classes/data351/slides/</guid>
       <description>Number Date Description Video Lecture 23 Wed, Nov 30 Views and Functions Lecture 22 Mon, Nov 28 Webscraping and APIs Lecture 21 Wed, Nov 16 Shapefiles Lecture 20 Mon, Nov 14 GIS Types Lecture 19 Wed, Nov 9 Text Mining Lecture 18 Mon, Nov 7 Regular Expressions Lecture 17 Mon, Oct 31 Window Functions Lecture 16 Wed, Oct 26 Pivot Tables Lecture 15 Mon, Oct 24 Subqueries Lecture 14 Wed, Oct 19 Timing Lecture 13 Mon, Oct 17 Alterations Lecture 12 Wed, Oct 12 Data Cleaning Lecture 11 Mon, Oct 10 Grouping Up!</description>
     </item>
     <item>
       <title>Lecture Slides</title>
-      <link>/Website_Backup/classes/data503/slides/</link>
+      <link>/classes/data503/slides/</link>
       <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data503/slides/</guid>
+      <guid>/classes/data503/slides/</guid>
       <description>Number Date Chapter Description Video (Salem) Video (Portland) Lecture 12 Thu, Apr 18 15 Serving and SQL Utilities Lecture 11 Tue, Apr 16 14 Connections and PostGIS Lecture 10 Thu, Mar 21 13 Text Lecture 9 Thu, Mar 14 12 Subqueries, Pivots, and Patterns Lecture 8 Thu, Mar 7 10 Altering the Window Lecture 7 Thu, Feb 29 10 Scraping Railways Lecture 6 Thu, Feb 22 9 Grouping JSON Models Lecture 5 Thu, Feb 15 8 Docking Constraints Lecture 4 Thu, Feb 8 7 Remote Joins Lecture 3 Thu, Feb 1 5 The Shell and Calculations Lecture 2 Thu, Jan 25 2 Data Sources, Types, and I/O Lecture 1 Thu, Jan 18 1 What is a Data Engineer?</description>
     </item>
     <item>
       <title>Lecture Slides</title>
-      <link>/Website_Backup/classes/data510/slides/</link>
+      <link>/classes/data510/slides/</link>
       <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data510/slides/</guid>
+      <guid>/classes/data510/slides/</guid>
       <description>&#xA;Number Date Description Video Week 9 Tue, Jul 9 Stat Consults Week 8 Tue, Jul 2 Quarto and Analysis Week 7 Tue, Jun 25 Technical Interviews and Data Summaries Week 6 Tue, Jun 18 Online Profiles and Data Summaries Week 5 Tue, Jun 11 Mock Interviews and Scripting Databases Week 4 Mon, Jun 3 Behavioral Interview Questions Week 3 Tue, May 28 Gitting Proposed Week 2 Tue, May 21 Commencing Planning Week 1 Tue, May 14 Capping Things Off </description>
     </item>
     <item>
       <title>Lecture 33 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec33/</link>
+      <link>/classes/cs151/code_samples/lec33/</link>
       <pubDate>Fri, 17 Apr 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec33/</guid>
+      <guid>/classes/cs151/code_samples/lec33/</guid>
       <description>Separating Code into Multiple Classes 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 import arcade import random class Ball: def __init__(self, x, y, r): self.</description>
     </item>
     <item>
       <title>Lecture 32 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec32/</link>
+      <link>/classes/cs151/code_samples/lec32/</link>
       <pubDate>Wed, 15 Apr 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec32/</guid>
+      <guid>/classes/cs151/code_samples/lec32/</guid>
       <description>Arcade Classes 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 import arcade class Example(arcade.Window): def __init__(self, width, height, title): arcade.Window.__init__(self, width, height, title) arcade.set_background_color(arcade.color.BLUE_YONDER) self.width = width self.height = height self.x = self.</description>
     </item>
     <item>
       <title>Lecture 31 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec31/</link>
+      <link>/classes/cs151/code_samples/lec31/</link>
       <pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec31/</guid>
+      <guid>/classes/cs151/code_samples/lec31/</guid>
       <description>Plotting Labels and Adjustments 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 import matplotlib.pyplot as plt plt.style.use(&amp;#39;fivethirtyeight&amp;#39;) f = plt.figure(figsize=(10,5)) ax1 = f.add_subplot(121) ax2 = f.add_subplot(122) ax1.plot([1,2,3,4,5], &amp;#39;gd&amp;#39;) ax2.plot([2,4,9,16,25], &amp;#39;bs--&amp;#39;) ax1.set_xlabel(&amp;#39;Axis 1 X&amp;#39;) ax1.set_ylabel(&amp;#39;Axis 1 Y&amp;#39;) ax2.set_xlabel(&amp;#39;Axis 2 X&amp;#39;) ax2.set_ylabel(&amp;#39;Axis 2 Y&amp;#39;) ax1.set_title(&amp;#39;Title of Plot 1&amp;#39;) ax2.set_title(&amp;#39;Title of Plot 2&amp;#39;) f.</description>
     </item>
     <item>
       <title>Lecture 26 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec26/</link>
+      <link>/classes/cs151/code_samples/lec26/</link>
       <pubDate>Mon, 30 Mar 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec26/</guid>
+      <guid>/classes/cs151/code_samples/lec26/</guid>
       <description>Special Methods Example 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 class Coordinate: def __init__(self,x,y): self.x = x self.y = y def distance(self, other): xdiff = (self.x - other.x) ydiff = (self.y - other.y) dist = (xdiff**2 + ydiff**2)**0.</description>
     </item>
     <item>
       <title>Lecture 25 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec25/</link>
+      <link>/classes/cs151/code_samples/lec25/</link>
       <pubDate>Fri, 20 Mar 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec25/</guid>
+      <guid>/classes/cs151/code_samples/lec25/</guid>
       <description>Simple Class Creation 1 2 3 4 5 6 7 8 9 10 11 12 13 14 class Coordinate: def __init__(self, x, y): self.x = x self.y = y self.turkey = True C1 = Coordinate(1, 2) C2 = Coordinate(5, 6) C2.x = 10 print(C1.x) print(C2.x) print(C1.turkey) print(C2.turkey) A Student Class 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 class Student: def __init__(self, name, age): self.</description>
     </item>
     <item>
       <title>Lecture 24 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec24/</link>
+      <link>/classes/cs151/code_samples/lec24/</link>
       <pubDate>Wed, 18 Mar 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec24/</guid>
+      <guid>/classes/cs151/code_samples/lec24/</guid>
       <description>&#xA;Review Question 1 2 3 4 5 6 A = &amp;#34;{:&amp;lt;12,f} &amp;amp; {:0&amp;gt;4d}&amp;#34;.format(1.01234984e5, 320 // 8) B = &amp;#34;{:&amp;gt;12,.2f} &amp;amp; {:0&amp;gt;4d}&amp;#34;.format(1.01234984e5, 32000 // 8) C = &amp;#34;{:&amp;lt;12,.2f} &amp;amp; {:&amp;lt;4d}&amp;#34;.format(1.01234984e5, 3200 // 8) D = &amp;#34;{:&amp;lt;12,.2f} &amp;amp; {:0&amp;lt;4d}&amp;#34;.format(1.01234984e5, 32 // 8) for s in [A, B, C, D]: print(s F-String Examples 1 2 3 A = 10 B = 15.9235 print(f&amp;#34;{A*2} is not equal to {B:.0f}&amp;#34; </description>
     </item>
     <item>
       <title>Lecture 23 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec23/</link>
+      <link>/classes/cs151/code_samples/lec23/</link>
       <pubDate>Mon, 16 Mar 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec23/</guid>
+      <guid>/classes/cs151/code_samples/lec23/</guid>
       <description>Basic Use of .format 1 2 3 4 print(&amp;#34;This is a string with a number: {}&amp;#34;.format(10.123)) S = &amp;#34;The number is {} and 2 times the number is {}&amp;#34; print(S.format(15, 2 * 15)) Labels and Keywords 1 2 T = &amp;#34;{name1} and {name2} and {}&amp;#34; print(T.format(&amp;#34;Barry&amp;#34;, name1=&amp;#34;Jennifer&amp;#34;, name2=&amp;#34;Bart&amp;#34;)) Different Formats 1 2 3 4 type_s = &amp;#34;{num1:.13f} + {num2:d} = {num3:.2e}&amp;#34; A = 4 print(type_s.format(num1=A, num2=6, num3=4 + 6)) print(A) Width and Fills 1 2 3 4 5 for i in range(1, 10000, 500): print(&amp;#34;{:8d}&amp;#34;.</description>
     </item>
     <item>
       <title>Lecture 22 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec22/</link>
+      <link>/classes/cs151/code_samples/lec22/</link>
       <pubDate>Fri, 13 Mar 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec22/</guid>
+      <guid>/classes/cs151/code_samples/lec22/</guid>
       <description>Sets Examples 1 2 3 4 5 6 7 8 9 10 11 12 13 14 A = {1,2,3,4,5,6,7,7,7,7,7} B = {1,3,5,7,9} print(len(A)) for v in B: print(v) print(A.union(B)) print(A.intersection(B)) C = [1,3,3,3,5] print(5 in set(C)) print(set(C).issubset(B)) Basic Sprites 1 2 3 4 5 6 7 8 9 10 11 import arcade arcade.open_window(500, 300, &amp;#39;Basic Sprites&amp;#39;) arcade.set_background_color(arcade.color.GREEN) truck = arcade.Sprite(&amp;#39;pngs/truckcabin.png&amp;#39;, 5, center_x=250, center_y=150) arcade.start_render() truck.draw() arcade.finish_render() arcade.run() SpriteLists and Animation 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 import arcade def main(): global sprites arcade.</description>
     </item>
     <item>
       <title>Lecture 13 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec13/</link>
+      <link>/classes/cs151/code_samples/lec13/</link>
       <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec13/</guid>
+      <guid>/classes/cs151/code_samples/lec13/</guid>
       <description>Arcade Example 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 import arcade WIDTH = 600 HEIGHT = 300 def main(): global bx, by, vx, vy arcade.open_window(WIDTH, HEIGHT, &amp;#39;Example&amp;#39;) arcade.set_background_color(arcade.color.BLUE_SAPPHIRE) bx, by = WIDTH/2, HEIGHT/2 vx, vy = 1, 0.5 arcade.schedule(on_draw, 1/60) arcade.run() def draw_happy_box(x,y): arcade.draw_rectangle_filled(x, y, 50, 50, arcade.</description>
     </item>
     <item>
       <title>Lecture 12 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec12/</link>
+      <link>/classes/cs151/code_samples/lec12/</link>
       <pubDate>Wed, 19 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec12/</guid>
+      <guid>/classes/cs151/code_samples/lec12/</guid>
       <description>Basic Newton-Raphson 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 goal = 0 epsilon = 0.01 guess = 1 num_guesses = 1 def f(x): return 8 * x**2 - 3 while abs(f(guess) - goal) &amp;gt; epsilon: numerator = f(guess) denom = 16 * guess guess -= numerator / denom num_guesses += 1 print(&amp;#39;Solution:&amp;#39;, guess) print(&amp;#39;It took&amp;#39;, num_guesses, &amp;#39;guesses!&amp;#39;) Positional and Keyword Arguments 1 2 3 4 def h(a, b, c): print(a,b,c) h(5, c=2, b=3) Default Arguments 1 2 3 4 5 6 7 def func(name=&amp;#39;Jed&amp;#39;, age=34): print(&amp;#39;The name is&amp;#39;, name, &amp;#39;and is&amp;#39;, age, &amp;#39;years old!</description>
     </item>
     <item>
       <title>Lecture 11 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec11/</link>
+      <link>/classes/cs151/code_samples/lec11/</link>
       <pubDate>Mon, 17 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec11/</guid>
+      <guid>/classes/cs151/code_samples/lec11/</guid>
       <description>Varied Examples 1 2 3 4 5 6 7 8 9 10 11 def print_stuff(): print(&amp;#39;Stuff 1&amp;#39;) print(&amp;#39;Stuff 2&amp;#39;) def print_mult_of_A(A): print(A, 2*A, 3*A, 4*A, 5*A) def calc_year_savings(init_amt): for i in range(12): init_amt += init_amt * 0.03/12 return init_amt Flow Example 1 2 3 4 5 6 7 8 9 10 11 12 def year_savings(init_amt, int_rate): for i in range(12): init_amt *= (1+int_rate/12) return init_amt amount = 100 rate = 0 while rate &amp;lt; 1: print(&amp;#39;Savings:&amp;#39;, year_savings(amount, rate)) rate += 0.</description>
     </item>
     <item>
       <title>Lecture 4 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec4/</link>
+      <link>/classes/cs151/code_samples/lec4/</link>
       <pubDate>Fri, 31 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec4/</guid>
+      <guid>/classes/cs151/code_samples/lec4/</guid>
       <description>Input Examples 1 2 3 4 5 name = input(&amp;#39;What is your name? &amp;#39;) year = int(input(&amp;#39;In what year were you born? &amp;#39;)) age = 2020 - year print(&amp;#34;Your name is &amp;#34; + name + &amp;#34; and you are &amp;#34; + str(age) + &amp;#34; years old.&amp;#34;) Troubleshooting Examples 1 2 3 4 5 6 # Will give a syntax error but where the # line above the listed one has the problem x = input(&amp;#39;Enter an integer x:&amp;#39; mult = 3 * x print(&amp;#39;The value of 3*x is:&amp;#39;) print(mult) Infinite Loop Perils 1 2 3 4 5 6 7 8 9 10 # Infinite because forgetting to update x = 0 while x &amp;lt; 10: print(x) # Infinite because missing target x = 0 while x !</description>
     </item>
     <item>
       <title>Lecture 3 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec3/</link>
+      <link>/classes/cs151/code_samples/lec3/</link>
       <pubDate>Wed, 29 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec3/</guid>
+      <guid>/classes/cs151/code_samples/lec3/</guid>
       <description>Conditional Syntax 1 2 3 4 5 6 7 8 A = True B = 10 C = 5 == B if C: print(&amp;#39;The test is true!&amp;#39;) else: print(&amp;#39;The test is false!&amp;#39;) Elif Statements 1 2 3 4 5 6 7 8 9 10 light_color = &amp;lt;fill_in_color&amp;gt; if light_color == &amp;#39;Green&amp;#39;: print(&amp;#39;Keep going!&amp;#39;) elif light_color == &amp;#39;Yellow&amp;#39;: print(&amp;#39;Slow down!&amp;#39;) elif light_color == &amp;#39;Red&amp;#39;: print(&amp;#39;Stop!!&amp;#39;) else: print(&amp;#39;What country are you in?!&amp;#39;) More Traffic Lights 1 2 3 4 5 6 7 8 9 10 11 12 13 14 light_color = &amp;lt;fill_in_color&amp;gt; time_since_changed = &amp;lt;fill_in_time&amp;gt; #seconds if light_color == &amp;#39;Green&amp;#39;: print(&amp;#39;Keep going!</description>
     </item>
     <item>
       <title>Hall of Excellence</title>
-      <link>/Website_Backup/classes/phys222/vhw_examples/</link>
+      <link>/classes/phys222/vhw_examples/</link>
       <pubDate>Thu, 16 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys222/vhw_examples/</guid>
+      <guid>/classes/phys222/vhw_examples/</guid>
       <description>This semester I&amp;rsquo;ll be linking to (with permission) videos that you all have sent in that I think are of particularly high quality. The reason is because I think there is a LOT of be learned from one another when it comes to explaining and thinking about solving physics problems. My plan is to pull one problem from here for each test, so make sure you check out what your peers are submitting!</description>
     </item>
     <item>
       <title>Lecture 30 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec30/</link>
+      <link>/classes/cs151/code_samples/lec30/</link>
       <pubDate>Fri, 08 Nov 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec30/</guid>
+      <guid>/classes/cs151/code_samples/lec30/</guid>
       <description>Adding Axes Manually 1 2 3 4 5 6 import matplotlib.pyplot as plt f = plt.figure() ax = f.add_axes((.1,.1,.8,.8)) ax2 = f.add_axes((.2,.6,.2,.2)) plt.show() Adding Axes with Subplots 1 2 3 4 5 6 import matplotlib.pyplot as plt f = plt.figure() ax = f.add_subplot(211) # two rows, 1 column ax2 = f.add_subplot(2,1,2) plt.show() Adding content to plots 1 2 3 4 5 6 7 8 9 10 import matplotlib.pyplot as plt f = plt.</description>
     </item>
     <item>
       <title>Lecture 29 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec29/</link>
+      <link>/classes/cs151/code_samples/lec29/</link>
       <pubDate>Wed, 06 Nov 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec29/</guid>
+      <guid>/classes/cs151/code_samples/lec29/</guid>
       <description>Creating and Accessing Class Variables 1 2 3 4 5 6 7 8 9 10 11 12 13 14 class MyBestClass: a_class_variable = &amp;#39;Hello!&amp;#39; def __init__(self): self.a_instance_variable = &amp;#39;Hi!&amp;#39; print(MyBestClass.a_class_variable) A = MyBestClass() print(A.a_class_variable) # Changing things: B = MyBestClass() A.a_class_variable = &amp;#39;Oh hi!&amp;#39; print(A.a_class_variable, B.a_class_variable) Checkers Mockup Example 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 class Checker: def __init__(self, x, y): self.</description>
     </item>
     <item>
       <title>Lecture 28 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec28/</link>
+      <link>/classes/cs151/code_samples/lec28/</link>
       <pubDate>Mon, 04 Nov 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec28/</guid>
+      <guid>/classes/cs151/code_samples/lec28/</guid>
       <description>Changing or Creating Inherited Attributes 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 class Human(object): def __init__(self,age): self.age = age self.legs = 2 self.eyes = 2 def __repr__(self): return f&amp;#39;Human({self.age})&amp;#39; class Pirate(Human): def talk(self): return &amp;#34;Aye matey!&amp;#34; def __repr__(self): return f&amp;#39;Pirate({self.</description>
     </item>
     <item>
       <title>Lecture 27 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec27/</link>
+      <link>/classes/cs151/code_samples/lec27/</link>
       <pubDate>Fri, 01 Nov 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec27/</guid>
+      <guid>/classes/cs151/code_samples/lec27/</guid>
       <description>Getters and Setters 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 class Animal: def __init__(self, name, age): self.name = name self._age = age # Protected self.__secret = &amp;#39;Afraid of water&amp;#39; # Private def __repr__(self): return f&amp;#39;Animal({self.name}, {self._age})&amp;#39; def get_name(self): return self.name def change_name(self, new_name): self.name = new_name def get_age(self): return self.</description>
     </item>
     <item>
       <title>Lecture 21 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec21/</link>
+      <link>/classes/cs151/code_samples/lec21/</link>
       <pubDate>Mon, 14 Oct 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec21/</guid>
+      <guid>/classes/cs151/code_samples/lec21/</guid>
       <description>Review Question 1 2 A = [i*j for i,j in enumerate([&amp;#39;c&amp;#39;,&amp;#39;o&amp;#39;,&amp;#39;w&amp;#39;])] print(A) List Comprehensions 1 2 3 4 5 6 7 8 9 L = [x**2 for x in range(10)] print(L) L2 = [x**2 for x in range(10) if x &amp;gt; 5] print(L2) L3 = [&amp;#39;fish&amp;#39;, 3, &amp;#39;sword&amp;#39;, 9, 58, 3.14159, True, False] f = [x for x in L3 if type(x) == int] print(f) More Complicated Comprehension Example 1 2 3 4 5 6 7 8 9 10 L = [] for x in range(10): if x &amp;lt; 5: L.</description>
     </item>
     <item>
       <title>Lecture 20 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec20/</link>
+      <link>/classes/cs151/code_samples/lec20/</link>
       <pubDate>Fri, 11 Oct 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec20/</guid>
+      <guid>/classes/cs151/code_samples/lec20/</guid>
       <description>Appending and Extending Examples 1 2 3 4 5 6 7 8 9 10 11 12 13 A = [&amp;#39;tuna&amp;#39;] A.append(&amp;#39;Cod&amp;#39;) A.append(&amp;#39;Halibut&amp;#39;) A.append(&amp;#39;Salmon&amp;#39;) print(A) A = [&amp;#39;tuna&amp;#39;] A.extend([&amp;#39;Cod&amp;#39;, &amp;#39;Halibut&amp;#39;, &amp;#39;Salmon&amp;#39;]) print(A) A = [&amp;#39;tuna&amp;#39;] A.append([&amp;#39;Cod&amp;#39;, &amp;#39;Halibut&amp;#39;, &amp;#39;Salmon&amp;#39;]) print(A) Cloning Fix 1 1 2 3 4 5 6 7 8 A = [&amp;#39;Aardvark&amp;#39;, &amp;#39;Butterfly&amp;#39;, &amp;#39;Centipede&amp;#39;] B = A[:] B.append(&amp;#39;Deer&amp;#39;) B.remove(&amp;#39;Butterfly&amp;#39;) print(A) print(B) Cloning Fix 2 1 2 3 4 5 6 7 8 A = [1,2,3,4,5,6,7,8,9] for i,num in enumerate(list(A)): print(&amp;#39;At index:&amp;#39;, i) if 3 &amp;lt; num &amp;lt; 6: A.</description>
     </item>
     <item>
       <title>Lecture 19 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec19/</link>
+      <link>/classes/cs151/code_samples/lec19/</link>
       <pubDate>Wed, 09 Oct 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec19/</guid>
+      <guid>/classes/cs151/code_samples/lec19/</guid>
       <description>&#xA;Review Question 1 2 3 4 5 6 7 8 9 A = (&amp;#39;pirate&amp;#39;, &amp;#39;ninja&amp;#39;) B = (&amp;#39;samurai&amp;#39;,) + A C = (B, (&amp;#39;ship&amp;#39;, &amp;#39;rope&amp;#39;, &amp;#39;horse&amp;#39;)) D = C[::-1] print(&amp;#39;A)&amp;#39;, D[1][0]) print(&amp;#39;B)&amp;#39;, D[0][1]) print(&amp;#39;C)&amp;#39;, D[0][2]) print(&amp;#39;D)&amp;#39;, D[1][2]) Multiple Assign 1 2 3 4 5 6 7 8 9 f1, f2, f3, f4 = (&amp;#39;first&amp;#39;, &amp;#39;second&amp;#39;, 3, &amp;#39;fourth&amp;#39;) print(&amp;#39;f1:&amp;#39;, f1) print(&amp;#39;f2:&amp;#39;, f2) print(&amp;#39;f3:&amp;#39;, f3) print(&amp;#39;f4:&amp;#39;, f4) first, _, _, last = (&amp;#39;first&amp;#39;, &amp;#39;second&amp;#39;, 3, &amp;#39;fourth&amp;#39;) print(&amp;#39;first:&amp;#39;, first) print(&amp;#39;last:&amp;#39;, last) Enumerating Lists 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 B = (&amp;#39;samurai&amp;#39;, &amp;#39;pirate&amp;#39;, &amp;#39;ninja&amp;#39;) print(&amp;#39;\nMethod 1\n----------&amp;#39;) for i in range(len(B)): print(i, &amp;#39;:&amp;#39;, B[i]) print(&amp;#39;\nMethod 2\n----------&amp;#39;) i = 0 for s in B: print(i, &amp;#39;:&amp;#39;, s) i += 1 print(&amp;#39;\nMethod 3\n----------&amp;#39;) for index, value in enumerate(B): print(index, &amp;#39;:&amp;#39;, value) </description>
     </item>
     <item>
       <title>Lecture 18 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec18/</link>
+      <link>/classes/cs151/code_samples/lec18/</link>
       <pubDate>Mon, 07 Oct 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec18/</guid>
+      <guid>/classes/cs151/code_samples/lec18/</guid>
       <description>Imports circles.py 1 2 3 4 5 6 7 8 9 10 11 12 13 14 pi = 3.14159 def circumference(radius): return 2 * pi * radius def area(radius): return pi * radius ** 2 def pie_area(radius, angle): return area(radius) * angle / (2 * pi) if __name__ == &amp;#39;__main__&amp;#39;: # This code will not be run upon import! print(area(5)) Main Import 1 1 2 3 4 5 import circles print(circles.</description>
     </item>
     <item>
       <title>Lecture 17 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec17/</link>
+      <link>/classes/cs151/code_samples/lec17/</link>
       <pubDate>Fri, 04 Oct 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec17/</guid>
+      <guid>/classes/cs151/code_samples/lec17/</guid>
       <description>Globals Global Version of HW4 1 2 3 4 5 6 7 8 9 10 11 def odd_sum(maxnum=10): global total def add_odd(x): global total if x % 2 == 1: total += x total = 0 for n in range(maxnum+1): add_odd(n) return total Imports circles.py 1 2 3 4 5 6 7 8 9 10 pi = 3.14159 def circumference(radius): return 2 * pi * radius def area(radius): return pi * radius ** 2 def pie_area(radius, angle): return area(radius) * angle / (2 * pi) Main Import 1 1 2 3 4 5 6 import circles pi = 3 print(pi) print(circles.</description>
     </item>
     <item>
       <title>Lecture 16 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec16/</link>
+      <link>/classes/cs151/code_samples/lec16/</link>
       <pubDate>Wed, 02 Oct 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec16/</guid>
+      <guid>/classes/cs151/code_samples/lec16/</guid>
       <description>Review Problem 1 2 3 4 5 6 7 8 9 def rec(s): if len(s) &amp;lt;= 1: return s.upper() elif s[-2] == &amp;#39; &amp;#39;: return rec(s[:-2]) + s[-1].upper() else: return rec(s[:-1]) + s[-1] print(rec(&amp;#39;My name is ABE&amp;#39;)) Recursive Graphics 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 import arcade import math def main(size): arcade.</description>
     </item>
     <item>
       <title>Lecture 15 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec15/</link>
+      <link>/classes/cs151/code_samples/lec15/</link>
       <pubDate>Mon, 30 Sep 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec15/</guid>
+      <guid>/classes/cs151/code_samples/lec15/</guid>
       <description>Review Problem 1 2 3 4 5 6 def fib(n): print(&amp;#39;Running fib!&amp;#39;) if n == 1 or n == 2: return 1 else: return fib(n-1) + fib(n-2) Recursive String Reverse 1 2 3 4 5 def rec_str_rev(s): if len(s) == 1: return s else: return rec_str_rev(s[1:]) + s[0] Recursive Remove Consecutive Duplicates 1 2 3 4 5 6 7 8 def prune_dupes(s): if len(s) == 1: return s elif s[0] == s[1]: print(&amp;#39;Dropping the letter:&amp;#39;, s[0]) return prune_dupes(s[1:]) else: return s[0] + prune_dupes(s[1:]) Write to File 1 2 3 4 5 6 def file_write(): fhandle = open(&amp;#39;Names.</description>
     </item>
     <item>
       <title>Lecture 14 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec14/</link>
+      <link>/classes/cs151/code_samples/lec14/</link>
       <pubDate>Fri, 27 Sep 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec14/</guid>
+      <guid>/classes/cs151/code_samples/lec14/</guid>
       <description>&#xA;Review Problem Code 1 2 3 4 5 6 7 def func(a, b=5, c=True): if c: return a + b else: return a * b print(func(10,False)) Multiplication Examples 1 2 3 4 5 6 7 8 9 10 11 def mult_w_loop(A,B): total = 0 for i in range(B): total += A return total def mult_w_rec(A,B): if B == 1: return A else: return A + mult_w_rec(A,B-1) Factorial Example 1 2 3 4 5 def factorial(n): if n == 1: return 1 else: return n * factorial(n-1) </description>
     </item>
     <item>
       <title>Lecture 10 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec10/</link>
+      <link>/classes/cs151/code_samples/lec10/</link>
       <pubDate>Wed, 18 Sep 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec10/</guid>
+      <guid>/classes/cs151/code_samples/lec10/</guid>
       <description>Guessing Game Algorithm 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 my_value = int(input(&amp;#39;Enter the number to guess: &amp;#39;)) low = 0 high = 101 guess = None guess_count = 0 while guess != my_value: guess = (low+high)//2 guess_count += 1 print(&amp;#39;I am guessing:&amp;#39;, guess) if guess &amp;gt; my_value: print(&amp;#39;It was too high!&amp;#39;) high = guess elif guess &amp;lt; my_value: print(&amp;#39;It was too low!</description>
     </item>
     <item>
       <title>Lecture 9 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec9/</link>
+      <link>/classes/cs151/code_samples/lec9/</link>
       <pubDate>Mon, 16 Sep 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec9/</guid>
+      <guid>/classes/cs151/code_samples/lec9/</guid>
       <description>Cube root of 27 1 2 3 4 5 6 7 8 9 10 11 12 13 x = 27 epsilon = 0.1 guess = 0 num_guesses = 1 while abs(guess**3 - x) &amp;gt;= epsilon and guess &amp;lt;= x: guess += epsilon**3 num_guesses += 1 print(&amp;#39;Took&amp;#39;, num_guesses, &amp;#39;guesses&amp;#39;) if abs(guess**3 - x) &amp;lt; epsilon: print(guess, &amp;#39;is close to the cube root of&amp;#39;, x) else: print(&amp;#39;No solution found for cube root of&amp;#39;, x) Ball Toss Example 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 v0 = 1 yi = 2 g = 9.</description>
     </item>
     <item>
       <title>Lecture 8 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec8/</link>
+      <link>/classes/cs151/code_samples/lec8/</link>
       <pubDate>Fri, 13 Sep 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec8/</guid>
+      <guid>/classes/cs151/code_samples/lec8/</guid>
       <description>&#xA;Simple String Example 1 2 3 4 5 6 7 8 for letter in &amp;#34;Pumpkin Pie&amp;#34;: print(letter) dessert = &amp;#34;Pumpkin Pie&amp;#34; i = 0 while i &amp;lt; len(dessert): print(dessert[i]) i = i + 1 For Ranging Examples 1 2 3 4 5 6 7 8 for n in range(5): print(n) for n in range(1,11): print(n) for n in range(10,0,-1): print(n) Checking Vowels 1 2 3 4 5 6 7 s = input(&amp;#39;Enter a sentence: &amp;#39;) count = 0 for c in s: if c in &amp;#39;aeiou&amp;#39;: count = count + 1 print(&amp;#39;Number of vowels:&amp;#39;,count) Summing string of decimal numbers 1 2 3 4 5 6 7 8 9 10 11 12 13 s = input(&amp;#39;Enter a string of decimal numbers&amp;#39; &amp;#39; separated by commas: &amp;#39;) curr_num = &amp;#39;&amp;#39; running_total = 0 for c in s: if c == &amp;#39;,&amp;#39;: running_total = running_total + float(curr_num) curr_num = &amp;#39;&amp;#39; else: curr_num = curr_num + c running_total = running_total + float(curr_num) print(running_total) </description>
     </item>
     <item>
       <title>Lecture 7 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec7/</link>
+      <link>/classes/cs151/code_samples/lec7/</link>
       <pubDate>Wed, 11 Sep 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec7/</guid>
+      <guid>/classes/cs151/code_samples/lec7/</guid>
       <description>Method 1 Prime Check 1 2 3 4 5 6 7 8 9 n = int(input(&amp;#39;Enter a number to check if prime: &amp;#39;)) x = 2 while n - x &amp;gt; 0 and n % x != 0: x = x + 1 if x == n: print(&amp;#39;Number is prime!&amp;#39;) else: print(&amp;#39;Number is evenly divisible by&amp;#39;, x) Method 2 Prime Check 1 2 3 4 5 6 7 8 9 10 11 12 n = int(input(&amp;#39;Enter a number to check if prime: &amp;#39;)) x = 2 is_prime = True while n - x &amp;gt; 0: if n % x == 0: is_prime = False print(&amp;#39;Number is divisible by&amp;#39;, x) break x = x + 1 if is_prime: print(&amp;#39;Number is prime!</description>
     </item>
     <item>
       <title>Lecture 6 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec6/</link>
+      <link>/classes/cs151/code_samples/lec6/</link>
       <pubDate>Mon, 09 Sep 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec6/</guid>
+      <guid>/classes/cs151/code_samples/lec6/</guid>
       <description>While Loops and Slicing Similarities 1 2 3 4 5 6 7 8 9 10 x = &amp;#39;Metamorphasis&amp;#39; print(x[4:9]) i = 4 piece = &amp;#34;&amp;#34; while i &amp;lt; 9: piece = piece + x[i] i = i + 1 print(piece) Dicing Examples 1 2 3 4 x = &amp;#39;Metamorphasis&amp;#39; print(x[0:6:2]) print(x[::-1]) Modern Speed Example 1 2 3 4 5 6 7 8 9 10 import time maxVal = int(input(&amp;#34;Enter a positive integer: &amp;#34;)) start = time.</description>
     </item>
     <item>
       <title>Lecture 5 Code</title>
-      <link>/Website_Backup/classes/cs151/code_samples/lec5/</link>
+      <link>/classes/cs151/code_samples/lec5/</link>
       <pubDate>Fri, 06 Sep 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/code_samples/lec5/</guid>
+      <guid>/classes/cs151/code_samples/lec5/</guid>
       <description>Test Code 1 2 3 f = 12 while f &amp;lt; 20: f += 1 More test 1 2 3 i = 0 for i in range(10): print(i) Lost Woods Simple Example 1 2 3 4 5 6 7 8 9 10 11 d = None while d != &amp;#39;L&amp;#39;: print(&amp;#39;&amp;#39;) print(&amp;#39;*&amp;#39;*32) print(&amp;#39;*&amp;#39;*32) print(&amp;#39; &amp;#39;*15 + &amp;#39;:)&amp;#39; + &amp;#39; &amp;#39;*15) print(&amp;#39;*&amp;#39;*32) print(&amp;#39;*&amp;#39;*32) d = input(&amp;#39;Go (L)eft or (R)ight? &amp;#39;) print(&amp;#39;You escaped!</description>
     </item>
     <item>
       <title>After-class Labs</title>
-      <link>/Website_Backup/classes/cs151/labs/</link>
+      <link>/classes/cs151/labs/</link>
       <pubDate>Thu, 05 Sep 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/labs/</guid>
+      <guid>/classes/cs151/labs/</guid>
       <description>&#xA;Name Description </description>
     </item>
     <item>
       <title>Guides</title>
-      <link>/Website_Backup/classes/data503/guides/</link>
+      <link>/classes/data503/guides/</link>
       <pubDate>Mon, 26 Aug 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data503/guides/</guid>
+      <guid>/classes/data503/guides/</guid>
       <description>&#xA;Learning GitHub Classroom </description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/phys110/schedule/</link>
+      <link>/classes/phys110/schedule/</link>
       <pubDate>Wed, 21 Aug 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys110/schedule/</guid>
+      <guid>/classes/phys110/schedule/</guid>
       <description>&#xA;Week Date Chapter Description 1 Aug 24 Ch 1 Science and the Universe Aug 26 Ch 2 Observing the Sky Aug 28 Ch 2 Observing the Sky 2 Aug 31 Ch 2 Observing the Sky Sep 02 Ch 3 Orbits and Gravity Sep 04 Ch 3 Orbits and Gravity 3 Sep 07 Ch 4 Earth and Sky Sep 09 Ch 4 Earth and Sky Sep 11 Ch 5 Radiation and Spectra 4 Sep 14 Ch 5 Radiation and Spectra Sep 16 Ch 5 Radiation and Spectra Sep 18 Ch 6 Astronomical Instruments 5 Sep 21 Ch 7 Intro to the Solar System Sep 23 Ch 8 Earth as a Planet Sep 25 Exam 1 (Ch 1-6) 6 Sep 28 Ch 9 Cratered Worlds Sep 30 Ch 11 The Giant Planets Oct 02 Ch 12 Rings, Moons, and Pluto 7 Oct 05 Ch 13 Comets and Asteroids Oct 07 Ch 14 Origins of the Solar System Oct 09 Ch 14 Origins of the Solar System 8 Oct 12 Ch 15 A Garden Variety Star Oct 14 Ch 15 A Garden Variety Star Oct 16 Ch 15 A Garden Variety Star 9 Oct 19 Exam 2 (Ch 7-14) Oct 21 Ch 16 A Nuclear Powerhouse Oct 23 Ch 17 Analyzing Starlight 10 Oct 26 Ch 18 A Celestial Census Oct 28 Ch 19 Celestial Distances Oct 30 Ch 21 Birth of Stars 11 Nov 02 Ch 22 Adolescence to Old Age Nov 04 Ch 23 Death of Stars Nov 06 Ch 24 Black Holes and Curved Spacetime 12 Nov 09 Exam 3 (Ch 15-24) Nov 11 Ch 25 The Milky Way Galaxy Nov 13 Ch 26 Galaxies 13 Nov 16 Ch 26 Galaxies Nov 18 Ch 29 The Big Bang Nov 20 Ch 29 The Big Bang 14 Nov 23 Ch 30 Life in the Universe 15 Dec 08 Final </description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/phys222/schedule/</link>
+      <link>/classes/phys222/schedule/</link>
       <pubDate>Wed, 21 Aug 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys222/schedule/</guid>
+      <guid>/classes/phys222/schedule/</guid>
       <description>&#xA;Week Date Chapter Description Lab 1 Jan 22 Intro and Review Jan 24 Ch 13 The Electric Field 2 Jan 27 Ch 13 The Electric Field Jan 29 Ch 13 The Electric Field Glowscript Review Jan 31 Ch 14 Electric Fields and Matter 3 Feb 03 Ch 14 Electric Fields and Matter Feb 05 Ch 14 Electric Fields and Matter Electric Field and Forces Feb 07 Ch 15 Electric Field and Distributed Charges 4 Feb 10 Ch 15 Electric Field and Distributed Charges Feb 12 Ch 15 Electric Field and Distributed Charges Electric Dipole Field Feb 14 Ch 15 Electric Field and Distributed Charges 5 Feb 17 Ch 16 Electric Potential Feb 19 Ch 16 Electric Potential Distributed Charges Feb 21 Test 1 (Ch 13--15) 6 Feb 24 Ch 16 Electric Potential Feb 26 Ch 16 Electric Potential Potential Difference Feb 28 Ch 17 Magnetic Field 7 Mar 02 Ch 17 Magnetic Field Mar 04 Ch 17 Magnetic Field Magnetic Field Mar 06 Ch 18 Electric Field and Circuits 8 Mar 09 Ch 18 Electric Field and Circuits Mar 11 Ch 18 Electric Field and Circuits Magnetic Dipoles and Energy in Circuits Mar 13 Ch 19 Circuit Elements 9 Mar 16 Ch 19 Circuit Elements Mar 18 Ch 19 Circuit Elements DC Circuits Mar 20 Ch 20 Magnetic Force 10 Mar 23 Spring Break Mar 25 Spring Break Mar 27 Spring Break 11 Mar 30 Ch 20 Magnetic Force Apr 01 Ch 20 Magnetic Force Gap Week Apr 03 Test 2 (Ch 16--19) 12 Apr 06 Ch 21 Patterns in Fields in Space Apr 08 Ch 21 Patterns in Fields in Space Magnetic Force Apr 10 Ch 21 Patterns in Fields in Space 13 Apr 13 Ch 22 Faraday&#39;s Law Apr 15 Ch 23 Electromagnetic Radiation Faraday&#39;s Law Apr 17 Ch 23 Electromagnetic Radiation 14 Apr 20 Ch 23 Electromagnetic Radiation Apr 22 SSRD Lenses Apr 24 Test 3 (Ch 20--23) 15 Apr 27 Ch S3 Waves Apr 29 Ch S3 Waves Interference May 01 Ch S3 Waves 16 May 04 Review Day May 09 Final </description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/phys339/schedule/</link>
+      <link>/classes/phys339/schedule/</link>
       <pubDate>Wed, 21 Aug 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys339/schedule/</guid>
+      <guid>/classes/phys339/schedule/</guid>
       <description>&#xA;Week Date Chapter Description Due 1 Aug 24 Ch 1 Newtons Laws of Motion Aug 26 Ch 1 Newtons Laws of Motion Aug 28 Ch 2 Projectiles and Charges Particles 2 Aug 31 CompDay 1: Intro HW1 Sep 02 Ch 2 Projectiles and Charges Particles CompDay 1 Sep 04 Ch 3 Momentum and Angular Momentum 3 Sep 07 CompDay 2: Projectile Motion HW2 Sep 09 Ch 3 Momentum and Angular Momentum CompDay 2 Sep 11 Ch 4 Energy 4 Sep 14 CompDay 3: Rockets HW3 Sep 16 Ch 4 Energy CompDay 3 Sep 18 Ch 4 Energy 5 Sep 21 CompDay 4: Sympy and Energy HW4 Sep 23 Ch 5 Oscillations CompDay 4 Sep 25 Ch 5 Oscillations 6 Sep 28 CompDay 5: 2D Oscillators HW5 Sep 30 Ch 6 Calculus of Variations CompDay 5 Oct 02 Ch 7 Lagrange&#39;s Equations 7 Oct 05 CompDay 6: Fourier Series HW6 Oct 07 Ch 7 Lagrange&#39;s Equations CompDay 6 Oct 09 Ch 7 Lagrange&#39;s Equations 8 Oct 12 CompDay 7: Lagrangians with Sympy Oct 14 Ch 7 Lagrange&#39;s Equations CompDay 7 Oct 16 Ch 8 Two-Body Central Force Problems 9 Oct 19 CompDay 8: Binar Star Orbits HW7 Oct 21 Ch 8 Two-Body Central Force Problems Midterm Oct 23 Ch 9 Mechanics in Noninertial Frames 10 Oct 26 CompDay 9: Hohmann Transfers HW8 Oct 28 Ch 9 Mechanics in Noninertial Frames CompDay 8, CompDay 9 Oct 30 Ch 10 Rotational Motion of Rigid Bodies 11 Nov 02 CompDay 10: Coriolis Merry-Go-Round HW9 Nov 04 Ch 10 Rotational Motion of Rigid Bodies CompDay 10 Nov 06 Ch 10 Rotational Motion of Rigid Bodies 12 Nov 09 CompDay 11: Inertial Tensors Nov 11 Ch 10 Rotational Motion of Rigid Bodies CompDay 11 Nov 13 Ch 11 Coupled Oscillators 13 Nov 16 CompDay 12: Visualizing Oscillation Modes HW10 Nov 18 Ch 11 Coupled Oscillators CompDay 12 Nov 20 Ch 11 Coupled Oscillators 14 Nov 23 Final Project Readings HW11 </description>
     </item>
     <item>
       <title>Computational Mondays</title>
-      <link>/Website_Backup/classes/phys339/compdays/</link>
+      <link>/classes/phys339/compdays/</link>
       <pubDate>Sun, 27 Jan 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys339/compdays/</guid>
+      <guid>/classes/phys339/compdays/</guid>
       <description>&#xA;Number Date Description Day 1 Mon, Aug 31 Numerical Solutions Day 2 Mon, Sep 7 Breezy Cannonballs Day 3 Mon, Sep 14 Optimized Rocketry Day 4 Mon, Sep 21 Sympy and Adv Visualization Day 5 Mon, Sep 28 2D Oscillators Day 6 Fri, Oct 2 Fourier Series Day 7 Mon, Oct 12 Exploring Lagrangian Problems Day 8 Mon, Oct 19 Binary Star Orbits Day 9 Mon, Oct 26 A Tesla to Mars Day 10 Mon, Nov 2 Merry-Go-Round Physics Day 11 Mon, Nov 9 Inertial Tensors Day 12 Mon, Nov 16 Coupled Oscillation Modes </description>
     </item>
     <item>
       <title>Video HW Help</title>
-      <link>/Website_Backup/classes/phys222/vhw/</link>
+      <link>/classes/phys222/vhw/</link>
       <pubDate>Thu, 24 Jan 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys222/vhw/</guid>
+      <guid>/classes/phys222/vhw/</guid>
       <description>General Information This semester you will commonly have video homework problems assigned on Fridays which will be due the following Monday at midnight. This page is meant to provide some extra guidance and suggestions for how to go about creating these in a simple fashion.&#xA;Objectives The process behind each video homework submission will likely entail the following:&#xA;Reading the given objective (Posted on the HW pdf) Coming up with a problem that satisfies the objective Solving the problem Making a short (less than 4 minute) video describing your steps to solving the problem Posting your video online Emailing me with a description of your problem and a link to your solution Video Recommendations Videos do not need to be Hollywood blockbuster films!</description>
     </item>
     <item>
       <title>In-class Labs</title>
-      <link>/Website_Backup/classes/ids138/labs/</link>
+      <link>/classes/ids138/labs/</link>
       <pubDate>Sun, 20 Jan 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/ids138/labs/</guid>
+      <guid>/classes/ids138/labs/</guid>
       <description>&#xA;Name Description </description>
     </item>
     <item>
       <title>Intro to Applied Statistics</title>
-      <link>/Website_Backup/classes/ids138/ids138/</link>
+      <link>/classes/ids138/ids138/</link>
       <pubDate>Thu, 17 Jan 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/ids138/ids138/</guid>
+      <guid>/classes/ids138/ids138/</guid>
       <description>General Information Welcome to IDS 138: Intro to Applied Statistics! This is my personal website, which I will update in lieu of the WISE page. This site is prettier and more functional to update anyway.&#xA;Syllabus If you need a quick reference or refresher, my syllabus is below. Syllabus Homework Homework in this course will be due almost every Monday at midnight. Problem sets will be posted at the link below and problems to be graded should be submitted via Gradescope.</description>
     </item>
     <item>
       <title>Intro Physics II</title>
-      <link>/Website_Backup/classes/phys222/phys222/</link>
+      <link>/classes/phys222/phys222/</link>
       <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys222/phys222/</guid>
+      <guid>/classes/phys222/phys222/</guid>
       <description>General Information Welcome to Willamette&amp;rsquo;s Physics 222 course! This is my personal website, which I will update in lieu of the WISE page. This site is prettier and more functional to update anyway.&#xA;Syllabus If you need a quick reference or refresher, my syllabus is below. Syllabus Homework Homework in this course is a mix of online and video problems. Online homework will be assigned through WebWorK after each class period and will be due by the end of the next class day.</description>
     </item>
     <item>
       <title>Mechanics</title>
-      <link>/Website_Backup/classes/phys339/phys339/</link>
+      <link>/classes/phys339/phys339/</link>
       <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys339/phys339/</guid>
+      <guid>/classes/phys339/phys339/</guid>
       <description>General Information Welcome to Willamette&amp;rsquo;s Phys 339: Mechanics course! This is my personal website and will be the primary vehicle by which I&amp;rsquo;ll pass information to you this semester. Anything posted elsewhere I&amp;rsquo;ll be very clear about!&#xA;Syllabus If you need a quick reference back to my syllabus, you can find it below: Syllabus Homework Homework in this class will be due Friday nights at midnight. We&amp;rsquo;ll be using Gradescope to submit assignments to cut back on the amount of paper I need to handle.</description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/ids138/schedule/</link>
+      <link>/classes/ids138/schedule/</link>
       <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/ids138/schedule/</guid>
+      <guid>/classes/ids138/schedule/</guid>
       <description>Week Date Reading Description Due 1 Jan 23 Motivation and Syllabus Jan 25 Into the Streets (No Class) 2 Jan 28 Ch 1.1 - 1.4 Intro to Data Jan 30 Introduction to R Lab Feb 1 Ch 1.5 - 1.7 Graphs and Plots 3 Feb 4 A.1 1st half Basic Probability HW 1 Feb 6 Intro to Data Lab Feb 8 A.1 2nd half 4 Feb 11 Probability Lab HW 2 Feb 13 Ch 5.</description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/phys222/schedule_old/</link>
+      <link>/classes/phys222/schedule_old/</link>
       <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys222/schedule_old/</guid>
+      <guid>/classes/phys222/schedule_old/</guid>
       <description>&#xA;Week Date Reading Description Lab 1 Jan 23 Intro and Review Jan 25 Ch 13.3, 13.4 The Electric Field 2 Jan 28 Ch 13.5, 13.6 Glowscript Review Jan 30 Ch 13.6, 13.7 Feb 1 Ch 13.8 - 14.1 Electric Fields and Matter 3 Feb 4 Ch 14 Electric Field and Forces Feb 6 Ch 14 Feb 8 Ch 15 Distributed Charges 4 Feb 11 Ch 15 Electric Dipole Feb 13 Ch 15 Feb 15 Ch 15 5 Feb 18 Ch 16 Electric Potential Distributed Charges Feb 20 Ch 16 Feb 22 Test 1: (Ch 13-15) 6 Feb 25 Ch 16 Potential Difference Feb 27 Ch 17 Magnetic Field Mar 1 Ch 17 7 Mar 4 Ch 17 Magnetic Field Mar 6 Ch 18 Electric Field and Circuits Mar 8 Ch 18 8 Mar 11 Ch 18 Magnetic Dipoles and Circuit Energy Mar 13 Ch 19 Circuit Elements Mar 15 Ch 19 9 Mar 18 Ch 19 DC Circuits Mar 20 Ch 20 Magnetic Force Mar 22 Test 2: (Ch 16-19) 10 Mar 25 Spring Break Mar 27 Mar 29 11 Apr 1 Ch 20 Magnetic Force and Real Batteries Apr 3 Ch 20 Apr 5 Ch 21 Patterns of Fields in Space 12 Apr 8 Ch 21 Magnetic Force Apr 10 Ch 22 Faraday&#39;s Law Apr 12 Ch 23 Electromagnetic Radiation 13 Apr 15 Ch 23 Faraday&#39;s Law Apr 17 Ch 23 Apr 19 S3 Waves 14 Apr 22 S3 Apr 24 SSRD (No class) Apr 26 Test 3: (Ch 20-23) 15 Apr 29 S3 Diffraction May 1 S3 May 3 S3 16 May 6 S3 May 13 Final: Comprehensive </description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/phys339/schedule_old/</link>
+      <link>/classes/phys339/schedule_old/</link>
       <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys339/schedule_old/</guid>
+      <guid>/classes/phys339/schedule_old/</guid>
       <description>&#xA;Week Date Reading Description Deadlines 1 Jan 23 Ch 1.1 - 1.4 Newton&#39;s Laws of Motion Jan 25 Ch 1.4 - 1.7 2 Jan 28 CompDay Intro to Computation HW1 Due Jan 30 Ch 2.1 - 2.3 Projectiles and Charged Particles Feb 1 Ch 2.4 - 2.7 3 Feb 4 CompDay Projectile Motion HW2 Due Feb 6 Ch 3 Momentum and Angular Momentum Feb 8 Ch 3 4 Feb 11 CompDay Rockets HW3 Due Feb 13 Ch 4 Energy Feb 15 Ch 4 5 Feb 18 CompDay Intro to Sympy HW4 Due Feb 20 Ch 4 Feb 22 Ch 5 Oscillations 6 Feb 25 CompDay 2D Oscillations HW5 Due Feb 27 Ch 5 Mar 1 Ch 6 Calculus of Variations 7 Mar 4 CompDay Fourier Series HW6 Due Mar 6 Ch 7 Lagrange&#39;s Equations Mar 8 Ch 7 8 Mar 11 CompDay Lagrange with Sympy HW7 Due Mar 13 Ch 7 Mar 15 Ch 7 9 Mar 18 Ch 8 Two-Body Central-Force Problems Midterm Due Mar 20 CompDay Binary Star Orbits Mar 22 Ch 8 10 Mar 25 Spring Break Mar 27 Mar 28 11 Apr 1 CompDay Hoffmann Transfers HW8 Due Apr 3 Ch 9 Mechanics in Noninertial Frames Apr 5 Ch 9 12 Apr 8 CompDay Projectile + Coriolis HW9 Due Apr 10 Ch 10 Rotational Motion of Rigid Bodies Apr 12 Ch 10 13 Apr 15 CompDay TBD Apr 17 Ch 10 Apr 19 Ch 10 14 Apr 22 Ch 11 Coupled Oscillators and Normal Modes HW10 Due Apr 24 SSRD (No class) APr 26 Ch 11 15 Apr 29 CompDay TBD HW11 Due May 1 Ch 11 May 3 Ch 11 16 May 6 Final Projects May 11 Final due at 11am </description>
     </item>
     <item>
       <title>Final Projects</title>
-      <link>/Website_Backup/classes/ids138/finalproject/</link>
+      <link>/classes/ids138/finalproject/</link>
       <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/ids138/finalproject/</guid>
+      <guid>/classes/ids138/finalproject/</guid>
       <description>#### Guidelines The latest copy of the project guidelines is posted here. Note that this version will always be the latest, whereas I can&#39;t update the version posted to Campuswire. Guidelines Presentation Schedule and Info Available Datasets Be aware that not all the datasets below might have the needed variables for both multiple regression and ANOVA testing. So if you are doing a group of 3 and need both, you might need to be a bit more selective.</description>
     </item>
     <item>
       <title>Test Preparation</title>
-      <link>/Website_Backup/classes/phys110/testprep/</link>
+      <link>/classes/phys110/testprep/</link>
       <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys110/testprep/</guid>
+      <guid>/classes/phys110/testprep/</guid>
       <description>&#xA;Equation Sheet Test 1 Test Review -- [Problems] [Solutions] Old Test -- [Problems] [Solutions] Test 2 Test Review -- [Problems] [Solutions] Old Test -- [Problems] [Solutions] Test 3 Test Review -- [Problems] [Solutions] Old Test -- [Problems] [Solutions] Final New Content Review -- [Problems] [Solutions] Old Final -- [Problems] [Solutions] We did not get a chance to talk about other galaxy types this semester, so ignore Problem 13! </description>
     </item>
     <item>
       <title>Test Preparation</title>
-      <link>/Website_Backup/classes/phys222/testprep/</link>
+      <link>/classes/phys222/testprep/</link>
       <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys222/testprep/</guid>
+      <guid>/classes/phys222/testprep/</guid>
       <description>&#xA;Test 1 Old Test -- [Test] [Solutions] Review Questions -- [Questions and Solutions] Test 2 Old Test -- [Test] [Solutions] Review Questions -- [Questions and Solutions] </description>
     </item>
     <item>
       <title>Useful Homework Things</title>
-      <link>/Website_Backup/classes/phys110/hwextra/</link>
+      <link>/classes/phys110/hwextra/</link>
       <pubDate>Wed, 05 Sep 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys110/hwextra/</guid>
+      <guid>/classes/phys110/hwextra/</guid>
       <description>Nautical Almanac Below are links to the 2019 Nautical Almanac for your WebWorK assignment! 2019 Nautical Almanac </description>
     </item>
     <item>
       <title>Computation</title>
-      <link>/Website_Backup/classes/phys345/computation/</link>
+      <link>/classes/phys345/computation/</link>
       <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys345/computation/</guid>
+      <guid>/classes/phys345/computation/</guid>
       <description>&#xA;Learning Sympy Visualizing Data Numerical Fields Accompanying Image Help with Euler Magnetic Field Creating Animations in Matplotlib </description>
     </item>
     <item>
       <title>Computation Guides</title>
-      <link>/Website_Backup/classes/phys339/guides/</link>
+      <link>/classes/phys339/guides/</link>
       <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys339/guides/</guid>
+      <guid>/classes/phys339/guides/</guid>
       <description>&#xA;Guide to Euler-Cromer Method Guide to Scipy&#39;s Odeint Guide to plotting with Matplotlib Guide to plotting with Bokeh Guide to Sympy Guide to Animation in Matplotlib Guide to Numeric Roots </description>
     </item>
     <item>
       <title>Computation Guides</title>
-      <link>/Website_Backup/resources/python_guides/guides/</link>
+      <link>/resources/python_guides/guides/</link>
       <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/resources/python_guides/guides/</guid>
+      <guid>/resources/python_guides/guides/</guid>
       <description>&#xA;Guide to Euler-Cromer Method Guide to Scipy&#39;s Odeint Guide to plotting with Matplotlib Guide to plotting with Bokeh Guide to Sympy Guide to Animation in Matplotlib </description>
     </item>
     <item>
       <title>Labs</title>
-      <link>/Website_Backup/classes/phys222/lab/</link>
+      <link>/classes/phys222/lab/</link>
       <pubDate>Wed, 29 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys222/lab/</guid>
+      <guid>/classes/phys222/lab/</guid>
       <description>&#xA;Lab 1 - Veterans Lab 1 - Recruits Lab 2 - Tape Portion Lab 2 - Glowscript Lab 3 - Glowscript Dipoles Lab 4 - Lists L4 - Ring L4 - Starter Code Lab 5 - Exp L5 - GS L5 - Starter Code Lab 6 - Exp L6 - Sheet L6 - GS L6 - Starter Code Lab 8 - Circuits L8 - Spreadsheet Lab 9 - Experiment L9 - Glowscript L9 - Starter Code Lab 10 - Experiment Lab 11 - Experiment </description>
     </item>
     <item>
       <title>Lecture Notes</title>
-      <link>/Website_Backup/classes/phys339/lec_notes/</link>
+      <link>/classes/phys339/lec_notes/</link>
       <pubDate>Mon, 27 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys339/lec_notes/</guid>
+      <guid>/classes/phys339/lec_notes/</guid>
       <description>When I formerly taught the class in a more lecture heavy format, these were the notes that I based those lectures off of. I am supplying them here to serve as an alternative form of information from what is presented in the book.&#xA;If you find errors within these notes and bring them to my attention, I&amp;rsquo;m willing to give small amounts of extra credit up to a cap (which I&amp;rsquo;m still figuring out).</description>
     </item>
     <item>
       <title>Lecture Slides</title>
-      <link>/Website_Backup/classes/phys339/slides/</link>
+      <link>/classes/phys339/slides/</link>
       <pubDate>Mon, 27 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys339/slides/</guid>
+      <guid>/classes/phys339/slides/</guid>
       <description>Number Date Description Video Lecture 27 Fri, Nov 20 Linearization Lecture 26 Wed, Nov 18 Normal Modes and Linearization Lecture 24 Fri, Nov 13 Intro to Coupled Oscillators Lecture 23 Wed, Nov 11 Euler Equations Lecture 22 Fri, Nov 6 Principal Axes Lecture 21 Wed, Nov 4 The Inertial Tensor Lecture 20 Fri, Oct 30 Rotations about 1 Axis Lecture 19 Wed, Oct 28 Rotating Reference Frames Lecture 18 Fri, Oct 23 Linearly Accelerating Frames Lecture 17 Wed, Oct 21 Orbital Shapes and Transfers Lecture 16 Fri, Oct 16 Central Forces and Orbital Motion Lecture 15 Wed, Oct 14 Equilibria and Multipliers Lecture 14 Fri, Oct 9 Lagrange Details Lecture 13 Fri, Oct 2 Generalize Coordinates Lecture 11 Fri, Sep 25 Calculus of Variations Lecture 10 Wed, Sep 23 Damped and Driven Oscillators Lecture 12 Sun, Sep 20 Lagrange enters the room Lecture 9 Fri, Sep 18 Effective Springs and Spring Solutions Lecture 8 Wed, Sep 16 Constraining and Central Forces Lecture 7 Fri, Sep 11 Potential Energy and Forces Lecture 6 Wed, Sep 9 Systems and Rotations Lecture 5 Fri, Sep 4 Rockets!</description>
     </item>
     <item>
       <title>Lecture Slides</title>
-      <link>/Website_Backup/classes/phys345/slides/</link>
+      <link>/classes/phys345/slides/</link>
       <pubDate>Mon, 27 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys345/slides/</guid>
+      <guid>/classes/phys345/slides/</guid>
       <description>&#xA;Number Date Description Video Lecture 38 Fri, Dec 7 Maxwell-Ampere Lecture 37 Wed, Dec 5 Induction Lecture 36 Mon, Dec 3 Faraday&amp;#39;s Law Lecture 35 Fri, Nov 30 Motional EMFs Lecture 34 Wed, Nov 28 Ohmmmm Lecture 33 Mon, Nov 26 Hysteresis Lecture 32 Fri, Nov 16 Ferromagnetics Lecture 31 Wed, Nov 14 The Auxiliary Field Lecture 30 Fri, Nov 9 Bound Currents Lecture 29 Wed, Nov 7 Para and Dia Magnetism Lecture 28 Mon, Nov 5 Magnetic Dipole Moments Lecture 27 Fri, Nov 2 Magnetic Vector Potential Lecture 26 Wed, Oct 31 Constructing B Fields Lecture 25 Mon, Oct 29 Ampere&amp;#39;s Law Lecture 24 Fri, Oct 26 Biot-Savart Math Lecture 23 Wed, Oct 24 Magnetic Forces and Currents Lecture 22 Mon, Oct 22 Dielectric Boundary Conditions Lecture 21 Wed, Oct 17 Linear Dielectrics Lecture 20 Mon, Oct 15 Electric Displacement Lecture 19 Wed, Oct 10 Bound Charges Lecture 18 Mon, Oct 8 Polarization Lecture 17 Fri, Oct 5 Multipole Expansions Lecture 16 Wed, Oct 3 Separation of Variables: Spherical Lecture 15 Mon, Oct 1 Separation of Variables: Cartesian Lecture 14 Fri, Sep 28 Method of Relaxation Lecture 13 Wed, Sep 26 Method of Images Lecture 12 Mon, Sep 24 The Laplace Equation Lecture 11 Fri, Sep 21 Conductors Lecture 10 Wed, Sep 19 Numerically Finding Fields Lecture 9 Mon, Sep 17 Potential and Energy Lecture 8 Fri, Sep 14 Electric Potential Lecture 7 Wed, Sep 12 Dirac Delta Functions Lecture 6 Mon, Sep 10 Gauss&amp;#39;s Law Lecture 5 Fri, Sep 7 Visualizations Tutorial Lecture 4 Wed, Sep 5 Coulomb Basics Lecture 3 Fri, Aug 31 Learning Sympy Lecture 2 Wed, Aug 29 Remembering Vector Calculus Lecture 1 Mon, Aug 27 Vector Refresher </description>
     </item>
     <item>
       <title>Semester&#39;s Schedule</title>
-      <link>/Website_Backup/classes/phys345/schedule/</link>
+      <link>/classes/phys345/schedule/</link>
       <pubDate>Tue, 21 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys345/schedule/</guid>
+      <guid>/classes/phys345/schedule/</guid>
       <description>Week Date Reading Description Deadlines 1 Aug 27 Ch 1.1 Vector Analysis Aug 29 Ch 1.2, 1.3 Aug 31 Ch 1.4 In-class Sympy Tutorial - Bring laptops! 2 Sep 3 Labor Day! HW1 Due Sep 5 Ch 2.1 Electric Field and Coulomb&#39;s Law Sep 7 In-class Matplotlib Tutoral - Bring Laptops! 3 Sep 10 Ch 2.2.1-2.2.3 Gauss&#39;s Law and Divergence HW2 Due Sep 12 Ch 1.5 Dirac Delta Functions Sep 14 Ch 2.</description>
     </item>
     <item>
       <title>HW</title>
-      <link>/Website_Backup/classes/phys221/hw/</link>
+      <link>/classes/phys221/hw/</link>
       <pubDate>Sun, 19 Aug 2018 19:14:43 -0700</pubDate>
-      <guid>/Website_Backup/classes/phys221/hw/</guid>
-      <description>Name Due Date Link 1 SirAmbush 1280 2 TheNewt 1260 3 Theseus 1223 4 TacticalAmazon 1203 5 Apollo 1183 6 Artemis 1165 7 SimpleAmazon 1162 8 Kricia 1160 9 PingMan 1031 10 RandomMan 999 11 NewtySimple 791 12 Filius 624 13 SimpleMan 323 Last Modified: Jul 9, 2024 16:08</description>
+      <guid>/classes/phys221/hw/</guid>
+      <description>Name Due Date Link 1 SirAmbush 1280 2 TheNewt 1260 3 Theseus 1223 4 TacticalAmazon 1203 5 Apollo 1183 6 Artemis 1165 7 SimpleAmazon 1162 8 Kricia 1160 9 PingMan 1031 10 RandomMan 999 11 NewtySimple 791 12 Filius 624 13 SimpleMan 323 Last Modified: Jul 10, 2024 01:23</description>
     </item>
     <item>
       <title>Astronomy</title>
-      <link>/Website_Backup/classes/phys110/phys110/</link>
+      <link>/classes/phys110/phys110/</link>
       <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys110/phys110/</guid>
+      <guid>/classes/phys110/phys110/</guid>
       <description>General Information Welcome to Physics 110: Astronomy! This is my personal website, and will be the main location where I post things throughout the semester. Anything posted elsewhere will be clearly indicated and announced in class! In general this should be your one-stop-shop for everything class related.&#xA;Syllabus If you need a quick reference or review, you can find my syllabus here: Syllabus Homework We are using WebWorK this semester for homework.</description>
     </item>
     <item>
       <title>Electromagnetism</title>
-      <link>/Website_Backup/classes/phys345/phys345/</link>
+      <link>/classes/phys345/phys345/</link>
       <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys345/phys345/</guid>
+      <guid>/classes/phys345/phys345/</guid>
       <description>General Information Welcome to Willamette&amp;rsquo;s Phys 345: Electromagnetism course! This is my personal website and will be the primary vehicle by which I&amp;rsquo;ll pass information to you this semester. Anything posted elsewhere I&amp;rsquo;ll be very clear about!&#xA;Syllabus If you need a quick reference back to my syllabus, you can find it below: Syllabus Homework Homework in this class will be due Monday nights at midnight. We&amp;rsquo;ll be using Gradescope to submit assignments to cut back on the amount of paper I need to handle.</description>
     </item>
     <item>
       <title>Homework</title>
-      <link>/Website_Backup/classes/cs151/hw/</link>
+      <link>/classes/cs151/hw/</link>
       <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/hw/</guid>
+      <guid>/classes/cs151/hw/</guid>
       <description>&#xA;Name Due Date Problem Set 0 Mon, Sep 4 Problem Set 1 Mon, Sep 11 Problem Set 2 Mon, Sep 18 Problem Set 3 Mon, Sep 25 Project 1: Wordle Mon, Oct 2 Problem Set 4 Mon, Oct 16 Project 2: Breakout! Mon, Oct 23 Problem Set 5 Mon, Oct 30 Project 3: ImageShop Mon, Nov 6 Project 4: Enigma Mon, Nov 20 Project 5: Adventure Wed, Dec 6 </description>
     </item>
     <item>
       <title>Homework</title>
-      <link>/Website_Backup/classes/ids138/hw/</link>
+      <link>/classes/ids138/hw/</link>
       <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/ids138/hw/</guid>
+      <guid>/classes/ids138/hw/</guid>
       <description>&#xA;Name Due Date </description>
     </item>
     <item>
       <title>Homework</title>
-      <link>/Website_Backup/classes/phys339/hw/</link>
+      <link>/classes/phys339/hw/</link>
       <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys339/hw/</guid>
+      <guid>/classes/phys339/hw/</guid>
       <description>&#xA;Name Due Date Homework 1 Mon, Aug 31 Homework 2 Mon, Sep 7 Homework 3 Mon, Sep 14 Homework 4 Mon, Sep 21 Homework 5 Mon, Sep 28 Homework 6 Mon, Oct 5 Homework 7 Mon, Oct 19 Homework 8 Mon, Oct 26 Homework 9 Mon, Nov 2 Homework 10 Mon, Nov 16 Homework 11 Mon, Nov 23 </description>
     </item>
     <item>
       <title>Homework</title>
-      <link>/Website_Backup/classes/phys345/hw/</link>
+      <link>/classes/phys345/hw/</link>
       <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys345/hw/</guid>
+      <guid>/classes/phys345/hw/</guid>
       <description>&#xA;Name Due Date </description>
     </item>
     <item>
       <title>Lab 3 Imagery</title>
-      <link>/Website_Backup/classes/phys110/lab3/</link>
+      <link>/classes/phys110/lab3/</link>
       <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys110/lab3/</guid>
+      <guid>/classes/phys110/lab3/</guid>
       <description> Figure 1: Located at 19.5099&amp;deg;N, 155.5256&amp;deg;W Figure 2: Located at 28.1129&amp;deg;N, 85.9812&amp;deg;E Figure 3: Located at 36.6064&amp;deg;N, 117.1141&amp;deg;W Figure 4: Located at 51.4007&amp;deg;N, 68.7219&amp;deg;W </description>
     </item>
     <item>
       <title>Labs</title>
-      <link>/Website_Backup/classes/phys110/labs/</link>
+      <link>/classes/phys110/labs/</link>
       <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys110/labs/</guid>
+      <guid>/classes/phys110/labs/</guid>
       <description>&#xA;Name Description </description>
     </item>
     <item>
       <title>Lecture Slides</title>
-      <link>/Website_Backup/classes/ids138/slides/</link>
+      <link>/classes/ids138/slides/</link>
       <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/ids138/slides/</guid>
+      <guid>/classes/ids138/slides/</guid>
       <description>&#xA;Number Date Chapter Description </description>
     </item>
     <item>
       <title>Lecture Slides</title>
-      <link>/Website_Backup/classes/phys110/slides/</link>
+      <link>/classes/phys110/slides/</link>
       <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys110/slides/</guid>
+      <guid>/classes/phys110/slides/</guid>
       <description>Number Date Description Video Lecture 37 Mon, Nov 23 Aliens! Lecture 36 Fri, Nov 20 The CMB Lecture 35 Wed, Nov 18 Evolution of the Universe Lecture 34 Mon, Nov 16 Wavelengths of the Milky Way and Formation Lecture 33 Wed, Nov 11 Rotation and Star Cycle Lecture 32 Mon, Nov 9 Black Holes and the Milky Way Lecture 31 Fri, Nov 6 Neutron Stars and Black Holes Lecture 30 Wed, Nov 4 Supernova and WD Lecture 29 Mon, Nov 2 Low Mass Lifetimes Lecture 28 Fri, Oct 30 Star Clusters and the HR Diagram Lecture 27 Wed, Oct 28 Mass and HR Diagrams Lecture 26 Mon, Oct 26 Magnitudes and Star Properties Lecture 25 Fri, Oct 23 Energy Production and the Solar Cycle Lecture 24 Wed, Oct 21 Introduction to Fusion Lecture 23 Fri, Oct 16 Distance to Sun and Energy Lecture 22 Wed, Oct 14 Exoplanets and Intro to the Sun Lecture 21 Mon, Oct 12 Origins of Solar System and Exoplanets Lecture 20 Fri, Oct 9 Comets, Dwarf Planets and Origins Lecture 19 Wed, Oct 7 Rings and Asteroids!</description>
     </item>
     <item>
       <title>Lecture Slides</title>
-      <link>/Website_Backup/classes/phys222/slides/</link>
+      <link>/classes/phys222/slides/</link>
       <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys222/slides/</guid>
+      <guid>/classes/phys222/slides/</guid>
       <description>&#xA;Number Date Description Video Lecture 37 Fri, May 1 Refraction and Reflection Lecture 36 Wed, Apr 29 Finding points of Interference Lecture 35 Mon, Apr 27 Basic Waves Lecture 34 Mon, Apr 20 Direction of Radiation Lecture 33 Fri, Apr 17 Electromagnetic Radiation Lecture 32 Wed, Apr 15 Maxwell&amp;#39;s Correction to Ampere&amp;#39;s Law Lecture 31 Mon, Apr 13 Faraday&amp;#39;s Law Lecture 30 Fri, Apr 10 Ampere&amp;#39;s Law Lecture 28 Mon, Apr 6 Intro to Flux and Gauss Lecture 26 Mon, Mar 30 Lorentz Force and Hall Effect Lecture 25 Fri, Mar 20 Intro to Magnetic Force Lecture 24 Wed, Mar 18 Power and Internal Resistance Lecture 23 Mon, Mar 16 Intro to Resistors Lecture 22 Fri, Mar 13 Intro to Capacitance Lecture 21 Wed, Mar 11 Loop Laws and Energy Lecture 20 Mon, Mar 9 What drives currents Lecture 19 Fri, Mar 6 Solenoids and Molecular Currents Lecture 18 Wed, Mar 4 Magnetic Distributions Lecture 17 Mon, Mar 2 Understanding Current Events Lecture 16 Fri, Feb 28 Dielectric Constants and Intro to Magnetism Lecture 15 Wed, Feb 26 Test Coverage and Single Potentials Lecture 14 Mon, Feb 24 Strong Independent Paths Lecture 13 Wed, Feb 19 Slopes and Changing Fields Lecture 12 Mon, Feb 17 Intro to Potential Lecture 11 Fri, Feb 14 Planes, Spheres and Capacitors Lecture 10 Wed, Feb 12 Ring Charges and Computation Lecture 9 Mon, Feb 10 The Line Charge Lecture 8 Fri, Feb 7 Van Der Graff and Intro to Distributions Lecture 7 Wed, Feb 5 Moving Charges Around Lecture 6 Mon, Feb 3 Conductor Behavior Lecture 5 Fri, Jan 31 Induced Dipoles Lecture 4 Wed, Jan 29 Dipoles and Computation Lecture 3 Mon, Jan 27 Superposition and the Dipole Lecture 2 Fri, Jan 24 Why We Use Fields Lecture 1 Wed, Jan 22 First day of class Lecture 29 Wed, Apr 10 Gauss&amp;#39;s Law Lecture 27 Fri, Apr 5 Motional emf and Generators </description>
     </item>
     <item>
       <title>Video Homework</title>
-      <link>/Website_Backup/classes/phys222/hw/</link>
+      <link>/classes/phys222/hw/</link>
       <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/phys222/hw/</guid>
+      <guid>/classes/phys222/hw/</guid>
       <description>&#xA;Name Due Date Homework 1 Mon, Jan 27 Homework 2 Mon, Feb 3 Homework 3 Mon, Feb 10 Homework 4 Mon, Feb 17 Homework 5 Mon, Mar 2 Homework 6 Mon, Mar 9 Homework 7 Mon, Mar 16 Homework 8 Mon, Apr 13 Homework 9 Mon, May 4 </description>
     </item>
     <item>
       <title>Introductory Physics I</title>
-      <link>/Website_Backup/classes/phys221/phys221/</link>
+      <link>/classes/phys221/phys221/</link>
       <pubDate>Sat, 18 Aug 2018 19:04:06 -0700</pubDate>
-      <guid>/Website_Backup/classes/phys221/phys221/</guid>
-      <description>General Information Welcome to Willamette&amp;rsquo;s Physics 221 course! This is my personal website, which I will likely prioritize updating over the WISE pages. This site is prettier anyway&amp;hellip;&#xA;Syllabus If you need a quick reference or refresher, my syllabus is below.&#xA;&amp;lt;a href=&amp;quot;/Website_Backup/class_files/phys221/syllabus.pdf&amp;quot;&amp;gt; Syllabus &amp;lt;/a&amp;gt; Homework Homework in this course is a mix of written and video problems. Written homework will be assigned after each class period and will be due by the end of the next class day.</description>
+      <guid>/classes/phys221/phys221/</guid>
+      <description>General Information Welcome to Willamette&amp;rsquo;s Physics 221 course! This is my personal website, which I will likely prioritize updating over the WISE pages. This site is prettier anyway&amp;hellip;&#xA;Syllabus If you need a quick reference or refresher, my syllabus is below.&#xA;&amp;lt;a href=&amp;quot;/class_files/phys221/syllabus.pdf&amp;quot;&amp;gt; Syllabus &amp;lt;/a&amp;gt; Homework Homework in this course is a mix of written and video problems. Written homework will be assigned after each class period and will be due by the end of the next class day.</description>
     </item>
     <item>
       <title>About Me</title>
-      <link>/Website_Backup/about/</link>
+      <link>/about/</link>
       <pubDate>Fri, 17 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/about/</guid>
+      <guid>/about/</guid>
       <description>Description In short, I&amp;rsquo;m an easy going fellow who loves life, god, family, friends, dreams, blankets and stars. The long version is as follows. I have a passion and gift for phyics and math that, along with my faith, influences much of my life. I believe that science supports a wonder of and a small understanding of God in striving to understand the awesome complexity of God&amp;rsquo;s creation. I tend to be a somewhat independent, quiet person&amp;ndash;though my friends mean more to me than I usually express to them.</description>
     </item>
     <item>
       <title>Graduate School Notes</title>
-      <link>/Website_Backup/resources/grad_resources/grad_resources/</link>
+      <link>/resources/grad_resources/grad_resources/</link>
       <pubDate>Fri, 17 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/resources/grad_resources/grad_resources/</guid>
+      <guid>/resources/grad_resources/grad_resources/</guid>
       <description>Quantum Mechanics The complete set of my graduate Quantum Mechanic&amp;rsquo;s notes, both semesters included. Hopefully by posting them here they can be of use to someone besides myself! Quantum Notes Advanced Dynamics These unfortunately are incomplete at the moment. Should I find the time to begin updating them again, I will post to make folk aware. Advanced Dynamics Notes Statistical Mechanics The finished set of my graduate Statistical Mechanic&amp;rsquo;s notes. Statistical Mechanics Notes </description>
     </item>
     <item>
       <title>Weekly Schedule</title>
-      <link>/Website_Backup/wu_schedule/</link>
+      <link>/wu_schedule/</link>
       <pubDate>Fri, 17 Aug 2018 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/wu_schedule/</guid>
+      <guid>/wu_schedule/</guid>
       <description></description>
     </item>
     <item>
       <title></title>
-      <link>/Website_Backup/classes/cs151/setup/</link>
+      <link>/classes/cs151/setup/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/cs151/setup/</guid>
+      <guid>/classes/cs151/setup/</guid>
       <description>Guide to Github and Github Classroom Getting a Github account if you don&amp;rsquo;t already have one Getting setup on Github is pretty straightforward:&#xA;Navigate you way to www.github.com and click on &amp;ldquo;Sign Up&amp;rdquo; in the upper right corner. You should see a page like below, and can choose your own username, email, and password. These do not need to be affiliated with Willamette accounts if you do not want them to be, but make sure you have access to the email address.</description>
     </item>
     <item>
       <title></title>
-      <link>/Website_Backup/classes/data275/setup/</link>
+      <link>/classes/data275/setup/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data275/setup/</guid>
+      <guid>/classes/data275/setup/</guid>
       <description>Guide to Github and Github Classroom Getting a Github account if you don&amp;rsquo;t already have one Getting setup on Github is pretty straightforward:&#xA;Navigate you way to www.github.com and click on &amp;ldquo;Sign Up&amp;rdquo; in the upper right corner. You should see a page like below, and can choose your own username, email, and password. These do not need to be affiliated with Willamette accounts if you do not want them to be, but make sure you have access to the email address.</description>
     </item>
     <item>
       <title></title>
-      <link>/Website_Backup/classes/data299/setup/</link>
+      <link>/classes/data299/setup/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data299/setup/</guid>
+      <guid>/classes/data299/setup/</guid>
       <description>Guide to Github and Github Classroom Getting a Github account if you don&amp;rsquo;t already have one Getting setup on Github is pretty straightforward:&#xA;Navigate you way to www.github.com and click on &amp;ldquo;Sign Up&amp;rdquo; in the upper right corner. You should see a page like below, and can choose your own username, email, and password. These do not need to be affiliated with Willamette accounts if you do not want them to be, but make sure you have access to the email address.</description>
     </item>
     <item>
       <title></title>
-      <link>/Website_Backup/classes/data351/setup/</link>
+      <link>/classes/data351/setup/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data351/setup/</guid>
+      <guid>/classes/data351/setup/</guid>
       <description>Guide to Github and Github Classroom Getting a Github account if you don&amp;rsquo;t already have one Getting setup on Github is pretty straightforward:&#xA;Navigate you way to www.github.com and click on &amp;ldquo;Sign Up&amp;rdquo; in the upper right corner. You should see a page like below, and can choose your own username, email, and password. These do not need to be affiliated with Willamette accounts if you do not want them to be, but make sure you have access to the email address.</description>
     </item>
     <item>
       <title></title>
-      <link>/Website_Backup/classes/data503/setup/</link>
+      <link>/classes/data503/setup/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/Website_Backup/classes/data503/setup/</guid>
+      <guid>/classes/data503/setup/</guid>
       <description>Guide to Github and Github Classroom Getting a Github account if you don&amp;rsquo;t already have one Getting setup on Github is pretty straightforward:&#xA;Navigate you way to www.github.com and click on &amp;ldquo;Sign Up&amp;rdquo; in the upper right corner. You should see a page like below, and can choose your own username, email, and password. These do not need to be affiliated with Willamette accounts if you do not want them to be, but make sure you have access to the email address.</description>
     </item>
   </channel>
