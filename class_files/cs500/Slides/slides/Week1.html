@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2024-07-10">
+  <title>Getting Started Typing</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/python_monokai.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/monokai.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Getting Started Typing</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">July 10, 2024</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Welcome to CS-500: MSCS Bridge!</li>
+<li>Things to do:
+<ul>
+<li>Access the course webpage <a
+href="https://jrembold.github.io/Website_Backup/classes/cs500/cs500/">here!</a>
+<ul>
+<li>There will also be a link to the course webpage from the Canvas site
+once it forms</li>
+</ul></li>
+<li>Read over the full syllabus</li>
+<li>Get signed up with a GitHub account if you don’t already have one
+(or if you want a separate one for school)</li>
+</ul></li>
+<li>Homework
+<ul>
+<li>Project 1 guide will be posted by the end of tomorrow</li>
+</ul></li>
+</ul>
+</section>
+<section>
+<section id="intro" class="title-slide slide level1">
+<h1>Intro</h1>
+
+</section>
+<section id="my-vitals" class="slide level2">
+<h2>My Vitals</h2>
+<div class="cols">
+<div class="col">
+<dl>
+<dt>Name</dt>
+<dd>
+Jed Rembold
+</dd>
+<dt>Office</dt>
+<dd>
+Ford 214
+</dd>
+<dt>Office Hours</dt>
+<dd>
+Online by appointment or anytime I’m around
+</dd>
+<dt>Email:</dt>
+<dd>
+jjrembold at willamette.edu
+</dd>
+<dt>Office Phone:</dt>
+<dd>
+503-370-6860
+</dd>
+</dl>
+</div>
+<div class="col">
+<p><img data-src="../images/about_me.png" style="width:70.0%" /></p>
+</div>
+</div>
+</section>
+<section id="how-to-succeed" class="slide level2">
+<h2>How to Succeed</h2>
+<ul>
+<li>Folks are entering this course with a variety of initial experiences
+<ul>
+<li>I’m targeting a starting point just slightly past the “very
+beginning”</li>
+</ul></li>
+<li>Path to Success
+<ul>
+<li>There can be a significant time commitment for this course
+<ul>
+<li>The main way to get good at coding is to <strong>do</strong>
+coding</li>
+<li>Coding can often times involve a lot of frustrating troubleshooting
+or failed attempts</li>
+<li>Expect, on average, the full use of WU’s 2-3 hours outside class for
+every hour in class</li>
+</ul></li>
+<li>If you are stuck for more than 30 minutes, <em>ask myself or AI or
+another mentor for help</em>
+<ul>
+<li>While it is important to give yourself time to troubleshoot, past a
+certain point continuing to bang your head against a problem just leads
+to frustration</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="grading" class="slide level2">
+<h2>Grading</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>All end of semester grades are credit/no-credit.</li>
+<li>Credit is anything &gt;70%</li>
+</ul>
+</div>
+<div class="col">
+<table>
+<tbody>
+<tr class="odd">
+<td>Participation</td>
+<td style="text-align: right;">50%</td>
+</tr>
+<tr class="even">
+<td>Projects</td>
+<td style="text-align: right;">50%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="participation" class="slide level2">
+<h2>Participation</h2>
+<ul>
+<li>Class will often times have “understanding check” polling questions
+<ul>
+<li>Just a web interface you can respond with</li>
+<li>Answering at all gets you credit, correct answers will get you a bit
+of extra credit</li>
+</ul></li>
+<li>A large portion of class will be dedicated to pair-programming
+exercises each week
+<ul>
+<li>You get full credit for you and your partner completing all the
+exercises</li>
+</ul></li>
+</ul>
+</section>
+<section id="projects" class="slide level2">
+<h2>Projects</h2>
+<ul>
+<li>Each week will have a different project for you to work on</li>
+<li>All will be due on Thursdays at 11:59pm</li>
+<li>Submissions will be handled through GitHub Classroom
+<ul>
+<li>Learning how to do this in class</li>
+</ul></li>
+<li>2 cumulative late days over the entire semester without penalty then
+penalties enacted for each subsequent day late</li>
+<li>Extensions for any reason need to be requested and approved by
+myself</li>
+</ul>
+</section>
+<section id="academic-honesty" class="slide level2">
+<h2>Academic Honesty</h2>
+<ol type="1">
+<li>You must not look at solutions or program code that is not your
+own.</li>
+<li>You must not share your solution code with other students.
+<ul>
+<li>But you are welcome (and encouraged!) to work alongside others en
+route to finding a solution.</li>
+</ul></li>
+<li>You must indicate on your submitted assignment any assistance you
+received or who you worked alongside.</li>
+</ol>
+</section>
+<section id="ai" class="slide level2">
+<h2>AI</h2>
+<div class="cols">
+<div class="col" style="font-size:.9em">
+<ul>
+<li>You are free in this class to use things like ChatGPT or GitHub
+Copilot to assist you in writing, understanding, or troubleshooting
+code</li>
+<li><strong>However:</strong>
+<ul>
+<li>LLMs make mistakes, and you need to understand the code to be able
+to catch them. If you can’t explain what every line of a piece of code
+is doing, that is a problem.</li>
+</ul></li>
+<li>I just ask that you make a note on the assignment if you got help
+from one of these sources, and link to the transcript if possible.</li>
+</ul>
+</div>
+<div class="col">
+<figure>
+<img data-src="../images/glados.png" style="width:70.0%"
+alt="My favorite AI" />
+<figcaption aria-hidden="true">My favorite AI</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="diving-in" class="slide level2">
+<h2>Diving In</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>This course is an introduction on <em>computer science</em>, and
+covers more than just programming!</li>
+<li>Python is used to teach the programming portion of the course, but
+the focus is less on Python itself and more on general computer science
+principles.</li>
+<li>If you come across situations where you need to know a bit more
+about specific Python details, there are plenty of resources online, or
+just ask me!</li>
+</ul>
+</div>
+<div class="col">
+<!--<p class="stretch"><img src="../images/book_cover.png"></p>-->
+<p><img data-src="../images/book_cover.png" style="width:70.0%" /></p>
+</div>
+</div>
+</section>
+<section id="effective-communication" class="slide level2">
+<h2>Effective Communication</h2>
+<div>
+<ul>
+<li class="fragment">To communicate effectively with someone or
+something, you really need two layers of communication:
+<ul>
+<li class="fragment">A shared language or method of conveying
+information
+<ul>
+<li class="fragment">The English alphabet, for example</li>
+<li class="fragment">In our case, Python</li>
+</ul></li>
+<li class="fragment">A joint agreement about what constitutes
+<strong>meaning</strong>
+<ul>
+<li class="fragment">Need ways to limit confusion or misunderstanding
+<ul>
+<li class="fragment">Following conventions</li>
+</ul></li>
+<li class="fragment">Being able to explain things clearly and
+unambiguously</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="algorithms" class="slide level2">
+<h2>Algorithms</h2>
+<ul>
+<li>The process of designing a solution strategy to a problem is called
+<em>algorithmic design</em></li>
+<li>An <em>algorithm</em> is just an approach or recipe for a method to
+solve a particular problem
+<ul>
+<li>Most commonly language agnostic</li>
+</ul></li>
+<li>Algorithms are not a new concept
+<ul>
+<li>Euclid’s algorithm to find the greatest common divisor, for
+instance</li>
+</ul></li>
+<li>A large part of computer science is focused on the study or analysis
+of algorithms</li>
+</ul>
+</section>
+<section id="algorithm-code" class="slide level2">
+<h2>Algorithm ⮕ Code</h2>
+<ul>
+<li>You need to have an algorithm in place <strong>before</strong> you
+can write the code to tell the computer what you want to do
+<ul>
+<li>Imagine an alien asking me how to bake a cake. I need to understand
+the steps to baking the cake before I can even worry about the
+translation or communication</li>
+</ul></li>
+<li>Programming tools like conditional statements and loops will
+frequently play a role in your algorithm, but as general concepts
+<ul>
+<li>I can easily describe a loop to you without needing the exact syntax
+of Python</li>
+</ul></li>
+<li>The <em>implementation</em> of the algorithm is the act of
+translating it into Python (or whatever language you are using)</li>
+</ul>
+</section></section>
+<section>
+<section id="numeric-types" class="title-slide slide level1">
+<h1>Numeric Types</h1>
+
+</section>
+<section id="data-types" class="slide level2">
+<h2>Data Types</h2>
+<ul>
+<li>Generally, the data processed by computers can take on many
+forms</li>
+<li>A <em>data type</em> defines the common characteristics of some data
+values that have a certain form or purpose.
+<ul>
+<li>Ex: a whole number or integer has certain characteristics common to
+all integers</li>
+</ul></li>
+<li>A data type has a <em>domain</em>, which is the set of all potential
+values that would belong to that type.
+<ul>
+<li>Ex: 0, 1, 2, 3, 4, 5, 6, 7, …</li>
+</ul></li>
+<li>A data type has a <em>set of operations</em> that define how those
+values can be manipulated
+<ul>
+<li>Ex: You can add two whole numbers (5 + 2)</li>
+</ul></li>
+</ul>
+</section>
+<section id="numeric-types-1" class="slide level2">
+<h2>Numeric Types</h2>
+<ul>
+<li>Initially, we’ll focus on the numeric types</li>
+<li>Python has 3 data types for representing numbers:
+<ul>
+<li><p><code class="python">int</code> for integers and whole
+numbers</p>
+<pre ><code class="python">1, 2, 3, 10, 1001010101, -231</code></pre></li>
+<li><p><code class="python">float</code> for numbers containing a
+decimal point</p>
+<pre ><code class="python">1.23, 3.14, 10.001, 0.0, -8.23</code></pre></li>
+<li><p><code class="python">complex</code> for numbers with an imaginary
+component (which we won’t deal with)</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="expressions" class="slide level2">
+<h2>Expressions</h2>
+<ul>
+<li>Python describes computation using <em>arithmetic expressions</em>,
+which consist of <em>terms</em> joined by <em>operators</em>
+<ul>
+<li>Very similar to how a logical English sentence has nouns connected
+by verbs</li>
+</ul></li>
+<li>A term in an expression can be:
+<ul>
+<li>an explicit numeric value (called a literal) like 1 or 3.14</li>
+<li>a variable name serving as a placeholder to a value (more on those
+in a moment!)</li>
+<li>a value resulting from the output of a function call (more on those
+on Monday!)</li>
+<li>another expression enclosed in parentheses</li>
+</ul></li>
+</ul>
+<p><br></p>
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="329.58304mm"
+   height="25.093552mm"
+   viewBox="0 0 329.58304 25.093552"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   sodipodi:docname="expressions.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.457453"
+     inkscape:cx="677.66524"
+     inkscape:cy="-221.88072"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(23.498847,-81.3686)">
+    <text
+       xml:space="preserve"
+       style="font-size:23.8114px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#a6e22e;stroke:none;stroke-width:1.31342;stroke-linecap:round;stroke-dasharray:none"
+       x="-27.992485"
+       y="101.2847"
+       id="text236"><tspan
+         sodipodi:role="line"
+         id="tspan234"
+         style="fill:#a6e22e;stroke:none;stroke-width:1.31342;stroke-dasharray:none"
+         x="-27.992485"
+         y="101.2847">[term]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:23.8114px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#a6e22e;stroke:none;stroke-width:1.31342;stroke-linecap:round;stroke-dasharray:none"
+       x="222.65875"
+       y="101.2847"
+       id="text3080"><tspan
+         sodipodi:role="line"
+         id="tspan3078"
+         style="fill:#a6e22e;stroke:none;stroke-width:1.31342;stroke-dasharray:none"
+         x="222.65875"
+         y="101.2847">[term]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:23.8114px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#f92672;stroke:none;stroke-width:1.31342;stroke-linecap:round;stroke-dasharray:none"
+       x="68.026825"
+       y="101.2847"
+       id="text3084"><tspan
+         sodipodi:role="line"
+         id="tspan3082"
+         style="fill:#f92672;stroke:none;stroke-width:1.31342;stroke-dasharray:none"
+         x="68.026825"
+         y="101.2847">[operator]</tspan></text>
+  </g>
+</svg>
+</p>
+</section>
+<section id="integer-and-float-operations" class="slide level2">
+<h2>Integer and Float Operations</h2>
+<div style="font-size:.85em">
+<ul>
+<li><code class="python">i + j</code>  the <em>sum</em> of
+<code class="python">i</code> and <code class="python">j</code><span
+class="orange"></span></li>
+<li><code class="python">i - j</code>  the <em>difference</em> between
+<code class="python">i</code> and <code class="python">j</code><span
+class="orange"></span></li>
+<li><code class="python">i * j</code>  the <em>product</em> of
+<code class="python">i</code> and <code class="python">j</code><span
+class="orange"></span></li>
+<li><code class="python">i // j</code>  the <em>floor division</em> of
+<code class="python">i</code> by <code class="python">j</code><span
+class="orange"></span></li>
+<li><code class="python">i / j</code>  the <em>division</em> of
+<code class="python">i</code> by <code class="python">j</code><span
+class="orange">†</span></li>
+<li><code class="python">i % j</code>  the <em>remainder</em> when
+<code class="python">i</code> is divided by
+<code class="python">j</code><span class="orange"></span></li>
+<li><code class="python">i ** j</code>  <code class="python">i</code>
+to the <em>power</em> of <code class="python">j</code><span
+class="orange"></span><span class="orange">‡</span></li>
+<li><code class="python">-j</code>  the <em>negation</em> of
+<code class="python">j</code><span class="orange"></span></li>
+</ul>
+</div>
+<hr>
+<div style="font-size:.9em">
+<p><span class="orange"></span> – Returns
+<code class="python">int</code> if both <code class="python">i</code>
+and <code class="python">j</code> are integers,
+<code class="python">float</code> otherwise</p>
+<p><span class="orange">†</span> – Returns
+<code class="python">float</code> always</p>
+<p><span class="orange">‡</span> – Returns
+<code class="python">float</code> always if
+<code class="python">j</code> is negative</p>
+</div>
+</section>
+<section id="order-of-operations" class="slide level2">
+<h2>Order of Operations</h2>
+<ul>
+<li>Basic order of operations applies just like in math!</li>
+<li>Operations in parentheses done first</li>
+<li>Without parentheses, order of operations proceeds as:
+<ul>
+<li><code class="python">**</code> (exponents, executed <em>right to
+left</em>)</li>
+<li><code class="python">-n</code> (negative numbers)</li>
+<li><code class="python">*</code>, <code class="python">/</code>,
+<code class="python">//</code>, <code class="python">%</code>, executed
+from left to right</li>
+<li><code class="python">+</code> and <code class="python">-</code>,
+executed from left to right</li>
+</ul></li>
+</ul>
+</section>
+<section id="understanding-check" class="slide level2"
+data-notes="Solution: 15">
+<h2 data-notes="Solution: 15">Understanding Check</h2>
+<p>What is the value of the below expression?</p>
+<p><code class="python inlinecode">1 * 2 * 3 + (4 + 5) % 6 + (7 * 8) // 9</code></p>
+<div class="poll">
+<ol>
+<li>15</li>
+<li>18.22</li>
+<li>42</li>
+<li>83</li>
+</ol>
+</div>
+</section>
+<section id="boolean-expressions" class="slide level2">
+<h2>Boolean Expressions</h2>
+<ul>
+<li><p>Python defines two types of operators that work with Boolean
+data: <em>relational operators</em> and <em>logical
+operators</em></p></li>
+<li><p>Relational operators compare values of other types and produce a
+boolean
+<code class="python">True</code>/<code class="python">False</code>
+result:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><code class="python">==</code></td>
+<td style="text-align: left;">Equals</td>
+<td></td>
+<td></td>
+<td></td>
+<td><code class="python">!=</code></td>
+<td style="text-align: left;">Not equals</td>
+</tr>
+<tr class="even">
+<td><code class="python"><</code></td>
+<td style="text-align: left;">Less than</td>
+<td></td>
+<td></td>
+<td></td>
+<td><code class="python"><=</code></td>
+<td style="text-align: left;">Less than or equal too</td>
+</tr>
+<tr class="odd">
+<td><code class="python">></code></td>
+<td style="text-align: left;">Greater than</td>
+<td></td>
+<td></td>
+<td></td>
+<td><code class="python">>=</code></td>
+<td style="text-align: left;">Greater than or equal to</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>Be careful! <code class="python">==</code> <em>compares</em> two
+values. A single <code class="python">=</code> <em>assigns</em> a
+variable. The odds are high you’ll use one when you meant the other at
+least once this semester!</p></li>
+</ul>
+</section>
+<section id="the-vulcan-way" class="slide level2">
+<h2>The Vulcan Way</h2>
+<ul>
+<li><p>Logical operators act on Boolean pairings</p>
+<table>
+<thead>
+<tr class="header">
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">A and B</code></td>
+<td>True if both terms True, False otherwise</td>
+</tr>
+<tr class="even">
+<td><code class="python">A or B</code></td>
+<td>True if <em>any</em> term is True, False otherwise</td>
+</tr>
+<tr class="odd">
+<td><code class="python">not A</code></td>
+<td>True if A False, False if A True (opposite)</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<div>
+<ul>
+<li class="fragment">Order of operations follows parentheses and then
+proceeds left to right</li>
+<li class="fragment">Careful that <code class="python">or</code> is
+still <code class="python">True</code> if both options are
+<code class="python">True</code></li>
+<li class="fragment">Similarly, careful with combining
+<code class="python">not</code> with <code class="python">and</code> and
+<code class="python">or</code>
+<ul>
+<li class="fragment">“Not A or B” in common English is not the same as
+<code class="python">not A or B</code></li>
+</ul></li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="variables" class="title-slide slide level1">
+<h1>Variables</h1>
+
+</section>
+<section id="tis-variable" class="slide level2">
+<h2>Tis Variable</h2>
+<div style="font-size:.9em">
+<ul>
+<li>One of the terms that can appear in expressions is what we term a
+variable</li>
+<li>A <em>variable</em> is a placeholder or nametag for a value that can
+be updated as the program progresses</li>
+<li>Envision as a named box capable of storing a value
+<p><img
+data-src="../images/svg_cache/f6c6bb43f05da24ad71fc0f13983388e3f56eafe.svg"
+style="width:20.0%" alt="&#39;Will this work?"
+data-id="box&#39;" /></p></li>
+<li>Each variable has the following attributes:
+<ul>
+<li>A <em>name</em>: which enables you to tell variables apart</li>
+<li>A <em>value</em>: which represents the current contents of the
+variable</li>
+</ul></li>
+<li>A variable’s name is fixed, but the value can change whenever you
+<em>assign</em> a new value to the variable</li>
+</ul>
+</div>
+</section>
+<section id="making-assignments" class="slide level2">
+<h2>Making Assignments</h2>
+<ul>
+<li><p>You create a variable by assigning it a value with Python’s
+<em>assignment statement</em>, <code class="python">=</code>, a single
+equals sign:</p>
+<pre ><code class="python">|||variable name||| = |||expression|||</code></pre></li>
+<li><p>The <code class="python">|||variable name|||</code>
+<strong>must</strong> appear on the left of the
+<code class="python">=</code> in Python!</p></li>
+<li><p>Python first computes the value of the right-hand side of the
+equals and then assigns to the name on the left</p>
+<ul>
+<li><p>The same variable name can seem to appear on both sides of the
+equals!</p>
+<pre ><code class="python">total = total + value</code></pre>
+<ul>
+<li>The <code class="python">total</code> on the right represents some
+existing value</li>
+<li>The <code class="python">total</code> on the left is the new label
+of whatever the right expression evaluates to</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="ephemeral-variables" class="slide level2">
+<h2>Ephemeral Variables</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li><p>When you assign a new value to a variable, the old value is
+lost</p>
+<pre ><code class="idle python-repl" style="font-size:0.8em">>>> A = 10
+>>> A
+10
+>>> B = A + 5
+>>> B
+15
+>>> A = B
+>>> A
+15</code></pre></li>
+</ul>
+</div>
+<div class="col">
+<ul>
+<li><p>Variables defined in terms of others do <strong>not</strong> get
+automatically updated</p></li>
+<li><p>Python evaluates expressions from the top down</p>
+<pre ><code class="idle python-repl" style="font-size:0.8em">>>> A = 10
+>>> B = A + 2
+>>> A = 8
+>>> B
+12</code></pre></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="the-power-of-names" class="slide level2">
+<h2>The Power of Names</h2>
+<div style="font-size:.9em">
+<ul>
+<li>Names for variables, functions, and (eventually) classes are called
+<em>identifiers</em></li>
+<li>Composed of letters, numbers and underscores, but <strong>can not
+start with a number</strong></li>
+<li>A variety of different conventions to mark word boundaries:
+<ul>
+<li><em>Snake case</em> uses underscores:
+<code class="python">this_is_amazing</code></li>
+<li><em>Camel case</em> uses uppercase:
+<code class="python">thisIsAmazing</code></li>
+</ul></li>
+<li>We will aim to follow the following conventions:
+<ul>
+<li>Variable and function names will use snake case</li>
+<li>Constant variables will use all uppercase and underscores:
+<code class="python">MAX_WIDTH</code></li>
+<li>Class names will use camel case and begin with a capital letter</li>
+</ul></li>
+<li>Capitalization matters! <code class="python">radius</code> and
+<code class="python">Radius</code> are different variable names!</li>
+<li><strong>Pick meaningful variable names!</strong></li>
+</ul>
+</div>
+</section>
+<section id="shorthand-and-multiple-assignments" class="slide level2">
+<h2>Shorthand and Multiple Assignments</h2>
+<div style="font-size:.9em">
+<ul>
+<li><p>It is very common to want to adjust an existing variable
+value</p>
+<pre ><code class="python">balance = balance + deposit</code></pre></li>
+<li><p>Python gives you a shorter expression to describe this
+relationship:</p>
+<pre ><code class="python">balance += deposit</code></pre></li>
+<li><p>You can do this with any operation
+(<code class="python">|||op|||</code>) following the general form:</p>
+<pre ><code class="python">|||variable||| |||op|||= |||expression|||</code></pre></li>
+<li><p>You can name multiple variables at once by separating with
+commas</p>
+<pre ><code class="python">A, B, C = 1, 2, 3</code></pre>
+<ul>
+<li>All the expressions on the right are computed before being assigned
+to the left variables</li>
+<li>This can give you a very concise way of swapping variable
+values</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="understanding-check-1" class="slide level2"
+data-notes="Solution: 40">
+<h2 data-notes="Solution: 40">Understanding Check!</h2>
+<p>What is the output value of <code class="python">A</code> in the code
+below?</p>
+<pre ><code class="idle python-repl">>>> A = 10
+>>> B = 4
+>>> C = A * B
+>>> A -= B
+>>> A, B, C = C, A, B
+>>> A
+??</code></pre>
+<div class="hpoll">
+<ol>
+<li>4</li>
+<li>10</li>
+<li>30</li>
+<li>40</li>
+</ol>
+</div>
+</section>
+<section id="understanding-check-2" class="slide level2">
+<h2>Understanding Check</h2>
+<p>What value is printed when the code to the right runs?</p>
+<div class="cols">
+<div class="col">
+<div class="poll">
+<ol>
+<li><code class="python">True</code></li>
+<li><code class="python">False</code></li>
+<li>5</li>
+<li>This would give an error</li>
+</ol>
+</div>
+</div>
+<div class="col" style="flex-grow:2;">
+<pre ><code class="python">A = 10
+B = 4
+C = 1
+A *= B
+if A > 40 and C != 10 % 4:
+    print(B+C)
+else:
+    print(A < B or not (C == 10 // 4))
+</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="strings" class="title-slide slide level1">
+<h1>Strings</h1>
+
+</section>
+<section id="a-string-primer" class="slide level2">
+<h2>A String primer</h2>
+<ul>
+<li>A <em>string</em> in Python in a data type that represents textual
+data, in the form of a sequence of individual characters
+<ul>
+<li>Domain: all possible sequences of characters</li>
+<li>Operations: <strong>Many!</strong> But we’ll keep in quite simple
+initially</li>
+</ul></li>
+<li>Denoted by placing the desired sequence of characters between two
+quotation marks
+<ul>
+<li><code class="python">'I am a string'</code></li>
+<li>In Python, either single or double quotes can be used, but the ends
+must match
+<ul>
+<li><code class="python">"I am also a string!"</code></li>
+<li><code class="python">"I'm sad you've gone"</code></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="lengths" class="slide level2">
+<h2>Lengths</h2>
+<ul>
+<li><p>The number of characters in a string is commonly called its
+<em>length</em></p></li>
+<li><p>The length of a string can be found using the built-in function
+<code class="python">len()</code></p>
+<pre ><code class="python">>>> len("Totally awesome")
+15</code></pre></li>
+<li><p>In practice, this function works for any sequence, of which
+strings are just our first example</p></li>
+</ul>
+</section>
+<section id="character-picking" class="slide level2">
+<h2>Character Picking</h2>
+<ul>
+<li>A string is an <em>ordered</em> sequence of characters
+<ul>
+<li>Character positions in the string are identified by an
+<em>index</em>, which <strong>starts at 0</strong></li>
+</ul></li>
+</ul>
+<p><img
+data-src="../images/svg_cache/9d907491f4c471977e9b041a3db1b7c6bc2ea0cc.svg"
+style="width:70.0%" /></p>
+<ul>
+<li><p>You can select individual characters from the string using the
+syntax</p>
+<pre ><code class="python">|||string|||[|||k|||]</code></pre>
+<p>where <code class="python">|||string|||</code> is the variable
+assigned to the desired string and <code class="python">|||k|||</code>
+is the index integer of the character you want</p>
+<pre ><code class="python-repl" style="font-size:.7em">>>> print("spaghetti sauce"[5])
+e</code></pre></li>
+</ul>
+</section>
+<section id="back-it-up" class="slide level2">
+<h2>Back it Up</h2>
+<ul>
+<li>Sometimes it is more useful to count from the end of the string, not
+the beginning</li>
+<li>Python gives you a convenient way to do this, using negative
+indexes</li>
+</ul>
+<p><br></p>
+<p><img
+data-src="../images/svg_cache/b81244858d27ed1fba077c2e55db5b8148227558.svg"
+style="width:70.0%" /></p>
+<ul>
+<li><p>A common use case is to grab the last character of the string,
+using</p>
+<pre ><code class="python">s[-1]</code></pre>
+<p>which is shorthand for</p>
+<pre ><code class="python">s[len(s)-1]</code></pre></li>
+</ul>
+</section>
+<section id="slicing" class="slide level2">
+<h2>Slicing</h2>
+<ul>
+<li><p>Often, you may want more than a single character</p></li>
+<li><p>Python allows you to specify a starting and an ending index
+through an operation known as <em>slicing</em></p></li>
+<li><p>The syntax looks like:</p>
+<pre ><code class="python">|||string_variable|||[|||start||| : |||limit|||]</code></pre>
+<p>where <code class="python">|||start|||</code> is the first index to
+be included and everything up to but <strong>not including</strong> the
+<code class="python">|||limit|||</code> is included</p></li>
+<li><p><code class="python">|||start|||</code> and
+<code class="python">|||limit|||</code> are actually optional (but the
+<code class="python">:</code> is not)</p>
+<ul>
+<li>If <code class="python">|||start|||</code> omitted, the slice will
+begin at the start of the string</li>
+<li>If <code class="python">|||limit|||</code> omitted, the slice will
+proceed to the end of the string</li>
+</ul></li>
+</ul>
+</section>
+<section id="and-dicing" class="slide level2">
+<h2>and Dicing</h2>
+<ul>
+<li><p>Can add a third component to the slice syntax, called a
+<em>stride</em></p>
+<pre ><code class="python">|||string_variable|||[|||start||| : |||limit||| : |||stride|||]</code></pre></li>
+<li><p>Specifies how large the steps are between each included
+index</p></li>
+<li><p>Can also make the stride negative to proceed backwards through a
+string</p>
+<pre ><code class="python-repl">>>> s = "spaghetti sauce"
+>>> s[4:8]
+hett
+>>> s[10:]
+sauce
+>>> s[:10:2]
+sahti</code></pre></li>
+</ul>
+</section>
+<section id="concatenation" class="slide level2">
+<h2>Concatenation</h2>
+<div style="font-size:.9em">
+<ul>
+<li><p><em>Concatenation</em> is the act of taking two separate objects
+and bringing them together to create a single new object</p></li>
+<li><p>For sequences, of which strings are a type, concatenation takes
+the contents of one sequence and add them to the end of another
+sequence</p></li>
+<li><p>Python <em>overloads</em> the <code class="python">+</code>
+operator to concatenate sequences like strings</p>
+<ul>
+<li>This is why keeping track of variable types is important!
+<code class="python">+</code> will <strong>add</strong> two numbers, but
+will <strong>concatenate</strong> two strings!</li>
+</ul>
+<pre ><code class="python">>>> 'fish' + 'sticks'
+'fishsticks'</code></pre></li>
+<li><p>Unlike in addition, order matters here!</p>
+<pre ><code class="python">>>> 'sticks' + 'fish'
+'sticksfish'</code></pre></li>
+</ul>
+</div>
+</section>
+<section id="repeat-again" class="slide level2">
+<h2>Repeat again?</h2>
+<ul>
+<li>We’ve seen how we can use addition (<code class="python">+</code>)
+in Python to concatenate strings</li>
+<li>In math, adding something many times is the same as multiplying</li>
+</ul>
+<p><span class="math display">\[5+5+5+5+5+5 = 6 \times 5\]</span></p>
+<ul>
+<li>The same logic holds true for Python strings!
+<ul>
+<li>You multiply by a <strong>integer</strong>: the number of times you
+want the concatenation repeated</li>
+<li>You can not multiply two strings together, Python will not
+understand what you are trying to do</li>
+</ul>
+<pre ><code class="python">print("Betelguese, " * 3)</code></pre></li>
+</ul>
+</section>
+<section id="comparing-strings" class="slide level2">
+<h2>Comparing Strings</h2>
+<ul>
+<li><p>Python lets you use normal comparison operators to compare
+strings</p>
+<pre ><code class="python">string1 == string2</code></pre>
+<p>is true if <code class="python">string1</code> and
+<code class="python">string2</code> contain the same characters in the
+same order</p></li>
+<li><p>Comparisons involving greater than or less than are done similar
+to alphabetical ordering</p>
+<ul>
+<li>Start at the beginning and compare a character. If they are the
+same, then compare the next character, etc</li>
+</ul></li>
+<li><p>All comparisons are done <strong>according to their Unicode
+values</strong>.</p>
+<ul>
+<li>Called <em>lexicographic ordering</em></li>
+<li><code class="python">"cat" > "CAT"</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="string-looping" class="slide level2">
+<h2>String Looping</h2>
+<ul>
+<li>Because strings are a sequence, they will work directly in a
+<code class="python">for</code> loop!</li>
+<li>In general, you have two options of how you want to loop through a
+string:</li>
+</ul>
+<div class="cols">
+<div class="col">
+<div class="block" name="By Index">
+<pre ><code class="python">s = "hello"
+for i in range(len(s)):
+    print(s[i], 'is letter', i)</code></pre>
+</div>
+</div>
+<div class="col">
+<div class="block" name="By Letter">
+<pre ><code class="python">s = "hello"
+for letter in s:
+    print(letter)</code></pre>
+</div>
+</div>
+</div>
+<ul>
+<li>Looping by letter can be very convenient, but you lose positional
+information</li>
+<li>You can always select the desired letter if looping by index</li>
+</ul>
+</section>
+<section id="cant-change-a-strings-colors" class="slide level2">
+<h2>Can’t change a string’s colors</h2>
+<ul>
+<li><p>Strings are what we call <em>immutable</em>: they can not be
+modified in place by clients.</p></li>
+<li><p>You can “look” at different parts of the string, but you can not
+“change” those parts without making a whole new string</p>
+<pre ><code class="python badcode">s = "Cats!"
+s[0] = "R"   # THIS WILL ERROR!!</code></pre></li>
+<li><p>You can of course create a new string object with the desired
+traits:</p>
+<pre ><code class="python">s = "R" + s[1:]</code></pre></li>
+<li><p>This applies to all methods that act on strings as well: they
+return a <strong>new</strong> string, they do not modify the
+original</p></li>
+</ul>
+</section></section>
+<section>
+<section id="basic-io" class="title-slide slide level1">
+<h1>Basic IO</h1>
+
+</section>
+<section id="output-print" class="slide level2">
+<h2>Output: <code class="python">print</code></h2>
+<div style="font-size:.89em">
+<ul>
+<li><p>We’ve seen how to output the value of a variable from within
+Python’s REPL, but that won’t work in a script</p></li>
+<li><p>Python’s built-in <code class="python">print()</code> function
+will display whatever is between the <code class="python">()</code> to
+the terminal</p>
+<pre ><code class="python-repl">>>> A = 10
+>>> print(A)
+10</code></pre></li>
+<li><p>If you want to display several things, separate each thing by a
+comma inside the <code class="python">print</code> statement. This will
+insert a space between each when printed.</p>
+<pre ><code class="python-repl">>>> print(1,3,5)
+1 3 5</code></pre></li>
+</ul>
+</div>
+</section>
+<section id="f-not-g" class="slide level2">
+<h2>F not G</h2>
+<ul>
+<li><p>Constructing text or a sentence by interleaving strings and other
+objects comes up a lot in communicating code results to a user</p></li>
+<li><p>For any Python version past 3.6, the nicest and easiest way to do
+this is with what are called <em>f-strings</em>:</p>
+<pre ><code class="python">A = 10
+print(f"The value of A is: {A}!")</code></pre></li>
+<li><p>You can define an f-string anytime you would normally define a
+string, just be aware that the substitution happens with the values of
+variable <em>at that point</em></p>
+<pre ><code class="python">A = 10
+s = f"The value of A is {A}"
+A = 12
+print(s)</code></pre></li>
+</ul>
+</section>
+<section id="getting-some-input" class="slide level2">
+<h2>Getting some <code class="python">input</code></h2>
+<ul>
+<li><p>We’ve seen how to display information to a user, but to retrieve
+data from a user, we can use Python’s built-in
+<code class="python">input()</code> function</p></li>
+<li><p>The form will generally look like:</p>
+<pre ><code class="python">|||variable||| = input(|||prompt_text|||)</code></pre>
+<ul>
+<li><code class="python">|||variable|||</code> is the variable name you
+want to assign the user’s typed input to</li>
+<li><code class="python">|||prompt_text|||</code> is the string that
+will be displayed on the screen to communicate to the user what they
+should be doing</li>
+</ul></li>
+<li><p>The <code class="python">input()</code> function <strong>always
+returns a string</strong></p>
+<ul>
+<li><p>If you want to get an integer from the user, you will need to
+convert it yourself after retrieving it</p>
+<pre ><code class="python">num = int(input('Pick a number between 1 and 10: '))</code></pre></li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="demo-hailstone-problem" class="title-slide slide level1">
+<h1>Demo: Hailstone Problem</h1>
+
+</section>
+<section id="hailstones" class="slide level2">
+<h2>Hailstones</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>In Douglas Hofstadter’s book <em>Gödel, Escheer, Bach</em>, he
+includes the following puzzle:
+<ul>
+<li>Pick some positive integer and call it
+<code class="python">n</code></li>
+<li>If <code class="python">n</code> is even, divide it by two.</li>
+<li>If <code class="python">n</code> is odd, multiply it by three and
+add one.</li>
+<li>Continue this process until <code class="python">n</code> is equal
+to 1.</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<figure>
+<img data-src="https://imgs.xkcd.com/comics/collatz_conjecture.png"
+style="width:60.0%" alt="Collatz Conjecture" />
+<figcaption aria-hidden="true"><a href="https://xkcd.com/710/">Collatz
+Conjecture</a></figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="our-problem" class="slide level2">
+<h2>Our Problem</h2>
+<ul>
+<li>Suppose we want to prompt the user to enter a starting value for
+<code class="python">n</code> to kick off the sequence</li>
+<li>Then we’ll run through the sequence, printing it off as we go.</li>
+<li>At the end, we’ll summarize how many total steps it took us to reach
+1.</li>
+</ul>
+</section></section>
+<section id="break-time" class="title-slide slide level1">
+<h1>Break Time!</h1>
+
+</section>
+
+<section>
+<section id="pair-programming" class="title-slide slide level1">
+<h1>Pair Programming</h1>
+
+</section>
+<section id="pair-programming-description" class="slide level2">
+<h2>Pair Programming Description</h2>
+<div style="font-size:.8em">
+<ul>
+<li>Every week we will have time set aside for pair programming</li>
+<li>How it works:
+<ul>
+<li>1 <em>driver</em>: the person allowed to type</li>
+<li>1-2 <em>navigator(s)</em>: observers reviewing what is typed and
+brainstorming. <strong>Not allowed to type</strong></li>
+<li>Roles will rotate every 5-6 minutes (there will be an alert)</li>
+<li>Talking is key! Communicate about what the problem is asking, how
+you might think about approaching the problem, and how you can translate
+that approach into Python.</li>
+</ul></li>
+<li>How does it work <em>remotely</em>?
+<ul>
+<li>Easiest approach is the <strong>Live Share</strong> extension
+through VSCode</li>
+<li>1 person accepts the assignment link, downloads and opens the
+repository in VSCode</li>
+<li>Then they can click on “Share (Read/Write)” and paste the invite URL
+into their group’s chat</li>
+<li>Other’s can then join, edit the code in a collaborative way, and
+view the console</li>
+<li>When done, have the same person save the code written and upload it
+back to the repository.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="this-weeks-pairs-and-problems" class="slide level2">
+<h2>This Weeks Pairs and Problems</h2>
+<ul>
+<li>For this first week, the pairings will be:
+<ul>
+<li>Room 1: Hailee and Lucie</li>
+<li>Room 2: Jace, Bryant, and Gokce</li>
+</ul></li>
+<li>The repository with the problems for this week can be accepted <a
+href="https://classroom.github.com/a/peDxa61R">here</a>.
+<ul>
+<li>First person to accept will need to name the group (just use first
+names)</li>
+<li>Any others who accept will join that group and then have access to
+the same shared repository.</li>
+</ul></li>
+</ul>
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/../js/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../js/python_language.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
+    </body>
+</html>
