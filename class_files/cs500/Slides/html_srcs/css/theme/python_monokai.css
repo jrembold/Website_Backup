@@ -703,6 +703,20 @@ margin-left: 1em;*/ }
 }
 
 /*********************************************
+ * Fixing Chalkboard
+ *********************************************/
+
+#chalkboard>.palette,
+#chalkboard>.boardhandle {
+  display: none;
+}
+
+#notescanvas>.palette,
+#notescanvas>.boardhandle {
+  display: none;
+}
+
+/*********************************************
  * Quip Styling
  *********************************************/
 .reveal .quip {
