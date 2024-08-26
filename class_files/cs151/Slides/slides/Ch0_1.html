@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-08-28">
+  <meta name="dcterms.date" content="2024-08-26">
   <title>Introducing Karel</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,15 +17,18 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
@@ -34,7 +37,7 @@
 <section id="title-slide">
   <h1 class="title">Introducing Karel</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">August 28, 2023</p>
+  <p class="date">August 26, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -44,7 +47,7 @@
 <li>Things to do:
 <ul>
 <li>Access the course webpage at <a
-href="http://www.willamette.edu/~jjrembold/classes/cs151/cs151/">here!</a>
+href="https://jrembold.github.io/Website_Backup/classes/cs151/cs151/">here!</a>
 <ul>
 <li>There is also a link to the course webpage from the Canvas site</li>
 </ul></li>
@@ -52,16 +55,22 @@ href="http://www.willamette.edu/~jjrembold/classes/cs151/cs151/">here!</a>
 <li>Join the class Discord server for ease of communication and
 announcements</li>
 <li>Fill out the section availability form <a
-href="https://forms.gle/75s2M4XhQt23iFdY8">here</a></li>
+href="https://forms.gle/8yh95AGSnLatMh8HA">here</a></li>
 <li>Bring phone or computer for polling questions in the future</li>
-<li>Come to one of the laptop setup sessions over the next few days or
-follow online guides</li>
+<li>Come to one of the laptop setup sessions Tuesday or Thursday at 3pm
+in Ford 202 or follow online guides and videos</li>
 </ul></li>
 <li>Homework
 <ul>
-<li>Problem Set 0 will be posted by the end of the day</li>
+<li>Problem Set 0 will be posted by the end of the day, due by next
+Monday night</li>
 </ul></li>
 </ul>
+</section>
+<section>
+<section id="introduction" class="title-slide slide level1">
+<h1>Introduction</h1>
+
 </section>
 <section id="my-vitals" class="slide level2">
 <h2>My Vitals</h2>
@@ -78,7 +87,7 @@ Ford 214
 </dd>
 <dt>Office Hours</dt>
 <dd>
-M, W 12:00-1:00pm
+M, W 1:00-2:00pm
 </dd>
 <dd>
 T, Th 2:00-4:00pm
@@ -121,22 +130,44 @@ fields with utilize computing.
 <p>Discuss my own motivations as well!</p>
 </aside>
 </section>
-<section id="how-to-succeed" class="slide level2">
-<h2>How to Succeed</h2>
+<section id="a-growth-mindset" class="slide level2">
+<h2>A Growth Mindset</h2>
 <ul>
 <li>People enter this course with a variety of initial experiences
 <ul>
 <li>This course is built for an individual entering with
-<strong>zero</strong> coding experience</li>
+<strong>zero</strong> coding experience!
+<ul>
+<li>I’m endeavoring to break concepts down into as digestible chunks as
+possible</li>
 </ul></li>
-<li>Path to Success
+<li>Coming in with more experience? You are welcome as well!
 <ul>
-<li>There is a significant time committment for this course
+<li>Help others! Nothing solidifies understanding like explaining to
+someone else.</li>
+<li>Take advantage of the various extension opportunities and
+contests</li>
+<li>Class/section time is not for impressing me or your section leader.
+Contribute to the learning environment.</li>
+</ul></li>
+</ul></li>
+<li><strong>Everyone</strong> can learn to program. It is all about
+growing in your understanding.</li>
+</ul>
+</section>
+<section id="succeeding-in-this-course" class="slide level2">
+<h2>Succeeding in this course</h2>
 <ul>
-<li>The only way to get good at coding is to <strong>do</strong>
-coding</li>
-<li>Coding can often times involve a lot of frustrating troubleshooting
-or failed attempts</li>
+<li>Don’t go it alone!
+<ul>
+<li>Working with peers is invaluable. Create homework groups. Attend
+your small section meetings. Visit the QUAD center.</li>
+</ul></li>
+<li>Budget your time carefully
+<ul>
+<li>The only way to grow at coding is to <strong>do</strong> coding</li>
+<li>Programming can often times involve a lot of frustrating
+troubleshooting or unsuccessful attempts</li>
 <li>Expect, on average, the full use of WU’s 2-3 hours outside class for
 every hour in class</li>
 </ul></li>
@@ -147,7 +178,6 @@ section leader for help</em>
 certain point continuing to bang your head against a problem just leads
 to frustration</li>
 </ul></li>
-</ul></li>
 </ul>
 </section>
 <section id="squad-goals" class="slide level2">
@@ -157,7 +187,7 @@ to frustration</li>
 test, and debug Python programs requiring several hundred lines of
 code.</p>
 </div>
-<p>Doing so will require that students be able to:</p>
+<p>Doing so will require that you be able to:</p>
 <ul>
 <li>implement simple algorithms using Python control structures,</li>
 <li>apply decomposition and step-wise refinement techniques,</li>
@@ -165,45 +195,31 @@ code.</p>
 <li>execute all phases of the programming process, including design,
 implementation, testing and debugging,</li>
 </ul>
-</section>
-<section id="grading" class="slide level2">
-<h2>Grading</h2>
-<div class="cols">
-<div class="col">
-<ul>
-<li>Standard 90/80/70 etc. grade cut-offs
-<ul>
-<li>Top 2% get +’s, bottom 2% get -’s</li>
-</ul></li>
-</ul>
-</div>
-<div class="col">
-<table>
-<tbody>
-<tr class="odd">
-<td>Participation</td>
-<td style="text-align: right;">5%</td>
-</tr>
-<tr class="even">
-<td>Problem Sets</td>
-<td style="text-align: right;">20%</td>
-</tr>
-<tr class="odd">
-<td>Projects</td>
-<td style="text-align: right;">30%</td>
-</tr>
-<tr class="even">
-<td>Midterms</td>
-<td style="text-align: right;">20%</td>
-</tr>
-<tr class="odd">
-<td>Final Exam</td>
-<td style="text-align: right;">25%</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<!--
+## Grading
+::::cols
+:::col
+- Standard 90/80/70 etc. grade cut-offs
+    - Top 2% get +'s, bottom 2% get -'s
+:::
+
+:::col
+------------- ----------
+Participation         5%
+Problem Sets         20%
+Projects             30%
+Midterms             20%
+Final Exam           25%
+------------- ----------
+
+:::
+::::
+-->
+</section></section>
+<section>
+<section id="class-components" class="title-slide slide level1">
+<h1>Class Components</h1>
+
 </section>
 <section id="participation" class="slide level2">
 <h2>Participation</h2>
@@ -215,12 +231,12 @@ a question about a specific slide.</li>
 wrong!)</li>
 <li>Answering correctly gets you bits of extra credit</li>
 <li>Polling website at <a
-href="http://rembold-class.ddns.net">http://rembold-class.ddns.net</a></li>
-<li>Will start officially on Friday</li>
+href="http://polling.jedrembold.prof">http://polling.jedrembold.prof</a></li>
+<li>Will start officially on Wednesday</li>
 </ul>
 </section>
-<section id="homework" class="slide level2">
-<h2>Homework</h2>
+<section id="practice" class="slide level2">
+<h2>Practice</h2>
 <ul>
 <li>Falls into two categories:
 <ul>
@@ -281,7 +297,7 @@ game</a></video><br />
 <tbody>
 <tr class="odd">
 <td style="text-align: center;"> </td>
-<td>A submission so good it “makes me weep”</td>
+<td>A submission so good it leaves me astounded</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"></td>
@@ -340,27 +356,31 @@ week</li>
 </section>
 <section id="tests" class="slide level2">
 <h2>Tests</h2>
+<div style="font-size:.9em">
 <ul>
 <li>Tests are necessary to assure retention of material and ensure that
 some are not getting too much help on the assignments.</li>
 <li>Three this semester:
 <ul>
-<li>Midterm 1 on October 6</li>
-<li>Midterm 2 on November 10</li>
-<li>Final on December 13</li>
+<li>Midterm 1 on October 4</li>
+<li>Midterm 2 on November 8</li>
+<li>Final on December 7</li>
 </ul></li>
 <li>Tests will be taken in class and will not allow the use of a
-computer to actually run code
+computer <strong>to actually run code</strong>
 <ul>
 <li>This policy has actually been seen to <em>improve</em> student
 scores, as it prevents you from wasting tons of time obsessing about a
 small mistake!</li>
+<li>The computer can otherwise be used to access resources and submit
+responses</li>
 </ul></li>
 <li>Tests <em>will</em> be open note, open book, and open slides, but
 not open internet</li>
-<li>Example tests and study materials will be given out a week in
-advance.</li>
+<li>Several example tests and study materials will be given out a week
+in advance before each exam.</li>
 </ul>
+</div>
 </section>
 <section id="communication" class="slide level2">
 <h2>Communication</h2>
@@ -380,24 +400,26 @@ code in triple backticks:
 <code class="text">```this is formatted nicely as code```</code></li>
 </ul>
 </section>
-<section id="academic-honesty" class="slide level2">
-<h2>Academic Honesty</h2>
-<ol type="1">
-<li>You must not look at solutions or program code that is not your
-own.</li>
-<li>You must not share your solution code with other students.
+<section id="working-together-and-academic-honesty"
+class="slide level2">
+<h2>Working Together and Academic Honesty</h2>
 <ul>
-<li>But you are welcome (and encouraged!) to work alongside others
-enroute to finding a solution.</li>
-</ul></li>
-<li>You must indicate on your submitted assignment any assistance you
-received or who you worked alongside.</li>
-</ol>
+<li>You are always welcome and encouraged to work alongside others
+enroute to finding a solution to a problem. <strong>But</strong>, your
+submitted work needs to be your own.</li>
+<li>The most effective way to accomplish this is to:
+<ol type="1">
+<li>Not look at solutions or program code that is not your own.</li>
+<li>Not share your solution code with other students.</li>
+<li>Indicate on your submitted assignment any assistance you received or
+who you worked alongside.</li>
+</ol></li>
+</ul>
 </section>
-<section id="ai" class="slide level2">
-<h2>AI</h2>
+<section id="generative-ai" class="slide level2">
+<h2>Generative AI</h2>
 <div class="cols">
-<div class="col" style="font-size:.9em">
+<div class="col" style="font-size:.85em">
 <ul>
 <li>You are free in this class to use things like ChatGPT or GitHub
 Copilot to assist you in writing, understanding, or troubleshooting
@@ -409,8 +431,9 @@ to catch them.</li>
 <li>You will not be able to use these tools on the tests, so ensure that
 you can do without.</li>
 </ul></li>
-<li>Otherwise, I just ask that you make a note on the assignment if you
-got help from one of these sources, and in what way it assisted you</li>
+<li>Assignments will have a field at the top where you can provide a
+link to the chat transcript if you used one. If you used an AI that
+doesn’t provide a transcript, state as much.</li>
 </ul>
 </div>
 <div class="col">
@@ -421,6 +444,11 @@ alt="My favorite AI" />
 </figure>
 </div>
 </div>
+</section></section>
+<section>
+<section id="what-is-programming" class="title-slide slide level1">
+<h1>What is Programming?</h1>
+
 </section>
 <section id="diving-in" class="slide level2">
 <h2>Diving In</h2>
@@ -461,6 +489,7 @@ information
 <ul>
 <li class="fragment">Need ways to limit confusion or misunderstanding
 <ul>
+<li class="fragment">Following syntax</li>
 <li class="fragment">Following conventions</li>
 </ul></li>
 <li class="fragment">Being able to explain things clearly and
@@ -487,7 +516,7 @@ that we can focus on the second layer</li>
 how we can take these simple instructions and get Karel to solve a wide
 variety of problems
 <ul>
-<li>This content is not in your book, but more in-depth descriptions can
+<li>This content is not in your text, but more in-depth descriptions can
 be found <a
 href="https://willamette.edu/~esroberts/pykarel/reader/01-IntroducingKarel.html">here</a></li>
 </ul></li>
@@ -514,7 +543,7 @@ pointing upwards</li>
 </div>
 <div class="col">
 <p><img
-data-src="../images/svg_cache/09798d6dcd5d446eb614a9423c8092c705b331ac.svg"
+data-src="../images/svg_cache/607330bb7350ac7470a79dcab6cf9f9fa1faf496.svg"
 style="width:100.0%" /></p>
 </div>
 </div>
@@ -559,7 +588,8 @@ style="text-align: left;"><code class="python">put_beeper()</code></td>
 </tr>
 </tbody>
 </table></li>
-<li><p>Our commands are just sequences of these actions</p></li>
+<li><p>Our programs are just ordered sequences of these
+actions/commands</p></li>
 </ul>
 </section>
 <section id="example" class="slide level2">
@@ -583,14 +613,14 @@ is better?</li>
 </div>
 <div class="col">
 <p><img
-data-src="../images/svg_cache/2f23aa67af9dd68dfb3635c94e79e7f1f75413b0.svg"
+data-src="../images/svg_cache/8939f75a5a405a104257bae60a9f6f4d2e8d22ab.svg"
 style="width:100.0%" /></p>
 </div>
 </div>
 </section>
 <section id="one-solution" class="slide level2">
 <h2>One Solution</h2>
-<pre ><code class="python" style="max-height:800px">def main():
+<pre ><code class="mypython" style="max-height:800px">def main():
     move()
     turn_left()
     turn_left()
@@ -613,7 +643,7 @@ style="width:100.0%" /></p>
 ## GitHub Classroom Demonstration
 - There will be instructions on my webpage as well, but I wanted to take a little time to demonstrate how you would usually use GitHub Classroom
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -628,6 +658,7 @@ style="width:100.0%" /></p>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
 
   <script>
 
@@ -746,6 +777,12 @@ style="width:100.0%" /></p>
 			disableCheckFile: false, //default false
 		 },
 
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -785,5 +822,18 @@ style="width:100.0%" /></p>
       });
       
     </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
