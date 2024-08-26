@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Alterations and Transactions</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Alterations and Transactions</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Monday, October 17, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 6 due on Thursday
+<ul>
+<li>Feedback will be coming at some point for previous homeworks
+<em>sigh</em></li>
+<li>I will not be penalizing late work as long as I’m behind</li>
+</ul></li>
+<li>Note that we are initially skipping Chapter 10, so we’ll be looking
+at Ch 11 material on Wednesday</li>
+<li>Terminal <code class="python">psql</code> issues? I posted something
+on Discord, but will summarize.</li>
+<li>Polling today: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+</ul>
+</section>
+<section id="making-adjustments" class="slide level2">
+<h2>Making Adjustments</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Changing existing tables can generally be broken down into two
+categories:
+<ul>
+<li>Changing the structure of the table itself
+<ul>
+<li>Uses keywords <code class="python">ALTER TABLE</code></li>
+</ul></li>
+<li>Changing the row content within the table
+<ul>
+<li>Uses keyword <code class="python">UPDATE</code></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/altering_table.jpg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="table-altering-part-1" class="slide level2">
+<h2>Table Altering: Part 1</h2>
+<ul>
+<li><p><code class="python">ALTER TABLE</code> is generally followed by
+the table name and then another keyword command, depending on what you
+want to do</p>
+<pre ><code class="pgsql">ALTER TABLE table_name ...</code></pre>
+<ul>
+<li><p>Adding columns:</p>
+<pre ><code class="pgsql">... ADD COLUMN col_name data_type;</code></pre></li>
+<li><p>Removing columns</p>
+<pre ><code class="pgsql">... DROP COLUMN col_name;</code></pre></li>
+</ul></li>
+</ul>
+</section>
+<section id="table-altering-part-2" class="slide level2">
+<h2>Table Altering: Part 2</h2>
+<pre ><code class="pgsql">ALTER TABLE table_name ...</code></pre>
+<ul>
+<li><p>Changing columns</p>
+<pre ><code class="pgsql" style="font-size:.9em">... ALTER COLUMN col_name SET DATA TYPE data_type;
+... ALTER COLUMN col_name SET NOT NULL;</code></pre></li>
+<li><p>Renaming columns</p>
+<pre ><code class="pgsql" style="font-size:.9em">... RENAME col_name TO new_col_name;</code></pre></li>
+<li><p>Rename entire table</p>
+<pre ><code class="pgsql" style="font-size:.9em">... RENAME TO new_table_name;</code></pre></li>
+</ul>
+</section>
+<section id="updating-tables" class="slide level2">
+<h2>Updating Tables</h2>
+<ul>
+<li>If you want to change the values in a particular row (or many rows),
+you don’t want to alter the table, you want to
+<code class="python">UPDATE</code> it</li>
+<li><code class="python">UPDATE</code> sets particular columns to a
+particular value
+<ul>
+<li><strong>BE CAREFUL!</strong> If you do not specify <em>which</em>
+rows, then <strong>ALL</strong> of the rows will have that column
+changed to that value
+<ul>
+<li>This is partly why having primary keys is so nice: it gives you a
+method to update just a single row should you need</li>
+</ul>
+<pre ><code class="pgsql">UPDATE table_name
+SET col_name = new_value;</code></pre></li>
+</ul></li>
+<li>You can specify which rows should be changed by filtering with
+<code class="python">WHERE</code></li>
+</ul>
+</section>
+<section id="understanding-check" class="slide level2">
+<h2>Understanding Check</h2>
+<div class="cols">
+<div class="col">
+<p>The table named <code class="python">revq</code> to the right is
+acted upon by the below SQL queries. What entries in the table are left
+untouched once all queries have been run?</p>
+</div>
+<div class="col">
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="153.30701mm"
+   height="102.056mm"
+   viewBox="0 0 153.30701 102.056"
+   version="1.1"
+   id="svg5"
+   xml:space="preserve"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   sodipodi:docname="uc_ch9_2.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.84096521"
+     inkscape:cx="314.51955"
+     inkscape:cy="202.14867"
+     inkscape:window-width="1680"
+     inkscape:window-height="1020"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" /><defs
+     id="defs2" /><g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-94.538953,-23.838356)"><path
+       style="fill:#000000;stroke:#000000;stroke-width:0.9816;stroke-linecap:round;stroke-dasharray:none"
+       d="M 97.029611,26.329082 H 211.65658"
+       id="path296" /><path
+       style="fill:#000000;stroke:#000000;stroke-width:0.9816;stroke-linecap:round;stroke-dasharray:none"
+       d="M 97.029611,122.165 H 211.65658"
+       id="path975" /><path
+       style="fill:#000000;stroke:#000000;stroke-width:0.434336;stroke-linecap:round;stroke-dasharray:none"
+       d="M 97.029611,62.699642 H 211.65658"
+       id="path977" /><text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:none;stroke-width:0.989595;stroke-linecap:round;stroke-dasharray:none"
+       x="98.437401"
+       y="41.13623"
+       id="text1033"><tspan
+         sodipodi:role="line"
+         id="tspan1031"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:0.989595"
+         x="98.437401"
+         y="41.13623">row1</tspan></text><text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:none;stroke-width:0.989595;stroke-linecap:round;stroke-dasharray:none"
+       x="139.72748"
+       y="41.13623"
+       id="text1037"><tspan
+         sodipodi:role="line"
+         id="tspan1035"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:0.989595"
+         x="139.72748"
+         y="41.13623">row2</tspan></text><text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:none;stroke-width:0.989595;stroke-linecap:round;stroke-dasharray:none"
+       x="180.53003"
+       y="41.13623"
+       id="text1041"><tspan
+         sodipodi:role="line"
+         id="tspan1039"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:0.989595"
+         x="180.53003"
+         y="41.13623">row3</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke:none;stroke-width:0.956942;stroke-linecap:round;stroke-dasharray:none"
+       x="100.15795"
+       y="56.296406"
+       id="text1095"><tspan
+         sodipodi:role="line"
+         id="tspan1093"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke-width:0.956942"
+         x="100.15795"
+         y="56.296406">TEXT</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke:none;stroke-width:0.956942;stroke-linecap:round;stroke-dasharray:none"
+       x="141.11984"
+       y="56.296406"
+       id="text1822"><tspan
+         sodipodi:role="line"
+         id="tspan1820"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke-width:0.956942"
+         x="141.11984"
+         y="56.296406">REAL</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke:none;stroke-width:0.956942;stroke-linecap:round;stroke-dasharray:none"
+       x="185.97403"
+       y="56.296406"
+       id="text1826"><tspan
+         sodipodi:role="line"
+         id="tspan1824"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke-width:0.956942"
+         x="185.97403"
+         y="56.296406">INT</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
+       x="108.8076"
+       y="77.305122"
+       id="text1932"><tspan
+         sodipodi:role="line"
+         id="tspan1930"
+         style="fill:#000000;stroke-width:0.492176"
+         x="108.8076"
+         y="77.305122">A</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
+       x="154.84677"
+       y="77.305122"
+       id="text1956"><tspan
+         sodipodi:role="line"
+         id="tspan1954"
+         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
+         x="154.84677"
+         y="77.305122">0.24</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
+       x="195.58284"
+       y="77.305122"
+       id="text1968"><tspan
+         sodipodi:role="line"
+         id="tspan1966"
+         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
+         x="195.58284"
+         y="77.305122">15</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
+       x="108.42769"
+       y="96.991028"
+       id="text1936"><tspan
+         sodipodi:role="line"
+         id="tspan1934"
+         style="fill:#000000;stroke-width:0.492176"
+         x="108.42769"
+         y="96.991028">B</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
+       x="156.08406"
+       y="96.991028"
+       id="text1960"><tspan
+         sodipodi:role="line"
+         id="tspan1958"
+         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
+         x="156.08406"
+         y="96.991028">9.1</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
+       x="195.85854"
+       y="96.991028"
+       id="text1972"><tspan
+         sodipodi:role="line"
+         id="tspan1970"
+         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
+         x="195.85854"
+         y="96.991028">4</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
+       x="108.61933"
+       y="116.69038"
+       id="text1940"><tspan
+         sodipodi:role="line"
+         id="tspan1938"
+         style="fill:#000000;stroke-width:0.492176"
+         x="108.61933"
+         y="116.69038">C</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
+       x="155.09892"
+       y="116.69038"
+       id="text1964"><tspan
+         sodipodi:role="line"
+         id="tspan1962"
+         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
+         x="155.09892"
+         y="116.69038">4</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
+       x="195.52232"
+       y="116.69038"
+       id="text1976"><tspan
+         sodipodi:role="line"
+         id="tspan1974"
+         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
+         x="195.52232"
+         y="116.69038">10</tspan></text><rect
+       style="fill:#ff0000;fill-opacity:0.297502;stroke:none;stroke-width:0.403014;stroke-linecap:round;stroke-dasharray:none"
+       id="rect2072"
+       width="74.09626"
+       height="17.42337"
+       x="134.86285"
+       y="63.780529"
+       ry="5.1545014" /><rect
+       style="fill:#00e2ff;fill-opacity:0.297502;stroke:none;stroke-width:0.390717;stroke-linecap:round;stroke-dasharray:none"
+       id="rect3478"
+       width="21.745987"
+       height="55.799976"
+       x="185.08685"
+       y="63.54591"
+       ry="6.433053" /><rect
+       style="fill:#00d779;fill-opacity:0.297502;stroke:none;stroke-width:0.391625;stroke-linecap:round;stroke-dasharray:none"
+       id="rect3480"
+       width="70.689957"
+       height="17.245436"
+       x="84.162178"
+       y="162.00232"
+       ry="5.1018615"
+       transform="matrix(0.89292302,-0.45020938,0.40934778,0.91237843,0,0)" /><rect
+       style="fill:#d700cc;fill-opacity:0.297502;stroke:none;stroke-width:0.434336;stroke-linecap:round;stroke-dasharray:none"
+       id="rect3534"
+       width="36.34494"
+       height="37.63588"
+       x="138.1024"
+       y="64.224426"
+       ry="6.2449827" /><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.2824px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#d700cc;fill-opacity:0.8;stroke:none;stroke-width:0.867818;stroke-linecap:round;stroke-dasharray:none"
+       x="238.46535"
+       y="48.250973"
+       id="text4890"><tspan
+         sodipodi:role="line"
+         id="tspan4888"
+         style="fill:#d700cc;fill-opacity:0.8;stroke-width:0.867818"
+         x="238.46535"
+         y="48.250973">A</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.2824px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#ff0000;fill-opacity:0.8;stroke:none;stroke-width:0.867818;stroke-linecap:round;stroke-dasharray:none"
+       x="238.46535"
+       y="71.033676"
+       id="text4894"><tspan
+         sodipodi:role="line"
+         id="tspan4892"
+         style="fill:#ff0000;fill-opacity:0.8;stroke-width:0.867818"
+         x="238.46535"
+         y="71.033676">B</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.2824px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#00d779;fill-opacity:0.8;stroke:none;stroke-width:0.867818;stroke-linecap:round;stroke-dasharray:none"
+       x="238.46535"
+       y="94.065376"
+       id="text5243"><tspan
+         sodipodi:role="line"
+         id="tspan5241"
+         style="fill:#00d779;fill-opacity:0.8;stroke-width:0.867818"
+         x="238.46535"
+         y="94.065376">C</tspan></text><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.2824px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#00e1ff;fill-opacity:0.8;stroke:none;stroke-width:0.867818;stroke-linecap:round;stroke-dasharray:none"
+       x="238.46535"
+       y="117.08521"
+       id="text5247"><tspan
+         sodipodi:role="line"
+         id="tspan5245"
+         style="fill:#00e1ff;fill-opacity:0.8;stroke-width:0.867818"
+         x="238.46535"
+         y="117.08521">D</tspan></text></g></svg>
+</p>
+</div>
+</div>
+<pre ><code class="pgsql" style="font-size:.85em;">ALTER TABLE revq ADD COLUMN row4 INT;
+UPDATE revq SET row4 = row2;
+UPDATE revq SET (row2,row3)=(row3, row2) WHERE row1 IN ('B','C');
+UPDATE revq SET row3 = row3 - row4;
+UPDATE revq SET row2 = row2 + row4 WHERE row3 > 10;
+ALTER TABLE revq DROP COLUMN row4;</code></pre>
+</section>
+<section id="backup-tables" class="slide level2">
+<h2>Backup Tables</h2>
+<ul>
+<li><p>Frequently, if you are about to heavily modify a table, you
+should consider working on a backup copy</p></li>
+<li><p>We actually have already seen the basic machinery for this:</p>
+<pre ><code class="pgsql" style="font-size:0.9em">CREATE TABLE new_table AS
+SELECT * FROM og_table;</code></pre>
+<ul>
+<li><strong>Note:</strong> Indexes and constraints are stored
+separately, and so are NOT copied over using this process!</li>
+</ul></li>
+<li><p>For including constraints and indexes, you can use a Postgres
+specific syntax, but the newly created table will initially be missing
+the data</p>
+<pre ><code class="pgsql" style="font-size:0.9em">CREATE TABLE new_table
+(LIKE og_table INCLUDING ALL);</code></pre></li>
+</ul>
+</section>
+<section id="table-to-table" class="slide level2">
+<h2>Table to Table</h2>
+<ul>
+<li><p>In some cases, you’ll want to update or pass information across
+tables</p>
+<ul>
+<li>Maybe one table has newer values that you want to use to update the
+original table</li>
+</ul></li>
+<li><p>In core SQL, you’d need to use subqueries, which we’ll be talking
+about in a few chapters</p></li>
+<li><p>In Postgres, to update, you can use
+<code class="python">FROM</code>:</p>
+<pre ><code class="pgsql" style="font-size:.9em">UPDATE table_name1
+SET col_name = table_name2.col_name
+FROM table_name2
+WHERE table_name.col1 = table_name2.col1;</code></pre></li>
+<li><p>To insert values from another table into another:</p>
+<pre ><code class="pgsql" style="font-size:.9em">INSERT INTO new_table SELECT * FROM old_table;</code></pre></li>
+</ul>
+</section>
+<section id="deletions" class="slide level2">
+<h2>Deletions</h2>
+<ul>
+<li>Similar to changing tables, removing things from tables has two main
+keywords:
+<ul>
+<li><code class="python">DROP</code> for removing aspects of a table
+like columns, constraints, indexes, or the table itself</li>
+<li><code class="python">DELETE FROM</code> for removing rows from
+tables</li>
+</ul></li>
+<li><code class="python">DROP</code> will frequently come after an
+<code class="python">ALTER TABLE</code> unless you are dropping the
+table itself</li>
+<li><code class="python">DELETE FROM</code> without a filter will
+<strong>delete all rows</strong>
+<ul>
+<li>Make absolutely sure you are using a filter if you don’t want that
+to happen!</li>
+<li>Another good reason to make up your tables before editing them</li>
+</ul></li>
+</ul>
+</section>
+<section id="getting-deleted" class="slide level2">
+<h2>Getting Deleted</h2>
+<pre ><code class="pgsql">ALTER TABLE tname DROP COLUMN colname;
+ALTER TABLE tname DROP CONSTRAINT const_name;
+DROP INDEX index_name;
+DROP TABLE tname;
+
+DELETE FROM tname; -- All rows gone!
+DELETE FROM tname WHERE condition;</code></pre>
+<ul>
+<li>In general, unless you have an important reason, don’t remove actual
+data from a table
+<ul>
+<li>You can filter it, you can create new tables that are missing that
+data, etc.</li>
+</ul></li>
+</ul>
+</section>
+<section id="transactions" class="slide level2">
+<h2>Transactions</h2>
+<ul>
+<li><em>Atomicity</em> is an important aspect of most database changes
+<ul>
+<li>The idea that related changes should happen in a single,
+self-contained step</li>
+</ul></li>
+<li>Many changes you might make to a database have several steps though!
+<ul>
+<li>Need to change one value in one table and another value in another
+table</li>
+<li>Need to create a new row and then copy some information into it</li>
+</ul></li>
+<li>Remember that, in general, others can access the database at the
+same time
+<ul>
+<li>What if they tried to access the data you were working on
+mid-operation?</li>
+</ul></li>
+<li>So solve these issues, SQL has the concept of a
+<em>transaction</em></li>
+</ul>
+</section>
+<section id="bundling-up" class="slide level2">
+<h2>Bundling Up</h2>
+<ul>
+<li>A <em>transaction</em> is essentially a bundling of several
+statements into one, discrete change to the database</li>
+<li>Commands within the transaction have not yet modified the database,
+but exist only in local memory</li>
+<li>Changes get written to the database all at once upon the conclusion
+of the transaction</li>
+<li>Starting a transaction?
+<ul>
+<li><code class="python">START TRANSACTION;</code> or
+<code class="python">BEGIN;</code></li>
+</ul></li>
+<li>Ending a transaction?
+<ul>
+<li><code class="python">COMMIT;</code> actually makes the changes</li>
+<li><code class="python">ROLLBACK;</code> throws out everything within
+the transaction</li>
+</ul></li>
+</ul>
+</section>
+<section id="uses-of-transactions" class="slide level2">
+<h2>Uses of Transactions</h2>
+<ul>
+<li>Protecting against system faults
+<ul>
+<li>What if you have a system crash in the middle of an operation?
+<ul>
+<li>What commands had been run? What commands had not?</li>
+</ul></li>
+<li>Transactions actually write to a log what they are <em>going</em> to
+do before they actually do it. So in case of a crash, then the
+transaction can then simply be rerun</li>
+</ul></li>
+<li>Protecting against simultaneous access
+<ul>
+<li>Changes occur all at once, so it is impossible for another database
+user to access data “mid-change”</li>
+<li>Other users of the database will see none of your changes until
+actually committed</li>
+</ul></li>
+<li>Testing changes
+<ul>
+<li>Sometimes it is useful to check to see that some changes look the
+way you wanted before actually changing the database</li>
+<li>Embedding within a transaction block always gives you the option to
+rollback</li>
+</ul></li>
+</ul>
+</section>
+<section id="practice-activity" class="slide level2">
+<h2>Practice Activity</h2>
+<ul>
+<li>There is a simple CSV of presidents and debt <a
+href="../activity_data/presidents.csv">here</a></li>
+<li>It has some data consistency problems which you should determine and
+fix before answering the following questions:
+<ul>
+<li>What are the top 5 presidents to have the greatest average annual
+increase in national debt over the years of their presidency?</li>
+<li>How do the median values of annual increases in national debt
+compare across party lines?</li>
+<li>Trickier: What is the average <em>change</em> in the annual increase
+percentage of national debt overall all the years?</li>
+</ul></li>
+</ul>
+</section>
+<section id="groups" class="slide level2">
+<h2>Groups</h2>
+<ul>
+<li>You’ll be working in small groups, only 1 computer interacting with
+a database
+<ul>
+<li>Others can have slides, documentation, etc open</li>
+</ul></li>
+</ul>
+<div class="cols" style="align-items: center">
+<div class="col">
+<ul>
+<li>Groups:
+<ul>
+<li>Group A: Sean , Alex B, Avinash</li>
+<li>Group B: Julius , Will R, Kelson</li>
+<li>Group C: Henry , Malie , Mitch</li>
+<li>Group D: Nathan , Camdin</li>
+<li>Group E: Meelad , Charlie , Paulina</li>
+<li>Group F: Pachie , Kellen , Jacob</li>
+<li>Group G: Will A, Maya , Tyler</li>
+<li>Group H: Faye , Alex W</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="193.07626mm"
+   height="189.43585mm"
+   viewBox="0 0 193.07626 189.43585"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   sodipodi:docname="group_seating_locs.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.46903409"
+     inkscape:cx="847.48637"
+     inkscape:cy="440.2665"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-271.65836,-38.702691)">
+    <rect
+       style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:1.87071;stroke-linecap:round;stroke-linejoin:round"
+       id="rect234"
+       width="56.21962"
+       height="19.801687"
+       x="340.08667"
+       y="39.638046" />
+    <g
+       id="g1752"
+       transform="matrix(0.62357127,0,0,0.62357127,105.39492,12.964302)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect236"
+         width="306.62982"
+         height="34.666981"
+         x="268.13101"
+         y="90.239426" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect960"
+         width="79.498459"
+         height="43.146389"
+         x="295.52704"
+         y="85.191986"
+         ry="6.17379" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1735"
+         width="79.498459"
+         height="43.146389"
+         x="467.86636"
+         y="85.191986"
+         ry="6.17379" />
+    </g>
+    <g
+       id="g1756"
+       transform="matrix(0.62357127,0,0,0.62357127,105.09461,13.25227)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect346"
+         width="306.62982"
+         height="34.666981"
+         x="268.61261"
+         y="143.18785" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1737"
+         width="79.498459"
+         height="43.146389"
+         x="382.17828"
+         y="138.53749"
+         ry="6.17379" />
+    </g>
+    <g
+       id="g1764"
+       transform="matrix(0.62357127,0,0,0.62357127,105.39492,80.069685)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1758"
+         width="306.62982"
+         height="34.666981"
+         x="268.13101"
+         y="90.239426" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1760"
+         width="79.498459"
+         height="43.146389"
+         x="295.52704"
+         y="85.191986"
+         ry="6.17379" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1762"
+         width="79.498459"
+         height="43.146389"
+         x="467.86636"
+         y="85.191986"
+         ry="6.17379" />
+    </g>
+    <g
+       id="g1770"
+       transform="matrix(0.62357127,0,0,0.62357127,105.09461,80.357656)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1766"
+         width="306.62982"
+         height="34.666981"
+         x="268.61261"
+         y="143.18785" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1768"
+         width="79.498459"
+         height="43.146389"
+         x="382.17828"
+         y="138.53749"
+         ry="6.17379" />
+    </g>
+    <g
+       id="g1778"
+       transform="matrix(0.62357127,0,0,0.62357127,105.39492,147.17507)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1772"
+         width="306.62982"
+         height="34.666981"
+         x="268.13101"
+         y="90.239426" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1774"
+         width="79.498459"
+         height="43.146389"
+         x="295.52704"
+         y="85.191986"
+         ry="6.17379" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1776"
+         width="79.498459"
+         height="43.146389"
+         x="467.86636"
+         y="85.191986"
+         ry="6.17379" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.574px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:3.70961;stroke-linecap:round;stroke-linejoin:round"
+       x="353.86295"
+       y="54.639805"
+       id="text1834"><tspan
+         sodipodi:role="line"
+         id="tspan1832"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.574px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:3.70961"
+         x="353.86295"
+         y="54.639805">Front</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="307.9303"
+       y="89.746925"
+       id="text1838"><tspan
+         sodipodi:role="line"
+         id="tspan1836"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="307.9303"
+         y="89.746925">A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="417.09128"
+       y="89.746925"
+       id="text1902"><tspan
+         sodipodi:role="line"
+         id="tspan1900"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="417.09128"
+         y="89.746925">B</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="362.85822"
+       y="123.30635"
+       id="text1906"><tspan
+         sodipodi:role="line"
+         id="tspan1904"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="362.85822"
+         y="123.30635">C</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="307.76288"
+       y="156.70032"
+       id="text1910"><tspan
+         sodipodi:role="line"
+         id="tspan1908"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="307.76288"
+         y="156.70032">D</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="417.18399"
+       y="156.70032"
+       id="text1914"><tspan
+         sodipodi:role="line"
+         id="tspan1912"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="417.18399"
+         y="156.70032">E</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="362.99017"
+       y="190.33252"
+       id="text1918"><tspan
+         sodipodi:role="line"
+         id="tspan1916"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="362.99017"
+         y="190.33252">F</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="309.30206"
+       y="224.20186"
+       id="text1922"><tspan
+         sodipodi:role="line"
+         id="tspan1920"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="309.30206"
+         y="224.20186">G</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="417.01123"
+       y="224.20186"
+       id="text1926"><tspan
+         sodipodi:role="line"
+         id="tspan1924"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="417.01123"
+         y="224.20186">H</tspan></text>
+  </g>
+</svg>
+</p>
+</div>
+</div>
+</section>
+<section id="question-answers" class="slide level2">
+<h2>Question Answers</h2>
+<ul>
+<li>What are the top 5 presidents to have the greatest average annual
+increase in national debt over the years of their presidency?
+<ul>
+<li>Reagan, HW Bush, Ford, Carter, Obama</li>
+</ul></li>
+<li>How do the median values of annual increases in national debt
+compare across party lines?
+<ul>
+<li>Democrats: 3.65%</li>
+<li>Republicans: 7.40%</li>
+</ul></li>
+<li>Trickier: What is the average <em>change</em> in the annual increase
+percentage of national debt overall all the years?
+<ul>
+<li>Only about 0.05%, but seemingly a slight steady increase</li>
+</ul></li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>

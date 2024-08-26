@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Joins</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Joins</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Datafest 2023</p>
+</section>
+
+<section id="what-are-joins" class="slide level2">
+<h2>What are joins?</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>The act of collecting data from multiple tables based on particular
+rows and columns is called a <em>join</em></li>
+<li>A join pulls information from multiple tables into a new table</li>
+<li>The columns that are matched across tables are called
+<em>keys</em></li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/join-me-vader.jpg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="big-picture" class="slide level2">
+<h2>Big Picture</h2>
+<ul>
+<li>The general idea is then to:
+<ul>
+<li>Set up your selection as usual from a single table</li>
+<li>Join to that table another table</li>
+<li>Specifying what columns in each table will act as keys along with a
+conditional relating them
+<ul>
+<li>Most common condition is equality</li>
+</ul></li>
+</ul></li>
+<li>The result is a new table with columns from both the original
+tables, with rows matched according to your conditions
+<ul>
+<li>Depending on your implementation, the matched columns may or may not
+be duplicated as well</li>
+</ul></li>
+</ul>
+</section>
+<section id="inner-join" class="slide level2">
+<h2>(Inner) Join</h2>
+<ul>
+<li>The basic join only keeps rows from table 1 and table 2 that matched
+on the given column keys
+<ul>
+<li>This is also called an <em>inner join</em></li>
+</ul></li>
+<li>Any row in table 1 that had no counterpart in table 2 is left out
+<ul>
+<li>Identically for any row in table 2 that had no counterpart in table
+1</li>
+</ul></li>
+<li>The key take-away is that it keeps what was in <strong>both</strong>
+tables</li>
+<li>If a value appears twice in one table, it will be duplicated in the
+joined table as well
+<ul>
+<li>One reason that many times people try to join on columns that hold
+unique values, but not always necessary</li>
+</ul></li>
+</ul>
+</section>
+<section id="inner-joins-visualized" class="slide level2">
+<h2>Inner Joins Visualized</h2>
+<div class="fig-container" data-file="../images/d3/InnerJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
+</section>
+<section id="inner-joins-in-r" class="slide level2">
+<h2>Inner Joins in R</h2>
+<ul>
+<li><p>If no condition provided, tries to match across all shared
+columns</p>
+<pre ><code class="r">facebook %>% inner_join(linkedin)</code></pre></li>
+<li><p>If needing to match differently named columns across both tables,
+or only a sub-selection of similarly named columns</p>
+<pre ><code class="r">facebook %>% inner_join(linkedin, 
+                        by=join_by(name == name2)
+                        )</code></pre></li>
+</ul>
+</section>
+<section id="inner-joins-in-pandas-python" class="slide level2">
+<h2>Inner Joins in Pandas (Python)</h2>
+<ul>
+<li><p>Pandas uses the same method for all joins, but you need to
+specify the <code class="python">how</code></p></li>
+<li><p>Not providing a condition here will match on the
+<em>index</em></p>
+<ul>
+<li><p>Unless you’ve set up your indexes, you’ll probably want to
+provide an <code class="python">on</code> parameter</p></li>
+<li><p>Even then, this will attempt to map the index of the second
+dataframe to the specified column in the first</p>
+<pre ><code class="python">facebook.join(linkedin, on='name', how='inner')</code></pre></li>
+</ul></li>
+<li><p>Frequently will want to set the index to the desired column to
+aid matching</p>
+<pre ><code class="python">facebook.set_index('name')</code></pre></li>
+</ul>
+</section>
+<section id="inner-joins-in-sql" class="slide level2">
+<h2>Inner Joins in SQL</h2>
+<ul>
+<li><p>Can run a lightweight SQL server using SQLite</p></li>
+<li><p>SQL is where joins originated, so they are very well
+supported:</p>
+<pre ><code class="sql">SELECT *
+FROM facebook
+JOIN linkedin
+  ON facebook.name = linkedin.name</code></pre></li>
+</ul>
+</section>
+<section id="left-and-right-join" class="slide level2">
+<h2>Left and Right Join</h2>
+<ul>
+<li>Sometimes, you don’t want to include <em>only</em> the rows that
+were in both tables</li>
+<li>Maybe you want <strong>all</strong> the rows from one table, but
+joining the other data when it is available</li>
+<li>In these cases, you can use a <code class="python">LEFT JOIN</code>
+or <code class="python">RIGHT JOIN</code>
+<ul>
+<li><code class="python">LEFT JOIN</code> is decidedly the more common,
+and you can make any <code class="python">RIGHT JOIN</code> a
+<code class="python">LEFT JOIN</code> just by flipping the table
+ordering</li>
+</ul></li>
+<li>Rows still need to have the same number of columns, so
+<code class="python">NULL</code> or <code class="python">NAN</code>
+values will be inserted for the secondary table columns if no match is
+found</li>
+</ul>
+</section>
+<section id="left-joins-visualized" class="slide level2">
+<h2>Left Joins Visualized</h2>
+<div class="fig-container" data-file="../images/d3/LeftJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
+</section>
+<section id="implementations" class="slide level2">
+<h2>Implementations</h2>
+<ul>
+<li><p>In R:</p>
+<pre ><code class="r">facebook %>% left_join(linkedin, 
+                       by=join_by(name == name))</code></pre></li>
+<li><p>In Pandas:</p>
+<pre ><code class="python">facebook.join(linkedin, how='left')</code></pre></li>
+<li><p>In SQL:</p>
+<pre ><code class="sql">SELECT *
+FROM facebook LEFT JOIN linkedin
+  ON facebook.name = linkedin.name</code></pre></li>
+</ul>
+</section>
+<section id="full-outer-join" class="slide level2">
+<h2>FULL OUTER JOIN</h2>
+<ul>
+<li>On occasion, you just want <em>all</em> the data from both tables
+<ul>
+<li>Matching where possible</li>
+<li>But keeping data from both left or right tables if no match</li>
+</ul></li>
+<li>In these cases, a <code class="python">FULL OUTER JOIN</code> will
+do what you want
+<ul>
+<li>Essentially does a <code class="python">LEFT JOIN</code> followed by
+a <code class="python">RIGHT JOIN</code> with the existing table</li>
+</ul></li>
+<li>Anything without a match is still represented with
+<code class="python">NULL</code> or <code class="python">NAN</code>
+values</li>
+</ul>
+</section>
+<section id="outer-joins-visualized" class="slide level2">
+<h2>Outer Joins Visualized</h2>
+<div class="fig-container" data-file="../images/d3/OuterJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
+</section>
+<section id="implementations-1" class="slide level2">
+<h2>Implementations</h2>
+<ul>
+<li><p>In R:</p>
+<pre ><code class="r">facebook %>% full_join(linkedin, 
+                       by=join_by(name == name))</code></pre></li>
+<li><p>In Pandas:</p>
+<pre ><code class="python">facebook.join(linkedin, how='outer')</code></pre></li>
+<li><p>In SQL:</p>
+<pre ><code class="sql">SELECT *
+FROM facebook FULL OUTER JOIN linkedin
+  ON facebook.name = linkedin.name</code></pre></li>
+</ul>
+</section>
+<section id="cross-join" class="slide level2">
+<h2>Cross Join</h2>
+<ul>
+<li>Lastly, sometimes you want to see <em>all the possible</em>
+combinations between the rows of two tables
+<ul>
+<li>Sometimes called a <em>cartesian product</em></li>
+</ul></li>
+<li>A <code class="python">CROSS JOIN</code> will return a table of all
+of these possibilities</li>
+<li>Could imagine cross joining all the card ranks with the card suits
+to generate your standard 52 card playing deck</li>
+<li>These can get very large very fast!
+<ul>
+<li>Do <strong>not</strong> run on tables of millions of rows!</li>
+</ul></li>
+<li>You do not need a matching key for cross joins! They operate by
+row.</li>
+</ul>
+</section>
+<section id="cross-joins-visualized" class="slide level2">
+<h2>Cross Joins Visualized</h2>
+<div class="fig-container" data-file="../images/d3/CrossJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
+</section>
+<section id="implementations-2" class="slide level2">
+<h2>Implementations</h2>
+<ul>
+<li><p>In R:</p>
+<pre ><code class="r">facebook %>% cross_join(linkedin)</code></pre></li>
+<li><p>In Pandas:</p>
+<pre ><code class="python">facebook.join(linkedin, how='cross')</code></pre></li>
+<li><p>In SQL:</p>
+<pre ><code class="sql">SELECT *
+FROM facebook CROSS JOIN linkedin</code></pre></li>
+</ul>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
+<div class="r-fit-text">
+<p>Go forth and join!</p>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>

@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Cross Tabulations</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Cross Tabulations</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Wednesday, October 26, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 7 due tomorrow!</li>
+<li>Test 2 a week from today
+<ul>
+<li>No HW due next week</li>
+<li>I’m aiming to get some study guide questions out tomorrow</li>
+</ul></li>
+<li>CS/DS Tea tomorrow at 11:30 in Ford 204!</li>
+<li>Polling today: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+</ul>
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<p>Given the starting table called <code class="python">rev</code>, what
+is the output of the query?</p>
+<div class="cols">
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>name</th>
+<th>num</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>E</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col" style="flex-grow:3">
+<pre ><code class="pgsql" style="font-size:1em">SELECT name
+FROM rev
+WHERE num IN (
+  SELECT
+    num - (SELECT avg(num) FROM rev)
+  FROM rev
+  WHERE num >= ALL (
+    SELECT num FROM rev
+  )
+);</code></pre>
+</div>
+</div>
+</section>
+<section id="common-table-expressions" class="slide level2">
+<h2>Common Table Expressions</h2>
+<ul>
+<li><p>Sometimes you may want to use the same derived tables multiple
+places in a query</p></li>
+<li><p>You could copy and paste those subqueries, but there is a better
+way</p></li>
+<li><p><em>Common Table Expressions</em> or CTEs are a way for you to
+define up front a derived table that can be referenced anywhere in the
+rest of the query</p></li>
+<li><p>To do so, you use a <code class="python">WITH</code> keyword at
+the <em>start</em> of the query:</p>
+<pre ><code class="pgsql">WITH
+  derived_table_name (new_col_names) AS (
+    subquery
+  )
+SELECT ...</code></pre></li>
+</ul>
+</section>
+<section id="cte-details" class="slide level2">
+<h2>CTE Details</h2>
+<ul>
+<li>The number of columns returned by your subquery
+<strong>must</strong> match the number of column names you initially
+define
+<ul>
+<li>If you aren’t going to rename the columns, you do not even really
+need to include the new column names, but it can be nice for
+clarity</li>
+</ul></li>
+<li>You do not need to include data types, as these will be inherited
+from the subquery columns</li>
+<li>You can include multiple derived tables in the CTE statement,
+separated with a comma</li>
+<li>Good use of CTE’s can help clarify and simplify queries
+<ul>
+<li><em>Especially</em> if you have a subquery that you need to
+reference a few times, use a CTE!</li>
+</ul></li>
+</ul>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<p>Using a CTE and other subqueries, let’s extract the middle 50% of the
+taxi_rides by duration.</p>
+</section>
+<section id="why-cross-tabulation" class="slide level2">
+<h2>Why Cross Tabulation?</h2>
+<ul>
+<li>SQL tables tend to operate with observations (records/rows) and
+variables (columns)
+<ul>
+<li>Commonly called a “tidy” data format</li>
+</ul></li>
+<li>This isn’t always the most <em>human readable</em> format</li>
+<li>Cross-tabulations or pivot tables compare variables to other
+variables</li>
+</ul>
+<div class="cols" style="font-size:.9em">
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th style="text-align: center;">Color</th>
+<th style="text-align: center;">Condition</th>
+<th style="text-align: center;">Number</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Apple</td>
+<td style="text-align: center;">Red</td>
+<td style="text-align: center;">Good</td>
+<td style="text-align: center;">5</td>
+</tr>
+<tr class="even">
+<td>Orange</td>
+<td style="text-align: center;">Orange</td>
+<td style="text-align: center;">Bad</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td>Cherry</td>
+<td style="text-align: center;">Red</td>
+<td style="text-align: center;">Good</td>
+<td style="text-align: center;">10</td>
+</tr>
+<tr class="even">
+<td>Banana</td>
+<td style="text-align: center;">Yellow</td>
+<td style="text-align: center;">Good</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td>Pineapple</td>
+<td style="text-align: center;">Yellow</td>
+<td style="text-align: center;">Bad</td>
+<td style="text-align: center;">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>Color</th>
+<th style="text-align: center;">Good</th>
+<th style="text-align: center;">Bad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Red</td>
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td>Orange</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td>Yellow</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="extensions" class="slide level2">
+<h2>Extensions</h2>
+<ul>
+<li><p>Standard SQL has no way to create these cross-tabulations</p>
+<ul>
+<li>They can’t be accomplish <strong>just</strong> through grouping, as
+you are needing to create new columns</li>
+</ul></li>
+<li><p>Postgres has a function to help, but it is located in an
+<em>extension</em> or <em>module</em></p>
+<ul>
+<li>Extensions to Postgres are collections of functions, date types, and
+more which add some functionality to a particular database</li>
+</ul></li>
+<li><p>To use an extension, you need only enable it for your particular
+database</p>
+<pre ><code class="pgsql">CREATE EXTENSION extension_name;</code></pre></li>
+<li><p>To facilitate making pivot tables, we need to add the
+<code class="python">tablefunc</code> extension to our database, which
+will add the <code class="python">crosstab</code> function</p></li>
+<li><p>You can always remove an extension using
+<code class="python">DROP</code> if you need later</p></li>
+</ul>
+</section>
+<section id="pieces-of-the-crosstab" class="slide level2">
+<h2>Pieces of the Crosstab</h2>
+<ul>
+<li>The <code class="python">crosstab</code> function has a lot going
+on, so let’s break things down</li>
+</ul>
+<div class="cols">
+<div class="col">
+<pre ><code class="pgsql" style="max-height:800px">SELECT *
+FROM crosstab(
+  'subquery 1',
+  'subquery 2'
+  )
+AS (
+  col1 dtype1,
+  col2 dtype2,
+  ⋮
+);</code></pre>
+</div>
+<div class="col" style="font-size:.9em">
+<div>
+<ul>
+<li class="fragment">Subquery 1 must return 3 columns
+<ul>
+<li class="fragment">The first is the row label values</li>
+<li class="fragment">The second is the column label values</li>
+<li class="fragment">The third is the particular data values</li>
+</ul></li>
+<li class="fragment">Subquery 2 returns a single column
+<ul>
+<li class="fragment">What column categories should rows be placed
+into?</li>
+</ul></li>
+<li class="fragment">You still need to define the column names and data
+types
+<ul>
+<li class="fragment">First should be the row label name and data
+type</li>
+<li class="fragment">Rest should be whatever column categories you are
+creating</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="example-1" class="slide level2">
+<h2>Example</h2>
+<p>Let’s construct a pivot table comparing the total number of taxi
+rides at different days of the week across different hours.</p>
+</section>
+<section id="on-the-case" class="slide level2">
+<h2>On the Case</h2>
+<ul>
+<li>It can be useful in certain situations to employ a little
+conditional logic <em>outside</em> a filtering statement</li>
+<li>Can be particularly useful to tweak or reclassify values</li>
+<li>Standard SQL has the <code class="python">CASE</code> statement to
+accomplish this
+<ul>
+<li>Essentially works like many programming language’s if…else if…else
+blocks</li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql">CASE 
+  WHEN some_condition1 THEN output1
+  WHEN some_condition2 THEN output2
+  ⋮
+  ELSE outputX
+END</code></pre>
+</section>
+<section id="a-case-study" class="slide level2">
+<h2>A Case Study</h2>
+<ul>
+<li><p>Comparisons are made in order, so the first condition that
+matches, that output is used</p></li>
+<li><p>If you do not include an <code class="python">ELSE</code> part,
+then <code class="python">NULL</code> will be output if nothing else
+matches</p></li>
+<li><p><code class="python">CASE</code> statements most often show up in
+<code class="python">SELECT</code> statements where column outputs are
+being selected, but they could potentially also show up in filtering or
+ordering statements</p></li>
+<li><p>A <code class="python">CASE</code> statement will not evaluate
+results where the condition is not met, so they can be used to prevent
+certain errors as well (such as dividing by 0)</p>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT
+  CASE WHEN a != 0 THEN 5/a END
+FROM tablename;</code></pre></li>
+</ul>
+</section>
+<section id="example-2" class="slide level2">
+<h2>Example</h2>
+<p>Let’s compute how many taxi rides were considered:</p>
+<ul>
+<li>“Time Travelers” with a duration of less than 0</li>
+<li>“Short Trips” with a duration less than 5 minutes</li>
+<li>“Medium Trips” with a duration between 5 and 15 minutes</li>
+<li>“Long Trips” with a duration greater than 15 minutes</li>
+</ul>
+</section>
+<section id="coalesce" class="slide level2">
+<h2>Coalesce</h2>
+<ul>
+<li>Similar to <code class="python">CASE</code>, SQL also has the
+<code class="python">COALESCE</code> statement</li>
+<li><code class="python">COALESCE</code> technically returns the first
+non-null value in the comma separate list of values</li>
+<li>Most frequently used to substitute a default value for
+<code class="python">NULL</code> values</li>
+</ul>
+<pre ><code class="pgsql">SELECT
+  student_id,
+  COALESCE(grade, 0)
+FROM grades;</code></pre>
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity!</h2>
+<p>Using the same grade book tables from Tuesday (<a
+href="../activity_data/assignment_submission.sql">here</a> if you need
+them again), do the following:</p>
+<ul>
+<li>Create a pivot table for student quiz point scores with full student
+names as the rows and individual quizes as the columns. You can
+concatenate two strings in SQL using the <code class="python">||</code>
+operator. So <code class="python">fname || ' ' || lname</code> would
+give the first and last name with a space between as a single string.
+Feel free to use joins here.</li>
+<li>Create a pivot table for student letter grades on each quiz. Parts
+of this will look really similar to what you did in the first part, but
+there will be some important differences.</li>
+</ul>
+</section>
+<section id="todays-groups" class="slide level2">
+<h2>Today’s Groups</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Group A: Nathan, Malie, Mitch</li>
+<li>Group B: Will R, Faye, Julius</li>
+<li>Group C: Meelad, Jacob, Tyler</li>
+<li>Group D: Camdin, Kelson, Charlie</li>
+<li>Group E: Alex W, Kellen, Avinash</li>
+<li>Group F: Henry, Alex B, Sean</li>
+<li>Group G: Maya, Will A</li>
+<li>Group H: Pachie, Paulina</li>
+</ul>
+</div>
+<div class="col">
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="193.07626mm"
+   height="189.43585mm"
+   viewBox="0 0 193.07626 189.43585"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   sodipodi:docname="group_seating_locs.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.46903409"
+     inkscape:cx="847.48637"
+     inkscape:cy="440.2665"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-271.65836,-38.702691)">
+    <rect
+       style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:1.87071;stroke-linecap:round;stroke-linejoin:round"
+       id="rect234"
+       width="56.21962"
+       height="19.801687"
+       x="340.08667"
+       y="39.638046" />
+    <g
+       id="g1752"
+       transform="matrix(0.62357127,0,0,0.62357127,105.39492,12.964302)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect236"
+         width="306.62982"
+         height="34.666981"
+         x="268.13101"
+         y="90.239426" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect960"
+         width="79.498459"
+         height="43.146389"
+         x="295.52704"
+         y="85.191986"
+         ry="6.17379" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1735"
+         width="79.498459"
+         height="43.146389"
+         x="467.86636"
+         y="85.191986"
+         ry="6.17379" />
+    </g>
+    <g
+       id="g1756"
+       transform="matrix(0.62357127,0,0,0.62357127,105.09461,13.25227)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect346"
+         width="306.62982"
+         height="34.666981"
+         x="268.61261"
+         y="143.18785" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1737"
+         width="79.498459"
+         height="43.146389"
+         x="382.17828"
+         y="138.53749"
+         ry="6.17379" />
+    </g>
+    <g
+       id="g1764"
+       transform="matrix(0.62357127,0,0,0.62357127,105.39492,80.069685)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1758"
+         width="306.62982"
+         height="34.666981"
+         x="268.13101"
+         y="90.239426" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1760"
+         width="79.498459"
+         height="43.146389"
+         x="295.52704"
+         y="85.191986"
+         ry="6.17379" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1762"
+         width="79.498459"
+         height="43.146389"
+         x="467.86636"
+         y="85.191986"
+         ry="6.17379" />
+    </g>
+    <g
+       id="g1770"
+       transform="matrix(0.62357127,0,0,0.62357127,105.09461,80.357656)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1766"
+         width="306.62982"
+         height="34.666981"
+         x="268.61261"
+         y="143.18785" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1768"
+         width="79.498459"
+         height="43.146389"
+         x="382.17828"
+         y="138.53749"
+         ry="6.17379" />
+    </g>
+    <g
+       id="g1778"
+       transform="matrix(0.62357127,0,0,0.62357127,105.39492,147.17507)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1772"
+         width="306.62982"
+         height="34.666981"
+         x="268.13101"
+         y="90.239426" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1774"
+         width="79.498459"
+         height="43.146389"
+         x="295.52704"
+         y="85.191986"
+         ry="6.17379" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1776"
+         width="79.498459"
+         height="43.146389"
+         x="467.86636"
+         y="85.191986"
+         ry="6.17379" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.574px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:3.70961;stroke-linecap:round;stroke-linejoin:round"
+       x="353.86295"
+       y="54.639805"
+       id="text1834"><tspan
+         sodipodi:role="line"
+         id="tspan1832"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.574px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:3.70961"
+         x="353.86295"
+         y="54.639805">Front</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="307.9303"
+       y="89.746925"
+       id="text1838"><tspan
+         sodipodi:role="line"
+         id="tspan1836"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="307.9303"
+         y="89.746925">A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="417.09128"
+       y="89.746925"
+       id="text1902"><tspan
+         sodipodi:role="line"
+         id="tspan1900"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="417.09128"
+         y="89.746925">B</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="362.85822"
+       y="123.30635"
+       id="text1906"><tspan
+         sodipodi:role="line"
+         id="tspan1904"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="362.85822"
+         y="123.30635">C</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="307.76288"
+       y="156.70032"
+       id="text1910"><tspan
+         sodipodi:role="line"
+         id="tspan1908"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="307.76288"
+         y="156.70032">D</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="417.18399"
+       y="156.70032"
+       id="text1914"><tspan
+         sodipodi:role="line"
+         id="tspan1912"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="417.18399"
+         y="156.70032">E</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="362.99017"
+       y="190.33252"
+       id="text1918"><tspan
+         sodipodi:role="line"
+         id="tspan1916"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="362.99017"
+         y="190.33252">F</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="309.30206"
+       y="224.20186"
+       id="text1922"><tspan
+         sodipodi:role="line"
+         id="tspan1920"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="309.30206"
+         y="224.20186">G</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="417.01123"
+       y="224.20186"
+       id="text1926"><tspan
+         sodipodi:role="line"
+         id="tspan1924"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="417.01123"
+         y="224.20186">H</tspan></text>
+  </g>
+</svg>
+</p>
+</div>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>

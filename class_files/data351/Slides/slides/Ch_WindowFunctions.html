@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>Looking through the Window</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Looking through the Window</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Wednesday, October 31, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Test on Wednesday!
+<ul>
+<li>Study Guide and old test is post!</li>
+<li>Aiming to get HW5 &amp; 6 scored today</li>
+</ul></li>
+<li>Nothing else due this week!</li>
+<li>HW8 will be posted on Thursday</li>
+<li>Polling today: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+</ul>
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<p>Given the starting table called <code class="python">rev</code>, what
+is the output of the query?</p>
+<div class="cols" style="align-items:center">
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">name</th>
+<th style="text-align: center;">num</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">A</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">B</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">D</td>
+<td style="text-align: center;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">E</td>
+<td style="text-align: center;">5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col" style="flex-grow:3">
+<pre ><code class="pgsql" style="font-size:1em">SELECT
+  CASE
+    WHEN num % 2 = 0 THEN name
+    WHEN name < 'C' THEN 'D'
+    ELSE 'A'
+  END
+FROM rev
+WHERE num < 4
+ORDER BY num DESC
+LIMIT 1</code></pre>
+</div>
+</div>
+<!--
+## Review Question
+::::::cols
+::::col
+Does the trigger defined to the right activate given the below modification to the table?
+```{.pgsql style='font-size:.9em'}
+UPDATE rev
+SET name = 'Jed',
+    birthday = '1985-04-24'
+WHERE current_age = 36;
+```
+
+
+:::{.poll}
+#. Yes!
+#. No!
+#. Maybe? Not enough information to tell!
+:::
+
+
+::::
+
+::::col
+```{.pgsql style='font-size:.8em; max-height:900px'}
+CREATE TABLE rev (
+  name text,
+  birthday date,
+  current_age int
+);
+
+CREATE TRIGGER mytrigger
+BEFORE UPDATE OF birthday
+  ON rev
+FOR EACH ROW
+WHEN NEW.birthday != OLD.birthday
+EXECUTE FUNCTION birthday_update()
+;
+```
+
+::::
+::::::
+-->
+</section>
+<section id="window-functions" class="slide level2">
+<h2>Window Functions</h2>
+<ul>
+<li>One useful piece of kit that is not included in the text is that of
+<em>window functions</em></li>
+<li>A window function is like a mix between a normal column value and an
+aggregate function
+<ul>
+<li>Unlike aggregate functions, a window function returns a value for
+each row</li>
+<li>Unlike normal column values, a window function can utilize other
+rows included within its “window” in making an aggregation</li>
+</ul></li>
+<li>Any normal aggregate function can be used as a window function,
+though there are specific window functions as well</li>
+<li>Window functions can only be used inside
+<code class="python">SELECT</code> or
+<code class="python">ORDER BY</code> statements
+<ul>
+<li>They are evaluated <em>after</em> any filtering, grouping, or normal
+aggregations</li>
+</ul></li>
+</ul>
+</section>
+<section id="over-the-hill" class="slide level2">
+<h2>Over the Hill</h2>
+<ul>
+<li>The defining characteristic of any window function is the
+<code class="python">OVER ()</code> keyword, which comes after the
+aggregating window function</li>
+<li>Content inside the <code class="python">()</code> determines the
+“window” of the window function</li>
+<li>By default, if nothing is provided, the entire column is the
+window</li>
+<li>The below would output the average of the column in every row
+<ul>
+<li>This means it is technically no different from accomplishing this
+with a subquery</li>
+</ul>
+<pre ><code class="pgsql">SELECT AVG(col1) OVER()
+FROM table_name;</code></pre></li>
+</ul>
+</section>
+<section id="dedicated-window-functions" class="slide level2">
+<h2>Dedicated Window Functions</h2>
+<ul>
+<li>You can use any existing aggregate function as a window function,
+but there are also more specific window functions</li>
+</ul>
+<div style="font-size:.9em">
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 81%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">row_number()</code></td>
+<td>Assigns an ascending row number to each row in a window</td>
+</tr>
+<tr class="even">
+<td><code class="python">rank()</code></td>
+<td>Assigns an ascending rank to each row, with possible ties skipping
+the next value</td>
+</tr>
+<tr class="odd">
+<td><code class="python">dense_rank()</code></td>
+<td>Assigns an ascending rank to each row, with possible ties not
+skipping the next value</td>
+</tr>
+<tr class="even">
+<td><code class="python">first_value(col)</code></td>
+<td>Returns the first value in the window of column
+<code class="python">col</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">last_value(col)</code></td>
+<td>Returns the last value in the window of column
+<code class="python">col</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">lag(col)</code></td>
+<td>Returns the previous row of column
+<code class="python">col</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">lead(col)</code></td>
+<td>Returns the next row of column <code class="python">col</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="determining-order" class="slide level2">
+<h2>DETERMINING ORDER</h2>
+<ul>
+<li>Often, to be useful, you may want to define an ordering inside the
+<code class="python">OVER()</code> statement</li>
+<li>As soon as you specify an ordering, <strong>the default window
+changes</strong>
+<ul>
+<li>By default, each window now encompasses everything from the start,
+up to that current row
+<ul>
+<li>Easiest to see with classic aggregate functions</li>
+</ul></li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql">SELECT COUNT(*) OVER(ORDER BY col2)
+FROM table_name;</code></pre>
+</section>
+<section id="tweaking-the-window" class="slide level2">
+<h2>Tweaking the Window</h2>
+<ul>
+<li><p>You can tweak this window by specifying the starting and stopping
+point, using the syntax:</p>
+<pre ><code class="pgsql">... ROWS BETWEEN offset1 PRECEDING AND offset2 FOLLOWING</code></pre>
+<p>which appears in the <code class="python">OVER</code> clause, after
+any provided ordering</p></li>
+<li><p>Can also exclude the current row or group from the window:</p>
+<pre ><code class="pgsql">... EXCLUDE CURRENT ROW</code></pre>
+<ul>
+<li>Group here refers to all other rows tied with the current row</li>
+</ul></li>
+<li><p>Can be used to compute “rolling” averages and similar</p></li>
+</ul>
+</section>
+<section id="partitioning" class="slide level2">
+<h2>Partitioning</h2>
+<ul>
+<li>Additionally, you can specify a partition for the window</li>
+<li>The default partition is the entire column</li>
+<li>Partitioning here is determined <em>before</em> the rows comprising
+the window are computed
+<ul>
+<li>This has a similar feel to <code class="python">GROUP BY</code>, but
+<em>every</em> row will get a value here</li>
+</ul></li>
+<li>Window functions evaluated within each window within each
+partition</li>
+</ul>
+<pre ><code class="pgsql">SELECT AVG(col1) OVER (
+    PARTITION BY col2
+  )
+FROM table_name;</code></pre>
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity!</h2>
+<ul>
+<li>Contained <a href="../activity_data/halloween.sql">here</a> is an
+SQL file to generate a table of Halloween trick-or-treater data, which
+contains two columns:
+<ul>
+<li>The minute within an hour span when a trick-or-treater visited</li>
+<li>What candy was given to the trick-or-treater</li>
+</ul></li>
+<li>You started out with a supply of 40 of each type of candy</li>
+<li>Using this information, answer the following questions:
+<ul>
+<li>Between the 20th and 30th minutes, what were the three most popular
+candies given?</li>
+<li>At what minute of the hour did you run out of Starburst?</li>
+<li>Which candy did you run out of first?</li>
+<li>Construct a 5-minute rolling average of the number of
+trick-or-treaters you saw each minute of the evening. According to this,
+about when were things busiest?</li>
+</ul></li>
+</ul>
+</section>
+<section id="todays-groups" class="slide level2">
+<h2>Today’s Groups</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Group A: Malie, Faye, Camdin</li>
+<li>Group B: Julius, Will A, Pachie</li>
+<li>Group C: Sean, Jacob, Paulina</li>
+<li>Group D: Henry, Maya, Avinash</li>
+<li>Group E: Will R, Nathan, Tyler</li>
+<li>Group F: Alex B, Alex W, Charlie</li>
+<li>Group G: Mitch, Kelson, Meelad</li>
+</ul>
+</div>
+<div class="col">
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="193.07626mm"
+   height="189.43585mm"
+   viewBox="0 0 193.07626 189.43585"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   sodipodi:docname="group_seating_locs.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.46903409"
+     inkscape:cx="847.48637"
+     inkscape:cy="440.2665"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-271.65836,-38.702691)">
+    <rect
+       style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:1.87071;stroke-linecap:round;stroke-linejoin:round"
+       id="rect234"
+       width="56.21962"
+       height="19.801687"
+       x="340.08667"
+       y="39.638046" />
+    <g
+       id="g1752"
+       transform="matrix(0.62357127,0,0,0.62357127,105.39492,12.964302)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect236"
+         width="306.62982"
+         height="34.666981"
+         x="268.13101"
+         y="90.239426" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect960"
+         width="79.498459"
+         height="43.146389"
+         x="295.52704"
+         y="85.191986"
+         ry="6.17379" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1735"
+         width="79.498459"
+         height="43.146389"
+         x="467.86636"
+         y="85.191986"
+         ry="6.17379" />
+    </g>
+    <g
+       id="g1756"
+       transform="matrix(0.62357127,0,0,0.62357127,105.09461,13.25227)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect346"
+         width="306.62982"
+         height="34.666981"
+         x="268.61261"
+         y="143.18785" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1737"
+         width="79.498459"
+         height="43.146389"
+         x="382.17828"
+         y="138.53749"
+         ry="6.17379" />
+    </g>
+    <g
+       id="g1764"
+       transform="matrix(0.62357127,0,0,0.62357127,105.39492,80.069685)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1758"
+         width="306.62982"
+         height="34.666981"
+         x="268.13101"
+         y="90.239426" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1760"
+         width="79.498459"
+         height="43.146389"
+         x="295.52704"
+         y="85.191986"
+         ry="6.17379" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1762"
+         width="79.498459"
+         height="43.146389"
+         x="467.86636"
+         y="85.191986"
+         ry="6.17379" />
+    </g>
+    <g
+       id="g1770"
+       transform="matrix(0.62357127,0,0,0.62357127,105.09461,80.357656)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1766"
+         width="306.62982"
+         height="34.666981"
+         x="268.61261"
+         y="143.18785" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1768"
+         width="79.498459"
+         height="43.146389"
+         x="382.17828"
+         y="138.53749"
+         ry="6.17379" />
+    </g>
+    <g
+       id="g1778"
+       transform="matrix(0.62357127,0,0,0.62357127,105.39492,147.17507)">
+      <rect
+         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1772"
+         width="306.62982"
+         height="34.666981"
+         x="268.13101"
+         y="90.239426" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1774"
+         width="79.498459"
+         height="43.146389"
+         x="295.52704"
+         y="85.191986"
+         ry="6.17379" />
+      <rect
+         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect1776"
+         width="79.498459"
+         height="43.146389"
+         x="467.86636"
+         y="85.191986"
+         ry="6.17379" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.574px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:3.70961;stroke-linecap:round;stroke-linejoin:round"
+       x="353.86295"
+       y="54.639805"
+       id="text1834"><tspan
+         sodipodi:role="line"
+         id="tspan1832"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.574px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:3.70961"
+         x="353.86295"
+         y="54.639805">Front</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="307.9303"
+       y="89.746925"
+       id="text1838"><tspan
+         sodipodi:role="line"
+         id="tspan1836"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="307.9303"
+         y="89.746925">A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="417.09128"
+       y="89.746925"
+       id="text1902"><tspan
+         sodipodi:role="line"
+         id="tspan1900"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="417.09128"
+         y="89.746925">B</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="362.85822"
+       y="123.30635"
+       id="text1906"><tspan
+         sodipodi:role="line"
+         id="tspan1904"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="362.85822"
+         y="123.30635">C</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="307.76288"
+       y="156.70032"
+       id="text1910"><tspan
+         sodipodi:role="line"
+         id="tspan1908"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="307.76288"
+         y="156.70032">D</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="417.18399"
+       y="156.70032"
+       id="text1914"><tspan
+         sodipodi:role="line"
+         id="tspan1912"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="417.18399"
+         y="156.70032">E</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="362.99017"
+       y="190.33252"
+       id="text1918"><tspan
+         sodipodi:role="line"
+         id="tspan1916"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="362.99017"
+         y="190.33252">F</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="309.30206"
+       y="224.20186"
+       id="text1922"><tspan
+         sodipodi:role="line"
+         id="tspan1920"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="309.30206"
+         y="224.20186">G</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
+       x="417.01123"
+       y="224.20186"
+       id="text1926"><tspan
+         sodipodi:role="line"
+         id="tspan1924"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
+         x="417.01123"
+         y="224.20186">H</tspan></text>
+  </g>
+</svg>
+</p>
+</div>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>

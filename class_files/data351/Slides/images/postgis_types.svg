@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="366.49155mm"
+   height="244.92104mm"
+   viewBox="0 0 366.49155 244.92104"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="postgis_types.svg"
+   inkscape:export-filename="/home/jedediah/Teaching/DataEng/IntroDE/Lectures/images/postgis_types.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.66368547"
+     inkscape:cx="794.80421"
+     inkscape:cy="406.81921"
+     inkscape:window-width="2528"
+     inkscape:window-height="1381"
+     inkscape:window-x="1096"
+     inkscape:window-y="43"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-379.69352,-15.441864)">
+    <path
+       id="rect1181"
+       style="fill:#eceff4;stroke:#4c566a;stroke-width:1.78;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.99938;stop-color:#000000"
+       d="M 623.72454,137.90238 H 745.29506 V 259.4729 H 623.72454 Z m -121.57049,0 H 623.72457 V 259.4729 H 502.15405 Z m -121.57053,0 H 502.15404 V 259.4729 H 380.58352 Z M 623.72454,16.331864 H 745.29506 V 137.90237 H 623.72454 Z m -121.57049,0 H 623.72457 V 137.90237 H 502.15405 Z m -121.57053,0 H 502.15404 V 137.90237 H 380.58352 Z" />
+    <circle
+       style="fill:#2e3440;stroke:#2e3440;stroke-width:1.78;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.99938;stop-color:#000000"
+       id="path1285"
+       cx="439.35501"
+       cy="77.944374"
+       r="3.3920944" />
+    <path
+       style="fill:none;stroke:#2e3440;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 517.13057,61.461147 25.933,18.766258 33.85919,-10.317155 7.2082,20.391401 21.59311,-46.242123"
+       id="path1422" />
+    <path
+       id="path1822"
+       style="fill:#bf616a;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 657.24542,38.645973 -16.18351,54.5114 53.29545,-4.611606 20.21427,7.07037 14.72727,-31.795476 z m 7.52769,24.121006 12.08608,1.113629 -1.96937,11.256158 -13.49684,0.223242 z" />
+    <circle
+       style="fill:#2e3440;stroke:#2e3440;stroke-width:1.78;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.99938;stop-color:#000000"
+       id="circle1880"
+       cx="406.33395"
+       cy="197.14099"
+       r="3.3920944" />
+    <circle
+       style="fill:#2e3440;stroke:#2e3440;stroke-width:1.78;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.99938;stop-color:#000000"
+       id="circle1882"
+       cx="424.14526"
+       cy="184.00752"
+       r="3.3920944" />
+    <circle
+       style="fill:#2e3440;stroke:#2e3440;stroke-width:1.78;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.99938;stop-color:#000000"
+       id="circle1884"
+       cx="437.56482"
+       cy="204.25493"
+       r="3.3920944" />
+    <circle
+       style="fill:#2e3440;stroke:#2e3440;stroke-width:1.78;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.99938;stop-color:#000000"
+       id="circle1886"
+       cx="458.52307"
+       cy="173.3125"
+       r="3.3920944" />
+    <circle
+       style="fill:#2e3440;stroke:#2e3440;stroke-width:1.78;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.99938;stop-color:#000000"
+       id="circle1888"
+       cx="469.33463"
+       cy="192.51868"
+       r="3.3920944" />
+    <path
+       style="fill:none;stroke:#2e3440;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 604.10579,183.95693 -25.933,-18.76625 -33.85919,10.31715 -7.2082,-20.3914 -21.59311,46.24212"
+       id="path1890" />
+    <path
+       style="fill:none;stroke:#2e3440;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 543.35059,193.93314 0.5975,22.89255 42.23562,-1.27853"
+       id="path1925" />
+    <path
+       id="path2124"
+       style="fill:#81a1c1;stroke:#000000;stroke-width:11.33858282;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 979.95117 541.96094 L 1031.1465 646.74414 L 968.33789 764.5625 L 1183.3398 743.35156 L 1094.3516 586.38477 L 1128.8203 544.61719 L 979.95117 541.96094 z M 1071.1191 680.41016 L 1095.6152 714.30664 L 1048.9785 714.62109 L 1071.1191 680.41016 z "
+       transform="matrix(0.26458333,0,0,0.26458333,379.69352,15.441864)" />
+    <path
+       style="fill:#81a1c1;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 699.19432,163.17859 -0.11231,26.81421 29.06511,0.29354 -2.39953,-29.20545 z"
+       id="path2128" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7176px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;stroke-width:1.02882;stroke:none;fill:#2e3440"
+       x="416.01584"
+       y="132.23453"
+       id="text3231"><tspan
+         sodipodi:role="line"
+         id="tspan3229"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7176px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:1.02882;stroke:none;fill:#2e3440"
+         x="416.01584"
+         y="132.23453">Point</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7176px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;stroke-width:1.02882;stroke:none;fill:#2e3440"
+       x="520.9126"
+       y="132.23453"
+       id="text3333"><tspan
+         sodipodi:role="line"
+         id="tspan3331"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7176px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:1.02882;stroke:none;fill:#2e3440"
+         x="520.9126"
+         y="132.23453">LineString</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7176px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;stroke-width:1.02882;stroke:none;fill:#2e3440"
+       x="654.59088"
+       y="132.23453"
+       id="text3439"><tspan
+         sodipodi:role="line"
+         id="tspan3437"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7176px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:1.02882;stroke:none;fill:#2e3440"
+         x="654.59088"
+         y="132.23453">Polygon</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7176px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;stroke-width:1.02882;stroke:none;fill:#2e3440"
+       x="397.53671"
+       y="254.10271"
+       id="text3545"><tspan
+         sodipodi:role="line"
+         id="tspan3543"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7176px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:1.02882;stroke:none;fill:#2e3440"
+         x="397.53671"
+         y="254.10271">MultiPoint</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.7438px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;stroke-width:0.880783;stroke:none;fill:#2e3440"
+       x="509.63049"
+       y="253.53485"
+       id="text3651"><tspan
+         sodipodi:role="line"
+         id="tspan3649"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.7438px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.880783;stroke:none;fill:#2e3440"
+         x="509.63049"
+         y="253.53485">MultiLineString</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7176px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;stroke-width:1.02882;stroke:none;fill:#2e3440"
+       x="634.86646"
+       y="254.71773"
+       id="text3757"><tspan
+         sodipodi:role="line"
+         id="tspan3755"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7176px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:1.02882;stroke:none;fill:#2e3440"
+         x="634.86646"
+         y="254.71773">MultiPolygon</tspan></text>
+  </g>
+</svg>

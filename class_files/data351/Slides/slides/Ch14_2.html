@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <title>The Shape of Things</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">The Shape of Things</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">Wednesday, November 16, 2022</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 9 due on Friday</li>
+<li>Project partner assignments and guidelines going out by Friday
+night!
+<ul>
+<li>A poll about who you might want to work with (or not work with) will
+be going out tonight</li>
+</ul></li>
+<li>We’ll go over the test in a moment</li>
+<li>Polling today: <a
+href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+</ul>
+</section>
+<section id="test-results" class="slide level2">
+<h2>Test Results</h2>
+<div class="cols" style="align-items:center">
+<div class="col" style="flex-grow:1.5">
+<p><img
+data-src="../images/svg_cache/befbc858fedf14c8f166d2c7be71e435e5c5bce8.svg"
+style="width:100.0%" /></p>
+</div>
+<div class="col">
+<ul>
+<li>Average: 82.6%</li>
+<li>Median: 86.8%</li>
+<li>St Dev: 15.9%</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="problem-1" class="slide level2">
+<h2>Problem 1</h2>
+<pre ><code class="pgsql" style="font-size:.9em">CREATE INDEX bdindex ON to_index_or_not (birthday);</code></pre>
+<pre ><code class="pgsql" style="font-size:.75em">SELECT SUM(favorite_num)
+FROM to_index_or_not
+WHERE name ILIKE '%Ben%'</code></pre>
+<pre ><code class="pgsql" style="font-size:.75em">SELECT name, birthday
+FROM to_index_or_not
+WHERE favorite_num = 8</code></pre>
+<pre ><code class="pgsql" style="font-size:.75em">SELECT name
+FROM to_index_or_not
+WHERE birthday = 'Jan 5, 2014'</code></pre>
+<pre ><code class="pgsql" style="font-size:.75em">SELECT MIN(name)
+FROM to_index_or_not
+WHERE birthday < 'Nov 2, 2022'</code></pre>
+</section>
+<section id="problem-2" class="slide level2">
+<h2>Problem 2</h2>
+<div class="cols">
+<div class="col">
+<pre ><code class="pgsql" style="font-size:.8em">INSERT INTO tab3 VALUES
+(7, -4, 'Katy', '2022-02-14');</code></pre>
+<pre ><code class="pgsql" style="font-size:.8em">ALTER TABLE tab3 
+  ADD FOREIGN KEY (H) 
+  REFERENCES tab1 (A);</code></pre>
+<pre ><code class="pgsql" style="font-size:.8em">UPDATE tab2
+SET E = -4.83;</code></pre>
+</div>
+<div class="col">
+<pre ><code class="pgsql" style="font-size:.8em">DELETE FROM tab1
+WHERE A = 'Katy';</code></pre>
+<pre ><code class="pgsql" style="font-size:.8em">ALTER TABLE tab3 
+  ALTER COLUMN G 
+  SET DATA TYPE INT;</code></pre>
+<pre ><code class="pgsql" style="font-size:.8em">ALTER TABLE tab1 
+  ADD PRIMARY KEY (C);</code></pre>
+</div>
+</div>
+</section>
+<section id="problem-3" class="slide level2">
+<h2>Problem 3</h2>
+<ul>
+<li><p>Part A</p>
+<pre ><code class="sql">SELECT tab2.D, AVG(tab3.F)
+FROM tab3
+RIGHT JOIN tab2
+   ON tab2.D = tab3.I
+GROUP BY tab2.D;</code></pre></li>
+<li><p>Part B</p>
+<pre ><code class="sql">SELECT COUNT(*) - MAX(tab1.B + tab3.F)
+FROM tab1
+FULL OUTER JOIN tab3
+  ON tab1.B = tab3.F;</code></pre></li>
+</ul>
+</section>
+<section id="problem-3-1" class="slide level2">
+<h2>Problem 3</h2>
+<ul>
+<li><p>Part C</p>
+<pre ><code class="sql">SELECT AVG(tab1.B) + COUNT(tab2.D)
+FROM tab1
+LEFT JOIN tab2
+  ON tab1.C = tab2.E
+JOIN tab1 AS ttab1
+  ON ttab1.B > tab1.C;</code></pre></li>
+</ul>
+</section>
+<section id="problem-4a" class="slide level2">
+<h2>Problem 4a</h2>
+<p><img data-src="../images/inhabitants_erd.png" /></p>
+<div class="quip">
+<p>How many houses have been foreclosed, having nobody living within
+them?</p>
+</div>
+</section>
+<section id="problem-4b" class="slide level2">
+<h2>Problem 4b</h2>
+<p><img data-src="../images/inhabitants_erd.png" /></p>
+<div class="quip">
+<p>What are the names of the <code class="python">'CEO'</code>’s who own
+more than 3 pets?</p>
+</div>
+</section>
+<section id="problem-4c" class="slide level2">
+<h2>Problem 4c</h2>
+<p><img data-src="../images/inhabitants_erd.png" /></p>
+<div class="quip">
+<p>What is the full address (number, street, and city) of the household
+with the greatest number of pet dogs?</p>
+</div>
+</section>
+<section id="problem-4d" class="slide level2">
+<h2>Problem 4d</h2>
+<p><img data-src="../images/inhabitants_erd.png" /></p>
+<div class="quip">
+<p>How many people are living with a parent?</p>
+</div>
+</section>
+<section id="shapefiles" class="slide level2">
+<h2>Shapefiles</h2>
+<ul>
+<li>Life would be very painstaking if you had to recreate complex
+polygons point by point</li>
+<li>Instead, most sources of spatial information that is more than a
+single point distribute that information in what is commonly called a
+<em>shapefile</em>
+<ul>
+<li>Shapefiles are technically the data format developed for the ArcGIS
+platform</li>
+<li>Basically a zip which includes several files that contain the
+necessary information (.shp, .shx, and .dbf, at least)</li>
+<li>The shapefile contains all the same information as we want,
+concerning lines, polygons, points, etc, as well as extra explanatory
+information or annotations</li>
+</ul></li>
+<li>The general plan is to import the shapefile information into its own
+table within our database</li>
+</ul>
+</section>
+<section id="shp2pgsql" class="slide level2">
+<h2>shp2pgsql</h2>
+<ul>
+<li>PostGIS comes with a command line utility called
+<code class="python">shp2pgsql</code> on all operating systems
+<ul>
+<li>Windows users can run a graphical version of the same program, but
+it is not available on Mac and Linux
+<ul>
+<li>If you want to run the graphical version, I’ll direct you to the
+book’s explanation, which is covered in depth</li>
+</ul></li>
+</ul></li>
+<li>Like many command line utilities,
+<code class="python">shp2pgsql</code> utilizes several flags to control
+its behavior
+<ul>
+<li><code class="python">-I</code> → sets up a GIST index on the
+geometry column</li>
+<li><code class="python">-s</code> → specifies a specific SRID</li>
+<li><code class="python">-W</code> → specifies a particular encoding if
+needed (sometimes necessary for location names)</li>
+</ul>
+<code class="python">shp2pgsql -I -s SRID -W ENCODING SHAPEFILE.SHP TABLE_NAME</code></li>
+</ul>
+</section>
+<section id="bringing-into-pgsql" class="slide level2">
+<h2>Bringing Into PGSQL</h2>
+<ul>
+<li><p>By itself, <code class="python">shp2pgsql</code> will just
+generate SQL</p></li>
+<li><p>You could save or copy that output and then run it in your
+database, but it can be more useful to pass that SQL directly into your
+database as it is created</p></li>
+<li><p>This can be done with the <code class="python">|</code> (pipe)
+operator</p></li>
+<li><p>All together then, the command would look like below (all on one
+line)</p>
+<p><code class="python">shp2pgsql -I -s SRID -W ENCODING SHAPEFILE.SHP TABLE_NAME | psql -d DATABASE -U postgres</code></p></li>
+<li><p>Shapefiles will usually create geometry objects, which you could
+then cast to geography as needed</p></li>
+</ul>
+</section>
+<section id="back-to-text" class="slide level2">
+<h2>Back to Text</h2>
+<ul>
+<li>Since the shapefile spatial information will be encoded directly to
+a geometry type, it can be tricky to know what exactly you are working
+with at times</li>
+<li>You can call the <code class="python">ST_AsText()</code> function on
+any geometry (or geography) object to output its WKT representation
+<ul>
+<li>This can also be useful if you need to get it into a text form to
+copy into another location</li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql">SELECT ST_AsText(geom)
+FROM table_name
+LIMIT 1;</code></pre>
+</section>
+<section id="visualization" class="slide level2">
+<h2>Visualization</h2>
+<ul>
+<li>In general, you would need to take your information to another
+program for visualization purposes</li>
+<li>For a quick view though, <a
+href="https://clydedacruz.github.io/openstreetmap-wkt-playground/">this</a>
+site will let you enter in a WKT which it will then display</li>
+<li>Can be used in conjunction with
+<code class="python">ST_AsText</code> to grab results for quick
+visualization</li>
+<li>You can use <code class="python">ST_Collect</code> to aggregate an
+entire column of singular geometries into one Multi-geometry object for
+each of representation</li>
+</ul>
+</section>
+<section id="postgis-polygon-functions" class="slide level2">
+<h2>PostGIS Polygon Functions</h2>
+<ul>
+<li>Working with shapefiles gives an easy way to gain access to complex
+polygonal spatial information</li>
+<li>PostGIS has several useful functions to interact with polygons:
+<ul>
+<li><code class="python">ST_Area(poly)</code> will return the area of
+the provided polygon. This will be in SRID specified units if geometry
+or square meters if geography</li>
+<li><code class="python">ST_Within(point, poly)</code> will return a
+True/False as to whether the given point lies within the provided
+polygon
+<ul>
+<li>Make sure your SRID values match for point and poly! Or you could
+get bizarre results!</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="crossings" class="slide level2">
+<h2>Crossings</h2>
+<ul>
+<li>PostGIS can also determine information about intersections between
+various geometries</li>
+<li><code class="python">ST_Intersects(geom1, geom2)</code> will return
+a True/False if there exists an intersection between the two
+geometries</li>
+<li><code class="python">ST_Intersection(geom1, geom2)</code> will
+return a new geometry representing the intersection between the two
+geometries
+<ul>
+<li>This might be a point for the intersection between two lines or a
+line for the intersection between a line and a polygon, or a polygon for
+the intersection between two polygons</li>
+</ul></li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/reveal.js/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/reveal.js/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1200,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+	reveald3: {
+			runLastState: true, // true/false, default: true
+			onSlideChangedDelay: 200,
+			mapPath: false, // true / false / "spefific/path/as/string", default: false
+			tryFallbackURL: true, // true/false, default false
+			disableCheckFile: false, //default false
+		 },
+
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChart,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+    </body>
+</html>
