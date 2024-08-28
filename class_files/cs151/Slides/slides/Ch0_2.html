@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-08-30">
-  <title>Controlling Karel</title>
+  <meta name="dcterms.date" content="2024-08-28">
+  <title>Functioning Karel</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -27,40 +27,91 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Controlling Karel</h1>
+  <h1 class="title">Functioning Karel</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">August 30, 2023</p>
+  <p class="date">August 28, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Practice Problem Set 0 is posted and due by Monday night
+<li>Problem Set 0 is posted and due by Monday night
 <ul>
 <li>Just to ensure you have all the necessary tech up and running on
 your system</li>
+<li>Nobody showed up yesterday, but I’ll be in Ford 202 again tomorrow
+from 3-4 in case folks want help with the software setup</li>
 </ul></li>
 <li>Sections start next week. If you have not yet filled out your
 availability, please do that <strong>now</strong> <a
-href="https://forms.gle/Y5cruY9vTL6NsiDx9">here</a>!</li>
-<li>Discord Invite link is posted in the announcements on Canvas!</li>
-<li>Participation polling will start on Friday</li>
-<li>Email went out from Kelly Strawn this morning to all of you, asking
-you to participate in a survey to help us improve these classes
+href="https://forms.gle/8yh95AGSnLatMh8HA">here</a>!</li>
+<li>Only about 10 of you have joined the Discord channel. Check your
+email for the invite link.</li>
+<li>Participation polling starts today! <a
+href="https://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
+</ul>
+</section>
+<section>
+<section id="karels-world" class="title-slide slide level1">
+<h1>Karel’s World</h1>
+
+</section>
+<section id="giving-clear-instructions" class="slide level2">
+<h2>Giving Clear Instructions</h2>
 <ul>
-<li>All data will be de-identified by the Institutional Research Office
-before aggregates passed back to faculty</li>
-<li>Please help us out and take the few minutes to fill it out!</li>
+<li>We will initially make the language <em>extremely</em> simple so
+that we can focus on the second layer</li>
+<li>Karel the Robot exists in a very simple 2D world</li>
+<li>Has a very limited set of actions:
+<ul>
+<li>Can move forward one space</li>
+<li>Can rotate counter-clockwise (turn left) 90 degrees</li>
+<li>Can pick up a beeper</li>
+<li>Can drop off a beeper</li>
+</ul></li>
+<li>We will be spending the first several class days just interested in
+how we can take these simple instructions and get Karel to solve a wide
+variety of problems
+<ul>
+<li>This content is not in your text, but more in-depth descriptions can
+be found <a
+href="https://willamette.edu/~esroberts/pykarel/reader/01-IntroducingKarel.html">here</a></li>
 </ul></li>
 </ul>
+</section>
+<section id="the-world" class="slide level2">
+<h2>The World</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Karel’s world is defined on a grid
+<ul>
+<li><em>avenues</em> run north-south</li>
+<li><em>streets</em> run east-west</li>
+<li>The <em>intersection</em> between a street and avenue is called a
+corner</li>
+</ul></li>
+<li>Compass directions are as you’d have them on a map, with North
+pointing upwards</li>
+<li>Walls are impassable</li>
+<li>Beepers are diamonds</li>
+<li>Karel is a house-shaped polygon</li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/607330bb7350ac7470a79dcab6cf9f9fa1faf496.svg"
+style="width:100.0%" /></p>
+</div>
+</div>
 </section>
 <section id="commands" class="slide level2">
 <h2>Commands</h2>
@@ -132,7 +183,7 @@ is better?</li>
 </div>
 <div class="col">
 <p><img
-data-src="../images/svg_cache/2f23aa67af9dd68dfb3635c94e79e7f1f75413b0.svg"
+data-src="../images/svg_cache/8939f75a5a405a104257bae60a9f6f4d2e8d22ab.svg"
 style="width:100.0%" /></p>
 </div>
 </div>
@@ -593,23 +644,24 @@ the same directory as your program</li>
 
 <figcaption>Karel Interface</figcaption>
 </figure>
-<!--
-## Understanding Check {data-notes="Solution: 3rd avenue and 4th street"}
-::::::cols
-::::col
-Suppose you had Karel starting in the world shown to the right. If Karel then executed the commands shown to the far right, what intersection would they end up at?
-::::
-::::col
-\begin{tikzpicture}%%width=100%
-\karelgrid[MGreen]{4}{4}
-\draw[MGreen, very thick] (2.5,0.5) --++(0,2);
-\karelmark[MYellow]{2}{3}{-90}
-
-\end{tikzpicture}
-::::
-::::col
-```python
-move()
+</section>
+<section id="understanding-check" class="slide level2"
+data-notes="Solution: 3rd avenue and 4th street">
+<h2 data-notes="Solution: 3rd avenue and 4th street">Understanding
+Check</h2>
+<div class="cols">
+<div class="col">
+<p>Suppose you had Karel starting in the world shown to the right. If
+Karel then executed the commands shown to the far right, what
+intersection would they end up at?</p>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/c9cbbb0a92367f4153b99eae5916154b72a870e1.svg"
+style="width:100.0%" /></p>
+</div>
+<div class="col">
+<pre ><code class="python">move()
 turn_left()
 turn_left()
 move()
@@ -617,18 +669,17 @@ move()
 turn_left()
 turn_left()
 turn_left()
-move()
-```
-::::
-::::::
-:::{.hpoll}
-#. 2nd avenue and 1st street
-#. 4th avenue and 2nd street
-#. 3rd avenue and 4th street
-#. Karel would hit a wall and error
-:::
-
--->
+move()</code></pre>
+</div>
+</div>
+<div class="hpoll">
+<ol>
+<li>2nd avenue and 1st street</li>
+<li>4th avenue and 2nd street</li>
+<li>3rd avenue and 4th street</li>
+<li>Karel would hit a wall and error</li>
+</ol>
+</div>
 <!--
 ## Previously...
 ::::::cols
@@ -668,6 +719,11 @@ def main():
 ::::
 ::::::
 -->
+</section></section>
+<section>
+<section id="bundling-code-functions" class="title-slide slide level1">
+<h1>Bundling code: Functions</h1>
+
 </section>
 <section id="functional-programs" class="slide level2">
 <h2>Functional Programs</h2>
@@ -685,23 +741,25 @@ repeatedly</li>
 </ul>
 <div class="cols">
 <div class="col">
-<div class="block" name="The Definition" style="font-size:.7em">
+<div class="block fragment fade-up" name="The Definition"
+style="font-size:.7em" data-fragment-index="1">
 <ul>
 <li><p>Where you define what is in the bundle</p></li>
 <li><p>Syntactically, it looks like:</p>
-<pre ><code class="python">def your_function_name():
-    any_commands_to_be_bundled</code></pre></li>
+<pre ><code class="python">def |||your_function_name|||():
+    |||any commands you want bundled|||</code></pre></li>
 <li><p>Note that bundled commands need to be tabbed in!</p></li>
 </ul>
 </div>
 </div>
 <div class="col">
-<div class="block" name="The Usage" style="font-size:.7em">
+<div class="block fragment fade-up" name="The Usage"
+style="font-size:.7em" data-fragment-index="2">
 <ul>
 <li><p>Where you use the earlier defined bundle (the function)</p></li>
 <li><p>Commonly referred to as <em>calling</em> the function</p></li>
 <li><p>Use matched parentheses after the function name:</p>
-<pre ><code class="python">your_function_name()</code></pre></li>
+<pre ><code class="python">|||your_function_name|||()</code></pre></li>
 </ul>
 </div>
 </div>
@@ -792,12 +850,12 @@ def turn_right():
 <h2>Pothole Decomposition</h2>
 <ul>
 <li>Functions can also be a very effective way to break a larger problem
-into smaller, more managable pieces</li>
+into smaller, more manageable pieces</li>
 <li>Suppose we wanted Karel to fill all the “holes” in the below world
 with a beeper</li>
 </ul>
 <p><img
-data-src="../images/svg_cache/e4861116a4ada12f99b05c8d06104eb7ea107ef6.svg"
+data-src="../images/svg_cache/ebf4f8c1ff8af2623c84c5c09aaf321cf46b092c.svg"
 style="width:60.0%" /></p>
 </section>
 <section id="breaking-down-potholes" class="slide level2">
@@ -912,63 +970,112 @@ def turn_around():
     """ Convenience function to turn Karel 180 around. """
     turn_left()
     turn_left()</code></pre>
+</section></section>
+<section>
+<section id="branching-code" class="title-slide slide level1">
+<h1>Branching Code</h1>
+
+</section>
+<section id="making-choices" class="slide level2">
+<h2>Making Choices</h2>
+<ul>
+<li>To solve more interesting tasks, we need to be able to write
+programs that can make choices about what they should be doing</li>
+<li>Commands that alter the order that a program will run its commands
+are called <em>control statements</em>, which come in two flavors:
+<ul>
+<li><em>Conditional statements</em>: Only run portions of the program if
+a condition is true</li>
+<li><em>Iterative statements</em>: Repeat portions of the program if
+certain conditions are met</li>
+</ul></li>
+<li>Conditions are answers to yes or no (or true/false) type questions
+<ul>
+<li>Am I facing a wall?</li>
+<li>Do I have any beepers in my bag?</li>
+</ul></li>
+<li>You can ask these questions of Karel using what are called
+<em>predicate functions</em>, which are the programming equivalent of
+yes-or-no questions</li>
+</ul>
+</section>
+<section id="interrogating-karel" class="slide level2">
+<h2>Interrogating Karel</h2>
+<p>Potential questions you can ask Karel include:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><code class="python">front_is_clear()</code></td>
+<td><code class="python">front_is_blocked()</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">left_is_clear()</code></td>
+<td><code class="python">left_is_blocked()</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">right_is_clear()</code></td>
+<td><code class="python">right_is_blocked()</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">beepers_present()</code></td>
+<td><code class="python">no_beepers_present()</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">beepers_in_bag()</code></td>
+<td><code class="python">no_beepers_in_bag()</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">facing_north()</code></td>
+<td><code class="python">not_facing_north()</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">facing_south()</code></td>
+<td><code class="python">not_facing_south()</code></td>
+</tr>
+<tr class="even">
+<td><code class="python">facing_east()</code></td>
+<td><code class="python">not_facing_east()</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">facing_west()</code></td>
+<td><code class="python">not_facing_west()</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="kinda-iffy" class="slide level2">
+<h2>Kinda Iffy</h2>
+<ul>
+<li><p>Predicate functions can be used to control a kind of “switch”:
+running one piece of code if the answer is yes and a different piece of
+code if the answer is no.</p></li>
+<li><p>Commonly called <em>if</em> or <em>if-else</em> statements, they
+take on the syntax of:</p>
+<pre ><code class="python">if |||conditional_test|||:
+    |||code to run if the test answer is yes|||
+else:
+    |||code to run if the test answer is no|||</code></pre></li>
+<li><p>If you don’t want the code to do anything special if the answer
+is no, you can ignore the “else” part of the statement:</p>
+<pre ><code class="python">if |||conditional_test|||:
+    |||code to run if the test answer is yes/true|||
+|||code that will always run, regardless of the test answer|||</code></pre></li>
+</ul>
+</section>
+<section id="karels-decisions-example" class="slide level2">
+<h2>Karel’s Decisions Example</h2>
+<ul>
+<li>Suppose we want Karel to move across the bottom of the world and
+fill in any gaps in the beepers
+<ul>
+<li>We want an even layer of beepers, no stacks</li>
+<li>What questions should we have Karel ask?</li>
+</ul></li>
+</ul>
+<p><img
+data-src="../images/svg_cache/f5e34386327812a742ff5ef483cc0fb963073c34.svg"
+style="width:60.0%" /></p>
 <!-- Did not get past
-
-## Making Choices
-- To solve more interesting tasks, we need to be able to write programs that can make choices about what they should be doing
-- Commands that alter the order that a program will run its commands are called _control statements_, which come in two flavors:
-    - _Conditional statements_: Only run portions of the program if a condition is true
-    - _Iterative statements_: Repeat portions of the program if certain conditions are met
-- Conditions are answers to yes or no (or true/false) type questions
-    - Am I facing a wall?
-    - Do I have any beepers in my bag?
-- You can ask these questions of Karel using what are called _predicate functions_, which are the programming equivalent of yes-or-no questions
-
-## Interrogating Karel
-Potential questions you can ask Karel include:
-
- | 
----|----
-`front_is_clear()` | `front_is_blocked()`
-`left_is_clear()` |  `left_is_blocked()`
-`right_is_clear()` | `right_is_blocked()`
-`beepers_present()` | `no_beepers_present()`
-`beepers_in_bag()` | `no_beepers_in_bag()`
-`facing_north()` | `not_facing_north()`
-`facing_south()` | `not_facing_south()`
-`facing_east()` | `not_facing_east()`
-`facing_west()` | `not_facing_west()`
-
-## Kinda Iffy
-- Predicate functions can be used to control a kind of "switch": running one piece of code if the answer is yes and a different piece of code if the answer is no.
-- Commonly called _if_ or _if-else_ statements, they take on the syntax of:
-
-    ```python
-    if conditional_test:
-        # Code to run if test answer is yes
-    else:
-        # Code to run if test answer is no
-    ```
-- If you don't want the code to do anything special if the answer is no, you can ignore the "else" part of the statement:
-    
-    ```python
-    if conditional_test:
-        # Code to run if test is true
-    # Carrying on with code that will always run
-    ```
-
-## Karel's Decisions Example
-- Suppose we want Karel to move across the bottom of the world and fill in any gaps in the beepers
-    - We want an even layer of beepers, no stacks
-    - What questions should we have Karel ask?
-
-\begin{tikzpicture}%%width=60%
-\karelgrid[MGreen]{4}{2}
-\karelbeeper[MBlue]{2}{1}
-\karelbeeper[MBlue]{3}{1}
-\karelmark[fill=MYellow]{1}{1}{0}
-\end{tikzpicture}
-
 -->
 <!--
 ## Its been a while
@@ -1034,7 +1141,7 @@ def turn_around():
     turn_left()
 ```
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -1049,6 +1156,7 @@ def turn_around():
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
 
   <script>
 
@@ -1167,6 +1275,12 @@ def turn_around():
 			disableCheckFile: false, //default false
 		 },
 
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -1206,5 +1320,18 @@ def turn_around():
       });
       
     </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>

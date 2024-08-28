@@ -94,7 +94,7 @@ $if(mathjax)$
 $endif$
 $if(highlightjs)$
   <script src="$revealjs-url$/plugin/highlight/highlight.js"></script>
-  <script src="$revealjs-url$/../libs/python_language.js"></script>
+  <script src="$revealjs-url$/../js/mypgsql.js"></script>
 $endif$
 
   <script>
@@ -363,10 +363,9 @@ $if(mathjax)$
 $endif$
 $if(highlightjs)$
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
-              console.log(hljs.regex);
-              console.log(mypythondef);
-              return mypythondef(hljs); } )
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
           },
 $endif$
         // reveal.js plugins

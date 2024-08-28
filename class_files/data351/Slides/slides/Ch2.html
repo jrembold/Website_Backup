@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <title>Making Selections</title>
+  <title>Being Selective</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -13,22 +13,30 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/tokyo-night-light.css">
 </head>
 <body>
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Making Selections</h1>
+  <h1 class="title">Being Selective</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Wednesday, August 31, 2022</p>
+  <p class="date">Wednesday, August 28, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -40,33 +48,33 @@
 well</li>
 </ul></li>
 <li>Let me know if you are having issues following along with the book’s
-description of the Postgresql install</li>
-<li>I’m working on a guide for setting up VSCode to talk to the Postgres
-server</li>
-<li><strong>No class on Monday!</strong></li>
-<li>Look over Ch 3 for next Thursday</li>
-<li>We’ll have some polling today: www.rembold-class.ddns.net</li>
+description of the PostgreSQL install</li>
+<li>I’m working on a guide for setting up Beekeeper to talk to the
+Postgres server</li>
+<li><strong>No class next Monday!</strong></li>
+<li>Look over Ch 3 for next Wednesday</li>
+<li>We’ll have some polling today: <a
+href="https://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
-</section>
-<section id="adding-values-to-a-table" class="slide level2">
-<h2>Adding Values to a Table</h2>
-<ul>
-<li>Your tables are initially empty!</li>
-<li>You add data to the table by inserting new values into the
-columns</li>
-<li>New rows are concatenated to the end of the table</li>
-<li>Need to include an entry for each listed column (rows can’t be
-unequal in length)</li>
-</ul>
-<pre ><code class="sql">INSERT INTO table_name (colname_1, colname_2)
+<!--
+## Adding Values to a Table
+- Your tables are initially empty!
+- You add data to the table by inserting new values into the columns
+- New rows are concatenated to the end of the table
+- Need to include an entry for each listed column (rows can't be unequal in length)
+
+```sql
+INSERT INTO table_name (colname_1, colname_2)
 VALUES ('row1a', 'row1b'),
        ('row2a', 'row2b'),
-       ('row3a', 'row3b');</code></pre>
+       ('row3a', 'row3b');
+```
+-->
 </section>
 <section id="review" class="slide level2">
 <h2>Review!</h2>
 <div class="cols">
-<div class="col">
+<div class="col" style="font-size:.9em">
 <p>The SQL commands to the right involve creating and then populating a
 simple table. If they were run one after the other, which of the below
 possibilities would mostly closely mimic how the
@@ -81,7 +89,7 @@ INSERT INTO rev (name)
 VALUES ('Bob'), ('Sally');</code></pre>
 </div>
 </div>
-<div class="hpoll">
+<div class="hpoll" style="font-size:.8em">
 <ol>
 <li><table>
 <thead>
@@ -93,11 +101,11 @@ VALUES ('Bob'), ('Sally');</code></pre>
 <tbody>
 <tr class="odd">
 <td>Bob</td>
-<td>12</td>
+<td>15</td>
 </tr>
 <tr class="even">
 <td>Sally</td>
-<td>22</td>
+<td>15</td>
 </tr>
 </tbody>
 </table></li>
@@ -141,28 +149,42 @@ VALUES ('Bob'), ('Sally');</code></pre>
 </ol>
 </div>
 </section>
+<section>
+<section id="subsets-by-column" class="title-slide slide level1">
+<h1>Subsets by Column</h1>
+
+</section>
 <section id="query-time" class="slide level2">
 <h2>Query Time</h2>
+<div style="font-size:.9em">
 <ul>
-<li>The prime use of SQL for individuals <em>not</em> in charge of
+<li><p>The prime use of SQL for individuals <em>not</em> in charge of
 managing a database is using it to <em>query</em> the database for
-information</li>
-<li>Queries return only a subset of information from the database, and
-don’t alter the database in any way</li>
-<li>The keyword that begins any query is
-<code class="python">SELECT</code>, followed by:
+information</p></li>
+<li><p>Queries return only a subset of information from the database,
+and <strong>don’t alter the database in any way</strong></p></li>
+<li><p>The keyword that begins any query is
+<code class="python">SELECT</code>, followed by:</p>
 <ul>
 <li>The column name(s) you would like information from, and</li>
 <li>The table you want to get the information from</li>
 </ul></li>
-<li>Basic syntax then could look something like:</li>
+<li><p>Basic syntax then could look something like:</p>
+<pre ><code class="pgsql">SELECT |||column 1|||, |||column 2||| FROM |||table name|||;</code></pre></li>
 </ul>
-<pre ><code class="sql">SELECT colname1, colname2 FROM table_name;</code></pre>
+</div>
+</section>
+<section id="star-power" class="slide level2">
+<h2>Star Power</h2>
 <ul>
-<li>An asterisk <code class="python">*</code>, can stand in for the
-column names to stand for “all the columns”</li>
+<li><p>While you can list out as many columns as you want, for tables
+with tons of columns that can be annoying</p></li>
+<li><p>An asterisk <code class="python">*</code>, can stand in for the
+column names to stand for “all the columns”</p>
+<pre ><code class="pgsql">SELECT * FROM |||table name|||;</code></pre></li>
+<li><p>There is no way in core SQL or Postgres to indicate that you want
+“all but a few columns”</p></li>
 </ul>
-<pre ><code class="sql">SELECT * FROM table_name;</code></pre>
 </section>
 <section id="you-are-distinct" class="slide level2">
 <h2>You are Distinct</h2>
@@ -183,10 +205,8 @@ display the <em>unique</em> values that appear in a column
 values?”</li>
 </ul></li>
 </ul>
-<pre ><code class="sql">SELECT DISTINCT colname1 FROM table_name;</code></pre>
-<p>or</p>
-<pre ><code class="sql">SELECT DISTINCT colname1, colname2
-FROM table_name;</code></pre>
+<pre ><code class="pgsql">SELECT DISTINCT |||column 1||| FROM |||table name|||;
+SELECT DISTINCT |||column 1|||, |||column 2||| FROM |||table name|||;</code></pre>
 </section>
 <section id="reversing-entropy" class="slide level2">
 <h2>Reversing Entropy</h2>
@@ -204,32 +224,40 @@ indicate a column to use for ordering</li>
 ordering</li>
 <li>Can also order by multiple columns (separate by comma)</li>
 </ul>
-<pre ><code class="sql">SELECT colname1, colname2
-FROM table_name
-ORDER BY colname2 DESC;</code></pre>
+<pre ><code class="pgsql">SELECT |||column 1|||, |||column 2|||
+FROM |||table name|||
+ORDER BY |||column 1||| DESC;</code></pre>
 </section>
 <section id="ordering-basics" class="slide level2">
 <h2>Ordering Basics</h2>
+<div style="font-size:.9em">
 <ul>
-<li>When your database was created, Postgres assigned it a character
-encoding scheme, usually UTF-8
+<li>When your database was created, Postgres assigned it a
+<em>collation</em> method based on your systems <em>locale</em>
 <ul>
-<li>Each character is represented internally by a number</li>
+<li>You can see the provided collation method for a connected database
+using: <code class="python">SHOW lc_collate;</code></li>
 </ul></li>
-<li>Many programming languages will sort things according to
-lexicographic ordering, which uses these internal numbers</li>
-<li>Postgres does <strong>not</strong> sort in this fashion!
+<li>This collation method is what determines what characters “come
+before” other characters
 <ul>
-<li>In general (though it is not perfect), Postgres orders things
-according to:
-<ul>
-<li>Special symbols</li>
-<li>Numeric digits</li>
-<li>Lowercase letters</li>
-<li>Uppercase letters</li>
-</ul></li>
-</ul></li>
+<li>On my system, the collation method looks like:
+<code class="python">en_US.utf8</code></li>
+<li>If your system is using a different collation method, then your
+sorting might come out slightly different!</li>
+<li>You can choose a different collation method by providing one after
+the <code class="python">ORDER BY</code> statement</li>
 </ul>
+<pre ><code class="pgsql">SELECT |||column|||
+FROM |||table name|||
+ORDER BY |||column||| DESC COLLATE C</code></pre></li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="subsets-by-row" class="title-slide slide level1">
+<h1>Subsets by Row</h1>
+
 </section>
 <section id="filtration" class="slide level2">
 <h2>Filtration</h2>
@@ -241,8 +269,8 @@ certain criteria</li>
 <li>SQL’s <code class="python">WHERE</code> keyword provides exactly
 this functionality</li>
 </ul>
-<pre ><code class="sql">SELECT colname1 FROM table_name
-WHERE some_condition;</code></pre>
+<pre ><code class="pgsql">SELECT |||column||| FROM |||table name|||
+WHERE |||some condition|||;</code></pre>
 <ul>
 <li>Each condition is some sort of comparison check, which could be
 summarized as a true / false question</li>
@@ -379,13 +407,14 @@ conditions</li>
 <li>SQL also has the boolean <code class="python">AND</code> and
 <code class="python">OR</code> operators that you can use to stitch
 together multiple conditions</li>
-<li>Order of operations is left to right, so surround terms in
-parentheses if you need them evaluated earlier</li>
+<li>Order of operations is <strong>not</strong> necessarily left to
+right, so surround terms in parentheses if you need to force
+prioritization</li>
 </ul>
 <pre ><code class="pgsql">SELECT *
-FROM table_name
-WHERE colname1 LIKE 'F%' AND
-      (colname2 > 50 OR colname3 <= 10);</code></pre>
+FROM |||table name|||
+WHERE |||column 1||| LIKE 'F%' AND
+      (|||column 2||| > 50 OR |||column 3||| <= 10);</code></pre>
 </section>
 <section id="reaching-your-limit" class="slide level2">
 <h2>Reaching Your Limit</h2>
@@ -398,19 +427,23 @@ result</li>
 <code class="python">LIMIT</code></li>
 <li>Comes last, after all the other keywords</li>
 </ul>
-<pre ><code class="pgsql">SELECT * FROM table_name
-WHERE some_condition
-ORDER BY column1
+<pre ><code class="pgsql">SELECT * FROM |||table name|||
+WHERE |||some condition|||
+ORDER BY |||column|||
 LIMIT 5;</code></pre>
 </section>
 <section id="your-turn" class="slide level2">
 <h2>Your Turn!</h2>
-<p>Suppose you are particularly short and thus can only access cereals
+<p>Introduce yourself to a neighbor and then work together to construct
+a query to solve the following situation:</p>
+<ul>
+<li>Suppose you are particularly short and thus can only access cereals
 on the first two shelves. You’d like to grab the cereal with “Cheerios”
-somewhere in its name has the highest amount of sugar per serving.
-Construct a query that could help you figure out what cereal you should
-be grabbing!</p>
-</section>
+somewhere in its name and which has the highest amount of sugar per
+serving. Construct a query that could help you figure out what cereal
+you should be grabbing!</li>
+</ul>
+</section></section>
     </div>
   </div>
 
@@ -421,12 +454,14 @@ be grabbing!</p>
   <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
   <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
   // Added plugins
-  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
-  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>,
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/mypgsql.js"></script>
 
   <script>
 
@@ -454,7 +489,7 @@ be grabbing!</p>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -501,7 +536,7 @@ be grabbing!</p>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -516,7 +551,7 @@ be grabbing!</p>
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
-        height: 1440,
+        height: 1080,
         // The display mode that will be used to show slides
         display: 'block',
 		math: {
@@ -536,14 +571,11 @@ be grabbing!</p>
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
-	reveald3: {
-			runLastState: true, // true/false, default: true
-			onSlideChangedDelay: 200,
-			mapPath: false, // true / false / "spefific/path/as/string", default: false
-			tryFallbackURL: true, // true/false, default false
-			disableCheckFile: false, //default false
-		 },
-
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -551,37 +583,48 @@ be grabbing!</p>
           RevealNotes,
           RevealSearch,
           RevealZoom,
-		  RevealChart,
 		  RevealChalkboard,
           RevealMenu,
+          Reveald3,
         ],
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
             // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
-			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
