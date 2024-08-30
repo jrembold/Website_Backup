@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-09-01">
+  <meta name="dcterms.date" content="2024-08-30">
   <title>Clever Karel</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -27,8 +27,8 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
@@ -37,7 +37,7 @@
 <section id="title-slide">
   <h1 class="title">Clever Karel</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">September 1, 2023</p>
+  <p class="date">August 30, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -45,24 +45,25 @@
 <ul>
 <li>Have Practice Problem Set 0 done by the end of Monday!
 <ul>
-<li>The first real problem set will be posted Monday night</li>
+<li>The first “real” problem set will be posted Monday night</li>
 </ul></li>
 <li>Small sections starting up next week
 <ul>
-<li>I still need about 6 of you to fill out the availability form <a
-href="https://forms.gle/8ifduNX41jq1k3aU8">here</a></li>
+<li>I still need about 7-8 of you to fill out the availability form <a
+href="https://forms.gle/8yh95AGSnLatMh8HA">here</a>! If that is you, do
+so <strong>now</strong> please!</li>
 </ul></li>
-<li>Polling starts today: <a
-href="http://rembold-class.ddns.net/">rembold-class.ddns.net</a>
+<li>Don’t forget to join the course Discord server</li>
+<li>Polling : <a
+href="https://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
+<li>QUAD Center opens today!
 <ul>
-<li>Include enough of your name that I can uniquely identify you!</li>
-<li>Multiple choice options will appear once the poll is officially
-started</li>
+<li><a
+href="https://willamette.edu/offices/quad/images/quad-center-hours-sp24.png">Hours</a></li>
+<li>Your section leaders will also eventually be manning hours in the
+QUAD, but almost all the tutors have taken this course and should be
+able to help</li>
 </ul></li>
-<li>Don’t forget to join the course Discord server: invite link on
-Canvas announcement</li>
-<li>Did you fill out the survey sent from Kelly Strawn to your email? If
-not, please consider doing so!</li>
 </ul>
 </section>
 <section id="review-question" class="slide level2"
@@ -70,36 +71,118 @@ data-notes="Solution: 3rd avenue and 4th street">
 <h2 data-notes="Solution: 3rd avenue and 4th street">Review
 Question</h2>
 <div class="cols">
+<div class="col" style="flex-grow:2">
+<div class="cols">
 <div class="col">
-<p>Suppose you had Karel starting in the world shown to the right. If
-Karel then executed the commands shown to the far right, what
-intersection would they end up at?</p>
+<p>Karel starts as shown and executes the code to the right. How many
+beepers are placed in the world at the conclusion of the program?</p>
 </div>
 <div class="col">
 <p><img
-data-src="../images/svg_cache/47af0b167f232f575043f7ae9f0b94f41c38da19.svg"
+data-src="../images/svg_cache/c9cbbb0a92367f4153b99eae5916154b72a870e1.svg"
 style="width:100.0%" /></p>
-</div>
-<div class="col">
-<pre ><code class="python">move()
-turn_left()
-turn_left()
-move()
-move()
-turn_left()
-turn_left()
-turn_left()
-move()</code></pre>
 </div>
 </div>
 <div class="hpoll">
 <ol>
-<li>2nd avenue and 1st street</li>
-<li>4th avenue and 2nd street</li>
-<li>3rd avenue and 4th street</li>
-<li>Karel would hit a wall and error</li>
+<li>1</li>
+<li>2</li>
+<li>3</li>
+<li>Hits a wall and errors</li>
 </ol>
 </div>
+</div>
+<div class="col">
+<pre ><code class="python" style="max-height:1000px">def main():
+    turn_left()
+    cool_thing()
+    neat_thing()
+    cool_thing()
+
+def cool_thing():
+    move()
+    turn_left()
+    turn_left()
+    neat_thing()
+
+def neat_thing():
+    put_beeper()
+    turn_left()
+    move()</code></pre>
+</div>
+</div>
+</section>
+<section>
+<section id="comments" class="title-slide slide level1">
+<h1>Comments</h1>
+
+</section>
+<section id="a-quick-comment" class="slide level2">
+<h2>A Quick Comment</h2>
+<ul>
+<li>It is <strong>always</strong> a good idea to document and leave
+notes to yourself (or future readers of your code)</li>
+<li><em>Comments</em> are pieces of text in your program that are
+ignored when the program is run</li>
+<li>Python has two methods to make a comment:
+<ul>
+<li><p>Hashtag method: Everything following a hashtag (#) on the same
+line is ignored</p>
+<pre ><code class="python"># This is a short comment!</code></pre>
+<ul>
+<li>Commonly used to make quick explanatory or labeling comments</li>
+</ul></li>
+<li><p>Triple quote method: Everything inside triple quotes (“““) is
+ignored</p>
+<pre ><code class="python">""" This is also a comment! """</code></pre>
+<ul>
+<li>Commonly used to describe what functions do</li>
+<li>Can span multiple lines</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="commenting-example" class="slide level2">
+<h2>Commenting Example</h2>
+<pre ><code class="python" style="max-height: 900px">def main():
+    """
+    Main function to fill 2 potholes 
+    at known locations.
+    """
+    move()
+    fill_pothole()
+    move()
+    move()
+    fill_pothole()
+    move()
+
+def fill_pothole():
+    """
+    Fills a single pothole and returns 
+    to where it started. 
+    """
+    turn_right()
+    move()
+    put_beeper() #assuming infinite beepers available
+    turn_around()
+    move()
+    turn_right()
+
+def turn_right():
+    """ Turns Karel 90 to the right. """
+    turn_left()
+    turn_left()
+    turn_left()
+
+def turn_around():
+    """ Convenience function to turn Karel 180 around. """
+    turn_left()
+    turn_left()</code></pre>
+</section></section>
+<section>
+<section id="decisions" class="title-slide slide level1">
+<h1>Decisions</h1>
+
 </section>
 <section id="making-choices" class="slide level2">
 <h2>Making Choices</h2>
@@ -176,31 +259,35 @@ running one piece of code if the answer is yes and a different piece of
 code if the answer is no.</p></li>
 <li><p>Commonly called <em>if</em> or <em>if-else</em> statements, they
 take on the syntax of:</p>
-<pre ><code class="python">if conditional_test:
-    # Code to run if test answer is yes
+<pre ><code class="python">if |||conditional test|||:
+    |||code to run if the test answer is yes|||
 else:
-    # Code to run if test answer is no</code></pre></li>
+    |||code to run if if the test answer is no|||</code></pre></li>
 <li><p>If you don’t want the code to do anything special if the answer
 is no, you can ignore the “else” part of the statement:</p>
-<pre ><code class="python">if conditional_test:
-    # Code to run if test is true
-# Carrying on with code that will always run</code></pre></li>
+<pre ><code class="python">if |||conditional test|||:
+    |||code to run if the test answer is yes/true|||
+|||code that will always run, regardless of the test answer|||</code></pre></li>
 </ul>
 </section>
 <section id="karels-decisions-example" class="slide level2">
 <h2>Karel’s Decisions Example</h2>
 <ul>
-<li>Suppose we want to write a single program to tell Karel to move
-across the bottom of any of the below worlds and fill in any gaps in the
-beepers
+<li>Suppose we want Karel to move across the bottom of any of the below
+worlds and fill in any gaps in the beepers
 <ul>
 <li>We want an even layer of beepers, no stacks</li>
 <li>What questions should we have Karel ask?</li>
 </ul></li>
 </ul>
 <p><img
-data-src="../images/svg_cache/57e214dd3e46fd394f011308e3ea40a55bd9db7f.svg"
+data-src="../images/svg_cache/4a9dad9ecf56fc5c235ab9de2f104cd6c0495b4c.svg"
 style="width:100.0%" /></p>
+</section></section>
+<section>
+<section id="iterations-while" class="title-slide slide level1">
+<h1>Iterations: While</h1>
+
 </section>
 <section id="its-been-a-while" class="slide level2">
 <h2>It’s been a while</h2>
@@ -208,10 +295,9 @@ style="width:100.0%" /></p>
 <li><p>Another common use of predicate functions is in controlling a
 type of iterative function called a <em>while</em> loop</p></li>
 <li><p>The structure of a while loop looks like:</p>
-<pre ><code class="python">while some_conditional_test:
-    # Code to repeat as long as the answer
-    # to the conditional_test is yes (true)
-# Code to run once the answer is no</code></pre></li>
+<pre ><code class="python">while |||conditional test|||:
+    |||code to repeat as long as the answer to the test in yes|||
+|||code to run once the answer to the test is no|||</code></pre></li>
 <li><p>All of our predicate functions give yes-or-no answers though! So
 we can do something like</p>
 <pre ><code class="python">while front_is_clear():
@@ -226,8 +312,8 @@ wall in front of them!</p></li>
 <li>Combining conditional statements with loops lets us write a program
 for Karel in which it can <strong>react</strong> to different situations
 in different ways, all using the same code</li>
-<li>Our pothole code from earlier could <strong>only</strong> handle two
-potholes, and they had to be perfectly spaced</li>
+<li>Our pothole code from Wednesday could <strong>only</strong> handle
+two potholes, and they had to be perfectly spaced</li>
 <li>With one loop and one if statement, we can make the program fill any
 number of potholes with any manner of spacing!</li>
 <li>Key questions:
@@ -278,8 +364,8 @@ def turn_around():
 <li><p>Whenever a loop ends, you just return to the same indentation
 level as when that loop began</p></li>
 <li><p>For loops inside other loops then, this means that the
-“inner-most” loop runs from start to finish for <em>every</em> step of
-the outer loop</p></li>
+“inner-most” loop runs from start to finish for <em>every single
+step</em> of the outer loop</p></li>
 <li><p>What does the below chunk of code accomplish?</p>
 <pre ><code class="python">while front_is_clear():
     move()
@@ -305,7 +391,7 @@ the conclusion of the program?</p>
 </div>
 <div class="col">
 <p><img
-data-src="../images/svg_cache/cbde3e64ccbc14da42aa984998fbfe99ad5de32c.svg"
+data-src="../images/svg_cache/a3d8c847b79521279e037f3dd30bf54544e7fd60.svg"
 style="width:90.0%" /></p>
 </div>
 </div>
@@ -320,6 +406,11 @@ style="width:90.0%" /></p>
 <aside class="notes">
 <p>There should be 12 beepers left</p>
 </aside>
+</section></section>
+<section>
+<section id="iterations-for" class="title-slide slide level1">
+<h1>Iterations: For</h1>
+
 </section>
 <section id="counting-loops" class="slide level2">
 <h2>Counting Loops</h2>
@@ -332,13 +423,14 @@ loop</p>
 <li><p>In these circumstances, the iterative statement called a
 <em>for</em> loop is best used</p></li>
 <li><p>Syntax looks like:</p>
-<pre ><code class="python">for i in range(desired_count):
-    # statements to be repeated</code></pre>
+<pre ><code class="python">for i in range(|||desired count|||):
+    |||code to be repeated the desired number of times|||</code></pre>
 <ul>
-<li><code class="python">desired_count</code> is an <em>integer</em>
-indicating the number of times you want the loop to repeat</li>
-<li>The <code class="python">i</code> is a name that we will later make
-more general, but for now you can always leave it as an
+<li><code class="python">|||desired count|||</code> is an
+<em>integer</em> indicating the number of times you want the loop to
+repeat</li>
+<li>The <code class="python">i</code> is a variable name that we will
+later make more general, but for now you can always leave it as an
 <code class="python">i</code></li>
 </ul></li>
 </ul>
@@ -350,6 +442,7 @@ more general, but for now you can always leave it as an
 <ul>
 <li>Suppose we want Karel to create a 6x6 square outline of beepers in a
 room</li>
+<li>Karel starts in the bottom left facing east</li>
 <li>Need to repeat making each side 4 times</li>
 <li>Need to repeat placing a beeper and moving 6 times for each side
 <ul>
@@ -360,7 +453,7 @@ can be in the loop</li>
 </div>
 <div class="col">
 <p><img
-data-src="../images/svg_cache/5c1f9b98dd235a17765d24b1fca63b1752094378.svg"
+data-src="../images/svg_cache/3667b808ea7ac54d4a49506edcfb5b95ecdbd6fe.svg"
 style="width:100.0%" /></p>
 </div>
 </div>
@@ -428,8 +521,8 @@ def draw_6_line():
 <div class="block" name="Functions">
 <ul>
 <li><p>Group code into bundles</p>
-<pre ><code class="python">def function_name():
-    # Code to be grouped</code></pre></li>
+<pre ><code class="python">def |||function name|||():
+    |||Code to be grouped|||</code></pre></li>
 </ul>
 </div>
 </div>
@@ -439,21 +532,21 @@ def draw_6_line():
 <li>Conditional statements
 <ul>
 <li><p>Run certain code blocks only if a condition is true</p>
-<pre ><code class="python">if condition_test:
-    # Code if answer yes
+<pre ><code class="python">if |||condition test|||:
+    |||Code if answer yes|||
 else:
-    # Code if answer no</code></pre></li>
+    |||Code if answer no|||</code></pre></li>
 </ul></li>
 <li>Iterative statements
 <ul>
 <li><p><code class="python">while</code> loop: repeat code block as long
 as condition is true</p>
-<pre ><code class="python">while condition_test:
-    # Code to repeat</code></pre></li>
+<pre ><code class="python">while |||condition test|||:
+    |||Code to repeat|||</code></pre></li>
 <li><p><code class="python">for</code> loop: repeat set number of
 times</p>
-<pre ><code class="python">for i in range(desired_count):
-    # Code to repeat</code></pre></li>
+<pre ><code class="python">for i in range(|||desired count|||):
+    |||Code to repeat|||</code></pre></li>
 </ul></li>
 </ul>
 </div>
@@ -568,7 +661,7 @@ def create_beeper_chain():
             move()
 ```
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -583,6 +676,7 @@ def create_beeper_chain():
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
 
   <script>
 
@@ -701,6 +795,12 @@ def create_beeper_chain():
 			disableCheckFile: false, //default false
 		 },
 
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -740,5 +840,18 @@ def create_beeper_chain():
       });
       
     </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
