@@ -14,17 +14,20 @@
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: 1;}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/tokyo-night-light.css">
 </head>
 <body>
   <div class="reveal">
@@ -33,7 +36,7 @@
 <section id="title-slide">
   <h1 class="title">The Right Type</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Wednesday, September 7, 2022</p>
+  <p class="date">Wednesday, September 4, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -44,19 +47,19 @@
 <li>You just need to have uploaded your solutions back to the GitHub
 repository. Nothing else needs to be done.</li>
 </ul></li>
-<li>Look over Ch 4 for Thursday</li>
-<li>Polling: www.rembold-class.ddns.net</li>
+<li>HW2 will be posted by the end of the day, due next Wednesday
+night</li>
+<li>Look over Ch 5 for Monday</li>
+<li>Polling: polling.jedrembold.prof</li>
 </ul>
 </section>
 <section id="review-question" class="slide level2">
 <h2>Review Question</h2>
 <div class="cols">
 <div class="col">
-<p>Suppose a table had been created using the SQL statement to the
-right. How would you then query for the most recent number of positive
-cases from universities (schools with “University” in their name)?</p>
-</div>
-<div class="col" style="flex-grow:1">
+<p>Suppose a table had been created using the SQL statement below. How
+would you then query for the most recently measured number of positive
+cases from schools beginning with “University”?</p>
 <pre ><code class="pgsql" style="font-size:.9em;">CREATE TABLE cases (
   id BIGSERIAL,
   school_name VARCHAR(50),
@@ -65,29 +68,25 @@ cases from universities (schools with “University” in their name)?</p>
   date_taken DATE
 );</code></pre>
 </div>
-</div>
-<div class="cols">
-<div class="col">
+<div class="col" style="flex-grow:1">
 <div class="block" name="A">
-<pre ><code class="pgsql" style="font-size:.9em;">SELECT case_positive FROM cases
-WHERE school_name LIKE '_University_'
+<pre ><code class="pgsql" style="font-size:.75em; margin-top:-50px;">SELECT case_positive FROM cases
+WHERE school_name LIKE 'University_'
 ORDER BY date_taken;</code></pre>
 </div>
+<div class="block" name="B">
+<pre ><code class="pgsql" style="font-size:.75em; margin-top:-50px;">SELECT case_positive FROM cases
+WHERE school_name LIKE 'University%'
+ORDER BY date_taken DESC;</code></pre>
+</div>
 <div class="block" name="C">
-<pre ><code class="pgsql" style="font-size:.9em;">SELECT case_positive FROM cases
+<pre ><code class="pgsql" style="font-size:.75em; margin-top: -50px;">SELECT case_positive FROM cases
 WHERE school_name LIKE '%University%'
 ORDER BY case_positive DESC, 
          date_taken DESC;</code></pre>
 </div>
-</div>
-<div class="col">
-<div class="block" name="B">
-<pre ><code class="pgsql" style="font-size:.9em;">SELECT case_positive FROM cases
-WHERE school_name LIKE '_University_'
-ORDER BY date_taken DESC;</code></pre>
-</div>
 <div class="block" name="D">
-<pre ><code class="pgsql" style="font-size:.9em;">SELECT case_positive FROM cases
+<pre ><code class="pgsql" style="font-size:.75em; margin-top:-50px;">SELECT case_positive FROM cases
 WHERE school_name LIKE '%University%'
 ORDER BY date_taken DESC;</code></pre>
 </div>
@@ -114,6 +113,11 @@ ORDER BY date_taken DESC;</code></pre>
 we will focus in depth on the most common: characters, numbers, and
 dates and times</li>
 </ul>
+</section>
+<section>
+<section id="text" class="title-slide slide level1">
+<h1>Text</h1>
+
 </section>
 <section id="characters-or-text" class="slide level2"
 data-notes="Example after this">
@@ -173,9 +177,14 @@ entered</li>
 <code class="python">TEXT</code> should always work</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="numbers" class="title-slide slide level1">
+<h1>Numbers</h1>
+
 </section>
-<section id="numbers" class="slide level2">
-<h2>Numbers</h2>
+<section id="types-of-numbers" class="slide level2">
+<h2>Types of numbers</h2>
 <ul>
 <li>Important to be able to do built-in math calculations on
 columns</li>
@@ -254,6 +263,19 @@ an error, that unique integer is basically skipped</li>
 </ul></li>
 </ul>
 </section>
+<section id="your-identity" class="slide level2">
+<h2>Your Identity</h2>
+<ul>
+<li><p>The <code class="python">SERIAL</code> datatypes are Postgres
+specific</p></li>
+<li><p>Since Postgres 10 the SQL core version with
+<code class="python">IDENTITY</code> has been supported</p></li>
+<li><p>Automatically fill the column with the incremented number:</p>
+<pre ><code class="pgsql">INTEGER GENERATED ALWAYS AS IDENTITY</code></pre></li>
+<li><p>Automatically fill column but allow overwriting:</p>
+<pre ><code class="pgsql">INTEGER GENERATED BY DEFAULT AS IDENTITY</code></pre></li>
+</ul>
+</section>
 <section id="fixed-point-numbers" class="slide level2">
 <h2>Fixed-Point Numbers</h2>
 <ul>
@@ -279,6 +301,8 @@ precision</li>
 </section>
 <section id="fixed-point-examples" class="slide level2">
 <h2>Fixed-Point Examples</h2>
+<div class="cols">
+<div class="col">
 <ul>
 <li>Consider the number: 192.837465</li>
 <li>In various fixed-point formats:
@@ -290,6 +314,10 @@ precision</li>
 <li><code class="python">NUMERIC(4,2)</code> =
 <strong>ERROR</strong></li>
 </ul></li>
+</ul>
+</div>
+<div class="col">
+<ul>
 <li>If you don’t include inputs:
 <ul>
 <li><code class="python">NUMERIC(5)</code> = 193
@@ -303,6 +331,8 @@ digits before and 16,383 digits after the decimal, lol)</li>
 </ul></li>
 </ul></li>
 </ul>
+</div>
+</div>
 </section>
 <section id="floating-point-numbers" class="slide level2">
 <h2>Floating-Point Numbers</h2>
@@ -331,6 +361,7 @@ to be synonymous with <code class="python">DOUBLE PRECISION</code></li>
 </section>
 <section id="floating-pitfalls" class="slide level2">
 <h2>Floating Pitfalls</h2>
+<div style="font-size:.9em">
 <ul>
 <li>Float-point representations are computed using binary math to make
 them easy to store in the computer</li>
@@ -357,6 +388,7 @@ around the desired value</li>
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="understanding-check" class="slide level2">
 <h2>Understanding Check!</h2>
@@ -377,6 +409,7 @@ row could be successfully added?</p>
 );</code></pre>
 </div>
 </div>
+<div style="font-size:.9em">
 <table>
 <thead>
 <tr class="header">
@@ -407,7 +440,7 @@ row could be successfully added?</p>
 </tr>
 <tr class="odd">
 <td>C</td>
-<td>‘OK’</td>
+<td>‘C’</td>
 <td>‘Puzzling.’</td>
 <td>13.6</td>
 <td>1.1</td>
@@ -415,7 +448,7 @@ row could be successfully added?</p>
 </tr>
 <tr class="even">
 <td>D</td>
-<td>‘C’</td>
+<td>‘okay’</td>
 <td>‘Mysterious…’</td>
 <td>2132</td>
 <td>8</td>
@@ -423,6 +456,12 @@ row could be successfully added?</p>
 </tr>
 </tbody>
 </table>
+</div>
+</section></section>
+<section>
+<section id="its-a-date-and-time" class="title-slide slide level1">
+<h1>It’s a Date (and time)</h1>
+
 </section>
 <section id="dates-and-times" class="slide level2">
 <h2>Dates and Times</h2>
@@ -534,6 +573,11 @@ including a timezone
 using this data type is generally discouraged.</li>
 </ul></li>
 </ul></li>
+</ul>
+</section>
+<section id="more-times" class="slide level2">
+<h2>More times</h2>
+<ul>
 <li>ISO time formats looks like HH:MM:SS.FFFF, where the hours are on
 the <strong>24 hour clock</strong></li>
 <li>Other formats are accepted, including</li>
@@ -581,8 +625,7 @@ timezone is used</li>
 <h2>Timestamps</h2>
 <ul>
 <li>A <code class="python">TIMESTAMP</code> field holds basically both a
-time and a date</li>
-<li>The date portion always needs to come first</li>
+date and a time (in that order)</li>
 <li>The same properties and formats that apply to each individually
 apply here as well</li>
 <li>Also have the option of with or without a timezone
@@ -640,38 +683,36 @@ types</li>
 <li>Network address types</li>
 <li>JSON types</li>
 <li>A full list can be found <a
-href="https://www.postgresql.org/docs/14/datatype.html">here</a></li>
+href="https://www.postgresql.org/docs/16/datatype.html">here</a></li>
 </ul></li>
-<li>We’ll address others as the come up sporadically through the rest of
-the semester, but you have the core basics now</li>
+<li>We’ll address others as they come up sporadically through the rest
+of the semester, but you have the core basics now</li>
 </ul>
+</section></section>
+<section>
+<section id="mix-and-match" class="title-slide slide level1">
+<h1>Mix and Match</h1>
+
 </section>
 <section id="conversions" class="slide level2">
 <h2>Conversions</h2>
 <ul>
-<li>There are plenty of instances where you may need to convert between
-types
+<li><p>There are plenty of instances where you may need to convert
+between types</p>
 <ul>
 <li>Sometimes calculations (coming soon!) need a certain data type</li>
 <li>Sometimes the information was just not stored in the most ideal
 type</li>
 </ul></li>
-<li>Can use the <code class="python">CAST</code> function to convert
-between data types (where it makes sense)</li>
-<li>Core syntax is</li>
+<li><p>Can use the <code class="python">CAST</code> function to convert
+between data types (where it makes sense)</p></li>
+<li><p>Core syntax is</p>
+<pre ><code class="pgsql">CAST(col_name AS new_data_type)</code></pre></li>
+<li><p>Postgres has a shorthand conversion syntax that uses double
+colons:</p>
+<pre ><code class="pgsql">col_name::new_data_type</code></pre></li>
 </ul>
-<pre ><code class="pgsql">CAST(col_name AS new_data_type)</code></pre>
-<ul>
-<li>Postgres has a shorthand conversion syntax that uses double
-colons:</li>
-</ul>
-<pre ><code class="pgsql">col_name::new_data_type</code></pre>
-<ul>
-<li>Be aware that casting data to a text string with a maximum size
-smaller than it would take will <em>truncate</em> the conversion to get
-it to fit</li>
-</ul>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -682,12 +723,14 @@ it to fit</li>
   <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
   <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
   // Added plugins
-  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
-  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>,
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/mypgsql.js"></script>
 
   <script>
 
@@ -715,7 +758,7 @@ it to fit</li>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -762,7 +805,7 @@ it to fit</li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -777,7 +820,7 @@ it to fit</li>
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
-        height: 1440,
+        height: 1080,
         // The display mode that will be used to show slides
         display: 'block',
 		math: {
@@ -797,14 +840,11 @@ it to fit</li>
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
-	reveald3: {
-			runLastState: true, // true/false, default: true
-			onSlideChangedDelay: 200,
-			mapPath: false, // true / false / "spefific/path/as/string", default: false
-			tryFallbackURL: true, // true/false, default false
-			disableCheckFile: false, //default false
-		 },
-
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -812,37 +852,48 @@ it to fit</li>
           RevealNotes,
           RevealSearch,
           RevealZoom,
-		  RevealChart,
 		  RevealChalkboard,
           RevealMenu,
+          Reveald3,
         ],
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
             // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
-			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
