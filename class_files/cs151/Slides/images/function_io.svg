@@ -2,12 +2,12 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="378.26358mm"
-   height="129.73212mm"
-   viewBox="0 0 378.26358 129.73212"
+   width="444.35092mm"
+   height="152.90923mm"
+   viewBox="0 0 444.35092 152.90923"
    version="1.1"
    id="svg5"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
    sodipodi:docname="function_io.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -15,7 +15,7 @@
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
      id="namedview7"
-     pagecolor="#ffffff"
+     pagecolor="#2c2c2c"
      bordercolor="#000000"
      borderopacity="0.25"
      inkscape:showpageshadow="2"
@@ -24,9 +24,9 @@
      inkscape:deskcolor="#676767"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="1.2938725"
-     inkscape:cx="706.02012"
-     inkscape:cy="210.60808"
+     inkscape:zoom="0.64693625"
+     inkscape:cx="452.90398"
+     inkscape:cy="11.593105"
      inkscape:window-width="2560"
      inkscape:window-height="1413"
      inkscape:window-x="1080"
@@ -40,87 +40,108 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="RoundedArrow5040"
+       inkscape:stockid="RoundedArrow61789799"
        markerWidth="2.135"
        markerHeight="2.063915"
        viewBox="0 0 6.1347524 5.9304951"
        inkscape:isstock="true"
        inkscape:collect="always"
        preserveAspectRatio="xMidYMid"
-       id="RoundedArrow5040">
+       id="RoundedArrow61789799">
       <path
          transform="scale(0.7)"
          d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
-         style="fill:#66d9ef;fill-opacity:1;fill-rule:evenodd;stroke:#66d9ef;stroke-opacity:1"
-         id="path21997" />
+         style="fill:#f9e2af;fill-opacity:1;fill-rule:evenodd;stroke:#f9e2af;stroke-opacity:1"
+         id="path1" />
     </marker>
     <marker
        style="overflow:visible"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="RoundedArrow6178"
+       inkscape:stockid="RoundedArrow93608993"
        markerWidth="2.135"
        markerHeight="2.063915"
        viewBox="0 0 6.1347524 5.9304951"
        inkscape:isstock="true"
        inkscape:collect="always"
        preserveAspectRatio="xMidYMid"
-       id="RoundedArrow6178">
+       id="RoundedArrow93608993">
       <path
          transform="scale(0.7)"
          d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
-         style="fill:#ffe792;fill-opacity:1;fill-rule:evenodd;stroke:#ffe792;stroke-opacity:1"
-         id="path22857" />
+         style="fill:#f38ba8;fill-opacity:1;fill-rule:evenodd;stroke:#f38ba8;stroke-opacity:1"
+         id="path2" />
     </marker>
     <marker
        style="overflow:visible"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="RoundedArrow9360"
+       inkscape:stockid="RoundedArrow50408579"
        markerWidth="2.135"
        markerHeight="2.063915"
        viewBox="0 0 6.1347524 5.9304951"
        inkscape:isstock="true"
        inkscape:collect="always"
        preserveAspectRatio="xMidYMid"
-       id="RoundedArrow9360">
+       id="RoundedArrow50408579">
       <path
          transform="scale(0.7)"
          d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
-         style="fill:#f92672;fill-opacity:1;fill-rule:evenodd;stroke:#f92672;stroke-opacity:1"
-         id="path23739" />
+         style="fill:#89b4fa;fill-opacity:1;fill-rule:evenodd;stroke:#89b4fa;stroke-opacity:1"
+         id="path3" />
     </marker>
     <marker
        style="overflow:visible"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="RoundedArrow7675"
+       inkscape:stockid="RoundedArrow76758166"
        markerWidth="2.135"
        markerHeight="2.063915"
        viewBox="0 0 6.1347524 5.9304951"
        inkscape:isstock="true"
        inkscape:collect="always"
        preserveAspectRatio="xMidYMid"
-       id="RoundedArrow7675">
+       id="RoundedArrow76758166">
       <path
          transform="scale(0.7)"
          d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
-         style="fill:#fd971f;fill-opacity:1;fill-rule:evenodd;stroke:#fd971f;stroke-opacity:1"
-         id="path24643" />
+         style="fill:#fab387;fill-opacity:1;fill-rule:evenodd;stroke:#fab387;stroke-opacity:1"
+         id="path4" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="RoundedArrow93608993-67765"
+       markerWidth="2.135"
+       markerHeight="2.063915"
+       viewBox="0 0 6.1347524 5.9304951"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid"
+       id="RoundedArrow93608993-67765">
+      <path
+         transform="scale(0.7)"
+         d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
+         style="fill:#94e2d5;fill-opacity:1;fill-rule:evenodd;stroke:#94e2d5;stroke-opacity:1"
+         id="path5" />
     </marker>
   </defs>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-279.74475,-84.336907)">
+     transform="translate(-279.69847,-84.015812)">
     <g
-       id="g3318">
+       id="g3318"
+       transform="matrix(1.1779329,0,0,1.1812161,-50.091066,-15.604301)"
+       style="stroke-width:0.847764">
       <rect
-         style="fill:none;stroke:#a6e22e;stroke-width:3.69738;stroke-linecap:round"
+         style="fill:none;stroke:#a6e3a1;stroke-width:3.13451;stroke-linecap:round"
          id="rect234"
          width="181.39629"
          height="106.60329"
@@ -128,94 +149,96 @@
          y="105.61704"
          ry="8.8196535" />
       <path
-         style="fill:none;stroke:#ffe792;stroke-width:3;stroke-linecap:round;marker-end:url(#RoundedArrow6178)"
+         style="fill:none;stroke:#f9e2af;stroke-width:2.54329;stroke-linecap:round;marker-end:url(#RoundedArrow61789799)"
          d="M 281.24475,158.91868 H 385.13043"
          id="path391" />
       <path
-         style="fill:none;stroke:#f92672;stroke-width:3;stroke-linecap:round;marker-end:url(#RoundedArrow9360)"
+         style="fill:#f38ba8;stroke:#f38ba8;stroke-width:2.54329;stroke-linecap:round;marker-end:url(#RoundedArrow93608993)"
          d="m 556.00098,158.91868 h 96.71404"
          id="path447" />
       <text
          xml:space="preserve"
-         style="font-size:15.3703px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#f92672;stroke:none;stroke-width:0.847814;stroke-linecap:round"
+         style="font-size:15.3703px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#f38ba8;stroke:none;stroke-width:0.718746;stroke-linecap:round"
          x="578.92444"
          y="175.24992"
          id="text1426"><tspan
            sodipodi:role="line"
            id="tspan1424"
-           style="fill:#f92672;stroke:none;stroke-width:0.847814"
+           style="fill:#f38ba8;stroke:none;stroke-width:0.718746"
            x="578.92444"
            y="175.24992">output</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:15.3703px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#ffe792;stroke:none;stroke-width:0.847814;stroke-linecap:round"
+         style="font-size:15.3703px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#f9e2af;stroke:none;stroke-width:0.718746;stroke-linecap:round"
          x="303.08331"
          y="175.24992"
          id="text1484"><tspan
            sodipodi:role="line"
            id="tspan1482"
-           style="fill:#ffe792;stroke:none;stroke-width:0.847814"
+           style="fill:#f9e2af;stroke:none;stroke-width:0.718746"
            x="303.08331"
            y="175.24992">input</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:15.3703px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#a6e22e;stroke:none;stroke-width:0.847814;stroke-linecap:round"
+         style="font-size:15.3703px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#a6e3a1;stroke:none;stroke-width:0.718746;stroke-linecap:round"
          x="413.90338"
          y="96.522797"
          id="text1590"><tspan
            sodipodi:role="line"
            id="tspan1588"
-           style="fill:#a6e22e;stroke:none;stroke-width:0.847814"
+           style="fill:#a6e3a1;stroke:none;stroke-width:0.718746"
            x="413.90338"
            y="96.522797">function def</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:14.3204px;line-height:1.1;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#f8f8f2;stroke:none;stroke-width:0.78991;stroke-linecap:round"
+         style="font-size:14.3204px;line-height:1.1;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#cdd6f4;stroke:none;stroke-width:0.669657;stroke-linecap:round"
          x="403.76147"
          y="139.95215"
          id="text1646"><tspan
            sodipodi:role="line"
            id="tspan1644"
-           style="fill:#f8f8f2;stroke-width:0.78991"
+           style="fill:#cdd6f4;stroke-width:0.669657"
            x="403.76147"
            y="139.95215">def cool(a,b):</tspan><tspan
            sodipodi:role="line"
-           style="fill:#f8f8f2;stroke-width:0.78991"
+           style="fill:#cdd6f4;stroke-width:0.669657"
            x="403.76147"
            y="155.70459"
            id="tspan1700">   c = a + b</tspan><tspan
            sodipodi:role="line"
-           style="fill:#f8f8f2;stroke-width:0.78991"
+           style="fill:#cdd6f4;stroke-width:0.669657"
            x="403.76147"
            y="171.45703"
            id="tspan1702">   return c + a</tspan><tspan
            sodipodi:role="line"
-           style="fill:#f8f8f2;stroke-width:0.78991"
+           style="fill:#cdd6f4;stroke-width:0.669657"
            x="403.76147"
            y="187.20947"
            id="tspan1648" /></text>
       <text
          xml:space="preserve"
-         style="font-size:13.2792px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#ffe792;stroke:none;stroke-width:0.732473;stroke-linecap:round"
+         style="font-size:13.2792px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#f9e2af;stroke:none;stroke-width:0.620964;stroke-linecap:round"
          x="290.52838"
          y="151.41565"
          id="text3284"><tspan
            sodipodi:role="line"
            id="tspan3282"
-           style="fill:#ffe792;stroke:none;stroke-width:0.732473"
+           style="fill:#f9e2af;stroke:none;stroke-width:0.620964"
            x="290.52838"
            y="151.41565">cool(4,5)</tspan></text>
     </g>
     <g
        id="g9053"
-       class="fragment">
+       class="fragment"
+       transform="matrix(1.1779329,0,0,1.1812161,-50.091066,-15.604301)"
+       style="stroke-width:0.847764">
       <path
-         style="fill:none;stroke:#66d9ef;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#RoundedArrow5040)"
+         style="fill:none;stroke:#89b4fa;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#RoundedArrow50408579)"
          d="m 335.76215,137.62261 v -18.6155 h 151.25056 v 7.2729"
          id="path3386"
          sodipodi:nodetypes="cccc" />
       <rect
-         style="fill:none;stroke:#66d9ef;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         style="fill:none;stroke:#89b4fa;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
          id="rect5875"
          width="37.176975"
          height="21.179291"
@@ -223,37 +246,39 @@
          y="183.86345" />
       <text
          xml:space="preserve"
-         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#66d9ef;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#89b4fa;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
          x="388.09344"
          y="198.66487"
          id="text6719"><tspan
            sodipodi:role="line"
            id="tspan6717"
-           style="font-size:14.1111px;fill:#66d9ef;stroke:none;stroke-width:3"
+           style="font-size:14.1111px;fill:#89b4fa;stroke:none;stroke-width:2.54329"
            x="388.09344"
            y="198.66487">a</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#66d9ef;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#89b4fa;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
          x="414.68774"
          y="199.515"
          id="text8307"><tspan
            sodipodi:role="line"
            id="tspan8305"
-           style="font-size:14.1111px;fill:#66d9ef;stroke:none;stroke-width:3"
+           style="font-size:14.1111px;fill:#89b4fa;stroke:none;stroke-width:2.54329"
            x="414.68774"
            y="199.515">4</tspan></text>
     </g>
     <g
        id="g12434"
-       class="fragment">
+       class="fragment"
+       transform="matrix(1.1779329,0,0,1.1812161,-50.091066,-15.604301)"
+       style="stroke-width:0.847764">
       <path
-         style="fill:none;stroke:#fd971f;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#RoundedArrow7675)"
+         style="fill:none;stroke:#fab387;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#RoundedArrow76758166)"
          d="m 352.1798,138.38495 v -25.96603 h 153.38669 v 12.12954"
          id="path9109"
          sodipodi:nodetypes="cccc" />
       <rect
-         style="fill:none;stroke:#fd971f;stroke-width:3.0839;stroke-linecap:round;stroke-linejoin:round"
+         style="fill:none;stroke:#fab387;stroke-width:2.61442;stroke-linecap:round;stroke-linejoin:round"
          id="rect10087"
          width="37.155491"
          height="21.031683"
@@ -261,26 +286,97 @@
          y="183.90414" />
       <text
          xml:space="preserve"
-         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#fd971f;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#fab387;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
          x="447.52106"
          y="199.95361"
          id="text6719-7"><tspan
            sodipodi:role="line"
            id="tspan6717-5"
-           style="font-size:14.1111px;fill:#fd971f;stroke:none;stroke-width:3"
+           style="font-size:14.1111px;fill:#fab387;stroke:none;stroke-width:2.54329"
            x="447.52106"
            y="199.95361">b</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#fd971f;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#fab387;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
          x="474.67825"
          y="199.31908"
          id="text12426"><tspan
            sodipodi:role="line"
            id="tspan12424"
-           style="font-size:14.1111px;fill:#fd971f;stroke:none;stroke-width:3"
+           style="font-size:14.1111px;fill:#fab387;stroke:none;stroke-width:2.54329"
            x="474.67825"
            y="199.31908">5</tspan></text>
+    </g>
+    <g
+       id="g4"
+       class="fragment"
+       transform="matrix(1.1779329,0,0,1.1812161,-50.091066,-15.604301)"
+       style="stroke-width:0.847764">
+      <rect
+         style="fill:none;stroke:#cba6f7;stroke-width:2.61442;stroke-linecap:round;stroke-linejoin:round"
+         id="rect10087-3"
+         width="37.155491"
+         height="21.031683"
+         x="516.50525"
+         y="183.32388" />
+      <text
+         xml:space="preserve"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#cba6f7;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
+         x="503.68161"
+         y="199.37335"
+         id="text6719-7-6"><tspan
+           sodipodi:role="line"
+           id="tspan6717-5-7"
+           style="font-size:14.1111px;fill:#cba6f7;stroke:none;stroke-width:2.54329"
+           x="503.68161"
+           y="199.37335">c</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#cba6f7;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
+         x="530.83881"
+         y="198.73882"
+         id="text12426-5"><tspan
+           sodipodi:role="line"
+           id="tspan12424-3"
+           style="font-size:14.1111px;fill:#cba6f7;stroke:none;stroke-width:2.54329"
+           x="530.83881"
+           y="198.73882">9</tspan></text>
+      <rect
+         style="fill:none;stroke:#cba6f7;stroke-width:1.76674;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+         id="rect4"
+         width="94.736923"
+         height="14.969669"
+         x="424.84705"
+         y="144.04529" />
+    </g>
+    <g
+       id="g5"
+       class="fragment"
+       transform="matrix(1.1779329,0,0,1.1812161,-50.091066,-15.604301)"
+       style="stroke-width:0.847764">
+      <rect
+         style="fill:none;stroke:#94e2d5;stroke-width:1.76674;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+         id="rect4-5"
+         width="49.519638"
+         height="14.969669"
+         x="489.04895"
+         y="159.49968" />
+      <path
+         style="fill:none;stroke:#94e2d5;stroke-width:2.54329;stroke-linecap:round;marker-end:url(#RoundedArrow93608993-67765)"
+         d="m 539.22683,166.42974 h 11.66501 v -19.19858 h 68.0002"
+         id="path447-9"
+         sodipodi:nodetypes="cccc" />
+      <text
+         xml:space="preserve"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#94e2d5;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
+         x="626.07294"
+         y="152.41145"
+         id="text12426-5-1"><tspan
+           sodipodi:role="line"
+           id="tspan12424-3-2"
+           style="font-size:14.1111px;fill:#94e2d5;stroke:none;stroke-width:2.54329"
+           x="626.07294"
+           y="152.41145">13</tspan></text>
     </g>
   </g>
 </svg>

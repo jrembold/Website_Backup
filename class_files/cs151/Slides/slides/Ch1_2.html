@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-09-11">
+  <meta name="dcterms.date" content="2024-09-09">
   <title>Functional Code</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -27,8 +27,8 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
@@ -37,7 +37,7 @@
 <section id="title-slide">
   <h1 class="title">Functional Code</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">September 11, 2023</p>
+  <p class="date">September 9, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -50,14 +50,15 @@
 </ul></li>
 <li>Questions?
 <ul>
-<li>I’ll be around after class and then after 2pm, but have a meeting at
-4:30</li>
+<li>I’ll be around after class and then after 4:30pm</li>
 <li>Don’t forget you can contact your section leaders to ask questions
 as well!</li>
+<li>QUAD Center hours tonight from 6pm - 9pm</li>
 </ul></li>
-<li>Today at 5pm is the deadline to add/drop classes</li>
-<li>Polling is back: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>Today at 5pm is the deadline to add/drop classes, if you are making
+any last minute changes (here or anywhere)</li>
+<li>Polling: <a
+href="https://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 </section>
 <section id="shorthand-and-multiple-assignments" class="slide level2">
@@ -85,9 +86,33 @@ values</li>
 </ul>
 </div>
 </section>
-<section id="review-question" class="slide level2"
+<section id="the-python-repl" class="slide level2">
+<h2>The Python Repl</h2>
+<ul>
+<li>You may have worked with some tools in the past that utilize an
+interactive environment
+<ul>
+<li>Type a command in, press enter, and you get instant feedback</li>
+</ul></li>
+<li>Python has this as well, though the basic version is a bit clunky
+(imho)</li>
+<li>To access, on a terminal, simply type
+<code class="python">python</code> (or however you access Python on your
+system)
+<ul>
+<li>You will always know you are in the interactive environment by the
+triple-greater-than prompt: <code class="python">>>></code></li>
+<li>In the interactive environment, you can simply type a variable and
+press enter to see it displayed</li>
+<li>To exit, you must type: <code class="python">exit()</code></li>
+</ul></li>
+<li>Writing full programs in the REPL is very cumbersome, but for quick
+tests, it can be quite useful</li>
+</ul>
+</section>
+<section id="understanding-check" class="slide level2"
 data-notes="Solution: 40">
-<h2 data-notes="Solution: 40">Review Question</h2>
+<h2 data-notes="Solution: 40">Understanding Check</h2>
 <p>What is the printed value of <code class="python">A</code> in the
 code below?</p>
 <pre ><code class="idle python-repl">>>> A = 10
@@ -132,18 +157,19 @@ user interface</em> or <em>GUI</em>
 </ul></li>
 <li>For now, all interaction will happen through the terminal
 <ul>
-<li>Requires we know how to output information to the terminal and how
-to input information into the terminal</li>
+<li>Thus, we need to know how to output information to the terminal, as
+well as how to input information into the terminal</li>
+<li>Without this, our programs are not very useful</li>
 </ul></li>
 </ul></li>
 </ul>
 </section>
 <section id="output-print" class="slide level2">
 <h2>Output: <code class="python">print</code></h2>
-<div style="font-size:.89em">
+<div style="font-size:.9em">
 <ul>
 <li><p>We’ve seen how to output the value of a variable from within
-Python’s REPL, but that won’t work in a script</p></li>
+Python’s REPL, but that won’t work within a program</p></li>
 <li><p>Python’s built-in <code class="python">print()</code> function
 will display whatever is between the <code class="python">()</code> to
 the terminal</p>
@@ -173,47 +199,10 @@ insert a space between each when printed.</p>
 </ul>
 </div>
 </section>
-<section id="running-a-program" class="slide level2">
-<h2>Running a Program</h2>
-<ul>
-<li><p>Karel programs always ran the first defined function in the code
-when the program was run. General Python programs do not follow the same
-convention.</p></li>
-<li><p>Python programs need to specify what part of the code is supposed
-to be executed when a program is run. They commonly do so using a few
-special lines at the end of the program</p>
-<pre ><code class="python">if __name__ == '__main__':
-    function_to_run()</code></pre>
-<ul>
-<li><code class="python">function_to_run</code> is the name of whatever
-function you want to execute when the program is run directly</li>
-</ul></li>
-<li><p>Patterns of this sort are commonly called
-<em>boilerplate</em></p>
-<ul>
-<li>Less important to fully understand all the pieces of it now</li>
-<li>Is important to understand what it is doing and how to implement it
-correctly</li>
-</ul></li>
-</ul>
-</section>
-<section id="sample-program" class="slide level2">
-<h2>Sample Program</h2>
-<pre ><code class="python" style="max-height: 900px">
-NUM_ODDS = 100 # Constant, so using all caps
+<section>
+<section id="functions-extended" class="title-slide slide level1">
+<h1>Functions (Extended)</h1>
 
-def print_odds():
-    """
-    Prints the first NUM_ODDS odd numbers 
-    starting at 1.
-    """
-    value = 1
-    for i in range(NUM_ODDS):
-        print(value)
-        value += 2
-
-if __name__ == '__main__':
-    print_odds()</code></pre>
 </section>
 <section id="what-is-your-function" class="slide level2">
 <h2>What is your Function?</h2>
@@ -234,7 +223,7 @@ other times we can treat it as a mysterious “black-box”</li>
    version="1.1"
    id="svg44"
    sodipodi:docname="function.svg"
-   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -249,13 +238,13 @@ other times we can treat it as a mysterious “black-box”</li>
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="499.92449"
-     inkscape:cy="178.89802"
+     inkscape:zoom="1"
+     inkscape:cx="559"
+     inkscape:cy="63.5"
      inkscape:window-width="2560"
-     inkscape:window-height="1440"
+     inkscape:window-height="1413"
      inkscape:window-x="1080"
-     inkscape:window-y="0"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg44" />
   <defs
@@ -372,59 +361,70 @@ other times we can treat it as a mysterious “black-box”</li>
        stroke-miterlimit="10"
        d="m -0.00175,3.984062 v 48.722657 c 0,2.203125 1.785156,3.988281 3.988281,3.988281 h 77.070313 c 2.199218,0 3.984375,-1.785156 3.984375,-3.988281 V 3.984062 c 0,-2.199218 -1.785157,-3.9843745 -3.984375,-3.9843745 H 3.986531 c -2.203125,0 -3.988281,1.7851565 -3.988281,3.9843745 z m 0,0"
        transform="matrix(1,0,0,-1,59.283,72.445)"
-       id="path16" />
+       id="path16"
+       style="stroke:#a6e3a1" />
   </g>
   <g
      fill="#a6e22e"
      fill-opacity="1"
      id="g17"
-     transform="matrix(5.6201085,0,0,5.6201085,-14.555204,-30.019109)">
+     transform="matrix(5.6201085,0,0,5.6201085,-14.555204,-30.019109)"
+     style="fill:#a6e3a1">
     <use
        xlink:href="#glyph-0-1"
        x="62.803001"
        y="12.232"
-       id="use16" />
+       id="use16"
+       style="fill:#a6e3a1" />
   </g>
   <g
      fill="#a6e22e"
      fill-opacity="1"
      id="g23"
-     transform="matrix(5.6201085,0,0,5.6201085,-14.555204,-30.019109)">
+     transform="matrix(5.6201085,0,0,5.6201085,-14.555204,-30.019109)"
+     style="fill:#a6e3a1">
     <use
        xlink:href="#glyph-0-2"
        x="68.197746"
        y="12.232"
-       id="use17" />
+       id="use17"
+       style="fill:#a6e3a1" />
     <use
        xlink:href="#glyph-0-3"
        x="73.345421"
        y="12.232"
-       id="use18" />
+       id="use18"
+       style="fill:#a6e3a1" />
     <use
        xlink:href="#glyph-0-4"
        x="78.493095"
        y="12.232"
-       id="use19" />
+       id="use19"
+       style="fill:#a6e3a1" />
     <use
        xlink:href="#glyph-0-5"
        x="82.921471"
        y="12.232"
-       id="use20" />
+       id="use20"
+       style="fill:#a6e3a1" />
     <use
        xlink:href="#glyph-0-6"
        x="86.518967"
        y="12.232"
-       id="use21" />
+       id="use21"
+       style="fill:#a6e3a1" />
     <use
        xlink:href="#glyph-0-7"
        x="88.899033"
        y="12.232"
-       id="use22" />
+       id="use22"
+       style="fill:#a6e3a1" />
     <use
        xlink:href="#glyph-0-3"
        x="93.880333"
        y="12.232"
-       id="use23" />
+       id="use23"
+       style="fill:#a6e3a1" />
   </g>
   <g
      clip-path="url(#clip-1)"
@@ -440,42 +440,45 @@ other times we can treat it as a mysterious “black-box”</li>
        stroke-miterlimit="10"
        d="M 60.396687,42.519219 H 24.642781 c -2.199219,0 -3.984375,-1.78125 -3.984375,-3.984375 v -20.375 c 0,-2.203125 1.785156,-3.988282 3.984375,-3.988282 h 35.753906 c 2.203125,0 3.984375,1.785157 3.984375,3.988282 v 20.375 c 0,2.203125 -1.78125,3.984375 -3.984375,3.984375 z m 0,0"
        transform="matrix(1,0,0,-1,59.283,72.445)"
-       id="path23" />
+       id="path23"
+       style="stroke:#94e2d5" />
   </g>
   <circle
-     style="fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:14.8838;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+     style="fill:#94e2d5;fill-opacity:1;stroke:none;stroke-width:14.8838;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
      id="path17"
      cx="550.98853"
      cy="164.52815"
      r="5.3573785" />
   <circle
-     style="fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:14.8838;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+     style="fill:#94e2d5;fill-opacity:1;stroke:none;stroke-width:14.8838;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
      id="circle17"
      cx="550.98853"
      cy="150.52815"
      r="5.3573785" />
   <circle
-     style="fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:14.8838;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+     style="fill:#94e2d5;fill-opacity:1;stroke:none;stroke-width:14.8838;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
      id="circle18"
      cx="550.98853"
      cy="136.52815"
      r="5.3573785" />
   <circle
-     style="fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:14.8838;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+     style="fill:#94e2d5;fill-opacity:1;stroke:none;stroke-width:14.8838;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
      id="circle19"
      cx="550.98853"
      cy="302.37424"
      r="5.3573785" />
   <g
      id="text2"
-     style="font-size:49.8678px;line-height:0.9;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';fill:#66d9ef;stroke-width:9.9405;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+     style="font-size:49.8678px;line-height:0.9;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';fill:#94e2d5;stroke-width:9.9405;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
      aria-label="Command&#10;Command">
     <path
        d="m 463.92494,175.39952 q 3.32452,0 5.65168,0.84391 2.35274,0.81835 4.55204,2.5829 l -2.48061,2.88978 q -3.11993,-2.60847 -7.39066,-2.60847 -3.06879,0 -5.49825,1.4321 -2.40388,1.4321 -3.86155,4.65432 -1.43211,3.22223 -1.43211,8.36245 0,5.03793 1.38096,8.26016 1.38095,3.22222 3.75926,4.6799 2.40389,1.45767 5.54939,1.45767 2.68519,0 4.60319,-0.79277 1.91799,-0.79277 3.58025,-2.14815 l 2.30159,2.91535 q -1.79013,1.73898 -4.3986,2.78748 -2.60847,1.0485 -6.13757,1.0485 -4.34745,0 -7.82541,-2.12258 -3.45239,-2.12257 -5.4471,-6.21429 -1.96914,-4.11729 -1.96914,-9.87127 0,-5.7284 2.02029,-9.82012 2.02028,-4.11729 5.4471,-6.21429 3.42681,-2.12258 7.59525,-2.12258 z m 27.77255,8.28572 q 3.73369,0 6.31659,1.71341 2.58289,1.68783 3.88713,4.85891 1.32981,3.14551 1.32981,7.44181 0,4.16844 -1.35539,7.33952 -1.3298,3.17108 -3.93827,4.96121 -2.60847,1.76455 -6.29102,1.76455 -3.73369,0 -6.34216,-1.7134 -2.5829,-1.73898 -3.9127,-4.88449 -1.32981,-3.14551 -1.32981,-7.41624 0,-4.19401 1.32981,-7.36509 1.35538,-3.17108 3.96385,-4.93563 2.63404,-1.76456 6.34216,-1.76456 z m 0,3.50354 q -3.50353,0 -5.26809,2.60847 -1.76455,2.58289 -1.76455,7.95327 0,5.29366 1.73898,7.90213 1.73898,2.5829 5.24251,2.5829 3.50353,0 5.24251,-2.5829 1.73898,-2.60847 1.73898,-7.95328 0,-5.31923 -1.73898,-7.90212 -1.73898,-2.60847 -5.19136,-2.60847 z m 38.18086,-3.50354 q 2.30159,0 3.75926,1.61112 1.45767,1.58554 1.45767,5.83069 v 20.04942 h -3.98942 v -19.35894 q 0,-1.91799 -0.12787,-2.8642 -0.12786,-0.97178 -0.56261,-1.4321 -0.43474,-0.48589 -1.38095,-0.48589 -2.63404,0 -4.70548,3.22222 v 20.91891 h -4.01499 v -19.35894 q 0,-1.91799 -0.12787,-2.8642 -0.12787,-0.97178 -0.56261,-1.4321 -0.43475,-0.48589 -1.38096,-0.48589 -2.63404,0 -4.70547,3.22222 v 20.91891 h -3.96385 v -26.92862 h 3.37567 l 0.25573,3.11994 q 1.22751,-1.76455 2.60847,-2.71076 1.38095,-0.97179 3.2478,-0.97179 3.81041,0 4.88449,3.55468 1.20194,-1.73898 2.58289,-2.63404 1.40653,-0.92064 3.3501,-0.92064 z m 30.6879,0 q 2.30159,0 3.75926,1.61112 1.45768,1.58554 1.45768,5.83069 v 20.04942 h -3.98943 v -19.35894 q 0,-1.91799 -0.12786,-2.8642 -0.12787,-0.97178 -0.56261,-1.4321 -0.43475,-0.48589 -1.38096,-0.48589 -2.63404,0 -4.70547,3.22222 v 20.91891 h -4.015 v -19.35894 q 0,-1.91799 -0.12787,-2.8642 -0.12786,-0.97178 -0.56261,-1.4321 -0.43474,-0.48589 -1.38095,-0.48589 -2.63404,0 -4.70548,3.22222 v 20.91891 h -3.96385 v -26.92862 h 3.37567 l 0.25573,3.11994 q 1.22752,-1.76455 2.60847,-2.71076 1.38096,-0.97179 3.2478,-0.97179 3.81041,0 4.88449,3.55468 1.20194,-1.73898 2.5829,-2.63404 1.40652,-0.92064 3.35009,-0.92064 z m 32.22229,21.60938 q 0,1.58554 0.51146,2.35274 0.51147,0.74163 1.68784,1.09965 l -1.0485,3.01764 q -3.88714,-0.51146 -4.93564,-3.78484 -1.4321,1.86685 -3.6314,2.83863 -2.17372,0.94621 -4.80776,0.94621 -2.65962,0 -4.62876,-1.02293 -1.96914,-1.02293 -3.01764,-2.88977 -1.0485,-1.89242 -1.0485,-4.3986 0,-4.16843 3.2478,-6.39331 3.2478,-2.22487 9.38537,-2.22487 h 3.96385 v -2.25044 q 0,-2.81306 -1.63668,-4.06615 -1.63669,-1.27866 -4.7822,-1.27866 -3.04321,0 -7.00706,1.38096 l -1.12522,-3.2478 q 4.50088,-1.68784 8.79719,-1.68784 4.93563,0 7.49295,2.32717 2.5829,2.30159 2.5829,6.36773 z m -11.12436,3.19666 q 1.99472,0 3.78484,-0.99736 1.8157,-1.02293 3.01764,-2.81305 v -6.93035 h -3.88713 q -4.27073,0 -6.18872,1.45768 -1.91799,1.45767 -1.91799,4.19401 0,5.08907 5.19136,5.08907 z m 22.53004,-24.24343 h 3.65697 l 0.33245,3.7337 q 1.61112,-2.02029 4.04058,-3.14551 2.45503,-1.1508 4.85891,-1.1508 3.86156,0 5.70283,2.04586 1.86685,2.04586 1.86685,5.88185 v 19.56352 h -4.29631 v -16.39244 q 0,-3.01764 -0.33245,-4.60319 -0.30688,-1.58554 -1.30423,-2.35273 -0.97179,-0.7672 -2.9665,-0.7672 -2.17372,0 -4.11729,1.35538 -1.91799,1.32981 -3.14551,3.14551 v 19.61467 h -4.2963 z m 51.09535,-10.84305 v 37.77167 h -3.75926 l -0.40918,-3.55468 q -1.48324,2.097 -3.42681,3.11993 -1.94356,1.02293 -4.21958,1.02293 -5.11465,0 -7.69754,-3.75926 -2.55733,-3.75927 -2.55733,-10.25487 0,-4.06614 1.25309,-7.2628 1.27866,-3.19665 3.65697,-4.98678 2.40389,-1.8157 5.65169,-1.8157 2.30159,0 4.06614,0.79277 1.79013,0.79277 3.14551,2.37831 v -13.98855 z m -10.38273,13.73283 q -3.40124,0 -5.21694,2.68519 -1.79013,2.65962 -1.79013,7.9277 0,5.21694 1.63669,7.87656 1.66226,2.65961 4.83334,2.65961 3.81041,0 6.62347,-4.24515 v -13.45152 q -1.09965,-1.63669 -2.68519,-2.53175 -1.55997,-0.92064 -3.40124,-0.92064 z"
-       id="path21" />
+       id="path21"
+       style="fill:#94e2d5" />
     <path
        d="m 463.92494,220.28054 q 3.32452,0 5.65168,0.84391 2.35274,0.81835 4.55204,2.5829 l -2.48061,2.88978 q -3.11993,-2.60847 -7.39066,-2.60847 -3.06879,0 -5.49825,1.4321 -2.40388,1.4321 -3.86155,4.65432 -1.43211,3.22223 -1.43211,8.36245 0,5.03793 1.38096,8.26016 1.38095,3.22222 3.75926,4.6799 2.40389,1.45767 5.54939,1.45767 2.68519,0 4.60319,-0.79277 1.91799,-0.79277 3.58025,-2.14815 l 2.30159,2.91535 q -1.79013,1.73898 -4.3986,2.78748 -2.60847,1.0485 -6.13757,1.0485 -4.34745,0 -7.82541,-2.12258 -3.45239,-2.12257 -5.4471,-6.21429 -1.96914,-4.11729 -1.96914,-9.87127 0,-5.7284 2.02029,-9.82012 2.02028,-4.11729 5.4471,-6.21429 3.42681,-2.12258 7.59525,-2.12258 z m 27.77255,8.28572 q 3.73369,0 6.31659,1.71341 2.58289,1.68783 3.88713,4.85891 1.32981,3.14551 1.32981,7.44182 0,4.16843 -1.35539,7.33951 -1.3298,3.17108 -3.93827,4.96121 -2.60847,1.76455 -6.29102,1.76455 -3.73369,0 -6.34216,-1.7134 -2.5829,-1.73898 -3.9127,-4.88449 -1.32981,-3.14551 -1.32981,-7.41624 0,-4.19401 1.32981,-7.36509 1.35538,-3.17108 3.96385,-4.93563 2.63404,-1.76456 6.34216,-1.76456 z m 0,3.50354 q -3.50353,0 -5.26809,2.60847 -1.76455,2.58289 -1.76455,7.95327 0,5.29366 1.73898,7.90213 1.73898,2.5829 5.24251,2.5829 3.50353,0 5.24251,-2.5829 1.73898,-2.60847 1.73898,-7.95327 0,-5.31924 -1.73898,-7.90213 -1.73898,-2.60847 -5.19136,-2.60847 z m 38.18086,-3.50354 q 2.30159,0 3.75926,1.61112 1.45767,1.58554 1.45767,5.83069 v 20.04942 h -3.98942 v -19.35894 q 0,-1.91799 -0.12787,-2.8642 -0.12786,-0.97178 -0.56261,-1.4321 -0.43474,-0.48589 -1.38095,-0.48589 -2.63404,0 -4.70548,3.22222 v 20.91891 h -4.01499 v -19.35894 q 0,-1.91799 -0.12787,-2.8642 -0.12787,-0.97178 -0.56261,-1.4321 -0.43475,-0.48589 -1.38096,-0.48589 -2.63404,0 -4.70547,3.22222 v 20.91891 h -3.96385 v -26.92861 h 3.37567 l 0.25573,3.11993 q 1.22751,-1.76455 2.60847,-2.71076 1.38095,-0.97179 3.2478,-0.97179 3.81041,0 4.88449,3.55468 1.20194,-1.73898 2.58289,-2.63404 1.40653,-0.92064 3.3501,-0.92064 z m 30.6879,0 q 2.30159,0 3.75926,1.61112 1.45768,1.58554 1.45768,5.83069 v 20.04942 h -3.98943 v -19.35894 q 0,-1.91799 -0.12786,-2.8642 -0.12787,-0.97178 -0.56261,-1.4321 -0.43475,-0.48589 -1.38096,-0.48589 -2.63404,0 -4.70547,3.22222 v 20.91891 h -4.015 v -19.35894 q 0,-1.91799 -0.12787,-2.8642 -0.12786,-0.97178 -0.56261,-1.4321 -0.43474,-0.48589 -1.38095,-0.48589 -2.63404,0 -4.70548,3.22222 v 20.91891 h -3.96385 v -26.92861 h 3.37567 l 0.25573,3.11993 q 1.22752,-1.76455 2.60847,-2.71076 1.38096,-0.97179 3.2478,-0.97179 3.81041,0 4.88449,3.55468 1.20194,-1.73898 2.5829,-2.63404 1.40652,-0.92064 3.35009,-0.92064 z m 32.22229,21.60938 q 0,1.58555 0.51146,2.35274 0.51147,0.74163 1.68784,1.09965 l -1.0485,3.01764 q -3.88714,-0.51146 -4.93564,-3.78484 -1.4321,1.86685 -3.6314,2.83863 -2.17372,0.94621 -4.80776,0.94621 -2.65962,0 -4.62876,-1.02293 -1.96914,-1.02293 -3.01764,-2.88977 -1.0485,-1.89242 -1.0485,-4.3986 0,-4.16843 3.2478,-6.39331 3.2478,-2.22487 9.38537,-2.22487 h 3.96385 v -2.25044 q 0,-2.81306 -1.63668,-4.06615 -1.63669,-1.27866 -4.7822,-1.27866 -3.04321,0 -7.00706,1.38096 l -1.12522,-3.2478 q 4.50088,-1.68784 8.79719,-1.68784 4.93563,0 7.49295,2.32717 2.5829,2.30159 2.5829,6.36773 z m -11.12436,3.19666 q 1.99472,0 3.78484,-0.99736 1.8157,-1.02293 3.01764,-2.81305 v -6.93035 h -3.88713 q -4.27073,0 -6.18872,1.45768 -1.91799,1.45767 -1.91799,4.19401 0,5.08907 5.19136,5.08907 z m 22.53004,-24.24342 h 3.65697 l 0.33245,3.73369 q 1.61112,-2.02029 4.04058,-3.14551 2.45503,-1.1508 4.85891,-1.1508 3.86156,0 5.70283,2.04586 1.86685,2.04586 1.86685,5.88185 v 19.56352 h -4.29631 v -16.39244 q 0,-3.01764 -0.33245,-4.60318 -0.30688,-1.58555 -1.30423,-2.35274 -0.97179,-0.7672 -2.9665,-0.7672 -2.17372,0 -4.11729,1.35538 -1.91799,1.32981 -3.14551,3.14551 v 19.61467 h -4.2963 z m 51.09535,-10.84305 v 37.77166 h -3.75926 l -0.40918,-3.55468 q -1.48324,2.097 -3.42681,3.11993 -1.94356,1.02293 -4.21958,1.02293 -5.11465,0 -7.69754,-3.75926 -2.55733,-3.75927 -2.55733,-10.25487 0,-4.06614 1.25309,-7.2628 1.27866,-3.19665 3.65697,-4.98678 2.40389,-1.8157 5.65169,-1.8157 2.30159,0 4.06614,0.79277 1.79013,0.79277 3.14551,2.37831 v -13.98855 z m -10.38273,13.73282 q -3.40124,0 -5.21694,2.68519 -1.79013,2.65962 -1.79013,7.9277 0,5.21694 1.63669,7.87656 1.66226,2.65961 4.83334,2.65961 3.81041,0 6.62347,-4.24515 v -13.45152 q -1.09965,-1.63669 -2.68519,-2.53175 -1.55997,-0.92064 -3.40124,-0.92064 z"
-       id="path22" />
+       id="path22"
+       style="fill:#94e2d5" />
   </g>
   <circle
      style="fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:14.8838;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
@@ -492,25 +495,20 @@ other times we can treat it as a mysterious “black-box”</li>
   <g
      id="bbox"
      class="fragment"
-     data-fragment-index="3">
-    <g
-       clip-path="url(#clip-0)"
-       id="g25"
-       transform="matrix(5.6201085,0,0,5.6201085,-14.555204,-30.019109)"
-       style="fill:#a6e22e">
-      <path
-         fill="none"
-         stroke-width="1.19553"
-         stroke-linecap="butt"
-         stroke-linejoin="miter"
-         stroke="#a6e22e"
-         stroke-opacity="1"
-         stroke-miterlimit="10"
-         d="m -0.00175,3.984062 v 48.722657 c 0,2.203125 1.785156,3.988281 3.988281,3.988281 h 77.070313 c 2.199218,0 3.984375,-1.785156 3.984375,-3.988281 V 3.984062 c 0,-2.199218 -1.785157,-3.9843745 -3.984375,-3.9843745 H 3.986531 c -2.203125,0 -3.988281,1.7851565 -3.988281,3.9843745 z m 0,0"
-         transform="matrix(1,0,0,-1,59.283,72.445)"
-         id="path24"
-         style="fill:#a6e22e" />
-    </g>
+     data-fragment-index="3"
+     style="display:inline">
+    <path
+       fill="none"
+       stroke-width="1.19553"
+       stroke-linecap="butt"
+       stroke-linejoin="miter"
+       stroke="#a6e22e"
+       stroke-opacity="1"
+       stroke-miterlimit="10"
+       d="m -0.00175,3.984062 v 48.722657 c 0,2.203125 1.785156,3.988281 3.988281,3.988281 h 77.070313 c 2.199218,0 3.984375,-1.785156 3.984375,-3.988281 V 3.984062 c 0,-2.199218 -1.785157,-3.9843745 -3.984375,-3.9843745 H 3.986531 c -2.203125,0 -3.988281,1.7851565 -3.988281,3.9843745 z m 0,0"
+       transform="matrix(5.6201085,0,0,-5.6201085,318.62169,377.12965)"
+       id="path24"
+       style="display:inline;fill:#a6e3a1;stroke:#a6e3a1" />
     <path
        d="m 483.64945,236.53905 h -6.39454 l -1.6465,-27.53099 q -0.4212,-7.35181 -0.4212,-16.92448 v -2.18257 l -8.88344,37.18024 h -6.66257 l -9.53438,-37.18024 q 0.11487,2.29744 0.11487,8.6154 0,6.47113 -0.19145,10.41507 l -1.41675,27.60757 h -6.24138 l 2.98667,-52.72625 h 9.26634 l 8.53882,36.1081 8.15591,-36.1081 h 9.34293 z m 38.90335,-8.80686 q 0,2.37403 0.76581,3.52275 0.76581,1.11042 2.52719,1.64649 l -1.56992,4.5183 q -5.82018,-0.76581 -7.3901,-5.66702 -2.14428,2.79522 -5.43728,4.25027 -3.2547,1.41675 -7.19864,1.41675 -3.98223,0 -6.93061,-1.53162 -2.94838,-1.53163 -4.5183,-4.32685 -1.56992,-2.83351 -1.56992,-6.58599 0,-6.24138 4.86292,-9.57267 4.86291,-3.33129 14.05267,-3.33129 h 5.93506 v -3.36958 q 0,-4.21197 -2.45061,-6.08821 -2.4506,-1.91454 -7.16035,-1.91454 -4.55659,0 -10.49165,2.0677 l -1.68478,-4.86292 q 6.73915,-2.52718 13.17198,-2.52718 7.3901,0 11.21917,3.48445 3.86736,3.44616 3.86736,9.53438 z m -16.65644,4.78634 q 2.98667,0 5.66702,-1.49334 2.71863,-1.53163 4.5183,-4.21197 v -10.37677 h -5.82019 q -6.39454,0 -9.26634,2.18256 -2.8718,2.18257 -2.8718,6.27967 0,7.61985 7.77301,7.61985 z m 68.50203,-34.53818 q -2.37402,0.72752 -5.09265,0.95726 -2.68035,0.22975 -6.70087,0.22975 7.00719,3.21641 7.00719,10.14702 0,3.98223 -1.83795,7.12207 -1.79966,3.10154 -5.24582,4.86291 -3.40787,1.72308 -8.07933,1.72308 -1.99112,0 -3.36958,-0.15316 -1.34018,-0.19145 -2.64206,-0.61265 -0.91897,0.65094 -1.53163,1.72308 -0.57436,1.03385 -0.57436,2.18257 0,1.56991 1.22531,2.48889 1.2253,0.88069 4.17368,0.88069 h 7.27523 q 3.98223,0 7.23693,1.45504 3.293,1.41676 5.13095,3.94394 1.87624,2.48889 1.87624,5.55215 0,5.93505 -5.01607,9.11317 -5.01608,3.17813 -14.24413,3.17813 -6.35625,0 -10.10874,-1.30188 -3.71419,-1.30189 -5.3224,-3.98223 -1.60821,-2.64206 -1.60821,-6.85403 h 5.82018 q 0,2.48889 0.91898,3.94394 0.95727,1.49333 3.36958,2.22086 2.4506,0.72752 6.89232,0.72752 6.58599,0 9.68754,-1.6465 3.10154,-1.6465 3.10154,-4.97779 0,-2.79522 -2.52718,-4.28855 -2.52719,-1.49334 -6.586,-1.49334 h -7.19864 q -3.33129,0 -5.62873,-1.03385 -2.29744,-1.03384 -3.40787,-2.75692 -1.11043,-1.72308 -1.11043,-3.79078 0,-1.95282 1.14872,-3.79078 1.14872,-1.83795 3.293,-3.2547 -3.48445,-1.83795 -5.13095,-4.55659 -1.6465,-2.71864 -1.6465,-6.586 0,-4.02052 2.0294,-7.19864 2.0677,-3.21642 5.70531,-5.01608 3.67591,-1.79966 8.34737,-1.79966 4.86291,0 8.04104,-0.38291 3.17812,-0.42119 5.3224,-1.11043 2.18257,-0.68923 5.01608,-1.91453 z m -20.37063,2.06769 q -4.70975,0 -7.12207,2.52719 -2.37402,2.52718 -2.37402,6.77744 0,4.28856 2.41232,6.85403 2.4506,2.52719 7.23693,2.52719 4.21198,0 6.47112,-2.45061 2.29744,-2.48889 2.29744,-6.9689 0,-4.55659 -2.25914,-6.89232 -2.25915,-2.37402 -6.66258,-2.37402 z m 46.82951,-22.70636 q 2.10599,0 3.40787,1.30188 1.30189,1.26359 1.30189,3.17812 0,1.99112 -1.30189,3.293 -1.30188,1.30188 -3.40787,1.30188 -2.0294,0 -3.33128,-1.30188 -1.30189,-1.34017 -1.30189,-3.293 0,-1.91453 1.30189,-3.17812 1.30188,-1.30188 3.33128,-1.30188 z m 5.13095,54.10471 h 11.37233 v 5.09266 h -30.24963 v -5.09266 h 12.44447 v -30.13476 h -12.06156 v -5.09266 h 18.49439 z m 43.76627,0.4212 q 5.39899,0 10.49165,-3.52275 l 3.13983,4.21198 q -2.64206,2.22086 -6.35625,3.56103 -3.7142,1.30188 -7.27523,1.30188 -5.93505,0 -10.22361,-2.56547 -4.25026,-2.56548 -6.47112,-7.27523 -2.22086,-4.70975 -2.22086,-11.02771 0,-6.08822 2.25915,-10.87455 2.25915,-4.82462 6.54771,-7.54326 4.28855,-2.75693 10.18531,-2.75693 7.69643,0 13.47832,4.67146 l -3.13984,4.28856 q -5.20753,-3.59933 -10.41506,-3.59933 -3.56103,0 -6.24138,1.76137 -2.68034,1.76137 -4.21197,5.32241 -1.49334,3.56103 -1.49334,8.73027 0,7.73471 3.21642,11.52549 3.25471,3.79078 8.73027,3.79078 z"
        id="text25"
@@ -520,7 +518,8 @@ other times we can treat it as a mysterious “black-box”</li>
   <g
      id="in"
      class="fragment"
-     data-fragment-index="1">
+     data-fragment-index="1"
+     style="display:inline;fill:#f9e2af">
     <path
        fill="none"
        stroke-width="6.71901"
@@ -530,55 +529,64 @@ other times we can treat it as a mysterious “black-box”</li>
        stroke-opacity="1"
        stroke-miterlimit="10"
        d="M 2.072574e-6,217.8145 H 340.52149"
-       id="path31" />
+       id="path31"
+       style="fill:#f9e2af;stroke:#f9e2af" />
     <path
        fill-rule="nonzero"
        fill="#ffe792"
        fill-opacity="1"
        d="m 358.45755,217.8145 -28.67134,-14.33566 10.73529,14.33566 -10.73529,14.33567"
        id="path32"
-       style="stroke-width:5.62011" />
+       style="stroke-width:5.62011;fill:#f9e2af" />
     <g
        fill="#ffe792"
        fill-opacity="1"
        id="g37"
-       transform="matrix(5.6201085,0,0,5.6201085,-14.555204,-30.019109)">
+       transform="matrix(5.6201085,0,0,5.6201085,-14.555204,-30.019109)"
+       style="fill:#f9e2af">
       <use
          xlink:href="#glyph-0-11"
          x="5.7220001"
          y="38.243"
-         id="use32" />
+         id="use32"
+         style="fill:#f9e2af" />
       <use
          xlink:href="#glyph-0-3"
          x="8.4896097"
          y="38.243"
-         id="use33" />
+         id="use33"
+         style="fill:#f9e2af" />
       <use
          xlink:href="#glyph-0-12"
          x="13.637286"
          y="38.243"
-         id="use34" />
+         id="use34"
+         style="fill:#f9e2af" />
       <use
          xlink:href="#glyph-0-2"
          x="18.784962"
          y="38.243"
-         id="use35" />
+         id="use35"
+         style="fill:#f9e2af" />
       <use
          xlink:href="#glyph-0-5"
          x="23.932636"
          y="38.243"
-         id="use36" />
+         id="use36"
+         style="fill:#f9e2af" />
       <use
          xlink:href="#glyph-0-10"
          x="27.53013"
          y="38.243"
-         id="use37" />
+         id="use37"
+         style="fill:#f9e2af" />
     </g>
   </g>
   <g
      id="out"
      class="fragment"
-     data-fragment-index="2">
+     data-fragment-index="2"
+     style="fill:#f38ba8">
     <path
        fill="none"
        stroke-width="6.71901"
@@ -588,54 +596,63 @@ other times we can treat it as a mysterious “black-box”</li>
        stroke-opacity="1"
        stroke-miterlimit="10"
        d="M 756.73883,217.8145 H 1097.2604"
-       id="path37" />
+       id="path37"
+       style="fill:#f38ba8;stroke:#f38ba8" />
     <path
        fill-rule="nonzero"
        fill="#f92672"
        fill-opacity="1"
        d="m 1115.1744,217.8145 -28.6494,-14.33566 10.7353,14.33566 -10.7353,14.33567"
        id="path38"
-       style="stroke-width:5.62011" />
+       style="stroke-width:5.62011;fill:#f38ba8" />
     <g
        fill="#f92672"
        fill-opacity="1"
        id="g44"
-       transform="matrix(5.6201085,0,0,5.6201085,-14.555204,-30.019109)">
+       transform="matrix(5.6201085,0,0,5.6201085,-14.555204,-30.019109)"
+       style="fill:#f38ba8">
       <use
          xlink:href="#glyph-0-13"
          x="168.17599"
          y="38.243"
-         id="use38" />
+         id="use38"
+         style="fill:#f38ba8" />
       <use
          xlink:href="#glyph-0-2"
          x="175.50948"
          y="38.243"
-         id="use39" />
+         id="use39"
+         style="fill:#f38ba8" />
       <use
          xlink:href="#glyph-0-5"
          x="180.65715"
          y="38.243"
-         id="use40" />
+         id="use40"
+         style="fill:#f38ba8" />
       <use
          xlink:href="#glyph-0-12"
          x="184.25464"
          y="38.243"
-         id="use41" />
+         id="use41"
+         style="fill:#f38ba8" />
       <use
          xlink:href="#glyph-0-2"
          x="189.40231"
          y="38.243"
-         id="use42" />
+         id="use42"
+         style="fill:#f38ba8" />
       <use
          xlink:href="#glyph-0-5"
          x="194.54999"
          y="38.243"
-         id="use43" />
+         id="use43"
+         style="fill:#f38ba8" />
       <use
          xlink:href="#glyph-0-10"
          x="198.14749"
          y="38.243"
-         id="use44" />
+         id="use44"
+         style="fill:#f38ba8" />
     </g>
   </g>
 </svg>
@@ -647,21 +664,21 @@ other times we can treat it as a mysterious “black-box”</li>
 <ul>
 <li class="fragment"><p>The more general form of a function definition
 looks like:</p>
-<pre ><code class="python">def name(parameter_list):
-    #statements in function body</code></pre>
+<pre ><code class="python">def |||name|||(|||parameters|||):
+    |||statements in function body|||</code></pre>
 <ul>
-<li class="fragment"><code class="python">name</code> is your chosen
-name for the function</li>
-<li class="fragment"><code class="no-highlight">parameter_list</code> is
-a comma-separated list of <strong>variable names</strong> that will have
+<li class="fragment"><code class="python">|||name|||</code> is your
+chosen name for the function</li>
+<li class="fragment"><code class="python">|||parameters|||</code> is a
+comma-separated list of <strong>variable names</strong> that will have
 each input value assigned to them</li>
 </ul></li>
 <li class="fragment"><p>You can return or output a value from the
 function by including a return statement in the function body</p>
-<pre ><code class="python">return expression</code></pre>
+<pre ><code class="python">return |||some expression|||</code></pre>
 <ul>
-<li class="fragment"><code class="python">expression</code> is the value
-you want to return or output</li>
+<li class="fragment"><code class="python">|||some expression|||</code>
+is the value you want to return or output</li>
 <li class="fragment">If no <code class="python">return</code> statement
 is included, Python will by default return
 <code class="python">None</code></li>
@@ -675,12 +692,12 @@ is included, Python will by default return
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="378.26358mm"
-   height="129.73212mm"
-   viewBox="0 0 378.26358 129.73212"
+   width="444.35092mm"
+   height="152.90923mm"
+   viewBox="0 0 444.35092 152.90923"
    version="1.1"
    id="svg5"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
    sodipodi:docname="function_io.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -688,7 +705,7 @@ is included, Python will by default return
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
      id="namedview7"
-     pagecolor="#ffffff"
+     pagecolor="#2c2c2c"
      bordercolor="#000000"
      borderopacity="0.25"
      inkscape:showpageshadow="2"
@@ -697,9 +714,9 @@ is included, Python will by default return
      inkscape:deskcolor="#676767"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="1.2938725"
-     inkscape:cx="706.02012"
-     inkscape:cy="210.60808"
+     inkscape:zoom="0.64693625"
+     inkscape:cx="452.90398"
+     inkscape:cy="11.593105"
      inkscape:window-width="2560"
      inkscape:window-height="1413"
      inkscape:window-x="1080"
@@ -713,87 +730,108 @@ is included, Python will by default return
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="RoundedArrow5040"
+       inkscape:stockid="RoundedArrow61789799"
        markerWidth="2.135"
        markerHeight="2.063915"
        viewBox="0 0 6.1347524 5.9304951"
        inkscape:isstock="true"
        inkscape:collect="always"
        preserveAspectRatio="xMidYMid"
-       id="RoundedArrow5040">
+       id="RoundedArrow61789799">
       <path
          transform="scale(0.7)"
          d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
-         style="fill:#66d9ef;fill-opacity:1;fill-rule:evenodd;stroke:#66d9ef;stroke-opacity:1"
-         id="path21997" />
+         style="fill:#f9e2af;fill-opacity:1;fill-rule:evenodd;stroke:#f9e2af;stroke-opacity:1"
+         id="path1" />
     </marker>
     <marker
        style="overflow:visible"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="RoundedArrow6178"
+       inkscape:stockid="RoundedArrow93608993"
        markerWidth="2.135"
        markerHeight="2.063915"
        viewBox="0 0 6.1347524 5.9304951"
        inkscape:isstock="true"
        inkscape:collect="always"
        preserveAspectRatio="xMidYMid"
-       id="RoundedArrow6178">
+       id="RoundedArrow93608993">
       <path
          transform="scale(0.7)"
          d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
-         style="fill:#ffe792;fill-opacity:1;fill-rule:evenodd;stroke:#ffe792;stroke-opacity:1"
-         id="path22857" />
+         style="fill:#f38ba8;fill-opacity:1;fill-rule:evenodd;stroke:#f38ba8;stroke-opacity:1"
+         id="path2" />
     </marker>
     <marker
        style="overflow:visible"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="RoundedArrow9360"
+       inkscape:stockid="RoundedArrow50408579"
        markerWidth="2.135"
        markerHeight="2.063915"
        viewBox="0 0 6.1347524 5.9304951"
        inkscape:isstock="true"
        inkscape:collect="always"
        preserveAspectRatio="xMidYMid"
-       id="RoundedArrow9360">
+       id="RoundedArrow50408579">
       <path
          transform="scale(0.7)"
          d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
-         style="fill:#f92672;fill-opacity:1;fill-rule:evenodd;stroke:#f92672;stroke-opacity:1"
-         id="path23739" />
+         style="fill:#89b4fa;fill-opacity:1;fill-rule:evenodd;stroke:#89b4fa;stroke-opacity:1"
+         id="path3" />
     </marker>
     <marker
        style="overflow:visible"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="RoundedArrow7675"
+       inkscape:stockid="RoundedArrow76758166"
        markerWidth="2.135"
        markerHeight="2.063915"
        viewBox="0 0 6.1347524 5.9304951"
        inkscape:isstock="true"
        inkscape:collect="always"
        preserveAspectRatio="xMidYMid"
-       id="RoundedArrow7675">
+       id="RoundedArrow76758166">
       <path
          transform="scale(0.7)"
          d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
-         style="fill:#fd971f;fill-opacity:1;fill-rule:evenodd;stroke:#fd971f;stroke-opacity:1"
-         id="path24643" />
+         style="fill:#fab387;fill-opacity:1;fill-rule:evenodd;stroke:#fab387;stroke-opacity:1"
+         id="path4" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="RoundedArrow93608993-67765"
+       markerWidth="2.135"
+       markerHeight="2.063915"
+       viewBox="0 0 6.1347524 5.9304951"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid"
+       id="RoundedArrow93608993-67765">
+      <path
+         transform="scale(0.7)"
+         d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
+         style="fill:#94e2d5;fill-opacity:1;fill-rule:evenodd;stroke:#94e2d5;stroke-opacity:1"
+         id="path5" />
     </marker>
   </defs>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-279.74475,-84.336907)">
+     transform="translate(-279.69847,-84.015812)">
     <g
-       id="g3318">
+       id="g3318"
+       transform="matrix(1.1779329,0,0,1.1812161,-50.091066,-15.604301)"
+       style="stroke-width:0.847764">
       <rect
-         style="fill:none;stroke:#a6e22e;stroke-width:3.69738;stroke-linecap:round"
+         style="fill:none;stroke:#a6e3a1;stroke-width:3.13451;stroke-linecap:round"
          id="rect234"
          width="181.39629"
          height="106.60329"
@@ -801,94 +839,96 @@ is included, Python will by default return
          y="105.61704"
          ry="8.8196535" />
       <path
-         style="fill:none;stroke:#ffe792;stroke-width:3;stroke-linecap:round;marker-end:url(#RoundedArrow6178)"
+         style="fill:none;stroke:#f9e2af;stroke-width:2.54329;stroke-linecap:round;marker-end:url(#RoundedArrow61789799)"
          d="M 281.24475,158.91868 H 385.13043"
          id="path391" />
       <path
-         style="fill:none;stroke:#f92672;stroke-width:3;stroke-linecap:round;marker-end:url(#RoundedArrow9360)"
+         style="fill:#f38ba8;stroke:#f38ba8;stroke-width:2.54329;stroke-linecap:round;marker-end:url(#RoundedArrow93608993)"
          d="m 556.00098,158.91868 h 96.71404"
          id="path447" />
       <text
          xml:space="preserve"
-         style="font-size:15.3703px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#f92672;stroke:none;stroke-width:0.847814;stroke-linecap:round"
+         style="font-size:15.3703px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#f38ba8;stroke:none;stroke-width:0.718746;stroke-linecap:round"
          x="578.92444"
          y="175.24992"
          id="text1426"><tspan
            sodipodi:role="line"
            id="tspan1424"
-           style="fill:#f92672;stroke:none;stroke-width:0.847814"
+           style="fill:#f38ba8;stroke:none;stroke-width:0.718746"
            x="578.92444"
            y="175.24992">output</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:15.3703px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#ffe792;stroke:none;stroke-width:0.847814;stroke-linecap:round"
+         style="font-size:15.3703px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#f9e2af;stroke:none;stroke-width:0.718746;stroke-linecap:round"
          x="303.08331"
          y="175.24992"
          id="text1484"><tspan
            sodipodi:role="line"
            id="tspan1482"
-           style="fill:#ffe792;stroke:none;stroke-width:0.847814"
+           style="fill:#f9e2af;stroke:none;stroke-width:0.718746"
            x="303.08331"
            y="175.24992">input</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:15.3703px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#a6e22e;stroke:none;stroke-width:0.847814;stroke-linecap:round"
+         style="font-size:15.3703px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#a6e3a1;stroke:none;stroke-width:0.718746;stroke-linecap:round"
          x="413.90338"
          y="96.522797"
          id="text1590"><tspan
            sodipodi:role="line"
            id="tspan1588"
-           style="fill:#a6e22e;stroke:none;stroke-width:0.847814"
+           style="fill:#a6e3a1;stroke:none;stroke-width:0.718746"
            x="413.90338"
            y="96.522797">function def</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:14.3204px;line-height:1.1;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#f8f8f2;stroke:none;stroke-width:0.78991;stroke-linecap:round"
+         style="font-size:14.3204px;line-height:1.1;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#cdd6f4;stroke:none;stroke-width:0.669657;stroke-linecap:round"
          x="403.76147"
          y="139.95215"
          id="text1646"><tspan
            sodipodi:role="line"
            id="tspan1644"
-           style="fill:#f8f8f2;stroke-width:0.78991"
+           style="fill:#cdd6f4;stroke-width:0.669657"
            x="403.76147"
            y="139.95215">def cool(a,b):</tspan><tspan
            sodipodi:role="line"
-           style="fill:#f8f8f2;stroke-width:0.78991"
+           style="fill:#cdd6f4;stroke-width:0.669657"
            x="403.76147"
            y="155.70459"
            id="tspan1700">   c = a + b</tspan><tspan
            sodipodi:role="line"
-           style="fill:#f8f8f2;stroke-width:0.78991"
+           style="fill:#cdd6f4;stroke-width:0.669657"
            x="403.76147"
            y="171.45703"
            id="tspan1702">   return c + a</tspan><tspan
            sodipodi:role="line"
-           style="fill:#f8f8f2;stroke-width:0.78991"
+           style="fill:#cdd6f4;stroke-width:0.669657"
            x="403.76147"
            y="187.20947"
            id="tspan1648" /></text>
       <text
          xml:space="preserve"
-         style="font-size:13.2792px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#ffe792;stroke:none;stroke-width:0.732473;stroke-linecap:round"
+         style="font-size:13.2792px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#f9e2af;stroke:none;stroke-width:0.620964;stroke-linecap:round"
          x="290.52838"
          y="151.41565"
          id="text3284"><tspan
            sodipodi:role="line"
            id="tspan3282"
-           style="fill:#ffe792;stroke:none;stroke-width:0.732473"
+           style="fill:#f9e2af;stroke:none;stroke-width:0.620964"
            x="290.52838"
            y="151.41565">cool(4,5)</tspan></text>
     </g>
     <g
        id="g9053"
-       class="fragment">
+       class="fragment"
+       transform="matrix(1.1779329,0,0,1.1812161,-50.091066,-15.604301)"
+       style="stroke-width:0.847764">
       <path
-         style="fill:none;stroke:#66d9ef;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#RoundedArrow5040)"
+         style="fill:none;stroke:#89b4fa;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#RoundedArrow50408579)"
          d="m 335.76215,137.62261 v -18.6155 h 151.25056 v 7.2729"
          id="path3386"
          sodipodi:nodetypes="cccc" />
       <rect
-         style="fill:none;stroke:#66d9ef;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         style="fill:none;stroke:#89b4fa;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
          id="rect5875"
          width="37.176975"
          height="21.179291"
@@ -896,37 +936,39 @@ is included, Python will by default return
          y="183.86345" />
       <text
          xml:space="preserve"
-         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#66d9ef;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#89b4fa;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
          x="388.09344"
          y="198.66487"
          id="text6719"><tspan
            sodipodi:role="line"
            id="tspan6717"
-           style="font-size:14.1111px;fill:#66d9ef;stroke:none;stroke-width:3"
+           style="font-size:14.1111px;fill:#89b4fa;stroke:none;stroke-width:2.54329"
            x="388.09344"
            y="198.66487">a</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#66d9ef;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#89b4fa;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
          x="414.68774"
          y="199.515"
          id="text8307"><tspan
            sodipodi:role="line"
            id="tspan8305"
-           style="font-size:14.1111px;fill:#66d9ef;stroke:none;stroke-width:3"
+           style="font-size:14.1111px;fill:#89b4fa;stroke:none;stroke-width:2.54329"
            x="414.68774"
            y="199.515">4</tspan></text>
     </g>
     <g
        id="g12434"
-       class="fragment">
+       class="fragment"
+       transform="matrix(1.1779329,0,0,1.1812161,-50.091066,-15.604301)"
+       style="stroke-width:0.847764">
       <path
-         style="fill:none;stroke:#fd971f;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#RoundedArrow7675)"
+         style="fill:none;stroke:#fab387;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#RoundedArrow76758166)"
          d="m 352.1798,138.38495 v -25.96603 h 153.38669 v 12.12954"
          id="path9109"
          sodipodi:nodetypes="cccc" />
       <rect
-         style="fill:none;stroke:#fd971f;stroke-width:3.0839;stroke-linecap:round;stroke-linejoin:round"
+         style="fill:none;stroke:#fab387;stroke-width:2.61442;stroke-linecap:round;stroke-linejoin:round"
          id="rect10087"
          width="37.155491"
          height="21.031683"
@@ -934,26 +976,97 @@ is included, Python will by default return
          y="183.90414" />
       <text
          xml:space="preserve"
-         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#fd971f;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#fab387;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
          x="447.52106"
          y="199.95361"
          id="text6719-7"><tspan
            sodipodi:role="line"
            id="tspan6717-5"
-           style="font-size:14.1111px;fill:#fd971f;stroke:none;stroke-width:3"
+           style="font-size:14.1111px;fill:#fab387;stroke:none;stroke-width:2.54329"
            x="447.52106"
            y="199.95361">b</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#fd971f;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#fab387;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
          x="474.67825"
          y="199.31908"
          id="text12426"><tspan
            sodipodi:role="line"
            id="tspan12424"
-           style="font-size:14.1111px;fill:#fd971f;stroke:none;stroke-width:3"
+           style="font-size:14.1111px;fill:#fab387;stroke:none;stroke-width:2.54329"
            x="474.67825"
            y="199.31908">5</tspan></text>
+    </g>
+    <g
+       id="g4"
+       class="fragment"
+       transform="matrix(1.1779329,0,0,1.1812161,-50.091066,-15.604301)"
+       style="stroke-width:0.847764">
+      <rect
+         style="fill:none;stroke:#cba6f7;stroke-width:2.61442;stroke-linecap:round;stroke-linejoin:round"
+         id="rect10087-3"
+         width="37.155491"
+         height="21.031683"
+         x="516.50525"
+         y="183.32388" />
+      <text
+         xml:space="preserve"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#cba6f7;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
+         x="503.68161"
+         y="199.37335"
+         id="text6719-7-6"><tspan
+           sodipodi:role="line"
+           id="tspan6717-5-7"
+           style="font-size:14.1111px;fill:#cba6f7;stroke:none;stroke-width:2.54329"
+           x="503.68161"
+           y="199.37335">c</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#cba6f7;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
+         x="530.83881"
+         y="198.73882"
+         id="text12426-5"><tspan
+           sodipodi:role="line"
+           id="tspan12424-3"
+           style="font-size:14.1111px;fill:#cba6f7;stroke:none;stroke-width:2.54329"
+           x="530.83881"
+           y="198.73882">9</tspan></text>
+      <rect
+         style="fill:none;stroke:#cba6f7;stroke-width:1.76674;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+         id="rect4"
+         width="94.736923"
+         height="14.969669"
+         x="424.84705"
+         y="144.04529" />
+    </g>
+    <g
+       id="g5"
+       class="fragment"
+       transform="matrix(1.1779329,0,0,1.1812161,-50.091066,-15.604301)"
+       style="stroke-width:0.847764">
+      <rect
+         style="fill:none;stroke:#94e2d5;stroke-width:1.76674;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+         id="rect4-5"
+         width="49.519638"
+         height="14.969669"
+         x="489.04895"
+         y="159.49968" />
+      <path
+         style="fill:none;stroke:#94e2d5;stroke-width:2.54329;stroke-linecap:round;marker-end:url(#RoundedArrow93608993-67765)"
+         d="m 539.22683,166.42974 h 11.66501 v -19.19858 h 68.0002"
+         id="path447-9"
+         sodipodi:nodetypes="cccc" />
+      <text
+         xml:space="preserve"
+         style="font-size:14.1111px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Normal';fill:#94e2d5;stroke:none;stroke-width:2.54329;stroke-linecap:round;stroke-linejoin:round"
+         x="626.07294"
+         y="152.41145"
+         id="text12426-5-1"><tspan
+           sodipodi:role="line"
+           id="tspan12424-3-2"
+           style="font-size:14.1111px;fill:#94e2d5;stroke:none;stroke-width:2.54329"
+           x="626.07294"
+           y="152.41145">13</tspan></text>
     </g>
   </g>
 </svg>
@@ -1024,6 +1137,11 @@ include:</li>
 </tr>
 </tbody>
 </table>
+</section></section>
+<section>
+<section id="libraries" class="title-slide slide level1">
+<h1>Libraries</h1>
+
 </section>
 <section id="visiting-the-libraryies" class="slide level2">
 <h2>Visiting the library(ies)</h2>
@@ -1036,15 +1154,17 @@ code collections called <em>libraries</em>
 <li>Requires you to <em>import</em> that library, which can take several
 different forms
 <ul>
-<li><p>Most common is to use <code class="python">import</code> to grab
-everything in a library</p>
+<li><p>Most common is to use
+<code class="python">import |||lib|||</code> to grab everything in a
+library</p>
 <pre ><code class="python">import math</code></pre>
 <ul>
 <li>You must then access any function in that library using its
 <em>fully qualified name</em>, which includes the library name
 (<code class="python">var = math.sqrt(4)</code>)</li>
 </ul></li>
-<li><p>Can also use <code class="python">from ... import</code> to grab
+<li><p>Can also use
+<code class="python">from |||lib||| import |||function|||</code> to grab
 specific functions from the library</p>
 <pre ><code class="python">from math import sqrt</code></pre>
 <ul>
@@ -1110,6 +1230,93 @@ class="math inline">\(e\)</span></td>
 </tbody>
 </table>
 </div>
+</section>
+<section id="pythons-path" class="slide level2">
+<h2>Python’s Path</h2>
+<ul>
+<li><p>Wherever possible, Python runs code one line at a time, from top
+to bottom</p></li>
+<li><p>It will not, however, enter indented blocks <strong>unless it has
+to</strong></p>
+<ul>
+<li>The code inside a function definition, for example, is only run when
+the function is called</li>
+</ul></li>
+<li><p>A common paradigm then is to define functions first, and then
+include the code to run those functions beneath</p>
+<pre ><code class="python">def func1(a):
+    return a + 1
+
+def func2(b):
+    return b // 2
+
+print(func1(2) + func2(2))</code></pre></li>
+</ul>
+</section>
+<section id="collections-on-constants-and-functions"
+class="slide level2">
+<h2>Collections on Constants and Functions</h2>
+<ul>
+<li>A library should generally just be a collection of defined functions
+and constants
+<ul>
+<li>You don’t want any code to actually run when you import the library,
+you just want to access the desired pieces</li>
+</ul></li>
+<li>If you place everything inside a function definition though, nothing
+actually happens when you run the library code!
+<ul>
+<li>You just defined a bunch of functions, but never did anything with
+them</li>
+</ul></li>
+<li>Commonly, we want the best of both worlds:
+<ul>
+<li>I can use a program easily as a library, if I want to import a
+defined function</li>
+<li>I can run the program directly and have something actually
+happen</li>
+</ul></li>
+</ul>
+</section>
+<section id="running-a-program" class="slide level2">
+<h2>Running a Program</h2>
+<ul>
+<li><p>Karel programs always run the first defined function in the code
+when the program was run. General Python programs do not follow the same
+convention.</p></li>
+<li><p>Python programs need to specify what part of the code is supposed
+to be executed when a program is run if everything is just function
+definitions. This commonly happens at the bottom of the program:</p>
+<pre ><code class="python">if __name__ == '__main__':
+    |||function_to_run()|||</code></pre>
+<ul>
+<li><code class="python">|||function_to_run|||</code> is the name of
+whatever function you want to execute when the program is run
+directly</li>
+</ul></li>
+<li><p>Patterns of this sort are commonly called
+<em>boilerplate</em></p>
+<ul>
+<li>Less important to fully understand all the pieces of it now</li>
+<li>Is important to understand what it is doing and how to implement it
+correctly</li>
+</ul></li>
+</ul>
+</section>
+<section id="sample-program" class="slide level2">
+<h2>Sample Program</h2>
+<pre ><code class="python" style="max-height: 900px">def print_odds(des_num):
+    """
+    Prints the first desired number of odd numbers 
+    starting from 1.
+    """
+    value = 1
+    for i in range(des_num):
+        print(value)
+        value += 2
+
+if __name__ == '__main__':
+    print_odds(100)</code></pre>
 </section>
 <section id="practice" class="slide level2">
 <h2>Practice</h2>
@@ -1379,7 +1586,7 @@ print(len(D))
 :::::
 
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -1394,6 +1601,7 @@ print(len(D))
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
 
   <script>
 
@@ -1469,7 +1677,7 @@ print(len(D))
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -1512,6 +1720,12 @@ print(len(D))
 			disableCheckFile: false, //default false
 		 },
 
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -1551,5 +1765,18 @@ print(len(D))
       });
       
     </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
