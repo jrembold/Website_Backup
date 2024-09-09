@@ -14,17 +14,20 @@
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: 1;}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/tokyo-night-light.css">
 </head>
 <body>
   <div class="reveal">
@@ -33,7 +36,7 @@
 <section id="title-slide">
   <h1 class="title">Importing and Exporting</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Monday, September 12, 2022</p>
+  <p class="date">Monday, September 9, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -46,20 +49,20 @@ today</li>
 <li>I’m working on feedback for the first homework, hoping to have that
 your way by mid tomorrow</li>
 </ul></li>
-<li>Look over the first part of Ch 5 for Friday</li>
+<li>Look over the first part of Ch 6 for Wednesday</li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 </section>
 <section id="review-question" class="slide level2">
 <h2>Review Question</h2>
-<p>All of the following values could be added to a
+<p>All the following values could be added to a
 <code class="python">NUMERIC(6,4)</code> type column except for one,
 which would result in an error. Which number would result in the
 error?</p>
 <div class="poll">
 <ol>
-<li>0.9812</li>
+<li>0.981213</li>
 <li>101.3</li>
 <li>60</li>
 <li>34.192834</li>
@@ -68,6 +71,11 @@ error?</p>
 <aside class="notes">
 <p>Solution: 101.3</p>
 </aside>
+</section>
+<section>
+<section id="back-to-types" class="title-slide slide level1">
+<h1>Back to Types</h1>
+
 </section>
 <section id="intervals" class="slide level2">
 <h2>Intervals</h2>
@@ -102,7 +110,7 @@ types</li>
 <li>Network address types</li>
 <li>JSON types</li>
 <li>A full list can be found <a
-href="https://www.postgresql.org/docs/14/datatype.html">here</a></li>
+href="https://www.postgresql.org/docs/16/datatype.html">here</a></li>
 </ul></li>
 <li>We’ll address others as the come up sporadically through the rest of
 the semester, but you have the core basics now</li>
@@ -121,14 +129,16 @@ type</li>
 <li><p>Can use the <code class="python">CAST</code> function to convert
 between reasonable data types</p></li>
 <li><p>Core syntax is</p>
-<pre ><code class="pgsql">CAST(col_name AS new_data_type)</code></pre></li>
+<pre ><code class="pgsql">CAST(|||column name||| AS |||new data type|||)</code></pre></li>
 <li><p>Postgres has a shorthand conversion syntax that uses double
 colons:</p>
-<pre ><code class="pgsql">col_name::new_data_type</code></pre></li>
-<li><p>Be aware that casting data to a text string with a maximum size
-smaller than it would take will <em>truncate</em> the conversion to get
-it to fit</p></li>
+<pre ><code class="pgsql">|||column name|||::|||new data type|||</code></pre></li>
 </ul>
+</section></section>
+<section>
+<section id="delimited-files" class="title-slide slide level1">
+<h1>Delimited Files</h1>
+
 </section>
 <section id="sql-io" class="slide level2">
 <h2>SQL I/O</h2>
@@ -157,7 +167,7 @@ universally accessible</li>
 </ul></li>
 </ul>
 </section>
-<section id="delimited-files" class="slide level2">
+<section id="delimited-files-1" class="slide level2">
 <h2>Delimited Files</h2>
 <div style="font-size:.9em">
 <ul>
@@ -204,6 +214,11 @@ but contains no actual data</li>
 <li>Make sure you have no empty line at the end!</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="imports-and-exports" class="title-slide slide level1">
+<h1>Imports and Exports</h1>
+
 </section>
 <section id="importing-data" class="slide level2">
 <h2>Importing Data</h2>
@@ -222,13 +237,14 @@ tend to be far from perfect.</li>
 </ul></li>
 </ul></li>
 <li><p>Syntax of the <code class="python">COPY</code> statement:</p>
-<pre ><code class="pgsql">COPY tablename
-FROM full_text_filename
-WITH ( import_options );</code></pre></li>
+<pre ><code class="pgsql">COPY |||tablename|||
+FROM |||full path to file|||
+WITH ( |||import options||| );</code></pre></li>
 </ul>
 </section>
 <section id="importing-details" class="slide level2">
 <h2>Importing Details</h2>
+<div style="font-size:.9em">
 <ul>
 <li>The full text filename needs to be the <strong>entire path</strong>
 that points to your file
@@ -254,6 +270,7 @@ double quotes</li>
 times, it will just keep adding the CSV contents to the end of the
 current table</li>
 </ul>
+</div>
 </section>
 <section id="subset-imports" class="slide level2">
 <h2>Subset Imports</h2>
@@ -268,8 +285,8 @@ only a portion of the CSV columns</li>
 </ul></li>
 <li><p>Just requires that you specify the target SQL columns after
 specifying the table</p>
-<pre ><code class="pgsql">COPY tablename (col1, col2, col3)
-FROM full_text_filename
+<pre ><code class="pgsql">COPY |||tablename||| (|||column 1|||, |||column 2|||, |||column 3|||)
+FROM |||full path to file|||
 WITH (FORMAT CSV, HEADER);</code></pre></li>
 </ul>
 </section>
@@ -294,7 +311,7 @@ Jan-16-22:Roths:milk,butter
 Jan-18-22:Winco:beans</code></pre>
 </div>
 </div>
-<div class="cols">
+<div class="cols" style="margin-top: -1.5em">
 <div class="col">
 <pre ><code class="pgsql answer" style="font-size:.65em;" name="A">COPY purchases
 FROM 'C:\DATA\purchases.csv'
@@ -327,9 +344,9 @@ column are not stored, just the contents and column names</li>
 <li><p>Syntax-wise, it is almost exactly like copying into a SQL table,
 except using <code class="python">TO</code> instead of
 <code class="python">FROM</code></p>
-<pre ><code class="pgsql">COPY tablename
-TO full_text_filename
-WITH ( import_options );</code></pre></li>
+<pre ><code class="pgsql">COPY |||tablename|||
+TO |||full path to file|||
+WITH ( |||import options||| );</code></pre></li>
 <li><p>This exports <strong>all</strong> columns from the specified
 table to the filename with the desired format</p></li>
 </ul>
@@ -343,9 +360,9 @@ to be exported. In that case, you have a few options:</li>
 <ul>
 <li>Just specify the desired columns after the table name</li>
 </ul>
-<pre ><code class="pgsql" style="font-size:1em;">COPY tablename (col1, col2, col3)
-TO full_text_filename
-WITH ( import_options );</code></pre></li>
+<pre ><code class="pgsql" style="font-size:1em;">COPY |||tablename||| (|||column 1|||, |||column 2|||, |||column 3|||)
+TO |||full path to file|||
+WITH ( |||import options||| );</code></pre></li>
 </ul>
 </section>
 <section id="exportings-queries" class="slide level2">
@@ -355,14 +372,56 @@ WITH ( import_options );</code></pre></li>
 <ul>
 <li>Embed the query instead of a named table</li>
 </ul>
-<pre ><code class="pgqsl" style="font-size:1em;">COPY (
-  SELECT col1, col2 FROM tablename
-  ORDER BY col2
+<pre ><code class="pgsql" style="font-size:1em;">COPY (
+  SELECT |||col1|||, |||col2||| FROM |||tablename|||
+  ORDER BY |||col2|||
   )
-TO full_text_filename
-WITH ( import_options );</code></pre></li>
+TO |||full path to file|||
+WITH ( |||import options||| );</code></pre></li>
 </ul>
+</section></section>
+<section>
+<section id="misc" class="title-slide slide level1">
+<h1>Misc</h1>
+
 </section>
+<section id="not-null" class="slide level2">
+<h2>Not Null</h2>
+<ul>
+<li>Probably have come across instances where you don’t want to have a
+bunch of <code class="python">NULL</code> values in your output
+query</li>
+<li>You can <strong>not</strong> filter them out using
+<code class="python">colname != NULL</code>
+<ul>
+<li>A <code class="python">NULL</code> value comparison <em>always</em>
+gives <code class="python">NULL</code>, no matter the comparison</li>
+</ul></li>
+<li>Need to use the keywords <code class="python">IS NOT NULL</code> (or
+<code class="python">IS NULL</code> if you want to find the null
+values)</li>
+</ul>
+<pre ><code class="pgsql">SELECT |||column|||
+FROM |||tablename|||
+WHERE |||column||| IS NOT NULL;</code></pre>
+</section>
+<section id="some-commentary" class="slide level2">
+<h2>Some Commentary</h2>
+<ul>
+<li>Like many programming languages, SQL has the concept of a
+<em>comment</em>, which is a piece of text that is entirely ignored by
+the system when running commands</li>
+<li>In SQL, you can comment a single line at a time using double dash:
+<code class="python">--</code></li>
+<li>To block comment, you begin with a <code class="python">/*</code>
+and end with a <code class="python">*/</code></li>
+</ul>
+<pre ><code class="pgsql">-- This is a comment
+SELECT *
+FROM |||table_name||| -- this is my table name
+ORDER BY |||column|||;/* this
+is all ignored */</code></pre>
+</section></section>
     </div>
   </div>
 
@@ -373,12 +432,14 @@ WITH ( import_options );</code></pre></li>
   <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
   <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
   // Added plugins
-  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
-  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>,
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/mypgsql.js"></script>
 
   <script>
 
@@ -406,7 +467,7 @@ WITH ( import_options );</code></pre></li>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -453,7 +514,7 @@ WITH ( import_options );</code></pre></li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -488,14 +549,11 @@ WITH ( import_options );</code></pre></li>
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
-	reveald3: {
-			runLastState: true, // true/false, default: true
-			onSlideChangedDelay: 200,
-			mapPath: false, // true / false / "spefific/path/as/string", default: false
-			tryFallbackURL: true, // true/false, default false
-			disableCheckFile: false, //default false
-		 },
-
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -503,37 +561,48 @@ WITH ( import_options );</code></pre></li>
           RevealNotes,
           RevealSearch,
           RevealZoom,
-		  RevealChart,
 		  RevealChalkboard,
           RevealMenu,
+          Reveald3,
         ],
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
             // { src: "../html_srcs/reveal.js/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/reveal.js/plugin/title-footer/title-footer.css"}); } },
-			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
