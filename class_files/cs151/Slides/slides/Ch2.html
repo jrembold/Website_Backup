@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-09-13">
+  <meta name="dcterms.date" content="2024-09-11">
   <title>All About Control</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,15 +17,18 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
@@ -34,29 +37,58 @@
 <section id="title-slide">
   <h1 class="title">All About Control</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">September 13, 2023</p>
+  <p class="date">September 11, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Problem Set 2 posted!
+<li>Homework
 <ul>
-<li>I’m working on scoring and giving feedback on PS1</li>
-<li>Autochecker results are for your <em>own use and piece of mind</em>.
-They do not directly influence your grade.</li>
-<li>Tired of getting emails from the autochecker? I’ll post a guide
-video to the website for how to disable them.</li>
+<li>Problem Set 2 posted!</li>
+<li>I’ll be getting feedback to you on PS1 later in the week
+<ul>
+<li>I am expecting these to be solid, because the QUAD Center had
+essentially <em>nobody</em> show up on Monday! If you are struggling,
+please don’t hesitate to reach out to one of your support folks: myself,
+your section leader, or the QUAD tutors!</li>
 </ul></li>
+</ul></li>
+<li>Sections today and tomorrow. Make sure you are going, as you only
+get 3 unexcused absences before missing starts <strong>really</strong>
+hurting your grade</li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
+</ul>
+</section>
+<section id="simple-function-examples" class="slide level2">
+<h2>Simple function examples</h2>
+<ul>
+<li><p>Convert Fahrenheit temperatures to their Celsius equivalent</p>
+<pre ><code class="python">def f_to_c(f):
+    return 5 / 9 * (f - 32)</code></pre>
+<ul>
+<li><p>Using the function:</p>
+<pre ><code class="python">print(f_to_c(45))</code></pre></li>
+</ul></li>
+<li><p>Computes the volume of a cylinder of height
+<code class="python">h</code> and radius
+<code class="python">r</code></p>
+<pre ><code class="python">def cylinder_volume(r, h):
+    return 3.14159 * r**2 * h</code></pre>
+<ul>
+<li><p>Using the function:</p>
+<pre ><code class="python">vol1 = cylinder_volume(2,10)
+vol2 = cylinder_volume(10,2)
+print(vol1 + vol2)</code></pre></li>
+</ul></li>
 </ul>
 </section>
 <section id="review-question" class="slide level2">
 <h2>Review Question</h2>
 <div class="cols">
 <div class="col">
-<p>Examining the code to the right, what is the output value if I
+<p>Examining the code to the right, what is the returned value if I
 evaluate the expression <code class="python">func2(1,5)</code>?</p>
 <div class="poll">
 <ol>
@@ -67,7 +99,7 @@ evaluate the expression <code class="python">func2(1,5)</code>?</p>
 </ol>
 </div>
 </div>
-<div class="col" style="font-size:.9em; flex-grow:1.5">
+<div class="col" style="font-size:1em; flex-grow:1.5">
 <pre ><code class="python">def func1(x):
     for i in range(3):
         x *= 2
@@ -80,6 +112,54 @@ def func2(y, z):
 </div>
 </div>
 </section>
+<section id="using-functions-built-ins" class="slide level2">
+<h2>Using Functions: Built-ins</h2>
+<ul>
+<li>All modern languages include a collection of pre-defined functions
+for convenience</li>
+<li>In Python, common build-in functions that operate on numbers
+include:</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">abs(x)</code></td>
+<td>The absolute value of x</td>
+</tr>
+<tr class="even">
+<td><code class="python">max(x,y,...)</code></td>
+<td>The largest of all the arguments</td>
+</tr>
+<tr class="odd">
+<td><code class="python">min(x,y,...)</code></td>
+<td>The smallest of all the arguments</td>
+</tr>
+<tr class="even">
+<td><code class="python">round(x)</code></td>
+<td>The value of x rounded to the nearest integer</td>
+</tr>
+<tr class="odd">
+<td><code class="python">int(x)</code></td>
+<td>The value of x truncated to an integer</td>
+</tr>
+<tr class="even">
+<td><code class="python">float(x)</code></td>
+<td>The value of x as a decimal</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section>
+<section id="libraries" class="title-slide slide level1">
+<h1>Libraries</h1>
+
+</section>
 <section id="visiting-the-libraryies" class="slide level2">
 <h2>Visiting the library(ies)</h2>
 <ul>
@@ -91,16 +171,18 @@ code collections called <em>libraries</em>
 <li>Requires you to <em>import</em> that library, which can take several
 different forms
 <ul>
-<li><p>Most common is to use <code class="python">import</code> to grab
-everything in a library</p>
+<li><p>Most common is to use
+<code class="python">import |||lib|||</code> to grab everything in a
+library</p>
 <pre ><code class="python">import math</code></pre>
 <ul>
 <li>You must then access any function in that library using its
 <em>fully qualified name</em>, which includes the library name
 (<code class="python">var = math.sqrt(4)</code>)</li>
 </ul></li>
-<li><p>Can also use <code class="python">from ... import</code> to grab
-specific functions from the library</p>
+<li><p>Can also use
+<code class="python">from |||lib||| import |||function/constant|||</code>
+to grab specific functions from the library</p>
 <pre ><code class="python">from math import sqrt</code></pre>
 <ul>
 <li>You do not need to use the library name then when you call it
@@ -162,15 +244,15 @@ class="math inline">\(\pi\)</span></td>
 class="math inline">\(e\)</span></td>
 </tr>
 <tr class="odd">
-<td><code class="python">math.sqrt(x)</code></td>
+<td><code class="python">math.sqrt(|||x|||)</code></td>
 <td>The square root of x</td>
 </tr>
 <tr class="even">
-<td><code class="python">math.log(x)</code></td>
+<td><code class="python">math.log(|||x|||)</code></td>
 <td>The natural logarithm of x</td>
 </tr>
 <tr class="odd">
-<td><code class="python">math.log10(x)</code></td>
+<td><code class="python">math.log10(|||x|||)</code></td>
 <td>The base 10 logarithm of x</td>
 </tr>
 </tbody>
@@ -186,23 +268,23 @@ class="math inline">\(e\)</span></td>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">math.sin(x)</code></td>
+<td><code class="python">math.sin(|||x|||)</code></td>
 <td>The sine of x in radians</td>
 </tr>
 <tr class="even">
-<td><code class="python">math.cos(x)</code></td>
+<td><code class="python">math.cos(|||x|||)</code></td>
 <td>The cosine of x in radians</td>
 </tr>
 <tr class="odd">
-<td><code class="python">math.asin(x)</code></td>
+<td><code class="python">math.asin(|||x|||)</code></td>
 <td>The arcsin of x</td>
 </tr>
 <tr class="even">
-<td><code class="python">math.degrees(x)</code></td>
+<td><code class="python">math.degrees(|||x|||)</code></td>
 <td>Converts radians to degrees</td>
 </tr>
 <tr class="odd">
-<td><code class="python">math.radians(x)</code></td>
+<td><code class="python">math.radians(|||x|||)</code></td>
 <td>Converts degrees to radians</td>
 </tr>
 </tbody>
@@ -221,64 +303,115 @@ $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
     - _Tip:_ writing out complicated equation on a single line in Python can get real ugly and hard to understand. Consider breaking up the equation and assigning pieces of it to variables that you can combine later.
 :::
 -->
+<!--not going to have time for this
+## Practice
+::::::cols
+::::{.col style='flex-grow:2; font-size:.9em'}
+- When you drop a rock into a pool of water, the outward moving ripples get smaller and smaller as they move away from the center
+- Mathematically, the height of these ripples can be described by:
+  $$h(A, B, C, r) = A e^{-B\cdot r}\cos\left(\frac{2\pi}{C}\cdot r\right) $$
+  where $A, B, C$ describe aspects of the initial drop and the liquid, and $r$ depicts the distance from the center
+- Write a function to compute the height of the wave based on these parameters. 
+::::
+
+::::col
+![](../images/ripple.jpg)
+
+::::
+::::::
+-->
 </section>
-<section id="practice" class="slide level2">
-<h2>Practice</h2>
-<div class="cols">
-<div class="col" style="flex-grow:2; font-size:.9em">
+<section id="pythons-path" class="slide level2">
+<h2>Python’s Path</h2>
 <ul>
-<li>When you drop a rock into a pool of water, the outward moving
-ripples get smaller and smaller as they move away from the center</li>
-<li>Mathematically, the height of these ripples can be described by:
-<span class="math display">\[h(A, B, C, r) = A e^{-B\cdot
-r}\cos\left(\frac{2\pi}{C}\cdot r\right) \]</span> where <span
-class="math inline">\(A, B, C\)</span> describe aspects of the initial
-drop and the liquid, and <span class="math inline">\(r\)</span> depicts
-the distance from the center</li>
-<li>Write a function to compute the height of the wave based on these
-parameters.</li>
+<li><p>Wherever possible, Python runs code one line at a time, from top
+to bottom</p></li>
+<li><p>It will not, however, enter indented blocks <strong>unless it has
+to</strong></p>
+<ul>
+<li>The code inside a function definition, for example, is only run when
+the function is called</li>
+</ul></li>
+<li><p>A common paradigm then is to define functions first, and then
+include the code to run those functions beneath</p>
+<pre ><code class="python">def func1(a):
+    return a + 1
+
+def func2(b):
+    return b // 2
+
+print(func1(2) + func2(2))</code></pre></li>
 </ul>
-</div>
-<div class="col">
-<p><img data-src="../images/ripple.jpg" /></p>
-</div>
-</div>
 </section>
-<section id="extra-if-functionality" class="slide level2">
-<h2>Extra <code class="python">if</code> functionality</h2>
-<div class="cols">
-<div class="col">
+<section id="collections-of-constants-and-functions"
+class="slide level2">
+<h2>Collections of Constants and Functions</h2>
 <ul>
-<li>Karel could only use <code class="python">if</code> and
-<code class="python">else</code></li>
-<li>Python also supports an <code class="python">elif</code>
-statement</li>
-<li>This lets you chain together multiple mutually exclusive condition
-checks</li>
-<li>You can include as many <code class="python">elif</code> chained
-statements as you want</li>
-<li>Only a single <code class="python">elif</code> block will ever be
-entered!</li>
+<li>A library should generally just be a collection of defined functions
+and constants
+<ul>
+<li>You don’t want any code to actually run when you import the library,
+you just want to access the desired pieces</li>
+</ul></li>
+<li>If you place everything inside a function definition though, nothing
+actually happens when you run the library code!
+<ul>
+<li>You just defined a bunch of functions, but never did anything with
+them</li>
+</ul></li>
+<li>Commonly, we want the best of both worlds:
+<ul>
+<li>I can use a program easily as a library, if I want to import a
+defined function</li>
+<li>I can run the program directly and have something actually
+happen</li>
+</ul></li>
 </ul>
-</div>
-<div class="col">
-<pre ><code class="python" style="max-height:900px; font-size:0.75em">if condition_1:
-    # Run this code if 
-    # condition 1 is true
-elif condition_2:
-    # This code runs if 
-    # condition 1 is false
-    # but condition 2 is true
-elif condition_3:
-    # Runs if both condition 1
-    # and 2 fail but condition
-    # 3 is true
-else:
-    # This code runs if 
-    # all above conditions 
-    # fail</code></pre>
-</div>
-</div>
+</section>
+<section id="running-a-program" class="slide level2">
+<h2>Running a Program</h2>
+<ul>
+<li><p>Karel programs always run the first defined function in the code
+when the program was run. General Python programs do not follow the same
+convention.</p></li>
+<li><p>Python programs need to specify what part of the code is supposed
+to be executed when a program is run if everything is just function
+definitions. This commonly happens at the bottom of the program:</p>
+<pre ><code class="python">if __name__ == '__main__':
+    |||function_to_run()|||</code></pre>
+<ul>
+<li><code class="python">|||function_to_run|||</code> is the name of
+whatever function you want to execute when the program is run
+directly</li>
+</ul></li>
+<li><p>Patterns of this sort are commonly called
+<em>boilerplate</em></p>
+<ul>
+<li>Less important to fully understand all the pieces of it now</li>
+<li>Is important to understand what it is doing and how to implement it
+correctly</li>
+</ul></li>
+</ul>
+</section>
+<section id="sample-program" class="slide level2">
+<h2>Sample Program</h2>
+<pre ><code class="python" style="max-height: 900px">def print_odds(des_num):
+    """
+    Prints the first desired number of odd numbers 
+    starting from 1.
+    """
+    value = 1
+    for i in range(des_num):
+        print(value)
+        value += 2
+
+if __name__ == '__main__':
+    print_odds(100)</code></pre>
+</section></section>
+<section>
+<section id="bombastic-booleans" class="title-slide slide level1">
+<h1>Bombastic Booleans</h1>
+
 </section>
 <section id="booleans" class="slide level2">
 <h2>Booleans</h2>
@@ -304,6 +437,38 @@ if A:
   A = False
 print(A)</code></pre></li>
 </ul>
+</section>
+<section id="extra-iffy" class="slide level2">
+<h2>Extra <code class="python">if</code>fy</h2>
+<div class="cols" style="align-items:center">
+<div class="col">
+<ul>
+<li>Karel could only use <code class="python">if</code> and
+<code class="python">else</code></li>
+<li>Python also supports an <code class="python">elif</code>
+statement</li>
+<li>This lets you chain together multiple mutually exclusive condition
+checks</li>
+<li>You can include as many <code class="python">elif</code> chained
+statements as you want</li>
+<li>Only a single <code class="python">elif</code> block will ever be
+entered!</li>
+</ul>
+</div>
+<div class="col">
+<pre ><code class="python" style="max-height:900px; font-size:0.75em">if |||condition 1|||:
+    |||Run this code if condition 1 is true|||
+elif |||condition 2|||:
+    |||Run this code if condition 1 is false|||
+    |||but condition 2 is true|||
+elif |||condition 3|||:
+    |||Run this code if both condition 1 and|||
+    |||2 fail but condition 3 is true|||
+else:
+    |||This code runs if all above|||
+    |||conditions fail|||</code></pre>
+</div>
+</div>
 </section>
 <section id="boolean-expressions" class="slide level2">
 <h2>Boolean Expressions</h2>
@@ -443,6 +608,11 @@ statement</p>
 <code class="python">x % n == 0</code> statement would have errored out
 if <code class="python">n=0</code></li>
 </ul>
+</section></section>
+<section>
+<section id="sequences" class="title-slide slide level1">
+<h1>Sequences</h1>
+
 </section>
 <section id="for-loop-anatomy" class="slide level2">
 <h2>For Loop Anatomy</h2>
@@ -451,14 +621,14 @@ if <code class="python">n=0</code></li>
 Karel, but let’s expand on their use:</p></li>
 <li><p>The more general syntax of a <code class="python">for</code> loop
 looks like:</p>
-<pre ><code class="python">for variable_name in sequence:
-    # code to loop over</code></pre>
+<pre ><code class="python">for |||variable name||| in |||sequence|||:
+    |||code to loop over|||</code></pre>
 <ul>
-<li><code class="python">variable_name</code> is a variable name that
-will be assigned every value in the sequence over the course of the
+<li><code class="python">|||variable name|||</code> is a variable name
+that will be assigned every value in the sequence over the course of the
 loop</li>
-<li><code class="python">sequence</code> is any expression that produces
-an object which supports iteration
+<li><code class="python">|||sequence|||</code> is any expression that
+produces an object which supports iteration
 <ul>
 <li>We’ve already seen <code class="python">range()</code> fill this
 role</li>
@@ -681,7 +851,7 @@ def test_count_letters():
 
 
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -696,6 +866,7 @@ def test_count_letters():
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
 
   <script>
 
@@ -814,6 +985,12 @@ def test_count_letters():
 			disableCheckFile: false, //default false
 		 },
 
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -853,5 +1030,18 @@ def test_count_letters():
       });
       
     </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
