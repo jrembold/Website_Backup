@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-09-15">
-  <title>Ranging from Creation to Debugging</title>
+  <meta name="dcterms.date" content="2024-09-13">
+  <title>Bugs on the Range</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -27,36 +27,127 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Ranging from Creation to Debugging</h1>
+  <h1 class="title">Bugs on the Range</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">September 15, 2023</p>
+  <p class="date">September 13, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
 <li>I’m working on PS1 feedback</li>
-<li>You have Problem Set 2 due on Monday
+<li>You have Problem Set 2 due on Monday!
 <ul>
 <li>You have everything you need to do all the problems after today</li>
 </ul></li>
-<li>I have so many meetings this afternoon, including one during normal
-office hours
+<li>I have meetings all this afternoon (ugh) starting immediately after
+class
 <ul>
-<li>Should be able to catch me from 3-4 or after 4:30 if you have
-questions</li>
+<li>You may be able to catch me for a bit after 4pm, but probably best
+just to email me or leave me a Discord message</li>
 </ul></li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
+</section>
+<section id="boolean-expressions" class="slide level2">
+<h2>Boolean Expressions</h2>
+<ul>
+<li><p>Python defines two types of operators that work with Boolean
+data: <em>relational operators</em> and <em>logical
+operators</em></p></li>
+<li><p>Relational operators compare values of other types and produce a
+boolean
+<code class="python">True</code>/<code class="python">False</code>
+result:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><code class="python">==</code></td>
+<td style="text-align: left;">Equals</td>
+<td></td>
+<td></td>
+<td></td>
+<td><code class="python">!=</code></td>
+<td style="text-align: left;">Not equals</td>
+</tr>
+<tr class="even">
+<td><code class="python"><</code></td>
+<td style="text-align: left;">Less than</td>
+<td></td>
+<td></td>
+<td></td>
+<td><code class="python"><=</code></td>
+<td style="text-align: left;">Less than or equal too</td>
+</tr>
+<tr class="odd">
+<td><code class="python">></code></td>
+<td style="text-align: left;">Greater than</td>
+<td></td>
+<td></td>
+<td></td>
+<td><code class="python">>=</code></td>
+<td style="text-align: left;">Greater than or equal to</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>Be careful! <code class="python">==</code> <em>compares</em> two
+values. A single <code class="python">=</code> <em>assigns</em> a
+variable. The odds are high you’ll use one when you meant the other at
+least once this semester!</p></li>
+</ul>
+</section>
+<section id="the-vulcan-way" class="slide level2">
+<h2>The Vulcan Way</h2>
+<ul>
+<li><p>Logical operators act on Boolean pairings</p>
+<table>
+<thead>
+<tr class="header">
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">A and B</code></td>
+<td>True if both terms True, False otherwise</td>
+</tr>
+<tr class="even">
+<td><code class="python">A or B</code></td>
+<td>True if <em>any</em> term is True, False otherwise</td>
+</tr>
+<tr class="odd">
+<td><code class="python">not A</code></td>
+<td>True if A False, False if A True (opposite)</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<div>
+<ul>
+<li class="fragment">Order of operations follows parentheses and then
+proceeds left to right</li>
+<li class="fragment">Careful that <code class="python">or</code> is
+still <code class="python">True</code> if both options are
+<code class="python">True</code></li>
+<li class="fragment">Similarly, careful with combining
+<code class="python">not</code> with <code class="python">and</code> and
+<code class="python">or</code>
+<ul>
+<li class="fragment">“Not A or B” in common English is not the same as
+<code class="python">not A or B</code></li>
+</ul></li>
+</ul>
+</div>
 </section>
 <section id="review-question" class="slide level2">
 <h2>Review Question</h2>
@@ -79,35 +170,18 @@ C = 1
 A *= B
 if A > 40 and C != 10 % 4:
     print(B+C)
+elif A ** B <= C:
+    print(A * C)
 else:
     print(A < B or not (C == 10 // 4))
 </code></pre>
 </div>
 </div>
 </section>
-<section id="for-loop-anatomy" class="slide level2">
-<h2>For Loop Anatomy</h2>
-<ul>
-<li><p>We have already seen <code class="python">for</code> loops in
-Karel, but let’s expand on their use:</p></li>
-<li><p>The more general syntax of a <code class="python">for</code> loop
-looks like:</p>
-<pre ><code class="python">for variable_name in sequence:
-    # code to loop over</code></pre>
-<ul>
-<li><code class="python">variable_name</code> is a variable name that
-will be assigned every value in the sequence over the course of the
-loop</li>
-<li><code class="python">sequence</code> is any expression that produces
-an object which supports iteration
-<ul>
-<li>We’ve already seen <code class="python">range()</code> fill this
-role</li>
-<li><strong>Any</strong> sequence works though, and we’ll see examples
-of another type of sequence next week</li>
-</ul></li>
-</ul></li>
-</ul>
+<section>
+<section id="home-on-the-range" class="title-slide slide level1">
+<h1>Home on the Range</h1>
+
 </section>
 <section id="the-range-iterable" class="slide level2">
 <h2>The <code class="python">range()</code> iterable</h2>
@@ -124,13 +198,39 @@ this and produces the needed iterable object</li>
 <li>Step (default 1): what value the sequence counts by <br><br></li>
 </ul></li>
 </ul>
-<div class="block" name="Warning!">
+<div class="fragment block" name="Warning!">
 <p>Be careful, the <code class="python">range</code> function will stop
 one step <em>before</em> the final stop value.</p>
 </div>
 </section>
+<section id="for-loop-anatomy" class="slide level2">
+<h2>For Loop Anatomy</h2>
+<ul>
+<li><p>We have already seen <code class="python">for</code> loops in
+Karel, but we can expand on them a bit now</p></li>
+<li><p>The more general syntax of a <code class="python">for</code> loop
+looks like:</p>
+<pre ><code class="python">for |||variable||| in |||sequence|||:
+    |||code to loop over|||</code></pre>
+<ul>
+<li><code class="python">|||variable|||</code> is a variable name that
+will be assigned every value in the sequence over the course of the
+loop</li>
+<li><code class="python">|||sequence|||</code> is any expression that
+produces an object which supports iteration
+<ul>
+<li>We’ve already seen <code class="python">range()</code> fulfills this
+role, and thus produces an iterable sequence</li>
+<li><strong>Any</strong> sequence works though, and we’ll see examples
+of another type of sequence next week</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
 <section id="for-ranging-examples" class="slide level2">
 <h2>For ranging examples</h2>
+<div class="cols">
+<div class="col">
 <ul>
 <li><p>Providing just a stop argument:</p>
 <pre ><code class="python">for n in range(5):
@@ -142,6 +242,42 @@ one step <em>before</em> the final stop value.</p>
 <pre ><code class="python">for n in range(10,0,-1):
     print(n)</code></pre></li>
 </ul>
+</div>
+<div class="col">
+<p><br></p>
+<div class="fragment only-fragment">
+<pre ><code class="text">0
+1
+2
+3
+4</code></pre>
+</div>
+<div class="fragment only-fragment">
+<pre ><code class="text">1
+2
+3
+4
+5
+6
+7
+8
+9
+10</code></pre>
+</div>
+<div class="fragment only-fragment">
+<pre ><code class="text">10
+9
+8
+7
+6
+5
+4
+3
+2
+1</code></pre>
+</div>
+</div>
+</div>
 </section>
 <section id="understanding-check" class="slide level2"
 data-notes="Answer is B, as it would not print the 0">
@@ -154,28 +290,35 @@ from the others?</p>
 <div class="block" name="A">
 <pre ><code class="python" style="margin-left:1em">for n in range(10):
     if n % 2 == 0:
-        print(n)</code></pre>
+        if n <= 10:
+            print(n)</code></pre>
 </div>
 <div class="block" name="B">
-<pre ><code class="python" style="margin-left:1em">for i in range(0,10,2):
-    if i > 0:
-        print(i)</code></pre>
-</div>
-</div>
-<div class="col">
-<div class="block" name="C">
-<pre ><code class="python" style="margin-left:1em">for j in '02468':
-    L = int(j)
-    print(L)
-</code></pre>
-</div>
-<div class="block" name="D">
 <pre ><code class="python" style="margin-left:1em">for k in range(0,10):
     if not (k % 2 > 0):
         print(k)</code></pre>
 </div>
 </div>
+<div class="col">
+<div class="block" name="C">
+<pre ><code class="python" style="margin-left:1em">j = 0
+while j < 10:
+    print(j)
+    j += 2
+</code></pre>
 </div>
+<div class="block" name="D">
+<pre ><code class="python" style="margin-left:1em">for i in range(0,10,2):
+    if i > 0:
+        print(i)</code></pre>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="algorithmic-approaches" class="title-slide slide level1">
+<h1>Algorithmic Approaches</h1>
+
 </section>
 <section id="algorithms" class="slide level2">
 <h2>Algorithms</h2>
@@ -240,13 +383,15 @@ factor</li>
 <li class="fragment">Start at top and work down, means first found is
 the greatest</li>
 </ul>
-</div></li>
-</ul>
-<pre ><code class="python fragment" style="margin:auto;">def greatest_factor(num):
+</div>
+<div class="fragment">
+<pre ><code class="python" style="margin:auto;">def greatest_factor(num):
     """Finds the greatest factor of a number."""
     for i in range(num-1,0,-1):
         if num % i == 0:
             return i</code></pre>
+</div></li>
+</ul>
 <!-- not until strings
 
 ## Learning English
@@ -295,6 +440,11 @@ print(count)
 ::::::
 
 -->
+</section></section>
+<section>
+<section id="purging-debugs" class="title-slide slide level1">
+<h1>Purging Debugs</h1>
+
 </section>
 <section id="debugging" class="slide level2">
 <h2>Debugging</h2>
@@ -448,14 +598,14 @@ same purpose</li>
 <ul>
 <li><p>You can use Python’s <code class="python">assert</code> statement
 to write test functions, which take the form:</p>
-<pre ><code class="python">assert condition</code></pre>
-<p>where <code class="python">condition</code> is any operation that
-returns a <code class="python">True</code> or
+<pre ><code class="python">assert |||condition|||</code></pre>
+<p>where <code class="python">|||condition|||</code> is any operation
+that returns a <code class="python">True</code> or
 <code class="python">False</code></p></li>
 <li><p>Assert statements “expect” a condition to yield a
 <code class="python">True</code>, and if they do, nothing happens</p>
 <ul>
-<li>No news is good news in this case</li>
+<li><strong>No news is good news in this case!</strong></li>
 </ul></li>
 <li><p>If an <code class="python">assert</code> condition evaluates to
 <code class="python">False</code>, an error is raised</p></li>
@@ -468,7 +618,7 @@ discoverable by other tools</p></li>
 <h2>Testing Example</h2>
 <ul>
 <li>Suppose we wanted to write some checks of the
-<code class="python">count_letters</code> function from earlier</li>
+<code class="python">greatest_factor</code> function from earlier</li>
 </ul>
 <pre ><code class="python">def test_greatest_factor():
     """ Runs several tests on the function greatest_factor """
@@ -476,21 +626,14 @@ discoverable by other tools</p></li>
     assert greatest_factor(7) == 1
     assert greatest_factor(51) == 17
     assert greatest_factor(9) == 3</code></pre>
-</section>
-<section id="showcasing-autochecks" class="slide level2">
-<h2>Showcasing Autochecks</h2>
-<ul>
-<li>When you submit code to GitHub, my pre-written tests are run
-<ul>
-<li>If <strong>any</strong> check fails, you’ll see the red X (and
-possibly get an email)</li>
-<li>Let’s look at how to get information about what went wrong</li>
-</ul></li>
-<li>VSCode actually can run all the tests locally as well
-<ul>
-<li>Let’s also walk through how that works (and looks)</li>
-</ul></li>
-</ul>
+<!-- need to fix GHClassroom checks first
+## Showcasing Autochecks
+- When you submit code to GitHub, my pre-written tests are run
+    - If **any** check fails, you'll see the red X (and possibly get an email)
+    - Let's look at how to get information about what went wrong
+- VSCode actually can run all the tests locally as well
+    - Let's also walk through how that works (and looks)
+-->
 <!-- moved to later
 ## Introduction to Wordle
 ::::::cols
@@ -676,7 +819,7 @@ Functions to create simple geometric objects:
 --------------------------------------------- ----------------------------
 
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -689,8 +832,10 @@ Functions to create simple geometric objects:
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
 
   <script>
 
@@ -809,6 +954,12 @@ Functions to create simple geometric objects:
 			disableCheckFile: false, //default false
 		 },
 
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -818,6 +969,7 @@ Functions to create simple geometric objects:
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
@@ -848,5 +1000,18 @@ Functions to create simple geometric objects:
       });
       
     </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
