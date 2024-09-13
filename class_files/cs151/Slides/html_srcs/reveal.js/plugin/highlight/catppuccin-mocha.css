@@ -126,6 +126,9 @@ code .hljs-selector-attr {
 code .hljs-selector-pseudo,
 code .hljs-pseudo {
     color: #94e2d5;
+    font-family: serif;
+    font-style: italic;
+    font-size: 1.15em;
 }
 code .hljs-template-tag {
     color: #f2cdcd;

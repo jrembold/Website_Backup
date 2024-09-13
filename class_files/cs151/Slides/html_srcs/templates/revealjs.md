@@ -83,6 +83,7 @@ $body$
   <script src="$revealjs-url$/plugin/chart/Chart.min.js"></script>
   <script src="$revealjs-url$/plugin/chart/plugin.js"></script>
   <script src="$revealjs-url$/plugin/chalkboard/plugin.js"></script>
+  <script src="$revealjs-url$/plugin/multimodal/multimodal.js"></script>
 $if(mathjax)$
   <script src="$revealjs-url$/plugin/math/math.js"></script>
 $endif$
@@ -372,7 +373,7 @@ $endif$
 
 $if(highlightjs)$
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
               console.log(mypythondef);
               return mypythondef(hljs); } )
           },
@@ -391,6 +392,7 @@ $endif$
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
