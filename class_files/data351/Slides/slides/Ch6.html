@@ -14,17 +14,20 @@
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: 1;}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/tokyo-night-light.css">
 </head>
 <body>
   <div class="reveal">
@@ -33,7 +36,7 @@
 <section id="title-slide">
   <h1 class="title">Join Me</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Wednesday, September 21, 2022</p>
+  <p class="date">Wednesday, September 19, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -43,14 +46,14 @@
 <ul>
 <li>I’m still working on HW2 feedback. Probably coming tomorrow.</li>
 </ul></li>
-<li>Still in Ch 6 on Monday</li>
+<li>Still in Ch 7 on Monday</li>
 <li>First test is a week from today!
 <ul>
 <li>Study materials will be posted by the end of tomorrow on the
 website</li>
 </ul></li>
 <li>Polling today: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 </section>
 <section id="understanding-check" class="slide level2">
@@ -67,9 +70,10 @@ know the biggest. Which query will deliver on your wish?</p>
   "pb" NUMERIC(4,2)
 );</code></pre>
 </div>
-<div class="col" style="flex-grow:1.2">
-<pre ><code class="pgsql answer" style="font-size:.7em" name="A">SELECT mode(pb - pa)
-FROM rev;</code></pre>
+<div class="col" style="flex-grow:1.5">
+<pre ><code class="pgsql answer" style="font-size:.7em" name="A">SELECT mode(pb) - mode(pa) AS com_dif
+FROM rev
+ORDER BY com_dif;</code></pre>
 <pre ><code class="pgsql answer" style="font-size:.7em" name="B">SELECT
   mode() WITHIN GROUP (ORDER BY pb) -
   mode() WITHIN GROUP (ORDER BY pa)
@@ -78,11 +82,15 @@ FROM rev;</code></pre>
   mode() WITHIN GROUP (ORDER BY (pb-pa))
 FROM rev;</code></pre>
 <pre ><code class="pgsql answer" style="font-size:.7em" name="D">SELECT
-  mode() WITHIN GROUP 
-    (ORDER BY (pb-pa) DESC)
+  mode() WITHIN GROUP (ORDER BY (pb-pa) DESC)
 FROM rev;</code></pre>
 </div>
 </div>
+</section>
+<section>
+<section id="joinery" class="title-slide slide level1">
+<h1>Joinery</h1>
+
 </section>
 <section id="linking-tables" class="slide level2">
 <h2>Linking Tables</h2>
@@ -118,13 +126,13 @@ style="width:100.0%" /></p>
 <li>Specifying what columns in each table will act as keys along with a
 conditional relating them
 <ul>
-<li>Most common condition is equality</li>
+<li>Most common condition is equality, but anything is allowed</li>
 </ul></li>
 </ul></li>
 </ul>
-<pre ><code class="pgsql">SELECT * FROM table_a
-JOIN table_b
-ON table_a.key_col = table_b.key_col;</code></pre>
+<pre ><code class="pgsql">SELECT * FROM |||table A|||
+JOIN |||table B|||
+ON |||table a|||.|||key column||| = |||table b|||.|||key column|||;</code></pre>
 </section>
 <section id="column-names" class="slide level2">
 <h2>Column Names</h2>
@@ -143,6 +151,11 @@ selecting particular columns you want out of the joined table</li>
 <pre ><code class="pgsql">SELECT tab1.name, tab1.age, tab2.name
 FROM tab1
 JOIN tab2 ON tab1.age = tab2.age;</code></pre>
+</section></section>
+<section>
+<section id="join-types" class="title-slide slide level1">
+<h1>Join Types</h1>
+
 </section>
 <section id="inner-join" class="slide level2">
 <h2>(Inner) Join</h2>
@@ -167,8 +180,15 @@ unique values, but not always necesarry</li>
 </ul></li>
 </ul>
 </section>
-<section id="inner-joins-visualized" class="slide level2">
-<h2>Inner Joins Visualized</h2>
+<section id="inner-join-example-query" class="slide level2">
+<h2>Inner Join Example Query</h2>
+<pre ><code class="pgsql">SELECT *
+FROM facebook
+INNER JOIN linkedin 
+  ON facebook.name = linkedin.name</code></pre>
+</section>
+<section id="inner-join-visualized" class="slide level2">
+<h2>Inner Join Visualized</h2>
 <div class="fig-container" data-file="../images/d3/InnerJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
 </section>
 <section id="left-and-right-join" class="slide level2">
@@ -191,8 +211,15 @@ ordering</li>
 secondary table columns if no match is found</li>
 </ul>
 </section>
-<section id="left-joins-visualized" class="slide level2">
-<h2>Left Joins Visualized</h2>
+<section id="left-join-example-query" class="slide level2">
+<h2>Left Join Example Query</h2>
+<pre ><code class="pgsql">SELECT *
+FROM facebook
+LEFT JOIN linkedin 
+  ON facebook.name = linkedin.name</code></pre>
+</section>
+<section id="left-join-visualized" class="slide level2">
+<h2>Left Join Visualized</h2>
 <div class="fig-container" data-file="../images/d3/LeftJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
 </section>
 <section id="full-outer-join" class="slide level2">
@@ -213,8 +240,15 @@ a <code class="python">RIGHT JOIN</code> with the existing table</li>
 <code class="python">NULL</code> values</li>
 </ul>
 </section>
-<section id="outer-joins-visualized" class="slide level2">
-<h2>Outer Joins Visualized</h2>
+<section id="full-outer-join-example-query" class="slide level2">
+<h2>Full Outer Join Example Query</h2>
+<pre ><code class="pgsql">SELECT *
+FROM facebook
+FULL OUTER JOIN linkedin
+  ON facebook.name = linkedin.name</code></pre>
+</section>
+<section id="outer-join-visualized" class="slide level2">
+<h2>Outer Join Visualized</h2>
 <div class="fig-container" data-file="../images/d3/OuterJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
 </section>
 <section id="cross-join" class="slide level2">
@@ -237,42 +271,80 @@ generate your standard 52 card playing deck</li>
 row.</li>
 </ul>
 </section>
-<section id="cross-joins-visualized" class="slide level2">
-<h2>Cross Joins Visualized</h2>
+<section id="cross-join-example-query" class="slide level2">
+<h2>Cross Join Example Query</h2>
+<pre ><code class="pgsql">SELECT *
+FROM facebook
+CROSS JOIN linkedin</code></pre>
+</section>
+<section id="cross-join-visualized" class="slide level2">
+<h2>Cross Join Visualized</h2>
 <div class="fig-container" data-file="../images/d3/CrossJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
 </section>
-<section id="practice" class="slide level2">
-<h2>Practice</h2>
+<section id="extending-join-queries" class="slide level2">
+<h2>Extending Join Queries</h2>
+<ul>
+<li>Envision any joins as just creating the table that your query is
+acting on
+<ul>
+<li>They happen before any other part of your query</li>
+</ul></li>
+<li>Thus you can still:
+<ul>
+<li>Filter the rows</li>
+<li>Select specific columns</li>
+<li>Order the results</li>
+<li>Etc.</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="practice-time" class="title-slide slide level1">
+<h1>Practice Time</h1>
+
+</section>
+<section id="practice-question-1" class="slide level2">
+<h2>Practice Question 1</h2>
 <p><img data-src="../images/hw_assignment_schema.png"
 style="width:70.0%" /></p>
 <div class="center quip">
 <p>First names of students who have submitted any assignment?</p>
 </div>
 </section>
-<section id="practice-1" class="slide level2">
-<h2>Practice</h2>
+<section id="practice-question-2" class="slide level2">
+<h2>Practice Question 2</h2>
 <p><img data-src="../images/hw_assignment_schema.png"
 style="width:70.0%" /></p>
 <div class="center quip">
 <p>Student ID and name of the assignment for all perfect scores?</p>
 </div>
 </section>
-<section id="practice-2" class="slide level2">
-<h2>Practice</h2>
+<section id="practice-question-3" class="slide level2">
+<h2>Practice Question 3</h2>
 <p><img data-src="../images/hw_assignment_schema.png"
 style="width:70.0%" /></p>
 <div class="center quip">
-<p>How many homework assignments have no submissions?</p>
+<p>How many students have submitted nothing? How many assignments have
+no submissions?</p>
 </div>
 </section>
-<section id="practice-3" class="slide level2">
-<h2>Practice</h2>
+<section id="practice-question-4" class="slide level2">
+<h2>Practice Question 4</h2>
 <p><img data-src="../images/hw_assignment_schema.png"
 style="width:70.0%" /></p>
 <div class="center quip">
-<p>All combinations of students and homework assignments?</p>
+<p>What is the most common number of days to submit an assignment
+late?</p>
 </div>
 </section>
+<section id="practice-question-5" class="slide level2">
+<h2>Practice Question 5</h2>
+<p><img data-src="../images/hw_assignment_schema.png"
+style="width:70.0%" /></p>
+<div class="center quip">
+<p>How many total combinations of students and assignments?</p>
+</div>
+</section></section>
     </div>
   </div>
 
@@ -283,13 +355,14 @@ style="width:70.0%" /></p>
   <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
   <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
   // Added plugins
-  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
-  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
-  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>,
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/mypgsql.js"></script>
 
   <script>
 
@@ -317,7 +390,7 @@ style="width:70.0%" /></p>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -364,7 +437,7 @@ style="width:70.0%" /></p>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -399,14 +472,11 @@ style="width:70.0%" /></p>
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
-	reveald3: {
-			runLastState: true, // true/false, default: true
-			onSlideChangedDelay: 200,
-			mapPath: false, // true / false / "spefific/path/as/string", default: false
-			tryFallbackURL: true, // true/false, default false
-			disableCheckFile: false, //default false
-		 },
-
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -414,7 +484,6 @@ style="width:70.0%" /></p>
           RevealNotes,
           RevealSearch,
           RevealZoom,
-		  RevealChart,
 		  RevealChalkboard,
           RevealMenu,
           Reveald3,
@@ -423,22 +492,22 @@ style="width:70.0%" /></p>
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
@@ -446,5 +515,17 @@ style="width:70.0%" /></p>
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
