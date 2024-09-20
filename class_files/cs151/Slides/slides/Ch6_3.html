@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-09-22">
+  <meta name="dcterms.date" content="2024-09-20">
   <title>Transforming English</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,15 +17,18 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
@@ -34,13 +37,16 @@
 <section id="title-slide">
   <h1 class="title">Transforming English</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">September 22, 2023</p>
+  <p class="date">September 20, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Problem Set 3 due Monday night!</li>
+<li>Problem Set 3 due Monday night!
+<ul>
+<li>You should have everything you need after today</li>
+</ul></li>
 <li>Project 1: Wordle guide out by the end of today!
 <ul>
 <li>No worries if you are still working on PS3 this weekend, that is the
@@ -48,15 +54,125 @@ expectation</li>
 <li>But try to make sure PS3 gets in on time so that you can get a good
 start on Wordle</li>
 </ul></li>
-<li>I’ll be around from 3-6:30 or so this afternoon if you have
-questions that come up, then I’ll be at the volleyball gaame</li>
+<li>I have several meetings this afternoon and then hope to be at the
+SCRP presentations, so consider reaching out to me electronically if you
+need to get a hold of me</li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 </section>
-<section id="review" class="slide level2"
+<section id="repeat-again" class="slide level2">
+<h2>Repeat again?</h2>
+<ul>
+<li>We’ve seen how we can use addition (<code class="python">+</code>)
+in Python to concatenate strings</li>
+<li>In math, adding something many times is the same as multiplying</li>
+</ul>
+<p><span class="math display">\[5+5+5+5+5+5 = 6 \times 5\]</span></p>
+<ul>
+<li>The same logic holds true for Python strings!
+<ul>
+<li><p>You multiply by a <strong>integer</strong>: the number of times
+you want the concatenation repeated</p>
+<pre ><code class="python">print("Betelguese, " * 3)</code></pre></li>
+<li><p>You can not multiply two strings together, Python will not
+understand what you are trying to do</p></li>
+</ul></li>
+</ul>
+</section>
+<section>
+<section id="sequence-operations" class="title-slide slide level1">
+<h1>Sequence Operations</h1>
+
+</section>
+<section id="character-picking" class="slide level2">
+<h2>Character Picking</h2>
+<ul>
+<li>A string is an <em>ordered</em> sequence of characters
+<ul>
+<li>Character positions in the string are identified by an
+<em>index</em>, which <strong>starts at 0</strong></li>
+</ul></li>
+</ul>
+<p><img
+data-src="../images/svg_cache/7f84d146f63c40c77e58a60ad4fc68bc01bd3792.svg"
+style="width:70.0%" /></p>
+<ul>
+<li><p>You can select individual characters from the string using the
+syntax</p>
+<pre ><code class="python">|||string|||[|||k|||]</code></pre>
+<p>where <code class="python">|||string|||</code> is the desired string
+(or variable assigned to a string) and
+<code class="python">|||k|||</code> is the index integer of the
+character you want</p>
+<pre ><code class="python-repl" style="font-size:.7em">>>> print("spaghetti sauce"[5])
+e</code></pre></li>
+</ul>
+</section>
+<section id="back-it-up" class="slide level2">
+<h2>Back it Up</h2>
+<ul>
+<li>Sometimes it is more useful to count from the end of the string, not
+the beginning</li>
+<li>Python gives you a convenient way to do this, using negative
+indexes</li>
+</ul>
+<p><br></p>
+<p><img
+data-src="../images/svg_cache/58828e434b4763134e657bea3fc41d716399eff2.svg"
+style="width:70.0%" /></p>
+<ul>
+<li><p>A common use case is to grab the last character of the string,
+using</p>
+<pre ><code class="python">|||string|||[-1]</code></pre>
+<p>which is shorthand for</p>
+<pre ><code class="python">|||string|||[len(|||string|||)-1]</code></pre></li>
+</ul>
+</section>
+<section id="slicing" class="slide level2">
+<h2>Slicing</h2>
+<ul>
+<li><p>Often, you may want more than a single character</p></li>
+<li><p>Python allows you to specify a starting and an ending index
+through an operation known as <em>slicing</em></p></li>
+<li><p>The syntax looks like:</p>
+<pre ><code class="python">|||string|||[|||start||| : |||limit|||]</code></pre>
+<p>where <code class="python">|||start|||</code> is the first index to
+be included and everything up to but <strong>not including</strong> the
+<code class="python">|||limit|||</code> is included</p></li>
+<li><p><code class="python">|||start|||</code> and
+<code class="python">|||limit|||</code> are actually optional (but the
+<code class="python">:</code> is not)</p>
+<ul>
+<li>If <code class="python">|||start|||</code> omitted, the slice will
+begin at the start of the string</li>
+<li>If <code class="python">|||limit|||</code> omitted, the slice will
+proceed to the end of the string</li>
+</ul></li>
+</ul>
+</section>
+<section id="and-dicing" class="slide level2">
+<h2>and Dicing</h2>
+<ul>
+<li><p>Can add a third component to the slice syntax, called a
+<em>stride</em></p>
+<pre ><code class="python">|||string|||[|||start||| : |||limit||| : |||stride|||]</code></pre></li>
+<li><p>Specifies how large the steps are between each included
+index</p></li>
+<li><p>Can also make the stride negative to proceed backwards through a
+string</p>
+<pre ><code class="python-repl">>>> s = "spaghetti sauce"
+>>> s[4:8]
+hett
+>>> s[10:]
+sauce
+>>> s[:10:2]
+sahti</code></pre></li>
+</ul>
+</section>
+<section id="understanding-check" class="slide level2"
 data-notes="Solution: x[-6:-1]">
-<h2 data-notes="Solution: x[-6:-1]">Review!</h2>
+<h2 data-notes="Solution: x[-6:-1]">Understanding Check!</h2>
 <p>Suppose you have the string
 <code class="python">x = "consternation"</code> and you’d like to just
 extract and print the word <code class="python">"nation"</code>. Which
@@ -103,15 +219,15 @@ another string</p>
 <li><p>You do have the tools to do this manually:</p>
 <pre ><code class="python">def check_if_substr(part, whole):
     L = len(part)
-    for i in range(whole - L):
+    for i in range(len(whole) - L):
         if whole[i:i+L] == part:
             return True
     return False</code></pre></li>
 </ul></li>
 <li><p>Thankfully, Python offers you the <code class="python">in</code>
 keyword, which accomplishes the same thing, but much simpler:</p>
-<pre ><code class="python">if part in whole:
-    #your code here</code></pre></li>
+<pre ><code class="python">if |||part||| in |||sequence|||:
+    |||your code here|||</code></pre></li>
 </ul>
 </section>
 <section id="string-looping" class="slide level2">
@@ -119,8 +235,8 @@ keyword, which accomplishes the same thing, but much simpler:</p>
 <ul>
 <li>Because strings are a sequence, they will work directly in a
 <code class="python">for</code> loop!</li>
-<li>In general, you have two options of how you want to loop through a
-string:</li>
+<li>In general then, you have two options of how you want to loop
+through a string:</li>
 </ul>
 <div class="cols">
 <div class="col">
@@ -143,6 +259,11 @@ for letter in s:
 information</li>
 <li>You can always select the desired letter if looping by index</li>
 </ul>
+</section></section>
+<section>
+<section id="changing-strings" class="title-slide slide level1">
+<h1>Changing Strings</h1>
+
 </section>
 <section id="cant-change-a-strings-colors" class="slide level2">
 <h2>Can’t change a string’s colors</h2>
@@ -175,7 +296,7 @@ objects that use <em>receiver syntax</em></p></li>
 <li><p>In receiver syntax, we specify the object to act on, followed by
 a dot and then a predefined function (called a <em>method</em> here)
 name</p>
-<pre ><code class="python">obj.method_name()</code></pre>
+<pre ><code class="python">|||object|||.|||method_name|||()</code></pre>
 <ul>
 <li>This is like you are running this special function on the object, so
 you <strong>need</strong> the <code class="python">()</code> at the
@@ -201,30 +322,30 @@ operation will proceed</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">string.lower()</code></td>
-<td>Returns a copy of <code class="python">string</code> with all
+<td><code class="python">|||string|||.lower()</code></td>
+<td>Returns a copy of <code class="python">|||string|||</code> with all
 letters converted to lowercase</td>
 </tr>
 <tr class="even">
-<td><code class="python">string.upper()</code></td>
-<td>Returns a copy of <code class="python">string</code> with all
+<td><code class="python">|||string|||.upper()</code></td>
+<td>Returns a copy of <code class="python">|||string|||</code> with all
 letters converted to uppercase</td>
 </tr>
 <tr class="odd">
-<td><code class="python">string.capitalize()</code></td>
-<td>Returns a copy of <code class="python">string</code> with the first
-character capitalized and the rest lowercase</td>
+<td><code class="python">|||string|||.capitalize()</code></td>
+<td>Returns a copy of <code class="python">|||string|||</code> with the
+first character capitalized and the rest lowercase</td>
 </tr>
 <tr class="even">
-<td><code class="python">string.strip()</code></td>
-<td>Returns a copy of <code class="python">string</code> with whitespace
-and non-printing characters removed from both ends</td>
+<td><code class="python">|||string|||.strip()</code></td>
+<td>Returns a copy of <code class="python">|||string|||</code> with
+whitespace and non-printing characters removed from both ends</td>
 </tr>
 <tr class="odd">
-<td><code class="python">string.replace(old, new)</code></td>
-<td>Returns a copy of <code class="python">string</code> with
-<strong>all</strong> instances of <code class="python">old</code>
-replaced by <code class="python">new</code></td>
+<td><code class="python">|||string|||.replace(|||old|||, |||new|||)</code></td>
+<td>Returns a copy of <code class="python">|||string|||</code> with
+<strong>all</strong> instances of <code class="python">|||old|||</code>
+replaced by <code class="python">|||new|||</code></td>
 </tr>
 </tbody>
 </table>
@@ -244,49 +365,55 @@ replaced by <code class="python">new</code></td>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">char.isalpha()</code></td>
+<td><code class="python">|||char|||.isalpha()</code></td>
 <td>Returns <code class="python">True</code> if
-<code class="python">char</code> is a letter</td>
+<code class="python">|||char|||</code> is a letter</td>
 </tr>
 <tr class="even">
-<td><code class="python">char.isdigit()</code></td>
+<td><code class="python">|||char|||.isdigit()</code></td>
 <td>Returns <code class="python">True</code> if
-<code class="python">char</code> is a digit</td>
+<code class="python">|||char|||</code> is a digit</td>
 </tr>
 <tr class="odd">
-<td><code class="python">char.isalnum()</code></td>
+<td><code class="python">|||char|||.isalnum()</code></td>
 <td>Returns <code class="python">True</code> if
-<code class="python">char</code> is letter or a digit</td>
+<code class="python">|||char|||</code> is letter or a digit</td>
 </tr>
 <tr class="even">
-<td><code class="python">char.islower()</code></td>
+<td><code class="python">|||char|||.islower()</code></td>
 <td>Returns <code class="python">True</code> if
-<code class="python">char</code> is a lowercase letter</td>
+<code class="python">|||char|||</code> is a lowercase letter</td>
 </tr>
 <tr class="odd">
-<td><code class="python">char.isupper()</code></td>
+<td><code class="python">|||char|||.isupper()</code></td>
 <td>Returns <code class="python">True</code> if
-<code class="python">char</code> is an uppercase letter</td>
+<code class="python">|||char|||</code> is an uppercase letter</td>
 </tr>
 <tr class="even">
-<td><code class="python">char.isspace()</code></td>
+<td><code class="python">|||char|||.isspace()</code></td>
 <td>Returns <code class="python">True</code> if
-<code class="python">char</code> is a whitespace character (space, tab,
-or newline)</td>
+<code class="python">|||char|||</code> is a whitespace character (space,
+tab, or newline)</td>
 </tr>
 <tr class="odd">
-<td><code class="python">char.isidentifier()</code></td>
+<td><code class="python">|||char|||.isidentifier()</code></td>
 <td>Returns <code class="python">True</code> if
-<code class="python">char</code> is a legal Python identifier</td>
+<code class="python">|||char|||</code> is a legal Python identifier</td>
 </tr>
 </tbody>
 </table>
+</section></section>
+<section>
+<section id="string-io" class="title-slide slide level1">
+<h1>String I/O</h1>
+
 </section>
 <section id="f-not-g" class="slide level2">
 <h2>F not G</h2>
 <ul>
-<li><p>Constructing text or a sentence by interleaving strings and other
-objects comes up a lot in communicating code results to a user</p></li>
+<li><p>Constructing text or a sentences by interleaving strings and
+other objects comes up a lot in communicating code results to a
+user</p></li>
 <li><p>For any Python version past 3.6, the nicest and easiest way to do
 this is with what are called <em>f-strings</em>:</p>
 <pre ><code class="python">A = 10
@@ -307,13 +434,13 @@ print(s)</code></pre></li>
 data from a user, we can use Python’s built-in
 <code class="python">input()</code> function</p></li>
 <li><p>The form will generally look like:</p>
-<pre ><code class="python">variable = input(prompt_text)</code></pre>
+<pre ><code class="python">|||variable||| = input(|||prompt_text|||)</code></pre>
 <ul>
-<li><code class="python">variable</code> is the variable name you want
-to assign the user’s typed input to</li>
-<li><code class="python">prompt_text</code> is the string that will be
-displayed on the screen to communicate to the user what they should be
-doing</li>
+<li><code class="python">|||variable|||</code> is the variable name you
+want to assign the user’s typed input to</li>
+<li><code class="python">|||prompt_text|||</code> is the string that
+will be displayed on the screen to communicate to the user what they
+should be doing</li>
 </ul></li>
 <li><p>The <code class="python">input()</code> function <strong>always
 returns a string</strong></p>
@@ -323,6 +450,11 @@ convert it yourself after retrieving it</p>
 <pre ><code class="python">num = int(input('Pick a number between 1 and 10: '))</code></pre></li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="working-with-english" class="title-slide slide level1">
+<h1>Working with English</h1>
+
 </section>
 <section id="the-english.py-library" class="slide level2">
 <h2>The <code class="python">english.py</code> Library</h2>
@@ -362,9 +494,8 @@ def find_biggest_palindromes():
 <section id="biggest-no-vowel-word" class="slide level2">
 <h2>Biggest No-vowel Word</h2>
 <ul>
-<li>Suppose we wanted to determine the longest word in the English
-language without vowels:</li>
-</ul>
+<li><p>Suppose we wanted to determine the longest word in the English
+language without vowels:</p>
 <pre ><code class="python">from english import ENGLISH_WORDS
 
 def find_first_vowel(word):
@@ -383,7 +514,8 @@ def find_longest_no_vowels():
 
 
 if __name__ == '__main__':
-    find_longest_no_vowels()</code></pre>
+    find_longest_no_vowels()</code></pre></li>
+</ul>
 </section>
 <section id="igpay-atinlay" class="slide level2">
 <h2>Igpay Atinlay</h2>
@@ -646,7 +778,7 @@ What would the below expression evaluate to?
 :::
 
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -659,8 +791,10 @@ What would the below expression evaluate to?
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
 
   <script>
 
@@ -779,6 +913,12 @@ What would the below expression evaluate to?
 			disableCheckFile: false, //default false
 		 },
 
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -788,6 +928,7 @@ What would the below expression evaluate to?
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
@@ -818,5 +959,18 @@ What would the below expression evaluate to?
       });
       
     </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
