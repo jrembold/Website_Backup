@@ -75,6 +75,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -105,7 +108,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <style>html{ scroll-behavior: smooth; }</style>
 
 
-<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed fullcontent">
@@ -167,7 +169,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="../milestones/milestone3.html">
- <span class="dropdown-text">Milestone 3: Pick a random word</span></a>
+ <span class="dropdown-text">Milestone 3: Pick a random secret word</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../milestones/milestone4.html">
@@ -233,7 +235,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../milestones/milestone3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Milestone 3: Pick a random word</span></a>
+ <span class="menu-text">Milestone 3: Pick a random secret word</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -288,6 +290,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Keep track of which letters in the guess have been “used” (already colored) and cross them off as you assign colors. This ensures that, as you consider how to color later letters, you are properly accounting for any letters already used, and will help ensure that you properly color duplicate letter combinations. To achieve this, consider keeping track of the available letters still to “use” from the secret word in a string, and then replacing those letters with something like a space or underscore as you color them. Don’t be afraid to write helper functions to help you achieve this! Break it down!</p></li>
 </ol>
 <p>You have sample words and guesses shown in the <a href="../introduction/wordle_rules.html">Introduction</a> of this guide. <em>Test them against your program!</em> You can just redefine your secret word variable to whatever you need and then type in various possible guesses. Test other combinations as well against what you think they should be (or compare them against the online demo). This is the easiest part of the project to <em>think</em> you have working flawlessly when, in fact, there are issues. <strong>Test it!</strong></p>
+<p>An example of the output of some of this testing is shown below. Your code should be able to recreate these situations and colorings.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="ms2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Output of Wordle.py after entering in a single word in a few configurations. To the left the secret word is RELIC, and to the right the secret word was GLASS. Note in particular how the coloring works for words with duplicate letters appearing in both the word and guess."><img src="ms2.png" class="img-fluid figure-img" alt="Output of Wordle.py after entering in a single word in a few configurations. To the left the secret word is RELIC, and to the right the secret word was GLASS. Note in particular how the coloring works for words with duplicate letters appearing in both the word and guess."></a></p>
+<figcaption>Output of Wordle.py after entering in a single word in a few configurations. To the left the secret word is <code>RELIC</code>, and to the right the secret word was <code>GLASS</code>. Note in particular how the coloring works for words with duplicate letters appearing in both the word and guess.</figcaption>
+</figure>
+</div>
 
 
 
@@ -719,12 +728,44 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../milestones/milestone3.html" class="pagination-link" aria-label="Milestone 3: Pick a random word">
-        <span class="nav-page-text">Milestone 3: Pick a random word</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../milestones/milestone3.html" class="pagination-link" aria-label="Milestone 3: Pick a random secret word">
+        <span class="nav-page-text">Milestone 3: Pick a random secret word</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","loop":false,"openEffect":"zoom","descPosition":"bottom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

@@ -41,6 +41,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -71,7 +74,6 @@ ul.task-list li input[type="checkbox"] {
 <style>html{ scroll-behavior: smooth; }</style>
 
 
-<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed fullcontent">
@@ -249,7 +251,13 @@ ul.task-list li input[type="checkbox"] {
 <li>A player wins the game if they have correctly guessed all <code>N_COLS</code> letters, which would correspond to all of the letters being colored <code>CORRECT_COLOR</code> (green). In that case, you want to have your program display some properly congratulatory message and then set the current row to <code>N_ROWS</code>, which will disable further keyboard input.</li>
 <li>A player loses the game if they have made <code>N_ROWS</code> guesses without winning. Display a message to the window telling them as this, and letting them know what the mystery word was.</li>
 </ul>
-<p>At this point you have a working game of Wordle! Play it through a bunch of times to ensure it is behaving as you expect. Don’t assume all the code you have written is perfect!</p>
+<p>At this point you have a working game of Wordle! Play it through a bunch of times to ensure it is behaving as you expect. Don’t assume all the code you have written is perfect! Some examples of example games are shown below.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="ms4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Examples of winning and losing games at this point. The game to the left was won on guess 4, and thus the victory text was displayed and the current line moved to the end to disable any more text input. The game to the right was lost, and thus after that last guess the loss message was displayed, which included the word that was trying to be guessed."><img src="ms4.png" class="img-fluid figure-img" alt="Examples of winning and losing games at this point. The game to the left was won on guess 4, and thus the victory text was displayed and the current line moved to the end to disable any more text input. The game to the right was lost, and thus after that last guess the loss message was displayed, which included the word that was trying to be guessed."></a></p>
+<figcaption>Examples of winning and losing games at this point. The game to the left was won on guess 4, and thus the victory text was displayed and the current line moved to the end to disable any more text input. The game to the right was lost, and thus after that last guess the loss message was displayed, which included the word that was trying to be guessed.</figcaption>
+</figure>
+</div>
 
 
 
@@ -687,6 +695,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"zoom","selector":".lightbox","closeEffect":"zoom","loop":false});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

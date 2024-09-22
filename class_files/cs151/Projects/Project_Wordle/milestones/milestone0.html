@@ -75,6 +75,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -295,6 +298,13 @@ Important
 <p>Don’t forget that you need to call this function on whatever variable you assigned your five-letter word to! So your lines after the <code>gw.add_enter_listener</code> might look something like:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>secret_word <span class="op">=</span> <span class="st">"happy"</span> <span class="co">#my chosen 5 letter word</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>display_word(secret_word) <span class="co"># displaying it using my defined function</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>resulting in a display of:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="ms0.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="The window immediately upon hitting play after displaying the secret word. Note that even though the word was all lowercase here, the letters displayed in the boxes are uppercase, which is handled automatically by set_square_letter."><img src="ms0.png" class="img-fluid figure-img" alt="The window immediately upon hitting play after displaying the secret word. Note that even though the word was all lowercase here, the letters displayed in the boxes are uppercase, which is handled automatically by set_square_letter."></a></p>
+<figcaption>The window immediately upon hitting play after displaying the secret word. Note that even though the word was all lowercase here, the letters displayed in the boxes are uppercase, which is handled automatically by <code>set_square_letter</code>.</figcaption>
+</figure>
+</div>
 <p>Once you have this working you can comment out the <code>display_word</code> function call, as the game would be very easy if you showed the user the secret word before they started guessing! It highlights the fact, though, that often times it can be worth doing a little work that will later be unnecessary, if it helps you better understand the tools and problem-solving strategies at your disposal. In this case, the code that you will end up writing for part of Milestone 1 will look <em>very</em> similar to what you wrote here.</p>
 
 
@@ -733,6 +743,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","openEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

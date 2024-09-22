@@ -41,6 +41,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -71,7 +74,6 @@ ul.task-list li input[type="checkbox"] {
 <style>html{ scroll-behavior: smooth; }</style>
 
 
-<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed fullcontent">
@@ -245,6 +247,13 @@ ul.task-list li input[type="checkbox"] {
 <p>Up until this point your game uses the same secret word every single time you press play. This is great for testing and debugging purposes, but it isn’t very good from a “good game” perspective! As such, your goal in this milestone is to set the secret word to a <em>random</em> five-letter English word.</p>
 <p>This is a great candidate for writing another helper function! Write a function which will return a random five-letter English word, and then call it where you were originally setting your secret word to a string. There are a variety of ways you could try to create a random five-letter word, but I would suggest using the <code>random</code> library to <em>choose</em> a random word from the <code>ENGLISH_WORDS</code> sequence. Remember though that <code>ENGLISH_WORDS</code> has words of all sizes in it, so you might need to keep choosing a new random word until you get one that is five letters long.</p>
 <p>Once you have your function running, you should be able to call it and assign the returned value to your secret word variable. Now every time you play you’ll be guessing a random word!</p>
+<p>Testing this may give you a chance to reuse your <code>display_word</code> function for a little bit. For example, all of the images below used <code>display_word</code> to automatically show the randomly chosen word. Once you are convinced it is working though, comment back out your <code>display_word</code> function call so that players can’t cheat!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="ms3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Three possible random five-letters words are displayed to the first row using display_word. In a general game, you of course would not display them, but instead challenge the player to guess them."><img src="ms3.png" class="img-fluid figure-img" alt="Three possible random five-letters words are displayed to the first row using display_word. In a general game, you of course would not display them, but instead challenge the player to guess them."></a></p>
+<figcaption>Three possible random five-letters words are displayed to the first row using <code>display_word</code>. In a general game, you of course would not display them, but instead challenge the player to guess them.</figcaption>
+</figure>
+</div>
 
 
 
@@ -682,6 +691,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"loop":false,"closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

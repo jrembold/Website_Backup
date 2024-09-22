@@ -107,7 +107,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <style>html{ scroll-behavior: smooth; }</style>
 
 
-<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed fullcontent">
@@ -285,35 +284,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="fig-startingcode" class="quarto-float quarto-figure quarto-figure-center anchored" style="text-align:left;">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-startingcode-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="sourceCode" id="fig-startingcode" style="text-align:left;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="fig-startingcode-1"><a href="#fig-startingcode-1"></a><span class="co">########################################</span></span>
+<div class="sourceCode" id="fig-startingcode" style="text-align:left;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="fig-startingcode-1"><a href="#fig-startingcode-1"></a><span class="co">#################################################################</span></span>
 <span id="fig-startingcode-2"><a href="#fig-startingcode-2"></a><span class="co"># Name:</span></span>
 <span id="fig-startingcode-3"><a href="#fig-startingcode-3"></a><span class="co"># Collaborators (if any):</span></span>
-<span id="fig-startingcode-4"><a href="#fig-startingcode-4"></a><span class="co"># Estimated time spent (hr):</span></span>
-<span id="fig-startingcode-5"><a href="#fig-startingcode-5"></a><span class="co"># Description of any added extensions:</span></span>
-<span id="fig-startingcode-6"><a href="#fig-startingcode-6"></a><span class="co">########################################</span></span>
-<span id="fig-startingcode-7"><a href="#fig-startingcode-7"></a></span>
-<span id="fig-startingcode-8"><a href="#fig-startingcode-8"></a><span class="im">from</span> WordleGraphics <span class="im">import</span> WordleGWindow, N_ROWS, N_COLS</span>
-<span id="fig-startingcode-9"><a href="#fig-startingcode-9"></a><span class="im">from</span> english <span class="im">import</span> ENGLISH_WORDS, is_english_word</span>
-<span id="fig-startingcode-10"><a href="#fig-startingcode-10"></a><span class="im">from</span> WordleGraphics <span class="im">import</span> CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR, UNKNOWN_COLOR</span>
-<span id="fig-startingcode-11"><a href="#fig-startingcode-11"></a><span class="im">import</span> random</span>
-<span id="fig-startingcode-12"><a href="#fig-startingcode-12"></a></span>
-<span id="fig-startingcode-13"><a href="#fig-startingcode-13"></a><span class="kw">def</span> wordle():</span>
-<span id="fig-startingcode-14"><a href="#fig-startingcode-14"></a>    <span class="co">""" The main function to play the Wordle game. """</span></span>
-<span id="fig-startingcode-15"><a href="#fig-startingcode-15"></a></span>
-<span id="fig-startingcode-16"><a href="#fig-startingcode-16"></a>    <span class="kw">def</span> enter_action():</span>
-<span id="fig-startingcode-17"><a href="#fig-startingcode-17"></a>        <span class="co">""" What should happen when the RETURN or ENTER key is pressed. """</span></span>
-<span id="fig-startingcode-18"><a href="#fig-startingcode-18"></a>        gw.show_message(<span class="st">"You need to implement this method"</span>)</span>
-<span id="fig-startingcode-19"><a href="#fig-startingcode-19"></a></span>
+<span id="fig-startingcode-4"><a href="#fig-startingcode-4"></a><span class="co"># Generative AI transcript link (if any):</span></span>
+<span id="fig-startingcode-5"><a href="#fig-startingcode-5"></a><span class="co"># Estimated time spent (hr):</span></span>
+<span id="fig-startingcode-6"><a href="#fig-startingcode-6"></a><span class="co"># Description of any added extensions:</span></span>
+<span id="fig-startingcode-7"><a href="#fig-startingcode-7"></a><span class="co">#################################################################</span></span>
+<span id="fig-startingcode-8"><a href="#fig-startingcode-8"></a></span>
+<span id="fig-startingcode-9"><a href="#fig-startingcode-9"></a><span class="im">from</span> WordleGraphics <span class="im">import</span> WordleGWindow, N_ROWS, N_COLS</span>
+<span id="fig-startingcode-10"><a href="#fig-startingcode-10"></a><span class="im">from</span> english <span class="im">import</span> ENGLISH_WORDS, is_english_word</span>
+<span id="fig-startingcode-11"><a href="#fig-startingcode-11"></a><span class="im">from</span> WordleGraphics <span class="im">import</span> CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR, UNKNOWN_COLOR</span>
+<span id="fig-startingcode-12"><a href="#fig-startingcode-12"></a><span class="im">import</span> random</span>
+<span id="fig-startingcode-13"><a href="#fig-startingcode-13"></a></span>
+<span id="fig-startingcode-14"><a href="#fig-startingcode-14"></a><span class="kw">def</span> wordle():</span>
+<span id="fig-startingcode-15"><a href="#fig-startingcode-15"></a>    <span class="co">""" The main function to play the Wordle game. """</span></span>
+<span id="fig-startingcode-16"><a href="#fig-startingcode-16"></a></span>
+<span id="fig-startingcode-17"><a href="#fig-startingcode-17"></a>    <span class="kw">def</span> enter_action():</span>
+<span id="fig-startingcode-18"><a href="#fig-startingcode-18"></a>        <span class="co">""" What should happen when the RETURN or ENTER key is pressed. """</span></span>
+<span id="fig-startingcode-19"><a href="#fig-startingcode-19"></a>        gw.show_message(<span class="st">"You need to implement this method"</span>)</span>
 <span id="fig-startingcode-20"><a href="#fig-startingcode-20"></a></span>
-<span id="fig-startingcode-21"><a href="#fig-startingcode-21"></a>    gw <span class="op">=</span> WordleGWindow()</span>
-<span id="fig-startingcode-22"><a href="#fig-startingcode-22"></a>    gw.add_enter_listener(enter_action)</span>
-<span id="fig-startingcode-23"><a href="#fig-startingcode-23"></a></span>
+<span id="fig-startingcode-21"><a href="#fig-startingcode-21"></a></span>
+<span id="fig-startingcode-22"><a href="#fig-startingcode-22"></a>    gw <span class="op">=</span> WordleGWindow()</span>
+<span id="fig-startingcode-23"><a href="#fig-startingcode-23"></a>    gw.add_enter_listener(enter_action)</span>
 <span id="fig-startingcode-24"><a href="#fig-startingcode-24"></a></span>
 <span id="fig-startingcode-25"><a href="#fig-startingcode-25"></a></span>
 <span id="fig-startingcode-26"><a href="#fig-startingcode-26"></a></span>
-<span id="fig-startingcode-27"><a href="#fig-startingcode-27"></a><span class="co"># Startup boilerplate</span></span>
-<span id="fig-startingcode-28"><a href="#fig-startingcode-28"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="fig-startingcode-29"><a href="#fig-startingcode-29"></a>    wordle()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="fig-startingcode-27"><a href="#fig-startingcode-27"></a></span>
+<span id="fig-startingcode-28"><a href="#fig-startingcode-28"></a><span class="co"># Startup boilerplate</span></span>
+<span id="fig-startingcode-29"><a href="#fig-startingcode-29"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="fig-startingcode-30"><a href="#fig-startingcode-30"></a>    wordle()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-startingcode-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: The starting state of <code>Wordle.py</code>. Of particular importance is line 21, where an instance of the <code>WordleGWindow</code> data type is stored in the variable <code>gw</code>. This is the variable you will use throughout the rest of the program when wanting to interact with the <code>WordleGWindow</code>.
@@ -766,7 +766,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","loop":false,"closeEffect":"zoom","descPosition":"bottom","selector":".lightbox"});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","loop":false,"descPosition":"bottom","closeEffect":"zoom","selector":".lightbox"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

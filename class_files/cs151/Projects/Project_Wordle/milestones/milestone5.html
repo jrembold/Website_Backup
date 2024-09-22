@@ -40,6 +40,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -70,7 +73,6 @@ ul.task-list li input[type="checkbox"] {
 <style>html{ scroll-behavior: smooth; }</style>
 
 
-<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed fullcontent">
@@ -242,7 +244,13 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>Your last milestone implements a very helpful feature from the <em>New York Times</em> website wherein it updates the colors of the keys on the virtual keyboard, making it easy to see what letters you’ve already positioned, found, or determined not to be present. The <code>WordleGWindow</code> object exports the methods <code>set_key_color</code> and <code>get_key_color</code> to accomplish this task. These methods use the same string codes (and constant variables) as the corresponding methods for squares.</p>
-<p>In solving this milestone, it is important to remember that once you have set the color of a key, it won’t regress to a worse color. If, for example, you’ve colored the <code>S</code> key green, it will never get set to yellow or gray, even though you may end up using those colors for other squares that contain as <code>S</code>. Key colors can only ever be upgraded, never “downgraded”.</p>
+<p>In solving this milestone, it is important to remember that once you have set the color of a key, it won’t regress to a worse color. If, for example, you’ve colored the <code>S</code> key green, it will never get set to yellow or gray, even though you may end up using those colors for other squares that contain as <code>S</code>. Key colors can only ever be upgraded, never “downgraded”. An example of this is shown in the image below.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="ms5.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="An example of key coloring for the secret word SHOPS in the middle of a game. Note that the “S” and “O” keys are still colored green on the keyboard, even though the most recent guess had the “S” in the incorrect location and didn’t include an “O” at all. The keys always keep the best coloring from any guessed word."><img src="ms5.png" class="img-fluid figure-img" alt="An example of key coloring for the secret word SHOPS in the middle of a game. Note that the “S” and “O” keys are still colored green on the keyboard, even though the most recent guess had the “S” in the incorrect location and didn’t include an “O” at all. The keys always keep the best coloring from any guessed word."></a></p>
+<figcaption>An example of key coloring for the secret word <code>SHOPS</code> in the middle of a game. Note that the “S” and “O” keys are still colored green on the keyboard, even though the most recent guess had the “S” in the incorrect location and didn’t include an “O” at all. The keys always keep the best coloring from any guessed word.</figcaption>
+</figure>
+</div>
 
 
 
@@ -677,6 +685,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"zoom","loop":false,"descPosition":"bottom","openEffect":"zoom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
