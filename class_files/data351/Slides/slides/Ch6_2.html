@@ -14,17 +14,20 @@
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: 1;}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/tokyo-night-light.css">
 </head>
 <body>
   <div class="reveal">
@@ -33,7 +36,7 @@
 <section id="title-slide">
   <h1 class="title">Joining Joins</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Monday, September 26, 2022</p>
+  <p class="date">Monday, September 23, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -47,16 +50,18 @@ afternoon</li>
 written for an hour</li>
 <li>Pen and paper exam: no computers</li>
 <li><a
-href="http://willamette.edu/~jjrembold/classes/data351/testprep/">Study
-Materials</a> posted over the weekend
+href="https://jrembold.github.io/Website_Backup/classes/data351/testprep/">Study
+Materials</a>
 <ul>
 <li>Study guide with some practice questions</li>
 <li>Old test</li>
+<li>Solutions to both</li>
 </ul></li>
-<li>I’ll post my solutions to those today as well</li>
 </ul></li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
+<li>Haley here to talk for a moment with you about career
+development!</li>
 </ul>
 </section>
 <section id="review-question" class="slide level2">
@@ -163,6 +168,11 @@ diagrams</li>
 <p><img data-src="../images/joins_venn_diagrams.png"
 style="width:65.0%" /></p>
 </section>
+<section>
+<section id="compound-joins" class="title-slide slide level1">
+<h1>Compound Joins</h1>
+
+</section>
 <section id="multiple-join-conditionals" class="slide level2">
 <h2>Multiple Join Conditionals</h2>
 <ul>
@@ -175,10 +185,10 @@ like with <code class="python">WHERE</code></li>
 true for the data to be included in the joined table</li>
 </ul>
 <pre ><code class="pgsql">SELECT *
-FROM table1
-JOIN table2
-ON table1.col1 = table2.col1 
-   AND table1.col2 > table2.col2;</code></pre>
+FROM |||table 1|||
+JOIN |||table 2|||
+ON |||table 1|||.|||column 1||| = |||table 2|||.|||column 1|||
+   AND |||table 1|||.|||column 2||| > |||table 2|||.|||column 2|||;</code></pre>
 </section>
 <section id="word-of-warning" class="slide level2">
 <h2>Word of Warning</h2>
@@ -220,9 +230,9 @@ names!</li>
 it helps some with readability</li>
 </ul>
 <pre ><code class="pgsql" style="font-size:.9em">SELECT *
-FROM tablename AS tn
-JOIN tablename2 AS tn2
-ON tn.col1 = tn2.col2;</code></pre>
+FROM |||tablename||| AS tn
+JOIN |||tablename 2||| AS tn2
+ON tn.|||column 1||| = tn2.|||column 2|||;</code></pre>
 </section>
 <section id="multiple-joins" class="slide level2">
 <h2>Multiple Joins</h2>
@@ -238,9 +248,9 @@ want to ensure your join condition matches them all!</li>
 </ul></li>
 </ul>
 <pre ><code class="pgsql">SELECT *
-FROM tablename AS t1
-JOIN tablename2 AS t2 ON t1.col1 = t2.col1
-JOIN tablename3 AS t3 ON t1.col2 = t3.col1;</code></pre>
+FROM |||tablename||| AS t1
+JOIN |||tablename 2||| AS t2 ON t1.|||column_1||| = t2.|||column_1|||
+JOIN |||tablename 3||| AS t3 ON t1.|||column_2||| = t3.|||column_1|||;</code></pre>
 </section>
 <section id="a-super-example" class="slide level2">
 <h2>A Super Example</h2>
@@ -248,6 +258,11 @@ JOIN tablename3 AS t3 ON t1.col2 = t3.col1;</code></pre>
 <div class="fragment center quip">
 <p>How many blue-eyed superheros can fly?</p>
 </div>
+</section></section>
+<section>
+<section id="join-thyself" class="title-slide slide level1">
+<h1>Join Thyself</h1>
+
 </section>
 <section id="self-joins" class="slide level2">
 <h2>Self Joins</h2>
@@ -263,15 +278,27 @@ else you won’t have a way to distinguish between which columns you
 want</li>
 </ul>
 </section>
-<section id="a-familial-example" class="slide level2">
-<h2>A Familial Example</h2>
+<section id="a-corporate-example" class="slide level2">
+<h2>A Corporate Example</h2>
 <ul>
-<li>We have a table containing the names and relationships between a
-multi-generational family tree.</li>
+<li>We have a table containing the names and subordinate relationships
+between individuals in a corporation.</li>
 <li>What sorts of questions could we answer using just that table and
 some self joins?</li>
 </ul>
+</section></section>
+<section>
+<section id="study-time" class="title-slide slide level1">
+<h1>Study Time</h1>
+
 </section>
+<section id="the-time-is-yours" class="slide level2">
+<h2>The Time is Yours</h2>
+<ul>
+<li>The remainder of our time today is set aside for you to ask
+questions or work on the study materials</li>
+</ul>
+</section></section>
     </div>
   </div>
 
@@ -282,13 +309,14 @@ some self joins?</li>
   <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
   <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
   // Added plugins
-  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
-  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
-  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>,
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/mypgsql.js"></script>
 
   <script>
 
@@ -316,7 +344,7 @@ some self joins?</li>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -363,7 +391,7 @@ some self joins?</li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -398,14 +426,11 @@ some self joins?</li>
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
-	reveald3: {
-			runLastState: true, // true/false, default: true
-			onSlideChangedDelay: 200,
-			mapPath: false, // true / false / "spefific/path/as/string", default: false
-			tryFallbackURL: true, // true/false, default false
-			disableCheckFile: false, //default false
-		 },
-
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -413,7 +438,6 @@ some self joins?</li>
           RevealNotes,
           RevealSearch,
           RevealZoom,
-		  RevealChart,
 		  RevealChalkboard,
           RevealMenu,
           Reveald3,
@@ -422,22 +446,22 @@ some self joins?</li>
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
@@ -445,5 +469,17 @@ some self joins?</li>
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
