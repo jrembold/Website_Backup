@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-09-27">
-  <title>Drawing 101</title>
+  <meta name="dcterms.date" content="2024-09-25">
+  <title>Random Drawing</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -27,59 +27,259 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Drawing 101</h1>
+  <h1 class="title">Random Drawing</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">September 27, 2023</p>
+  <p class="date">September 25, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
 <li>PS2 scores and feedback posted</li>
-<li>Wordle Project due on Monday night!
+<li>Wordle Project due next Monday night!
 <ul>
 <li>Remember you can contact your section leader if you have questions
 as well</li>
+<li>Get started!</li>
 </ul></li>
 <li>Attend your small sections!
 <ul>
 <li>All questions this week revolve around prepping/helping you with
 Wordle</li>
 </ul></li>
-<li>CS/DS Tea tomorrow
+<li>TechBytes begins tomorrow!
 <ul>
-<li>Student speakers! We’ll have several talking about what they did
-over the summer and what they took away from it.</li>
+<li>In the DLS from noon-1pm. There will be pizza, and we will be
+hearing about our own Professor Kitada-Smalley’s research</li>
 </ul></li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
-</section>
-<section id="review-question" class="slide level2"
-data-notes="The 32//8 option">
-<h2 data-notes="The 32//8 option">Review Question!</h2>
-<p>Which of the provided formatted string options below would evaluate
-to appear as:</p>
+<!-- Haven't covered f-string formatting yet
+## Review Question! {data-notes="The 32//8 option"}
+Which of the provided formatted string options below would evaluate to appear as:
+
 <center>
-<code class="python">101,234.98   & 4000</code>
+`101,234.98   & 4000`
 </center>
-<p>when printed?</p>
-<div class="poll">
+
+when printed?
+
+:::{.poll}
+#. `f"{101234.984:<12,.2f} & {3200//8:<4d}"`
+#. `f"{101234.984:>12,.2f} & {32000//8:0>3d}"`
+#. `f"{101234.984:<12,f} & {320//8:0>4d}"`
+#. `f"{101234.984:<12,.2f} & {32//8:0<4d}"`
+:::
+-->
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question</h2>
+<p>What would be the output of
+<code class="python">revq("september", "e")</code> given the definition
+below?</p>
+<pre ><code class="python">def revq(a, b):
+    c = b.find(a)
+    return a[ a.find(b)+1 : a.rfind(b) : c+3 ]</code></pre>
+<div class="hpoll">
 <ol>
-<li><code class="python">f"{101234.984:<12,.2f} & {3200//8:<4d}"</code></li>
-<li><code class="python">f"{101234.984:>12,.2f} & {32000//8:0>3d}"</code></li>
-<li><code class="python">f"{101234.984:<12,f} & {320//8:0>4d}"</code></li>
-<li><code class="python">f"{101234.984:<12,.2f} & {32//8:0<4d}"</code></li>
+<li><code class="python">"seer"</code></li>
+<li><code class="python">""</code></li>
+<li><code class="python">"eptemb"</code></li>
+<li><code class="python">"peb"</code></li>
 </ol>
 </div>
+</section>
+<section>
+<section id="english-and-pig-latin" class="title-slide slide level1">
+<h1>English and (Pig) Latin</h1>
+
+</section>
+<section id="igpay-atinlay" class="slide level2">
+<h2>Igpay Atinlay</h2>
+<ul>
+<li>Suppose we wanted to write a script that converted English to Pig
+Latin</li>
+<li>Rules of Pig Latin:
+<ul>
+<li>If the word begins with a consonant, move everything up to the first
+vowel to the end and append on “ay” at the end
+<center>
+<code class="python">fleet</code> ⟶ <code class="python">eetflay</code>
+</center></li>
+<li>If the word starts with a vowel, just append “way” to the end
+<center>
+<code class="python">orange</code> ⟶
+<code class="python">orangeway</code>
+</center></li>
+<li>If the word has no vowels, do nothing</li>
+</ul></li>
+<li>Our decomposition:
+<ul>
+<li>Find first vowel location</li>
+<li>Convert a single word</li>
+</ul></li>
+</ul>
+</section>
+<section id="indingfay-owelsvay" class="slide level2">
+<h2>Indingfay Owelsvay</h2>
+<pre ><code class="python">def find_first_vowel_index(word):
+    """
+    Find the first vowel in a word and return its index,
+    or return None if no vowels found.
+    """
+    for i in range(len(word)):
+        index = "aeiou".find(word[i].lower())
+        if index != -1:
+            return i
+    return None</code></pre>
+</section>
+<section id="onvertcay-oneway-ordway" class="slide level2">
+<h2>Onvertcay Oneway Ordway</h2>
+<pre ><code class="python" style="max-height:900px;">def word_2_pig_latin(word):
+    """
+    Convert a single word with no special characters from
+    English to Pig Latin.
+    """
+    vowel = find_first_vowel_index(word)
+    if vowel is None:
+        return word
+    elif vowel == 0:
+        return word + "way"
+    else:
+        return word[vowel:] + word[:vowel] + "ay"</code></pre>
+</section>
+<section id="when-pig-latin-english" class="slide level2">
+<h2>When Pig Latin = English?</h2>
+<ul>
+<li>What about when the Pig Latin version of a word is a different, but
+valid, English word?</li>
+</ul>
+<pre ><code class="python">def pig_latin_equals_english():
+    count = 0
+    for word in ENGLISH_WORDS:
+        piglatin = word_2_pig_latin(word)
+        if is_english_word(piglatin) and word != piglatin:
+            print(word, ":", piglatin)
+            count += 1
+    return count</code></pre>
+</section></section>
+<section>
+<section id="randomizing-our-programs" class="title-slide slide level1">
+<h1>Randomizing Our Programs</h1>
+
+</section>
+<section id="nondeterministic-programming" class="slide level2">
+<h2>Nondeterministic Programming</h2>
+<ul>
+<li>For Wordle, the game is only interesting if the secret word is not
+the same every time!</li>
+<li>Let’s take a moment to look at the built-in
+<code class="python">random</code> library, which lets us simulate
+random processes</li>
+<li>Programs that involve random processes that cannot be predicted in
+advance are said to be <em>nondeterministic</em></li>
+<li>Nondeterministic behavior is essential to many applications.
+<ul>
+<li>Many games would not be enjoyable if they behaved the exact same way
+every playthrough</li>
+<li>Important practical uses in simulations, computer security, and
+algorithm research</li>
+</ul></li>
+</ul>
+</section>
+<section id="important-functions-in-random" class="slide level2">
+<h2>Important Functions in <code class="python">random</code></h2>
+<div style="font-size: 80%">
+<ul>
+<li>Random Integers</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 63%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td
+style="text-align: left;"><code class="python">randint(minv, maxv)</code></td>
+<td style="text-align: left;">Returns an integer between minv and maxv,
+inclusive</td>
+</tr>
+<tr class="even">
+<td
+style="text-align: left;"><code class="python">randrange(limit)</code></td>
+<td style="text-align: left;">Returns an integer from 0 up to but not
+including limit</td>
+</tr>
+<tr class="odd">
+<td
+style="text-align: left;"><code class="python">randrange(start,limit)</code></td>
+<td style="text-align: left;">Returns an integer from start up to but
+not including limit</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code class="python">random()</code></td>
+<td style="text-align: left;">Returns a random float between 0 and
+1</td>
+</tr>
+<tr class="odd">
+<td
+style="text-align: left;"><code class="python">uniform(minv, maxv)</code></td>
+<td style="text-align: left;">Returns a random float between minv and
+maxv</td>
+</tr>
+<tr class="even">
+<td
+style="text-align: left;"><code class="python">choice(a_seq)</code></td>
+<td style="text-align: left;">Returns a random element from
+<code class="python">a_seq</code></td>
+</tr>
+<tr class="odd">
+<td
+style="text-align: left;"><code class="python">sample(a_seq, k)</code></td>
+<td style="text-align: left;">Returns a list of
+<code class="python">k</code> elements from
+<code class="python">a_seq</code></td>
+</tr>
+<tr class="even">
+<td
+style="text-align: left;"><code class="python">shuffle(a_seq)</code></td>
+<td style="text-align: left;">Randomly reorders the elements of
+<code class="python">a_seq</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="random-examples" class="slide level2">
+<h2>Random Examples</h2>
+<pre ><code class="python" style="max-height:900px">import random
+
+def random_redblue():
+    if random.random() > 0.5:
+        return "red"
+    else:
+        return "blue"
+
+def random_color():
+    color_string = "#"
+    for i in range(6):
+        color_string += random.choice("0123456789ABCDEF")
+    return color</code></pre>
+</section></section>
+<section>
+<section id="getting-graphical" class="title-slide slide level1">
+<h1>Getting Graphical</h1>
+
 </section>
 <section id="the-worth-of-a-picture" class="slide level2">
 <h2>The Worth of a Picture</h2>
@@ -306,19 +506,19 @@ pixels</li>
 <ul>
 <li>Rectangles!
 <ul>
-<li><code class="python">GRect( x, y, width, height )</code></li>
+<li><code class="python">GRect( |||x|||, |||y|||, |||width|||, |||height||| )</code></li>
 <li>Creates a rectangle whose upper left corner is at (x,y) of the
 specified size</li>
 </ul></li>
 <li>Circles/Ovals!
 <ul>
-<li><code class="python">GOval( x, y, width, height )</code></li>
+<li><code class="python">GOval( |||x|||, |||y|||, |||width|||, |||height||| )</code></li>
 <li>Creates an oval that fits inside the rectangle with the same
 dimensions</li>
 </ul></li>
 <li>Lines!
 <ul>
-<li><code class="python">GLine( x1, y1, x2, y2 )</code></li>
+<li><code class="python">GLine( |||x1|||, |||y1|||, |||x2|||, |||y2||| )</code></li>
 <li>Creates a line extending from (x1,y1) to (x2,y2)</li>
 </ul></li>
 </ul>
@@ -331,7 +531,7 @@ dimensions</li>
 <p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    sodipodi:docname="GObject_Hierarchy.svg"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
    id="svg8"
    version="1.1"
    viewBox="0 0 288.75107 138.18124"
@@ -355,11 +555,11 @@ dimensions</li>
      inkscape:showpageshadow="false"
      showgrid="false"
      inkscape:document-rotation="0"
-     inkscape:current-layer="g922"
+     inkscape:current-layer="g887"
      inkscape:document-units="mm"
-     inkscape:cy="250.01275"
-     inkscape:cx="677.81235"
-     inkscape:zoom="0.9899495"
+     inkscape:cy="-50.714285"
+     inkscape:cx="301.42857"
+     inkscape:zoom="0.7"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0"
      borderopacity="1.0"
@@ -388,19 +588,19 @@ dimensions</li>
     <path
        sodipodi:nodetypes="cccccc"
        d="M 361.26594,98.229926 V 59.650267 M 248.28711,146.39855 V 80.547709 h 223.32154 v 65.079271"
-       style="fill:none;stroke:#66d9ef;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#89b4fa;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path974" />
     <path
        sodipodi:nodetypes="cccccc"
        d="m 361.70422,134.19507 v -11.39636 m -36.96412,23.3191 v -12.01496 h 74.40916 v 11.85956"
-       style="fill:none;stroke:#66d9ef;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#89b4fa;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path968" />
     <g
        style="stroke-width:1.24545;stroke:#a6e22e"
        transform="matrix(0.80375953,0,0,0.80208372,44.982492,33.781385)"
        id="g860">
       <rect
-         style="fill:none;stroke:#a6e22e;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round"
+         style="fill:none;stroke:#a6e3a1;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round"
          id="rect833"
          width="75.025894"
          height="30.082256"
@@ -409,7 +609,7 @@ dimensions</li>
          ry="4.2922554" />
       <text
          xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e22e;fill-opacity:1;stroke:none;stroke-width:0.329525"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:#a6e3a1;stroke-width:0.329525"
          x="363.17523"
          y="21.115273"
          id="text837"><tspan
@@ -417,7 +617,7 @@ dimensions</li>
            id="tspan835"
            x="363.17523"
            y="21.115273"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e22e;stroke-width:0.329525;stroke:none">GObject</tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.329525;stroke:#a6e3a1">GObject</tspan></text>
     </g>
     <g
        style="stroke-width:1.24545"
@@ -430,14 +630,14 @@ dimensions</li>
          height="30.082256"
          width="149.09215"
          id="rect862"
-         style="fill:none;stroke:#a6e22e;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round" />
+         style="fill:none;stroke:#a6e3a1;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round" />
       <text
          id="text866"
          y="21.115273"
          x="363.17523"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e22e;fill-opacity:1;stroke:none;stroke-width:0.329525"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:#a6e3a1;stroke-width:0.329525"
          xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e22e;stroke-width:0.329525"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.329525;stroke:#a6e3a1"
            y="21.115273"
            x="363.17523"
            id="tspan864"
@@ -456,7 +656,7 @@ dimensions</li>
            transform="translate(-96.854547)"
            id="g914">
           <rect
-             style="fill:none;stroke:#a6e22e;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round"
+             style="fill:none;stroke:#a6e3a1;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round"
              id="rect908"
              width="75.025894"
              height="30.082256"
@@ -465,7 +665,7 @@ dimensions</li>
              ry="4.2922554" />
           <text
              xml:space="preserve"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e22e;fill-opacity:1;stroke:none;stroke-width:0.329525"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:#a6e3a1;stroke-width:0.329525"
              x="372.17844"
              y="22.624582"
              id="text912"><tspan
@@ -473,7 +673,7 @@ dimensions</li>
                id="tspan910"
                x="372.17844"
                y="22.624582"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e22e;stroke-width:0.329525">GLine</tspan></text>
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.329525;stroke:#a6e3a1">GLine</tspan></text>
         </g>
         <g
            style="stroke-width:1.24545"
@@ -486,14 +686,14 @@ dimensions</li>
              height="30.082256"
              width="75.025894"
              id="rect881"
-             style="fill:none;stroke:#a6e22e;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round" />
+             style="fill:none;stroke:#a6e3a1;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round" />
           <text
              id="text885"
              y="22.071293"
              x="372.20853"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e22e;fill-opacity:1;stroke:none;stroke-width:0.329525"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:#a6e3a1;stroke-width:0.329525"
              xml:space="preserve"><tspan
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e22e;stroke-width:0.329525"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.329525;stroke:#a6e3a1"
                y="22.071293"
                x="372.20853"
                id="tspan883"
@@ -504,7 +704,7 @@ dimensions</li>
            transform="translate(90.332768,-0.34814689)"
            id="g902">
           <rect
-             style="fill:none;stroke:#a6e22e;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round"
+             style="fill:none;stroke:#a6e3a1;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round"
              id="rect896"
              width="75.025894"
              height="30.082256"
@@ -513,7 +713,7 @@ dimensions</li>
              ry="4.2922554" />
           <text
              xml:space="preserve"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e22e;fill-opacity:1;stroke:none;stroke-width:0.329525"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:#a6e3a1;stroke-width:0.329525"
              x="372.32144"
              y="22.364876"
              id="text900"><tspan
@@ -521,7 +721,7 @@ dimensions</li>
                sodipodi:role="line"
                x="372.32144"
                y="22.364876"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e22e;stroke-width:0.329525">GOval</tspan></text>
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.329525;stroke:#a6e3a1">GOval</tspan></text>
         </g>
         <g
            style="stroke-width:1.24545"
@@ -534,14 +734,14 @@ dimensions</li>
              height="30.082256"
              width="75.025894"
              id="rect916"
-             style="fill:none;stroke:#a6e22e;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round" />
+             style="fill:none;stroke:#a6e3a1;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round" />
           <text
              id="text920"
              y="22.443916"
              x="367.80481"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e22e;fill-opacity:1;stroke:none;stroke-width:0.329525"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:#a6e3a1;stroke-width:0.329525"
              xml:space="preserve"><tspan
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e22e;stroke-width:0.329525"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.329525;stroke:#a6e3a1"
                y="22.443916"
                x="367.80481"
                sodipodi:role="line"
@@ -563,39 +763,41 @@ those that have a fillable interior</li>
 <h2>Interacting with the <code class="python">GWindow</code></h2>
 <ul>
 <li><p>We’ve already shown creation:</p>
-<pre ><code class="python">gw = GWindow(width, height)</code></pre></li>
+<pre ><code class="python">gw = GWindow(|||width|||, |||height|||)</code></pre></li>
 <li><p>You have several more operations that you can apply to the
 <code class="python">GWindow</code> object:</p></li>
 </ul>
 <table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td
-style="text-align: right;"><code class="no-highlight">gw.add(object)</code></td>
-<td style="text-align: left;">Adds an object to the window</td>
+<td><code class="python">|||gw|||.add(|||object|||)</code></td>
+<td>Adds an object to the window</td>
 </tr>
 <tr class="even">
-<td
-style="text-align: right;"><code class="no-highlight">gw.add(object, x, y)</code></td>
-<td style="text-align: left;">Adds an object to the window after moving
-it to (x,y)</td>
+<td><code class="python">|||gw|||.add(|||object|||, |||x|||, |||y|||)</code></td>
+<td>Adds an object to the window after moving it to (x,y)</td>
 </tr>
 <tr class="odd">
-<td
-style="text-align: right;"><code class="no-highlight">gw.remove(object)</code></td>
-<td style="text-align: left;">Removes an object from the window</td>
+<td><code class="python">|||gw|||.remove(|||object|||)</code></td>
+<td>Removes an object from the window</td>
 </tr>
 <tr class="even">
-<td
-style="text-align: right;"><code class="no-highlight">gw.get_width()</code></td>
-<td style="text-align: left;">Returns the width of the graphics window
-in pixels</td>
+<td><code class="python">|||gw|||.get_width()</code></td>
+<td>Returns the width of the graphics window in pixels</td>
 </tr>
 <tr class="odd">
-<td
-style="text-align: right;"><code class="no-highlight">gw.get_height()</code></td>
-<td style="text-align: left;">Returns the height of the graphics window
-in pixels</td>
+<td><code class="python">|||gw|||.get_height()</code></td>
+<td>Returns the height of the graphics window in pixels</td>
 </tr>
 </tbody>
 </table>
@@ -608,30 +810,35 @@ in pixels</td>
 instance.</li>
 </ul>
 <table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td
-style="text-align: right;"><code class="no-highlight">object.get_x()</code></td>
+<td><code class="python">|||object|||.get_x()</code></td>
 <td>Returns the x coordinate of this object</td>
 </tr>
 <tr class="even">
-<td
-style="text-align: right;"><code class="no-highlight">object.get_y()</code></td>
+<td><code class="python">|||object|||.get_y()</code></td>
 <td>Returns the y coordinate of this object</td>
 </tr>
 <tr class="odd">
-<td
-style="text-align: right;"><code class="no-highlight">object.get_width()</code></td>
+<td><code class="python">|||object|||.get_width()</code></td>
 <td>Returns the width of this object</td>
 </tr>
 <tr class="even">
-<td
-style="text-align: right;"><code class="no-highlight">object.get_height()</code></td>
+<td><code class="python">|||object|||.get_height()</code></td>
 <td>Returns the height of this object</td>
 </tr>
 <tr class="odd">
-<td
-style="text-align: right;"><code class="no-highlight">object.set_color(color)</code></td>
+<td><code class="python">|||object|||.set_color(|||color|||)</code></td>
 <td>Sets the color of the object to the specified color</td>
 </tr>
 </tbody>
@@ -649,26 +856,32 @@ to them.</li>
 and ovals</li>
 </ul>
 <table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td
-style="text-align: right;"><code class="no-highlight">object.set_filled(bool)</code></td>
+<td><code class="python">|||object|||.set_filled(|||bool|||)</code></td>
 <td>Sets the fill state of the object</td>
 </tr>
 <tr class="even">
-<td
-style="text-align: right;"><code class="no-highlight">object.set_fill_color(color)</code></td>
+<td><code class="python">|||object|||.set_fill_color(|||color|||)</code></td>
 <td>Sets the color to be used to fill the interior, otherwise same as
 the outer line</td>
 </tr>
 <tr class="odd">
-<td
-style="text-align: right;"><code class="no-highlight">object.get_fill_color()</code></td>
+<td><code class="python">|||object|||.get_fill_color()</code></td>
 <td>Gets the current color used to display the object interior</td>
 </tr>
 <tr class="even">
-<td
-style="text-align: right;"><code class="no-highlight">object.is_filled()</code></td>
+<td><code class="python">|||object|||.is_filled()</code></td>
 <td>Returns True or False depending on whether the object is currently
 filled</td>
 </tr>
@@ -961,7 +1174,7 @@ def introduction(name='Jed', age=35):
   ```
 
   -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -974,8 +1187,10 @@ def introduction(name='Jed', age=35):
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
 
   <script>
 
@@ -1094,6 +1309,12 @@ def introduction(name='Jed', age=35):
 			disableCheckFile: false, //default false
 		 },
 
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -1103,6 +1324,7 @@ def introduction(name='Jed', age=35):
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
@@ -1133,5 +1355,18 @@ def introduction(name='Jed', age=35):
       });
       
     </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
