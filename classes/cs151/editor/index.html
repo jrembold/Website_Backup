@@ -414,7 +414,7 @@
 var editor = ace.edit("editor");
 editor.setTheme("ace/theme/gruvbox");
 editor.session.setMode("ace/mode/python");
-editor.session.setUseSoftTabs(false);
+editor.session.setUseSoftTabs(true);
 
 function mycopy() {
 	var copytext = editor.getValue()
