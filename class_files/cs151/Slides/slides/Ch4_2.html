@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-09-29">
-  <title>Functional Labels</title>
+  <meta name="dcterms.date" content="2024-09-27">
+  <title>Graphical Basics</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -17,24 +17,27 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Functional Labels</h1>
+  <h1 class="title">Graphical Basics</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">September 29, 2023</p>
+  <p class="date">September 27, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -42,19 +45,21 @@
 <ul>
 <li>Be working on Wordle! Remember a good goal was to try to have
 Milestone 3 done by the end of today</li>
-<li>My availability this afternoon is tiny, as I have a ton of meetings.
-But I should be around the hour after class and then from 5-6:30</li>
-<li>Midterm 1 is a week from today! On everything up through Wordle (no
-graphics)
+<li>My availability this afternoon is variable as I have a bunch of
+students making up tests. But I should be around most of the afternoon
+and could chat with you outside my office if someone is currently taking
+an exam</li>
+<li>Speaking of exams, Midterm 1 is a week from today! On everything up
+through Wordle (no graphics)
 <ul>
-<li>Review materials going out this weekend
+<li>Review materials going out today
 <ul>
 <li>List of learning objectives</li>
 <li>2 sample exams with solutions</li>
 </ul></li>
 </ul></li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 <!--
 ## Review Question {data-notes="Answer: None of the above, as nothing is returned"}
@@ -85,9 +90,802 @@ print(type(x))
 ::::
 -->
 </section>
+<section>
+<section id="the-big-picture" class="title-slide slide level1">
+<h1>The Big Picture</h1>
+
+</section>
+<section id="the-pieces" class="slide level2">
+<h2>The Pieces</h2>
+<ul>
+<li>At its simplest then, we have two main parts:
+<ul>
+<li>The window (or felt-board/cork-board)
+<ul>
+<li>Created with the <code class="python">GWindow</code> function</li>
+<li>Takes two arguments: a width and a height in pixels</li>
+</ul></li>
+<li>The contents
+<ul>
+<li>A wide assortment of shapes that can be added to the scene</li>
+<li>Control over where they are placed, how large they are, what color
+they are, etc</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="blue-rectangle" class="slide level2">
+<h2>Blue Rectangle!</h2>
+<pre ><code class="python" data-line-numbers="1|3,4|6|7|8|9|10|11">from pgl import GWindow, GRect
+
+GW_WIDTH = 500
+GW_HEIGHT = 200
+
+gw = GWindow(GW_WIDTH, GW_HEIGHT)
+rect = GRect(150, 50 ,200, 100)
+rect.set_color("Blue")
+rect.set_filled(True)
+gw.add(rect)</code></pre>
+</section>
+<section id="the-coordinate-system" class="slide level2">
+<h2>The Coordinate System</h2>
+<figure>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="390.46mm"
+   height="146.14mm"
+   version="1.1"
+   viewBox="0 0 390.46 146.14"
+   id="svg7"
+   sodipodi:docname="pgl_coordinates.svg"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.4345885"
+     inkscape:cx="663.84637"
+     inkscape:cy="121.95445"
+     inkscape:window-width="1680"
+     inkscape:window-height="1020"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg7" />
+  <defs
+     id="defs2">
+    <marker
+       inkscape:stockid="Distance start"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker27"
+       style="overflow:visible"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <g
+         transform="scale(0.6)"
+         id="g27">
+        <path
+           d="m 0,-40 v 0"
+           id="path25" />
+        <path
+           d="M 0,0 8,5 V -5 Z"
+           style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+           sodipodi:nodetypes="ccccc"
+           id="path26" />
+        <path
+           d="M 0,-8 V 40"
+           style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:square"
+           id="path27" />
+      </g>
+    </marker>
+    <marker
+       inkscape:stockid="Distance end"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker24"
+       style="overflow:visible"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <g
+         transform="scale(0.6)"
+         id="g24">
+        <path
+           d="m 0,-40 v 0"
+           id="path22" />
+        <path
+           d="M 0,0 -8,5 V -5 Z"
+           style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+           id="path23" />
+        <path
+           d="M 0,-8 V 40"
+           style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:square"
+           id="path24" />
+      </g>
+    </marker>
+    <marker
+       inkscape:stockid="Distance end"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="DistanceEnd"
+       style="overflow:visible"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <g
+         transform="scale(0.6)"
+         id="g16">
+        <path
+           d="m 0,-40 v 0"
+           id="path14" />
+        <path
+           d="M 0,0 -8,5 V -5 Z"
+           style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+           id="path15" />
+        <path
+           d="M 0,-8 V 40"
+           style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:square"
+           id="path16" />
+      </g>
+    </marker>
+    <marker
+       inkscape:stockid="Distance start"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="DistanceStart"
+       style="overflow:visible"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <g
+         transform="scale(0.6)"
+         id="g13">
+        <path
+           d="m 0,-40 v 0"
+           id="path11" />
+        <path
+           d="M 0,0 8,5 V -5 Z"
+           style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+           sodipodi:nodetypes="ccccc"
+           id="path12" />
+        <path
+           d="M 0,-8 V 40"
+           style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:square"
+           id="path13" />
+      </g>
+    </marker>
+    <marker
+       id="marker1717"
+       overflow="visible"
+       orient="auto">
+      <path
+         transform="scale(.8)"
+         d="m0 5.65v-11.3"
+         fill="#008080"
+         fill-rule="evenodd"
+         stroke="#008080"
+         stroke-width="1pt"
+         id="path1" />
+    </marker>
+    <marker
+       id="StopL"
+       overflow="visible"
+       orient="auto">
+      <path
+         transform="scale(.8)"
+         d="m0 5.65v-11.3"
+         fill="#008080"
+         fill-rule="evenodd"
+         stroke="#008080"
+         stroke-width="1pt"
+         id="path2" />
+    </marker>
+  </defs>
+  <metadata
+     id="metadata2">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-14.342 -8.9911)"
+     id="g7">
+    <image
+       x="64.843"
+       y="18.88"
+       width="339.96"
+       height="136.25"
+       stroke-width=".39225"
+       preserveAspectRatio="none"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfgAAADKCAYAAABJ7VJtAAAABHNCSVQICAgIfAhkiAAAA3hJREFU eJzt11FxQkEURMH7UoghgsAKkYAWDEXOxgTUwkm3gvk7Ncf5clszM7+P+wAAn+37+jMzM1+bdwAA LyDwABAk8AAQJPAAECTwABAk8AAQJPAAECTwABAk8AAQJPAAECTwABAk8AAQJPAAECTwABAk8AAQ JPAAECTwABAk8AAQJPAAECTwABAk8AAQJPAAECTwABAk8AAQJPAAECTwABAk8AAQJPAAECTwABAk 8AAQJPAAECTwABAk8AAQJPAAECTwABAk8AAQJPAAECTwABAk8AAQJPAAECTwABAk8AAQJPAAECTw ABAk8AAQJPAAECTwABAk8AAQJPAAEHTaPYC249i9AN7bWrsXUOXBA0CQwANAkMADQJDAA0CQwANA kMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQ wANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDA A0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMAD QJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANA kMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQ wANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDA A0CQwANAkMADQJDAA0CQwANAkMADQJDAA0CQwANAkMADQJDAA0DQafcA2tbavQDgf/LgASBI4AEg SOABIEjgASBI4AEgSOABIEjgASBI4AEgSOABIEjgASBI4AEgSOABIEjgASBI4AEgSOABIEjgASBI 4AEgSOABIEjgASBI4AEgSOABIEjgASBI4AEgSOABIEjgASBI4AEgSOABIEjgASBI4AEgSOABIEjg ASBI4AEgSOABIEjgASBI4AEgSOABIEjgASBI4AEgSOABIEjgASBI4AEgSOABIEjgASBI4AEgSOAB IEjgASBI4AEgSOABIOg4X25r9wgA4Lk8eAAI+gMgAAx7yl/0WgAAAABJRU5ErkJggg== "
+       id="image2" />
+    <g
+       id="g3">
+      <rect
+         x="64.843"
+         y="8.9911"
+         width="339.96"
+         height="9.8886"
+         ry=".86466"
+         fill="#285577"
+         id="rect2" />
+      <text
+         x="206.63153"
+         y="15.925928"
+         fill="#ffffff"
+         font-family="sans-serif"
+         font-size="7.5986px"
+         letter-spacing="0px"
+         stroke-width=".26458"
+         word-spacing="0px"
+         style="line-height:1.25"
+         xml:space="preserve"
+         id="text2"><tspan
+           x="206.63153"
+           y="15.925928"
+           fill="#ffffff"
+           stroke-width=".26458"
+           id="tspan2">blue_rectangle</tspan></text>
+      <circle
+         cx="65.636"
+         cy="18.866"
+         r="3.3161"
+         fill="#f60"
+         id="circle2"
+         style="fill:#fab387" />
+      <text
+         x="12.586732"
+         y="25.491901"
+         fill="#ff6600"
+         font-family="sans-serif"
+         font-size="20.426px"
+         letter-spacing="0px"
+         stroke-width=".26458"
+         word-spacing="0px"
+         style="line-height:1.25;fill:#fab387"
+         xml:space="preserve"
+         id="text3"><tspan
+           x="12.586732"
+           y="25.491901"
+           fill="#ff6600"
+           stroke-width=".26458"
+           id="tspan3"
+           style="fill:#fab387">(0,0)</tspan></text>
+    </g>
+    <g
+       fill="#008080"
+       id="g6">
+      <circle
+         cx="167.29"
+         cy="52.578"
+         r="3.3161"
+         id="circle3"
+         style="fill:#cba6f7" />
+      <text
+         x="76.350014"
+         y="59.203312"
+         font-family="sans-serif"
+         font-size="20.426px"
+         letter-spacing="0px"
+         stroke-width=".26458"
+         word-spacing="0px"
+         style="line-height:1.25;fill:#cba6f7"
+         xml:space="preserve"
+         id="text4"><tspan
+           x="76.350014"
+           y="59.203312"
+           fill="#008080"
+           stroke-width=".26458"
+           id="tspan4"
+           style="fill:#cba6f7">(150,50)</tspan></text>
+      <path
+         d="m167.68 126.82h134.9"
+         marker-end="url(#StopL)"
+         marker-start="url(#StopL)"
+         stroke="#008080"
+         stroke-width="1.119"
+         id="path4"
+         style="fill:#cba6f7;stroke:#cba6f7;marker-start:url(#marker27);marker-end:url(#marker24)" />
+      <path
+         d="m311.2 121.13v-68.122"
+         marker-end="url(#marker1717)"
+         marker-start="url(#marker1717)"
+         stroke="#008080"
+         stroke-width="1.119"
+         id="path5"
+         style="stroke:#cba6f7;fill:#cba6f7;marker-start:url(#DistanceStart);marker-end:url(#DistanceEnd)" />
+      <text
+         x="199.44638"
+         y="145.48874"
+         font-family="sans-serif"
+         font-size="20.426px"
+         letter-spacing="0px"
+         stroke-width=".26458"
+         word-spacing="0px"
+         style="line-height:1.25;fill:#cba6f7"
+         xml:space="preserve"
+         id="text5"><tspan
+           x="199.44638"
+           y="145.48874"
+           fill="#008080"
+           stroke-width=".26458"
+           id="tspan5"
+           style="fill:#cba6f7">200 px</tspan></text>
+      <text
+         x="313.77524"
+         y="92.521362"
+         font-family="sans-serif"
+         font-size="20.426px"
+         letter-spacing="0px"
+         stroke-width=".26458"
+         word-spacing="0px"
+         style="line-height:1.25;fill:#cba6f7"
+         xml:space="preserve"
+         id="text6"><tspan
+           x="313.77524"
+           y="92.521362"
+           fill="#008080"
+           stroke-width=".26458"
+           id="tspan6"
+           style="fill:#cba6f7">100 px</tspan></text>
+    </g>
+  </g>
+</svg>
+
+<figcaption>PGL Coordinates</figcaption>
+</figure>
+<div style="font-size:.8em">
+<ul>
+<li>Positions and distances on the screen are measured in terms of
+pixels</li>
+<li>The location of the origin and orientation of the y-axis are
+<strong>different from math</strong>!
+<ul>
+<li>Origin is in the upper left instead of lower left</li>
+<li>Y-values increase as you move downwards</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="other-simple-objects" class="slide level2">
+<h2>Other Simple Objects</h2>
+<p>Functions to create simple geometric objects: <br></p>
+<ul>
+<li>Rectangles!
+<ul>
+<li><code class="python">GRect( |||x|||, |||y|||, |||width|||, |||height||| )</code></li>
+<li>Creates a rectangle whose upper left corner is at (x,y) of the
+specified size</li>
+</ul></li>
+<li>Circles/Ovals!
+<ul>
+<li><code class="python">GOval( |||x|||, |||y|||, |||width|||, |||height||| )</code></li>
+<li>Creates an oval that fits inside the rectangle with the same
+dimensions</li>
+</ul></li>
+<li>Lines!
+<ul>
+<li><code class="python">GLine( |||x1|||, |||y1|||, |||x2|||, |||y2||| )</code></li>
+<li>Creates a line extending from (x1,y1) to (x2,y2)</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="manipulating-windows" class="title-slide slide level1">
+<h1>Manipulating Windows</h1>
+
+</section>
+<section id="interacting-with-the-gwindow" class="slide level2">
+<h2>Interacting with the <code class="python">GWindow</code></h2>
+<ul>
+<li><p>We’ve already shown creation:</p>
+<pre ><code class="python">gw = GWindow(|||width|||, |||height|||)</code></pre></li>
+<li><p>You have several more operations that you can apply to the
+<code class="python">GWindow</code> object:</p></li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">|||gw|||.add(|||object|||)</code></td>
+<td>Adds an object to the window</td>
+</tr>
+<tr class="even">
+<td><code class="python">|||gw|||.add(|||object|||, |||x|||, |||y|||)</code></td>
+<td>Adds an object to the window after moving it to (x,y)</td>
+</tr>
+<tr class="odd">
+<td><code class="python">|||gw|||.remove(|||object|||)</code></td>
+<td>Removes an object from the window</td>
+</tr>
+<tr class="even">
+<td><code class="python">|||gw|||.get_width()</code></td>
+<td>Returns the width of the graphics window in pixels</td>
+</tr>
+<tr class="odd">
+<td><code class="python">|||gw|||.get_height()</code></td>
+<td>Returns the height of the graphics window in pixels</td>
+</tr>
+</tbody>
+</table>
+</section></section>
+<section>
+<section id="manipulating-objects" class="title-slide slide level1">
+<h1>Manipulating Objects</h1>
+
+</section>
+<section id="the-gobject-hierarchy" class="slide level2">
+<h2>The <code class="python">GObject</code> Hierarchy</h2>
+<ul>
+<li>The types of graphical objects form a hierarchy:</li>
+</ul>
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   sodipodi:docname="GObject_Hierarchy.svg"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 288.75107 138.18124"
+   height="138.18124mm"
+   width="288.75107mm"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     inkscape:window-maximized="1"
+     inkscape:window-y="27"
+     inkscape:window-x="1080"
+     inkscape:window-height="1413"
+     inkscape:window-width="2560"
+     inkscape:showpageshadow="false"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="g887"
+     inkscape:document-units="mm"
+     inkscape:cy="-50.714285"
+     inkscape:cx="301.42857"
+     inkscape:zoom="0.7"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#4d4d4d"
+     id="base"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#4d4d4d" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-217.70676,-33.885044)"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <path
+       sodipodi:nodetypes="cccccc"
+       d="M 361.26594,98.229926 V 59.650267 M 248.28711,146.39855 V 80.547709 h 223.32154 v 65.079271"
+       style="fill:none;stroke:#89b4fa;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path974" />
+    <path
+       sodipodi:nodetypes="cccccc"
+       d="m 361.70422,134.19507 v -11.39636 m -36.96412,23.3191 v -12.01496 h 74.40916 v 11.85956"
+       style="fill:none;stroke:#89b4fa;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path968" />
+    <g
+       style="stroke-width:1.24545;stroke:#a6e22e"
+       transform="matrix(0.80375953,0,0,0.80208372,44.982492,33.781385)"
+       id="g860">
+      <rect
+         style="fill:none;stroke:#a6e3a1;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round"
+         id="rect833"
+         width="75.025894"
+         height="30.082256"
+         x="357.00778"
+         y="1.8510774"
+         ry="4.2922554" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:#a6e3a1;stroke-width:0.329525"
+         x="363.17523"
+         y="21.115273"
+         id="text837"><tspan
+           sodipodi:role="line"
+           id="tspan835"
+           x="363.17523"
+           y="21.115273"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.329525;stroke:#a6e3a1">GObject</tspan></text>
+    </g>
+    <g
+       style="stroke-width:1.24545"
+       id="g873"
+       transform="matrix(0.80375953,0,0,0.80208372,15.940215,97.032237)">
+      <rect
+         ry="4.2922554"
+         y="1.8510802"
+         x="356.1077"
+         height="30.082256"
+         width="149.09215"
+         id="rect862"
+         style="fill:none;stroke:#a6e3a1;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round" />
+      <text
+         id="text866"
+         y="21.115273"
+         x="363.17523"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:#a6e3a1;stroke-width:0.329525"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.329525;stroke:#a6e3a1"
+           y="21.115273"
+           x="363.17523"
+           id="tspan864"
+           sodipodi:role="line">GFillableObject</tspan></text>
+    </g>
+    <g
+       style="stroke-width:1.24545"
+       transform="matrix(0.80375953,0,0,0.80208372,8.0020355,145.07202)"
+       id="g889">
+      <g
+         style="stroke-width:1.24545"
+         transform="translate(2.4734124)"
+         id="g887">
+        <g
+           style="stroke-width:1.24545"
+           transform="translate(-96.854547)"
+           id="g914">
+          <rect
+             style="fill:none;stroke:#a6e3a1;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round"
+             id="rect908"
+             width="75.025894"
+             height="30.082256"
+             x="357.00778"
+             y="1.8510774"
+             ry="4.2922554" />
+          <text
+             xml:space="preserve"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:#a6e3a1;stroke-width:0.329525"
+             x="372.17844"
+             y="22.624582"
+             id="text912"><tspan
+               sodipodi:role="line"
+               id="tspan910"
+               x="372.17844"
+               y="22.624582"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.329525;stroke:#a6e3a1">GLine</tspan></text>
+        </g>
+        <g
+           style="stroke-width:1.24545"
+           transform="translate(-3.2608895)"
+           id="g894">
+          <rect
+             ry="4.2922554"
+             y="1.8510774"
+             x="357.00778"
+             height="30.082256"
+             width="75.025894"
+             id="rect881"
+             style="fill:none;stroke:#a6e3a1;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round" />
+          <text
+             id="text885"
+             y="22.071293"
+             x="372.20853"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:#a6e3a1;stroke-width:0.329525"
+             xml:space="preserve"><tspan
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.329525;stroke:#a6e3a1"
+               y="22.071293"
+               x="372.20853"
+               id="tspan883"
+               sodipodi:role="line">GRect</tspan></text>
+        </g>
+        <g
+           style="stroke-width:1.24545"
+           transform="translate(90.332768,-0.34814689)"
+           id="g902">
+          <rect
+             style="fill:none;stroke:#a6e3a1;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round"
+             id="rect896"
+             width="75.025894"
+             height="30.082256"
+             x="357.00778"
+             y="1.8510774"
+             ry="4.2922554" />
+          <text
+             xml:space="preserve"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:#a6e3a1;stroke-width:0.329525"
+             x="372.32144"
+             y="22.364876"
+             id="text900"><tspan
+               id="tspan904"
+               sodipodi:role="line"
+               x="372.32144"
+               y="22.364876"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.329525;stroke:#a6e3a1">GOval</tspan></text>
+        </g>
+        <g
+           style="stroke-width:1.24545"
+           id="g922"
+           transform="translate(183.92643,-0.34814689)">
+          <rect
+             ry="4.2922554"
+             y="1.8510774"
+             x="357.00778"
+             height="30.082256"
+             width="75.025894"
+             id="rect916"
+             style="fill:none;stroke:#a6e3a1;stroke-width:3.44368;stroke-linecap:round;stroke-linejoin:round" />
+          <text
+             id="text920"
+             y="22.443916"
+             x="367.80481"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.6791px;line-height:1.25;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:#a6e3a1;stroke-width:0.329525"
+             xml:space="preserve"><tspan
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.67910053px;font-family:'FiraCode Nerd Font Mono';-inkscape-font-specification:'FiraCode Nerd Font Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.329525;stroke:#a6e3a1"
+               y="22.443916"
+               x="367.80481"
+               sodipodi:role="line"
+               id="tspan918">GLabel</tspan></text>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
+</p>
+<ul>
+<li>The <code class="python">GObject</code> type represents the
+collection of all graphical objects</li>
+<li>The <code class="python">GFillableObject</code> type represents
+those that have a fillable interior</li>
+</ul>
+</section>
+<section id="interacting-with-gobjects" class="slide level2">
+<h2>Interacting with <code class="python">GObject</code>s</h2>
+<ul>
+<li>The following operations apply to all GObjects, where
+<code class="no-highlight">object</code> is the name of any specific
+instance.</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">|||object|||.get_x()</code></td>
+<td>Returns the x coordinate of this object</td>
+</tr>
+<tr class="even">
+<td><code class="python">|||object|||.get_y()</code></td>
+<td>Returns the y coordinate of this object</td>
+</tr>
+<tr class="odd">
+<td><code class="python">|||object|||.get_width()</code></td>
+<td>Returns the width of this object</td>
+</tr>
+<tr class="even">
+<td><code class="python">|||object|||.get_height()</code></td>
+<td>Returns the height of this object</td>
+</tr>
+<tr class="odd">
+<td><code class="python">|||object|||.set_color(|||color|||)</code></td>
+<td>Sets the color of the object to the specified color</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>All coordinates and distances are measured in pixels</li>
+</ul>
+</section>
+<section id="interacting-with-gfillableobjects" class="slide level2">
+<h2>Interacting with <code class="python">GFillableObject</code>s</h2>
+<ul>
+<li>Fillable GObjects have a smaller subset of commands that also apply
+to them.</li>
+<li>Initially the only fillable objects available to you are rectangles
+and ovals</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">|||object|||.set_filled(|||bool|||)</code></td>
+<td>Sets the fill state of the object</td>
+</tr>
+<tr class="even">
+<td><code class="python">|||object|||.set_fill_color(|||color|||)</code></td>
+<td>Sets the color to be used to fill the interior, otherwise same as
+the outer line</td>
+</tr>
+<tr class="odd">
+<td><code class="python">|||object|||.get_fill_color()</code></td>
+<td>Gets the current color used to display the object interior</td>
+</tr>
+<tr class="even">
+<td><code class="python">|||object|||.is_filled()</code></td>
+<td>Returns True or False depending on whether the object is currently
+filled</td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="smile" class="slide level2">
 <h2>Smile!</h2>
-<div class="cols">
+<div class="cols" style="align-items: center">
 <div class="col">
 <figure>
 <img data-src="../images/smile_face.png" style="width:80.0%" alt=" " />
@@ -95,7 +893,7 @@ print(type(x))
 </figure>
 </div>
 <div class="col fragment" style="flex-grow:1.5">
-<pre ><code class="mypython">gw = GWindow(400, 400)
+<pre ><code class="python" style="font-size:.6em; max-height:750px;">gw = GWindow(400, 400)
 
 head = GOval(20, 20, 360, 360)
 head.set_fill_color("yellow")
@@ -116,11 +914,11 @@ gw.add(mouth)</code></pre>
 </div>
 </div>
 </section>
-<section id="review-question" class="slide level2">
-<h2>Review Question</h2>
+<section id="understanding-check" class="slide level2">
+<h2>Understanding Check</h2>
 <p>Which of the below images would be produced by the following
 code?</p>
-<pre ><code class="mypython" style="font-size:.8em">gw = GWindow(200,200)
+<pre ><code class="python" style="font-size:.8em">gw = GWindow(200,200)
 for c in range(0,10):
     for r in range(0,10):
         rect = GRect(20*c,20*r,20,20)
@@ -157,6 +955,11 @@ alt="D" />
 </figure>
 </div>
 </div>
+</section></section>
+<section>
+<section id="textual-objects" class="title-slide slide level1">
+<h1>Textual Objects</h1>
+
 </section>
 <section id="label-it" class="slide level2">
 <h2>Label It!</h2>
@@ -164,12 +967,11 @@ alt="D" />
 <li><p>Sometimes you need to add some text to the window</p></li>
 <li><p>Can display any string using <code class="python">GLabel</code>
 using the following format:</p>
-<pre ><code class="mypython">msg = GLabel(|||string to add|||, |||x location|||, |||y location|||)</code></pre></li>
-<li><p>Here <code class="mypython">|||string to add|||</code> is the
-text you want to display, and
-<code class="mypython">|||x location|||</code> and
-<code class="mypython">|||y location|||</code> are the (x,y) coordinates
-of where you want to place the origin of the label.</p></li>
+<pre ><code class="python">msg = GLabel(|||string to add|||, |||x location|||, |||y location|||)</code></pre></li>
+<li><p>Here <code class="python">|||string to add|||</code> is the text
+you want to display, and <code class="python">|||x location|||</code>
+and <code class="python">|||y location|||</code> are the (x,y)
+coordinates of where you want to place the origin of the label.</p></li>
 </ul>
 </section>
 <section id="label-geometry" class="slide level2">
@@ -194,24 +996,63 @@ baseline</li>
 </ul></li>
 </ul>
 </div>
-<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<figure>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="GLabel_Geometry.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07, custom)"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
    id="svg983"
    version="1.1"
    viewBox="0 0 467.99667 79.292732"
    height="79.292732mm"
-   width="467.99667mm">
+   width="467.99667mm"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs977">
+    <marker
+       style="overflow:visible"
+       id="marker1"
+       refX="5"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Concave triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.7)"
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         id="path1" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="ConcaveTriangle"
+       refX="3"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Concave triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.7)"
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         id="path7" />
+    </marker>
     <marker
        inkscape:stockid="Arrow2Mend"
        orient="auto"
@@ -226,43 +1067,30 @@ baseline</li>
          d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
          transform="scale(-0.6)" />
     </marker>
-    <marker
-       inkscape:collect="always"
-       inkscape:isstock="true"
-       style="overflow:visible"
-       id="Arrow2Mend"
-       refX="0"
-       refY="0"
-       orient="auto"
-       inkscape:stockid="Arrow2Mend">
-      <path
-         transform="scale(-0.6)"
-         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
-         style="fill:#09f7a0;fill-opacity:1;fill-rule:evenodd;stroke:#a6e22e;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
-         id="path1030" />
-    </marker>
   </defs>
   <sodipodi:namedview
      inkscape:window-maximized="1"
-     inkscape:window-y="43"
-     inkscape:window-x="1096"
-     inkscape:window-height="1381"
-     inkscape:window-width="2528"
+     inkscape:window-y="30"
+     inkscape:window-x="0"
+     inkscape:window-height="1020"
+     inkscape:window-width="1680"
      inkscape:snap-global="false"
      inkscape:showpageshadow="false"
      showgrid="false"
      inkscape:document-rotation="0"
      inkscape:current-layer="layer1"
      inkscape:document-units="mm"
-     inkscape:cy="-11.72573"
-     inkscape:cx="834.58898"
-     inkscape:zoom="0.98994949"
+     inkscape:cy="220"
+     inkscape:cx="916.42857"
+     inkscape:zoom="0.7"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0"
      borderopacity="1.0"
      bordercolor="#666666"
      pagecolor="#1c1e42"
-     id="base" />
+     id="base"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata980">
     <rdf:RDF>
@@ -299,9 +1127,9 @@ baseline</li>
     <path
        id="path991"
        d="M 304.25875,17.877641 H 632.14936"
-       style="fill:#09f7a0;stroke:#a6e22e;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3, 3;stroke-dashoffset:0;stroke-opacity:1" />
+       style="fill:#09f7a0;stroke:#a6e3a1;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3, 3;stroke-dashoffset:0;stroke-opacity:1" />
     <path
-       style="fill:#09f7a0;stroke:#a6e22e;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3, 3;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:#09f7a0;stroke:#a6e3a1;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3, 3;stroke-dashoffset:0;stroke-opacity:1"
        d="M 304.25875,48.353018 H 632.14936"
        id="path993" />
     <circle
@@ -309,14 +1137,14 @@ baseline</li>
        cy="17.351007"
        cx="316.91428"
        id="path995"
-       style="fill:#f92672;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1.5, 1.50000000000000000;stroke-dashoffset:0" />
+       style="fill:#f38ba8;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1.5, 1.5;stroke-dashoffset:0" />
     <text
        id="text999"
        y="52.447407"
        x="230.5995"
-       style="font-style:normal;font-weight:normal;font-size:11.5001px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#a6e22e;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:normal;font-weight:normal;font-size:11.5001px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:none;stroke-width:0.264583"
        xml:space="preserve"><tspan
-         style="fill:#a6e22e;stroke:none;stroke-width:0.264583;"
+         style="fill:#a6e3a1;stroke:none;stroke-width:0.264583"
          y="52.447407"
          x="230.5995"
          id="tspan997"
@@ -324,14 +1152,14 @@ baseline</li>
     <path
        id="path1001"
        d="m 280.48797,49.498696 21.55698,-1.376081"
-       style="fill:#09f7a0;stroke:#a6e22e;stroke-width:0.765;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend)" />
+       style="fill:#a6e3a1;stroke:#a6e3a1;stroke-width:0.765;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1)" />
     <text
        id="text1335"
        y="6.6341271"
        x="266.38818"
-       style="font-style:normal;font-weight:normal;font-size:11.5001px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#f92672;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:normal;font-weight:normal;font-size:11.5001px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#f38ba8;fill-opacity:1;stroke:none;stroke-width:0.264583"
        xml:space="preserve"><tspan
-         style="fill:#f92672;stroke:none;stroke-width:0.264583;"
+         style="fill:#f38ba8;stroke:none;stroke-width:0.264583"
          y="6.6341271"
          x="266.38818"
          id="tspan1333"
@@ -339,19 +1167,19 @@ baseline</li>
     <path
        id="path1337"
        d="m 304.24757,3.3180643 8.91832,9.1211077"
-       style="fill:#f92672;stroke:#f92672;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1341)" />
+       style="fill:#f38ba8;stroke:#f38ba8;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#ConcaveTriangle)" />
     <path
        sodipodi:nodetypes="cc"
        id="path1385"
        d="M 457.55143,54.103089 H 632.14936"
-       style="fill:none;stroke:#66d9ef;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3, 1.50000000000000000;stroke-dashoffset:0;stroke-opacity:1" />
+       style="fill:none;stroke:#94e2d5;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3, 1.5;stroke-dashoffset:0;stroke-opacity:1" />
     <text
        id="text1389"
        y="55.752464"
        x="652.88214"
-       style="font-style:normal;font-weight:normal;font-size:11.5001px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:normal;font-weight:normal;font-size:11.5001px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#94e2d5;fill-opacity:1;stroke:none;stroke-width:0.264583"
        xml:space="preserve"><tspan
-         style="fill:#66d9ef;stroke-width:0.264583;"
+         style="fill:#94e2d5;stroke-width:0.264583"
          y="55.752464"
          x="652.88214"
          id="tspan1387"
@@ -360,15 +1188,15 @@ baseline</li>
        sodipodi:nodetypes="ccc"
        id="path1391"
        d="m 645.7038,48.221727 c 6.9445,0 0.0223,3.485368 6.61045,3.485368 -6.59535,0 -0.0552,3.671648 -6.61045,3.671648"
-       style="fill:none;stroke:#66d9ef;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="fill:none;stroke:#94e2d5;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
-       style="fill:#f09383;stroke:#fd971f;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3, 1.50000000000000000;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:#fab387;stroke:#fab387;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3, 1.5;stroke-dashoffset:0;stroke-opacity:1"
        d="M 438.4327,-1.6725981 H 632.14936"
        id="path1393"
        sodipodi:nodetypes="cc" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:11.5001px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#fd971f;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:normal;font-weight:normal;font-size:11.5001px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#fab387;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="652.88214"
        y="12.937334"
        id="text1397"><tspan
@@ -376,9 +1204,9 @@ baseline</li>
          id="tspan1395"
          x="652.88214"
          y="12.937334"
-         style="fill:#fd971f;stroke:none;stroke-width:0.264583;">Ascent</tspan></text>
+         style="fill:#fab387;stroke:none;stroke-width:0.264583">Ascent</tspan></text>
     <path
-       style="fill:none;stroke:#fd971f;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#fab387;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 645.7038,-1.1517914 c 6.9445,0 0.0223,9.8437379 6.61045,9.8437379 -6.59535,0 -0.0552,9.3567325 -6.61045,9.3567325"
        id="path1399"
        sodipodi:nodetypes="ccc" />
@@ -386,9 +1214,9 @@ baseline</li>
        id="text1403"
        y="35.937614"
        x="652.88214"
-       style="font-style:normal;font-weight:normal;font-size:11.5001px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ae81ff;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:normal;font-weight:normal;font-size:11.5001px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#cba6f7;fill-opacity:1;stroke:none;stroke-width:0.264583"
        xml:space="preserve"><tspan
-         style="fill:#ae81ff;stroke:none;stroke-width:0.264583;"
+         style="fill:#cba6f7;stroke:none;stroke-width:0.264583"
          y="35.937614"
          x="652.88214"
          id="tspan1401"
@@ -397,14 +1225,14 @@ baseline</li>
        sodipodi:nodetypes="ccc"
        id="path1405"
        d="m 645.7038,19.802115 c 6.9445,0 0.0223,13.642505 6.61045,13.642505 -6.59535,0 -0.0552,13.243375 -6.61045,13.243375"
-       style="fill:none;stroke:#ae81ff;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="fill:none;stroke:#cba6f7;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <text
        id="text1451"
        y="76.720276"
        x="456.56235"
-       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffe792;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#f9e2af;fill-opacity:1;stroke:none;stroke-width:0.264583"
        xml:space="preserve"><tspan
-         style="fill:#ffe792;stroke-width:0.264583;"
+         style="fill:#f9e2af;stroke-width:0.264583"
          y="76.720276"
          x="456.56235"
          id="tspan1449"
@@ -413,10 +1241,12 @@ baseline</li>
        sodipodi:nodetypes="ccc"
        id="path1453"
        d="m 316.40382,58.496417 c 0,8.015595 155.04944,-2.848929 155.04944,7.79031 0,-10.338013 155.46723,0.18052 155.46723,-7.79031"
-       style="fill:none;stroke:#ffe792;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="fill:none;stroke:#f9e2af;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   </g>
 </svg>
-</p>
+
+<figcaption> </figcaption>
+</figure>
 </section>
 <section id="interacting-with-labels" class="slide level2">
 <h2>Interacting with Labels</h2>
@@ -547,145 +1377,111 @@ def random_color():
     return color
 ```
 -->
-</section>
-<section id="function-review" class="slide level2">
-<h2>Function Review</h2>
-<ul>
-<li>A <em>function</em> is just a sequence of statements that have been
-collected together and given a name
-<ul>
-<li>Makes it possible to execute the statements multiple times much more
-easily</li>
-</ul></li>
-<li>Some reminders about vocabulary:
-<ul>
-<li>Invoking or running a function by name is known as
-<strong>calling</strong> that function.</li>
-<li>The caller passes information to a function using
-<strong>arguments</strong>.</li>
-<li>When a function completes its block of code, it
-<strong>returns</strong> to its caller.</li>
-<li>The function gives information back to the caller by
-<strong>returning a result</strong></li>
-</ul></li>
-</ul>
-<pre ><code class="mypython">def function_name( parameter_list ):
-  |||Body of the function|||</code></pre>
-</section>
-<section id="predicate-functions" class="slide level2">
-<h2>Predicate Functions</h2>
-<ul>
-<li><p>Functions that return a Boolean value are called <em>predicate
-functions</em></p>
-<pre ><code class="mypython">def is_divisible_by(x, y):
-  return x % y == 0</code></pre></li>
-<li><p>Once you have defined a predicate function, you can use it in any
-conditional expression!</p>
-<pre ><code class="mypython">for i in range(1, 100):
-  if is_divisible_by(i, 7):
-      print(i)</code></pre></li>
-</ul>
-</section>
-<section id="predicate-no-nos" class="slide level2">
-<h2>Predicate No-nos</h2>
-<ul>
-<li><p>Don’t complicate your code for no reason!</p></li>
-<li><p>Work directly with the boolean values when possible</p></li>
-<li><p>Try not to code patterns like the following:</p>
-<pre ><code class="mypython badcode">def is_divisible_by(x, y):
-  if x % y == 0:
-      return True
-  else:
-      return False</code></pre>
-<pre ><code class="mypython badcode">for i in range(1, 100):
-  if is_divisible_by(i,7) == True:
-      print(i)</code></pre></li>
-</ul>
-</section>
-<section id="parameter-purposes" class="slide level2">
-<h2>Parameter Purposes</h2>
-<ul>
-<li>Often functions need some sort of outside input in order to be
-useful</li>
-<li>It is necessary for them to know enough details so that they can
-carry out the requested task, but not so many that the function becomes
-annoying to use
-<ul>
-<li>Imagine you were trying to accomplish the task yourself!</li>
-<li>What is the minimum amount of information you would need to
-know?</li>
-</ul></li>
-<li>The minimum necessary information needed for the function to
-accomplish its task is generally the information conveyed in the
-parameters</li>
-<li>There is always a balance
-<ul>
-<li>More parameters makes your function more general, to be used
-elsewhere</li>
-<li>More parameters are tedious and potentially error prone to enter if
-unnecessary</li>
-</ul></li>
-</ul>
-</section>
-<section id="jockeying-for-position" class="slide level2">
-<h2>Jockeying for Position</h2>
-<ul>
-<li><p>So far we have used a positional way to assign arguments to
-parameters</p>
-<pre ><code class="mypython">>>> def func( first, second, third ):
-        print( first, second, third )
->>> func(1,2,3)
-1 2 3
->>> func(2,6,4)
-2 6 4</code></pre>
-<ul>
-<li>First argument to first parameter, second to second parameter,
-etc</li>
-</ul></li>
-</ul>
-</section>
-<section id="the-word-is-key" class="slide level2">
-<h2>The Word is Key</h2>
-<ul>
-<li><p>Arguments may also be specified by a <em>keyword</em>, in which
-the caller precedes the argument with a parameter name and equals
-sign</p></li>
-<li><p>Always stores the argument value in the specified parameter</p>
-<pre ><code class="mypython">>>> def func( first, second, third ):
-       print( first, second, third )
->>> func(third=4, first=2, second=6)
-2 6 4</code></pre></li>
-<li><p>Keyword arguments can appear in any order</p></li>
-<li><p><strong>All keyword arguments must come after any positional
-arguments!</strong></p></li>
-</ul>
-</section>
-<section id="default-slide-title" class="slide level2">
-<h2>Default Slide Title</h2>
-<ul>
-<li><p>Python allows you to specify a default value for a parameter,
-which is will use if one is not directly supplied</p></li>
-<li><p>Do so by adding an equals sign and a value after the parameter
-name</p>
-<pre ><code class="mypython">def introduction(name='Jed', age=37):
-  print(f'My name is {name} and I am {age}')</code></pre>
-<ul>
-<li>So you define default values when you define the function</li>
-</ul></li>
-<li><p>If providing any arguments after a default parameter, you must
-indicate them through keywords</p></li>
-</ul>
-</section>
-<section id="default-example" class="slide level2">
-<h2>Default Example</h2>
-<pre ><code class="python-repl" style="max-height: 800px">>>> introduction()
-My name is Jed and I am 37
->>> introduction('Bob', 25)
-My name is Bob and I am 25
->>> introduction('Larry')
-My name is Larry and I am 37
->>> introduction(age=68)
-My name is Jed and I am 68</code></pre>
+<!-- for monday
+## Function Review
+- A _function_ is just a sequence of statements that have been collected together and given a name
+    - Makes it possible to execute the statements multiple times much more easily
+- Some reminders about vocabulary:
+    - Invoking or running a function by name is known as **calling** that function.
+    - The caller passes information to a function using **arguments**.
+    - When a function completes its block of code, it **returns** to its caller.
+    - The function gives information back to the caller by **returning a result**
+    
+```mypython
+def function_name( parameter_list ):
+  |||Body of the function|||
+```
+
+## Predicate Functions
+- Functions that return a Boolean value are called _predicate functions_
+  ```mypython
+  def is_divisible_by(x, y):
+    return x % y == 0
+  ```
+- Once you have defined a predicate function, you can use it in any conditional expression!
+  ```mypython
+  for i in range(1, 100):
+    if is_divisible_by(i, 7):
+        print(i)
+  ```
+
+
+## Predicate No-nos
+- Don't complicate your code for no reason!
+- Work directly with the boolean values when possible
+- Try not to code patterns like the following:
+  ```{.mypython .badcode}
+  def is_divisible_by(x, y):
+    if x % y == 0:
+        return True
+    else:
+        return False
+  ```
+  ```{.mypython .badcode}
+  for i in range(1, 100):
+    if is_divisible_by(i,7) == True:
+        print(i)
+  ```
+
+## Parameter Purposes
+- Often functions need some sort of outside input in order to be useful
+- It is necessary for them to know enough details so that they can carry out the requested task, but not so many that the function becomes annoying to use
+    - Imagine you were trying to accomplish the task yourself!
+    - What is the minimum amount of information you would need to know?
+- The minimum necessary information needed for the function to accomplish its task is generally the information conveyed in the parameters
+- There is always a balance
+    - More parameters makes your function more general, to be used elsewhere
+    - More parameters are tedious and potentially error prone to enter if unnecessary
+
+
+## Jockeying for Position
+- So far we have used a positional way to assign arguments to parameters
+
+    ```mypython
+    >>> def func( first, second, third ):
+            print( first, second, third )
+    >>> func(1,2,3)
+    1 2 3
+    >>> func(2,6,4)
+    2 6 4
+    ```
+    - First argument to first parameter, second to second parameter, etc
+
+## The Word is Key
+- Arguments may also be specified by a _keyword_, in which the caller precedes the argument with a parameter name and equals sign
+- Always stores the argument value in the specified parameter
+  ```mypython
+  >>> def func( first, second, third ):
+         print( first, second, third )
+  >>> func(third=4, first=2, second=6)
+  2 6 4
+  ```
+- Keyword arguments can appear in any order
+- **All keyword arguments must come after any positional arguments!**
+
+## Default Slide Title
+- Python allows you to specify a default value for a parameter, which is will use if one is not directly supplied
+- Do so by adding an equals sign and a value after the parameter name
+  ```mypython
+  def introduction(name='Jed', age=37):
+    print(f'My name is {name} and I am {age}')
+  ```
+  - So you define default values when you define the function
+- If providing any arguments after a default parameter, you must indicate them through keywords
+
+
+## Default Example
+  ```{.python-repl style="max-height: 800px"}
+  >>> introduction()
+  My name is Jed and I am 37
+  >>> introduction('Bob', 25)
+  My name is Bob and I am 25
+  >>> introduction('Larry')
+  My name is Larry and I am 37
+  >>> introduction(age=68)
+  My name is Jed and I am 68
+  ```
+-->
 <!--
 ## Returning Graphics
 - You can `return` any type of variable from a function, including `GObject` graphical objects
@@ -897,7 +1693,7 @@ increment()
 :::
 
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -910,6 +1706,7 @@ increment()
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
@@ -1032,7 +1829,7 @@ increment()
 		 },
 
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
               console.log(mypythondef);
               return mypythondef(hljs); } )
           },
@@ -1046,6 +1843,7 @@ increment()
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,

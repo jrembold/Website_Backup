@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-10-02">
-  <title>Stacking Functions</title>
+  <meta name="dcterms.date" content="2024-09-30">
+  <title>Stacking Parameters</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -27,17 +27,17 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Stacking Functions</h1>
+  <h1 class="title">Stacking Parameters</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">October 2, 2023</p>
+  <p class="date">September 30, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -49,7 +49,7 @@
 <ul>
 <li>Last moment help?
 <ul>
-<li>I’ll be around normal office hours or between 2-4:30</li>
+<li>I’ll be around normal office hours or between 4:30 and 6:30</li>
 <li>Section Leaders may have some time, but you need to reach out to
 them sooner rather than later</li>
 <li>QUAD Center open from 6pm - 9pm tonight</li>
@@ -58,7 +58,7 @@ them sooner rather than later</li>
 <li>First exam on Friday!
 <ul>
 <li><a
-href="https://willamette.edu/~jjrembold/classes/cs151/testprep/">Study
+href="https://jrembold.github.io/Website_Backup/classes/cs151/testprep/">Study
 Materials Posted!</a>
 <ul>
 <li>Learning objective checklist</li>
@@ -67,7 +67,7 @@ Materials Posted!</a>
 </ul></li>
 </ul></li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 </div>
 </section>
@@ -75,7 +75,7 @@ href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 <h2>Review Question</h2>
 <p>Which of the below images would be produced by the following
 code?</p>
-<pre ><code class="mypython" style="font-size:.8em">gw = GWindow(200, 200)
+<pre ><code class="python" style="font-size:.8em">gw = GWindow(200, 200)
 for c in range(0, 10):
     for r in range(0, 10):
         rect = GRect(20*c, 20*r, 20, 20)
@@ -112,6 +112,97 @@ alt="D" />
 </figure>
 </div>
 </div>
+</section>
+<section>
+<section id="wrapping-up-labels" class="title-slide slide level1">
+<h1>Wrapping up Labels</h1>
+
+</section>
+<section id="interacting-with-labels" class="slide level2">
+<h2>Interacting with Labels</h2>
+<div style="font-size:.9em">
+<ul>
+<li>A <code class="python">GLabel</code> has several special methods
+that you can use to interact with it
+<ul>
+<li><p>You can use: <code class="python">get_width()</code>,
+<code class="python">get_height()</code>,
+<code class="python">get_ascent()</code>, and
+<code class="python">get_descent()</code> methods to obtain the
+geometric properties</p></li>
+<li><p>You can set a special font for the label using</p>
+<pre ><code class="python">labelname.set_font(font)</code></pre></li>
+<li><p>Where <code class="python">font</code> is a string comprised of
+the following elements:</p>
+<ul>
+<li>The <em>font style</em>, which is usually blank or
+<code class="python">italic</code></li>
+<li>The <em>font weight</em>, which is usually blank or
+<code class="python">bold</code></li>
+<li>The <em>font size</em>, which is a number followed by the units
+(typically <code class="python">pt</code>,
+<code class="python">px</code>, or <code class="python">em</code>)</li>
+<li>The <em>font family</em>, which is the name of the font. Because
+what fonts are available can differ from machine to machine, the family
+is usually a sequence of fonts separated by commas</li>
+<li>The font family sequence usually ends with a standard family
+(<code class="python">serif</code>,
+<code class="python">sans-serif</code>, or
+<code class="python">monospace</code>) to ensure that the label can
+display</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="label-example" class="slide level2">
+<h2>Label Example</h2>
+<pre ><code class="python">gw = GWindow(500, 200)
+msg = GLabel("hello world!", 50, 100)
+msg.set_font("italic bold 80px 'times new roman'")
+gw.add(msg)</code></pre>
+<p><br><br></p>
+<figure>
+<img data-src="../images/hello_world_font.png" style="width:50.0%"
+alt="A bold new (friendly) world" />
+<figcaption aria-hidden="true">A bold new (friendly) world</figcaption>
+</figure>
+</section>
+<section id="centering-a-glabel" class="slide level2">
+<h2>Centering a <code class="python">GLabel</code></h2>
+<div>
+<ul>
+<li class="fragment">Frequently useful to center within the window or
+some shape</li>
+<li class="fragment">To center properly, you need to know the label
+dimensions, but you can’t determine the dimensions until after you’ve
+created the label!</li>
+<li class="fragment">The main idea then is to:
+<ul>
+<li class="fragment">Create a <code class="python">GLabel</code> without
+setting its location</li>
+<li class="fragment">Call the <code class="python">.set_font()</code>
+method to set the desired font (which could change the size)</li>
+<li class="fragment">Determine the horizontal position of the origin by
+subtracting half the width from the desired location x</li>
+<li class="fragment">Determine the vertical position of the baseline by
+adding half the ascent to the desired location y</li>
+<li class="fragment">Add the <code class="python">GLabel</code> at the
+newly calculated position</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="centering-example" class="slide level2">
+<h2>Centering Example</h2>
+<pre ><code class="python">gw = GWindow(500, 200)
+msg = GLabel("hello world!")
+msg.set_font("italic bold 20px 'times new roman'")
+x = gw.get_width()  / 2 - msg.get_width()  / 2
+y = gw.get_height() / 2 + msg.get_ascent() / 2
+gw.add(msg, x, y)</code></pre>
+<!-- already covered
+
 <!--
 ## Review Question {data-notes="Answer: None of the above, as nothing is returned"}
 :::: cols
@@ -140,6 +231,65 @@ print(type(x))
 :::
 ::::
 -->
+</section></section>
+<section>
+<section id="returning-to-functions" class="title-slide slide level1">
+<h1>Returning to Functions</h1>
+
+</section>
+<section id="function-review" class="slide level2">
+<h2>Function Review</h2>
+<ul>
+<li>A <em>function</em> is just a sequence of statements that have been
+collected together and given a name
+<ul>
+<li>Makes it possible to execute the statements multiple times much more
+easily</li>
+</ul></li>
+<li>Some reminders about vocabulary:
+<ul>
+<li>Invoking or running a function by name is known as
+<strong>calling</strong> that function.</li>
+<li>The caller passes information to a function using
+<strong>arguments</strong>.</li>
+<li>When a function completes its block of code, it
+<strong>returns</strong> to its caller.</li>
+<li>The function gives information back to the caller by
+<strong>returning a result</strong></li>
+</ul></li>
+</ul>
+<pre ><code class="python">def function_name( parameter_list ):
+  |||Body of the function|||</code></pre>
+</section>
+<section id="predicate-functions" class="slide level2">
+<h2>Predicate Functions</h2>
+<ul>
+<li><p>Functions that return a Boolean value are called <em>predicate
+functions</em></p>
+<pre ><code class="python">def is_divisible_by(x, y):
+  return x % y == 0</code></pre></li>
+<li><p>Once you have defined a predicate function, you can use it in any
+conditional expression!</p>
+<pre ><code class="python">for i in range(1, 100):
+  if is_divisible_by(i, 7):
+      print(i)</code></pre></li>
+</ul>
+</section>
+<section id="predicate-no-nos" class="slide level2">
+<h2>Predicate No-nos</h2>
+<ul>
+<li><p>Don’t complicate your code for no reason!</p></li>
+<li><p>Work directly with the boolean values when possible</p></li>
+<li><p>Try not to code patterns like the following:</p>
+<pre ><code class="python badcode">def is_divisible_by(x, y):
+  if x % y == 0:
+      return True
+  else:
+      return False</code></pre>
+<pre ><code class="python badcode">for i in range(1, 100):
+  if is_divisible_by(i,7) == True:
+      print(i)</code></pre></li>
+</ul>
 </section>
 <section id="parameter-purposes" class="slide level2">
 <h2>Parameter Purposes</h2>
@@ -171,7 +321,7 @@ unnecessary</li>
 <ul>
 <li><p>So far we have used a positional way to assign arguments to
 parameters</p>
-<pre ><code class="mypython">>>> def func( first, second, third ):
+<pre ><code class="python">>>> def func( first, second, third ):
         print( first, second, third )
 >>> func(1,2,3)
 1 2 3
@@ -190,7 +340,7 @@ etc</li>
 the caller precedes the argument with a parameter name and equals
 sign</p></li>
 <li><p>Always stores the argument value in the specified parameter</p>
-<pre ><code class="mypython">>>> def func( first, second, third ):
+<pre ><code class="python">>>> def func( first, second, third ):
         print( first, second, third )
 >>> func(third=4, first=2, second=6)
 2 6 4</code></pre></li>
@@ -212,7 +362,7 @@ positional arguments!</strong></li>
 which it will use if one is not directly supplied</p></li>
 <li><p>Do so by adding an equals sign and a value after the parameter
 name</p>
-<pre ><code class="mypython">def introduction(name='Jed', age=38):
+<pre ><code class="python">def introduction(name='Jed', age=38):
     print(f'My name is {name} and I am {age}')</code></pre>
 <ul>
 <li>So you define default values when you define the function</li>
@@ -231,6 +381,11 @@ My name is Bob and I am 25
 My name is Larry and I am 38
 >>> introduction(age=68)
 My name is Jed and I am 68</code></pre>
+</section></section>
+<section>
+<section id="a-visual-aside" class="title-slide slide level1">
+<h1>A Visual Aside</h1>
+
 </section>
 <section id="returning-graphics" class="slide level2">
 <h2>Returning Graphics</h2>
@@ -308,12 +463,17 @@ def create_centered_label(x_cent, y_cent, text, font=None):
     label.set_location(x_cent - label.get_width() / 2, 
                        y_cent + label.get_ascent() / 2 )
     return label</code></pre>
+</section></section>
+<section>
+<section id="periscopes" class="title-slide slide level1">
+<h1>Peri(Scopes)</h1>
+
 </section>
 <section id="poll" class="slide level2">
 <h2>Poll!</h2>
 <div class="cols">
 <div class="col">
-<pre ><code class="mypython">def Vegas(x):
+<pre ><code class="python">def Vegas(x):
     y = 2
     for i in range(5):
         x += y
@@ -361,7 +521,7 @@ frame for that function is <strong>thrown away</strong>!</li>
 <section id="taking-a-walk-through-vegas" class="slide level2">
 <h2>Taking a Walk through Vegas</h2>
 <p>We’ll annotate the stack frames by hand as the earlier code runs:</p>
-<pre ><code class="mypython" data-line-numbers="1-11|1|7|8|2|3|4|3|4|3|4|3|4|3|4|5|9|10" style="max-height:800px">def Vegas(x):
+<pre ><code class="python" data-line-numbers="1-11|1|7|8|2|3|4|3|4|3|4|3|4|3|4|5|9|10" style="max-height:800px">def Vegas(x):
     y = 2
     for i in range(5):
         x += y
@@ -414,7 +574,7 @@ the code to the right?</p>
 </div>
 </div>
 <div class="col">
-<pre ><code class="mypython">def f(x,y):
+<pre ><code class="python">def f(x,y):
     z = (x + 3) ** 2
     return y + z
 
@@ -450,7 +610,7 @@ etc.</li>
 </section>
 <section id="scoping-example" class="slide level2">
 <h2>Scoping Example</h2>
-<pre ><code class="mypython" style="max-height:900px">def func1(x,y):
+<pre ><code class="python" style="max-height:900px">def func1(x,y):
     return z + func2(x,y)
 
 def func2(x,y):
@@ -474,7 +634,7 @@ variable is assumed to be <em>local</em></p>
 functions overriding variables in other areas</li>
 </ul></li>
 <li><p>Can lead to issues though:</p>
-<pre ><code class="mypython badcode">def increment():
+<pre ><code class="python badcode">def increment():
     x = x + 1
 
 x = 0
@@ -482,7 +642,7 @@ increment()</code></pre></li>
 <li><p>There are a few ways to address this, but we’ll focus on one in
 particular when it comes to PGL</p></li>
 </ul>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -495,6 +655,7 @@ particular when it comes to PGL</p></li>
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
@@ -617,7 +778,7 @@ particular when it comes to PGL</p></li>
 		 },
 
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
               console.log(mypythondef);
               return mypythondef(hljs); } )
           },
@@ -631,6 +792,7 @@ particular when it comes to PGL</p></li>
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
