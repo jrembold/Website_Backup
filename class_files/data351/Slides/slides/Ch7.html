@@ -14,17 +14,20 @@
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: 1;}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/tokyo-night-light.css">
 </head>
 <body>
   <div class="reveal">
@@ -33,7 +36,7 @@
 <section id="title-slide">
   <h1 class="title">How Constraining</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Monday, October 3, 2022</p>
+  <p class="date">Monday, September 30, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -44,11 +47,17 @@
 <li>Everything relating to joins, so you have everything you need to do
 all the problems</li>
 </ul></li>
-<li>I <em>may</em> have Exam 1 scored by Wednesday, but more likely I’ll
-need to hand it back next Monday</li>
-<li>Office hours today from 4 - 5:30</li>
+<li>Exam 1 back to you!
+<ul>
+<li>Mean: 35.2, Median: 36.75, StDev: 5.03</li>
+</ul></li>
+<li>I had a typo in the <code class="python">hw4.sql</code> file where
+the <code class="python">INSERT INTO</code> statement for the
+superheroes table was missing the last <code class="python">e</code>. I
+have fixed that on the official side, but if you were having issues, it
+should be an easy manual fix as well.</li>
 <li>Polling today: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 </section>
 <section id="review" class="slide level2">
@@ -186,6 +195,11 @@ style="font-size:.8em; margin-top:-1em; margin-left: -3em">
 </ol>
 </div>
 </section>
+<section>
+<section id="the-art-of-naming" class="title-slide slide level1">
+<h1>The Art of Naming</h1>
+
+</section>
 <section id="identifiers" class="slide level2">
 <h2>Identifiers</h2>
 <ul>
@@ -236,6 +250,11 @@ the table name to make it easier to find later what your latest version
 is.</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="chains-that-constrain" class="title-slide slide level1">
+<h1>Chains that Constrain</h1>
+
 </section>
 <section id="why-constrain-yourself" class="slide level2">
 <h2>Why Constrain Yourself?</h2>
@@ -247,7 +266,7 @@ expect</li>
 <li>Entering in data in another format either gets converted or an error
 gets output</li>
 </ul></li>
-<li>We can also import a variety of other <em>constraints</em> on the
+<li>We can also implement a variety of other <em>constraints</em> on the
 columns or rows of our table
 <ul>
 <li>All are with the idea of further ensuring that the data in our table
@@ -274,7 +293,7 @@ should be applied as table constraints</li>
 </ul></li>
 <li>The anatomy of a constraint syntax looks like:</li>
 </ul>
-<pre ><code class="pgsql" style="font-size:0.9em">CONSTRAINT constraint_name CONSTRAINT_TYPE CONSTRAINT_CONDITIONS</code></pre>
+<pre ><code class="pgsql" style="font-size:0.85em">CONSTRAINT |||constraint name||| |||CONSTRAINT_TYPE||| |||CONSTRAINT_CONDITIONS|||</code></pre>
 </section>
 <section id="check" class="slide level2">
 <h2>CHECK</h2>
@@ -360,10 +379,11 @@ complete successfully?</p>
 <h2>The Primary Directive</h2>
 <ul>
 <li>Combining <code class="python">UNIQUE</code> and
-<code class="python">NOT NULL</code> is so common that such a constraint
-gets its own name: the <em>primary key</em></li>
-<li>A primary key gives you an unambiguous way to select a specific row
-from a table</li>
+<code class="python">NOT NULL</code> is extremely useful in having a
+column that gives an unambiguous way to selection a specific row from a
+table</li>
+<li>Can define a <strong>single</strong> <em>primary key</em> for a
+table, that reflects this joint constraint</li>
 <li>If you already have a table column doing this, why declare as a
 primary key?
 <ul>
@@ -430,7 +450,7 @@ either syntax</li>
 <li>Columns in tables can be related to columns in other tables:
 <em>foreign key constraints</em> are a way to formalize these
 relationships</li>
-<li>Says: “the values in this column are related to this other column in
+<li>Says: “the values in this column also appear in this other column in
 this other table”
 <ul>
 <li>Almost always refers to another primary key, though it could
@@ -518,69 +538,41 @@ href="https://drawsql.app/">drawsql</a>, <a
 href="https://online.visual-paradigm.com/">visual-paradigm</a>, or <a
 href="https://app.diagrams.net/">DrawIO</a></p>
 </div>
-</section>
-<section id="creating-indexes" class="slide level2">
-<h2>Creating Indexes</h2>
-<div style="font-size:.9em">
-<ul>
-<li>We’ve talked previously about indexes from a theoretical view, now
-to put them into practice</li>
-<li>Postgres will automatically index any column that is a primary key
-or which has the <code class="python">UNIQUE</code> constraint</li>
-<li>You can choose to set up indexes on other columns as well
-though</li>
-<li>By default, the assigned index type is a B-Tree index in Postgres
-<ul>
-<li>B-Trees work best for <em>orderable</em> type data</li>
-<li>You <em>can</em> assign other types of indexes to columns though, so
-you can somewhat customize to what will work best
-<ul>
-<li>Index types like <em>Generalized Inverted Index</em> (GIN) and
-<em>Generalized Search Tree</em> (GiST) will be discussed later as they
-come up</li>
-</ul></li>
-</ul></li>
-</ul>
-<pre ><code class="pgsql" style="font-size:.9em">CREATE INDEX index_name ON table_name (col_name);</code></pre>
-</div>
-</section>
-<section id="benchmarking" class="slide level2">
-<h2>Benchmarking</h2>
-<ul>
-<li>One of the prime reasons for creating an index is to speed up access
-or manipulation of the data later</li>
-<li>How can we objectively test this?
-<ul>
-<li>Postgres has the <code class="python">EXPLAIN</code> keyword to give
-you information about what the database is doing in the background</li>
-<li>Using <code class="python">EXPLAIN ANALYZE</code> will also give you
-timing information about how long it took a query to run</li>
-</ul></li>
-<li><code class="python">EXPLAIN</code> always comes at the start of
-your query</li>
-<li>Other SQL variants have their own versions, but most have some
-method of getting information back about execution time or what is being
-done under the hood</li>
-</ul>
-</section>
-<section id="costs" class="slide level2">
-<h2>Costs</h2>
-<ul>
-<li>Indexes always have a cost associated with them, both in initial
-setup and in every time new data is added to the column
-<ul>
-<li>Also, they are stored information, so they can also inflate your
-database size</li>
-</ul></li>
-<li>Consider indexing only those columns that receive the heaviest of
-use in filters or in joining</li>
-<li>You never need to worry about indexing primary keys or unique
-columns, as those are done automatically</li>
-<li>When in doubt, <strong>benchmark</strong> your queries before and
-after adding an index to see if you are really gaining much from
-it!</li>
-</ul>
-</section>
+<!--
+## Creating Indexes
+:::{style='font-size:.9em'}
+- We've talked previously about indexes from a theoretical view, now to put them into practice
+- Postgres will automatically index any column that is a primary key or which has the `UNIQUE` constraint
+- You can choose to set up indexes on other columns as well though
+- By default, the assigned index type is a B-Tree index in Postgres
+  - B-Trees work best for _orderable_ type data
+  - You _can_ assign other types of indexes to columns though, so you can somewhat customize to what will work best
+    - Index types like _Generalized Inverted Index_ (GIN) and _Generalized Search Tree_ (GiST) will be discussed later as they come up
+
+```{.pgsql style='font-size:.9em'}
+CREATE INDEX index_name ON table_name (col_name);
+```
+:::
+
+
+## Benchmarking
+- One of the prime reasons for creating an index is to speed up access or manipulation of the data later
+- How can we objectively test this?
+  - Postgres has the `EXPLAIN` keyword to give you information about what the database is doing in the background
+  - Using `EXPLAIN ANALYZE` will also give you timing information about how long it took a query to run
+- `EXPLAIN` always comes at the start of your query
+- Other SQL variants have their own versions, but most have some method of getting information back about execution time or what is being done under the hood
+
+
+## Costs
+- Indexes always have a cost associated with them, both in initial setup and in every time new data is added to the column
+  - Also, they are stored information, so they can also inflate your database size
+- Consider indexing only those columns that receive the heaviest of use in filters or in joining
+- You never need to worry about indexing primary keys or unique columns, as those are done automatically
+- When in doubt, **benchmark** your queries before and after adding an index to see if you are really gaining much from it!
+
+-->
+</section></section>
     </div>
   </div>
 
@@ -591,13 +583,14 @@ it!</li>
   <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
   <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
   // Added plugins
-  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
-  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
-  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>,
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/mypgsql.js"></script>
 
   <script>
 
@@ -625,7 +618,7 @@ it!</li>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -672,7 +665,7 @@ it!</li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -707,14 +700,11 @@ it!</li>
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
-	reveald3: {
-			runLastState: true, // true/false, default: true
-			onSlideChangedDelay: 200,
-			mapPath: false, // true / false / "spefific/path/as/string", default: false
-			tryFallbackURL: true, // true/false, default false
-			disableCheckFile: false, //default false
-		 },
-
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -722,7 +712,6 @@ it!</li>
           RevealNotes,
           RevealSearch,
           RevealZoom,
-		  RevealChart,
 		  RevealChalkboard,
           RevealMenu,
           Reveald3,
@@ -731,22 +720,22 @@ it!</li>
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
@@ -754,5 +743,17 @@ it!</li>
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
