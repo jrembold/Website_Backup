@@ -1,0 +1,64 @@
+{
+  "name": "reveal.js-multimodal",
+  "version": "1.0.1",
+  "description": "A plugin for Reveal.js to show modal windows in presentations",
+  "keywords": [
+    "reveal",
+    "reveal.js",
+    "reveal-plugin",
+    "plugin",
+    "modal",
+    "lightbox",
+    "powerpoint"
+  ],
+  "main": "plugin/multimodal/multimodal.js",
+  "module": "plugin/multimodal/multimodal.esm.js",
+  "style": "plugin/multimodal/multimodal.css",
+  "author": {
+    "name": "Martijn De Jongh (Martino)",
+    "email": "martijn.de.jongh@gmail.com",
+    "web": "https://martinomagnifico.github.io",
+    "username": "martinomagnifico"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/martinomagnifico/reveal.js-multimodal.git"
+  },
+  "functionname": "Multimodal",
+  "license": "MIT",
+  "scripts": {
+    "start": "gulp demo",
+    "build": "NODE_ENV=prod gulp build"
+  },
+  "overrides": {
+    "ws": "8.17.1"
+  },
+  "browserslist": "> 2%, not dead",
+  "devDependencies": {
+    "@babel/preset-env": "^7.23.2",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "browser-sync": "^3.0.2",
+    "del": "^5.1.0",
+    "gulp": "^5.0.0",
+    "gulp-autoprefixer": "^8.0.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-pug": "^5.0.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-sass": "^5.1.0",
+    "gulp-tap": "^2.0.0",
+    "merge-stream": "^2.0.0",
+    "rollup": "^4.22.5",
+    "sass": "^1.63.6"
+  },
+  "dependencies": {
+    "body-scroll-lock-upgrade": "^1.1.0",
+    "marked": "^4.3.0",
+    "reveal.js": "^5.0.4"
+  },
+  "copydependencies": [
+    "reveal.js"
+  ]
+}

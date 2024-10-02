@@ -88,7 +88,8 @@ $body$
   <!--<script src="$revealjs-url$/../plugin/chart/plugin.js"></script>-->
   <script src="$revealjs-url$/../plugin/chalkboard/plugin.js"></script>
   <script src="$revealjs-url$/../plugin/menu/menu.js"></script>
-  <script src="$revealjs-url$/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="$revealjs-url$/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="$revealjs-url$/../other_plugins/multimodal/plugin/multimodal/multimodal.js"></script>
 $if(mathjax)$
   <script src="$revealjs-url$/plugin/math/math.js"></script>
 $endif$
@@ -382,6 +383,7 @@ $endif$
 		  RevealChalkboard,
           RevealMenu,
           Reveald3,
+          Multimodal,
         ],
 		chalkboard: {
           boardmarkerWidth: 4,

@@ -14,17 +14,20 @@
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: 1;}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/tokyo-night-light.css">
 </head>
 <body>
   <div class="reveal">
@@ -33,188 +36,19 @@
 <section id="title-slide">
   <h1 class="title">Check the Index</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Wednesday, October 5, 2022</p>
+  <p class="date">Wednesday, October 2, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Exam 1 will be handed back next Monday</li>
-<li>Hopefully HW4 is going well!</li>
-<li>Homework 5 should be able to be posted tomorrow</li>
+<li>I’ll be sending out grade reports by the end of the week so that you
+know where you are at in the class</li>
+<li>Don’t forget homework 4 due tomorrow night!</li>
+<li>Homework 5 should also be posted tomorrow</li>
 <li>Polling today: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
-<!--
-## Exam Summary
-::::::{.cols style='align-items:center'}
-::::{.col style='flex-grow:2'}
-![](../images/exam1_hist.png){width=100%}
-::::
-
-::::col
-- Average: 87.084
-- Median: 87.805
-- StDev: 8.391
-::::
-::::::
-
-
-## Problem 1
-::::::cols
-::::col
-
-| Column      | Type          |
-|-------------|---------------|
-| `id`        | `SERIAL`      |
-| `name`      | `TEXT`        |
-| `age`       | `SMALLINT`    |
-| `gender`    | `VARCHAR(15)` |
-| `met_thru`  | `VARCHAR(20)` |
-| `last_talk` | `DATE`        |
-| `notes`     | `TEXT`        |
-
-::::
-
-::::col
-```{.pgsql style='font-size:.8em'}
-SELECT name
-FROM correspondents
-WHERE gender = 'Female' and last_talk < '2018';
-```
-```{.pgsql style='font-size:.8em'}
-SELECT avg(age)
-FROM correspondents
-WHERE notes ILIKE '%had baby%' 
-   OR notes ILIKE '%pregnant%';
-```
-```{.pgsql style='font-size:.8em'}
-SELECT DISTINCT met_thru 
-FROM correspondents
-ORDER BY last_talk DESC LIMIT 5;
-```
-
-
-::::
-::::::
-
-
-## Problem 2
-```pgsql
-SELECT
-    min(red - cyan::INT) AS new_a,
-    percentile_disc(0.5) WITHIN GROUP 
-         (ORDER BY cyan) AS new_b,
-    max(2 * red + green) AS new_c
-FROM mysterious_table
-WHERE blue ILIKE '%odd' 
-  AND orange BETWEEN '1:00' AND '13:00';
-```
-
-| Column  | Type      |
-|---------|-----------|
-| `new_a` | `INTEGER` |
-| `new_b` | `REAL`    |
-| `new_c` | `NUMERIC` |
-
-## Problem 3
-```{.text style='font-size:1em'}
-William Ellison,57 Elizabeth Dr.,Merrillville,IN,46410
-Colten Spears,8457 Sycamore Ave.,Amsterdam,NY,12010
-Kendra Aguilar,76 North Alton Lane,Tualatin,OR,97062
-Natalia Church,7789 Ryan Dr.,Englewood,NJ,07631
-```
-- Write out a command to create the table to store this information, with extra `id` field.
-- Write out a command to import the data into your table.
-- Add some new information to the end of the table.
-
-## Problem 4a
-
-| c1         | c2           | c3     | c4   |
-|------------|--------------|--------|------|
-| 2022-06-29 | Curling      | 24     | 9.5  |
-| 2022-11-15 | Tennis       | `NULL` | 5    |
-| 2022-06-12 | Baseball     | 2      | -0.5 |
-| 2022-12-27 | Ultimate     | 0      | 2.1  |
-| 2022-04-15 | Surfing      | `NULL` | 4.5  |
-| 2022-10-03 | Cheerleading | 10     | -1   |
-
-```pgsql
-SELECT c2, c3 + c4 AS "add"
-FROM amazing
-WHERE c2 ILIKE '%e%i%'
-ORDER BY c2;    
-```
-
-## Problem 4b
-
-| c1         | c2           | c3     | c4   |
-|------------|--------------|--------|------|
-| 2022-06-29 | Curling      | 24     | 9.5  |
-| 2022-11-15 | Tennis       | `NULL` | 5    |
-| 2022-06-12 | Baseball     | 2      | -0.5 |
-| 2022-12-27 | Ultimate     | 0      | 2.1  |
-| 2022-04-15 | Surfing      | `NULL` | 4.5  |
-| 2022-10-03 | Cheerleading | 10     | -1   |
-
-```pgsql
-SELECT COUNT(*) % COUNT(c3) AS rem
-FROM amazing
-WHERE c4 > 0;
-```
-
-## Problem 4c
-
-| c1         | c2           | c3     | c4   |
-|------------|--------------|--------|------|
-| 2022-06-29 | Curling      | 24     | 9.5  |
-| 2022-11-15 | Tennis       | `NULL` | 5    |
-| 2022-06-12 | Baseball     | 2      | -0.5 |
-| 2022-12-27 | Ultimate     | 0      | 2.1  |
-| 2022-04-15 | Surfing      | `NULL` | 4.5  |
-| 2022-10-03 | Cheerleading | 10     | -1   |
-
-```pgsql
-SELECT c2
-FROM amazing
-WHERE c1::TEXT ILIKE '%-0_-%'
-ORDER BY c4;
-```
-
-## Problem 4d
-
-| c1         | c2           | c3     | c4       |
-|------------|--------------|--------|----------|
-| 2022-06-29 | Curling      | 24     | 9.5      |
-| 2022-11-15 | Tennis       | `NULL` | 5        |
-| 2022-06-12 | Baseball     | 2      | -0.5     |
-| 2022-12-27 | Ultimate     | 0      | 2.1      |
-| 2022-04-15 | Surfing      | `NULL` | 4.5      |
-| 2022-10-03 | Cheerleading | 10     | -1       |
-
-```pgsql
-SELECT sum(c4)
-FROM amazing
-WHERE c3 IS NULL OR c4 < 0;
-```
-
-
-## Problem 5
-
-| Name         | Type       | Description                                 |
-|--------------|------------|---------------------------------------------|
-| puzzle_id    | `INT`      | The unique puzzle id number                 |
-| release_date | `DATE`     | The day the puzzle was publically available |
-| solution     | `CHAR(5)`  | The 5 letter solution to the puzzle         |
-| player_name  | `TEXT`     | The name of the player                      |
-| guesses      | `SMALLINT` | Number of guesses. Null if more than 6      |
-
-- When the player named "Bobby" attempts a puzzle, he succeeds in solving it what percentage of the time?
-- What is the most likely number of guesses it takes any player to complete the puzzle if the letter "a" is the second letter?
-- How many of the daily puzzles have been solved in one guess?
-
-
--->
 </section>
 <section id="review-question" class="slide level2">
 <h2>Review Question</h2>
@@ -249,28 +83,10 @@ it?</p>
 </div>
 </div>
 </section>
-<section id="activity" class="slide level2">
-<h2>Activity</h2>
-<p>Suppose you wanted to track your Spotify playlist information in your
-own database. Questions you may want to be able to answer might
-include:</p>
-<ul>
-<li>What is the total playtime of this playlist?</li>
-<li>What is the most common band in a particular playlist?</li>
-<li>Of all the artists who perform songs in any playlist, which artists
-collaborate with others the most?</li>
-<li>Songs from how many different albums are in a particular
-playlist?</li>
-</ul>
-<p>In groups of two or three, sketch out table diagrams similar to what
-we just saw in the example at the end of Monday (commonly called ERD or
-Entity Relationship Diagrams), that would allow all these questions to
-be answered. Your tables should include primary keys and foreign keys
-where appropriate.</p>
-<p>Online sketching resources include: <a
-href="https://drawsql.app/">drawsql</a>, <a
-href="https://online.visual-paradigm.com/">visual-paradigm</a>, or <a
-href="https://app.diagrams.net/">DrawIO</a></p>
+<section>
+<section id="indexing" class="title-slide slide level1">
+<h1>Indexing</h1>
+
 </section>
 <section id="consulting-an-index" class="slide level2">
 <h2>Consulting an Index</h2>
@@ -279,7 +95,7 @@ href="https://app.diagrams.net/">DrawIO</a></p>
 find things faster</li>
 <li>We can construct similar precomputed guides for certain columns in
 SQL to also help find things faster!</li>
-<li>There are several different types of indexes
+<li>There are several types of indexes
 <ul>
 <li>By default, the assigned index type is a B-Tree index in Postgres
 <ul>
@@ -311,10 +127,10 @@ key or which has the <code class="python">UNIQUE</code>
 constraint</p></li>
 <li><p>You can choose to set up indexes on other columns as well, but do
 so outside of the table creation</p>
-<pre ><code class="pgsql" style="font-size:1em">CREATE INDEX index_name ON table_name (col_name);</code></pre></li>
+<pre ><code class="pgsql" style="font-size:1em">CREATE INDEX |||index_name||| ON |||table_name||| (|||col_name|||);</code></pre></li>
 <li><p>If you decide you want to remove an index, you do so using the
 index name:</p>
-<pre ><code class="pgsql" style="font-size:1em">DROP INDEX index_name;</code></pre></li>
+<pre ><code class="pgsql" style="font-size:1em">DROP INDEX |||index_name|||;</code></pre></li>
 </ul>
 </section>
 <section id="benchmarking" class="slide level2">
@@ -377,6 +193,10 @@ columns, as those are done automatically</li>
 after adding an index to see if you are really gaining much from
 it!</li>
 </ul>
+<aside class="notes">
+<p>SELECT
+pg_size_pretty(pg_total_relation_size(‘taxi_rides_june2024’))</p>
+</aside>
 </section>
 <section id="benchmarking-activity" class="slide level2">
 <h2>Benchmarking Activity</h2>
@@ -385,85 +205,528 @@ it!</li>
 your computer</li>
 <li>Benchmark that data set under three different queries, for each
 getting a time both before creating an index and then after creating an
-index over the desired column
+index over the desired column (you’ll create 2 different indices total)
 <ul>
-<li>Select all the columns for the row where the taxi id = 56789</li>
+<li>Select all the columns for the row where the ride id = 56789</li>
 <li>Select all the columns for the rows where the total amount charged
-was greater than $20</li>
+was greater than $40</li>
 <li>Select all the columns for the rows where the total amount charged
 was greater than $10</li>
 </ul></li>
 <li>Enter your values into the shared spreadsheet <a
-href="https://docs.google.com/spreadsheets/d/1e7kBm-DdB7eSQnMLIPXTgI7hvzu4lPVjYQFkd_wEy7U/edit?usp=sharing">here</a>
+href="https://docs.google.com/spreadsheets/d/1J8jQOvWI1zqHtWD80FZW5XSmdeRQZnSqq7XfsOnpMCs/edit?usp=sharing">here</a>
 (Just choose an unused trial number)</li>
 </ul>
+</section></section>
+<section>
+<section id="normal-modeling" class="title-slide slide level1">
+<h1>Normal Modeling</h1>
+
 </section>
-<section id="birds-of-a-feather" class="slide level2">
-<h2>Birds of a Feather</h2>
+<section id="data-modeling" class="slide level2">
+<h2>Data Modeling</h2>
 <ul>
-<li><p>It is frequently the case that values in a particular table
-column all belong to a smaller subset of categories or options</p>
+<li>Data Modeling is the act of best deciding how to represent and store
+data such that it relates to the real world</li>
+<li>As much as possible, it is generally desirable to:
 <ul>
-<li>Think months of the year or political parties</li>
+<li>ensure the model can easily help answer the types of questions you
+will want to ask</li>
+<li>operate at as low a level of granularity as possible</li>
+<li>remove redundancy</li>
+<li>ensure referential integrity</li>
 </ul></li>
-<li><p>With current methods, if you want to compare some sort of
-aggregate between those categories or options, you need to do it in
-multiple queries:</p>
+</ul>
+</section>
+<section id="normalization" class="slide level2">
+<h2>Normalization</h2>
+<ul>
+<li>First introduced by Edgar Codd in the early 1970s</li>
+<li>Codd outlined the following goals:
+<ul>
+<li>to free the collection of relations from undesirable insertion,
+update, and deletion dependencies</li>
+<li>To reduce the need for restructuring the collection of relations as
+new types of data are introduced</li>
+<li>To make the relational model more informative to users</li>
+<li>To make the collection of relations neutral to what queries are
+being run on them</li>
+</ul></li>
+<li>To assist in these efforts, Codd introduced the idea of <em>normal
+forms</em></li>
+</ul>
+</section>
+<section id="what-is-normal" class="slide level2">
+<h2>What is normal?</h2>
+<ul>
+<li>Each normal form builds on those before</li>
+<li>The primary normal forms are:</li>
+</ul>
+<dl>
+<dt>Denormalized</dt>
+<dd>
+No normalization. Nested and redundant data is allowed
+</dd>
+<dt>First normal form (1NF)</dt>
+<dd>
+Each column is unique and has a single value. The table has a unique
+primary key.
+</dd>
+<dt>Second normal form (2NF)</dt>
+<dd>
+Partial dependencies are removed (only necessary if compound primary
+key)
+</dd>
+<dt>Third normal form (3NF)</dt>
+<dd>
+Each table contains fields only relevant to its primary key, and has no
+transitive dependencies
+</dd>
+</dl>
+</section>
+<section id="denormalized" class="slide level2">
+<h2>Denormalized</h2>
 <div class="cols">
 <div class="col">
-<pre ><code class="pgsql">SELECT AVG(age)
-FROM voters
-WHERE party = 'D'</code></pre>
+<ul>
+<li>APIs will commonly give denormalized data, since they tend to return
+JSON type entries</li>
+<li>Consider the entry to the right about a particular order</li>
+</ul>
 </div>
-<div class="col">
-<pre ><code class="pgsql">SELECT AVG(age)
-FROM voters
-WHERE party = 'R'</code></pre>
+<div class="col" style="flex-grow:2">
+<pre ><code class="json" style="max-height:1000px; font-size:.9em;">{ "OrderID": 100,
+  "OrderItems": [
+    {
+      "sku": 1,
+      "price": 10,
+      "quantity": 1,
+      "name": "Thingmajig"
+    },
+    {
+      "sku": 2,
+      "price": 25,
+      "quantity": 2,
+      "name": "Whatchamacalit"
+    }],
+  "CustomerID": 5,
+  "CustomerName": "Jed Rembold",
+  "OrderDate": "2022-11-09" }</code></pre>
 </div>
-</div></li>
-<li><p>This rapidly becomes intractable if you want to compare across
-many categories</p></li>
+</div>
+</section>
+<section id="initial-attempt" class="slide level2">
+<h2>Initial Attempt</h2>
+<table style="font-size:.9em">
+<tr>
+<th>
+OrderID
+</th>
+<th style="width:35%">
+OrderItems
+</th>
+<th>
+CustomerID
+</th>
+<th>
+CustomerName
+</th>
+<th>
+OrderDate
+</th>
+</tr>
+<tr>
+<td>
+100
+</td>
+<td>
+<pre><code class='json' style='font-size:.5em'>
+  [
+    {
+      "sku": 1,
+      "price": 10,
+      "quantity": 1,
+      "name": "Thingmajig"
+    },
+    {
+      "sku": 2,
+      "price": 25,
+      "quantity": 2,
+      "name": "Whatchamacalit"
+    }
+  ]
+    </code></pre>
+</td>
+<td>
+5
+</td>
+<td>
+Jed Rembold
+</td>
+<td>
+2022-11-09
+</td>
+</tr>
+</table>
+</section>
+<section id="st-normal-form" class="slide level2">
+<h2>1st Normal Form</h2>
+<div style="font-size: .8em">
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 5%" />
+<col style="width: 8%" />
+<col style="width: 11%" />
+<col style="width: 18%" />
+<col style="width: 14%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>OrderID</th>
+<th>Sku</th>
+<th>Price</th>
+<th>Quantity</th>
+<th>ProductName</th>
+<th>CustomerID</th>
+<th>CustomerName</th>
+<th>OrderDate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>100</td>
+<td>1</td>
+<td>50</td>
+<td>1</td>
+<td>Thingmajig</td>
+<td>5</td>
+<td>Jed Rembold</td>
+<td>2022-11-09</td>
+</tr>
+<tr class="even">
+<td>100</td>
+<td>2</td>
+<td>25</td>
+<td>2</td>
+<td>Whatchamacalit</td>
+<td>5</td>
+<td>Jed Rembold</td>
+<td>2022-11-09</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="st-normal-form-pk" class="slide level2">
+<h2>1st Normal Form (PK)</h2>
+<div style="font-size: .7em">
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 5%" />
+<col style="width: 7%" />
+<col style="width: 10%" />
+<col style="width: 16%" />
+<col style="width: 12%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">OrderID</th>
+<th style="text-align: center;">ItemNum</th>
+<th style="text-align: center;">Sku</th>
+<th style="text-align: center;">Price</th>
+<th style="text-align: center;">Quantity</th>
+<th style="text-align: left;">ProductName</th>
+<th style="text-align: center;">CustomerID</th>
+<th>CustomerName</th>
+<th>OrderDate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">50</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">Thingmajig</td>
+<td style="text-align: center;">5</td>
+<td>Jed Rembold</td>
+<td>2022-11-09</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">Whatchamacalit</td>
+<td style="text-align: center;">5</td>
+<td>Jed Rembold</td>
+<td>2022-11-09</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="evaluating-2nf" class="slide level2">
+<h2>Evaluating 2NF</h2>
+<ul>
+<li>To be in second normal form, there can be no partial dependencies,
+where columns depend on only one of the compound keys</li>
+<li>Here though the last 3 columns all depend only on OrderID
+<ul>
+<li>Solution: Split to new tables!</li>
+</ul></li>
 </ul>
 </section>
-<section id="the-fix" class="slide level2">
-<h2>The Fix</h2>
+<section id="nd-normal-form" class="slide level2">
+<h2>2nd Normal Form</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">OrderID</th>
+<th style="text-align: center;">CustomerID</th>
+<th>CustomerName</th>
+<th>OrderDate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">5</td>
+<td>Jed Rembold</td>
+<td>2022-11-09</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">OrderID</th>
+<th style="text-align: center;">ItemNum</th>
+<th style="text-align: center;">Sku</th>
+<th style="text-align: center;">Price</th>
+<th style="text-align: center;">Quantity</th>
+<th>ProductName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">50</td>
+<td style="text-align: center;">1</td>
+<td>Thingmajig</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">2</td>
+<td>Whatchamacalit</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="evaluating-3nf" class="slide level2">
+<h2>Evaluating 3NF</h2>
 <ul>
-<li>SQL has one last trick up its sleave with the
-<code class="python">GROUP BY</code> command</li>
-<li><code class="python">GROUP BY</code> gathers together all rows with
-matching values from a particular column
+<li>The third normal form prohibits transitive dependencies, where a
+column depends on another (that depends on the primary key), instead of
+depending directly on the primary key</li>
+<li>Here we have 2! One in each table:
 <ul>
-<li>By itself, this is basically the same as running
-<code class="python">DISTINCT</code> on a column</li>
-<li>Note that once you make a grouping, you can only select entire
-columns that are a part of the grouping</li>
+<li><code class="python">ProductName</code> depends on
+<code class="python">Sku</code></li>
+<li><code class="python">CustomerName</code> depends on
+<code class="python">CustomerID</code></li>
+</ul></li>
+<li>Solution? More tables!</li>
 </ul>
-<pre ><code class="pgsql">SELECT grouped_column
+</section>
+<section id="rd-normal-form" class="slide level2">
+<h2>3rd Normal Form</h2>
+<div style="font-size:.9em">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Sku</th>
+<th>ProductName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td>Thingmajig</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td>Whatchamacalit</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">CustomerID</th>
+<th>CustomerName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td>Jed Rembold</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">OrderID</th>
+<th style="text-align: center;">ItemNum</th>
+<th style="text-align: center;">Sku</th>
+<th style="text-align: center;">Price</th>
+<th style="text-align: center;">Quantity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">50</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">2</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">OrderID</th>
+<th style="text-align: center;">CustomerID</th>
+<th>OrderDate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">100</td>
+<td style="text-align: center;">5</td>
+<td>2022-11-09</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="visually" class="slide level2">
+<h2>Visually</h2>
+<p><img data-src="../images/normal_forms_example.png"
+style="width:100.0%" /></p>
+</section>
+<section id="beyond" class="slide level2">
+<h2>Beyond</h2>
+<ul>
+<li>Other normal forms exist (up to 6NF in the Boyce-Codd system)</li>
+<li>Most people only care about the first 3 to get data in a
+“normalized” state</li>
+<li>Unless you have specific performance reasons for wanting otherwise,
+you really should strive for normalized tables in your relational
+database, as they make maintaining, adding, updating, and adjusting your
+database and tables much easier</li>
+</ul>
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity</h2>
+<div style="font-size:.9em">
+<p>Suppose you wanted to track your Spotify playlist information in your
+own database. Questions you may want to be able to answer might
+include:</p>
+<ul>
+<li>What is the total playtime of this playlist?</li>
+<li>What is the most common band in a particular playlist?</li>
+<li>Of all the artists who perform songs in any playlist, which artists
+collaborate with others the most?</li>
+<li>Songs from how many different albums are in a particular
+playlist?</li>
+</ul>
+<p>In groups of two or three, sketch out ER diagrams that would allow
+all these questions to be answered. Your tables should include primary
+keys and foreign keys where appropriate, and be normalized as best as
+you are able.</p>
+<p>Online sketching resources include: <a
+href="https://drawsql.app/">drawsql</a>, <a
+href="https://online.visual-paradigm.com/">visual-paradigm</a>, or <a
+href="https://app.diagrams.net/">DrawIO</a></p>
+</div>
+<!--push to next class
+## Birds of a Feather
+- It is frequently the case that values in a particular table column all belong to a smaller subset of categories or options
+  - Think months of the year or political parties
+- With current methods, if you want to compare some sort of aggregate between those categories or options, you need to do it in multiple queries:
+
+  :::::cols
+  ::::col
+    ```pgsql
+    SELECT AVG(age)
+    FROM voters
+    WHERE party = 'D'
+    ```
+  ::::
+  ::::col
+    ```pgsql
+    SELECT AVG(age)
+    FROM voters
+    WHERE party = 'R'
+    ```
+  ::::
+  :::::
+- This rapidly becomes intractable if you want to compare across many categories
+
+
+
+
+## The Fix
+- SQL has one last trick up its sleave with the `GROUP BY` command
+- `GROUP BY` gathers together all rows with matching values from a particular column
+  - By itself, this is basically the same as running `DISTINCT` on a column
+  - Note that once you make a grouping, you can only select entire columns that are a part of the grouping
+```pgsql
+SELECT grouped_column
 FROM table_name
-GROUP BY grouped_column;</code></pre></li>
-<li>Can visualize as if many smaller tables were created, one for each
-grouping, which are then joined back together with each table
-contributing one row</li>
-</ul>
-</section>
-<section id="aggregating-groups" class="slide level2">
-<h2>Aggregating Groups</h2>
-<ul>
-<li><p>Groups by themselves are not that useful, since we already had
-<code class="python">DISTINCT</code></p></li>
-<li><p>The prime use-case of <code class="python">GROUP BY</code> is to
-be able to run aggregates across <em>all</em> potential groups
-<em>simultaneously</em> for comparison</p>
-<pre ><code class="pgsql">SELECT 
-  col_name, 
-  min(col_name), 
-  avg(col_name2)
-FROM table_name
-GROUP BY col_name;</code></pre></li>
-<li><p>Causes any aggregate function to just aggregate over the smaller,
-group tables</p></li>
-</ul>
-</section>
+GROUP BY grouped_column;
+```
+- Can visualize as if many smaller tables were created, one for each grouping, which are then joined back together with each table contributing one row
+
+
+## Aggregating Groups
+- Groups by themselves are not that useful, since we already had `DISTINCT`
+- The prime use-case of `GROUP BY` is to be able to run aggregates across _all_ potential groups _simultaneously_ for comparison
+  ```pgsql
+  SELECT 
+    col_name, 
+    min(col_name), 
+    avg(col_name2)
+  FROM table_name
+  GROUP BY col_name;
+  ```
+- Causes any aggregate function to just aggregate over the smaller, group tables
+-->
+</section></section>
     </div>
   </div>
 
@@ -474,13 +737,15 @@ group tables</p></li>
   <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
   <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
   // Added plugins
-  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
-  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
   <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/multimodal/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/mypgsql.js"></script>
 
   <script>
 
@@ -508,7 +773,7 @@ group tables</p></li>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -555,7 +820,7 @@ group tables</p></li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -590,14 +855,11 @@ group tables</p></li>
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
-	reveald3: {
-			runLastState: true, // true/false, default: true
-			onSlideChangedDelay: 200,
-			mapPath: false, // true / false / "spefific/path/as/string", default: false
-			tryFallbackURL: true, // true/false, default false
-			disableCheckFile: false, //default false
-		 },
-
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -605,31 +867,31 @@ group tables</p></li>
           RevealNotes,
           RevealSearch,
           RevealZoom,
-		  RevealChart,
 		  RevealChalkboard,
           RevealMenu,
           Reveald3,
+          Multimodal,
         ],
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
@@ -637,5 +899,17 @@ group tables</p></li>
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
