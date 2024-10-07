@@ -16,15 +16,18 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/tokyo-night-light.css">
 </head>
 <body>
   <div class="reveal">
@@ -33,7 +36,7 @@
 <section id="title-slide">
   <h1 class="title">Group Up!</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Monday, October 10, 2022</p>
+  <p class="date">Monday, October 7, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -44,258 +47,15 @@
 <li>Working with constraints, so you have everything you need to
 complete it already</li>
 </ul></li>
-<li>Now that the exams are scored, I’ll work on the first round of grade
-reports this weekend
+<li>Grade reports out!
 <ul>
-<li>We’ll talk about the exam in just a moment</li>
+<li>Today is the last day to choose the credit/no credit option if that
+is something you were thinking about</li>
 </ul></li>
 <li>Polling today: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
-</section>
-<section id="exam-summary" class="slide level2">
-<h2>Exam Summary</h2>
-<div class="cols">
-<div class="col">
-
-</div>
-<div class="col">
-<ul>
-<li>Mean: 93.4%</li>
-<li>St Dev: 5%</li>
-<li>Median: 94%</li>
-</ul>
-</div>
-</div>
-</section>
-<section id="problem-1" class="slide level2">
-<h2>Problem 1</h2>
-<div class="r-stack">
-<div class="fragment fade-in-then-out">
-<pre ><code class="pgsql">SELECT "id", "desc"
-FROM keychains
-WHERE state = 'OR'
-ORDER BY date_purch DESC</code></pre>
-</div>
-<div class="fragment fade-in-then-out">
-<pre ><code class="pgsql">SELECT
-  MODE() WITHIN GROUP (ORDER BY state)
-FROM keychains
-WHERE loc ILIKE '%National Park%'</code></pre>
-</div>
-<div class="fragment fade-in-then-out">
-<pre ><code class="pgsql">SELECT DISTINCT state
-FROM keychains
-WHERE price > 10.00
-ORDER BY date_purch
-LIMIT 1</code></pre>
-</div>
-</div>
-</section>
-<section id="problem-2" class="slide level2">
-<h2>Problem 2</h2>
-<pre ><code class="pgsql">SELECT
-  MAX(salmon) * trout AS col_a,
-  trout + CAST(halibut AS int) - snapper AS col_b,
-  cod / (snapper % 10) AS col_c
-FROM mysterious_table
-WHERE halibut LIKE '%0'
-  AND cod::TEXT ILIKE '%.__'</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code class="python">col_a</code></td>
-<td><code class="python">DOUBLE PRECISION</code></td>
-</tr>
-<tr class="even">
-<td><code class="python">col_b</code></td>
-<td><code class="python">INTEGER</code></td>
-</tr>
-<tr class="odd">
-<td><code class="python">col_c</code></td>
-<td><code class="python">NUMERIC</code></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="problem-3" class="slide level2">
-<h2>Problem 3</h2>
-<pre ><code class="text">name:color:radius (cm):price:amount in package
-basketball:orange:24:11.97:1
-bowling ball:teal:12:115:1
-ping pong ball:white:0.79:9.68:12
-tennis ball:green:6.86:4.99:3</code></pre>
-</section>
-<section id="problem-4" class="slide level2">
-<h2>Problem 4</h2>
-<div class="cols" style="align-items:center">
-<div class="col" style="font-size:.8em">
-<table>
-<thead>
-<tr class="header">
-<th>name</th>
-<th>type</th>
-<th>weight</th>
-<th>price</th>
-<th>fluid_vol</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Milk</td>
-<td>dairy</td>
-<td>NULL</td>
-<td>3.50</td>
-<td>128</td>
-</tr>
-<tr class="even">
-<td>Ketchup</td>
-<td>condiment</td>
-<td>NULL</td>
-<td>4.00</td>
-<td>32</td>
-</tr>
-<tr class="odd">
-<td>Cheese</td>
-<td>dairy</td>
-<td>32</td>
-<td>14.00</td>
-<td>NULL</td>
-</tr>
-<tr class="even">
-<td>Apples</td>
-<td>fruit</td>
-<td>8</td>
-<td>1.00</td>
-<td>NULL</td>
-</tr>
-<tr class="odd">
-<td>Salami</td>
-<td>meat</td>
-<td>16</td>
-<td>7.00</td>
-<td>NULL</td>
-</tr>
-<tr class="even">
-<td>Chicken</td>
-<td>meat</td>
-<td>64</td>
-<td>12.00</td>
-<td>NULL</td>
-</tr>
-<tr class="odd">
-<td>Yogurt</td>
-<td>dairy</td>
-<td>NULL</td>
-<td>3.50</td>
-<td>32</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="col" style="font-size:.9em">
-<div class="r-stack">
-<div class="fragment fade-in-then-out">
-<pre ><code class="pgsql">SELECT DISTINCT type, fluid_vol
-FROM fridge_items
-WHERE price < 10
-ORDER BY type, fluid_vol</code></pre>
-</div>
-<div class="fragment fade-in-then-out">
-<pre ><code class="pgsql">SELECT SUM(weight)
-FROM fridge_items
-WHERE name LIKE '%s%'</code></pre>
-</div>
-<div class="fragment fade-in-then-out">
-<pre ><code class="pgsql">SELECT COUNT(price)
-FROM fridge_items
-WHERE price > weight</code></pre>
-</div>
-<div class="fragment fade-in-then-out">
-<pre ><code class="pgsql">SELECT
-  percentile_cont(0.5) 
-    WITHIN GROUP
-    (ORDER BY price) AS mdprice
-FROM fridge_items
-WHERE fluid_vol IS NOT NULL
-   OR price % 1 > 0</code></pre>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="problem-5" class="slide level2">
-<h2>Problem 5</h2>
-<div style="font-size:.9em">
-<table>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code class="python">pid</code></td>
-<td><code class="python">TEXT</code></td>
-<td>A unique player ID number</td>
-</tr>
-<tr class="even">
-<td><code class="python">full_name</code></td>
-<td><code class="python">TEXT</code></td>
-<td>The full player name, first then last</td>
-</tr>
-<tr class="odd">
-<td><code class="python">round_num</code></td>
-<td><code class="python">INT</code></td>
-<td>What round this is at the given event</td>
-</tr>
-<tr class="even">
-<td><code class="python">strokes</code></td>
-<td><code class="python">INT</code></td>
-<td>The number of strokes taken that round</td>
-</tr>
-<tr class="odd">
-<td><code class="python">event_name</code></td>
-<td><code class="python">TEXT</code></td>
-<td>The full event name</td>
-</tr>
-<tr class="even">
-<td><code class="python">par_score</code></td>
-<td><code class="python">INT</code></td>
-<td>The par number of strokes for the round</td>
-</tr>
-<tr class="odd">
-<td><code class="python">date_played</code></td>
-<td><code class="python">DATE</code></td>
-<td>The date the round was played</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="r-stack">
-<div class="fragment fade-in-then-out">
-<p>How many different events did the player with ID 007 play in the year
-2021?</p>
-</div>
-<div class="fragment fade-in-then-out">
-<p>What is the name of the player who scored the lowest number of
-strokes across the second round at the event
-<code class="python">'Augusta 2021'</code>?</p>
-</div>
-<div class="fragment fade-in-then-out">
-<p>What was the average number of strokes of all players with the first
-name “Beth” who shot under par in any round played on the 4th of July,
-2022?</p>
-</div>
-</div>
+<!-- maybe a different review question on normal forms? -->
 </section>
 <section id="review-question" class="slide level2">
 <h2>Review Question</h2>
@@ -312,6 +72,40 @@ performed.</li>
 <li>Indexes can be placed on any column.</li>
 </ol>
 </div>
+</section>
+<section>
+<section id="data-modeling" class="title-slide slide level1">
+<h1>Data Modeling</h1>
+
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity</h2>
+<div style="font-size:.9em">
+<p>Suppose you wanted to track your Spotify playlist information in your
+own database. Questions you may want to be able to answer might
+include:</p>
+<ul>
+<li>What is the total playtime of this playlist?</li>
+<li>What is the most common band in a particular playlist?</li>
+<li>Of all the artists who perform songs in any playlist, which artists
+collaborate with others the most?</li>
+<li>Songs from how many different albums are in a particular
+playlist?</li>
+</ul>
+<p>In groups of two or three, sketch out ER diagrams that would allow
+all these questions to be answered. Your tables should include primary
+keys and foreign keys where appropriate, and be normalized as best as
+you are able.</p>
+<p>Online sketching resources include: <a
+href="https://drawsql.app/">drawsql</a>, <a
+href="https://online.visual-paradigm.com/">visual-paradigm</a>, or <a
+href="https://app.diagrams.net/">DrawIO</a></p>
+</div>
+</section></section>
+<section>
+<section id="grouping" class="title-slide slide level1">
+<h1>Grouping</h1>
+
 </section>
 <section id="birds-of-a-feather" class="slide level2">
 <h2>Birds of a Feather</h2>
@@ -343,7 +137,7 @@ many categories</p></li>
 <section id="the-fix" class="slide level2">
 <h2>The Fix</h2>
 <ul>
-<li>SQL has one last trick up its sleave with the
+<li>SQL has one last (mostly) trick up its sleave with the
 <code class="python">GROUP BY</code> command</li>
 <li><code class="python">GROUP BY</code> gathers together all rows with
 matching values from a particular column
@@ -353,9 +147,9 @@ matching values from a particular column
 <li>Note that once you make a grouping, you can only select entire
 columns that are a part of the grouping</li>
 </ul>
-<pre ><code class="pgsql">SELECT grouped_column
-FROM table_name
-GROUP BY grouped_column;</code></pre></li>
+<pre ><code class="pgsql">SELECT |||grouped_column|||
+FROM |||table|||
+GROUP BY |||grouped_column|||;</code></pre></li>
 <li>Can visualize as if many smaller tables were created, one for each
 grouping, which are then joined back together with each table
 contributing one row</li>
@@ -371,11 +165,11 @@ able to run aggregates across <em>all</em> potential groups
 <em>simultaneously</em> for comparison</li>
 </ul>
 <pre ><code class="pgsql">SELECT 
-  col_name, 
-  min(col_name), 
-  avg(col_name2)
-FROM table_name
-GROUP BY col_name;</code></pre>
+  |||col_name|||, 
+  min(|||col_name|||), 
+  avg(|||col_name2|||)
+FROM |||table|||
+GROUP BY |||col_name|||;</code></pre>
 <ul>
 <li>Causes any aggregate function to just aggregate over the smaller,
 group tables</li>
@@ -383,11 +177,11 @@ group tables</li>
 </section>
 <section id="group-example" class="slide level2">
 <h2>Group Example</h2>
-<p>Looking back at the New York City addresses table, how can we
-answer:</p>
+<p>Looking back at the cereal table, how can we answer:</p>
 <ul>
-<li>Which street has the most addresses on it?</li>
-<li>What is the average latitude and longitude of each postcode?</li>
+<li>Which manufacturer sells the most sugar-laden cereal?</li>
+<li>What shelf has the most cereals placed on it? What about the
+greatest sum of calories?</li>
 </ul>
 </section>
 <section id="multiple-groups" class="slide level2">
@@ -400,11 +194,11 @@ columns</li>
 each combination</li>
 </ul>
 <pre ><code class="pgsql">SELECT 
-  col_name, 
-  min(col_name), 
-  avg(col_name2)
-FROM table_name
-GROUP BY col_name, col_name2;</code></pre>
+  |||col_name|||, 
+  min(|||col_name|||), 
+  avg(|||col_name2|||)
+FROM |||table|||
+GROUP BY |||col_name|||, |||col_name2|||;</code></pre>
 </section>
 <section id="combining-with-joins" class="slide level2">
 <h2>Combining with Joins</h2>
@@ -416,12 +210,12 @@ tables</li>
 identifiers</li>
 </ul>
 <pre ><code class="pgsql">SELECT 
-  t1.col_name, 
-  COUNT(t2.col_name3), 
+  t1.|||col_name|||, 
+  COUNT(t2.|||col_name3|||), 
 FROM table_name1 AS t1
 JOIN table_name2 AS t2
-  ON t1.col_name = t2.col_name2
-GROUP BY t1.col_name;</code></pre>
+  ON t1.|||col_name||| = t2.|||col_name2|||
+GROUP BY t1.|||col_name|||;</code></pre>
 </section>
 <section id="have-or-have-not" class="slide level2">
 <h2>HAVE or HAVE NOT</h2>
@@ -440,27 +234,34 @@ aggregates can be computed</li>
 </ul></li>
 </ul>
 <pre ><code class="pgsql">SELECT 
-  col_name, 
-  min(col_name), 
-  avg(col_name2)
-FROM table_name
-GROUP BY col_name
-HAVING min(col_name) > 50;</code></pre>
+  |||col_name|||, 
+  min(|||col_name|||), 
+  avg(|||col_name2|||)
+FROM |||table|||
+GROUP BY |||col_name|||
+HAVING min(|||col_name|||) > 50;</code></pre>
 </section>
 <section id="server-ordering" class="slide level2">
 <h2>Server Ordering</h2>
 <p><img data-src="../images/query_flowchart.png"
 style="width:80.0%" /></p>
+</section></section>
+<section>
+<section id="the-showdown-returns" class="title-slide slide level1">
+<h1>The Showdown Returns</h1>
+
 </section>
 <section id="showdown-time" class="slide level2">
 <h2>SHOWDOWN TIME!</h2>
 <ul>
-<li>Let’s divide into groups and try a time based
-trial-by-SQL-combat!</li>
+<li>Divide into groups based on the next slide. It is time for another
+SQL showdown!</li>
 <li>Each group should have:
 <ul>
 <li>one person designated as the answer submitter</li>
-<li>one person designated as the SQL typer</li>
+<li>one person designated as the SQL typer (must rotate each
+question)</li>
+<li>one computer that has the superheroes tables from HW4 on it</li>
 </ul></li>
 <li>Navigate to <a
 href="http://pollev.com/jedrembold441">pollev.com/jedrembold441</a> and
@@ -469,6 +270,346 @@ come up with a fun group name</li>
 answer faster gets you more points!</li>
 </ul>
 </section>
+<section id="groups" class="slide level2">
+<h2>Groups</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Group 1: Tippy, Marcus, Haley</li>
+<li>Group 2: Nick, Jordan, AJ</li>
+<li>Group 3: Jack, Dayton, Mallory</li>
+<li>Group 4: Aurora, Myles, Greg</li>
+</ul>
+</div>
+<div class="col">
+<ul>
+<li>Group 5: Matthew, Sam H, Harleen</li>
+<li>Group 6: Evan, Sergio, Michael</li>
+<li>Group 7: Connor, Finn, Sam J</li>
+<li>Group 8: Hannah, Jerrick, Grace</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="locations" class="slide level2">
+<h2>Locations!</h2>
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="304.91373mm"
+   height="196.17766mm"
+   viewBox="0 0 304.91373 196.17766"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   sodipodi:docname="group_seating_locs_Ford201.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.84100812"
+     inkscape:cx="582.03956"
+     inkscape:cy="331.74472"
+     inkscape:window-width="1680"
+     inkscape:window-height="1050"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     showgrid="false">
+    <inkscape:grid
+       id="grid24"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="0.26458334"
+       spacingy="0.26458334"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       dotted="false"
+       gridanglex="30"
+       gridanglez="30"
+       visible="false" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(57.332851,258.13925)">
+    <rect
+       style="fill:none;fill-opacity:0.898751;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+       id="rect1"
+       width="303.91373"
+       height="195.17766"
+       x="-56.832851"
+       y="-257.63925" />
+    <text
+       xml:space="preserve"
+       style="font-size:14.1111px;line-height:1;font-family:Menlo;-inkscape-font-specification:'Menlo, Normal';fill:#000000;fill-opacity:0.898751;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+       x="43.12114"
+       y="-66.821236"
+       id="text1"><tspan
+         sodipodi:role="line"
+         id="tspan1"
+         style="fill:#000000;stroke:none;stroke-width:1"
+         x="43.12114"
+         y="-66.821236">Back of room</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14.1111px;line-height:1;font-family:Menlo;-inkscape-font-specification:'Menlo, Normal';fill:#000000;fill-opacity:0.898751;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+       x="66.119049"
+       y="242.61075"
+       id="text2"
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         id="tspan2"
+         style="stroke-width:1"
+         x="66.119049"
+         y="242.61075">Door</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14.1111px;line-height:1;font-family:Menlo;-inkscape-font-specification:'Menlo, Normal';fill:#000000;fill-opacity:0.898751;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+       x="36.208023"
+       y="-242.02055"
+       id="text3"><tspan
+         sodipodi:role="line"
+         id="tspan3"
+         style="fill:#000000;stroke:none;stroke-width:1"
+         x="36.208023"
+         y="-242.02055">Front of room</tspan></text>
+    <rect
+       style="fill:#999999;fill-opacity:0.898751;stroke:#000000;stroke-width:0.999998;stroke-linecap:round;stroke-linejoin:round"
+       id="rect3"
+       width="242.16151"
+       height="23.674189"
+       x="-25.956745"
+       y="-118.4958" />
+    <rect
+       style="fill:#999999;fill-opacity:0.898751;stroke:#000000;stroke-width:0.999998;stroke-linecap:round;stroke-linejoin:round"
+       id="rect4"
+       width="242.16151"
+       height="23.674189"
+       x="-25.956745"
+       y="-164.42628" />
+    <rect
+       style="fill:#999999;fill-opacity:0.898751;stroke:#000000;stroke-width:0.999998;stroke-linecap:round;stroke-linejoin:round"
+       id="rect5"
+       width="242.16151"
+       height="23.674189"
+       x="-25.956745"
+       y="-210.35677" />
+    <g
+       id="g23"
+       transform="translate(-2.2382062,111.28706)">
+      <rect
+         style="fill:#f2f2f2;fill-opacity:0.898751;stroke:#000000;stroke-width:0.999996;stroke-linecap:round;stroke-linejoin:round"
+         id="rect6"
+         width="45.771015"
+         height="40.481121"
+         x="21.558189"
+         y="-238.18633"
+         ry="11.383913" />
+      <text
+         xml:space="preserve"
+         style="font-size:41.9517px;line-height:1;font-family:Menlo;-inkscape-font-specification:'Menlo, Normal';fill:#000000;fill-opacity:0.898751;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+         x="30.252254"
+         y="-206.98671"
+         id="text12"
+         transform="scale(1.0196435,0.98073494)"><tspan
+           sodipodi:role="line"
+           id="tspan12"
+           style="fill:#000000;stroke:none;stroke-width:1"
+           x="30.252254"
+           y="-206.98671">1</tspan></text>
+    </g>
+    <g
+       id="g24"
+       transform="translate(-0.02900185,111.28706)">
+      <rect
+         style="fill:#f2f2f2;fill-opacity:0.898751;stroke:#000000;stroke-width:0.999996;stroke-linecap:round;stroke-linejoin:round"
+         id="rect7"
+         width="45.771015"
+         height="40.481121"
+         x="125.18603"
+         y="-238.18633"
+         ry="11.383913" />
+      <text
+         xml:space="preserve"
+         style="font-size:41.9517px;line-height:1;font-family:Menlo;-inkscape-font-specification:'Menlo, Normal';fill:#000000;fill-opacity:0.898751;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+         x="132.81573"
+         y="-206.65897"
+         id="text13"
+         transform="scale(1.0196435,0.98073494)"><tspan
+           sodipodi:role="line"
+           id="tspan13"
+           style="fill:#000000;stroke:none;stroke-width:1"
+           x="132.81573"
+           y="-206.65897">2</tspan></text>
+    </g>
+    <g
+       id="g21"
+       transform="translate(-35.707826,18.597495)">
+      <rect
+         style="fill:#f2f2f2;fill-opacity:0.898751;stroke:#000000;stroke-width:0.999996;stroke-linecap:round;stroke-linejoin:round"
+         id="rect9"
+         width="45.771015"
+         height="40.481121"
+         x="23.122143"
+         y="-191.42725"
+         ry="11.383913" />
+      <text
+         xml:space="preserve"
+         style="font-size:41.9517px;line-height:1;font-family:Menlo;-inkscape-font-specification:'Menlo, Normal';fill:#000000;fill-opacity:0.898751;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+         x="32.666901"
+         y="-159.2784"
+         id="text14"
+         transform="scale(1.0196435,0.98073494)"><tspan
+           sodipodi:role="line"
+           id="tspan14"
+           style="fill:#000000;stroke:none;stroke-width:1"
+           x="32.666901"
+           y="-159.2784">3</tspan></text>
+    </g>
+    <g
+       id="g22"
+       transform="translate(-50.851894,18.597495)">
+      <rect
+         style="fill:#f2f2f2;fill-opacity:0.898751;stroke:#000000;stroke-width:0.999996;stroke-linecap:round;stroke-linejoin:round"
+         id="rect8"
+         width="45.771015"
+         height="40.481121"
+         x="124.03192"
+         y="-191.42725"
+         ry="11.383913" />
+      <text
+         xml:space="preserve"
+         style="font-size:41.9517px;line-height:1;font-family:Menlo;-inkscape-font-specification:'Menlo, Normal';fill:#000000;fill-opacity:0.898751;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+         x="131.41756"
+         y="-159.25792"
+         id="text15"
+         transform="scale(1.0196435,0.98073494)"><tspan
+           sodipodi:role="line"
+           id="tspan15"
+           style="fill:#000000;stroke:none;stroke-width:1"
+           x="131.41756"
+           y="-159.25792">4</tspan></text>
+    </g>
+    <g
+       id="g18"
+       transform="translate(172.99121,-26.852746)">
+      <rect
+         style="fill:#f2f2f2;fill-opacity:0.898751;stroke:#000000;stroke-width:0.999996;stroke-linecap:round;stroke-linejoin:round"
+         id="rect12"
+         width="45.771015"
+         height="40.481121"
+         x="-15.928519"
+         y="-145.97701"
+         ry="11.383913" />
+      <text
+         xml:space="preserve"
+         style="font-size:41.9517px;line-height:1;font-family:Menlo;-inkscape-font-specification:'Menlo, Normal';fill:#000000;fill-opacity:0.898751;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+         x="-5.5904803"
+         y="-113.21189"
+         id="text16"
+         transform="scale(1.0196435,0.98073494)"><tspan
+           sodipodi:role="line"
+           id="tspan16"
+           style="fill:#000000;stroke:none;stroke-width:1"
+           x="-5.5904803"
+           y="-113.21189">5</tspan></text>
+    </g>
+    <g
+       id="g19"
+       transform="translate(-84.605413,-73.346472)">
+      <rect
+         style="fill:#f2f2f2;fill-opacity:0.898751;stroke:#000000;stroke-width:0.999996;stroke-linecap:round;stroke-linejoin:round"
+         id="rect10"
+         width="45.771015"
+         height="40.481121"
+         x="72.01973"
+         y="-145.97701"
+         ry="11.383913" />
+      <text
+         xml:space="preserve"
+         style="font-size:41.9517px;line-height:1;font-family:Menlo;-inkscape-font-specification:'Menlo, Normal';fill:#000000;fill-opacity:0.898751;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+         x="80.448357"
+         y="-112.93536"
+         id="text17"
+         transform="scale(1.0196435,0.98073494)"><tspan
+           sodipodi:role="line"
+           id="tspan17"
+           style="fill:#000000;stroke:none;stroke-width:1"
+           x="80.448357"
+           y="-112.93536">6</tspan></text>
+    </g>
+    <g
+       id="g20"
+       transform="translate(-87.11169,-73.346472)">
+      <rect
+         style="fill:#f2f2f2;fill-opacity:0.898751;stroke:#000000;stroke-width:0.999996;stroke-linecap:round;stroke-linejoin:round"
+         id="rect11"
+         width="45.771015"
+         height="40.481121"
+         x="160.29172"
+         y="-145.97701"
+         ry="11.383913" />
+      <text
+         xml:space="preserve"
+         style="font-size:41.9517px;line-height:1;font-family:Menlo;-inkscape-font-specification:'Menlo, Normal';fill:#000000;fill-opacity:0.898751;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+         x="167.17342"
+         y="-112.91487"
+         id="text18"
+         transform="scale(1.0196435,0.98073494)"><tspan
+           sodipodi:role="line"
+           id="tspan18"
+           style="fill:#000000;stroke:none;stroke-width:1"
+           x="167.17342"
+           y="-112.91487">7</tspan></text>
+    </g>
+    <g
+       id="g4"
+       transform="translate(-3.2290268,-73.346472)">
+      <rect
+         style="fill:#f2f2f2;fill-opacity:0.898751;stroke:#000000;stroke-width:0.999996;stroke-linecap:round;stroke-linejoin:round"
+         id="rect2"
+         width="45.771015"
+         height="40.481121"
+         x="160.29172"
+         y="-145.97701"
+         ry="11.383913" />
+      <text
+         xml:space="preserve"
+         style="font-size:41.9517px;line-height:1;font-family:Menlo;-inkscape-font-specification:'Menlo, Normal';fill:#000000;fill-opacity:0.898751;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+         x="167.17342"
+         y="-112.91487"
+         id="text4"
+         transform="scale(1.0196435,0.98073494)"><tspan
+           sodipodi:role="line"
+           id="tspan4"
+           style="fill:#000000;stroke:none;stroke-width:1"
+           x="167.17342"
+           y="-112.91487">8</tspan></text>
+    </g>
+  </g>
+</svg>
+</p>
+</section></section>
     </div>
   </div>
 
@@ -479,13 +620,15 @@ answer faster gets you more points!</li>
   <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
   <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
   // Added plugins
-  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
-  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
   <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/multimodal/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/mypgsql.js"></script>
 
   <script>
 
@@ -513,7 +656,7 @@ answer faster gets you more points!</li>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -560,7 +703,7 @@ answer faster gets you more points!</li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -595,14 +738,11 @@ answer faster gets you more points!</li>
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
-	reveald3: {
-			runLastState: true, // true/false, default: true
-			onSlideChangedDelay: 200,
-			mapPath: false, // true / false / "spefific/path/as/string", default: false
-			tryFallbackURL: true, // true/false, default false
-			disableCheckFile: false, //default false
-		 },
-
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -610,31 +750,31 @@ answer faster gets you more points!</li>
           RevealNotes,
           RevealSearch,
           RevealZoom,
-		  RevealChart,
 		  RevealChalkboard,
           RevealMenu,
           Reveald3,
+          Multimodal,
         ],
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
@@ -642,5 +782,17 @@ answer faster gets you more points!</li>
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
