@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-10-11">
+  <meta name="dcterms.date" content="2024-10-09">
   <title>Getting Animated</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -27,8 +27,8 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
@@ -37,29 +37,25 @@
 <section id="title-slide">
   <h1 class="title">Getting Animated</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">October 11, 2023</p>
+  <p class="date">October 9, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <div style="font-size:.9em">
 <ul>
-<li>My apologies, I’m not quite through the exam scoring just yet
+<li>Midterm 1 feedback released on Canvas</li>
+<li>Problem Set 4 released and due on Monday!</li>
+<li>SCIS Open House taking place tomorrow during TechBytes
 <ul>
-<li>Some plane rides today though, so hoping to be at least able to
-share scores by tomorrow</li>
-</ul></li>
-<li>PS4 due on Monday</li>
-<li>Academic Explorations Expo happening tomorrow during CS/DS Tea time
-and beyond
-<ul>
-<li>First years should have received information about it</li>
+<li>11:30- 1pm in the DLS (Ford 101)</li>
+<li>There will be snacks and refreshments</li>
 <li>Come chat with faculty and upper-classmen about the computer and
 data science programs!</li>
 </ul></li>
 <li>No class Friday! Rest up!</li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 </div>
 </section>
@@ -80,7 +76,7 @@ happens when the mouse is clicked in the window?</p>
 </div>
 </div>
 <div class="col" style="flex-grow:2">
-<pre ><code class="mypython" style="max-height:900px; font-size:.80em; width:100%">def rev_q():
+<pre ><code class="python" style="max-height:900px; font-size:.80em; width:100%">def rev_q():
     def act_A(e):
         sq.set_filled(True)
     def act_B(e):
@@ -97,9 +93,115 @@ happens when the mouse is clicked in the window?</p>
 </div>
 </div>
 </section>
+<section>
+<section id="an-interactive-example" class="title-slide slide level1">
+<h1>An Interactive Example</h1>
+
+</section>
+<section id="line-drawing" class="slide level2">
+<h2>Line Drawing</h2>
+<div>
+<ul>
+<li class="fragment">Say we wanted to write a simple program that allows
+the user to draw lines by clicking and dragging the mouse</li>
+<li class="fragment">Using two event listeners would be useful:
+<ul>
+<li class="fragment">“mousedown” could start drawing a zero-length line
+at the current mouse position (and add it to the window)</li>
+<li class="fragment">“drag” could update the end-point of that line</li>
+</ul></li>
+<li class="fragment">The strategy would allow the user to have visual
+feedback as they drag around, helping them to position the line
+<ul>
+<li class="fragment">Since the line stretches and contracts as you move
+the cursor around, the technique is commonly called
+<em>rubber-banding</em></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="attempt-1" class="slide level2">
+<h2>Attempt #1</h2>
+<pre ><code class="python badcode" style="max-height:800px;">from pgl import GWindow, GLine
+
+WIDTH = 500
+HEIGHT = 500
+
+def draw_lines():
+    def mousedown_event(e):
+        x = e.get_x()
+        y = e.get_y()
+        line = GLine(x,y,x,y)
+        gw.add(line)
+
+    def drag_action(e):
+        line.set_end_point(e.get_x(), e.get_y())
+
+    gw = GWindow(WIDTH, HEIGHT)
+    line = None
+    gw.add_event_listener("mousedown", mousedown_event)
+    gw.add_event_listener("drag", drag_action)
+
+if __name__ == '__main__':
+    draw_lines()</code></pre>
+</section>
+<section id="what-happened" class="slide level2">
+<h2>What Happened?</h2>
+<ul>
+<li>Remember that if you define a variable in a function, that variable
+is assumed to be local!
+<ul>
+<li>Keeps you from accidentally overwriting variables you may not have
+meant to</li>
+<li>It works against us here, since we WANT to override the original
+value</li>
+</ul></li>
+<li>We can’t pass in the info as a parameter, since it is not part of
+the event information</li>
+<li>Python <em>does</em> have a <code class="python">nonlocal</code>
+keyword, which allows you to state that a specific variable is
+<em>not</em> local, but it tends to just confuse students</li>
+</ul>
+</section>
+<section id="in-the-window" class="slide level2">
+<h2>In the Window</h2>
+<ul>
+<li>A common tactic is to store all variables that need to be shared
+between two or more functions in a <em>state object</em></li>
+<li>A state object is just a single object which serves as a storage
+space for a collection of values</li>
+<li>The object is created in such a location as to ensure it is in the
+closure of any functions that need to access its contents</li>
+<li>We will most often encounter this issue with graphics applications,
+where we actually already have an object that could serve as a state
+object
+<ul>
+<li>The <code class="python">GWindow</code> object (mostly commonly
+named <code class="python">gw</code>)!</li>
+</ul></li>
+</ul>
+</section>
+<section id="storage-and-retrieval" class="slide level2">
+<h2>Storage and Retrieval</h2>
+<ul>
+<li>Do you want to store a value in your state object?
+<ul>
+<li>We can store it as an <em>attribute</em> to the
+<code class="python">gw</code> object</li>
+<li>Requires specifying the object name, followed by a dot and then your
+desired attribute name:</li>
+</ul>
+<pre ><code class="python">gw.|||my_attribute_name||| = |||some_cool_value|||</code></pre></li>
+<li>Do you want to retrieve a value from your state object?
+<ul>
+<li><p>Just refer to the object and attribute name:</p>
+<pre ><code class="python">print(gw.|||my_attribute_name|||)</code></pre></li>
+</ul></li>
+</ul>
+</section>
 <section id="fixed-line-drawing" class="slide level2">
 <h2>Fixed Line-Drawing</h2>
-<pre ><code class="mypython" style="max-height:800px;" data-line-numbers="">from pgl import GWindow, GLine
+<pre ><code class="python" style="max-height:800px;" data-line-numbers="">from pgl import GWindow, GLine
 
 WIDTH = 500
 HEIGHT = 500
@@ -121,6 +223,11 @@ def draw_lines():
 
 if __name__ == '__main__':
     draw_lines()</code></pre>
+</section></section>
+<section>
+<section id="a-matter-of-timing" class="title-slide slide level1">
+<h1>A Matter of Timing</h1>
+
 </section>
 <section id="timer-events" class="slide level2">
 <h2>Timer Events</h2>
@@ -148,17 +255,17 @@ the animations will appear smooth to the human eye</li>
 once</strong> after a specified delay
 <ul>
 <li><p>Created with</p>
-<pre ><code class="mypython">gw.set_timeout(|||function|||, |||delay|||)</code></pre></li>
+<pre ><code class="python">gw.set_timeout(|||function|||, |||delay|||)</code></pre></li>
 </ul></li>
 <li>An <em>interval timer</em> invokes its callback function
 <strong>repeatedly</strong> at regular intervals
 <ul>
 <li><p>Created with</p>
-<pre ><code class="mypython">gw.set_interval(|||function|||, |||delay|||)</code></pre></li>
+<pre ><code class="python">gw.set_interval(|||function|||, |||delay|||)</code></pre></li>
 </ul></li>
-<li>In both, <code class="mypython">|||function|||</code> is the
-callback function and <code class="mypython">|||delay|||</code> is the
-time interval in milliseconds</li>
+<li>In both, <code class="python">|||function|||</code> is the callback
+function and <code class="python">|||delay|||</code> is the time
+interval in milliseconds</li>
 </ul></li>
 <li>Both methods return a <code class="python">GTimer</code> object that
 identifies the timer, and can be stopped by invoking the
@@ -167,7 +274,7 @@ identifies the timer, and can be stopped by invoking the
 </section>
 <section id="moving-square" class="slide level2">
 <h2>Moving Square</h2>
-<pre ><code class="mypython" style="max-height:900px">def moving_square():
+<pre ><code class="python" style="max-height:900px">def moving_square():
     def step():
         square.move(dx, dy)
         if square.get_x() > 500:
@@ -193,7 +300,7 @@ alt="These circles are growing!" />
 <ul>
 <li><p>Many would probably try to approach this doing something like as
 follows:</p>
-<pre ><code class="mypython">def growing_circles():
+<pre ><code class="python">def growing_circles():
   gw = GWindow(WIDTH, HEIGHT)
   for i in range(NUM_CIRCLES):
       |||Create a new circle|||
@@ -216,7 +323,7 @@ creation (when needed) and growing animations</p></li>
 doing, and then have the timer callback function handle whatever is
 needed</p></li>
 <li><p>Conceptually, for these circles, might look more like this:</p>
-<pre ><code class="mypython">def step():
+<pre ><code class="python">def step():
     if |||there is a circle needing growing|||
         |||then increase its size|||
     elif |||a new circle needs to be created|||
@@ -227,7 +334,7 @@ needed</p></li>
 </section>
 <section id="making-those-circles-grow" class="slide level2">
 <h2>Making those circles grow!</h2>
-<pre ><code class="mypython" style="max-height:800px;" data-line-numbers="">from pgl import GWindow, GOval
+<pre ><code class="python" style="max-height:800px;" data-line-numbers="">from pgl import GWindow, GOval
 import random
 
 GWIDTH = 500
@@ -306,7 +413,7 @@ result otherwise!</li>
 </section>
 <section id="the-two-body-problem" class="slide level2">
 <h2>The Two Body Problem</h2>
-<pre ><code class="mypython" style="max-height:800px;">from pgl import GWindow, GOval, GLine
+<pre ><code class="python" style="max-height:800px;">from pgl import GWindow, GOval, GLine
 from pgl_tools import create_filled_circle
 
 def two_body():
@@ -365,59 +472,62 @@ def two_body():
 
 if __name__ == '__main__':
     two_body()</code></pre>
-</section>
-<section id="something-to-smile-about" class="slide level2">
-<h2>Something to smile about</h2>
-<div class="cols">
-<div class="col" style="font-size:.9em">
-<!--- Up until now, we haven't had a way to draw an arc!-->
-<ul>
-<li>The <code class="python">GArc</code> class represents an arc formed
-by taking a section of the perimeter of an oval.</li>
-<li>3 things necessary:
-<ul>
-<li>The bounding rectangle geometry (upper left corner and width and
-height)</li>
-<li>The <em>starting angle</em> (in degrees)</li>
-<li>The <em>sweep angle</em> (in degrees) which is how far the arc
-extends</li>
-</ul></li>
-<li>Negative angles move in the clockwise direction</li>
-</ul>
-</div>
-<div class="col">
-<p><img
-data-src="../images/svg_cache/568c4310834f76d9a4b710159f6c6cd65c6a7d0b.svg"
-style="width:100.0%" /></p>
-</div>
-</div>
-</section>
-<section id="fillable-arcs" class="slide level2">
-<h2>Fillable Arcs</h2>
-<ul>
-<li>The <code class="python">GArc</code> class is a
-<code class="python">GFillableObject</code>, and so you can call
-<code class="python">.set_filled()</code> on a
-<code class="python">GArc</code> object</li>
-<li>Filled like a pie-shaped wedge formed between the center of the
-bounding box and the starting and end points of the arc</li>
-</ul>
-<div class="cols">
-<div class="col">
-<pre ><code class="python">def filled_arc():
+<!--
+
+## Something to smile about
+
+::::::cols
+::::{.col style='font-size:.9em'}
+- The `GArc` class represents an arc formed by taking a section of the perimeter of an oval.
+- 3 things necessary:
+    - The bounding rectangle geometry (upper left corner and width and height)
+    - The _starting angle_ (in degrees)
+    - The _sweep angle_ (in degrees) which is how far the arc extends
+- Negative angles move in the clockwise direction
+::::
+
+::::col
+
+\begin{tikzpicture}%%width=100%
+\draw[MPurple] (-2,0) -- (2,0) (0,-2) -- (0,2);
+\draw[dashed, MBlue] (-1.5,-1.5) rectangle (1.5, 1.5);
+\draw[ultra thick, MRed, line cap=round] (45:1.5) arc (45:270:1.5);
+
+\draw[MOrange, dashed] (0,0) -- (45:1.5);
+\draw[MOrange, thick, -stealth] (0:1) arc (0:45:1) node[midway,right,font=\scriptsize\sf] {start};
+
+\draw[MGreen, thick, -stealth] (45:0.5) arc (45:270:0.5) node[midway, left, font=\scriptsize\sf] {sweep};
+\end{tikzpicture}
+
+::::
+::::::
+
+
+## Fillable Arcs
+- The `GArc` class is a `GFillableObject`, and so you can call `.set_filled()` on a `GArc` object
+- Filled like a pie-shaped wedge formed between the center of the bounding box and the starting and end points of the arc
+
+::::::cols
+::::col
+```python
+def filled_arc():
     gw = GWindow(400, 400)
     arc = GArc(50, 50, 
                350, 350, 
                90, 135)
     arc.set_color("orange")
     arc.set_filled(True)
-    gw.add(arc)</code></pre>
-</div>
-<div class="col">
-<p><img data-src="../images/FilledArc.png" style="width:50.0%" /></p>
-</div>
-</div>
-</section>
+    gw.add(arc)
+```
+::::
+
+::::col
+![](../images/FilledArc.png){width=50%}
+::::
+::::::
+
+-->
+</section></section>
     </div>
   </div>
 
@@ -430,6 +540,7 @@ bounding box and the starting and end points of the arc</li>
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
@@ -552,7 +663,7 @@ bounding box and the starting and end points of the arc</li>
 		 },
 
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
               console.log(mypythondef);
               return mypythondef(hljs); } )
           },
@@ -566,6 +677,7 @@ bounding box and the starting and end points of the arc</li>
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
