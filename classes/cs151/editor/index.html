@@ -417,14 +417,14 @@ editor.session.setMode("ace/mode/python");
 editor.session.setUseSoftTabs(true);
 
 // Load existing session if available
-if (sessionStorage.getItem("ace_editor_state")) {
-	editor.setSession(ace.EditSession.fromJSON(sessionStorage.getItem("ace_editor_state")))
+if (sessionStorage.getItem("ace_editor_text")) {
+	editor.setSession(ace.createEditSession(sessionStorage.getItem("ace_editor_text")))
 }
 
 // Autosave into session storage every time a change is made
 // This will persist across reloads or history changes until a tab is closed
 editor.session.on('change', function(delta) {
-	sessionStorage.setItem("ace_editor_state", JSON.stringify(editor.getSession().toJSON()))
+	sessionStorage.setItem("ace_editor_text", editor.getSession().getValue())
 })
 
 function mycopy() {
