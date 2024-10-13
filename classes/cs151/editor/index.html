@@ -419,6 +419,8 @@ editor.session.setUseSoftTabs(true);
 // Load existing session if available
 if (sessionStorage.getItem("ace_editor_text")) {
 	editor.setSession(ace.createEditSession(sessionStorage.getItem("ace_editor_text")))
+	editor.session.setMode("ace/mode/python");
+	editor.session.setUseSoftTabs(true);
 }
 
 // Autosave into session storage every time a change is made
