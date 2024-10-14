@@ -16,15 +16,18 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/tokyo-night-light.css">
 </head>
 <body>
   <div class="reveal">
@@ -33,7 +36,7 @@
 <section id="title-slide">
   <h1 class="title">Alterations and Transactions</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Monday, October 17, 2022</p>
+  <p class="date">Monday, October 14, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -41,92 +44,36 @@
 <ul>
 <li>Homework 6 due on Thursday
 <ul>
-<li>Feedback will be coming at some point for previous homeworks
-<em>sigh</em></li>
-<li>I will not be penalizing late work as long as I’m behind</li>
+<li>Mostly groups and data modeling, so you have everything already that
+you need</li>
 </ul></li>
-<li>Note that we are initially skipping Chapter 10, so we’ll be looking
-at Ch 11 material on Wednesday</li>
+<li>I am working on Homework 5 feedback</li>
+<li>Note that we are skipping Chapter 11, so we’ll be looking at Ch 12
+material on Wednesday</li>
 <li>Terminal <code class="python">psql</code> issues? I posted something
 on Discord, but will summarize.</li>
 <li>Polling today: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 </section>
-<section id="making-adjustments" class="slide level2">
-<h2>Making Adjustments</h2>
-<div class="cols">
-<div class="col">
-<ul>
-<li>Changing existing tables can generally be broken down into two
-categories:
-<ul>
-<li>Changing the structure of the table itself
-<ul>
-<li>Uses keywords <code class="python">ALTER TABLE</code></li>
-</ul></li>
-<li>Changing the row content within the table
-<ul>
-<li>Uses keyword <code class="python">UPDATE</code></li>
-</ul></li>
-</ul></li>
-</ul>
-</div>
-<div class="col">
-<p><img data-src="../images/altering_table.jpg"
-style="width:100.0%" /></p>
-</div>
-</div>
+<section>
+<section id="continuing-alterations" class="title-slide slide level1">
+<h1>Continuing Alterations</h1>
+
 </section>
-<section id="table-altering-part-1" class="slide level2">
-<h2>Table Altering: Part 1</h2>
+<section id="multi-updates" class="slide level2">
+<h2>Multi-Updates</h2>
 <ul>
-<li><p><code class="python">ALTER TABLE</code> is generally followed by
-the table name and then another keyword command, depending on what you
-want to do</p>
-<pre ><code class="pgsql">ALTER TABLE table_name ...</code></pre>
+<li>Sometimes you want to update several things at once</li>
+<li>So long as they are all in the same table, you can do this with a
+single <code class="python">UPDATE</code> statement</li>
+<li>After the <code class="python">SET</code> keyword, either:
 <ul>
-<li><p>Adding columns:</p>
-<pre ><code class="pgsql">... ADD COLUMN col_name data_type;</code></pre></li>
-<li><p>Removing columns</p>
-<pre ><code class="pgsql">... DROP COLUMN col_name;</code></pre></li>
+<li>Separate each assignment by a comma:
+<code class="pgsql">SET col1 = 5, col2 = col3</code></li>
+<li>Pair up the assignments with parentheses:
+<code class="pgsql">SET (col1, col2) = (5, col3)</code></li>
 </ul></li>
-</ul>
-</section>
-<section id="table-altering-part-2" class="slide level2">
-<h2>Table Altering: Part 2</h2>
-<pre ><code class="pgsql">ALTER TABLE table_name ...</code></pre>
-<ul>
-<li><p>Changing columns</p>
-<pre ><code class="pgsql" style="font-size:.9em">... ALTER COLUMN col_name SET DATA TYPE data_type;
-... ALTER COLUMN col_name SET NOT NULL;</code></pre></li>
-<li><p>Renaming columns</p>
-<pre ><code class="pgsql" style="font-size:.9em">... RENAME col_name TO new_col_name;</code></pre></li>
-<li><p>Rename entire table</p>
-<pre ><code class="pgsql" style="font-size:.9em">... RENAME TO new_table_name;</code></pre></li>
-</ul>
-</section>
-<section id="updating-tables" class="slide level2">
-<h2>Updating Tables</h2>
-<ul>
-<li>If you want to change the values in a particular row (or many rows),
-you don’t want to alter the table, you want to
-<code class="python">UPDATE</code> it</li>
-<li><code class="python">UPDATE</code> sets particular columns to a
-particular value
-<ul>
-<li><strong>BE CAREFUL!</strong> If you do not specify <em>which</em>
-rows, then <strong>ALL</strong> of the rows will have that column
-changed to that value
-<ul>
-<li>This is partly why having primary keys is so nice: it gives you a
-method to update just a single row should you need</li>
-</ul>
-<pre ><code class="pgsql">UPDATE table_name
-SET col_name = new_value;</code></pre></li>
-</ul></li>
-<li>You can specify which rows should be changed by filtering with
-<code class="python">WHERE</code></li>
 </ul>
 </section>
 <section id="understanding-check" class="slide level2">
@@ -418,12 +365,13 @@ ALTER TABLE revq DROP COLUMN row4;</code></pre>
 </section>
 <section id="backup-tables" class="slide level2">
 <h2>Backup Tables</h2>
+<div style="font-size:.9em">
 <ul>
 <li><p>Frequently, if you are about to heavily modify a table, you
 should consider working on a backup copy</p></li>
 <li><p>We actually have already seen the basic machinery for this:</p>
-<pre ><code class="pgsql" style="font-size:0.9em">CREATE TABLE new_table AS
-SELECT * FROM og_table;</code></pre>
+<pre ><code class="pgsql" style="font-size:0.9em">CREATE TABLE |||new_table||| AS
+SELECT * FROM |||og_table|||;</code></pre>
 <ul>
 <li><strong>Note:</strong> Indexes and constraints are stored
 separately, and so are NOT copied over using this process!</li>
@@ -431,12 +379,14 @@ separately, and so are NOT copied over using this process!</li>
 <li><p>For including constraints and indexes, you can use a Postgres
 specific syntax, but the newly created table will initially be missing
 the data</p>
-<pre ><code class="pgsql" style="font-size:0.9em">CREATE TABLE new_table
-(LIKE og_table INCLUDING ALL);</code></pre></li>
+<pre ><code class="pgsql" style="font-size:0.9em">CREATE TABLE |||new_table|||
+(LIKE |||og_table||| INCLUDING ALL);</code></pre></li>
 </ul>
+</div>
 </section>
 <section id="table-to-table" class="slide level2">
 <h2>Table to Table</h2>
+<div style="font-size:.9em">
 <ul>
 <li><p>In some cases, you’ll want to update or pass information across
 tables</p>
@@ -448,13 +398,14 @@ original table</li>
 about in a few chapters</p></li>
 <li><p>In Postgres, to update, you can use
 <code class="python">FROM</code>:</p>
-<pre ><code class="pgsql" style="font-size:.9em">UPDATE table_name1
-SET col_name = table_name2.col_name
-FROM table_name2
-WHERE table_name.col1 = table_name2.col1;</code></pre></li>
+<pre ><code class="pgsql" style="font-size:.9em">UPDATE |||table_1|||
+SET |||col_name||| = |||table_2|||.|||col2|||
+FROM |||table_2|||
+WHERE |||table_1|||.|||col1||| = |||table_2|||.|||col1|||;</code></pre></li>
 <li><p>To insert values from another table into another:</p>
-<pre ><code class="pgsql" style="font-size:.9em">INSERT INTO new_table SELECT * FROM old_table;</code></pre></li>
+<pre ><code class="pgsql" style="font-size:.9em">INSERT INTO |||new_table||| SELECT * FROM |||old_table|||;</code></pre></li>
 </ul>
+</div>
 </section>
 <section id="deletions" class="slide level2">
 <h2>Deletions</h2>
@@ -462,10 +413,10 @@ WHERE table_name.col1 = table_name2.col1;</code></pre></li>
 <li>Similar to changing tables, removing things from tables has two main
 keywords:
 <ul>
-<li><code class="python">DROP</code> for removing aspects of a table
-like columns, constraints, indexes, or the table itself</li>
-<li><code class="python">DELETE FROM</code> for removing rows from
-tables</li>
+<li><code class="python">DROP</code> for removing structural aspects of
+a table like columns, constraints, indexes, or the table itself</li>
+<li><code class="python">DELETE FROM</code> for removing content (rows)
+from tables</li>
 </ul></li>
 <li><code class="python">DROP</code> will frequently come after an
 <code class="python">ALTER TABLE</code> unless you are dropping the
@@ -475,7 +426,7 @@ table itself</li>
 <ul>
 <li>Make absolutely sure you are using a filter if you don’t want that
 to happen!</li>
-<li>Another good reason to make up your tables before editing them</li>
+<li>Another good reason to back up your tables before editing them</li>
 </ul></li>
 </ul>
 </section>
@@ -496,6 +447,11 @@ data from a table
 data, etc.</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="acid-transactions" class="title-slide slide level1">
+<h1>ACID Transactions</h1>
+
 </section>
 <section id="transactions" class="slide level2">
 <h2>Transactions</h2>
@@ -545,6 +501,7 @@ the transaction</li>
 </section>
 <section id="uses-of-transactions" class="slide level2">
 <h2>Uses of Transactions</h2>
+<div style="font-size:.9em">
 <ul>
 <li>Protecting against system faults
 <ul>
@@ -571,6 +528,12 @@ way you wanted before actually changing the database</li>
 rollback</li>
 </ul></li>
 </ul>
+</div>
+</section></section>
+<section>
+<section id="presidential-cleaning" class="title-slide slide level1">
+<h1>Presidential Cleaning</h1>
+
 </section>
 <section id="practice-activity" class="slide level2">
 <h2>Practice Activity</h2>
@@ -595,296 +558,31 @@ percentage of national debt overall all the years?</li>
 <li>You’ll be working in small groups, only 1 computer interacting with
 a database
 <ul>
-<li>Others can have slides, documentation, etc open</li>
+<li>Others can have slides, documentation, etc. open</li>
 </ul></li>
 </ul>
 <div class="cols" style="align-items: center">
-<div class="col">
+<div class="col" style="flex-grow:1.5">
 <ul>
 <li>Groups:
 <ul>
-<li>Group A: Sean , Alex B, Avinash</li>
-<li>Group B: Julius , Will R, Kelson</li>
-<li>Group C: Henry , Malie , Mitch</li>
-<li>Group D: Nathan , Camdin</li>
-<li>Group E: Meelad , Charlie , Paulina</li>
-<li>Group F: Pachie , Kellen , Jacob</li>
-<li>Group G: Will A, Maya , Tyler</li>
-<li>Group H: Faye , Alex W</li>
+<li>Group 1: Connor, Hannah, Aurora</li>
+<li>Group 2: Tiffany, Michael, Jordan</li>
+<li>Group 3: Sergio, Jack, Tippy</li>
+<li>Group 4: Nick, Jerrick, Myles, Matthew</li>
+<li>Group 5: Grace, Greg, Sam H</li>
+<li>Group 6: Dayton, Finn, Sam J</li>
+<li>Group 7: Evan, Marcus, AJ</li>
+<li>Group 8: Haley, Mallory, Harleen</li>
 </ul></li>
 </ul>
 </div>
 <div class="col">
-<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   width="193.07626mm"
-   height="189.43585mm"
-   viewBox="0 0 193.07626 189.43585"
-   version="1.1"
-   id="svg5"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
-   sodipodi:docname="group_seating_locs.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview7"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     showgrid="false"
-     inkscape:zoom="0.46903409"
-     inkscape:cx="847.48637"
-     inkscape:cy="440.2665"
-     inkscape:window-width="2560"
-     inkscape:window-height="1413"
-     inkscape:window-x="1080"
-     inkscape:window-y="27"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <defs
-     id="defs2" />
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(-271.65836,-38.702691)">
-    <rect
-       style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:1.87071;stroke-linecap:round;stroke-linejoin:round"
-       id="rect234"
-       width="56.21962"
-       height="19.801687"
-       x="340.08667"
-       y="39.638046" />
-    <g
-       id="g1752"
-       transform="matrix(0.62357127,0,0,0.62357127,105.39492,12.964302)">
-      <rect
-         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect236"
-         width="306.62982"
-         height="34.666981"
-         x="268.13101"
-         y="90.239426" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect960"
-         width="79.498459"
-         height="43.146389"
-         x="295.52704"
-         y="85.191986"
-         ry="6.17379" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1735"
-         width="79.498459"
-         height="43.146389"
-         x="467.86636"
-         y="85.191986"
-         ry="6.17379" />
-    </g>
-    <g
-       id="g1756"
-       transform="matrix(0.62357127,0,0,0.62357127,105.09461,13.25227)">
-      <rect
-         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect346"
-         width="306.62982"
-         height="34.666981"
-         x="268.61261"
-         y="143.18785" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1737"
-         width="79.498459"
-         height="43.146389"
-         x="382.17828"
-         y="138.53749"
-         ry="6.17379" />
-    </g>
-    <g
-       id="g1764"
-       transform="matrix(0.62357127,0,0,0.62357127,105.39492,80.069685)">
-      <rect
-         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1758"
-         width="306.62982"
-         height="34.666981"
-         x="268.13101"
-         y="90.239426" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1760"
-         width="79.498459"
-         height="43.146389"
-         x="295.52704"
-         y="85.191986"
-         ry="6.17379" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1762"
-         width="79.498459"
-         height="43.146389"
-         x="467.86636"
-         y="85.191986"
-         ry="6.17379" />
-    </g>
-    <g
-       id="g1770"
-       transform="matrix(0.62357127,0,0,0.62357127,105.09461,80.357656)">
-      <rect
-         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1766"
-         width="306.62982"
-         height="34.666981"
-         x="268.61261"
-         y="143.18785" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1768"
-         width="79.498459"
-         height="43.146389"
-         x="382.17828"
-         y="138.53749"
-         ry="6.17379" />
-    </g>
-    <g
-       id="g1778"
-       transform="matrix(0.62357127,0,0,0.62357127,105.39492,147.17507)">
-      <rect
-         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1772"
-         width="306.62982"
-         height="34.666981"
-         x="268.13101"
-         y="90.239426" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1774"
-         width="79.498459"
-         height="43.146389"
-         x="295.52704"
-         y="85.191986"
-         ry="6.17379" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1776"
-         width="79.498459"
-         height="43.146389"
-         x="467.86636"
-         y="85.191986"
-         ry="6.17379" />
-    </g>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.574px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:3.70961;stroke-linecap:round;stroke-linejoin:round"
-       x="353.86295"
-       y="54.639805"
-       id="text1834"><tspan
-         sodipodi:role="line"
-         id="tspan1832"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.574px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:3.70961"
-         x="353.86295"
-         y="54.639805">Front</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="307.9303"
-       y="89.746925"
-       id="text1838"><tspan
-         sodipodi:role="line"
-         id="tspan1836"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="307.9303"
-         y="89.746925">A</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="417.09128"
-       y="89.746925"
-       id="text1902"><tspan
-         sodipodi:role="line"
-         id="tspan1900"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="417.09128"
-         y="89.746925">B</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="362.85822"
-       y="123.30635"
-       id="text1906"><tspan
-         sodipodi:role="line"
-         id="tspan1904"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="362.85822"
-         y="123.30635">C</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="307.76288"
-       y="156.70032"
-       id="text1910"><tspan
-         sodipodi:role="line"
-         id="tspan1908"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="307.76288"
-         y="156.70032">D</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="417.18399"
-       y="156.70032"
-       id="text1914"><tspan
-         sodipodi:role="line"
-         id="tspan1912"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="417.18399"
-         y="156.70032">E</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="362.99017"
-       y="190.33252"
-       id="text1918"><tspan
-         sodipodi:role="line"
-         id="tspan1916"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="362.99017"
-         y="190.33252">F</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="309.30206"
-       y="224.20186"
-       id="text1922"><tspan
-         sodipodi:role="line"
-         id="tspan1920"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="309.30206"
-         y="224.20186">G</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="417.01123"
-       y="224.20186"
-       id="text1926"><tspan
-         sodipodi:role="line"
-         id="tspan1924"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="417.01123"
-         y="224.20186">H</tspan></text>
-  </g>
-</svg>
-</p>
+<figure>
+<img data-src="../images/group_seating_locs_Ford201.png"
+style="width:100.0%" alt="Group Locations" />
+<figcaption aria-hidden="true">Group Locations</figcaption>
+</figure>
 </div>
 </div>
 </section>
@@ -908,7 +606,7 @@ percentage of national debt overall all the years?
 <li>Only about 0.05%, but seemingly a slight steady increase</li>
 </ul></li>
 </ul>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -919,13 +617,15 @@ percentage of national debt overall all the years?
   <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
   <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
   // Added plugins
-  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
-  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
   <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/multimodal/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/mypgsql.js"></script>
 
   <script>
 
@@ -953,7 +653,7 @@ percentage of national debt overall all the years?
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -1000,7 +700,7 @@ percentage of national debt overall all the years?
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -1035,14 +735,11 @@ percentage of national debt overall all the years?
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
-	reveald3: {
-			runLastState: true, // true/false, default: true
-			onSlideChangedDelay: 200,
-			mapPath: false, // true / false / "spefific/path/as/string", default: false
-			tryFallbackURL: true, // true/false, default false
-			disableCheckFile: false, //default false
-		 },
-
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
+              console.log(mypgsqldef);
+              return mypgsqldef(hljs); } )
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -1050,31 +747,31 @@ percentage of national debt overall all the years?
           RevealNotes,
           RevealSearch,
           RevealZoom,
-		  RevealChart,
 		  RevealChalkboard,
           RevealMenu,
           Reveald3,
+          Multimodal,
         ],
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
@@ -1082,5 +779,17 @@ percentage of national debt overall all the years?
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>

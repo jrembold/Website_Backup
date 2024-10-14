@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-10-16">
+  <meta name="dcterms.date" content="2024-10-14">
   <title>Complex Shapes</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -27,8 +27,8 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
@@ -37,52 +37,22 @@
 <section id="title-slide">
   <h1 class="title">Complex Shapes</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">October 16, 2023</p>
+  <p class="date">October 14, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
 <li>PS4 due <em>tonight!</em></li>
-<li>Exam 1 feedback posted!
-<ul>
-<li>We don’t have time in class today, but I’ll see about recording a
-video walkthrough of each problem in case you want to review or examine
-where you went awry.</li>
-</ul></li>
-<li>On Friday, we will have class in Eaton 209 – the BoT is taking this
-room</li>
-<li>Section Leaders are working on Project 1 feedback, and should be out
-early this week</li>
+<li>If you didn’t find it already, your Exam 1 feedback is available on
+Canvas now</li>
+<li>Project 1 feedback should have come your way</li>
 <li>Project 2: Breakout is due next Monday!
 <ul>
-<li>Guide out this afternoon</li>
+<li>Guide out now, introducing it later in class</li>
 </ul></li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
-</ul>
-</section>
-<section id="exam-thoughts" class="slide level2">
-<h2>Exam Thoughts</h2>
-<ul>
-<li>Quick Stats:
-<ul>
-<li>High: 104%</li>
-<li>Mean: 78%</li>
-<li>Median: 83%</li>
-<li>Stdev: 23%</li>
-</ul></li>
-<li>If all did not go as you’d hoped, there likely isn’t cause for
-alarm!
-<ul>
-<li>Just 10% of your class grade</li>
-<li>Know now how to better study and prepare for the next exams</li>
-</ul></li>
-<li>If it went catastrophically, we should probably plan to meet
-<ul>
-<li>Need to identify where the issues are so as to determine if future
-tests will significantly improve</li>
-</ul></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 <!--
 ## Quick General Poll
@@ -100,7 +70,7 @@ Comparatively speaking, how would you say you are doing in absorbing and keeping
 data-notes="Answer: B, as step will run 50 times in 1 second">
 <h2 data-notes="Answer: B, as step will run 50 times in 1 second">Review
 Question!</h2>
-<div class="cols">
+<div class="cols" style="align-items: center">
 <div class="col">
 <p>When the function to the right is run, what does the screen look like
 just after 1 second has passed?</p>
@@ -132,7 +102,7 @@ alt="(D)" />
 </div>
 </div>
 <div class="col" style="flex-grow:1">
-<pre ><code class="mypython" style="max-height:900px; font-size:0.8em">def rev_q():
+<pre ><code class="python" style="max-height:900px; font-size:0.8em">def rev_q():
     def step():
         rect.move(1, 1)
 
@@ -146,10 +116,60 @@ alt="(D)" />
     gw.set_timeout(once, 1000)</code></pre>
 </div>
 </div>
-<!--
-## Making those circles grow!
-```{.python style='max-height:800px;' data-line-numbers=""}
-from pgl import GWindow, GOval
+</section>
+<section>
+<section id="stepping-up" class="title-slide slide level1">
+<h1>Stepping Up</h1>
+
+</section>
+<section id="growing-circles" class="slide level2">
+<h2>Growing Circles</h2>
+<figure>
+<img data-src="../images/GrowingCircles.gif" style="width:50.0%"
+alt="These circles are growing!" />
+<figcaption aria-hidden="true">These circles are growing!</figcaption>
+</figure>
+</section>
+<section id="waiting-vs-events" class="slide level2">
+<h2>Waiting vs Events</h2>
+<ul>
+<li><p>Many would probably try to approach this doing something like as
+follows:</p>
+<pre ><code class="python badcode">def growing_circles():
+  gw = GWindow(WIDTH, HEIGHT)
+  for i in range(NUM_CIRCLES):
+      |||Create a new circle|||
+      |||Animate the circle to grow it|||
+      |||Wait for the animation to complete|||</code></pre></li>
+<li><p>The problem here is that there is no clear way to “wait” for an
+animation to complete</p>
+<ul>
+<li>Code you write runs basically instantly or when run by a
+callback</li>
+</ul></li>
+<li><p>Instead, we need an event callback that takes care of both circle
+creation (when needed) and growing animations</p></li>
+</ul>
+</section>
+<section id="using-events-wisely" class="slide level2">
+<h2>Using Events Wisely</h2>
+<ul>
+<li><p>Need to keep track of what the program <strong>should</strong> be
+doing, and then have the timer callback function handle whatever is
+needed</p></li>
+<li><p>Conceptually, for these circles, might look more like this:</p>
+<pre ><code class="python">def step():
+    if |||there is a circle needing growing|||
+        |||then increase its size|||
+    elif |||a new circle needs to be created|||
+        |||then create one|||
+    else:
+        |||stop the madness by stopping the timer!|||</code></pre></li>
+</ul>
+</section>
+<section id="making-those-circles-grow" class="slide level2">
+<h2>Making those circles grow!</h2>
+<pre ><code class="python" style="max-height:800px;" data-line-numbers="">from pgl import GWindow, GOval
 import random
 
 GWIDTH = 500
@@ -208,9 +228,7 @@ def growing_circles():
     gw.circles_created = 0
     gw.current_size = 0
     gw.desired_size = 0
-    timer = gw.set_interval(step, DELTA_TIME)
-```
--->
+    timer = gw.set_interval(step, DELTA_TIME)</code></pre>
 </section>
 <section id="simulation" class="slide level2">
 <h2>Simulation</h2>
@@ -230,7 +248,7 @@ result otherwise!</li>
 </section>
 <section id="the-two-body-problem" class="slide level2">
 <h2>The Two Body Problem</h2>
-<pre ><code class="mypython" style="max-height:800px;">from pgl import GWindow, GOval, GLine
+<pre ><code class="python" style="max-height:800px;">from pgl import GWindow, GOval, GLine
 from pgl_tools import create_filled_circle
 
 def two_body():
@@ -289,6 +307,11 @@ def two_body():
 
 if __name__ == '__main__':
     two_body()</code></pre>
+</section></section>
+<section>
+<section id="arcs" class="title-slide slide level1">
+<h1>Arcs</h1>
+
 </section>
 <section id="something-to-smile-about" class="slide level2">
 <h2>Something to smile about</h2>
@@ -311,7 +334,7 @@ extends</li>
 </div>
 <div class="col">
 <p><img
-data-src="../images/svg_cache/568c4310834f76d9a4b710159f6c6cd65c6a7d0b.svg"
+data-src="../images/svg_cache/15bc6f4ef7c135b7b0e1816d0a094021236e77d4.svg"
 style="width:100.0%" /></p>
 </div>
 </div>
@@ -328,7 +351,7 @@ bounding box and the starting and end points of the arc</li>
 </ul>
 <div class="cols">
 <div class="col">
-<pre ><code class="mypython">def filled_arc():
+<pre ><code class="python">def filled_arc():
     gw = GWindow(400, 400)
     arc = GArc(50, 50, 
                350, 350, 
@@ -370,6 +393,11 @@ Group D
 
 ::::::
 -->
+</section></section>
+<section>
+<section id="polygons" class="title-slide slide level1">
+<h1>Polygons</h1>
+
 </section>
 <section id="the-gpolygon-class" class="slide level2">
 <h2>The <code class="python">GPolygon</code> class</h2>
@@ -383,41 +411,44 @@ Group D
 <figure>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="GPolygons.svg"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
    id="svg8"
    version="1.1"
-   viewBox="0 0 316.60822 101.79784"
-   height="101.79784mm"
-   width="316.60822mm">
+   viewBox="0 0 251.70652 80.93024"
+   height="80.930237mm"
+   width="251.70651mm"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2" />
   <sodipodi:namedview
      inkscape:window-maximized="1"
-     inkscape:window-y="43"
-     inkscape:window-x="1096"
-     inkscape:window-height="1381"
-     inkscape:window-width="2528"
+     inkscape:window-y="27"
+     inkscape:window-x="1080"
+     inkscape:window-height="1413"
+     inkscape:window-width="2560"
      showgrid="false"
      inkscape:document-rotation="0"
      inkscape:current-layer="layer1"
      inkscape:document-units="mm"
-     inkscape:cy="0.068641731"
-     inkscape:cx="818.37938"
-     inkscape:zoom="0.49497475"
+     inkscape:cy="-26.769042"
+     inkscape:cx="617.2032"
+     inkscape:zoom="0.9899495"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
      bordercolor="#666666"
      pagecolor="#ffffff"
-     id="base" />
+     id="base"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -431,13 +462,13 @@ Group D
     </rdf:RDF>
   </metadata>
   <g
-     transform="translate(-218.05446,41.926654)"
+     transform="translate(-218.05445,21.059057)"
      id="layer1"
      inkscape:groupmode="layer"
      inkscape:label="Layer 1">
     <path
-       inkscape:transform-center-x="3.388389e-06"
-       d="M 269.46239,53.744498 224.18114,9.4812806 268.44436,-35.79997 313.72561,8.463248 Z"
+       inkscape:transform-center-x="1.6568062e-06"
+       d="M 269.46239,53.744498 224.18114,9.4812806 268.44435,-35.79997 313.7256,8.463248 Z"
        inkscape:randomized="0"
        inkscape:rounded="0"
        inkscape:flatsided="true"
@@ -449,10 +480,11 @@ Group D
        sodipodi:cx="268.95337"
        sodipodi:sides="4"
        id="path835"
-       style="fill:none;stroke:#66d9ef;stroke-width:8.665;stroke-linecap:round"
-       sodipodi:type="star" />
+       style="fill:none;stroke:#94e2d5;stroke-width:8.665;stroke-linecap:round"
+       sodipodi:type="star"
+       transform="matrix(0.79500943,0,0,0.79500943,44.699107,12.273028)" />
     <path
-       inkscape:transform-center-x="4.7445856e-06"
+       inkscape:transform-center-x="2.2789729e-06"
        d="m 404.69518,50.575813 -48.01813,-0.03726 -23.97679,-41.6035483 24.04133,-41.5662887 48.01813,0.03726 23.97679,41.6035489 z"
        inkscape:randomized="0"
        inkscape:rounded="0"
@@ -465,10 +497,11 @@ Group D
        sodipodi:cx="380.71838"
        sodipodi:sides="6"
        id="path837"
-       style="fill:none;stroke:#f92672;stroke-width:8.665;stroke-linecap:round"
-       sodipodi:type="star" />
+       style="fill:none;stroke:#f38ba8;stroke-width:8.665;stroke-linecap:round"
+       sodipodi:type="star"
+       transform="matrix(0.79500943,0,0,0.79500943,44.699107,12.273028)" />
     <path
-       inkscape:transform-center-x="6.1462532e-06"
+       inkscape:transform-center-x="2.9552829e-06"
        d="M 468.09743,19.433937 450.34445,0.47401838 476.00728,-3.5342564 488.55326,-26.277281 500.2956,-3.1091087 525.80242,1.7948475 507.39677,20.12184 510.61487,45.895676 487.4972,34.054208 463.97928,45.079359 Z"
        inkscape:randomized="0"
        inkscape:rounded="0"
@@ -481,26 +514,27 @@ Group D
        sodipodi:cx="487.85886"
        sodipodi:sides="5"
        id="path839"
-       style="fill:none;stroke:#a6e22e;stroke-width:8.665;stroke-linecap:round"
-       sodipodi:type="star" />
+       style="fill:none;stroke:#a6e3a1;stroke-width:8.665;stroke-linecap:round"
+       sodipodi:type="star"
+       transform="matrix(0.79500943,0,0,0.79500943,44.699107,12.273028)" />
     <circle
-       r="4.5723495"
-       cy="8.9722643"
-       cx="268.95337"
+       r="3.635061"
+       cy="19.406063"
+       cx="258.51956"
        id="path841"
-       style="fill:#6c6f93;stroke:none;stroke-width:8.665;stroke-linecap:round" />
+       style="fill:#cdd6f4;stroke:none;stroke-width:6.88876;stroke-linecap:round" />
     <circle
-       style="fill:#6c6f93;stroke:none;stroke-width:8.665;stroke-linecap:round"
+       style="fill:#cdd6f4;stroke:none;stroke-width:6.88876;stroke-linecap:round"
        id="circle843"
-       cx="380.71838"
-       cy="8.9722643"
-       r="4.5723495" />
+       cx="347.37381"
+       cy="19.406063"
+       r="3.635061" />
     <circle
-       r="4.5723495"
-       cy="12.059289"
-       cx="488.12354"
+       r="3.635061"
+       cy="21.860277"
+       cx="432.76193"
        id="circle845"
-       style="fill:#6c6f93;stroke:none;stroke-width:8.665;stroke-linecap:round" />
+       style="fill:#cdd6f4;stroke:none;stroke-width:6.88876;stroke-linecap:round" />
   </g>
 </svg>
 
@@ -508,9 +542,11 @@ Group D
 </figure>
 <ul>
 <li>Location not fixed in upper left, but at some convenient reference
-point</li>
+point
+<ul>
 <li>Often a convenient reference point is near the center of the object,
 but it doesn’t need to be</li>
+</ul></li>
 <li><code class="python">GPolygon</code>s are
 <code class="python">GFillableObject</code>s, so they can be filled</li>
 </ul>
@@ -540,7 +576,7 @@ vertex relative to the previous using polar coordinates</li>
 </section>
 <section id="triangle-by-vertex" class="slide level2">
 <h2>Triangle By Vertex</h2>
-<pre ><code class="mypython" style="max-height:800px;">def triangle_by_vertex():
+<pre ><code class="python" style="max-height:800px;">def triangle_by_vertex():
     def create_triangle(b, h):
         tri = GPolygon()
         tri.add_vertex(-b / 2, h / 2)
@@ -556,7 +592,7 @@ vertex relative to the previous using polar coordinates</li>
 </section>
 <section id="triangle-by-polar-edge" class="slide level2">
 <h2>Triangle by Polar Edge</h2>
-<pre ><code class="mypython" style="max-height:800px;">def triangle_by_polar_edge():
+<pre ><code class="python" style="max-height:800px;">def triangle_by_polar_edge():
     def create_eq_triangle(side):
         tri = GPolygon()
         tri.add_vertex(0, 0)
@@ -569,6 +605,11 @@ vertex relative to the previous using polar coordinates</li>
     triangle.set_filled(True)
     triangle.set_color("green")
     gw.add(triangle, 250, 250)</code></pre>
+</section></section>
+<section>
+<section id="compounding-problems" class="title-slide slide level1">
+<h1>Compounding Problems</h1>
+
 </section>
 <section id="compound-objects" class="slide level2">
 <h2>Compound Objects</h2>
@@ -594,7 +635,7 @@ you set the location of the reference point</li>
 </section>
 <section id="and-my-axe" class="slide level2">
 <h2>And my Axe!</h2>
-<pre ><code class="mypython" style="max-height:800px;">def my_axe():
+<pre ><code class="python" style="max-height:800px;">def my_axe():
     def create_axe():
         axe = GCompound()
         shaft = GRect(-15, 0, 30, 300)
@@ -614,6 +655,11 @@ you set the location of the reference point</li>
     gw = GWindow(500, 500)
     axe = create_axe()
     gw.add(axe, 250, 100)</code></pre>
+</section></section>
+<section>
+<section id="breakout" class="title-slide slide level1">
+<h1>Breakout!</h1>
+
 </section>
 <section id="project-2-breakout" class="slide level2">
 <h2>Project 2: Breakout!</h2>
@@ -621,15 +667,15 @@ you set the location of the reference point</li>
 <div class="col">
 <ul>
 <li>Project 2 is recreating the classic arcade game Breakout!</li>
-<li>Guide will be posted today, not due until October 23</li>
-<li>Get an early start! Finish up PS4 tonight if you need, but start
+<li>Guide is posted now, due next Monday</li>
+<li>Get an early start! Finish up PS4 tonight as needed, but start
 Breakout tomorrow!</li>
 </ul>
 </div>
 <div class="col">
 <iframe width="100%" height="400vh" src="https://www.youtube.com/embed/UhAEjDKEHgk" title="Data Driven Gamer: Breakout (Atari, 1976 arcade, 60fps)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
 </iframe>
-<iframe width="100%" height="400vh" src="https://www.youtube.com/embed/QrlIqaN4ltM" title="DX Ball 2 gameplay (PC Game, 1999)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+<iframe width="100%" height="400vh" src="https://www.youtube.com/embed/QrlIqaN4ltM?t=25s" title="DX Ball 2 gameplay (PC Game, 1999)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
 </iframe>
 </div>
 </div>
@@ -694,36 +740,38 @@ controls=""><a href="../video/project1_demo.webm">Breakout!</a></video>
 <li>You have already seen or written pieces of similar code to many of
 the milestones!
 <ul>
-<li>Milestone 1: PS4 brick pyramid</li>
-<li>Milestone 3: Section bouncy ball problem (this week)</li>
+<li>Milestone 0: PS4 brick pyramid</li>
+<li>Milestone 1: Section stamping problem (last week)</li>
+<li>Milestone 2: Section bouncy Pacman problem (this week)</li>
+<li>Milestone 3: Section Hungry Pacman problem (this week)</li>
 </ul></li>
 </ul>
 </section>
+<section id="milestone-0" class="slide level2">
+<h2>Milestone 0</h2>
+<iframe width="60%" height="800px" src="https://willamette.edu/~esroberts/cs151/Assignments/Project2/Breakout1/index.html">
+</iframe>
+</section>
 <section id="milestone-1" class="slide level2">
 <h2>Milestone 1</h2>
-<iframe width="60%" height="800px" src="https://willamette.edu/~esroberts/cs151/Assignments/Project2/Breakout1/index.html">
+<iframe width="60%" height="800px" src="https://willamette.edu/~esroberts/cs151/Assignments/Project2/Breakout2/index.html">
 </iframe>
 </section>
 <section id="milestone-2" class="slide level2">
 <h2>Milestone 2</h2>
-<iframe width="60%" height="800px" src="https://willamette.edu/~esroberts/cs151/Assignments/Project2/Breakout2/index.html">
+<iframe width="60%" height="800px" src="https://willamette.edu/~esroberts/cs151/Assignments/Project2/Breakout3/index.html">
 </iframe>
 </section>
 <section id="milestone-3" class="slide level2">
 <h2>Milestone 3</h2>
-<iframe width="60%" height="800px" src="https://willamette.edu/~esroberts/cs151/Assignments/Project2/Breakout3/index.html">
+<iframe width="60%" height="800px" src="https://willamette.edu/~esroberts/cs151/Assignments/Project2/Breakout4/index.html">
 </iframe>
 </section>
 <section id="milestone-4" class="slide level2">
 <h2>Milestone 4</h2>
-<iframe width="60%" height="800px" src="https://willamette.edu/~esroberts/cs151/Assignments/Project2/Breakout4/index.html">
-</iframe>
-</section>
-<section id="milestone-5" class="slide level2">
-<h2>Milestone 5</h2>
 <iframe width="60%" height="800px" src="https://willamette.edu/~esroberts/cs151/Assignments/Project2/Breakout5/index.html">
 </iframe>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -736,6 +784,7 @@ the milestones!
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
@@ -858,7 +907,7 @@ the milestones!
 		 },
 
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
               console.log(mypythondef);
               return mypythondef(hljs); } )
           },
@@ -872,6 +921,7 @@ the milestones!
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
