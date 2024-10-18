@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-10-20">
+  <meta name="dcterms.date" content="2024-10-18">
   <title>Do You Comprehend?</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,15 +17,18 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
@@ -34,33 +37,26 @@
 <section id="title-slide">
   <h1 class="title">Do You Comprehend?</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">October 20, 2023</p>
+  <p class="date">October 18, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Welcome to Eaton :)
-<ul>
-<li>We’ll be back in Ford on Monday</li>
-</ul></li>
 <li>Project 2: Breakout due on Monday! Be making progress!!</li>
-<li>I’m still working on grade reports, but am trying to get them out
-this weekend</li>
-<li>You’ve hopefully gotten feedback about Project 1 by now?</li>
-<li>I’ll be around from noon - 2 today for questions, but then have
-another lovely afternoon of meetings…</li>
+<li>I’m sending out updated grade reports this weekend</li>
+<li>Make sure you look at your Wordle feedback to apply to
+Breakout!</li>
+<li>I’ll be around from about 2:30 - 6:30 this afternoon, if you have
+Breakout questions before the weekend</li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 </section>
-<section id="review" class="slide level2"
-data-notes="Solution: None of the above, as it errors">
-<h2 data-notes="Solution: None of the above, as it errors">Review!</h2>
+<section id="review" class="slide level2" data-notes="Solution: True">
+<h2 data-notes="Solution: True">Review!</h2>
 <p>What would the below expression evaluate to?</p>
-<center>
-<code>[‘One’, 2, True][-1:1:-1][1]</code>
-</center>
+<pre ><code class="python inlinecode">['One', 2, True][-1:1:-1][0]</code></pre>
 <div class="poll">
 <ol>
 <li><code class="python">['One']</code></li>
@@ -70,15 +66,68 @@ data-notes="Solution: None of the above, as it errors">
 </ol>
 </div>
 </section>
-<section id="a-tutorial-on-lists" class="slide level2">
-<h2>A Tutorial on Lists</h2>
-<div class="cols">
+<section>
+<section id="x-lists" class="title-slide slide level1">
+<h1>X-Lists</h1>
+
+</section>
+<section id="mutants" class="slide level2">
+<h2>Mutants</h2>
+<ul>
+<li>The most important difference between strings and lists is one of
+<em>mutability</em>
+<ul>
+<li>Strings we have already identified as being <em>immutable</em>: you
+can not change the individual elements</li>
+<li>Lists, in contrast, are <em>mutable</em>, which means that we
+<strong>can</strong> change or assign new values to the elements of a
+list</li>
+</ul></li>
+<li>Immutable objects have many advantages in programming:
+<ul>
+<li>You don’t have to worry about if the values will change</li>
+<li>Immutable values can be more easily shared</li>
+<li>Immutable objects are easier to use with concurrent programs</li>
+</ul></li>
+<li>In some situations though, mutable objects are the perfect tool for
+the job</li>
+</ul>
+</section>
+<section id="locations-in-memory" class="slide level2">
+<h2>Locations in Memory</h2>
+<div class="cols" style="align-items: center">
 <div class="col">
 <ul>
 <li>Thinking about mutable objects requires a shift in how we visualize
 our code interacting with the objects in memory</li>
+<li>We can “see” the location in memory where Python is storing an
+object with the <code class="python">id(|||object|||)</code>
+function</li>
+</ul>
+</div>
+<div class="col">
+<pre ><code class="python-repl" style="font-size:.8em; max-height:900px">>>> A = 5
+>>> id(A)
+129257497672776
+>>> B = 5
+>>> id(B)
+129257497672776
+>>> C = [5]
+>>> id(C)
+129257425943936
+>>> D = [5]
+>>> id(D)
+129257426156544</code></pre>
+</div>
+</div>
+</section>
+<section id="thinking-about-mutable-lists" class="slide level2">
+<h2>Thinking about Mutable Lists</h2>
+<div class="cols">
+<div class="col">
+<ul>
 <li><a
-href="https://pythontutor.com/render.html#code=cool%20%3D%20%5B&#39;blue&#39;,%20&#39;violet&#39;%5D%0Awarm%20%3D%20%5B&#39;red&#39;,%20&#39;orange&#39;%5D%0A%0Acolors%20%3D%20%5Bcool,%20warm%5D%0Aother_colors%20%3D%20%5B%5B&#39;blue&#39;,%20&#39;violet&#39;%5D,%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5B&#39;red&#39;,%20&#39;orange&#39;%5D%5D%0A%0Aprint%28colors%20%3D%3D%20other_colors%29%0Aprint%28colors%20is%20other_colors%29%0A%0Acool%5B0%5D%20%3D%20&#39;indigo&#39;%0Awarm%20%3D%20%5B&#39;orange&#39;,%20&#39;yellow&#39;%5D%0A%0Aprint%28colors%29%0Aprint%28other_colors%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">Link
+href="https://pythontutor.com/render.html#code=cool%20%3D%20%5B&#39;blue&#39;,%20&#39;violet&#39;%5D%0Awarm%20%3D%20%5B&#39;red&#39;,%20&#39;orange&#39;%5D%0A%0Acolors%20%3D%20%5Bcool,%20warm%5D%0Aother_colors%20%3D%20%5B%5B&#39;blue&#39;,%20&#39;violet&#39;%5D,%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5B&#39;red&#39;,%20&#39;orange&#39;%5D%5D%0A%0Aprint%28colors%20%3D%3D%20other_colors%29%0Aprint%28colors%20is%20other_colors%29%0A%0Acool%5B0%5D%20%3D%20&#39;indigo&#39;%0Awarm%20%3D%20%5B&#39;orange&#39;,%20&#39;yellow&#39;%5D%0A%0Aprint%28colors%29%0Aprint%28other_colors%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">Trace
 here</a></li>
 </ul>
 </div>
@@ -108,10 +157,13 @@ print(other_colors)</code></pre>
 variable as holding a <em>reference</em> to the object, rather than the
 actual contents of the object</li>
 <li>I find it useful to think of a reference as the “address” in memory
-where that object’s contents can be found</li>
+where that object’s contents can be found
+<ul>
+<li>The treasure map showing where you can find the object!</li>
+</ul></li>
 <li>This undeniably complicates things, as referencing a mutable object
-lets you change it, which will immediately be reflected in anything
-<em>else</em> that referenced that object</li>
+lets you change it, which will immediately be reflected in
+<strong>anything else that referenced that object</strong>!</li>
 <li>Mutable objects can be terrific to work with, as their mutability
 makes them very flexible, but be wary of unexpected behavior</li>
 </ul>
@@ -145,12 +197,12 @@ up:
 changes and then compare it to the original
 <ul>
 <li><a
-href="http://www.pythontutor.com/visualize.html#code=A%20%3D%20%5B&#39;Aardvark&#39;,%20&#39;Butterfly&#39;,%20&#39;Centipede&#39;%5D%0AB%20%3D%20A%0A%0AB.append%28&#39;Deer&#39;%29%0AB.remove%28&#39;Butterfly&#39;%29%0A%0Aprint%28A%29%0Aprint%28B%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">Example</a></li>
+href="https://pythontutor.com/render.html#code=A%20%3D%20%5B&#39;Aardvark&#39;,%20&#39;Butterfly&#39;,%20&#39;Centipede&#39;%5D%0AB%20%3D%20A%0A%0AB%5B1%5D%20%3D%20&#39;Deer&#39;%0A%0Afor%20i%20in%20range%28len%28A%29%29%3A%0A%20%20%20%20if%20A%5Bi%5D%20!%3D%20B%5Bi%5D%3A%0A%20%20%20%20%20%20%20%20print%28A,B%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">Example</a></li>
 </ul></li>
 <li>Looping over a mutating list
 <ul>
 <li><a
-href="http://www.pythontutor.com/visualize.html#code=A%20%3D%20%5B1,2,3,4,5,6,7,8,9%5D%0A%0Afor%20i%20in%20range%28len%28A%29%29%3A%0A%20%20%20%20print%28&#39;Current%20index%3A%20%7B%7D,%20Current%20value%3A%20%7B%7D&#39;.format%28i,A%5Bi%5D%29%29%0A%20%20%20%20if%203%20%3C%20A%5Bi%5D%20%3C%206%3A%0A%20%20%20%20%20%20%20%20A.remove%28A%5Bi%5D%29%0A%20%20%20%0Aprint%28A%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">Example</a></li>
+href="https://pythontutor.com/visualize.html#code=A%20%3D%20%5B1,2,3,4,5,6,7,8,9%5D%0A%0Afor%20i%20in%20range%28len%28A%29%29%3A%0A%20%20%20%20print%28&#39;Current%20index%3A%20%7B%7D,%20Current%20value%3A%20%7B%7D&#39;.format%28i,A%5Bi%5D%29%29%0A%20%20%20%20if%203%20%3C%20A%5Bi%5D%20%3C%206%3A%0A%20%20%20%20%20%20%20%20A.remove%28A%5Bi%5D%29%0A%20%20%20%0Aprint%28A%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=false&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">Example</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -172,6 +224,11 @@ trip us up?</li>
 new object</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="list-methods" class="title-slide slide level1">
+<h1>List Methods</h1>
+
 </section>
 <section id="common-useful-list-methods" class="slide level2">
 <h2>Common Useful List Methods</h2>
@@ -188,31 +245,32 @@ new object</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">list.copy()</code></td>
+<td><code class="python">|||list|||.copy()</code></td>
 <td>Returns a new list whose elements are the same as the original</td>
 </tr>
 <tr class="even">
-<td><code class="python">list.append(value)</code></td>
-<td>Adds <code class="python">value</code> to the end of the list</td>
+<td><code class="python">|||list|||.append(|||value|||)</code></td>
+<td>Adds <code class="python">|||value|||</code> to the end of the
+list</td>
 </tr>
 <tr class="odd">
-<td><code class="python">list.insert(idx, val)</code></td>
-<td>Inserts <code class="python">val</code> before the specified
-<code class="python">idx</code></td>
+<td><code class="python">|||list|||.insert(|||idx|||, |||val|||)</code></td>
+<td>Inserts <code class="python">|||val|||</code> before the specified
+<code class="python">|||idx|||</code></td>
 </tr>
 <tr class="even">
-<td><code class="python">list.remove(value)</code></td>
-<td>Removes the first instance of <code class="python">value</code> from
-the list, or errors</td>
+<td><code class="python">|||list|||.remove(|||value|||)</code></td>
+<td>Removes the first instance of
+<code class="python">|||value|||</code> from the list, or errors</td>
 </tr>
 <tr class="odd">
-<td><code class="python">list.reverse()</code></td>
+<td><code class="python">|||list|||.reverse()</code></td>
 <td>Reverses the order of the elements in the list</td>
 </tr>
 <tr class="even">
-<td><code class="python">list.sort()</code></td>
+<td><code class="python">|||list|||.sort()</code></td>
 <td>Sorts the elements of the list. Can take an optional argument
-<code class="python">key</code> to specify how to sort</td>
+<code class="python">|||key|||</code> to specify how to sort</td>
 </tr>
 </tbody>
 </table>
@@ -243,7 +301,7 @@ data-notes="Solution: [&#39;Fox&#39;, &#39;Hippo&#39;, &#39;Iguana&#39;]">Unders
 Check</h2>
 <div class="cols">
 <div class="col">
-<p>Given the code to the right, what would be the final printed value of
+<p>Given the code to the right, what would be the printed value of
 <code class="python">A</code>?</p>
 <div class="poll">
 <ol>
@@ -269,6 +327,11 @@ for anim in B:
 print(A)</code></pre>
 </div>
 </div>
+</section></section>
+<section>
+<section id="list-comprehension" class="title-slide slide level1">
+<h1>List Comprehension</h1>
+
 </section>
 <section id="list-building-with-loops" class="slide level2">
 <h2>List building with loops</h2>
@@ -292,9 +355,9 @@ for i in range(0, 10, 2):
 <h2>Comprehending Lists</h2>
 <ul>
 <li><p>The simplest list comprehension syntax is:</p>
-<pre ><code class="python">[ expression iterator ]</code></pre>
-<p>where <code class="python">expression</code> is any Python expression
-and <code class="python">iterator</code> is a
+<pre ><code class="python">[ |||expression||| |||iterator||| ]</code></pre>
+<p>where <code class="python">|||expression|||</code> is any Python
+expression and <code class="python">|||iterator|||</code> is a
 <code class="python">for</code> loop header</p></li>
 <li><p>The iterator component can be followed by any number of
 additional modifiers</p>
@@ -307,6 +370,12 @@ values</li>
 <li><p>Example: all even numbers to 20 not also visible by 3</p>
 <pre ><code class="python">[i for i in range(0,2,20) if i % 3 != 0]</code></pre></li>
 </ul>
+</section></section>
+<section>
+<section id="forever-friends-strings-and-lists"
+class="title-slide slide level1">
+<h1>Forever Friends: Strings and Lists</h1>
+
 </section>
 <section id="where-strings-and-lists-meet" class="slide level2">
 <h2>Where Strings and Lists Meet</h2>
@@ -484,7 +553,7 @@ def image_example():
 ```
 
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -497,6 +566,7 @@ def image_example():
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
@@ -619,7 +689,7 @@ def image_example():
 		 },
 
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
               console.log(mypythondef);
               return mypythondef(hljs); } )
           },
@@ -633,6 +703,7 @@ def image_example():
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
