@@ -45,14 +45,35 @@
 <li>HW7 due on Thursday night!
 <ul>
 <li>Last of the “testable” content for the next exam</li>
+<li>The last part of the last question does involve some content from
+today</li>
 </ul></li>
-<li>Exam 2 1 week from Wednesday
+<li>Exam 2 is 1 week from Wednesday
 <ul>
 <li>Review and study materials will be posted on Wednesday</li>
 </ul></li>
 <li>Polling today: <a
 href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
+</section>
+<section id="review-question" class="slide level2">
+<h2>Review Question!</h2>
+<p>Assuming that your server has its timezone set to
+<code class="pgsql">'American/Los_Angeles'</code>, what is the output of
+the below query?</p>
+<pre ><code class="pgsql">SELECT make_time(
+  date_part('dow', current_date)::INT,
+  date_part('day', now())::INT,
+  date_part('hour', localtime)::INT
+  ) AT TIME ZONE 'PDT';</code></pre>
+<div class="poll">
+<ol>
+<li>01:21:14-07</li>
+<li>01:21:13</li>
+<li>00:22:12-07</li>
+<li>08:21:14</li>
+</ol>
+</div>
 <!-- haven't covered cases yet
 ## Review Question
 Given the starting table called `rev`, what is the output of the query?
@@ -172,8 +193,8 @@ aggregating window function</li>
 window</li>
 <li>The below would output the average of the column in every row
 <ul>
-<li>This means it is technically no different from accomplishing this
-with a subquery</li>
+<li>There will be other ways to do something similar with subqueries,
+but this is perhaps the most straightforward method</li>
 </ul>
 <pre ><code class="pgsql">SELECT AVG(|||column|||) OVER()
 FROM |||table|||;</code></pre></li>
