@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-10-25">
-  <title>Reading and Writing</title>
+  <meta name="dcterms.date" content="2024-10-23">
+  <title>Image Reading</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -17,24 +17,27 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Reading and Writing</h1>
+  <h1 class="title">Image Reading</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">October 25, 2023</p>
+  <p class="date">October 23, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -43,16 +46,15 @@
 <li>Problem Set 5 due on Monday!
 <ul>
 <li>Just 2 problems, of which you already have everything you need</li>
+<li>Remember that we have another project coming next week, so having
+PS5 done in a timely manner sets you up well for a good start on that
+project</li>
 </ul></li>
-<li>Project 3: ImageShop will be introduced on Friday (not due until a
-week from next Monday)</li>
-<li>Grade reports actually went out!
-<ul>
-<li>I’ll send out another once I have PS4 scored and Project 2 is
-scored</li>
-</ul></li>
+<li>Attend your small sections today or tomorrow! All questions built
+around understanding and using lists.</li>
+<li>Midterm 2 is two weeks from Friday</li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="https://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 <!--
 ## Review Question
@@ -110,6 +112,126 @@ data-notes="Solution: [2,3,4,5]">
 </ol>
 </div>
 </section>
+<section>
+<section id="images-and-pixels" class="title-slide slide level1">
+<h1>Images and Pixels</h1>
+
+</section>
+<section id="d-arrays-images" class="slide level2">
+<h2>2D Arrays → Images</h2>
+<ul>
+<li><p>Image data is commonly stored in two-dimensional arrays</p></li>
+<li><p>Each element stores information about the pixel that exists at
+that location</p></li>
+<li><p>The <code class="python">GImage</code> class lets you convert
+between the image itself and the array representing the image contents
+by using the <code class="python">get_pixel_array</code> method, which
+returns a two-dimensional array of integers.</p></li>
+<li><p>We could get the pixels from our example image using:</p>
+<pre ><code class="python">image = GImage("VLA_Moonset.jpg")
+pixels = image.get_pixel_array()</code></pre></li>
+<li><p>The first index of the pixel array gets you the row, the second
+index gets you the column</p></li>
+</ul>
+</section>
+<section id="pixel-contents" class="slide level2">
+<h2>Pixel Contents</h2>
+<ul>
+<li>Each element in a pixel array is an integer in which the 32 bits are
+interpreted as:</li>
+</ul>
+<p><img
+data-src="../images/svg_cache/bf1c993825d11ef2085291e704e3cda87b134445.svg"
+style="width:90.0%" /></p>
+<ul>
+<li>The first byte (8 bits) is the transparency or alpha</li>
+<li>The next three bytes indicate the amount of red, green, and blue in
+the pixel, where each value varies from 0 to 255
+<ul>
+<li>Form the RGB of a color, generally expressed in hexadecimal form
+<ul>
+<li><code class="text">10010101</code> →
+<code class="text">0x95</code></li>
+<li><code class="text">00111001</code> →
+<code class="text">0x39</code></li>
+<li><code class="text">01100011</code> →
+<code class="text">0x63</code></li>
+</ul></li>
+<li>Overall color: <code class="no-highlight">#953963</code> or
+<svg width="100" height="50" style="display:inline-block; vertical-align:middle"><rect width="100" height="50" style="fill:#953963"></rect></svg></li>
+</ul></li>
+</ul>
+</section>
+<section id="combining-light-colors" class="slide level2">
+<h2>Combining Light Colors</h2>
+<figure>
+<img data-src="../images/RGB_illumination.jpg" style="width:60.0%"
+alt="Additive Colors" />
+<figcaption aria-hidden="true">Additive Colors</figcaption>
+</figure>
+</section>
+<section id="transparency" class="slide level2">
+<h2>Transparency</h2>
+<ul>
+<li>The first byte (8 bits) of the pixel value gives the transparency,
+which indicates how much of the background is allowed to show
+through</li>
+<li>Often denoted with the Greek letter alpha: <span
+class="math inline">\(\alpha\)</span></li>
+<li>Varies from 0 to 255 like the other 8 bit values:
+<ul>
+<li>0 is entirely transparent</li>
+<li>255 is entirely opaque</li>
+</ul></li>
+</ul>
+</section>
+<section id="breaking-out-the-colors" class="slide level2">
+<h2>Breaking out the Colors</h2>
+<ul>
+<li>You do not need to convert the pixel values yourself! PGL has
+built-in ways to extract the various colors</li>
+</ul>
+<div style="font-size:.8em;">
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">GImage.get_red(|||pixel|||)</code></td>
+<td>Returns the integer (0-255) corresponding to the red portion of the
+pixel</td>
+</tr>
+<tr class="even">
+<td><code class="python">GImage.get_green(|||pixel|||)</code></td>
+<td>Returns the integer (0-255) corresponding to the green portion of
+the pixel</td>
+</tr>
+<tr class="odd">
+<td><code class="python">GImage.get_blue(|||pixel|||)</code></td>
+<td>Returns the integer (0-255) corresponding to the blue portion of the
+pixel</td>
+</tr>
+<tr class="even">
+<td><code class="python">GImage.get_alpha(|||pixel|||)</code></td>
+<td>Returns the integer (0-255) corresponding to the alpha portion of
+the pixel</td>
+</tr>
+<tr class="odd">
+<td><code class="python">GImage.create_rgb_pixel(|||r|||,|||g|||,|||b|||)</code></td>
+<td>Returns a 32-bit integer corresponding to the desired color</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="image-thresholding" class="slide level2">
 <h2>Image Thresholding</h2>
 <div class="cols" style="align-items: center">
@@ -121,7 +243,7 @@ how we could threshold the image to the right</li>
 black and white image, where a pixel is set to be white if it is above a
 certain threshold in brightness</li>
 <li>Grayscale, so each RGB component is the same</li>
-<li>Let’s threshold at a value of 30</li>
+<li>Lets threshold at a value of 30</li>
 </ul>
 </div>
 <div class="col">
@@ -134,7 +256,7 @@ certain threshold in brightness</li>
 </section>
 <section id="thresholding-code" class="slide level2">
 <h2>Thresholding Code</h2>
-<pre ><code class="mypython" style="max-height:900px; font-size:.75em;">from pgl import GWindow, GImage
+<pre ><code class="python" style="max-height:900px; font-size:.75em;">from pgl import GWindow, GImage
 
 def threshold(e):
     thresh_value = 30
@@ -155,6 +277,11 @@ image = GImage("Moon.png")
 gw.add(image)
 pixels = image.get_pixel_array()
 gw.add_event_listener("click", threshold)</code></pre>
+</section></section>
+<section>
+<section id="reading-other-files" class="title-slide slide level1">
+<h1>Reading Other Files</h1>
+
 </section>
 <section id="reading" class="slide level2">
 <h2>Reading</h2>
@@ -207,7 +334,7 @@ called its <em>file handle</em></p></li>
 <li><p>We will also use the <em>with</em> keyword to ensure that Python
 cleans up after itself (closes the file) when we are done with it (Many
 of us could use a <code class="python">with</code> irl)</p>
-<pre ><code class="mypython">with open(filename) as file_handle:
+<pre ><code class="python">with open(|||filename|||) as |||file_handle|||:
     |||Code to read the file using the file_handle|||</code></pre></li>
 <li><p>Python gives you several ways to actually read in the data</p>
 <ul>
@@ -216,9 +343,6 @@ string</li>
 <li><code class="python">readline</code> or
 <code class="python">readlines</code> reads a single line or lines from
 the file</li>
-<li><code class="python">read</code> alongside
-<code class="python">splitlines</code> gets you a list of line
-strings</li>
 <li>Can use the file handle as an iterator to loop over</li>
 </ul></li>
 </ul>
@@ -248,13 +372,54 @@ style="width:40%; margin-left: auto; margin-right: auto;">
 file handler as an iterator and looping is probably best and certainly
 most flexible</p></li>
 <li><p>Leads to code that looks like:</p>
-<pre ><code class="mypython">with open(filename) as f:
-    for line in f:
+<pre ><code class="python">with open(|||filename|||) as |||f|||:
+    for line in |||f|||:
         |||Do something with the line|||</code></pre></li>
 <li><p>Note that <strong>most</strong> strategies preserve the newline
 character, which you very likely do not want, so be ready to strip them
 out before doing more processing</p></li>
 </ul>
+</section>
+<section id="where-strings-and-lists-meet" class="slide level2">
+<h2>Where Strings and Lists Meet</h2>
+<ul>
+<li>There are a handful of methods that transition between strings and
+lists</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">|||string|||.split()</code></td>
+<td>Splits a string into a list of its components using whitespace as a
+separator</td>
+</tr>
+<tr class="even">
+<td><code class="python">|||string|||.split(|||sep|||)</code></td>
+<td>Splits a string into a list using the specified separator
+<code class="python">sep</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">|||string|||.splitlines()</code></td>
+<td>Splits a string into of list of strings at the newline
+character</td>
+</tr>
+<tr class="even">
+<td><code class="python">|||string|||.join(|||a_list|||)</code></td>
+<td>Joins the elements of the <code class="python">a_list</code> into a
+string, using <code class="python">string</code> as the separator</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="powers-combined" class="slide level2">
 <h2>Powers Combined</h2>
@@ -265,8 +430,8 @@ out before doing more processing</p></li>
 option</p></li>
 <li><p>This <strong>does</strong> remove the newline characters, since
 it splits the string at them</p>
-<pre ><code class="mypython">with open(filename) as f:
-    lines = f.read().splitlines()
+<pre ><code class="python">with open(|||filename|||) as |||f|||:
+    lines = |||f|||.read().splitlines()
 |||Then you can do whatever you want with the list of lines|||</code></pre></li>
 </ul>
 </section>
@@ -287,7 +452,7 @@ other</li>
 </section>
 <section id="example-code" class="slide level2">
 <h2>Example Code:</h2>
-<pre ><code class="mypython" style="font-size:.6em; max-height:800px; width=100%;">import random
+<pre ><code class="python" style="font-size:.6em; max-height:800px; width=100%;">import random
 
 def name_mangler(filename):
     """
@@ -328,75 +493,46 @@ def name_mangler(filename):
 
 if __name__ == '__main__':
     name_mangler('class_first_names.csv')</code></pre>
-</section>
-<section id="arent-you-exceptional" class="slide level2">
-<h2>Aren’t you Exceptional</h2>
-<ul>
-<li>When opening a file for reading, it is possible the file does not
-exist!
-<ul>
-<li>Python handles this (and many other potential errors that can arise)
-using a mechanism called <em>exception handling</em></li>
-<li>Common in other languages as well</li>
-</ul></li>
-<li>An <em>exception</em> is a object that belongs to an overarching
-hierarchy of exception classes
-<ul>
-<li>Different classes/types for different purposes</li>
-<li>File operations, for example, use the exception class
-<code class="python">IOError</code></li>
-</ul></li>
-<li>If <code class="python">open</code> encounters an error, it reports
-the error by <em>raising an exception</em> with
-<code class="python">IOError</code> as its type.
-<ul>
-<li>Raising an exception generally immediately terminates your program,
-but sometimes that is undesirable</li>
-</ul></li>
-</ul>
-</section>
-<section id="ignore-yoda-there-is-a-try" class="slide level2">
-<h2>Ignore Yoda, there is a <code class="python">try</code></h2>
-<ul>
-<li><p>Python uses the <code class="python">try</code> statement to
-indicate an interest in trying to handle a possible exception</p></li>
-<li><p>In simplest form, the syntax is:</p>
-<pre ><code class="mypython">try:
-    |||Code that may cause an exception|||
-except type_of_exception:
-    |||Code to handle that type of exception|||</code></pre></li>
-<li><p><code class="python">type_of_exception</code> here is the class
-name of the exception being handled</p>
-<ul>
-<li><code class="python">IOError</code> for the file reading errors we
-are discussing</li>
-</ul></li>
-<li><p>Any exceptions arising from within the
-<code class="python">try</code> block or within functions
-<em>called</em> within the try block would be “caught” and the lower
-block of code run instead of terminating the program</p></li>
-</ul>
-</section>
-<section id="example-requesting-existing-file" class="slide level2">
-<h2>Example: Requesting Existing File</h2>
-<ul>
-<li><p>As an example, the below function will repeatedly ask the user to
-supply a file name that actually exists.</p></li>
-<li><p>It will not just immediately break should they give it an invalid
-filename!</p>
-<pre ><code class="mypython">def get_existing_file(prompt="Input a filename: "):
-    while True:
-        filename = input(prompt)
-        try:
-            with open(filename):
-                return filename
-        except IOError:
-            print("That filename is invalid!")</code></pre></li>
-<li><p>If the <code class="python">open</code> call succeeds, we
-immediately just return the filename, but if it fails due to a
-<code class="python">IOError</code>, we display a message and then keep
-asking</p></li>
-</ul>
+<!-- save for next day
+## Aren't you Exceptional
+- When opening a file for reading, it is possible the file does not exist!
+    - Python handles this (and many other potential errors that can arise) using a mechanism called _exception handling_
+    - Common in other languages as well
+- An _exception_ is a object that belongs to an overarching hierarchy of exception classes
+    - Different classes/types for different purposes
+    - File operations, for example, use the exception class `IOError`
+- If `open` encounters an error, it reports the error by _raising an exception_ with `IOError` as its type.
+    - Raising an exception generally immediately terminates your program, but sometimes that is undesirable
+
+
+## Ignore Yoda, there is a `try`
+- Python uses the `try` statement to indicate an interest in trying to handle a possible exception
+- In simplest form, the syntax is:
+  ```mypython
+  try:
+      |||Code that may cause an exception|||
+  except type_of_exception:
+      |||Code to handle that type of exception|||
+  ```
+- `type_of_exception` here is the class name of the exception being handled
+    - `IOError` for the file reading errors we are discussing
+- Any exceptions arising from within the `try` block or within functions *called* within the try block would be "caught" and the lower block of code run instead of terminating the program
+
+## Example: Requesting Existing File
+- As an example, the below function will repeatedly ask the user to supply a file name that actually exists. 
+- It will not just immediately break should they give it an invalid filename!
+  ```mypython
+  def get_existing_file(prompt="Input a filename: "):
+      while True:
+          filename = input(prompt)
+          try:
+              with open(filename):
+                  return filename
+          except IOError:
+              print("That filename is invalid!")
+  ```
+- If the `open` call succeeds, we immediately just return the filename, but if it fails due to a `IOError`, we display a message and then keep asking
+-->
 <!--
 ## Choosing Wisely
 - The Python package used to implement `pgl.py` also supports a mechanism to choose files interactively, made available through the `filechooser.py` library module.
@@ -414,53 +550,33 @@ with open(filename) as f:
     # Code to read file
 ```
 -->
-</section>
-<section id="writing-text-files" class="slide level2">
-<h2>Writing Text Files</h2>
-<ul>
-<li><p>You can write text files using almost the same syntax as
-reading:</p>
-<pre ><code class="mypython">with open(filename, mode) as file_handle:
-    |||Code to write the file using file_handle|||</code></pre></li>
-<li><p>Note the <code class="python">mode</code> parameter to
-<code class="python">open</code> here! Mode is a string which is
-either</p>
-<ul>
-<li><code class="python">"w"</code> to <strong>write</strong> a new file
-(or overwrite an existing file)</li>
-<li><code class="python">"a"</code> to <strong>append</strong> new
-contents to the end of an existing file</li>
-</ul></li>
-<li><p>The file handler supports the methods:</p>
-<ul>
-<li><code class="python">.write(some_string)</code> to write a string to
-the file</li>
-<li><code class="python">.writelines(iterable_of_strings)</code> to
-write each iterable element to the file</li>
-</ul></li>
-</ul>
-</section>
-<section id="writing-ascii-sine" class="slide level2">
-<h2>Writing ASCII SINE</h2>
-<ul>
-<li>Suppose I wanted to try my hand at some ASCII art and fill a text
-file with a vertical oscillating sine wave</li>
-<li>A sine wave generally looks like: <span class="math display">\[ A +
-A \sin\left(\frac{2\pi}{T}x\right)\]</span> where <span
-class="math inline">\(A\)</span> is the amplitude of the wave and <span
-class="math inline">\(T\)</span> the period of the wave, or how quickly
-it repeats
-<ul>
-<li>The extra <span class="math inline">\(A +\)</span> out front is to
-push the wave over to the right, since we can’t really place negative
-characters</li>
-</ul></li>
-<li>How can we put this together?</li>
-</ul>
-</section>
-<section id="ascii-sine-code" class="slide level2">
-<h2>ASCII SINE Code</h2>
-<pre ><code class="mypython" style="font-size:.6em; max-height:900px;">
+<!-- save for next day
+## Writing Text Files
+- You can write text files using almost the same syntax as reading:
+  ```mypython
+  with open(filename, mode) as file_handle:
+      |||Code to write the file using file_handle|||
+  ```
+- Note the `mode` parameter to `open` here! Mode is a string which is either
+    - `"w"` to **write** a new file (or overwrite an existing file)
+    - `"a"` to **append** new contents to the end of an existing file
+- The file handler supports the methods:
+    - `.write(some_string)` to write a string to the file
+    - `.writelines(iterable_of_strings)` to write each iterable element to the file
+
+
+## Writing ASCII SINE
+- Suppose I wanted to try my hand at some ASCII art and fill a text file with a vertical oscillating sine wave
+- A sine wave generally looks like:
+    $$ A + A \sin\left(\frac{2\pi}{T}x\right)$$
+  where $A$ is the amplitude of the wave and $T$ the period of the wave, or how quickly it repeats
+  - The extra $A +$ out front is to push the wave over to the right, since we can't really place negative characters
+- How can we put this together?
+
+
+## ASCII SINE Code
+```{.mypython style='font-size:.6em; max-height:900px;'}
+
 from math import sin, pi
 
 def sine_file(filename, A, T, symbol, padding=" "):
@@ -495,8 +611,10 @@ def sine_file(filename, A, T, symbol, padding=" "):
             fh.write(line + '\n') # need the newline character at the end!
 
 if __name__ == '__main__':
-    sine_file('sine_test.txt', A=30, T=50, symbol='X')</code></pre>
-</section>
+    sine_file('sine_test.txt', A=30, T=50, symbol='X')
+```
+-->
+</section></section>
     </div>
   </div>
 
@@ -509,6 +627,7 @@ if __name__ == '__main__':
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
@@ -631,7 +750,7 @@ if __name__ == '__main__':
 		 },
 
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
               console.log(mypythondef);
               return mypythondef(hljs); } )
           },
@@ -645,6 +764,7 @@ if __name__ == '__main__':
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
