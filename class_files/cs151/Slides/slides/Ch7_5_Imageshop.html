@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-10-27">
-  <title>Definitely Not Photoshop</title>
+  <meta name="dcterms.date" content="2024-10-25">
+  <title>ImageShop Read/Writes</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -27,17 +27,17 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Definitely Not Photoshop</h1>
+  <h1 class="title">ImageShop Read/Writes</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">October 27, 2023</p>
+  <p class="date">October 25, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -46,19 +46,16 @@
 <li>Problem Set 5 due on Monday</li>
 <li>Project 3: Imageshop guide will be released by the end of tomorrow
 (though I’m aiming for today)</li>
-<li>Feel that things are hopeless and need to withdraw? The deadline is
-next Thursday
+<li>You have fairly up-to-date grade reports currently. Do you feel that
+things are hopeless and need to withdraw? The deadline is next Wednesday
 <ul>
-<li>I’ll try to get another grade report with at least PS4 on it sent
-before then.</li>
-<li>If things look dire, <strong>please reach out before
-Thursday</strong>, so we can figure out if withdrawing is the correct
-option</li>
+<li>If considering, <strong>please reach out before Wednesday</strong>,
+so we can figure out if withdrawing is the correct option</li>
 </ul></li>
-<li>A reminder that the graphics contest is due at the end of the month
-if you are interested in submitting something to that</li>
+<li>A reminder that the graphics contest is live if you are interested
+in submitting something to that</li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="http://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 <!--
 ## What if it didn't go well?
@@ -93,9 +90,221 @@ What would be the output of:
 
 -->
 </section>
-<section id="review" class="slide level2"
+<section>
+<section id="reading-and-writing" class="title-slide slide level1">
+<h1>Reading and Writing</h1>
+
+</section>
+<section id="opening-text-files" class="slide level2">
+<h2>Opening Text Files</h2>
+<ul>
+<li><p>The general approach for reading a text file is to first
+<em>open</em> the file and associate that file with a variable, commonly
+called its <em>file handle</em></p></li>
+<li><p>We will also use the <em>with</em> keyword to ensure that Python
+cleans up after itself (closes the file) when we are done with it (Many
+of us could use a <code class="python">with</code> irl)</p>
+<pre ><code class="python">with open(|||filename|||) as |||file_handle|||:
+    |||Code to read the file using the file_handle|||</code></pre></li>
+<li><p>Python gives you several ways to actually read in the data</p>
+<ul>
+<li><code class="python">read</code> reads the entire file in as a
+string</li>
+<li><code class="python">readline</code> or
+<code class="python">readlines</code> reads a single line or lines from
+the file</li>
+<li>Can use the file handle as an iterator to loop over</li>
+</ul></li>
+</ul>
+</section>
+<section id="entire-file-string" class="slide level2">
+<h2>Entire file ⟶ String</h2>
+<ul>
+<li><p>The <code class="python">read</code> method reads the entire file
+into a string, with includes newline characters
+(<code class="python">\n</code>) to mark the end of lines</p></li>
+<li><p>Simple, but can be cumbersome to work with the newline
+characters, and, for large files, it can take a large amount of
+memory</p></li>
+<li><p>As an example, the file:<br><br></p>
+<div class="block" name="Seuss.txt"
+style="width:40%; margin-left: auto; margin-right: auto;">
+<p>One fish<br> two fish<br> red fish<br> blue fish</p>
+</div>
+<p>would get read as</p></li>
+</ul>
+<p><code class="python" style="display: block; margin: auto; text-align: center;">"One fish\ntwo fish\nred fish\nblue fish"</code></p>
+</section>
+<section id="line-by-line" class="slide level2">
+<h2>Line by Line</h2>
+<ul>
+<li><p>Of the ways to read the file in a string at a time, using the
+file handler as an iterator and looping is probably best and certainly
+most flexible</p></li>
+<li><p>Leads to code that looks like:</p>
+<pre ><code class="python">with open(|||filename|||) as |||f|||:
+    for line in |||f|||:
+        |||Do something with the line|||</code></pre></li>
+<li><p>Note that <strong>most</strong> strategies preserve the newline
+character, which you very likely do not want, so be ready to strip them
+out before doing more processing</p></li>
+</ul>
+</section>
+<section id="where-strings-and-lists-meet" class="slide level2">
+<h2>Where Strings and Lists Meet</h2>
+<ul>
+<li>There are a handful of methods that transition between strings and
+lists</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="python">|||string|||.split()</code></td>
+<td>Splits a string into a list of its components using whitespace as a
+separator</td>
+</tr>
+<tr class="even">
+<td><code class="python">|||string|||.split(|||sep|||)</code></td>
+<td>Splits a string into a list using the specified separator
+<code class="python">sep</code></td>
+</tr>
+<tr class="odd">
+<td><code class="python">|||string|||.splitlines()</code></td>
+<td>Splits a string into of list of strings at the newline
+character</td>
+</tr>
+<tr class="even">
+<td><code class="python">|||string|||.join(|||a_list|||)</code></td>
+<td>Joins the elements of the <code class="python">a_list</code> into a
+string, using <code class="python">string</code> as the separator</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="powers-combined" class="slide level2">
+<h2>Powers Combined</h2>
+<ul>
+<li><p>So long as your files are not gigantic, using
+<code class="python">read</code> and then the
+<code class="python">splitlines</code> method can be a good
+option</p></li>
+<li><p>This <strong>does</strong> remove the newline characters, since
+it splits the string at them</p>
+<pre ><code class="python">with open(|||filename|||) as |||f|||:
+    lines = |||f|||.read().splitlines()
+|||Then you can do whatever you want with the list of lines|||</code></pre></li>
+</ul>
+</section>
+<section id="writing-mostly-like-reading" class="slide level2">
+<h2>Writing: Mostly Like Reading</h2>
+<ul>
+<li><p>You can write text files using almost the same syntax as
+reading:</p>
+<pre ><code class="python">with open(|||filename|||, |||mode|||) as |||file_handle|||:
+    |||Code to write the file using file_handle|||</code></pre></li>
+<li><p>Note the <code class="python">|||mode|||</code> parameter to
+<code class="python">open</code> here! Mode is a string which is
+either</p>
+<ul>
+<li><code class="python">"w"</code> to <strong>write</strong> a new file
+(or overwrite an existing file)</li>
+<li><code class="python">"a"</code> to <strong>append</strong> new
+contents to the end of an existing file</li>
+</ul></li>
+<li><p>The file handler supports the methods:</p>
+<ul>
+<li><code class="python">.write(|||string|||)</code> to write a string
+to the file</li>
+<li><code class="python">.writelines(|||iterable of strings|||)</code>
+to write each iterable element to the file</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="on-the-case-for-an-example"
+class="title-slide slide level1">
+<h1>On the Case for an Example</h1>
+
+</section>
+<section id="fingerprints" class="slide level2">
+<h2>Fingerprints!</h2>
+<ul>
+<li>Suppose we had a text file that stores information about a
+particular users fingerprint
+<ul>
+<li>Name, dimensions, and the print itself</li>
+</ul></li>
+<li>We want to read this information in and display the fingerprint as a
+<code class="python">GImage</code></li>
+<li>Then we want to allow the user to click on parts of the fingerprint
+and store those important coordinates to a file</li>
+<li>How might we go about doing this?</li>
+</ul>
+<!--
+## Writing ASCII SINE
+- Suppose I wanted to try my hand at some ASCII art and fill a text file with a vertical oscillating sine wave
+- A sine wave generally looks like:
+    $$ A + A \sin\left(\frac{2\pi}{T}x\right)$$
+  where $A$ is the amplitude of the wave and $T$ the period of the wave, or how quickly it repeats
+  - The extra $A +$ out front is to push the wave over to the right, since we can't really place negative characters
+- How can we put this together?
+
+
+## ASCII SINE Code
+```{.python style='font-size:.6em; max-height:900px;'}
+
+from math import sin, pi
+
+def sine_file(filename, A, T, symbol, padding=" "):
+    """ 
+    Creates a new sine wave in the provided file with the provided amplitude (A),
+    and period (T) with the indicated symbol at the end.
+
+    Inputs:
+        filename (string): the name of the file to write the art to
+        A (int): the amplitude of the wave in terms of number of characters
+        T (int): the period of the wave in terms of number of lines
+        symbol (string): the symbol to place to mark the wave
+        padding (string): what character to pad the left side of the wave with
+
+    Outputs:
+        None
+    """
+
+    def compute_symb_placement(A, T, x):
+        """Computes where the symbol should be placed."""
+        value = A * sin(2 * pi / T * x) + A
+        return int(value) # to integer character placement
+
+    def construct_line(placement, symbol, padding):
+        """Constructs the line with the necessary padding and symbol at the end."""
+        return padding * placement + symbol
+
+    with open(filename, 'w') as fh:
+        for x in range(10 * T): # write 10 periods worth of lines
+            v = compute_symb_placement(A, T, x)
+            line = construct_line(v, symbol, padding)
+            fh.write(line + '\n') # need the newline character at the end!
+
+if __name__ == '__main__':
+    sine_file('sine_test.txt', A=30, T=50, symbol='X')
+```
+-->
+</section>
+<section id="understanding-check" class="slide level2"
 data-notes="Solution: D, others print the .">
-<h2 data-notes="Solution: D, others print the .">Review!</h2>
+<h2 data-notes="Solution: D, others print the .">Understanding
+Check!</h2>
 <div class="cols">
 <div class="col">
 <p>To the right are the contents of a text file named
@@ -136,88 +345,11 @@ print(c.find("father"))</code></pre>
 </div>
 </div>
 </div>
-</section>
-<section id="writing-text-files" class="slide level2">
-<h2>Writing Text Files</h2>
-<ul>
-<li><p>You can write text files using almost the same syntax as
-reading:</p>
-<pre ><code class="mypython">with open(filename, mode) as file_handle:
-    |||Code to write the file using file_handle|||</code></pre></li>
-<li><p>Note the <code class="python">mode</code> parameter to
-<code class="python">open</code> here! Mode is a string which is
-either</p>
-<ul>
-<li><code class="python">"w"</code> to <strong>write</strong> a new file
-(or overwrite an existing file)</li>
-<li><code class="python">"a"</code> to <strong>append</strong> new
-contents to the end of an existing file</li>
-</ul></li>
-<li><p>The file handler supports the methods:</p>
-<ul>
-<li><code class="python">.write(some_string)</code> to write a string to
-the file</li>
-<li><code class="python">.writelines(iterable_of_strings)</code> to
-write each iterable element to the file</li>
-</ul></li>
-</ul>
-</section>
-<section id="writing-ascii-sine" class="slide level2">
-<h2>Writing ASCII SINE</h2>
-<ul>
-<li>Suppose I wanted to try my hand at some ASCII art and fill a text
-file with a vertical oscillating sine wave</li>
-<li>A sine wave generally looks like: <span class="math display">\[ A +
-A \sin\left(\frac{2\pi}{T}x\right)\]</span> where <span
-class="math inline">\(A\)</span> is the amplitude of the wave and <span
-class="math inline">\(T\)</span> the period of the wave, or how quickly
-it repeats
-<ul>
-<li>The extra <span class="math inline">\(A +\)</span> out front is to
-push the wave over to the right, since we can’t really place negative
-characters</li>
-</ul></li>
-<li>How can we put this together?</li>
-</ul>
-</section>
-<section id="ascii-sine-code" class="slide level2">
-<h2>ASCII SINE Code</h2>
-<pre ><code class="mypython" style="font-size:.6em; max-height:900px;">
-from math import sin, pi
+</section></section>
+<section>
+<section id="making-good-choices" class="title-slide slide level1">
+<h1>Making Good Choices</h1>
 
-def sine_file(filename, A, T, symbol, padding=" "):
-    """ 
-    Creates a new sine wave in the provided file with the provided amplitude (A),
-    and period (T) with the indicated symbol at the end.
-
-    Inputs:
-        filename (string): the name of the file to write the art to
-        A (int): the amplitude of the wave in terms of number of characters
-        T (int): the period of the wave in terms of number of lines
-        symbol (string): the symbol to place to mark the wave
-        padding (string): what character to pad the left side of the wave with
-
-    Outputs:
-        None
-    """
-
-    def compute_symb_placement(A, T, x):
-        """Computes where the symbol should be placed."""
-        value = A * sin(2 * pi / T * x) + A
-        return int(value) # to integer character placement
-
-    def construct_line(placement, symbol, padding):
-        """Constructs the line with the necessary padding and symbol at the end."""
-        return padding * placement + symbol
-
-    with open(filename, 'w') as fh:
-        for x in range(10 * T): # write 10 periods worth of lines
-            v = compute_symb_placement(A, T, x)
-            line = construct_line(v, symbol, padding)
-            fh.write(line + '\n') # need the newline character at the end!
-
-if __name__ == '__main__':
-    sine_file('sine_test.txt', A=30, T=50, symbol='X')</code></pre>
 </section>
 <section id="choosing-wisely" class="slide level2">
 <h2>Choosing Wisely</h2>
@@ -241,11 +373,16 @@ folder and filename to save a file to</li>
 <li>Clicking Cancel returns an empty string</li>
 </ul></li>
 <li><p>Using it thus looks something like:</p>
-<pre ><code class="mypython">filename = choose_input_file()
-with open(filename) as f:
+<pre ><code class="python">filename = choose_input_file()
+with open(|||filename|||) as |||f|||:
     |||Code to read file|||</code></pre></li>
 </ul>
 </div>
+</section></section>
+<section>
+<section id="imageshop" class="title-slide slide level1">
+<h1>ImageShop</h1>
+
 </section>
 <section id="introducing-imageshop" class="slide level2">
 <h2>Introducing ImageShop</h2>
@@ -254,7 +391,7 @@ with open(filename) as f:
 <ul>
 <li>While you have a PS due on Monday, the next project will be due the
 week after afterwards</li>
-<li>Taking a moment today to introduce Imageshop, and the guide will be
+<li>Taking a moment today to introduce ImageShop, and the guide will be
 posted by tomorrow</li>
 </ul>
 </div>
@@ -280,7 +417,7 @@ alt="Starting view of ImageShop" />
 <ul>
 <li>ImageShop initially has only two buttons
 <ul>
-<li>“Load” will bring up a file selection box where you can chose what
+<li>“Load” will bring up a file selection box where you can choose what
 image to display
 <ul>
 <li>Internally, this is handled by a function that returns the chosen
@@ -306,13 +443,18 @@ equal to the output of a new function you’ll write</li>
 </ul></li>
 <li>You are always free to write whatever other helper functions you
 might like!</li>
+</ul>
+</section>
+<section id="so-many-files" class="slide level2">
+<h2>So Many Files!</h2>
+<ul>
 <li>ImageShop is the first project to start leveraging multi-file
 layouts:
 <ul>
 <li>Some functions will already be provided in
 <code class="python">GrayscaleImage.py</code> that you can import into
 your main program</li>
-<li>You are encouraged to write the necessary functions for Milestone 5
+<li>You are encouraged to write the necessary functions for Milestone 4
 in their own file and import them in accordingly</li>
 <li>I’ve <strong><em>seen</em></strong> you all scrolling madly around
 trying to find the code you want. This helps with that!</li>
@@ -324,6 +466,8 @@ trying to find the code you want. This helps with that!</li>
 <ul>
 <li>To help facilitate working with buttons, ImageShop introduces a new
 type called <code class="python">GButton</code></li>
+<li>There is nothing magical about these! They are just pre-bundling PGL
+concepts that you already know like labels and mouse click events</li>
 <li>Each <code class="python">GButton</code> gets a label and a callback
 function name that determines what function is called when that button
 is clicked</li>
@@ -345,19 +489,20 @@ displayed on the window in a variable called
 <li>The variable is specifically added as an attribute to
 <code class="python">gw</code> so that you will have access to it in any
 callback function you write</li>
-<li>This will generally be the input to your manipulation functions,
-since most work with whatever image was currently displayed on the
-screen</li>
-<li>Your callback function will run
+<li>This will generally be the input to your various image manipulation
+functions, since most of those functions work with whatever image was
+currently displayed on the screen</li>
+<li>Your callback function should run
 <code class="python">set_image</code> on the output of your manipulation
 function, which will take care of updating the value of
-<code class="python">gw.current_image</code></li>
+<code class="python">gw.current_image</code> and displaying the new
+image in the window</li>
 </ul>
 </section>
-<section id="milestone-1" class="slide level2">
-<h2>Milestone 1</h2>
+<section id="milestone-0" class="slide level2">
+<h2>Milestone 0</h2>
 <ul>
-<li>Milestone 1 has you adding a “Flip Horizontal” button
+<li>Milestone 0 has you adding a “Flip Horizontal” button
 <ul>
 <li>Add the button</li>
 <li>Add the action callback function</li>
@@ -368,8 +513,8 @@ horizontally</li>
 much</li>
 </ul>
 </section>
-<section id="milestone-2" class="slide level2">
-<h2>Milestone 2</h2>
+<section id="milestone-1" class="slide level2">
+<h2>Milestone 1</h2>
 <div class="cols" style="align-items: center">
 <div class="col">
 <ul>
@@ -385,21 +530,22 @@ location in the new list</li>
 </div>
 <div class="col">
 <p><img
-data-src="../images/svg_cache/f19b6bf1ed4f5e6e4e45c93d2d53ecf861f4ec4d.svg"
+data-src="../images/svg_cache/d20b6bd27a91cff9d922cc11cecd56a3d67832eb.svg"
 style="width:100.0%" /></p>
 </div>
 </div>
 </section>
-<section id="milestone-3" class="slide level2">
-<h2>Milestone 3</h2>
+<section id="milestone-2" class="slide level2">
+<h2>Milestone 2</h2>
 <ul>
 <li>Here you’ll add a button to convert an image to grayscale</li>
 <li>If you understand the other library files that have been given to
-you as part of the project, this project should be the simplest!</li>
+you as part of the project, this milestone should be the simplest!</li>
+<li><strong>Don’t copy. Import!</strong></li>
 </ul>
 </section>
-<section id="milestone-4" class="slide level2">
-<h2>Milestone 4</h2>
+<section id="milestone-3" class="slide level2">
+<h2>Milestone 3</h2>
 <ul>
 <li>Here you get to enable a green screen effect!</li>
 <li>Unlike other buttons, when this one is clicked, you should use the
@@ -415,14 +561,14 @@ depending on how “green” a pixel is, you will choose between different
 choices
 <ul>
 <li>If green enough, you will copy the pixel from the
-<em>background</em> image to your pixel array</li>
+<em>background</em> image to your new pixel array</li>
 <li>If not green enough, you will copy the pixel from the
-<em>foreground</em> image to your pixel array</li>
+<em>foreground</em> image to your new pixel array</li>
 </ul></li>
 </ul>
 </section>
-<section id="milestone-5" class="slide level2">
-<h2>Milestone 5</h2>
+<section id="milestone-4" class="slide level2">
+<h2>Milestone 4</h2>
 <ul>
 <li>Here you’ll implement one algorithm for increasing dynamic contrast
 across an image!</li>
@@ -459,7 +605,7 @@ cool graphical effects and add a button for them!</li>
 “sub-extensions”, but come up with your own as well!</li>
 </ul></li>
 </ul>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -472,6 +618,7 @@ cool graphical effects and add a button for them!</li>
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
@@ -594,7 +741,7 @@ cool graphical effects and add a button for them!</li>
 		 },
 
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
               console.log(mypythondef);
               return mypythondef(hljs); } )
           },
@@ -608,6 +755,7 @@ cool graphical effects and add a button for them!</li>
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
