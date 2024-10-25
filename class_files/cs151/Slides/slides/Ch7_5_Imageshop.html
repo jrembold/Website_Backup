@@ -250,6 +250,60 @@ particular users fingerprint
 and store those important coordinates to a file</li>
 <li>How might we go about doing this?</li>
 </ul>
+</section>
+<section id="one-approach" class="slide level2">
+<h2>One approach</h2>
+<pre ><code class="python" style="max-height:900px; font-size:.8em">from pgl import GWindow, GImage, GOval
+
+SCALE_FACTOR = 3
+MARKER_SIZE = 10
+
+with open('User1_Original.txt') as fh:
+    name = fh.readline().strip()
+    width = int(fh.readline().strip())
+    height = int(fh.readline().strip())
+    fp = fh.read().splitlines()
+
+# Initially clean out points for new run
+with open('points.txt', 'w') as fh:
+    pass # Not doing anything, because just opening it clears things
+
+print(name)
+print(width)
+print(height)
+print(fp) #list of strings
+
+# Make our scaled window
+gw = GWindow(SCALE_FACTOR*width, SCALE_FACTOR*height)
+
+# Create our array and populate it
+pixel_array = [[0 for i in range(width)] for j in range(height)]
+for r in range(height):
+    for c in range(width):
+        if fp[r][c] == 'M':
+            pixel_array[r][c] = GImage.create_rgb_pixel(0,0,0)
+        else:
+            pixel_array[r][c] = GImage.create_rgb_pixel(255,255,255)
+
+# Convert our pixel array to a GImage, scale it, and add it
+fp_image = GImage(pixel_array)
+fp_image.scale(SCALE_FACTOR)
+gw.add(fp_image)
+
+# Handling interactivity
+def click_action(e):
+    """Marks the clicked loc with a red dot and writes to file"""
+    mx, my = e.get_x(), e.get_y()
+    marker = GOval(mx - MARKER_SIZE/2, my - MARKER_SIZE/2, 
+                   MARKER_SIZE, MARKER_SIZE )
+    marker.set_filled(True)
+    marker.set_color("red")
+    gw.add(marker)
+
+    with open('points.txt', 'a') as fh:
+        fh.write(f"{mx},{my}\n")
+
+gw.add_event_listener("mousedown", click_action)</code></pre>
 <!--
 ## Writing ASCII SINE
 - Suppose I wanted to try my hand at some ASCII art and fill a text file with a vertical oscillating sine wave
