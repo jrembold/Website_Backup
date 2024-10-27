@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Milestone 4: The Equalize button – Project 3: ImageShop</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../milestones/milestone3.html" rel="prev">
+<link href="../favicon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Project 3: ImageShop</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-introduction" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Introduction</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-introduction">    
+        <li>
+    <a class="dropdown-item" href="../introduction/usage.html">
+ <span class="dropdown-text">Understanding the Initial Program</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../introduction/existing_code.html">
+ <span class="dropdown-text">Understanding the Existing Code</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-milestones" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Milestones</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-milestones">    
+        <li>
+    <a class="dropdown-item" href="../milestones.html">
+ <span class="dropdown-text">Introducing Milestones</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../milestones/milestone0.html">
+ <span class="dropdown-text">Milestone 0: The Flip Horizontal button</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../milestones/milestone1.html">
+ <span class="dropdown-text">Milestone 1: Rotate Left and Right buttons</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../milestones/milestone2.html">
+ <span class="dropdown-text">Milestone 2: The Grayscale button</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../milestones/milestone3.html">
+ <span class="dropdown-text">Milestone 3: The Green Screen button</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../milestones/milestone4.html">
+ <span class="dropdown-text">Milestone 4: The Equalize button</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../extensions.html"> 
+<span class="menu-text">Extensions</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../milestones/milestone4.html">Milestone 4: The Equalize button</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../milestones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introducing Milestones</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../milestones/milestone0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Milestone 0: The Flip Horizontal button</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../milestones/milestone1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Milestone 1: Rotate Left and Right buttons</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../milestones/milestone2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Milestone 2: The Grayscale button</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../milestones/milestone3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Milestone 3: The Green Screen button</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../milestones/milestone4.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Milestone 4: The Equalize button</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#understanding-luminance" id="toc-understanding-luminance" class="nav-link active" data-scroll-target="#understanding-luminance">Understanding Luminance</a></li>
+  <li><a href="#calculating-the-image-histogram" id="toc-calculating-the-image-histogram" class="nav-link" data-scroll-target="#calculating-the-image-histogram">Calculating the image histogram</a></li>
+  <li><a href="#calculating-the-cumulative-histogram" id="toc-calculating-the-cumulative-histogram" class="nav-link" data-scroll-target="#calculating-the-cumulative-histogram">Calculating the cumulative histogram</a></li>
+  <li><a href="#the-histogram-equalization-algorithm" id="toc-the-histogram-equalization-algorithm" class="nav-link" data-scroll-target="#the-histogram-equalization-algorithm">The histogram-equalization algorithm</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Milestone 4: The Equalize button</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Digital processing can do an amazing job of enhancing a photograph. Consider, for example, the countryside image on the left in <a href="#fig-enhance" class="quarto-xref">Figure&nbsp;1</a>. Particularly when you compare it to the enhanced version on the right, the picture on the left seems hazy. The enhanced version is the result of applying an algorithm called <em>histogram equalization</em>, which spreads out the intensities shown in the picture to increase its effective contrast and make it easier to identify individual features.</p>
+<div id="fig-enhance" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-enhance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="../images/Countryside.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Before and after images illustrating the histogram equalization algorithm results. Left image from Wikipedia."><img src="../images/Countryside.png" class="img-fluid figure-img"></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="../images/Countryside_Enhanced.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;1: Before and after images illustrating the histogram equalization algorithm results. Left image from Wikipedia."><img src="../images/Countryside_Enhanced.png" class="img-fluid figure-img"></a></p>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-enhance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Before and after images illustrating the histogram equalization algorithm results. Left image from <a href="http://en.wikipedia.org/wiki/File:Unequalized_Hawkes_Bay_NZ.jpg">Wikipedia</a>.
+</figcaption>
+</figure>
+</div>
+<p>As described in Section 8.7 of the PDF reader (and <a href="https://jrembold.github.io/Website_Backup/class_files/cs151/Slides/slides/Ch7_4.html#/pixel-contents">in class</a>), the individual pixels in an image are represented using four single-byte values, one for the transparency of the image and three representing the intensity of the red, green, and blue components of the color. The human eye perceives some colors as brighter than others, much in the same way that it perceives audible tones of certain frequencies as louder than others. The color green, for example, appears brighter than either red or blue, and if our eyes were more sensitive to violet hues, the sky would appear more purple instead of the blue we currently see.</p>
+<section id="understanding-luminance" class="level3">
+<h3 class="anchored" data-anchor-id="understanding-luminance">Understanding Luminance</h3>
+<p>This concept of brightness can be quantified using the idea of <em>luminance</em>, as described on page 262 in the PDF reader. That idea is implemented as a <code>luminance</code> function, which is defined in the <code>GrayscaleImage</code> module in the repository. The value returned by <code>luminance</code> is an integer between 0 and 255, just like the intensity values for red, green, and blue. A luminance of 0 indicates black, a luminance of 255 indicates white, and any other color falls somewhere in between.</p>
+<p>The histogram-equalization algorithm you need to write for this assignment uses luminosities rather than colors and therefore produces a grayscale image, much as you did when you implemented the <strong>Grayscale</strong> button.</p>
+<p>The entire histogram-equalization process requires several steps, each of which is best coded as a helper function. Because all of these functions will be related to the same idea, it is recommended to write them all in their <strong>own file</strong>, perhaps called <code>equalization.py</code>, and then import what you need into <code>ImageShop.py</code>. The various pieces (and functions) that you’ll want to write are described in the follow sub-milestones.</p>
+</section>
+<section id="calculating-the-image-histogram" class="level3">
+<h3 class="anchored" data-anchor-id="calculating-the-image-histogram">Calculating the image histogram</h3>
+<p>Given an image, there may be multiple pixels that all have the same luminance. In fact, there almost certainly are! After all, there are only 256 possible luminance values, and most images will have thousands of individual pixels. An <em>image histogram</em> is a representation of the distribution of the luminance throughout the image. Specifically, the histogram is an array of 256 integers–one for each possible luminance–where each entry in the array represents the number of pixels in the image with that luminance. For example, the entry at index 0 of the array represents the number of pixels in the image with a luminance of 0 (or pure black). The entry an index 1 represents the number of pixels in the image with luminance of 1 (pure white), and so on and so forth. Your task in this sub-milestone is to write a function to generate an image histogram of the luminosities of a provided image or pixel array.</p>
+<p>Looking at an image’s histogram tells you a lot about the distribution of brightness throughout the image. The images at the top of <a href="#fig-contrastcompare" class="quarto-xref">Figure&nbsp;2</a>, for example, shows the original low-contrast picture of the countryside, along with its image histogram. The bottom row shows an image and histogram for a high-contrast image. Images with low contrast tend to have histograms more tightly clustered around a small number of values, while images with higher contrasts tend to have histograms that are more spread out over the full possible range of values.</p>
+<div id="fig-contrastcompare" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-contrastcompare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row quarto-layout-valign-center">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="../images/Countryside.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;2: Comparison of histograms for a low contrast image (top) and a high contrast image (bottom). Higher contrast images result in a much broader spread of the image luminosities in the histogram. Bottom left image from Ansel Adams Gallery."><img src="../images/Countryside.png" class="img-fluid figure-img"></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="../images/Countryside_Hist.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;2: Comparison of histograms for a low contrast image (top) and a high contrast image (bottom). Higher contrast images result in a much broader spread of the image luminosities in the histogram. Bottom left image from Ansel Adams Gallery."><img src="../images/Countryside_Hist.png" class="img-fluid figure-img"></a></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-center">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="../images/AAYosemite.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;2: Comparison of histograms for a low contrast image (top) and a high contrast image (bottom). Higher contrast images result in a much broader spread of the image luminosities in the histogram. Bottom left image from Ansel Adams Gallery."><img src="../images/AAYosemite.png" class="img-fluid figure-img"></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="../images/AAYosemite_Hist.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;2: Comparison of histograms for a low contrast image (top) and a high contrast image (bottom). Higher contrast images result in a much broader spread of the image luminosities in the histogram. Bottom left image from Ansel Adams Gallery."><img src="../images/AAYosemite_Hist.png" class="img-fluid figure-img"></a></p>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-contrastcompare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Comparison of histograms for a low contrast image (top) and a high contrast image (bottom). Higher contrast images result in a much broader spread of the image luminosities in the histogram. Bottom left image from <a href="https://www.sfmoma.org/artwork/57.941/">Ansel Adams Gallery</a>.
+</figcaption>
+</figure>
+</div>
+<p>The point of making this an intermediate sub-milestone is to emphasize that you need to test it, even if it isn’t easy to see the result. The histogram array will have 256 elements. You can either print the histogram on the console or use the graphical histogram functions from the most recent problem set to check whether your distribution matches the above graphs.</p>
+</section>
+<section id="calculating-the-cumulative-histogram" class="level3">
+<h3 class="anchored" data-anchor-id="calculating-the-cumulative-histogram">Calculating the cumulative histogram</h3>
+<p>Related to the image histogram is the <em>cumulative histogram</em>, which shows not simply how many pixels have a particular luminance, but rather how many pixels have a particular luminance <strong>or lower</strong>. Like the image histogram, the cumulative histogram is an array of 256 values: one for each possible value of the luminance. You can compute the cumulative histogram purely from the image histogram. Each entry in the cumulative histogram is the sum of all the entries in the image histogram up to and including that index position. As an example, if the first six entries in the image histogram are:</p>
+<pre class=".python"><code>[1, 3, 5, 7, 9, 11]</code></pre>
+<p>then the corresponding entries in the cumulative histogram are calculated as:</p>
+<pre class=".python"><code>[1, 1+3, 1+3+5, 1+3+5+7, 1+3+5+7+9, 1+3+5+7+9+11]</code></pre>
+<p>or, in other words:</p>
+<pre class=".python"><code>[1, 4, 9, 16, 25, 36]</code></pre>
+<p>In <a href="#fig-cumhists" class="quarto-xref">Figure&nbsp;3</a> we can see the cumulative histograms for the two images from <a href="#fig-contrastcompare" class="quarto-xref">Figure&nbsp;2</a>. Notice how the low-contrast image has a sharp transition in its cumulative histogram, while the higher-contrast image tends to have a smoother increase over time.</p>
+<div id="fig-cumhists" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cumhists-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row quarto-layout-valign-center">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="../images/Countryside.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;3: Comparison of cumulative histograms for a low contrast image (top) and a high contrast image (bottom). Lower contrast images tend to create a much sharper “wall” in the cumulative histogram, versus the more gradual increase in higher contrast images."><img src="../images/Countryside.png" class="img-fluid figure-img"></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="../images/Countryside_CHist.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;3: Comparison of cumulative histograms for a low contrast image (top) and a high contrast image (bottom). Lower contrast images tend to create a much sharper “wall” in the cumulative histogram, versus the more gradual increase in higher contrast images."><img src="../images/Countryside_CHist.png" class="img-fluid figure-img"></a></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-center">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="../images/AAYosemite.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;3: Comparison of cumulative histograms for a low contrast image (top) and a high contrast image (bottom). Lower contrast images tend to create a much sharper “wall” in the cumulative histogram, versus the more gradual increase in higher contrast images."><img src="../images/AAYosemite.png" class="img-fluid figure-img"></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="../images/AAYosemite_CHist.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;3: Comparison of cumulative histograms for a low contrast image (top) and a high contrast image (bottom). Lower contrast images tend to create a much sharper “wall” in the cumulative histogram, versus the more gradual increase in higher contrast images."><img src="../images/AAYosemite_CHist.png" class="img-fluid figure-img"></a></p>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cumhists-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Comparison of cumulative histograms for a low contrast image (top) and a high contrast image (bottom). Lower contrast images tend to create a much sharper “wall” in the cumulative histogram, versus the more gradual increase in higher contrast images.
+</figcaption>
+</figure>
+</div>
+<p>After creating these cumulative histograms, you could still test them using the same visualization tools you used for the normal histograms! Make sure things are looking correct before continuing!</p>
+</section>
+<section id="the-histogram-equalization-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="the-histogram-equalization-algorithm">The histogram-equalization algorithm</h3>
+<p>The cumulative histogram provides just what you need for the histogram-equalization algorithm. To get a sense to how it works, it helps to start with an example. Suppose that you have a pixel in the original image whose luminance is 106. Since the maximum possible luminance for a pixel is 255, this means that the “relative” luminance of this pixel is <span class="math inline">106 / 255 \approx 41.5</span> percent, which means that the pixel’s luminance is roughly 41.5 percent of the maximum possible. If you were to assume that all the intensities were distributed evenly across the image, you would expect this particular pixel to have a brightness greater than 41.5 percent of the other pixels in the image.</p>
+<p>Similarly, suppose you have another pixel in the original image whose luminance is 222. The relative luminance of this pixel is <span class="math inline">222/255 \approx 87.1</span> percent, so we would expect that, should the intensities be evenly distributed, this pixel would be brighter than 87.1 percent of the pixels in the image.</p>
+<p>The histogram equalization algorithm works by trying to change the intensities of the pixels in the original image as follows: if a pixel is supposed to be brighter than <span class="math inline">X</span> percent of the pixels in the image, then the algorithm attempts to map it to a luminance that will make it brighter than as close to <span class="math inline">X</span> percent of the total pixels as possible. In doing so, the algorithm attempts to more evenly distribute the luminosities across the total available options. Implementing this process turns out to be much easier than it might seem, especially if you have the cumulative histogram for an image.</p>
+<p>The key idea is as follows. Suppose that an original pixel in the image has luminance <span class="math inline">L</span>. If you look up the <span class="math inline">L^{th}</span> entry in the cumulative histogram for the image, you will get back the total number of pixels in the image that have luminance of <span class="math inline">L</span> or less (that is literally what the cumulative histogram tells you). You could then convert this value into the fraction of pixels in the image with luminance <span class="math inline">L</span> or less by dividing by the total number of pixels in the image. Once you have the fraction of pixels with intensities less than or equal to the current luminance <span class="math inline">L</span>, you can scale this number (which is currently between 0 and 1) so that it is between 0 and 255, which produces a valid luminance. The histogram equalization therefore consists of the following steps:</p>
+<ol type="1">
+<li>Compute the image histogram from the original image</li>
+<li>Compute the cumulative histogram from the image histogram</li>
+<li>Replace each luminance value (L) in the original image using the formula: <span class="math display">\text{new luminance} = \frac{255 \times \text{ cumulative histogram[L]}}{\text{ total number of pixels }} </span></li>
+</ol>
+<p>As a reminder, your task in this part of the assignment will be considerably easier if you decompose the problem into several helper functions and test each function independently as you go. The algorithm for performing histogram equalization is sufficiently complex that it would make sense to code it as a separate module by itself and import the necessary functions into <code>ImageShop.py</code>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../milestones/milestone3.html" class="pagination-link" aria-label="Milestone 3: The Green Screen button">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Milestone 3: The Green Screen button</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","selector":".lightbox","loop":false,"closeEffect":"zoom","openEffect":"zoom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
