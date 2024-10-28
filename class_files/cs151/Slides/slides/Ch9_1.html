@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-10-30">
+  <meta name="dcterms.date" content="2024-10-28">
   <title>Spin me right round</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,15 +17,18 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
@@ -34,7 +37,7 @@
 <section id="title-slide">
   <h1 class="title">Spin me right round</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">October 30, 2023</p>
+  <p class="date">October 28, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -42,12 +45,11 @@
 <ul>
 <li>Problem Set 5 due tonight!</li>
 <li>ImageShop guide posted!</li>
-<li>I’ll be around after class for an hour or from 2 until 4:30 this
-afternoon</li>
-<li>I’m still trying to finish up the PS4 scoring, sorry for the
-delay.</li>
-<li>Last day to withdraw from the class is Thursday, but talk to me
+<li>Can probably expect Breakout feedback around the end of the
+week</li>
+<li>Last day to withdraw from the class is Wednesday, but talk to me
 before then if you are concerned</li>
+<li>Exam 2 one week from Friday</li>
 <li>Polling: <a
 href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
@@ -93,25 +95,257 @@ accomplish this?</p>
 </div>
 <div class="cols">
 <div class="col">
-<pre ><code class="mypython block" name="Option A" style="font-size:.7em; padding-left:40px; margin-bottom:45px;">with open(file) as fh:
+<pre ><code class="python block" name="Option A" style="font-size:.7em; padding-left:40px; margin-bottom:45px;">with open(file) as fh:
     data = fh.read()
 with open(file, 'w') as fh:
     fh.write(data[::-1])</code></pre>
-<pre ><code class="mypython block" name="Option C" style="font-size:.7em; padding-left:40px">with open(file, 'rw') as fh:
+<pre ><code class="python block" name="Option C" style="font-size:.7em; padding-left:40px">with open(file, 'rw') as fh:
     data = fh.read()
     fh.write(data[::-1])</code></pre>
 </div>
 <div class="col">
-<pre ><code class="mypython block" name="Option B" style="font-size:.7em; padding-left:40px; margin-bottom:45px;">with open(file) as fh:
+<pre ><code class="python block" name="Option B" style="font-size:.7em; padding-left:40px; margin-bottom:45px;">with open(file) as fh:
     data = fh.read()
 with open(file, 'a') as fh:
     fh.write(data[::-1])</code></pre>
-<pre ><code class="mypython block" name="Option D" style="font-size:.7em; padding-left:40px">with open(file) as fh:
+<pre ><code class="python block" name="Option D" style="font-size:.7em; padding-left:40px">with open(file) as fh:
     data = fh.read()
 with open(file, 'a') as fh:
     fh.write(data[-2::-1])</code></pre>
 </div>
 </div>
+</section>
+<section>
+<section id="imageshop" class="title-slide slide level1">
+<h1>ImageShop</h1>
+
+</section>
+<section id="introducing-imageshop" class="slide level2">
+<h2>Introducing ImageShop</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>While you have a PS due on Monday, the next project will be due the
+week after afterwards</li>
+<li>Taking a moment today to introduce ImageShop, and the guide will be
+posted by tomorrow</li>
+</ul>
+</div>
+<div class="col">
+<figure>
+<img data-src="../images/project3.png" alt="ImageShop" />
+<figcaption aria-hidden="true">ImageShop</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="starting" class="slide level2">
+<h2>Starting</h2>
+<div class="cols">
+<div class="col">
+<figure>
+<img data-src="../images/StartScreen.png"
+alt="Starting view of ImageShop" />
+<figcaption aria-hidden="true">Starting view of ImageShop</figcaption>
+</figure>
+</div>
+<div class="col">
+<ul>
+<li>ImageShop initially has only two buttons
+<ul>
+<li>“Load” will bring up a file selection box where you can choose what
+image to display
+<ul>
+<li>Internally, this is handled by a function that returns the chosen
+file path</li>
+</ul></li>
+<li>“Flip Vertical” is the example feature button that flips an image
+vertically</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="big-picture" class="slide level2">
+<h2>Big Picture</h2>
+<ul>
+<li>Each milestone in ImageShop boils down to:
+<ul>
+<li>Adding a button to the window to handle a new feature</li>
+<li>Writing a simple callback function that sets the new image to be
+equal to the output of a new function you’ll write</li>
+<li>Writing that function, which will generally return a
+<code class="python">GImage</code> type object</li>
+</ul></li>
+<li>You are always free to write whatever other helper functions you
+might like!</li>
+</ul>
+</section>
+<section id="so-many-files" class="slide level2">
+<h2>So Many Files!</h2>
+<ul>
+<li>ImageShop is the first project to start leveraging multi-file
+layouts:
+<ul>
+<li>Some functions will already be provided in
+<code class="python">GrayscaleImage.py</code> that you can import into
+your main program</li>
+<li>You are encouraged to write the necessary functions for Milestone 4
+in their own file and import them in accordingly</li>
+<li>I’ve <strong><em>seen</em></strong> you all scrolling madly around
+trying to find the code you want. This helps with that!</li>
+</ul></li>
+</ul>
+</section>
+<section id="gbuttons" class="slide level2">
+<h2>GButtons</h2>
+<ul>
+<li>To help facilitate working with buttons, ImageShop introduces a new
+type called <code class="python">GButton</code></li>
+<li>There is nothing magical about these! They are just pre-bundling PGL
+concepts that you already know like labels and mouse click events</li>
+<li>Each <code class="python">GButton</code> gets a label and a callback
+function name that determines what function is called when that button
+is clicked</li>
+<li>ImageShop will come with a pre-defined
+<code class="python">add_button</code> function which will take care of
+adding a new button to the correct part of the screen.
+<ul>
+<li>You’ll just need to provide it a label and function name to callback
+to</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-current-image" class="slide level2">
+<h2>The Current Image</h2>
+<ul>
+<li>ImageShop holds the <code class="python">GImage</code> currently
+displayed on the window in a variable called
+<code class="python">gw.current_image</code></li>
+<li>The variable is specifically added as an attribute to
+<code class="python">gw</code> so that you will have access to it in any
+callback function you write</li>
+<li>This will generally be the input to your various image manipulation
+functions, since most of those functions work with whatever image was
+currently displayed on the screen</li>
+<li>Your callback function should run
+<code class="python">set_image</code> on the output of your manipulation
+function, which will take care of updating the value of
+<code class="python">gw.current_image</code> and displaying the new
+image in the window</li>
+</ul>
+</section>
+<section id="milestone-0" class="slide level2">
+<h2>Milestone 0</h2>
+<ul>
+<li>Milestone 0 has you adding a “Flip Horizontal” button
+<ul>
+<li>Add the button</li>
+<li>Add the action callback function</li>
+<li>Write a function to manipulate the pixels to flip the image
+horizontally</li>
+</ul></li>
+<li>Slightly more complicated than the example function, but not
+much</li>
+</ul>
+</section>
+<section id="milestone-1" class="slide level2">
+<h2>Milestone 1</h2>
+<div class="cols" style="align-items: center">
+<div class="col">
+<ul>
+<li>Here you will add buttons to rotate the image left or right (or CW
+or CCW if you prefer)</li>
+<li>Most of the difficulty comes in keeping track of of rows and columns
+<ul>
+<li>Need to create a new list of lists of the correct dimensions</li>
+<li>Need to copy over the pixels from the original to the needed
+location in the new list</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/d20b6bd27a91cff9d922cc11cecd56a3d67832eb.svg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="milestone-2" class="slide level2">
+<h2>Milestone 2</h2>
+<ul>
+<li>Here you’ll add a button to convert an image to grayscale</li>
+<li>If you understand the other library files that have been given to
+you as part of the project, this milestone should be the simplest!</li>
+<li><strong>Don’t copy. Import!</strong></li>
+</ul>
+</section>
+<section id="milestone-3" class="slide level2">
+<h2>Milestone 3</h2>
+<ul>
+<li>Here you get to enable a green screen effect!</li>
+<li>Unlike other buttons, when this one is clicked, you should use the
+file chooser library to prompt the user to select <em>another</em> image
+<ul>
+<li>This is the image that will be overlaid on whatever image is
+currently shown on the screen</li>
+</ul></li>
+<li>You will want to start with an “empty” pixel array with the same
+dimensions as the background</li>
+<li>This will closely mimic our in-class example from Friday, where
+depending on how “green” a pixel is, you will choose between different
+choices
+<ul>
+<li>If green enough, you will copy the pixel from the
+<em>background</em> image to your new pixel array</li>
+<li>If not green enough, you will copy the pixel from the
+<em>foreground</em> image to your new pixel array</li>
+</ul></li>
+</ul>
+</section>
+<section id="milestone-4" class="slide level2">
+<h2>Milestone 4</h2>
+<ul>
+<li>Here you’ll implement one algorithm for increasing dynamic contrast
+across an image!</li>
+<li>Doing so requires several steps and different functions. It can be
+convenient to place these in their own file and import them into
+<code class="python">ImageShop.py</code> as needed.
+<ul>
+<li>Compute all the pixel luminosities</li>
+<li>Construct a histogram of these luminosity counts
+<ul>
+<li>Your histogram should have 256 elements, one for each possible
+luminosity</li>
+</ul></li>
+<li>Construct a cumulative histogram using your histogram</li>
+<li>Use the cumulative histogram to adjust the luminosity of each pixel
+in the pixel array</li>
+</ul></li>
+<li>You don’t need to display the visual histograms! But they can be a
+great way to check that you are doing the other parts correctly.
+<ul>
+<li>Related to Problem 1 on PS5</li>
+</ul></li>
+</ul>
+</section>
+<section id="extensions" class="slide level2">
+<h2>Extensions</h2>
+<ul>
+<li>Give yourself time for extensions on this project!</li>
+<li>They are <strong>easy</strong>! Just come up with interesting or
+cool graphical effects and add a button for them!</li>
+<li>You’ll look at several this week in your section meetings
+<ul>
+<li>Adding these in your project is encouraged and will be regarded as
+“sub-extensions”, but come up with your own as well!</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="busting-out-the-vinyl" class="title-slide slide level1">
+<h1>Busting out the Vinyl</h1>
+
 </section>
 <section id="its-a-record" class="slide level2">
 <h2>It’s a Record!</h2>
@@ -11194,28 +11428,31 @@ Marley</li>
 <table>
 <thead>
 <tr class="header">
-<th>name</th>
-<th>title</th>
-<th>salary</th>
+<th style="text-align: center;">name</th>
+<th style="text-align: center;">title</th>
+<th style="text-align: center;">salary</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">"Ebenezer Scrooge"</code></td>
-<td><code class="python">"founder"</code></td>
-<td><code class="python">1000</code></td>
+<td
+style="text-align: center;"><code class="python">"Ebenezer Scrooge"</code></td>
+<td
+style="text-align: center;"><code class="python">"founder"</code></td>
+<td style="text-align: center;"><code class="python">1000</code></td>
 </tr>
 <tr class="even">
-<td><code class="python">"Bob Cratchit"</code></td>
-<td><code class="python">"clerk"</code></td>
-<td><code class="python">15</code></td>
+<td
+style="text-align: center;"><code class="python">"Bob Cratchit"</code></td>
+<td style="text-align: center;"><code class="python">"clerk"</code></td>
+<td style="text-align: center;"><code class="python">15</code></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="fragment fade-in" style="width:70%">
 <p><img
-data-src="../images/svg_cache/3505431e17d85b81d84a2cfe3c10454a814f6a66.svg"
+data-src="../images/svg_cache/7ac7dd6babe1668687f97f509f805e12cdc13b6a.svg"
 style="width:100.0%" /></p>
 </div>
 </div>
@@ -11224,7 +11461,7 @@ style="width:100.0%" /></p>
 <h2>Tuple Time</h2>
 <ul>
 <li>In Python, the simplest strategy for representing a record uses the
-built-in type <em>tuple</em>
+built-in type called a <em>tuple</em>
 <ul>
 <li>Comes from terms like <em>quintuple</em> or <em>sextuple</em>, that
 denote fixed-size collections</li>
@@ -11233,12 +11470,13 @@ denote fixed-size collections</li>
 <li>Feel similar to lists, except immutable, and thus used very
 differently
 <ul>
-<li>Think of tuples as records</li>
+<li>Think of tuples as records, recording the state of something at some
+time</li>
 </ul></li>
 <li>Created by enclosing a collection of elements in parentheses
-<code class="inlinecode">employee = ("Bob Cratchit", "clerk", 15)</code></li>
-<li>Stored internally similarly to a list, so each element has a
-corresponding index</li>
+<code class="inlinecode python">employee = ("Bob Cratchit", "clerk", 15)</code></li>
+<li>An ordered collection, so each element has a corresponding
+index</li>
 </ul>
 </section>
 <section id="tuple-usage" class="slide level2">
@@ -11257,7 +11495,10 @@ corresponding index</li>
 <li>Can loop over them directly or via index</li>
 </ul></li>
 <li>A tuple of a single value <strong>needs</strong> a comma at the end
-in order to be a tuple</li>
+in order to be a tuple
+<ul>
+<li>Otherwise just a set of parentheses around a value</li>
+</ul></li>
 </ul>
 </section>
 <section id="tuple-selection" class="slide level2">
@@ -11272,7 +11513,7 @@ Rather, it is the field name that is usually important</li>
 <li><p>If using tuples, you can make programs more readable by using a
 <em>destructuring assignment</em>, which breaks a tuple into named
 components:</p>
-<pre ><code class="mypython">name, title, salary = employee</code></pre></li>
+<pre ><code class="python">name, title, salary = employee</code></pre></li>
 <li><p>While modern versions of Python have such thing as a <em>named
 tuple</em>, we will not look at them here.</p>
 <ul>
@@ -11280,6 +11521,11 @@ tuple</em>, we will not look at them here.</p>
 better represent the objects in question</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="a-tangled-example" class="title-slide slide level1">
+<h1>A Tangled Example</h1>
+
 </section>
 <section id="pointy-tuples" class="slide level2">
 <h2>Pointy Tuples!</h2>
@@ -11292,12 +11538,12 @@ location information in 2d space</p></li>
 class="math inline">\(y\)</span> coordinates in a tuple, it makes that
 information easier to store and pass around your program</p></li>
 <li><p>When you need to use the points, best to destructure:</p>
-<pre ><code class="mypython">x,y = pt</code></pre></li>
+<pre ><code class="python">x,y = pt</code></pre></li>
 </ul>
 </div>
 <div class="col">
 <p><img
-data-src="../images/svg_cache/b6d2879cf3f0a8ab1be682d6b360044d0f79f72a.svg"
+data-src="../images/svg_cache/2cb105a69bb16b13633e8c985f8e4d7eafdf6812.svg"
 style="width:80.0%" /></p>
 </div>
 </div>
@@ -11329,7 +11575,7 @@ to store a host of locations in a list</li>
    viewBox="0 0 202.73213 202.58243"
    version="1.1"
    id="svg472"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
    sodipodi:docname="yarn_pattern.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -11347,9 +11593,9 @@ to store a host of locations in a list</li>
      inkscape:document-units="mm"
      showgrid="false"
      showguides="true"
-     inkscape:zoom="0.76662259"
-     inkscape:cx="710.25822"
-     inkscape:cy="371.10829"
+     inkscape:zoom="1.0841681"
+     inkscape:cx="634.58796"
+     inkscape:cy="440.42987"
      inkscape:window-width="2560"
      inkscape:window-height="1413"
      inkscape:window-x="1080"
@@ -11364,7 +11610,7 @@ to store a host of locations in a list</li>
      id="layer1"
      transform="translate(-20.690923,-25.225078)">
     <rect
-       style="fill:none;stroke:#a6e22e;stroke-width:2.08946;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+       style="fill:none;stroke:#a6e3a1;stroke-width:2.08946;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
        id="rect528"
        width="192.94083"
        height="192.94083"
@@ -11376,208 +11622,208 @@ to store a host of locations in a list</li>
        class="fragment"
        transform="matrix(1.3585539,0,0,1.3585539,-7.4188104,-9.0445491)">
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="path582"
          cx="35.561756"
          cy="28.777637"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle584"
          cx="52.678326"
          cy="28.777637"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle586"
          cx="69.794899"
          cy="28.777637"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle588"
          cx="86.911469"
          cy="28.777637"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle590"
          cx="104.02804"
          cy="28.777637"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle592"
          cx="121.14461"
          cy="28.777637"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle594"
          cx="138.26117"
          cy="28.777637"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle596"
          cx="155.37775"
          cy="28.777637"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle598"
          cx="35.561756"
          cy="170.78874"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle600"
          cx="52.678326"
          cy="170.78874"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle602"
          cx="69.794899"
          cy="170.78874"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle604"
          cx="86.911469"
          cy="170.78874"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle606"
          cx="104.02804"
          cy="170.78874"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle608"
          cx="121.14461"
          cy="170.78874"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle610"
          cx="138.26117"
          cy="170.78874"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle612"
          cx="155.37775"
          cy="170.78874"
          r="2.78356" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle614"
          cx="38.585598"
          cy="-166.36478"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle616"
          cx="55.702168"
          cy="-166.36478"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle618"
          cx="72.818741"
          cy="-166.36478"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle620"
          cx="89.93531"
          cy="-166.36478"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle622"
          cx="107.05188"
          cy="-166.36478"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle624"
          cx="124.16845"
          cy="-166.36478"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle626"
          cx="141.285"
          cy="-166.36478"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle628"
          cx="158.40158"
          cy="-166.36478"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle648"
          cx="38.585598"
          cy="-24.243483"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle650"
          cx="55.702168"
          cy="-24.243483"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle652"
          cx="72.818741"
          cy="-24.243483"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle654"
          cx="89.93531"
          cy="-24.243483"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle656"
          cx="107.05188"
          cy="-24.243483"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle658"
          cx="124.16845"
          cy="-24.243483"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle660"
          cx="141.285"
          cy="-24.243483"
          r="2.78356"
          transform="rotate(90)" />
       <circle
-         style="fill:#66d9ef;stroke:#66d9ef;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
          id="circle662"
          cx="158.40158"
          cy="-24.243483"
@@ -11585,23 +11831,23 @@ to store a host of locations in a list</li>
          transform="rotate(90)" />
     </g>
     <path
-       style="fill:none;stroke:#ae81ff;stroke-width:3.04044;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
+       style="fill:none;stroke:#cba6f7;stroke-width:3.04044;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
        d="M 40.948219,30.503681 219.15776,90.146287"
        id="string1"
        class="fragment" />
     <path
-       style="fill:none;stroke:#ae81ff;stroke-width:3.44801;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
+       style="fill:none;stroke:#cba6f7;stroke-width:3.44801;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
        d="M 218.59153,90.14344 110.54209,223.42182"
        id="string2"
        class="fragment" />
     <path
-       style="fill:none;stroke:#ae81ff;stroke-width:3.44801;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
+       style="fill:none;stroke:#cba6f7;stroke-width:3.44801;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
        d="M 25.680942,66.736916 110.54209,223.42182"
        id="string3"
        sodipodi:nodetypes="cc"
        class="fragment" />
     <path
-       style="fill:none;stroke:#ae81ff;stroke-width:3.44801;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
+       style="fill:none;stroke:#cba6f7;stroke-width:3.44801;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
        d="M 25.72879,66.900994 218.72134,43.50405 156.71951,222.89453 25.302927,113.15522 180.4125,30.271749 203.74032,223.33504 25.63295,159.56925 133.7845,29.893361 218.72093,183.23207 25.383458,206.50005 87.156944,30.071772 218.70326,136.63625 64.147836,223.31055 40.834407,30.605897"
        id="string_rest"
        class="fragment" />
@@ -11618,7 +11864,7 @@ style="width:100.0%" /></p>
 </section>
 <section id="in-code" class="slide level2">
 <h2>In Code</h2>
-<pre ><code class="mypython" style="max-height:800px; font-size:.8em; width:100%; margin: auto;">from pgl import GWindow, GLine, GRect
+<pre ><code class="python" style="max-height:800px; font-size:.8em; width:100%; margin: auto;">from pgl import GWindow, GLine, GRect
 
 PEG_SEP = 3
 PEG_ACROSS = 300
@@ -11661,6 +11907,11 @@ def draw_pattern(list_pts, color='black'):
 if __name__ == '__main__':
     pegs = place_pegs()
     draw_pattern(pegs, 'green')</code></pre>
+</section></section>
+<section>
+<section id="special-tuple-functions" class="title-slide slide level1">
+<h1>Special Tuple Functions</h1>
+
 </section>
 <section id="returning-tuples" class="slide level2">
 <h2>Returning Tuples</h2>
@@ -11685,14 +11936,14 @@ particularly useful
 <li><p>We have multiple ways to iterate through a string or list:</p>
 <ul>
 <li><p>By element:</p>
-<pre ><code class="mypython">for ch in string:
+<pre ><code class="python">for ch in string:
     |||body of loop using ch|||</code></pre></li>
 <li><p>By index:</p>
-<pre ><code class="mypython">for i in range(len(string)):
+<pre ><code class="python">for i in range(len(string)):
     |||body of loop using i|||</code></pre></li>
 </ul></li>
 <li><p>Using <code class="python">enumerate</code> lets us get both!</p>
-<pre ><code class="mypython">for i, ch in enumerate(string):
+<pre ><code class="python">for i, ch in enumerate(string):
     |||body of loop using both ch and i|||</code></pre></li>
 </ul>
 </section>
@@ -11710,7 +11961,7 @@ tuples of pairs of elements</p></li>
 <code class="python">(3, "three")</code></p></li>
 <li><p>Can unpack or destructure as part of a
 <code class="python">for</code> loop:</p>
-<pre ><code class="mypython">for x,y in zip([1,2,3],[4,5,6]):
+<pre ><code class="python">for x,y in zip([1,2,3],[4,5,6]):
     |||body of loop using paired x and y|||</code></pre></li>
 </ul>
 <!--
@@ -11806,7 +12057,7 @@ lab/.style={font=\tt\small, anchor=south west},
 - Note that none of these assigned attributes affect the `Employee` class in any way
 
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -11819,6 +12070,7 @@ lab/.style={font=\tt\small, anchor=south west},
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
@@ -11941,7 +12193,7 @@ lab/.style={font=\tt\small, anchor=south west},
 		 },
 
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
               console.log(mypythondef);
               return mypythondef(hljs); } )
           },
@@ -11955,6 +12207,7 @@ lab/.style={font=\tt\small, anchor=south west},
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,

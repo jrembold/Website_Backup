@@ -9,9 +9,15 @@ DELTA = 332
 GWIDTH = PEG_ACROSS * PEG_SEP
 GHEIGHT = PEG_DOWN * PEG_SEP
 
+# Monokai Colors
 COL_BG = "#272822"
 COL_BD = "#a6e22e"
 COL_FG = "#ae81ff"
+
+# Catppuccin Colors
+COL_BG = "#1e1e2e"
+COL_BD = "#a6e3a1"
+COL_FG = "#cba6f7"
 
 def place_pegs():
     """ Returns a list of points, where the points are tuples. """
