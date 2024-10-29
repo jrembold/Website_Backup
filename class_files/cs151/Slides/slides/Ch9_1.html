@@ -95,24 +95,52 @@ accomplish this?</p>
 </div>
 <div class="cols">
 <div class="col">
-<pre ><code class="python block" name="Option A" style="font-size:.7em; padding-left:40px; margin-bottom:45px;">with open(file) as fh:
+<pre ><code class="python block" name="Option A" style="font-size:.7em; padding-left:40px; margin-bottom:45px;">with open('OG.txt') as fh:
     data = fh.read()
-with open(file, 'w') as fh:
+with open('Final.txt', 'w') as fh:
     fh.write(data[::-1])</code></pre>
-<pre ><code class="python block" name="Option C" style="font-size:.7em; padding-left:40px">with open(file, 'rw') as fh:
+<pre ><code class="python block" name="Option C" style="font-size:.7em; padding-left:40px">with open('OG.txt', 'rw') as fh:
     data = fh.read()
     fh.write(data[::-1])</code></pre>
 </div>
 <div class="col">
-<pre ><code class="python block" name="Option B" style="font-size:.7em; padding-left:40px; margin-bottom:45px;">with open(file) as fh:
+<pre ><code class="python block" name="Option B" style="font-size:.7em; padding-left:40px; margin-bottom:45px;">with open('OG.txt') as fh:
     data = fh.read()
-with open(file, 'a') as fh:
+with open('Final.txt', 'a') as fh:
     fh.write(data[::-1])</code></pre>
-<pre ><code class="python block" name="Option D" style="font-size:.7em; padding-left:40px">with open(file) as fh:
+<pre ><code class="python block" name="Option D" style="font-size:.7em; padding-left:40px">with open('OG.txt') as fh:
     data = fh.read()
-with open(file, 'a') as fh:
+with open('Final.txt', 'a') as fh:
     fh.write(data[-2::-1])</code></pre>
 </div>
+</div>
+</section>
+<section id="choosing-wisely" class="slide level2">
+<h2>Choosing Wisely</h2>
+<div style="font-size:.9em">
+<ul>
+<li><p>The Python package used to implement
+<code class="python">pgl.py</code> also supports a mechanism to choose
+files interactively, made available through the
+<code class="python">filechooser.py</code> library module.</p></li>
+<li><p><code class="python">filechooser.py</code> exports two
+functions:</p>
+<ul>
+<li><code class="python">choose_input_file</code> for selecting a
+file</li>
+<li><code class="python">choose_output_file</code> for selecting a
+folder and filename to save a file to</li>
+</ul></li>
+<li><p>Both open up a file dialog that lets you select/choose a file</p>
+<ul>
+<li>Clicking Open or Save returns the full pathname of the file</li>
+<li>Clicking Cancel returns an empty string</li>
+</ul></li>
+<li><p>Using it thus looks something like:</p>
+<pre ><code class="python">filename = choose_input_file()
+with open(|||filename|||) as |||f|||:
+    |||Code to read file|||</code></pre></li>
+</ul>
 </div>
 </section>
 <section>
