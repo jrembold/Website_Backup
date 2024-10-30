@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-11-01">
+  <meta name="dcterms.date" content="2024-10-30">
   <title>Construction Zone</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -27,8 +27,8 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
@@ -37,27 +37,22 @@
 <section id="title-slide">
   <h1 class="title">Construction Zone</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">November 1, 2023</p>
+  <p class="date">October 30, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
 <li>ImageShop due on Monday!</li>
-<li>Graphics Contests should have been submitted, but I’ll still take
-them before the end of today if you forgot.</li>
-<li>I’m still working on PS4 feedback</li>
-<li>Tomorrow: <strong>I’m</strong> talking at TechBytes!
-<ul>
-<li>Discussing the power of databases for professional and personal
-projects</li>
-</ul></li>
+<li>Graphics Contest is still live if you want to be working on
+that</li>
+<li>I’m still working on PS5 feedback</li>
 <li>Exam 2 is a week from Friday
 <ul>
 <li>I’ll be working to get study materials out this weekend</li>
 </ul></li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="https://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 </section>
 <section id="review-question" class="slide level2"
@@ -71,15 +66,15 @@ Question</h2>
 right?</p>
 <div class="poll">
 <ol>
-<li><code class="no-highlight">(1, 'a', 'b')</code></li>
-<li><code class="no-highlight">(1, 'a')</code></li>
+<li><code class="python">(1, 'a', 'b')</code></li>
+<li><code class="python">(1, 'a')</code></li>
 <li>Error: can’t add strings and tuples</li>
 <li>Error: index out of range</li>
 </ol>
 </div>
 </div>
 <div class="col">
-<pre ><code class="mypython">A = (1, 3, 5)
+<pre ><code class="python">A = (1, 3, 5)
 B = (2*A, ('a', ) )
 C = B + ('b', 'c', 'd')
 D = tuple()
@@ -88,6 +83,452 @@ for v in C[:3]:
 print(D)</code></pre>
 </div>
 </div>
+</section>
+<section id="tuple-selection" class="slide level2">
+<h2>Tuple Selection</h2>
+<ul>
+<li><p>You can select or slice elements from a tuple just like you can
+with lists</p>
+<ul>
+<li>Unfortunately, records are not usually ordered in a particular way.
+Rather, it is the field name that is usually important</li>
+</ul></li>
+<li><p>If using tuples, you can make programs more readable by using a
+<em>destructuring assignment</em>, which breaks a tuple into named
+components:</p>
+<pre ><code class="python">name, title, salary = employee</code></pre></li>
+<li><p>While modern versions of Python have such thing as a <em>named
+tuple</em>, we will not look at them here.</p>
+<ul>
+<li>The more general strategy is to define a new data type (class) to
+better represent the objects in question</li>
+</ul></li>
+</ul>
+</section>
+<section>
+<section id="a-tangled-example" class="title-slide slide level1">
+<h1>A Tangled Example</h1>
+
+</section>
+<section id="pointy-tuples" class="slide level2">
+<h2>Pointy Tuples!</h2>
+<div class="cols" style="align-items:center">
+<div class="col">
+<ul>
+<li><p>One of the most simple examples of tuple usage would be storing
+location information in 2d space</p></li>
+<li><p>By storing both <span class="math inline">\(x\)</span> and <span
+class="math inline">\(y\)</span> coordinates in a tuple, it makes that
+information easier to store and pass around your program</p></li>
+<li><p>When you need to use the points, best to destructure:</p>
+<pre ><code class="python">x,y = pt</code></pre></li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/2cb105a69bb16b13633e8c985f8e4d7eafdf6812.svg"
+style="width:80.0%" /></p>
+</div>
+</div>
+</section>
+<section id="yarn-tuples" class="slide level2">
+<h2>Yarn Tuples</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Points often show up in graphical applications, where you may want
+to store a host of locations in a list</li>
+<li>A pretty example of points involves making some yarn art, where we:
+<ul>
+<li>Place a set of “pegs” at regular intervals around a border</li>
+<li>Tie a piece of “yarn” around one peg</li>
+<li>Loop the yarn around the peg a distance
+<code class="python">DELTA</code> ahead</li>
+<li>Continue until we return to where we started</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="202.73213mm"
+   height="202.58243mm"
+   viewBox="0 0 202.73213 202.58243"
+   version="1.1"
+   id="svg472"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   sodipodi:docname="yarn_pattern.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview474"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     showguides="true"
+     inkscape:zoom="1.0841681"
+     inkscape:cx="634.58796"
+     inkscape:cy="440.42987"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs469" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-20.690923,-25.225078)">
+    <rect
+       style="fill:none;stroke:#a6e3a1;stroke-width:2.08946;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+       id="rect528"
+       width="192.94083"
+       height="192.94083"
+       x="25.495306"
+       y="30.410948"
+       ry="1.5094541" />
+    <g
+       id="pegs"
+       class="fragment"
+       transform="matrix(1.3585539,0,0,1.3585539,-7.4188104,-9.0445491)">
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="path582"
+         cx="35.561756"
+         cy="28.777637"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle584"
+         cx="52.678326"
+         cy="28.777637"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle586"
+         cx="69.794899"
+         cy="28.777637"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle588"
+         cx="86.911469"
+         cy="28.777637"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle590"
+         cx="104.02804"
+         cy="28.777637"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle592"
+         cx="121.14461"
+         cy="28.777637"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle594"
+         cx="138.26117"
+         cy="28.777637"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle596"
+         cx="155.37775"
+         cy="28.777637"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle598"
+         cx="35.561756"
+         cy="170.78874"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle600"
+         cx="52.678326"
+         cy="170.78874"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle602"
+         cx="69.794899"
+         cy="170.78874"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle604"
+         cx="86.911469"
+         cy="170.78874"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle606"
+         cx="104.02804"
+         cy="170.78874"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle608"
+         cx="121.14461"
+         cy="170.78874"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle610"
+         cx="138.26117"
+         cy="170.78874"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle612"
+         cx="155.37775"
+         cy="170.78874"
+         r="2.78356" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle614"
+         cx="38.585598"
+         cy="-166.36478"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle616"
+         cx="55.702168"
+         cy="-166.36478"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle618"
+         cx="72.818741"
+         cy="-166.36478"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle620"
+         cx="89.93531"
+         cy="-166.36478"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle622"
+         cx="107.05188"
+         cy="-166.36478"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle624"
+         cx="124.16845"
+         cy="-166.36478"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle626"
+         cx="141.285"
+         cy="-166.36478"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle628"
+         cx="158.40158"
+         cy="-166.36478"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle648"
+         cx="38.585598"
+         cy="-24.243483"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle650"
+         cx="55.702168"
+         cy="-24.243483"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle652"
+         cx="72.818741"
+         cy="-24.243483"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle654"
+         cx="89.93531"
+         cy="-24.243483"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle656"
+         cx="107.05188"
+         cy="-24.243483"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle658"
+         cx="124.16845"
+         cy="-24.243483"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle660"
+         cx="141.285"
+         cy="-24.243483"
+         r="2.78356"
+         transform="rotate(90)" />
+      <circle
+         style="fill:#89b4fa;stroke:#89b4fa;stroke-width:1.538;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.998262"
+         id="circle662"
+         cx="158.40158"
+         cy="-24.243483"
+         r="2.78356"
+         transform="rotate(90)" />
+    </g>
+    <path
+       style="fill:none;stroke:#cba6f7;stroke-width:3.04044;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
+       d="M 40.948219,30.503681 219.15776,90.146287"
+       id="string1"
+       class="fragment" />
+    <path
+       style="fill:none;stroke:#cba6f7;stroke-width:3.44801;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
+       d="M 218.59153,90.14344 110.54209,223.42182"
+       id="string2"
+       class="fragment" />
+    <path
+       style="fill:none;stroke:#cba6f7;stroke-width:3.44801;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
+       d="M 25.680942,66.736916 110.54209,223.42182"
+       id="string3"
+       sodipodi:nodetypes="cc"
+       class="fragment" />
+    <path
+       style="fill:none;stroke:#cba6f7;stroke-width:3.44801;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
+       d="M 25.72879,66.900994 218.72134,43.50405 156.71951,222.89453 25.302927,113.15522 180.4125,30.271749 203.74032,223.33504 25.63295,159.56925 133.7845,29.893361 218.72093,183.23207 25.383458,206.50005 87.156944,30.071772 218.70326,136.63625 64.147836,223.31055 40.834407,30.605897"
+       id="string_rest"
+       class="fragment" />
+  </g>
+</svg>
+</p>
+</div>
+</div>
+</section>
+<section id="expanding" class="slide level2">
+<h2>Expanding…</h2>
+<p><img data-src="../images/python/yarn_pattern.png"
+style="width:100.0%" /></p>
+</section>
+<section id="in-code" class="slide level2">
+<h2>In Code</h2>
+<pre ><code class="python" style="max-height:800px; font-size:.8em; width:100%; margin: auto;">from pgl import GWindow, GLine, GRect
+
+PEG_SEP = 3
+PEG_ACROSS = 300
+PEG_DOWN = 150
+DELTA = 332
+
+GWIDTH = PEG_ACROSS * PEG_SEP
+GHEIGHT = PEG_DOWN * PEG_SEP
+
+def place_pegs():
+    """ Returns a list of points, where the points are tuples. """
+    list_pts = []
+    for i in range(PEG_ACROSS):
+        list_pts.append((i * PEG_SEP, 0))
+    for i in range(PEG_DOWN):
+        list_pts.append((GWIDTH, i * PEG_SEP))
+    for i in range(PEG_ACROSS):
+        list_pts.append((GWIDTH - i * PEG_SEP, GHEIGHT))
+    for i in range(PEG_DOWN):
+        list_pts.append((0, GHEIGHT - i * PEG_SEP))
+    return list_pts
+
+def draw_pattern(list_pts, color='black'):
+    """ Creates a window and draws in the necessary yarn. """
+    gw = GWindow(GWIDTH, GHEIGHT)
+    current_i = 0
+    finished = False
+    while not finished:
+        next_i = (current_i + DELTA) % len(list_pts)
+        x1, y1 = list_pts[current_i]
+        x2, y2 = list_pts[next_i]
+        line = GLine(x1, y1, x2, y2)
+        line.set_line_width(2)
+        line.set_color(color)
+        gw.add(line)
+        current_i = next_i
+        if current_i == 0:
+            finished = True
+
+if __name__ == '__main__':
+    pegs = place_pegs()
+    draw_pattern(pegs, 'green')</code></pre>
+</section></section>
+<section>
+<section id="special-tuple-functions" class="title-slide slide level1">
+<h1>Special Tuple Functions</h1>
+
+</section>
+<section id="returning-tuples" class="slide level2">
+<h2>Returning Tuples</h2>
+<ul>
+<li>Tuples give us a convenient way to return multiple objects from a
+function
+<ul>
+<li><code class="python">return x, y</code> is the same as
+<code class="python">return (x,y)</code></li>
+</ul></li>
+<li>Several Python built-in functions return tuples, of which a few are
+particularly useful
+<ul>
+<li><code class="python">enumerate</code></li>
+<li><code class="python">zip</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="enumerating" class="slide level2">
+<h2>Enumerating</h2>
+<ul>
+<li><p>We have multiple ways to iterate through a string or list:</p>
+<ul>
+<li><p>By element:</p>
+<pre ><code class="python">for ch in string:
+    |||body of loop using ch|||</code></pre></li>
+<li><p>By index:</p>
+<pre ><code class="python">for i in range(len(string)):
+    |||body of loop using i|||</code></pre></li>
+</ul></li>
+<li><p>Using <code class="python">enumerate</code> lets us get both!</p>
+<pre ><code class="python">for i, ch in enumerate(string):
+    |||body of loop using both ch and i|||</code></pre></li>
+</ul>
 </section>
 <section id="zipping" class="slide level2">
 <h2>Zipping</h2>
@@ -103,9 +544,14 @@ tuples of pairs of elements</p></li>
 <code class="python">(3, "three")</code></p></li>
 <li><p>Can unpack or destructure as part of a
 <code class="python">for</code> loop:</p>
-<pre ><code class="mypython">for x,y in zip([1,2,3],[4,5,6]):
+<pre ><code class="python">for x,y in zip([1,2,3],[4,5,6]):
     |||body of loop using paired x and y|||</code></pre></li>
 </ul>
+</section></section>
+<section>
+<section id="crafting-objects" class="title-slide slide level1">
+<h1>Crafting Objects</h1>
+
 </section>
 <section id="classes-vs-objects" class="slide level2">
 <h2>Classes vs Objects</h2>
@@ -136,20 +582,20 @@ different rectangles, each of which was an instance of the
 <figure>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="398.5264mm"
    height="212.04616mm"
    viewBox="0 0 398.5264 212.04616"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
-   sodipodi:docname="Interface2.svg">
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   sodipodi:docname="Interface2.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -160,17 +606,20 @@ different rectangles, each of which was an instance of the
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="677.83757"
-     inkscape:cy="294.39057"
+     inkscape:cx="677.85714"
+     inkscape:cy="293.57143"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
-     inkscape:window-width="2528"
-     inkscape:window-height="1381"
-     inkscape:window-x="1096"
-     inkscape:window-y="43"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -189,7 +638,7 @@ different rectangles, each of which was an instance of the
      id="layer1"
      transform="translate(-234.32974,-30.675317)">
     <path
-       style="fill:#a6e22e;stroke-width:1"
+       style="fill:#a6e3a1;stroke-width:1"
        d="m 253.12868,190.3601 c 0.0668,-0.18315 1.59027,-4.8276 3.38546,-10.32101 l 3.264,-9.98802 h 14.59985 14.59986 l -3.3598,10.2526 -3.35979,10.25261 -14.62553,0.0684 c -11.66404,0.0545 -14.60093,10e-4 -14.50405,-0.26458 z m -11.96938,-4.00225 -6.74688,-2.75494 -0.0705,-8.56185 c -0.0447,-5.43254 0.0349,-9.07078 0.21789,-9.95426 1.03873,-5.01482 5.22072,-8.94363 11.08596,-10.41482 3.01593,-0.75648 8.22708,-0.60549 10.85938,0.31466 5.29901,1.85232 8.90902,5.67884 9.93819,10.53423 0.20425,0.96364 0.37344,1.84137 0.37597,1.95051 0.003,0.10914 -1.95624,0.19844 -4.35281,0.19844 h -4.35741 l -2.16538,6.68073 c -1.19096,3.6744 -2.18064,6.70429 -2.19929,6.73308 -0.0187,0.0288 -2.11379,-0.74965 -4.65586,-1.72987 l -4.62195,-1.78224 -0.13229,-4.62012 c -0.0728,-2.54107 -0.22862,-4.76895 -0.34635,-4.95085 -0.28612,-0.44209 -1.36591,-0.42114 -1.7435,0.0338 -0.21055,0.25369 -0.28075,1.99492 -0.23084,5.72538 l 0.0717,5.36082 4.23333,1.63657 c 2.32834,0.90012 4.5076,1.78411 4.84281,1.96443 0.92302,0.49651 1.63738,1.86647 1.6385,3.14223 7.9e-4,0.91218 -0.16909,1.31395 -0.88671,2.09701 -0.79936,0.87225 -1.04291,0.97777 -2.4474,1.06031 -1.46561,0.0861 -1.96671,-0.0745 -8.30657,-2.66328 z m 6.64227,-34.71716 c -3.16236,-0.8504 -5.54152,-2.79838 -6.86441,-5.62036 -0.61572,-1.31345 -0.70367,-1.833 -0.70205,-4.14739 0.002,-2.39472 0.075,-2.79061 0.77256,-4.17132 0.96061,-1.90135 3.11626,-3.96976 5.11187,-4.90497 1.33571,-0.62596 1.84598,-0.71317 4.16788,-0.71231 2.15546,8e-4 2.9295,0.11529 4.17634,0.61775 2.14461,0.86424 4.39954,3.01538 5.37487,5.12749 0.6765,1.46496 0.76754,1.96027 0.76754,4.17566 0,2.16721 -0.0957,2.71405 -0.69463,3.96875 -1.38988,2.91169 -3.7599,4.83914 -6.98236,5.67848 -1.90379,0.49588 -3.25134,0.49278 -5.12761,-0.0118 z"
        id="path847"
        sodipodi:nodetypes="sscccccssccssssscscsssccssscsssssscsscssssssssss" />
@@ -219,34 +668,35 @@ different rectangles, each of which was an instance of the
     </g>
     <g
        id="g909"
-       transform="translate(-22.200467)">
+       transform="translate(-22.200467)"
+       style="fill:#f38ba8">
       <path
-         style="fill:#f92672;stroke-width:1"
+         style="fill:#f38ba8;stroke-width:1"
          d="m 430.47599,207.21648 v -2.61795 l 7.63035,0.0454 7.63035,0.0454 0.0482,2.57252 0.0482,2.57251 h -7.67861 -7.67861 z m 17.47974,0.0454 0.0482,-2.57252 7.63035,-0.0454 7.63034,-0.0454 v 2.61795 2.61795 h -7.6786 -7.67861 z m -18.52618,-6.49669 v -2.44172 h 3.74976 3.74977 v 2.44172 2.4417 h -3.74977 -3.74976 z m 9.59243,0 v -2.44172 h 7.67395 7.67395 v 2.44172 2.4417 h -7.67395 -7.67395 z m 17.4408,0 v -2.44172 h 3.92417 3.92418 v 2.44172 2.4417 h -3.92418 -3.92417 z m -25.98679,-6.62568 v -2.79235 h 7.67838 7.67838 l -0.0481,2.74692 -0.048,2.74692 -7.63035,0.0454 -7.63034,0.0454 z m 17.55707,2.67242 c -0.0639,-0.0639 -0.11628,-1.31968 -0.11628,-2.79052 v -2.67425 h 7.67395 7.67396 v 2.79052 2.79053 h -7.55768 c -4.15672,0 -7.61,-0.0523 -7.67395,-0.11628 z m -18.60351,-9.29826 v -2.44518 h 3.75469 3.75469 l -0.0485,2.39811 -0.0485,2.39811 -3.70616,0.0471 -3.70617,0.0471 z m 9.71053,2.3238 c -0.0649,-0.0649 -0.1181,-1.16455 -0.1181,-2.44354 v -2.32544 h 7.67887 7.67887 l -0.0485,2.39811 -0.0485,2.39811 -7.51225,0.0454 c -4.13173,0.025 -7.56539,-0.008 -7.63034,-0.0727 z m 17.43897,-0.002 c -0.0639,-0.0639 -0.11627,-1.16272 -0.11627,-2.44171 v -2.32543 h 3.92417 3.92418 v 2.4417 2.44172 h -3.80791 c -2.09434,0 -3.86022,-0.0523 -3.92417,-0.11628 z"
          id="path891" />
       <path
-         style="fill:#f92672;stroke-width:1"
+         style="fill:#f38ba8;stroke-width:1"
          d="m 430.29526,180.62677 v -2.61795 l 7.63035,0.0454 7.63035,0.0454 0.0482,2.57252 0.0482,2.57251 h -7.67861 -7.67861 z m 17.47974,0.0454 0.0482,-2.57252 7.63035,-0.0454 7.63034,-0.0454 v 2.61795 2.61795 h -7.6786 -7.67861 z m -18.52618,-6.49669 v -2.44172 h 3.74976 3.74977 v 2.44172 2.4417 h -3.74977 -3.74976 z m 9.59243,0 v -2.44172 h 7.67395 7.67395 v 2.44172 2.4417 h -7.67395 -7.67395 z m 17.4408,0 v -2.44172 h 3.92417 3.92418 v 2.44172 2.4417 h -3.92418 -3.92417 z m -25.98679,-6.62568 v -2.79235 h 7.67838 7.67838 l -0.0481,2.74692 -0.048,2.74692 -7.63035,0.0454 -7.63034,0.0454 z m 17.55707,2.67242 c -0.0639,-0.0639 -0.11628,-1.31968 -0.11628,-2.79052 v -2.67425 h 7.67395 7.67396 v 2.79052 2.79053 h -7.55768 c -4.15672,0 -7.61,-0.0523 -7.67395,-0.11628 z m -18.60351,-9.29826 v -2.44518 h 3.75469 3.75469 l -0.0485,2.39811 -0.0485,2.39811 -3.70616,0.0471 -3.70617,0.0471 z m 9.71053,2.3238 c -0.0649,-0.0649 -0.1181,-1.16455 -0.1181,-2.44354 v -2.32544 h 7.67887 7.67887 l -0.0485,2.39811 -0.0485,2.39811 -7.51225,0.0454 c -4.13173,0.025 -7.56539,-0.008 -7.63034,-0.0727 z m 17.43897,-0.002 c -0.0639,-0.0639 -0.11627,-1.16272 -0.11627,-2.44171 v -2.32543 h 3.92417 3.92418 v 2.4417 2.44172 h -3.80791 c -2.09434,0 -3.86022,-0.0523 -3.92417,-0.11628 z"
          id="path893" />
       <path
-         style="fill:#f92672;stroke-width:1"
+         style="fill:#f38ba8;stroke-width:1"
          d="m 430.29526,154.16842 v -2.61795 l 7.63035,0.0454 7.63035,0.0454 0.0482,2.57252 0.0482,2.57251 h -7.67861 -7.67861 z m 17.47974,0.0454 0.0482,-2.57252 7.63035,-0.0454 7.63034,-0.0454 v 2.61795 2.61795 h -7.6786 -7.67861 z m -18.52618,-6.49669 v -2.44172 h 3.74976 3.74977 v 2.44172 2.4417 h -3.74977 -3.74976 z m 9.59243,0 v -2.44172 h 7.67395 7.67395 v 2.44172 2.4417 h -7.67395 -7.67395 z m 17.4408,0 v -2.44172 h 3.92417 3.92418 v 2.44172 2.4417 h -3.92418 -3.92417 z m -25.98679,-6.62568 v -2.79235 h 7.67838 7.67838 l -0.0481,2.74692 -0.048,2.74692 -7.63035,0.0454 -7.63034,0.0454 z m 17.55707,2.67242 c -0.0639,-0.0639 -0.11628,-1.31968 -0.11628,-2.79052 v -2.67425 h 7.67395 7.67396 v 2.79052 2.79053 h -7.55768 c -4.15672,0 -7.61,-0.0523 -7.67395,-0.11628 z m -18.60351,-9.29826 v -2.44518 h 3.75469 3.75469 l -0.0485,2.39811 -0.0485,2.39811 -3.70616,0.0471 -3.70617,0.0471 z m 9.71053,2.3238 c -0.0649,-0.0649 -0.1181,-1.16455 -0.1181,-2.44354 v -2.32544 h 7.67887 7.67887 l -0.0485,2.39811 -0.0485,2.39811 -7.51225,0.0454 c -4.13173,0.025 -7.56539,-0.008 -7.63034,-0.0727 z m 17.43897,-0.002 c -0.0639,-0.0639 -0.11627,-1.16272 -0.11627,-2.44171 v -2.32543 h 3.92417 3.92418 v 2.4417 2.44172 h -3.80791 c -2.09434,0 -3.86022,-0.0523 -3.92417,-0.11628 z"
          id="path895" />
       <path
-         style="fill:#f92672;stroke-width:1"
+         style="fill:#f38ba8;stroke-width:1"
          d="m 430.29526,118.71418 v -2.61795 l 7.63035,0.0454 7.63035,0.0454 0.0482,2.57252 0.0482,2.57251 h -7.67861 -7.67861 z m 17.47974,0.0454 0.0482,-2.57252 7.63035,-0.0454 7.63034,-0.0454 v 2.61795 2.61795 h -7.6786 -7.67861 z m -18.52618,-6.49669 v -2.44172 h 3.74976 3.74977 v 2.44172 2.4417 h -3.74977 -3.74976 z m 9.59243,0 v -2.44172 h 7.67395 7.67395 v 2.44172 2.4417 h -7.67395 -7.67395 z m 17.4408,0 v -2.44172 h 3.92417 3.92418 v 2.44172 2.4417 h -3.92418 -3.92417 z m -25.98679,-6.62568 v -2.79235 h 7.67838 7.67838 l -0.0481,2.74692 -0.048,2.74692 -7.63035,0.0454 -7.63034,0.0454 z m 17.55707,2.67242 c -0.0639,-0.0639 -0.11628,-1.31968 -0.11628,-2.79052 v -2.67425 h 7.67395 7.67396 v 2.79052 2.79053 h -7.55768 c -4.15672,0 -7.61,-0.0523 -7.67395,-0.11628 z m -18.60351,-9.298257 v -2.44518 h 3.75469 3.75469 l -0.0485,2.39811 -0.0485,2.398107 -3.70616,0.0471 -3.70617,0.0471 z m 9.71053,2.323797 c -0.0649,-0.0649 -0.1181,-1.16455 -0.1181,-2.443537 v -2.32544 h 7.67887 7.67887 l -0.0485,2.39811 -0.0485,2.398107 -7.51225,0.0454 c -4.13173,0.025 -7.56539,-0.008 -7.63034,-0.0727 z m 17.43897,-0.002 c -0.0639,-0.0639 -0.11627,-1.16272 -0.11627,-2.441707 v -2.32543 h 3.92417 3.92418 v 2.4417 2.441717 h -3.80791 c -2.09434,0 -3.86022,-0.0523 -3.92417,-0.11628 z"
          id="path897" />
       <path
-         style="fill:#f92672;stroke-width:1"
+         style="fill:#f38ba8;stroke-width:1"
          d="m 430.29526,92.255836 v -2.61795 l 7.63035,0.0454 7.63035,0.0454 0.0482,2.57252 0.0482,2.572507 h -7.67861 -7.67861 z m 17.47974,0.0454 0.0482,-2.57252 7.63035,-0.0454 7.63034,-0.0454 v 2.61795 2.617947 h -7.6786 -7.67861 z m -18.52618,-6.496687 v -2.441717 h 3.74976 3.74977 v 2.441717 2.4417 h -3.74977 -3.74976 z m 9.59243,0 v -2.441717 h 7.67395 7.67395 v 2.441717 2.4417 h -7.67395 -7.67395 z m 17.4408,0 v -2.441717 h 3.92417 3.92418 v 2.441717 2.4417 h -3.92418 -3.92417 z m -25.98679,-6.625677 v -2.792347 h 7.67838 7.67838 l -0.0481,2.746917 -0.048,2.74692 -7.63035,0.0454 -7.63034,0.0454 z m 17.55707,2.67242 c -0.0639,-0.0639 -0.11628,-1.31968 -0.11628,-2.79052 v -2.674247 h 7.67395 7.67396 v 2.790517 2.79053 h -7.55768 c -4.15672,0 -7.61,-0.0523 -7.67395,-0.11628 z m -18.60351,-9.298254 v -2.44518 h 3.75469 3.75469 l -0.0485,2.39811 -0.0485,2.398107 -3.70616,0.0471 -3.70617,0.0471 z m 9.71053,2.323797 c -0.0649,-0.0649 -0.1181,-1.16455 -0.1181,-2.443537 v -2.32544 h 7.67887 7.67887 l -0.0485,2.39811 -0.0485,2.398107 -7.51225,0.0454 c -4.13173,0.025 -7.56539,-0.008 -7.63034,-0.0727 z m 17.43897,-0.002 c -0.0639,-0.0639 -0.11627,-1.16272 -0.11627,-2.441707 v -2.32543 h 3.92417 3.92418 v 2.4417 2.441717 h -3.80791 c -2.09434,0 -3.86022,-0.0523 -3.92417,-0.11628 z"
          id="path899" />
       <path
-         style="fill:#f92672;stroke-width:1"
+         style="fill:#f38ba8;stroke-width:1"
          d="m 430.29526,65.797501 v -2.61795 l 7.63035,0.0454 7.63035,0.0454 0.0482,2.57252 0.0482,2.572507 h -7.67861 -7.67861 z m 17.47974,0.0454 0.0482,-2.57252 7.63035,-0.0454 7.63034,-0.0454 v 2.61795 2.617947 h -7.6786 -7.67861 z m -18.52618,-6.496687 v -2.441717 h 3.74976 3.74977 v 2.441717 2.4417 h -3.74977 -3.74976 z m 9.59243,0 v -2.441717 h 7.67395 7.67395 v 2.441717 2.4417 h -7.67395 -7.67395 z m 17.4408,0 v -2.441717 h 3.92417 3.92418 v 2.441717 2.4417 h -3.92418 -3.92417 z M 430.29526,52.720537 V 49.92819 h 7.67838 7.67838 l -0.0481,2.746917 -0.048,2.74692 -7.63035,0.0454 -7.63034,0.0454 z m 17.55707,2.67242 c -0.0639,-0.0639 -0.11628,-1.31968 -0.11628,-2.79052 V 49.92819 h 7.67395 7.67396 v 2.790517 2.79053 h -7.55768 c -4.15672,0 -7.61,-0.0523 -7.67395,-0.11628 z m -18.60351,-9.298254 v -2.44518 h 3.75469 3.75469 l -0.0485,2.39811 -0.0485,2.398107 -3.70616,0.0471 -3.70617,0.0471 z m 9.71053,2.323797 c -0.0649,-0.0649 -0.1181,-1.16455 -0.1181,-2.443537 v -2.32544 h 7.67887 7.67887 l -0.0485,2.39811 -0.0485,2.398107 -7.51225,0.0454 c -4.13173,0.025 -7.56539,-0.008 -7.63034,-0.0727 z m 17.43897,-0.002 c -0.0639,-0.0639 -0.11627,-1.16272 -0.11627,-2.441707 v -2.32543 h 3.92417 3.92418 v 2.4417 2.441717 h -3.80791 c -2.09434,0 -3.86022,-0.0523 -3.92417,-0.11628 z"
          id="path901" />
     </g>
     <path
-       style="fill:#66d9ef;stroke-width:1"
+       style="fill:#89b4fa;stroke-width:1"
        d="m 493.76796,155.62854 h -4.61131 v 12.17083 12.17083 h 20.37291 20.37292 v -10.05416 c 0,-11.85143 -0.19353,-11.1125 2.91042,-11.1125 h 1.85208 v -1.5875 -1.5875 h -15.7017 m 1.15353,-2.91042 h 16.89943 l 0.41188,0.58804 c 0.30093,0.42964 0.41188,1.24926 0.41188,3.04271 v 2.45467 h 8.06979 c 7.71702,0 8.09293,0.0231 8.59896,0.52916 0.51956,0.51956 0.52917,0.88195 0.52917,19.95715 0,17.30902 -0.0453,19.47332 -0.41578,19.84375 -0.36545,0.36545 -1.83346,0.41577 -12.12982,0.41577 -11.01237,0 -11.74029,-0.029 -12.15194,-0.48385 -0.36409,-0.40232 -0.43788,-1.1157 -0.43788,-4.23334 v -3.74947 h -4.77176 -4.77175 l 0.0754,2.71197 0.0754,2.71198 2.24099,0.0778 c 2.91601,0.10122 3.77853,0.82856 2.90908,2.45315 -0.26528,0.49566 -0.69699,0.51177 -13.71733,0.51177 -12.68776,0 -13.46805,-0.0272 -13.88131,-0.48385 l -3e-5,-1e-5 c -0.54652,-0.6039 -0.55334,-1.08566 -0.026,-1.83853 0.37342,-0.53312 0.63285,-0.58803 2.77813,-0.58803 h 2.36624 v -2.77813 -2.77812 h -8.06979 c -7.71701,0 -8.09292,-0.0231 -8.59896,-0.52917 -0.51887,-0.51888 -0.52916,-0.88194 -0.52916,-18.67052 0,-11.99932 0.0927,-18.31462 0.27389,-18.65313 0.25856,-0.48313 0.61341,-0.51177 6.34069,-0.51177 m 24.81393,41.07656 0.0754,-2.71197 h -5.56551 -5.56551 v 2.78349 2.78349 l 5.49011,-0.0715 5.4901,-0.0715 z m 34.45273,-14.48593 v -17.33021 h -9.39271 -9.39271 v 17.33021 17.33021 h 9.39271 9.39271 z m -10.86827,11.79431 c -1.03982,-1.03982 -1.03982,-2.17589 0,-3.21571 0.8619,-0.8619 1.53704,-0.96042 2.64726,-0.38631 0.83279,0.43066 1.07726,0.8832 1.07726,1.99417 0,1.11096 -0.24447,1.5635 -1.07726,1.99416 -1.11022,0.57411 -1.78536,0.47559 -2.64726,-0.38631 z m -5.12013,-14.72363 c -0.22867,-0.22867 -0.41577,-0.69642 -0.41577,-1.03943 0,-1.38901 0.31897,-1.45521 7.01146,-1.45521 6.76523,0 7.01146,0.0546 7.01146,1.55348 0,1.32299 -0.17293,1.35693 -6.91319,1.35693 -5.35466,0 -6.33934,-0.0612 -6.69396,-0.41577 z m 0.17227,-6.87527 c -0.72603,-0.50853 -0.78002,-1.71361 -0.10419,-2.32524 0.42073,-0.38076 1.27833,-0.43788 6.57358,-0.43788 5.5636,0 6.12755,0.0418 6.5276,0.48385 0.62498,0.6906 0.55276,1.78693 -0.15015,2.27927 -0.48907,0.34256 -1.57016,0.41188 -6.42342,0.41188 -4.85326,0 -5.93435,-0.0693 -6.42342,-0.41188 z m -6.14429,16.0223 v -2.38125 h -20.37292 -20.37291 v 2.38125 2.38125 h 20.37291 20.37292 z"
        id="path925"
        sodipodi:nodetypes="ccccccssccccccsscssssssscccccssssssscccsssscccccccccccccccccccsssssssssssssssssssccccccccc" />
@@ -286,7 +736,7 @@ different rectangles, each of which was an instance of the
          y="90.475258"
          style="stroke-width:0.264583">GRect</tspan></text>
     <rect
-       style="fill:#ae81ff;fill-opacity:1;stroke-width:4;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:#cba6f7;fill-opacity:1;stroke-width:4;stroke-linecap:round;stroke-linejoin:round"
        id="rect941"
        width="36.261768"
        height="11.168176"
@@ -439,7 +889,7 @@ two employees at Scrooge and Marley as two instances of the same
 class</li>
 <li>Could view the class as a template or empty form:
 <p><img
-data-src="../images/svg_cache/9bcb1ffdf3cd3190e1cadd402c51eba5047ac258.svg"
+data-src="../images/svg_cache/1e846ed08ab2109a71f7736235f9533cda4e9d93.svg"
 style="width:40.0%" /></p></li>
 <li>Can help initially to just start with an empty template and then
 fill in the necessary fields</li>
@@ -457,7 +907,7 @@ initially can just leave blank</p>
 <li>Almost. Python does not allow an empty body, so need to include a
 docstring or use the <code class="python">pass</code> keyword</li>
 </ul>
-<pre ><code class="mypython">class Employee:
+<pre ><code class="python">class Employee:
   """This class is currently empty!"""</code></pre></li>
 <li><p>Once the class is defined, you can create an object of this class
 type by calling the class as if it were a function:</p>
@@ -505,7 +955,7 @@ name and a value, just like you’d define a new variable</p></li>
 <ul>
 <li><p>We could, for instance, create a
 <code class="python">clerk</code> in the following fashion:</p>
-<pre ><code class="mypython">def create_clerk():
+<pre ><code class="python">def create_clerk():
   clerk = Employee()
   clerk.name = "Bob Cratchit"
   clerk.title = "clerk"
@@ -520,14 +970,14 @@ name and a value, just like you’d define a new variable</p></li>
 <ul>
 <li><p>We could accomplish this more generally by passing arguments to
 our function:</p>
-<pre ><code class="mypython">def create_employee(name, title, salary):
+<pre ><code class="python">def create_employee(name, title, salary):
   emp = Employee()
   emp.name = name
   emp.title = title
   emp.salary = salary
   return emp</code></pre></li>
 <li><p>We could then use that as:</p>
-<pre ><code class="mypython">clerk = create_employee('Bob Cratchit', 'clerk', 15)
+<pre ><code class="python">clerk = create_employee('Bob Cratchit', 'clerk', 15)
 boss = create_employee(
           'Ebeneezer Scrooge', 'founder', 1000
           )</code></pre></li>
@@ -591,7 +1041,7 @@ additional parameters afterwards</li>
 </section>
 <section id="an-employee-constructor" class="slide level2">
 <h2>An Employee Constructor</h2>
-<pre ><code class="mypython">class Employee:
+<pre ><code class="python">class Employee:
     def __init__(self, name, title, salary):
         self.name = name
         self.title = title
@@ -606,23 +1056,24 @@ supplies this reference automatically</li>
 <li>Viewing in PythonTutor can be helpful, as is shown <a
 href="https://pythontutor.com/render.html#code=class%20Employee%3A%0A%20%20%20%20def%20__init__%28self,%20name,%20title,%20salary%29%3A%0A%20%20%20%20%20%20%20%20self.name%20%3D%20name%0A%20%20%20%20%20%20%20%20self.title%20%3D%20title%0A%20%20%20%20%20%20%20%20self.salary%20%3D%20salary%0A%0A%0Aclerk%20%3D%20Employee%28&#39;Bob%20Cratchit&#39;,%20&#39;clerk&#39;,%2015%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=nevernest&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">here</a></li>
 </ul>
-</section>
-<section id="understanding-check" class="slide level2">
-<h2>Understanding Check</h2>
-<div class="cols">
-<div class="col">
-<p>What is printed out on the final line of code to the right?</p>
-<div class="poll">
-<ol>
-<li><code class="no-highlight">Honda red 2006</code></li>
-<li><code class="no-highlight">Honda blue 2006</code></li>
-<li><code class="no-highlight">Toyota blue 2008</code></li>
-<li><code class="no-highlight">Honda red 2008</code></li>
-</ol>
-</div>
-</div>
-<div class="col" style="flex-grow:2">
-<pre ><code class="mypython" style="max-height:800px">class Car:
+<!-- for next class
+## Understanding Check
+::::::cols
+::::col
+What is printed out on the final line of code to the right?
+
+:::{.poll}
+#. `Honda red 2006`{.no-highlight}
+#. `Honda blue 2006`{.no-highlight}
+#. `Toyota blue 2008`{.no-highlight}
+#. `Honda red 2008`{.no-highlight}
+:::
+
+::::
+
+::::{.col style='flex-grow:2'}
+```{.mypython style='max-height:800px'}
+class Car:
     def __init__(self, color, year):
         self.color = color
         self.year = year
@@ -632,108 +1083,78 @@ A = Car('blue', 2008)
 B = Car('red', 2006)
 A.make = 'Honda'
 A.year = B.year
-print(A.make, A.color, A.year)</code></pre>
-</div>
-</div>
-</section>
-<section id="whats-your-method" class="slide level2">
-<h2>What’s your Method?</h2>
-<ul>
-<li><p>Most classes define additional functions called methods to allow
-clients to read or update attributes or manipulate the object</p></li>
-<li><p>Methods look like a normal function definition but will
-<strong>always</strong> declare the parameter
-<code class="python">self</code> at the beginning of the parameter
-list</p>
-<ul>
-<li>This is true even if the method has no other parameters</li>
-</ul></li>
-<li><p>Methods are defined in the body of the class and would thus look
-something like:</p>
-<pre ><code class="mypython">def method_name (self, other_parameters):
-  ...body of the method...</code></pre></li>
-<li><p>For example</p>
-<pre ><code class="mypython">def give_raise(self, amount):
-  self.salary += amount</code></pre></li>
-</ul>
-</section>
-<section id="accessing-and-using-methods" class="slide level2">
-<h2>Accessing and Using Methods</h2>
-<ul>
-<li>After definition, there are two mains ways you can access and use
-the method:
-<ul>
-<li><strong>Dot Notation (Conventional)</strong>
-<ul>
-<li><p>Python sets <code class="python">self</code> to be a reference to
-the <em>receiver</em>, which is the object to which the method is
-applied</p>
-<pre ><code class="mypython">clerk = Employee('Bob', 'clerk', 15)
-clerk.give_raise(15)</code></pre></li>
-</ul></li>
-<li><strong>Function Notation</strong>
-<ul>
-<li><p>You retrieve the method from the class itself, and then provide
-self manually</p>
-<pre ><code class="mypython">clerk = Employee('Bob', 'clerk', 15)
-Employee.give_raise(clerk, 15)</code></pre></li>
-</ul></li>
-</ul></li>
-</ul>
-</section>
-<section id="visualization-summary" class="slide level2">
-<h2>Visualization Summary</h2>
-<ul>
-<li>To summarize in a visual manner, we can look at everything together
-on <a
-href="http://pythontutor.com/live.html#code=class%20Employee%3A%0A%20%20%20%20def%20__init__%28self,%20name,%20title,%20salary%29%3A%0A%20%20%20%20%20%20%20%20self.name%20%3D%20name%0A%20%20%20%20%20%20%20%20self.title%20%3D%20title%0A%20%20%20%20%20%20%20%20self.salary%20%3D%20salary%0A%20%20%20%20%20%20%20%20%0A%20%20%20%20def%20give_raise%28self,%20amount%29%3A%0A%20%20%20%20%20%20%20%20current%20%3D%20self.salary%0A%20%20%20%20%20%20%20%20self.salary%20%2B%3D%20amount%0A%20%20%20%20%20%20%20%20%0A%0Aclerk%20%3D%20Employee%28%22Bob%20Cratchit%22,%20%22clerk%22,%2015%29%0Aboss%20%3D%20Employee%28%22Scrooge%22,%20%22founder%22,%201000%29%0A%0Aclerk.give_raise%2820%29&amp;cumulative=false&amp;curInstr=1&amp;heapPrimitives=nevernest&amp;mode=display&amp;origin=opt-live.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">PythonTutor</a></li>
-</ul>
-<p><img data-src="../images/ConstructorPythonTutor.png"
-style="width:50.0%" /></p>
-</section>
-<section id="getters-and-setters" class="slide level2">
-<h2>Getters and Setters</h2>
-<ul>
-<li><p>In the object-oriented model, the client is not supposed to
-muck-about with the object internals</p></li>
-<li><p>The implementation should therefore provide methods to retrieve
-desired attributes (called <em>getters</em>) or to make changes to
-desired attributes (called <em>setters</em>)</p></li>
-<li><p>Setting up getters and setters for the attribute
-<code class="python">salary</code> might look like:</p>
-<pre ><code class="mypython">def get_salary(self):
-  return self.salary
+print(A.make, A.color, A.year)
+```
+::::
+::::::
 
-def set_salary(self, new_salary):
-  self.salary = new_salary</code></pre></li>
-<li><p>Getters are far more common than setters, as you don’t always
-want the client to have the freedom to change attributes on a
-whim</p></li>
-</ul>
-</section>
-<section id="representation" class="slide level2">
-<h2>Representation</h2>
-<ul>
-<li><p>Printing out an object that you just created as an instance of a
-custom class will look ugly:</p>
-<pre ><code class="python-repl">>>> C = Employee('Bob', 'clerk', 15)
->>> print(C)
-<__main__.Employee object at 0x7f942ba13550></code></pre></li>
-<li><p>You can define special methods for a class that specify how your
-object should be converted to a string (or anything else really)</p>
-<ul>
-<li>All these special methods have double underscores before and after,
-and hence are frequently termed “dunder” (double underscore)
-methods</li>
-<li>You can the <code class="python">__str__</code> or
-<code class="python">__repr__</code> method to specify how your object
-should be printed</li>
-</ul></li>
-</ul>
-</section>
-<section id="a-good-employee" class="slide level2">
-<h2>A Good Employee</h2>
-<pre ><code class="mypython" style="max-height:900px">class Employee:
+
+## What's your Method?
+- Most classes define additional functions called methods to allow clients to read or update attributes or manipulate the object
+- Methods look like a normal function definition but will **always** declare the parameter `self` at the beginning of the parameter list
+    - This is true even if the method has no other parameters
+- Methods are defined in the body of the class and would thus look something like:
+  ```mypython
+  def method_name (self, other_parameters):
+    ...body of the method...
+  ```
+- For example
+  ```mypython
+  def give_raise(self, amount):
+    self.salary += amount
+  ```
+
+## Accessing and Using Methods
+- After definition, there are two mains ways you can access and use the method:
+    - **Dot Notation (Conventional)**
+        - Python sets `self` to be a reference to the _receiver_, which is the object to which the method is applied
+
+          ```mypython
+          clerk = Employee('Bob', 'clerk', 15)
+          clerk.give_raise(15)
+          ```
+
+    - **Function Notation**
+        - You retrieve the method from the class itself, and then provide self manually
+
+          ```mypython
+          clerk = Employee('Bob', 'clerk', 15)
+          Employee.give_raise(clerk, 15)
+          ```
+
+## Visualization Summary
+- To summarize in a visual manner, we can look at everything together on [PythonTutor](http://pythontutor.com/live.html#code=class%20Employee%3A%0A%20%20%20%20def%20__init__%28self,%20name,%20title,%20salary%29%3A%0A%20%20%20%20%20%20%20%20self.name%20%3D%20name%0A%20%20%20%20%20%20%20%20self.title%20%3D%20title%0A%20%20%20%20%20%20%20%20self.salary%20%3D%20salary%0A%20%20%20%20%20%20%20%20%0A%20%20%20%20def%20give_raise%28self,%20amount%29%3A%0A%20%20%20%20%20%20%20%20current%20%3D%20self.salary%0A%20%20%20%20%20%20%20%20self.salary%20%2B%3D%20amount%0A%20%20%20%20%20%20%20%20%0A%0Aclerk%20%3D%20Employee%28%22Bob%20Cratchit%22,%20%22clerk%22,%2015%29%0Aboss%20%3D%20Employee%28%22Scrooge%22,%20%22founder%22,%201000%29%0A%0Aclerk.give_raise%2820%29&cumulative=false&curInstr=1&heapPrimitives=nevernest&mode=display&origin=opt-live.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false)
+
+![](../images/ConstructorPythonTutor.png){width=50%}
+
+## Getters and Setters
+- In the object-oriented model, the client is not supposed to muck-about with the object internals
+- The implementation should therefore provide methods to retrieve desired attributes (called _getters_) or to make changes to desired attributes (called _setters_)
+- Setting up getters and setters for the attribute `salary` might look like:
+  ```mypython
+  def get_salary(self):
+    return self.salary
+  
+  def set_salary(self, new_salary):
+    self.salary = new_salary
+  ```
+- Getters are far more common than setters, as you don't always want the client to have the freedom to change attributes on a whim
+
+
+## Representation
+- Printing out an object that you just created as an instance of a custom class will look ugly:
+  ```python-repl
+  >>> C = Employee('Bob', 'clerk', 15)
+  >>> print(C)
+  <__main__.Employee object at 0x7f942ba13550>
+  ```
+- You can define special methods for a class that specify how your object should be converted to a string (or anything else really)
+    - All these special methods have double underscores before and after, and hence are frequently termed "dunder" (double underscore) methods
+    - You can the `__str__` or `__repr__` method to specify how your object should be printed
+
+## A Good Employee
+```{.mypython style='max-height:900px'}
+class Employee:
     def __init__(self, name, title, salary):
         self.name = name
         self.title = title
@@ -746,8 +1167,11 @@ should be printed</li>
         return self.salary
 
     def set_salary(self, new_salary):
-        self.salary = new_salary</code></pre>
-</section>
+        self.salary = new_salary
+```
+
+-->
+</section></section>
     </div>
   </div>
 
@@ -760,6 +1184,7 @@ should be printed</li>
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
@@ -882,7 +1307,7 @@ should be printed</li>
 		 },
 
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
               console.log(mypythondef);
               return mypythondef(hljs); } )
           },
@@ -896,6 +1321,7 @@ should be printed</li>
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
