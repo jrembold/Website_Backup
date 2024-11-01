@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-11-03">
-  <title>Methodically Representing Fireworks</title>
+  <meta name="dcterms.date" content="2024-11-01">
+  <title>A Construction Zone</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -27,17 +27,17 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Methodically Representing Fireworks</h1>
+  <h1 class="title">A Construction Zone</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">November 3, 2023</p>
+  <p class="date">November 1, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -46,18 +46,200 @@
 <li>ImageShop due on Monday!</li>
 <li>Exam 2 is a week from today!
 <ul>
-<li>I’m working on practice exams and learning objectives for you</li>
+<li>Practice exams and learning objectives posted this afternoon</li>
 <li>On Chapters 4-6, and 8 (graphics, functions, and lists)</li>
 <li>No problem set next week: just studying for exam</li>
 </ul></li>
-<li>My goal is to have PS4 scoring finished by the end of tomorrow, and
-then to start in on PS5 so I can have them done by next Wednesday</li>
+<li>I’ll have PS5 graded this weekend</li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="https://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 </section>
-<section id="review-question" class="slide level2">
-<h2>Review Question</h2>
+<section>
+<section id="constructing-a-type" class="title-slide slide level1">
+<h1>Constructing a Type</h1>
+
+</section>
+<section id="classes-as-record-templates" class="slide level2">
+<h2>Classes as Record Templates</h2>
+<ul>
+<li>Since they share the same attributes, it is natural to regard the
+two employees at Scrooge and Marley as two instances of the same
+class</li>
+<li>Could view the class as a template or empty form:
+<p><img
+data-src="../images/svg_cache/1e846ed08ab2109a71f7736235f9533cda4e9d93.svg"
+style="width:40.0%" /></p></li>
+<li>Can help initially to just start with an empty template and then
+fill in the necessary fields</li>
+</ul>
+</section>
+<section id="starting-empty" class="slide level2">
+<h2>Starting Empty</h2>
+<ul>
+<li><p>Class definitions in Python start with a header line consisting
+of the keyword <code class="python">class</code> and then the class
+name</p></li>
+<li><p>The body of the class will later contain definitions, but
+initially can just leave blank</p>
+<ul>
+<li>Almost. Python does not allow an empty body, so need to include a
+docstring or use the <code class="python">pass</code> keyword</li>
+</ul>
+<pre ><code class="python">class Employee:
+  """This class is currently empty!"""</code></pre></li>
+<li><p>Once the class is defined, you can create an object of this class
+type by calling the class as if it were a function:</p>
+<pre ><code class="python">clerk = Employee()</code></pre></li>
+</ul>
+</section>
+<section id="more-references" class="slide level2">
+<h2>More References</h2>
+<ul>
+<li>Instances of custom Python classes are mutable</li>
+<li>Thus custom class instances are stored as <em>references</em> to
+that information in memory</li>
+<li>Any code with access to this reference can manipulate the object
+<ul>
+<li>Can get or set the contents of any attributes or create new ones
+<br><br></li>
+</ul></li>
+</ul>
+<figure>
+<img data-src="../images/ObjectRepresentations.png"
+alt="Objects are references!" />
+<figcaption aria-hidden="true">Objects are references!</figcaption>
+</figure>
+</section>
+<section id="selecting-object-attributes" class="slide level2">
+<h2>Selecting Object Attributes</h2>
+<ul>
+<li><p>You can select an attribute from an object by writing out the
+object name, followed by a dot and then the attribute name.</p>
+<ul>
+<li><p>As an example</p>
+<pre ><code class="python">clerk.name</code></pre>
+<p>would select the <code class="python">name</code> attribute for the
+<code class="python">clerk</code> object</p></li>
+</ul></li>
+<li><p>Attributes are assignable, so</p>
+<pre ><code class="python">clerk.salary *= 2</code></pre>
+<p>would double the clerk’s current salary</p></li>
+<li><p>You can create a new attribute in Python by simply assigning a
+name and a value, just like you’d define a new variable</p></li>
+</ul>
+</section>
+<section id="assigning-clerk-attributes" class="slide level2">
+<h2>Assigning Clerk Attributes</h2>
+<ul>
+<li><p>We could, for instance, create a
+<code class="python">clerk</code> in the following fashion:</p>
+<pre ><code class="python">def create_clerk():
+  clerk = Employee()
+  clerk.name = "Bob Cratchit"
+  clerk.title = "clerk"
+  clerk.salary = 15
+  return clerk</code></pre></li>
+<li><p>Note that none of these assigned attributes affect the
+<code class="python">Employee</code> class in any way: they are only
+affecting the <code class="python">clerk</code> object</p></li>
+</ul>
+</section>
+<section id="more-generally" class="slide level2">
+<h2>More Generally</h2>
+<ul>
+<li><p>We could accomplish this more generally by passing arguments to
+our function:</p>
+<pre ><code class="python">def create_employee(name, title, salary):
+  emp = Employee()
+  emp.name = name
+  emp.title = title
+  emp.salary = salary
+  return emp</code></pre></li>
+<li><p>We could then use that as:</p>
+<pre ><code class="python">clerk = create_employee('Bob Cratchit', 'clerk', 15)
+boss = create_employee(
+          'Ebeneezer Scrooge', 'founder', 1000
+          )</code></pre></li>
+</ul>
+</section>
+<section id="constructors" class="slide level2">
+<h2>Constructors</h2>
+<ul>
+<li>While the previous method works, it is not ideal
+<ul>
+<li>Forces the client to tinker with the internal workings of the
+Employee</li>
+<li>Details of the data structure are the property of the
+implementation, not the client</li>
+</ul></li>
+<li>Better to add a method (function) to the
+<code class="python">Employee</code> class called a
+<em>constructor</em>, which is responsible for initializing attributes
+of a newly created object
+<ul>
+<li>In Python, a constructor is created by defining a special function
+named <code class="python">__init__</code></li>
+<li>The constructor function is called automatically whenever a new
+object of that type is created</li>
+</ul></li>
+</ul>
+</section>
+<section id="know-thy-self" class="slide level2">
+<h2>Know Thy <code class="python">self</code></h2>
+<div>
+<ul>
+<li class="fragment">Moving the function into the Employee class has a
+problem:
+<ul>
+<li class="fragment">When we set attributes, they are specific to a
+given object</li>
+<li class="fragment">The class itself though is just a template, and not
+linked to a specific object</li>
+</ul></li>
+<li class="fragment">We need a general way within the class to refer to
+whatever object is being created
+<ul>
+<li class="fragment">The overwhelming convention in Python is to call
+this variable <code class="python">self</code></li>
+<li class="fragment">Whenever a new object is created, you could imagine
+that, for that object, Python replaces all of the
+<code class="python">self</code>s in the class with that object’s name
+<ul>
+<li class="fragment">This isn’t quite the order of what is happening,
+but it can help envision what <code class="python">self</code> is
+doing</li>
+</ul></li>
+</ul></li>
+<li class="fragment"><code class="python">self</code> is always the
+first parameter to the <code class="python">__init__</code> constructor
+<ul>
+<li class="fragment">Any other arguments provided are passed in as
+additional parameters afterwards</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="an-employee-constructor" class="slide level2">
+<h2>An Employee Constructor</h2>
+<pre ><code class="python">class Employee:
+    def __init__(self, name, title, salary):
+        self.name = namey
+        self.title = title
+        self.salary = salary
+
+
+clerk = Employee('Bob Cratchit', 'clerk', 15)</code></pre>
+<ul>
+<li>Note that you do not need to provide an argument for
+<code class="python">self</code> when creating the object, Python
+supplies this reference automatically</li>
+<li>Viewing in PythonTutor can be helpful, as is shown <a
+href="https://pythontutor.com/render.html#code=class%20Employee%3A%0A%20%20%20%20def%20__init__%28self,%20name,%20title,%20salary%29%3A%0A%20%20%20%20%20%20%20%20self.name%20%3D%20name%0A%20%20%20%20%20%20%20%20self.title%20%3D%20title%0A%20%20%20%20%20%20%20%20self.salary%20%3D%20salary%0A%0A%0Aclerk%20%3D%20Employee%28&#39;Bob%20Cratchit&#39;,%20&#39;clerk&#39;,%2015%29&amp;cumulative=false&amp;curInstr=0&amp;heapPrimitives=nevernest&amp;mode=display&amp;origin=opt-frontend.js&amp;py=3&amp;rawInputLstJSON=%5B%5D&amp;textReferences=false">here</a></li>
+</ul>
+</section>
+<section id="understanding-check" class="slide level2">
+<h2>Understanding Check</h2>
 <div class="cols">
 <div class="col">
 <p>What is printed out on the final line of code to the right?</p>
@@ -71,7 +253,7 @@ href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </div>
 </div>
 <div class="col" style="flex-grow:2">
-<pre ><code class="mypython" style="max-height:800px">class Car:
+<pre ><code class="python" style="max-height:800px">class Car:
   def __init__(self, color, year):
     self.color = color
     self.year = year
@@ -84,6 +266,11 @@ A.year = B.year
 print(A.make, A.color, A.year)</code></pre>
 </div>
 </div>
+</section></section>
+<section>
+<section id="adding-behavior" class="title-slide slide level1">
+<h1>Adding Behavior</h1>
+
 </section>
 <section id="whats-your-method" class="slide level2">
 <h2>What’s your Method?</h2>
@@ -99,32 +286,33 @@ list</p>
 </ul></li>
 <li><p>Methods are defined in the body of the class and would thus look
 something like:</p>
-<pre ><code class="mypython">def method_name (self, other_parameters):
-  ...body of the method...</code></pre></li>
+<pre ><code class="python">def |||method name||| (self, |||other parameters|||):
+  |||...body of the method...|||</code></pre></li>
 <li><p>For example</p>
-<pre ><code class="mypython">def give_raise(self, amount):
+<pre ><code class="python">def give_raise(self, amount):
   self.salary += amount</code></pre></li>
 </ul>
 </section>
 <section id="accessing-and-using-methods" class="slide level2">
 <h2>Accessing and Using Methods</h2>
 <ul>
-<li>After definition, there are two mains ways you can access and use
-the method:
+<li>Once defined, there are two mains ways you can access and use the
+method:
 <ul>
 <li><strong>Dot Notation (Conventional)</strong>
 <ul>
 <li><p>Python sets <code class="python">self</code> to be a reference to
 the <em>receiver</em>, which is the object to which the method is
-applied</p>
-<pre ><code class="mypython">clerk = Employee('Bob', 'clerk', 15)
+applied (the object that comes before the dot)</p>
+<pre ><code class="python">clerk = Employee('Bob', 'clerk', 15)
 clerk.give_raise(15)</code></pre></li>
 </ul></li>
 <li><strong>Function Notation</strong>
 <ul>
 <li><p>You retrieve the method from the class itself, and then provide
-<code class="python">self</code> manually</p>
-<pre ><code class="mypython">clerk = Employee('Bob', 'clerk', 15)
+<code class="python">self</code> manually, where
+<code class="python">self</code> is the object you want to act on</p>
+<pre ><code class="python">clerk = Employee('Bob', 'clerk', 15)
 Employee.give_raise(clerk, 15)</code></pre></li>
 </ul></li>
 </ul></li>
@@ -143,14 +331,14 @@ style="width:50.0%" /></p>
 <section id="getters-and-setters" class="slide level2">
 <h2>Getters and Setters</h2>
 <ul>
-<li><p>In the object-oriented model, the client is not supposed to
+<li><p>In the abstraction boundary model, the client is not supposed to
 muck-about with the object internals</p></li>
 <li><p>The implementation should therefore provide methods to retrieve
 desired attributes (called <em>getters</em>) or to make changes to
 desired attributes (called <em>setters</em>)</p></li>
 <li><p>Setting up getters and setters for the attribute
 <code class="python">salary</code> might look like:</p>
-<pre ><code class="mypython">def get_salary(self):
+<pre ><code class="python">def get_salary(self):
   return self.salary
 
 def set_salary(self, new_salary):
@@ -163,14 +351,14 @@ whim</p></li>
 <section id="internal-representation" class="slide level2">
 <h2>Internal Representation</h2>
 <ul>
-<li>The idea behind object-oriented programming is that we interact with
-the class though methods, and the class takes care of the internal
-representation</li>
+<li>The idea behind object-oriented programming and the abstraction
+boundary is that we interact with the class though methods, and the
+class takes care of the internal representation</li>
 <li>Python works well with this, but it doesn’t really enforce it
 <ul>
 <li>We can freely access, change, or even add new attributes to the
 class</li>
-<li>But <strong>we really should not</strong>
+<li>But in most cases, <strong>we really should not</strong>
 <ul>
 <li>Maybe the class will get updated in a way that changes all the
 internal variable names. Now all our code referring to them is
@@ -242,6 +430,11 @@ def increment(self, value):
 ::::::
 
 -->
+</section></section>
+<section>
+<section id="more-dunder-methods" class="title-slide slide level1">
+<h1>More Dunder Methods</h1>
+
 </section>
 <section id="representation" class="slide level2">
 <h2>Representation</h2>
@@ -259,13 +452,16 @@ and hence are frequently termed “dunder” (double underscore)
 methods</li>
 <li>Define the <code class="python">__str__</code> or
 <code class="python">__repr__</code> method to specify how your object
-should be printed</li>
+should be printed
+<ul>
+<li>These should <em>return</em> a string</li>
+</ul></li>
 </ul></li>
 </ul>
 </section>
 <section id="a-good-employee" class="slide level2">
 <h2>A Good Employee</h2>
-<pre ><code class="mypython" style="max-height:900px">class Employee:
+<pre ><code class="python" style="max-height:900px">class Employee:
     def __init__(self, name, title, salary):
         self.name = name
         self.title = title
@@ -279,10 +475,15 @@ should be printed</li>
 
     def set_salary(self, new_salary):
         self.salary = new_salary</code></pre>
+</section></section>
+<section>
+<section id="example" class="title-slide slide level1">
+<h1>Example!</h1>
+
 </section>
-<section id="return-of-the-firework" class="slide level2">
-<h2>Return of the Firework</h2>
-<pre ><code class="mypython" style="max-height:900px; font-size:0.8em;">from pgl import GWindow, GOval, GRect
+<section id="a-dazzling-display" class="slide level2">
+<h2>A Dazzling Display</h2>
+<pre ><code class="python" style="max-height:900px; font-size:0.8em;">from pgl import GWindow, GOval, GRect
 import random
 
 GW_WIDTH = 500
@@ -566,7 +767,7 @@ class Patch(Pirate):
 
 
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -579,6 +780,7 @@ class Patch(Pirate):
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
@@ -701,7 +903,7 @@ class Patch(Pirate):
 		 },
 
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
               console.log(mypythondef);
               return mypythondef(hljs); } )
           },
@@ -715,6 +917,7 @@ class Patch(Pirate):
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
