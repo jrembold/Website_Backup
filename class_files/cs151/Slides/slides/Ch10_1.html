@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-11-06">
+  <meta name="dcterms.date" content="2024-11-04">
   <title>All the Squiggles</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,15 +17,18 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
@@ -34,28 +37,27 @@
 <section id="title-slide">
   <h1 class="title">All the Squiggles</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">November 6, 2023</p>
+  <p class="date">November 4, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
 <li>ImageShop due tonight!</li>
-<li>PS4’s feedback went out</li>
-<li>I’m working on PS5 now</li>
+<li>PS5’s feedback is coming, sorry for the delay</li>
 <li>Exam 2 on Friday!
 <ul>
 <li>Learning Objectives posted</li>
-<li>Practice Exam 1 posted</li>
-<li>Practice Exam 2 will be posted later today</li>
+<li>Practice Exam 1 posted with solutions</li>
+<li>Practice Exam 2 posted with solutions</li>
 </ul></li>
-<li>We will introduce the Enigma project on Monday in case you are
+<li>We will introduce the Enigma project next Monday in case you are
 itching to get started on that
 <ul>
-<li>Not due until Nov 20</li>
+<li>Not due until Nov 18</li>
 </ul></li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="https://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 <!--
 ## Review Question {data-notes="Solution: hnktge"}
@@ -140,7 +142,7 @@ the right?</p>
 </div>
 </div>
 <div class="col">
-<pre ><code class="mypython" style="max-height:900px; font-size:.8em; line-height:1.3em;">class Demo:
+<pre ><code class="python" style="max-height:900px; font-size:.8em; line-height:1.3em;">class Demo:
     def __init__(self):
         self.x = []
 
@@ -159,9 +161,181 @@ print(A.get_x() == B.get_x())</code></pre>
 </div>
 </div>
 </section>
+<section>
+<section id="defining-good-methods" class="title-slide slide level1">
+<h1>Defining Good Methods</h1>
+
+</section>
+<section id="getters-and-setters" class="slide level2">
+<h2>Getters and Setters</h2>
+<ul>
+<li><p>In the abstraction boundary, object-oriented model, the client is
+not supposed to muck-about with the object internals</p></li>
+<li><p>The implementation should therefore provide methods to retrieve
+desired attributes (called <em>getters</em>) or to make changes to
+desired attributes (called <em>setters</em>)</p></li>
+<li><p>Setting up getters and setters for the attribute
+<code class="python">salary</code> might look like:</p>
+<pre ><code class="python">def get_salary(self):
+  return self.salary
+
+def set_salary(self, new_salary):
+  self.salary = new_salary</code></pre></li>
+<li><p>Getters are far more common than setters, as you don’t always
+want the client to have the freedom to change attributes on a
+whim</p></li>
+</ul>
+</section>
+<section id="privacy-please" class="slide level2">
+<h2>Privacy Please</h2>
+<ul>
+<li>The idea behind object-oriented programming and the abstraction
+boundary is that we interact with the class though methods, and the
+class takes care of the internal representation</li>
+<li>Python works well with this, but it doesn’t really enforce it
+<ul>
+<li>We can freely access, change, or even add new attributes to the
+class</li>
+<li>But in most cases, <strong>we really should not</strong>
+<ul>
+<li>Maybe the class will get updated in a way that changes all the
+internal variable names. Now all our code referring to them is
+broken!</li>
+</ul></li>
+<li>Use (and define) getters and setters for your classes!</li>
+</ul></li>
+<li>Convention is that we preface a class attribute with an underscore
+if we really want to make clear that the client should
+<strong>not</strong> mess with that attribute
+<ul>
+<li>This is just convention. Python will still allow it to be altered,
+but it is a bad practice to get in the habit of doing</li>
+</ul></li>
+</ul>
+<!-- Skipped
+## Understanding Check
+::::::cols
+::::col
+The code block to the right starts defining a class. Only 1 of the below options for defining an `increment` method will work. Which one?
+::::
+
+::::col
+```mypython
+class BestCounter:
+  def __init__(self, start):
+    self.counter = start
+```
+::::
+::::::
+
+::::::cols
+::::col
+
+:::{.block name=A}
+```mypython
+def increment(self, value):
+    counter += value
+```
+:::
+
+:::{.block name=C}
+```mypython
+def increment(value):
+    counter += self.value
+```
+:::
+
+
+::::
+
+::::col
+
+:::{.block name=B}
+```mypython
+def increment(self, value):
+    self.counter += self.value
+```
+:::
+
+:::{.block name=D}
+```mypython
+def increment(self, value):
+    self.counter += value
+```
+:::
+
+::::
+::::::
+
+-->
+</section>
+<section id="representation" class="slide level2">
+<h2>Representation</h2>
+<ul>
+<li><p>Printing out an object that you just created as an instance of a
+custom class will look ugly:</p>
+<pre ><code class="python-repl">>>> C = Employee('Bob', 'clerk', 15)
+>>> print(C)
+<__main__.Employee object at 0x7f942ba13550></code></pre></li>
+<li><p>You can define special methods for a class that specify how your
+object should be converted to a string (or anything else really)</p>
+<ul>
+<li>All these special methods have double underscores before and after,
+and hence are frequently termed “dunder” (double underscore)
+methods</li>
+<li>Define the <code class="python">__str__</code> or
+<code class="python">__repr__</code> method to specify how your object
+should be printed
+<ul>
+<li>These should <em>return</em> a string</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="a-good-employee" class="slide level2">
+<h2>A Good Employee</h2>
+<pre ><code class="python" style="max-height:900px">class Employee:
+    def __init__(self, name, title, salary):
+        self.name = name
+        self.title = title
+        self.salary = salary
+
+    def __str__(self):
+        return f"{self.name} ({self.title}): {self.salary}"
+
+    def get_salary(self):
+        return self.salary
+
+    def set_salary(self, new_salary):
+        self.salary = new_salary</code></pre>
+</section></section>
+<section>
+<section id="why-write-a-class-an-example"
+class="title-slide slide level1">
+<h1>Why write a class? An example</h1>
+
+</section>
+<section id="the-objective" class="slide level2">
+<h2>The Objective</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Suppose we want to write a program to simulate a fireworks show in
+PGL</li>
+<li>Fireworks should travel upward on the screen for some random time at
+some random angle until they explode</li>
+<li>When they explode, they should grow in a circle of some random color
+to some random size</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/fireworks.png" /></p>
+</div>
+</div>
+</section>
 <section id="return-of-the-firework" class="slide level2">
 <h2>Return of the Firework</h2>
-<pre ><code class="mypython" style="max-height:900px; font-size:0.8em;">from pgl import GWindow, GOval, GRect
+<pre ><code class="python" style="max-height:900px; font-size:0.8em;">from pgl import GWindow, GOval, GRect
 import random
 
 GW_WIDTH = 500
@@ -254,6 +428,11 @@ def fireworks_show():
 
 if __name__ == '__main__':
     fireworks_show()</code></pre>
+</section></section>
+<section>
+<section id="paired-object-types" class="title-slide slide level1">
+<h1>Paired Object Types</h1>
+
 </section>
 <section id="maps-and-dictionaries" class="slide level2">
 <h2>Maps and Dictionaries</h2>
@@ -282,7 +461,7 @@ contents.</li>
 <section id="creating-dictionaries" class="slide level2">
 <h2>Creating Dictionaries</h2>
 <ul>
-<li><p>Python dictionaries use squiggly brackets
+<li><p>Python dictionaries use squiggly brackets or <em>braces</em>
 <code class="python">{}</code> to enclose their contents</p></li>
 <li><p>Can create an empty dictionary by providing no key-value
 pairs:</p>
@@ -293,7 +472,7 @@ pairs:</p>
 <code class="python">:</code></li>
 <li>Pairs are separated by a comma <code class="python">,</code></li>
 </ul>
-<pre ><code class="mypython">generic_dict = {'Bob': 21, 0: False, 13: 'Thirteen'}</code></pre></li>
+<pre ><code class="python">generic_dict = {'Bob': 21, 0: False, 13: 'Thirteen'}</code></pre></li>
 </ul>
 </section>
 <section id="keys-and-values" class="slide level2">
@@ -317,14 +496,14 @@ object, mutable or immutable
 <div class="cols">
 <div class="col">
 <div class="block" name="Viable">
-<pre ><code class="mypython">A = {True: 'Seth', False: 'Jesse'}
+<pre ><code class="python">A = {True: 'Seth', False: 'Jesse'}
 B = {'Jill': 13, 'Jack': 12}
 C = {(1,2): {'x': 1}}</code></pre>
 </div>
 </div>
 <div class="col">
 <div class="block" name="Illegal" style="border-color:var(--red)">
-<pre ><code class="mypython">X = {{'x': 1, 'y': 2}: 'Shark'}
+<pre ><code class="python">X = {{'x': 1, 'y': 2}: 'Shark'}
 Y = {[1,3,5]: 'Odd'}
 Z = {'A': 13, 'B': 24, 'A': 15}</code></pre>
 </div>
@@ -380,39 +559,38 @@ print(A['Jil'])</code></pre>
 >>> print(d)
 {'A':12, 'B':12}</code></pre></li>
 </ul>
-</section>
-<section id="grade-sheet-example" class="slide level2">
-<h2>Grade Sheet Example</h2>
-<ul>
-<li><p>Suppose we had a file of student ids and accompanying scores that
-we wanted to read into a dictionary and then access.</p>
-<pre ><code class="mypython" style="max-height:700px; font-size:.8em; line-heigh:2em;">def read_to_dict(filename):
-    dictionary = {}
-    with open(filename) as f:
-        for line in f:
-            ID, score = line.strip().split(',')
-            dictionary[ID] = score
-    return dictionary
-
-def get_student_score():
-    scores = read_to_dict('SampleGrades.txt')
-    done = False
-    while not done:
-        student_id = input('Enter a student id number: ')
-        if student_id == "":
-            done = True
-        else:
-            if student_id in scores:
-                print(f"Student got a {scores[student_id]}.")
-            else:
-                print(f"Student id {student_id} was not found in classlist")</code></pre></li>
-</ul>
+<!-- don't think we have time for this this semester
+## Grade Sheet Example
+- Suppose we had a file of student ids and accompanying scores that we wanted to read into a dictionary and then access.
+  ```{.mypython style='max-height:700px; font-size:.8em; line-heigh:2em;'}
+  def read_to_dict(filename):
+      dictionary = {}
+      with open(filename) as f:
+          for line in f:
+              ID, score = line.strip().split(',')
+              dictionary[ID] = score
+      return dictionary
+  
+  def get_student_score():
+      scores = read_to_dict('SampleGrades.txt')
+      done = False
+      while not done:
+          student_id = input('Enter a student id number: ')
+          if student_id == "":
+              done = True
+          else:
+              if student_id in scores:
+                  print(f"Student got a {scores[student_id]}.")
+              else:
+                  print(f"Student id {student_id} was not found in classlist")
+  ```
+-->
 </section>
 <section id="understanding-check" class="slide level2"
 data-notes="Solution: [125,167,204]">
 <h2 data-notes="Solution: [125,167,204]">Understanding Check</h2>
 <p>What is the printed value of the below code?</p>
-<pre ><code class="mypython">A = [
+<pre ><code class="python">A = [
     {'name': 'Jill',  'weight':125, 'height':62},
     {'name': 'Sam',   'height':68},
     {'name': 'Bobby', 'height':72},
@@ -451,7 +629,7 @@ print([d['weight'] for d in A if 'weight' in d])</code></pre>
 checking either its values or its keys</p></li>
 <li><p>Python supports iteration with the
 <code class="python">for</code> statement, which has the form of:</p>
-<pre ><code class="mypython">for key in dictionary:
+<pre ><code class="python">for key in dictionary:
     value = dictionary[key]
     |||code to work with that key and value|||</code></pre></li>
 <li><p>You can also use the <code class="python">.items</code> method to
@@ -459,13 +637,27 @@ grab both key and values together:</p>
 <ul>
 <li>Returns a tuple with both the key and corresponding pair</li>
 </ul>
-<pre ><code class="mypython">for key, value in dictionary.items():
+<pre ><code class="python">for key, value in dictionary.items():
     |||code to work with that key and value|||</code></pre></li>
 </ul>
 </section>
 <section id="finding-students-by-grade" class="slide level2">
 <h2>Finding Students by grade</h2>
-<pre ><code class="mypython" style="max-height:900px">def get_students_with_score():
+<ul>
+<li>Suppose we had a file of student ids and corresponding grades on a
+test</li>
+<li>We want a simple program where we can enter in a target grade and
+have it tell us all the students who received that grade</li>
+</ul>
+<pre ><code class="python fragment">def read_to_dict(filename):
+  dictionary = {}
+  with open(filename) as f:
+      for line in f:
+          ID, score = line.strip().split(',')
+          dictionary[ID] = score
+  return dictionary
+
+def get_students_with_score():
     scores = read_to_dict('SampleGrades.txt')
     done = False
     while not done:
@@ -492,29 +684,29 @@ grab both key and values together:</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="mypython">len(|||dict|||)</code></td>
+<td><code class="python">len(|||dict|||)</code></td>
 <td>Returns the number of key-value pairs in the dictionary</td>
 </tr>
 <tr class="even">
-<td><code class="mypython">|||dict|||.get(key, value)</code></td>
+<td><code class="python">|||dict|||.get(key, value)</code></td>
 <td>Returns the value associated with the
 <code class="python">key</code> in the dictionary. If the key is not
 found, returns the specified value, which is
 <code class="python">None</code> by default)</td>
 </tr>
 <tr class="odd">
-<td><code class="mypython">|||dict|||.pop(key)</code></td>
+<td><code class="python">|||dict|||.pop(key)</code></td>
 <td>Removes the key-value pair corresponding to
 <code class="python">key</code> and returns the associated value. Will
 raise an error if the key is not found.</td>
 </tr>
 <tr class="even">
-<td><code class="mypython">|||dict|||.clear()</code></td>
+<td><code class="python">|||dict|||.clear()</code></td>
 <td>Removes all key-value pairs from the dictionary, leaving it
 empty.</td>
 </tr>
 <tr class="odd">
-<td><code class="mypython">|||dict|||.items()</code></td>
+<td><code class="python">|||dict|||.items()</code></td>
 <td>Returns an iterable object that cycles through the successive tuples
 consisting of a key-value pair.</td>
 </tr>
@@ -535,6 +727,8 @@ seen increased use of late as structures to store records</p></li>
 <li><p>Allows easy access of attributes without worrying about
 ordering</p>
 <pre ><code class="python">print(boss['name'])</code></pre></li>
+<li><p>It is still using a mutable data-type to represent something that
+should be immutable though</p></li>
 </ul>
 <!--  for later
 ## Mathematical Sets
@@ -695,7 +889,7 @@ class Dictionary:
         return repr(self.buckets)
 ```
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -708,6 +902,7 @@ class Dictionary:
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
@@ -830,7 +1025,7 @@ class Dictionary:
 		 },
 
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
               console.log(mypythondef);
               return mypythondef(hljs); } )
           },
@@ -844,6 +1039,7 @@ class Dictionary:
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
