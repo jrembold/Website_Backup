@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-04-07">
-  <title>All the Squiggles</title>
+  <meta name="dcterms.date" content="2024-11-06">
+  <title>Tis the Definition</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -17,140 +17,91 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">All the Squiggles</h1>
+  <h1 class="title">Tis the Definition</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">April 7, 2023</p>
+  <p class="date">November 6, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>ImageShop due tonight!</li>
-<li>Problem Set 6 will be posted this weekend. Due next Friday
+<li>Exam 2 on Friday!
 <ul>
-<li>Will be a bit shorter than most</li>
+<li>Study materials all posted</li>
+<li>Section meetings this week will also revolve around studying</li>
+<li>Prep your allowed materials so that you have them all easily
+accessible on Friday!</li>
+<li>Consider making yourself a personal summary sheet that has examples
+or code that you find most problematic</li>
 </ul></li>
-<li>We will introduce the Enigma project on Monday in case you are
-itching to get started on that</li>
+<li>Graphics Contest submissions due at the end of Monday</li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="https://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
-<!--
-## Review Question {data-notes="Solution: hnktge"}
-::::::cols
-::::col
-Let's consider a greatly simplified Enigma machine, which only has one rotor that is not turning. So the signal goes through the rotor then the reflector and back through the rotor. Given the rotor and reflector mappings shown to the right, what would the word `python` encrypt to?
-
-:::{.poll}
-#. `aicmnz`
-#. `hnktge`
-#. `rfqbls`
-#. `zghpmy`
-:::
-
-::::
-
-::::col
-\begin{tikzpicture}%%width=55%
-[label/.style={font=\Large\bf, MGreen},
-scale=1.8,
-transform shape,
-]
-\node[label, MRed] at (1,0.5) {Rotor 1};
-\foreach[count=\t] \a/\b in {A/D,B/M,C/T,D/W,E/S,F/I,G/L,H/R,I/U,J/Y,K/Q,L/N,M/K,N/F,O/E,P/J,Q/C,R/A,S/Z,T/B,U/P,V/G,W/X,X/O,Y/H,Z/V} {
-    \node[label](a) at (0,-\t*0.5) {\a};
-    \node[label](b) at (2,-\t*0.5) {\b};
-    \draw[-stealth, MBlue, line width=3pt] (a) -- (b);
-}
-
-
-\node[label, MRed] at (6,0.5) {Reflector};
-\foreach[count=\t] \a/\b in {A/U,B/Q,C/N,D/T,E/L,F/S,G/Z,H/F,I/M,J/R,K/E,L/H,M/D,N/P,O/X,P/K,Q/I,R/B,S/V,T/Y,U/G,V/J,W/C,X/W,Y/O,Z/A} {
-    \node[label](a) at (5,-\t*0.5) {\a};
-    \node[label](b) at (7,-\t*0.5) {\b};
-    \draw[-stealth, MBlue, line width=3pt] (a) -- (b);
-}
-
-\end{tikzpicture}
-
-
-::::
-::::::
-
-## Maps and Dictionaries
-- A common form of information associates pairs of data values
-    - Commonly called a _map_ in computer science
-    - Python calls such a structure a _dictionary_
-- A dictionary associates two different values:
-    - A simple value called the _key_, which is often a string but doesn't need to be
-    - A larger and more complex object called the _value_
-- This idea of associating pairs of values is exhibited all over in the real world
-    - Actual dictionaries! The words are the keys, the definitions the values.
-    - Web addresses! Keys are the urls, the values are the webpage contents.
-
-## Creating Dictionaries
-- Python dictionaries use squiggly brackets `{}` to bracket their contents
-- Can create an empty dictionary by providing no key-value pairs:
-  ```python
-  empty_dict = {}
-  ```
-- If creating a dictionary with key-value pairs
-    - Keys are separated from values with a colon `:`
-    - Pairs are separated by a comma `,`
-  ```python
-  generic_dict = {'Bob': 21, 0: False, 13: 'Thirteen'}
-  ```
--->
 </section>
-<section id="review-question" class="slide level2">
-<h2>Review Question</h2>
-<div class="cols" style="align-items:center">
-<div class="col">
-<p>What would be the output of the last print statement in the code to
-the right?</p>
-<div class="poll">
-<ol>
-<li>True</li>
-<li>False</li>
-<li>Error: Index out of range</li>
-<li>Error: Python will not know how to compare the new Demo objects</li>
-</ol>
-</div>
-</div>
-<div class="col">
-<pre ><code class="python" style="max-height:900px; font-size:.8em; line-height:1.3em;">class Demo:
-    def __init__(self):
-        self.x = []
+<section>
+<section id="paired-object-types" class="title-slide slide level1">
+<h1>Paired Object Types</h1>
 
-    def add(self, v):
-        self.x.append(v)
-
-    def get_x(self):
-        return self.x
-
-A, B = Demo(), Demo()
-A.add(3)
-B.add(3)
-C = B.get_x()
-C.append(A)
-print(A.get_x() == B.get_x())</code></pre>
-</div>
-</div>
+</section>
+<section id="maps-and-dictionaries" class="slide level2">
+<h2>Maps and Dictionaries</h2>
+<ul>
+<li>A common form of information associates pairs of data values
+<ul>
+<li>Commonly called a <em>map</em> in computer science</li>
+<li>Python calls such a structure a <em>dictionary</em></li>
+</ul></li>
+<li>A dictionary associates two different values:
+<ul>
+<li>A simple value called the <em>key</em>, which is often a string but
+doesn’t need to be</li>
+<li>A larger and more complex object called the <em>value</em></li>
+</ul></li>
+<li>This idea of associating pairs of values is exhibited all over in
+the real world
+<ul>
+<li>Actual dictionaries! The words are the keys, the definitions the
+values.</li>
+<li>Web addresses! Keys are the urls, the values are the webpage
+contents.</li>
+</ul></li>
+</ul>
+</section>
+<section id="creating-dictionaries" class="slide level2">
+<h2>Creating Dictionaries</h2>
+<ul>
+<li><p>Python dictionaries use squiggly brackets or <em>braces</em>
+<code class="python">{}</code> to enclose their contents</p></li>
+<li><p>Can create an empty dictionary by providing no key-value
+pairs:</p>
+<pre ><code class="python">empty_dict = {}</code></pre></li>
+<li><p>If creating a dictionary with key-value pairs</p>
+<ul>
+<li>Keys are separated from values with a colon
+<code class="python">:</code></li>
+<li>Pairs are separated by a comma <code class="python">,</code></li>
+</ul>
+<pre ><code class="python">generic_dict = {'Bob': 21, 0: False, 13: 'Thirteen'}</code></pre></li>
+</ul>
 </section>
 <section id="keys-and-values" class="slide level2">
 <h2>Keys and Values</h2>
@@ -175,7 +126,7 @@ object, mutable or immutable
 <div class="block" name="Viable">
 <pre ><code class="python">A = {True: 'Seth', False: 'Jesse'}
 B = {'Jill': 13, 'Jack': 12}
-C = {(1,2): {'x':1}}</code></pre>
+C = {(1,2): {'x': 1}}</code></pre>
 </div>
 </div>
 <div class="col">
@@ -236,33 +187,32 @@ print(A['Jil'])</code></pre>
 >>> print(d)
 {'A':12, 'B':12}</code></pre></li>
 </ul>
-</section>
-<section id="grade-sheet-example" class="slide level2">
-<h2>Grade Sheet Example</h2>
-<ul>
-<li><p>Suppose we had a file of student ids and accompanying scores that
-we wanted to read into a dictionary and then access.</p>
-<pre ><code class="python" style="max-height:700px; font-size:.8em; line-heigh:2em;">def read_to_dict(filename):
-    dictionary = {}
-    with open(filename) as f:
-        for line in f:
-            ID, score = line.strip().split(',')
-            dictionary[ID] = score
-    return dictionary
-
-def get_student_score():
-    scores = read_to_dict('SampleGrades.txt')
-    done = False
-    while not done:
-        student_id = input('Enter a student id number: ')
-        if student_id == "":
-            done = True
-        else:
-            if student_id in scores:
-                print(f"Student got a {scores[student_id]}.")
-            else:
-                print(f"Student id {student_id} was not found in classlist")</code></pre></li>
-</ul>
+<!-- don't think we have time for this this semester
+## Grade Sheet Example
+- Suppose we had a file of student ids and accompanying scores that we wanted to read into a dictionary and then access.
+  ```{.mypython style='max-height:700px; font-size:.8em; line-heigh:2em;'}
+  def read_to_dict(filename):
+      dictionary = {}
+      with open(filename) as f:
+          for line in f:
+              ID, score = line.strip().split(',')
+              dictionary[ID] = score
+      return dictionary
+  
+  def get_student_score():
+      scores = read_to_dict('SampleGrades.txt')
+      done = False
+      while not done:
+          student_id = input('Enter a student id number: ')
+          if student_id == "":
+              done = True
+          else:
+              if student_id in scores:
+                  print(f"Student got a {scores[student_id]}.")
+              else:
+                  print(f"Student id {student_id} was not found in classlist")
+  ```
+-->
 </section>
 <section id="understanding-check" class="slide level2"
 data-notes="Solution: [125,167,204]">
@@ -307,18 +257,34 @@ print([d['weight'] for d in A if 'weight' in d])</code></pre>
 checking either its values or its keys</p></li>
 <li><p>Python supports iteration with the
 <code class="python">for</code> statement, which has the form of:</p>
-<pre ><code class="python">for key in dictionary:
-    value = dictionary[key]
-    # Then code to work with that key and value</code></pre></li>
+<pre ><code class="python">for key in |||dictionary|||:
+    value = |||dictionary|||[key]
+    |||code to work with that key and value|||</code></pre></li>
 <li><p>You can also use the <code class="python">.items</code> method to
 grab both key and values together:</p>
-<pre ><code class="python">for key, value in dictionary.items():
-    # Then code to work with that key and value</code></pre></li>
+<ul>
+<li>Returns a tuple with both the key and corresponding pair</li>
+</ul>
+<pre ><code class="python">for key, value in |||dictionary|||.items():
+    |||code to work with that key and value|||</code></pre></li>
 </ul>
 </section>
 <section id="finding-students-by-grade" class="slide level2">
 <h2>Finding Students by grade</h2>
-<pre ><code class="python" style="max-height:900px">def get_students_with_score():
+<ul>
+<li><p>Suppose we had a file of student ids and corresponding grades on
+a test</p></li>
+<li><p>We want a simple program where we can enter in a target grade and
+have it tell us all the students who received that grade</p>
+<pre ><code class="python fragment">def read_to_dict(filename):
+    dictionary = {}
+    with open(filename) as f:
+      for line in f:
+          ID, score = line.strip().split(',')
+          dictionary[ID] = score
+    return dictionary
+
+def get_students_with_score():
     scores = read_to_dict('SampleGrades.txt')
     done = False
     while not done:
@@ -328,7 +294,8 @@ grab both key and values together:</p>
         else:
             for st_id, grade in scores.items():
                 if grade == des_grade.strip().upper():
-                    print(f"{st_id} got a {grade}")</code></pre>
+                    print(f"{st_id} got a {grade}")</code></pre></li>
+</ul>
 </section>
 <section id="common-dictionary-methods" class="slide level2">
 <h2>Common Dictionary Methods</h2>
@@ -345,29 +312,29 @@ grab both key and values together:</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">len(dict)</code></td>
+<td><code class="python">len(|||dict|||)</code></td>
 <td>Returns the number of key-value pairs in the dictionary</td>
 </tr>
 <tr class="even">
-<td><code class="python">dict.get(key, value)</code></td>
+<td><code class="python">|||dict|||.get(|||key|||, |||value|||)</code></td>
 <td>Returns the value associated with the
 <code class="python">key</code> in the dictionary. If the key is not
 found, returns the specified value, which is
 <code class="python">None</code> by default)</td>
 </tr>
 <tr class="odd">
-<td><code class="python">dict.pop(key)</code></td>
+<td><code class="python">|||dict|||.pop(|||key|||)</code></td>
 <td>Removes the key-value pair corresponding to
 <code class="python">key</code> and returns the associated value. Will
 raise an error if the key is not found.</td>
 </tr>
 <tr class="even">
-<td><code class="python">dict.clear()</code></td>
+<td><code class="python">|||dict|||.clear()</code></td>
 <td>Removes all key-value pairs from the dictionary, leaving it
 empty.</td>
 </tr>
 <tr class="odd">
-<td><code class="python">dict.items()</code></td>
+<td><code class="python">|||dict|||.items()</code></td>
 <td>Returns an iterable object that cycles through the successive tuples
 consisting of a key-value pair.</td>
 </tr>
@@ -388,7 +355,14 @@ seen increased use of late as structures to store records</p></li>
 <li><p>Allows easy access of attributes without worrying about
 ordering</p>
 <pre ><code class="python">print(boss['name'])</code></pre></li>
+<li><p>It is still using a mutable data-type to represent something that
+should be immutable though</p></li>
 </ul>
+</section></section>
+<section>
+<section id="more-squiggles-sets" class="title-slide slide level1">
+<h1>More Squiggles: Sets</h1>
+
 </section>
 <section id="mathematical-sets" class="slide level2">
 <h2>Mathematical Sets</h2>
@@ -475,7 +449,7 @@ class="math inline">\(B\)</span> but not in both.</li>
 operations</li>
 <li>Can either use appropriately named methods on sets or operators
 between sets</li>
-<li>Membership <code class="inlinecode">3 in primes</code></li>
+<li>Membership <code class="python inlinecode">3 in primes</code></li>
 </ul>
 <div class="cols">
 <div class="col">
@@ -509,20 +483,20 @@ set operations</li>
 <div class="col">
 <p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="105.47767mm"
    height="81.764046mm"
    viewBox="0 0 105.47767 81.764047"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15, custom)"
-   sodipodi:docname="Set_Union.svg">
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   sodipodi:docname="Set_Union.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -533,17 +507,20 @@ set operations</li>
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="145.03928"
-     inkscape:cy="153.79237"
+     inkscape:cx="145.20943"
+     inkscape:cy="153.79572"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
-     inkscape:window-width="2528"
-     inkscape:window-height="1381"
-     inkscape:window-x="1096"
-     inkscape:window-y="43"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -576,16 +553,16 @@ set operations</li>
        rx="31.218267"
        ry="31.015854" />
     <path
-       style="opacity:1;fill:#f92672;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       style="opacity:1;fill:#f38ba8;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
        d="m 299.88546,19.273529 c -8.4686,-0.05723 -16.64698,4.101398 -22.07349,10.473594 -4.94829,5.41909 -7.49248,12.77927 -7.2203,20.067026 -0.027,8.714039 4.33889,17.146678 11.13943,22.566548 4.75285,3.94259 10.8292,6.25895 16.98936,6.668266 6.06073,0.265565 12.24565,-1.011563 17.42787,-4.225164 0.65511,-0.514517 1.77692,-0.796289 2.12577,-1.529479 -2.37535,-2.607721 -4.88595,-5.147293 -6.57481,-8.284209 -6.03603,-10.282856 -5.55838,-23.900378 1.22634,-33.726347 1.40697,-2.246838 3.37059,-4.052622 5.09176,-6.0272 0.27398,-0.96652 -1.22434,-1.242046 -1.75439,-1.724925 -4.89021,-2.966315 -10.6404,-4.526749 -16.37754,-4.25811 z"
        id="path843" />
     <path
-       style="opacity:1;fill:#f92672;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       style="opacity:1;fill:#f38ba8;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
        d="m 339.29351,19.256818 c -6.10469,-0.07325 -12.19021,2.004769 -17.09588,5.572812 -0.0514,0.701747 0.96802,1.166956 1.33502,1.74177 7.51305,7.421021 10.9005,18.63685 8.71794,28.91345 -1.28144,6.461847 -4.69551,12.40993 -9.42639,17.005613 -0.41688,0.368535 -1.07811,1.040384 -0.20886,1.336627 4.53452,3.08375 9.91221,4.870628 15.3822,5.248136 4.89784,0.07321 9.8854,-0.546974 14.32883,-2.714348 9.91663,-4.506833 17.06558,-14.741902 17.41827,-25.618799 0.10165,-4.17028 -0.23257,-8.415811 -1.88182,-12.301298 -4.28066,-11.179276 -15.80712,-19.433657 -27.95256,-19.184958 -0.20558,-0.0027 -0.41117,6.56e-4 -0.61675,0.001 z"
        id="path847" />
     <text
        xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#1e1e2e;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="278.29404"
        y="55.864189"
        id="text851"
@@ -594,10 +571,10 @@ set operations</li>
          id="tspan849"
          x="278.29404"
          y="55.864189"
-         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#66d9ef;stroke-width:0.264583;">A</tspan></text>
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#1e1e2e;stroke-width:0.264583">A</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#1e1e2e;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="349.10455"
        y="55.864189"
        id="text855"
@@ -606,10 +583,10 @@ set operations</li>
          id="tspan853"
          x="349.10455"
          y="55.864189"
-         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#66d9ef;stroke-width:0.264583;">B</tspan></text>
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#1e1e2e;stroke-width:0.264583">B</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e22e;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="294.21402"
        y="98.211548"
        id="text877"
@@ -618,9 +595,9 @@ set operations</li>
          id="tspan875"
          x="294.21402"
          y="98.211548"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984004px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e22e;stroke-width:0.264583;">A ∪ B</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984004px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.264583">A ∪ B</tspan></text>
     <path
-       style="opacity:1;fill:#f92672;stroke:#f8f8f2;stroke-width:3.77953;stroke-linecap:round;stroke-linejoin:round"
+       style="opacity:1;fill:#f38ba8;stroke:#f8f8f2;stroke-width:3.77953;stroke-linecap:round;stroke-linejoin:round"
        d="m 194.72149,201.39581 c -5.9282,-6.03685 -9.51295,-10.42321 -13.68309,-16.74285 -21.70349,-32.89056 -24.00827,-74.27954 -6.08764,-109.321311 5.09789,-9.968349 12.6867,-20.342454 20.55319,-28.096757 l 3.82906,-3.774455 3.32967,3.269379 c 23.59617,23.168961 35.7461,56.221264 32.51304,88.447484 -2.08007,20.73353 -9.43121,39.21209 -22.3514,56.18476 -2.95982,3.88818 -12.78247,14.45316 -13.43763,14.45316 -0.17892,0 -2.27826,-1.98873 -4.6652,-4.41941 z"
        id="path901"
        transform="matrix(0.26458333,0,0,0.26458333,267.44543,16.12859)" />
@@ -628,20 +605,20 @@ set operations</li>
 </svg>
 <br> <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="105.47767mm"
    height="81.764046mm"
    viewBox="0 0 105.47767 81.764047"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15, custom)"
-   sodipodi:docname="Set_Diff.svg">
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   sodipodi:docname="Set_Diff.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -652,17 +629,20 @@ set operations</li>
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="220.70619"
-     inkscape:cy="176.63828"
+     inkscape:cx="220.89286"
+     inkscape:cy="176.60714"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
-     inkscape:window-width="2528"
-     inkscape:window-height="1381"
-     inkscape:window-x="1096"
-     inkscape:window-y="43"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -812,7 +792,7 @@ set operations</li>
        ry="31.015854" />
     <text
        xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#89b4fa;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="650.96637"
        y="55.864189"
        id="text953"
@@ -821,10 +801,10 @@ set operations</li>
          id="tspan951"
          x="650.96637"
          y="55.864189"
-         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#66d9ef;stroke-width:0.264583;">B</tspan></text>
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#89b4fa;stroke-width:0.264583">B</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e22e;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="599.29767"
        y="98.211548"
        id="text957"
@@ -833,15 +813,15 @@ set operations</li>
          id="tspan955"
          x="599.29767"
          y="98.211548"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984004px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e22e;stroke-width:0.264583;stroke:none;">A - B</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984004px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.264583;stroke:none">A - B</tspan></text>
     <path
-       style="opacity:1;fill:#f92672;stroke:#f8f8f2;stroke-width:3.77954;stroke-linecap:round;stroke-linejoin:round"
+       style="opacity:1;fill:#f38ba8;stroke:#f8f8f2;stroke-width:3.77954;stroke-linecap:round;stroke-linejoin:round"
        d="m 116.42048,233.92626 c -0.58929,-0.0797 -2.59822,-0.318 -4.46429,-0.52968 C 94.565041,231.42384 75.748101,224.10853 61.314573,213.70903 25.397354,187.83035 8.4536686,143.9487 17.903644,101.28113 27.076394,59.865266 59.908048,27.173827 101.59905,17.943171 c 28.04234,-6.208755 57.57253,-1.240719 81.96428,13.789327 1.57143,0.968305 2.92148,1.822742 3.00011,1.898751 0.0786,0.07601 -1.60887,1.948862 -3.75001,4.161898 -31.67742,32.741155 -43.01459,78.638963 -30.26915,122.542813 5.52899,19.04555 16.77536,37.91812 31.24328,52.42946 l 3.08218,3.09142 -4.51035,2.67663 c -12.96374,7.69322 -25.62631,12.21097 -40.92766,14.60217 -3.6379,0.56851 -6.7596,0.75004 -14.29697,0.83138 -5.30357,0.0572 -10.125,0.0389 -10.71428,-0.0408 z"
        id="path2926"
        transform="matrix(0.26458333,0,0,0.26458333,570.29064,16.12859)" />
     <text
        xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#1e1e2e;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="579.30554"
        y="55.864189"
        id="text949"
@@ -850,7 +830,7 @@ set operations</li>
          id="tspan947"
          x="579.30554"
          y="55.864189"
-         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#66d9ef;stroke-width:0.264583;">A</tspan></text>
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#1e1e2e;stroke-width:0.264583">A</tspan></text>
   </g>
 </svg>
 </p>
@@ -858,20 +838,20 @@ set operations</li>
 <div class="col">
 <p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="105.47767mm"
    height="81.764046mm"
    viewBox="0 0 105.47767 81.764047"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15, custom)"
-   sodipodi:docname="Set_Intersect.svg">
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   sodipodi:docname="Set_Intersect.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -882,17 +862,20 @@ set operations</li>
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="152.6386"
-     inkscape:cy="138.47211"
+     inkscape:cx="152.67857"
+     inkscape:cy="138.39286"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
-     inkscape:window-width="2528"
-     inkscape:window-height="1381"
-     inkscape:window-x="1096"
-     inkscape:window-y="43"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -987,12 +970,12 @@ set operations</li>
        rx="31.218267"
        ry="31.015854" />
     <path
-       style="opacity:1;fill:#f92672;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       style="opacity:1;fill:#f38ba8;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
        d="m 471.26262,26.501554 c -1.9861,1.381819 -3.47359,3.417812 -4.98556,5.288442 -3.36022,4.811944 -5.5321,10.587802 -5.45597,16.495035 -0.46823,7.48011 2.48355,14.949313 7.32973,20.602446 1.00667,1.01036 1.94187,2.312782 3.24356,2.909192 4.15785,-3.349977 7.19853,-8.014271 8.94495,-13.030116 3.42688,-9.656933 1.29262,-20.954992 -5.37293,-28.754979 -1.13845,-1.204089 -2.21335,-2.7549 -3.70378,-3.51002 z"
        id="path885" />
     <text
        xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#89b4fa;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="428.94394"
        y="55.864189"
        id="text891"
@@ -1001,10 +984,10 @@ set operations</li>
          id="tspan889"
          x="428.94394"
          y="55.864189"
-         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#66d9ef;stroke-width:0.264583;">A</tspan></text>
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#89b4fa;stroke-width:0.264583">A</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#89b4fa;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="499.75446"
        y="55.864189"
        id="text895"
@@ -1013,10 +996,10 @@ set operations</li>
          id="tspan893"
          x="499.75446"
          y="55.864189"
-         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#66d9ef;stroke-width:0.264583;">B</tspan></text>
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#89b4fa;stroke-width:0.264583">B</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e22e;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="448.08575"
        y="98.211548"
        id="text899"
@@ -1025,25 +1008,25 @@ set operations</li>
          id="tspan897"
          x="448.08575"
          y="98.211548"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984004px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e22e;stroke-width:0.264583;">A ∩ B</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984004px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.264583">A ∩ B</tspan></text>
   </g>
 </svg>
 <br> <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="105.47767mm"
    height="81.764046mm"
    viewBox="0 0 105.47767 81.764047"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15, custom)"
-   sodipodi:docname="Set_SymDiff.svg">
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   sodipodi:docname="Set_SymDiff.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -1054,17 +1037,20 @@ set operations</li>
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="203.19242"
-     inkscape:cy="138.15203"
+     inkscape:cx="233.59777"
+     inkscape:cy="177.53431"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
-     inkscape:window-width="2528"
-     inkscape:window-height="1381"
-     inkscape:window-x="1096"
-     inkscape:window-y="43"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -1271,16 +1257,16 @@ set operations</li>
        rx="31.218267"
        ry="31.015854" />
     <path
-       style="opacity:1;fill:#f92672;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       style="opacity:1;fill:#f38ba8;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
        d="m 749.15842,19.273529 c -8.4686,-0.05723 -16.64698,4.101398 -22.07349,10.473594 -4.94829,5.41909 -7.49248,12.77927 -7.2203,20.067026 -0.027,8.714039 4.33889,17.146678 11.13943,22.566548 4.75285,3.94259 10.8292,6.25895 16.98936,6.668266 6.06073,0.265565 12.24565,-1.011563 17.42787,-4.225164 0.65511,-0.514517 1.77692,-0.796289 2.12577,-1.529479 -2.37535,-2.607721 -4.88595,-5.147293 -6.57481,-8.284209 -6.03603,-10.282856 -5.55838,-23.900378 1.22634,-33.726347 1.40697,-2.246838 3.37059,-4.052622 5.09176,-6.0272 0.27398,-0.96652 -1.22434,-1.242046 -1.75439,-1.724925 -4.89021,-2.966315 -10.6404,-4.526749 -16.37754,-4.25811 z"
        id="path981" />
     <path
-       style="opacity:1;fill:#f92672;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       style="opacity:1;fill:#f38ba8;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
        d="m 788.56647,19.256818 c -6.10469,-0.07325 -12.19021,2.004769 -17.09588,5.572812 -0.0514,0.701747 0.96802,1.166956 1.33502,1.74177 7.51305,7.421021 10.9005,18.63685 8.71794,28.91345 -1.28144,6.461847 -4.69551,12.40993 -9.42639,17.005613 -0.41688,0.368535 -1.07811,1.040384 -0.20886,1.336627 4.53452,3.08375 9.91221,4.870628 15.3822,5.248136 4.89784,0.07321 9.8854,-0.546974 14.32883,-2.714348 9.91663,-4.506833 17.06558,-14.741902 17.41827,-25.618799 0.10165,-4.17028 -0.23257,-8.415811 -1.88182,-12.301298 -4.28066,-11.179276 -15.80712,-19.433657 -27.95256,-19.184958 -0.20558,-0.0027 -0.41117,6.56e-4 -0.61675,0.001 z"
        id="path985" />
     <text
        xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#1e1e2e;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="726.10809"
        y="55.864189"
        id="text989"
@@ -1289,10 +1275,10 @@ set operations</li>
          id="tspan987"
          x="726.10809"
          y="55.864189"
-         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#66d9ef;stroke-width:0.264583;">A</tspan></text>
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#1e1e2e;stroke-width:0.264583">A</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#66d9ef;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#1e1e2e;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="796.91864"
        y="55.864189"
        id="text993"
@@ -1301,10 +1287,10 @@ set operations</li>
          id="tspan991"
          x="796.91864"
          y="55.864189"
-         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#66d9ef;stroke-width:0.264583;">B</tspan></text>
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;font-family:Arial;-inkscape-font-specification:'Arial, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#1e1e2e;stroke-width:0.264583">B</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e22e;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#a6e3a1;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="745.24994"
        y="98.211548"
        id="text997"
@@ -1313,7 +1299,7 @@ set operations</li>
          id="tspan995"
          x="745.24994"
          y="98.211548"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984004px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e22e;stroke-width:0.264583;">A ∆ B</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.5984004px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a6e3a1;stroke-width:0.264583">A ∆ B</tspan></text>
   </g>
 </svg>
 </p>
@@ -1392,7 +1378,7 @@ class Dictionary:
         return repr(self.buckets)
 ```
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -1405,8 +1391,10 @@ class Dictionary:
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
 
   <script>
 
@@ -1525,6 +1513,12 @@ class Dictionary:
 			disableCheckFile: false, //default false
 		 },
 
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -1534,6 +1528,7 @@ class Dictionary:
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
@@ -1562,6 +1557,20 @@ class Dictionary:
 			{ src: "../html_srcs/reveal.js/plugin/d3/reveald3.js" },
 		],
       });
+      
     </script>
+
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>

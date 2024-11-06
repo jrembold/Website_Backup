@@ -16,15 +16,18 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/tokyo-night-light.css">
 </head>
 <body>
   <div class="reveal">
@@ -33,7 +36,7 @@
 <section id="title-slide">
   <h1 class="title">Full Scale Mining</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Wednesday, November 9, 2022</p>
+  <p class="date">Wednesday, November 6, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -41,14 +44,16 @@
 <ul>
 <li>Homework 8 due tomorrow</li>
 <li>Test 2 results back on Monday</li>
-<li>CS/DS Tea tomorrow!
+<li>TechBytes tomorrow! Where does ethics belong in the data science
+curriculum?</li>
+<li>Women in Tech: November 13th
 <ul>
-<li>11:30 - 12:30 in Ford 204</li>
-<li>Pizza!</li>
-<li>Juni DeYoung talking about their summer research</li>
+<li>RSVP <a
+href="https://docs.google.com/forms/d/e/1FAIpQLSfxfkp7LVQhP0PpASNGf-71ojRCMcGKD5hn0J-3harp3iaQGQ/viewform?usp=sf_link">here</a></li>
+<li>Both speakers are awesome!</li>
 </ul></li>
 <li>Polling today: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="https://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 </section>
 <section id="review-question" class="slide level2">
@@ -65,6 +70,12 @@ expression:</p>
 </ol>
 </div>
 </section>
+<section>
+<section id="regular-expressions-in-sql"
+class="title-slide slide level1">
+<h1>Regular Expressions in SQL</h1>
+
+</section>
 <section id="back-to-sql" class="slide level2">
 <h2>Back to SQL</h2>
 <ul>
@@ -72,11 +83,11 @@ expression:</p>
 filtering</li>
 <li>You can also use regexes for pattern matching!
 <ul>
-<li><code class="python">~</code> is a case sensitive match using the
+<li><code class="pgsql">~</code> is a case sensitive match using the
 following regex</li>
-<li><code class="python">~*</code> is a case insensitive match using the
+<li><code class="pgsql">~*</code> is a case insensitive match using the
 following regex</li>
-<li>Either can have a <code class="python">!</code> in front to negate
+<li>Either can have a <code class="pgsql">!</code> in front to negate
 the search (where things do <strong>not</strong> match the regex)</li>
 </ul></li>
 </ul>
@@ -91,36 +102,55 @@ WHERE colname ~ '[a-z]*\s\d{2}';</code></pre>
 want from a much larger string</li>
 <li>This can be particularly useful when cleaning data or constructing
 useful database tables</li>
-<li><code class="python">regexp_match(str, regex)</code> returns the
-<strong>first</strong> matching instance in the string
+<li>If you have just a single piece of information to extract,
+<code class="pgsql">SUBSTRING(|||text|||, |||regex|||)</code> is
+probably the most straightforward method
+<ul>
+<li>If no capture group provided, the entire match is returned</li>
+<li>If a single capture group is provided, only that will be
+returned</li>
+<li>Just the <strong>first</strong> matching instance is returned</li>
+</ul></li>
+</ul>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT substring('today is November 6, 2024', '(\w+) \d{2}');</code></pre>
+</section>
+<section id="extracting-more-data" class="slide level2">
+<h2>Extracting More Data</h2>
+<ul>
+<li>If you want to capture multiple groups at once,
+<code class="pgsql">regexp_match(|||str|||, |||regex|||)</code> is what
+you want
 <ul>
 <li>What is returned is whatever is in any <em>capture groups</em> you
 may have included in your regex, or the entire match if there are no
 capture groups</li>
 <li>Output is returned as an array, to allow for potentially multiple
 capture groups</li>
-<li>If you just have one capture group and don’t want it in an array,
-index it out using <code class="python">[1]</code> at the end after
-wrapping entire expression in ()</li>
+<li>You can index values out of the array or “unpack it” with
+<code class="pgsql">UNNEST</code></li>
 </ul></li>
 </ul>
-<pre ><code class="pgsql" style="font-size:.9em">SELECT (regexp_match('today is March 29, 2022', '\d{4}'))[1];</code></pre>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT regexp_match(
+  'today is November 6, 2024', 
+  '(\w+) \d{2}.*(\d{4})')
+);</code></pre>
 </section>
 <section id="regular-splitting" class="slide level2">
 <h2>Regular Splitting</h2>
 <ul>
 <li>You can also use regular expressions to replace or split text</li>
-<li><code class="python">regexp_replace(text, re, replacement)</code>
-will replace the first matches of re in text with the replacement
+<li><code class="pgsql">regexp_replace(|||text|||, |||re|||, |||replacement|||)</code>
+will replace the <strong>first</strong> matches of re in text with the
+replacement
 <ul>
-<li>Add another <code class="python">'g'</code> argument on the end to
-do so globally (replacing all matches)</li>
+<li>Add another <code class="pgsql">'g'</code> argument on the end to do
+so globally (replacing all matches)</li>
 </ul></li>
-<li><code class="python">regexp_split_to_array(text, re)</code> will
-split the text into an array on each match to re</li>
-<li><code class="python">regexp_split_to_table(text, re)</code> will
-split the text into a table column on each match to re. This is just
-like unnesting the array.</li>
+<li><code class="pgsql">regexp_split_to_array(|||text|||, |||re|||)</code>
+will split the text into an array on each match to re</li>
+<li><code class="pgsql">regexp_split_to_table(|||text|||, |||re|||)</code>
+will split the text into a table column on each match to re. This is
+just like unnesting the array.</li>
 </ul>
 </section>
 <section id="now-to-you" class="slide level2">
@@ -131,12 +161,12 @@ href="../activity_data/regex_parsing.csv">this</a> CSV file, which
 contains a simple subset of artists and dimensions from the MoMA data
 set</li>
 <li>Create the simple table and import in the data from the CSV</li>
-<li>See if you can achieve the following:
+<li>See if you can achieve the following using regular expressions:
 <ul>
 <li>Create and populate new columns for first, middle, and last
 name</li>
 <li>Create and populate new columns to hold the width and height in
-inches (in <code class="python">1 1/4</code> form)</li>
+inches (in <code class="pgsql">1 1/4</code> form)</li>
 <li>If the above was easy and you finish quickly, create new columns to
 hold decimal equivalents of the width and height</li>
 </ul></li>
@@ -147,289 +177,29 @@ hold decimal equivalents of the width and height</li>
 <div class="cols">
 <div class="col">
 <ul>
-<li>Group A: Charlie, Kellen, Kelson</li>
-<li>Group B: Sean, Camdin, Paulina</li>
-<li>Group C: Tyler, Jacob</li>
-<li>Group D: Will R, Alex W, Pachie</li>
-<li>Group E: Nathan, Maya, Will A</li>
-<li>Group F: Alex B, Malie, Henry</li>
-<li>Group F: Julius, Mitch, Meelad</li>
-<li>Group H: Avinash, Faye</li>
+<li>Group 1: Dayton, Matthew, Haley</li>
+<li>Group 2: Jordan, Marcus, Nick</li>
+<li>Group 3: Tiffany, Mallory, Grace</li>
+<li>Group 4: Harleen, Jack, Connor</li>
+<li>Group 5: Aurora, Tippy, Sergio</li>
+<li>Group 6: Jerrick, AJ, Michael</li>
+<li>Group 7: Sam H, Greg, Evan</li>
+<li>Group 8: Sam J, Hannah</li>
 </ul>
 </div>
 <div class="col">
-<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<figure>
+<img data-src="../images/group_seating_locs_Ford201.png"
+alt="Group Areas" />
+<figcaption aria-hidden="true">Group Areas</figcaption>
+</figure>
+</div>
+</div>
+</section></section>
+<section>
+<section id="full-text-searching" class="title-slide slide level1">
+<h1>Full Text Searching</h1>
 
-<svg
-   width="193.07626mm"
-   height="189.43585mm"
-   viewBox="0 0 193.07626 189.43585"
-   version="1.1"
-   id="svg5"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
-   sodipodi:docname="group_seating_locs.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview7"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     showgrid="false"
-     inkscape:zoom="0.46903409"
-     inkscape:cx="847.48637"
-     inkscape:cy="440.2665"
-     inkscape:window-width="2560"
-     inkscape:window-height="1413"
-     inkscape:window-x="1080"
-     inkscape:window-y="27"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <defs
-     id="defs2" />
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(-271.65836,-38.702691)">
-    <rect
-       style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:1.87071;stroke-linecap:round;stroke-linejoin:round"
-       id="rect234"
-       width="56.21962"
-       height="19.801687"
-       x="340.08667"
-       y="39.638046" />
-    <g
-       id="g1752"
-       transform="matrix(0.62357127,0,0,0.62357127,105.39492,12.964302)">
-      <rect
-         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect236"
-         width="306.62982"
-         height="34.666981"
-         x="268.13101"
-         y="90.239426" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect960"
-         width="79.498459"
-         height="43.146389"
-         x="295.52704"
-         y="85.191986"
-         ry="6.17379" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1735"
-         width="79.498459"
-         height="43.146389"
-         x="467.86636"
-         y="85.191986"
-         ry="6.17379" />
-    </g>
-    <g
-       id="g1756"
-       transform="matrix(0.62357127,0,0,0.62357127,105.09461,13.25227)">
-      <rect
-         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect346"
-         width="306.62982"
-         height="34.666981"
-         x="268.61261"
-         y="143.18785" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1737"
-         width="79.498459"
-         height="43.146389"
-         x="382.17828"
-         y="138.53749"
-         ry="6.17379" />
-    </g>
-    <g
-       id="g1764"
-       transform="matrix(0.62357127,0,0,0.62357127,105.39492,80.069685)">
-      <rect
-         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1758"
-         width="306.62982"
-         height="34.666981"
-         x="268.13101"
-         y="90.239426" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1760"
-         width="79.498459"
-         height="43.146389"
-         x="295.52704"
-         y="85.191986"
-         ry="6.17379" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1762"
-         width="79.498459"
-         height="43.146389"
-         x="467.86636"
-         y="85.191986"
-         ry="6.17379" />
-    </g>
-    <g
-       id="g1770"
-       transform="matrix(0.62357127,0,0,0.62357127,105.09461,80.357656)">
-      <rect
-         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1766"
-         width="306.62982"
-         height="34.666981"
-         x="268.61261"
-         y="143.18785" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1768"
-         width="79.498459"
-         height="43.146389"
-         x="382.17828"
-         y="138.53749"
-         ry="6.17379" />
-    </g>
-    <g
-       id="g1778"
-       transform="matrix(0.62357127,0,0,0.62357127,105.39492,147.17507)">
-      <rect
-         style="opacity:1;fill:#88c0d0;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1772"
-         width="306.62982"
-         height="34.666981"
-         x="268.13101"
-         y="90.239426" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1774"
-         width="79.498459"
-         height="43.146389"
-         x="295.52704"
-         y="85.191986"
-         ry="6.17379" />
-      <rect
-         style="opacity:1;fill:#d8dee9;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect1776"
-         width="79.498459"
-         height="43.146389"
-         x="467.86636"
-         y="85.191986"
-         ry="6.17379" />
-    </g>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.574px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:3.70961;stroke-linecap:round;stroke-linejoin:round"
-       x="353.86295"
-       y="54.639805"
-       id="text1834"><tspan
-         sodipodi:role="line"
-         id="tspan1832"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.574px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:3.70961"
-         x="353.86295"
-         y="54.639805">Front</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="307.9303"
-       y="89.746925"
-       id="text1838"><tspan
-         sodipodi:role="line"
-         id="tspan1836"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="307.9303"
-         y="89.746925">A</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="417.09128"
-       y="89.746925"
-       id="text1902"><tspan
-         sodipodi:role="line"
-         id="tspan1900"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="417.09128"
-         y="89.746925">B</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="362.85822"
-       y="123.30635"
-       id="text1906"><tspan
-         sodipodi:role="line"
-         id="tspan1904"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="362.85822"
-         y="123.30635">C</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="307.76288"
-       y="156.70032"
-       id="text1910"><tspan
-         sodipodi:role="line"
-         id="tspan1908"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="307.76288"
-         y="156.70032">D</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="417.18399"
-       y="156.70032"
-       id="text1914"><tspan
-         sodipodi:role="line"
-         id="tspan1912"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="417.18399"
-         y="156.70032">E</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="362.99017"
-       y="190.33252"
-       id="text1918"><tspan
-         sodipodi:role="line"
-         id="tspan1916"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="362.99017"
-         y="190.33252">F</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="309.30206"
-       y="224.20186"
-       id="text1922"><tspan
-         sodipodi:role="line"
-         id="tspan1920"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="309.30206"
-         y="224.20186">G</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#2e3440;stroke:none;stroke-width:7.26355;stroke-linecap:round;stroke-linejoin:round"
-       x="417.01123"
-       y="224.20186"
-       id="text1926"><tspan
-         sodipodi:role="line"
-         id="tspan1924"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.5366px;font-family:'Bebas Neue';-inkscape-font-specification:'Bebas Neue, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2e3440;stroke:none;stroke-width:7.26355"
-         x="417.01123"
-         y="224.20186">H</tspan></text>
-  </g>
-</svg>
-</p>
-</div>
-</div>
 </section>
 <section id="full-text-search" class="slide level2">
 <h2>Full Text Search</h2>
@@ -444,8 +214,8 @@ longer passage?
 <li>Using these new tools will require using some new functions and data
 types:
 <ul>
-<li><code class="python">tsvector</code></li>
-<li><code class="python">tsquery</code></li>
+<li><code class="pgsql">tsvector</code></li>
+<li><code class="pgsql">tsquery</code></li>
 </ul></li>
 </ul>
 </section>
@@ -465,7 +235,7 @@ particular ideas</li>
 words</li>
 <li>RUN: run, runs, ran, running</li>
 </ul></li>
-<li>Postgres’s <code class="python">to_tsvector</code> will break a
+<li>Postgres’s <code class="pgsql">to_tsvector</code> will break a
 string down into its component lexemes, and keep track of where each
 occured in the original string</li>
 </ul>
@@ -478,16 +248,16 @@ occured in the original string</li>
 <ul>
 <li>Text that you want to search <strong>through</strong> will need to
 be converted to a tsvector through
-<code class="python">to_tsvector</code></li>
+<code class="pgsql">to_tsvector</code></li>
 <li>Text that you want to search <strong>for</strong> will be converted
-using <code class="python">to_tsquery</code></li>
-<li><code class="python">to_tsquery</code> takes a sequence of words
-with symbols connecting them conveying relationships
+using <code class="pgsql">to_tsquery</code></li>
+<li><code class="pgsql">to_tsquery</code> takes a sequence of words with
+symbols connecting them conveying relationships
 <ul>
-<li><code class="python">&</code> - and</li>
-<li><code class="python">|</code> - or</li>
-<li><code class="python">!</code> - not</li>
-<li><code class="python"><-></code> - followed by</li>
+<li><code class="pgsql">&</code> - and</li>
+<li><code class="pgsql">|</code> - or</li>
+<li><code class="pgsql">!</code> - not</li>
+<li><code class="pgsql"><-></code> - followed by</li>
 </ul>
 <pre ><code class="postgresql">SELECT to_tsquery('fly & monday')</code></pre></li>
 </ul>
@@ -496,33 +266,32 @@ with symbols connecting them conveying relationships
 <h2>Combining Vectors and Queries</h2>
 <ul>
 <li><p>To actually complete a full text search, you ask Postgres to look
-through a <code class="python">tsvector</code> object for a particular
-<code class="python">tsquery</code></p></li>
+through a <code class="pgsql">tsvector</code> object for a particular
+<code class="pgsql">tsquery</code></p></li>
 <li><p>The syntax to do so utilizes the match operator, which is two
-“at” symbols: <code class="python">@@</code></p>
-<pre ><code class="postgresql">SELECT some_tsvector @@ some_tsquery;</code></pre></li>
-<li><p>Using <code class="python">@@</code> is a true/false search, so
+“at” symbols: <code class="pgsql">@@</code></p>
+<pre ><code class="postgresql">SELECT |||some tsvector||| @@ |||some tsquery|||;</code></pre></li>
+<li><p>Using <code class="pgsql">@@</code> is a true/false search, so
 the query is either found or not</p>
 <ul>
 <li>This means it can be used for filtering with
-<code class="python">WHERE</code> as well!</li>
+<code class="pgsql">WHERE</code> as well!</li>
 </ul></li>
 </ul>
 </section>
 <section id="indexing-tsvectors" class="slide level2">
 <h2>Indexing TSVectors</h2>
 <ul>
-<li><p>Individual <code class="python">tsvector</code>s can not be
-easily ordered, so indexing a column with
-<code class="python">tsvector</code> contents using the normal B-Tree
-method would not be effective</p></li>
+<li><p>Individual <code class="pgsql">tsvector</code>s can not be easily
+ordered, so indexing a column with <code class="pgsql">tsvector</code>
+contents using the normal B-Tree method would not be effective</p></li>
 <li><p>For this sort of content, use a <em>Generalized Inverted
 Index</em> or GIN indexing method instead</p>
-<pre ><code class="postgresql">CREATE INDEX idx_name ON tab_name 
-USING gin(col_name);</code></pre></li>
-<li><p>Seriously consider adding your
-<code class="python">tsvector</code> column as an index, as it can
-significantly speed up these sorts of searches</p></li>
+<pre ><code class="postgresql">CREATE INDEX |||index name||| ON |||table|||
+USING GIN(|||column|||);</code></pre></li>
+<li><p>Seriously consider adding an index to your
+<code class="pgsql">tsvector</code> column, as it can
+<em>significantly</em> speed up these sorts of searches</p></li>
 </ul>
 </section>
 <section id="getting-more-info" class="slide level2">
@@ -530,25 +299,25 @@ significantly speed up these sorts of searches</p></li>
 <ul>
 <li>Sometimes it can be useful to get a bit more information about
 <em>where</em> a match shows up in the text</li>
-<li>The <code class="python">ts_headline</code> function can capture
+<li>The <code class="pgsql">ts_headline</code> function can capture
 snippets of text around a match and display them
 <ul>
-<li><code class="python">ts_headline</code> operates on the original
+<li><code class="pgsql">ts_headline</code> operates on the original
 text, <strong>not</strong> the tsvector! This will absolutely make it
 slower, so use it wisely!</li>
 </ul></li>
 <li>There are a few required parameters and some options for
-<code class="python">ts_headline</code>:
+<code class="pgsql">ts_headline</code>:
 <ul>
 <li>the text to search</li>
 <li>the tsquery to look for</li>
 <li>Other options appear in an option string:
 <ul>
-<li><code class="python">StartSel</code>/<code class="python">StopSel</code>:
+<li><code class="pgsql">StartSel</code>/<code class="pgsql">StopSel</code>:
 the delimiters that will showcase the word</li>
-<li><code class="python">MinWords</code>/<code class="python">MaxWords</code>:
+<li><code class="pgsql">MinWords</code>/<code class="pgsql">MaxWords</code>:
 the min or max number of words to show around the match</li>
-<li><code class="python">MaxFragments</code>: a max number of fragments
+<li><code class="pgsql">MaxFragments</code>: a max number of fragments
 to show if the match occurs multiple times</li>
 </ul></li>
 </ul></li>
@@ -561,14 +330,14 @@ to show if the match occurs multiple times</li>
 want a method to rank or compare them and only select the “best”</li>
 <li>Ranking by relevancy is vague and tends to be very application
 specific, but it can be useful</li>
-<li><code class="python">ts_rank</code> will give an arbitrary rank
-based on how many times your query words appear in the text
+<li><code class="pgsql">ts_rank</code> will give an arbitrary rank based
+on how many times your query words appear in the text
 <ul>
 <li>This might mean that longer texts will always receive a higher rank!
 You can normalize by the text length by providing an extra numeric code
 as a third argument (2 or 8 probably best)</li>
 </ul></li>
-<li><code class="python">ts_rank_cd</code> does similar, but also
+<li><code class="pgsql">ts_rank_cd</code> does similar, but also
 considers the proximity of searched lexemes</li>
 <li>Both functions take 2 required arguments:
 <ul>
@@ -581,17 +350,16 @@ considers the proximity of searched lexemes</li>
 <h2>Your Turn!</h2>
 <p>The file <a href="../activity_data/alice.sql">here</a> contains the
 SQL commands to generate and populate a simple table
-<code class="python">alice</code> which hold the raw chapter contents of
+<code class="pgsql">alice</code> which hold the raw chapter contents of
 the book: Alice in Wonderland. You will need to set up your own
-<code class="python">tsvector</code> column and index. In the same
-groups as earlier, see if you can use the data to answer the
-following:</p>
+<code class="pgsql">tsvector</code> column and index. In the same groups
+as earlier, see if you can use the data to answer the following:</p>
 <ul>
 <li>In what chapters does the “Chesire cat” appear?</li>
 <li>In what chapter does the word “mushroom” appear the most? How many
 times does it appear?</li>
 </ul>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -602,13 +370,15 @@ times does it appear?</li>
   <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
   <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
   // Added plugins
-  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
-  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
   <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/multimodal/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/mypgsql.js"></script>
 
   <script>
 
@@ -636,7 +406,7 @@ times does it appear?</li>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -683,7 +453,7 @@ times does it appear?</li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -718,14 +488,18 @@ times does it appear?</li>
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
-	reveald3: {
-			runLastState: true, // true/false, default: true
-			onSlideChangedDelay: 200,
-			mapPath: false, // true / false / "spefific/path/as/string", default: false
-			tryFallbackURL: true, // true/false, default false
-			disableCheckFile: false, //default false
-		 },
-
+          highlight: {
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -733,31 +507,31 @@ times does it appear?</li>
           RevealNotes,
           RevealSearch,
           RevealZoom,
-		  RevealChart,
 		  RevealChalkboard,
           RevealMenu,
           Reveald3,
+          Multimodal,
         ],
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
@@ -765,5 +539,17 @@ times does it appear?</li>
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
