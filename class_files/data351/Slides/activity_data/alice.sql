@@ -8,8 +8,7 @@ CREATE TABLE alice (
 
 INSERT INTO alice VALUES
 (1, 'Down the Rabbit-Hole', 
-$$
-Alice was beginning to get very tired of sitting by her sister on the
+$$ Alice was beginning to get very tired of sitting by her sister on the
 bank, and of having nothing to do: once or twice she had peeped into
 the book her sister was reading, but it had no pictures or
 conversations in it, “and what is the use of a book,” thought Alice
@@ -225,8 +224,7 @@ $$),
 
 
 (2,'The Pool of Tears',
-$$
-“Curiouser and curiouser!” cried Alice (she was so much surprised, that
+$$ “Curiouser and curiouser!” cried Alice (she was so much surprised, that
 for the moment she quite forgot how to speak good English); “now I’m
 opening out like the largest telescope that ever was! Good-bye, feet!”
 (for when she looked down at her feet, they seemed to be almost out of
@@ -428,8 +426,7 @@ $$),
 
 
 (3, 'A Caucus-Race and a Long Tale',
-$$
-They were indeed a queer-looking party that assembled on the bank—the
+$$ They were indeed a queer-looking party that assembled on the bank—the
 birds with draggled feathers, the animals with their fur clinging close
 to them, and all dripping wet, cross, and uncomfortable.
 
@@ -636,8 +633,7 @@ $$),
 
 
 (4, 'The Rabbit Sends in a Little Bill',
-$$
-It was the White Rabbit, trotting slowly back again, and looking
+$$ It was the White Rabbit, trotting slowly back again, and looking
 anxiously about as it went, as if it had lost something; and she heard
 it muttering to itself “The Duchess! The Duchess! Oh my dear paws! Oh
 my fur and whiskers! She’ll get me executed, as sure as ferrets are
@@ -898,8 +894,7 @@ $$),
 
 
 (4,'Advice from a Caterpillar',
-$$
-The Caterpillar and Alice looked at each other for some time in
+$$ The Caterpillar and Alice looked at each other for some time in
 silence: at last the Caterpillar took the hookah out of its mouth, and
 addressed her in a languid, sleepy voice.
 
@@ -1195,8 +1190,7 @@ $$),
 
 
 (6,'Pig and Pepper',
-$$
-For a minute or two she stood looking at the house, and wondering what
+$$ For a minute or two she stood looking at the house, and wondering what
 to do next, when suddenly a footman in livery came running out of the
 wood—(she considered him to be a footman because he was in livery:
 otherwise, judging by his face only, she would have called him a
@@ -1520,8 +1514,7 @@ $$),
 
 
 (7,'A Mad Tea-Party',
-$$
-There was a table set out under a tree in front of the house, and the
+$$ There was a table set out under a tree in front of the house, and the
 March Hare and the Hatter were having tea at it: a Dormouse was sitting
 between them, fast asleep, and the other two were using it as a
 cushion, resting their elbows on it, and talking over its head. “Very
@@ -1863,8 +1856,7 @@ $$),
 
 
 (8,'The Queen’s Croquet-Ground',
-$$
-A large rose-tree stood near the entrance of the garden: the roses
+$$ A large rose-tree stood near the entrance of the garden: the roses
 growing on it were white, but there were three gardeners at it, busily
 painting them red. Alice thought this a very curious thing, and she
 went nearer to watch them, and just as she came up to them she heard
@@ -2169,8 +2161,7 @@ $$),
 
 
 (9,'The Mock Turtle’s Story',
-$$
-“You can’t think how glad I am to see you again, you dear old thing!”
+$$ “You can’t think how glad I am to see you again, you dear old thing!”
 said the Duchess, as she tucked her arm affectionately into Alice’s,
 and they walked off together.
 
@@ -2489,8 +2480,7 @@ $$),
 
 
 (10,'The Lobster Quadrille',
-$$
-The Mock Turtle sighed deeply, and drew the back of one flapper across
+$$ The Mock Turtle sighed deeply, and drew the back of one flapper across
 his eyes. He looked at Alice, and tried to speak, but for a minute or
 two sobs choked his voice. “Same as if he had a bone in his throat,”
 said the Gryphon: and it set to work shaking him and punching him in
@@ -2788,8 +2778,7 @@ $$),
 
 
 (11,'Who Stole the Tarts?',
-$$
-The King and Queen of Hearts were seated on their throne when they
+$$ The King and Queen of Hearts were seated on their throne when they
 arrived, with a great crowd assembled about them—all sorts of little
 birds and beasts, as well as the whole pack of cards: the Knave was
 standing before them, in chains, with a soldier on each side to guard
@@ -3048,8 +3037,7 @@ $$),
 
 
 (12,'Alice’s Evidence',
-$$
-“Here!” cried Alice, quite forgetting in the flurry of the moment how
+$$ “Here!” cried Alice, quite forgetting in the flurry of the moment how
 large she had grown in the last few minutes, and she jumped up in such
 a hurry that she tipped over the jury-box with the edge of her skirt,
 upsetting all the jurymen on to the heads of the crowd below, and there
