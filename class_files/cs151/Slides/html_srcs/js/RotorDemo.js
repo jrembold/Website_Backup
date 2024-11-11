@@ -9,9 +9,9 @@
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const PERMUTATION = "EKMFLGDQVZNTOWYHXUSPAIBRCJ";
-const BG_COLOR = "#272822";
-const FG_COLOR = "#A6E22E";
-const CONTACT_COLOR = "#888888";
+const BG_COLOR = "#1e1e2e";
+const FG_COLOR = "#a6e3a1";
+const CONTACT_COLOR = "#6c7086";
 const WHEEL_LABEL_FONT = "36px 'Helvetica Neue','Sans-Serif'";
 const STRIP_LABEL_FONT = "24px 'Helvetica Neue','Sans-Serif'";
 
