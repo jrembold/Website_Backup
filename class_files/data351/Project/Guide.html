@@ -3133,6 +3133,19 @@ background: linear-gradient(135deg, rgb(15, 75, 110) 0%, rgb(56, 95, 13) 100%);
 <li>Defining other constraints where appropriate, be they <code>CHECK</code>, <code>NOT NULL</code> or <code>UNIQUE</code> constraints. Think about how to ensure that the data in your tables could not be corrupted with invalid inputs.</li>
 </ul>
 <p>Imagine that this database that you are creating will need to stand on its own for 3-5 years. You might be actively adding new data to it over those years, but construct it as if that would be the case.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>It will make your life much easier later if you create all of your tables for this project in their own separate database. Remember you can create a new database with <code>CREATE DATABASE new_name;</code>. This will just streamline later exporting your database.</p>
+</div>
+</div>
 </section>
 </section>
 <section id="problem-construction" class="level2">
