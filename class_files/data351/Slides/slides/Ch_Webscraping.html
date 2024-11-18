@@ -16,15 +16,18 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/tokyo-night-light.css">
 </head>
 <body>
   <div class="reveal">
@@ -33,25 +36,28 @@
 <section id="title-slide">
   <h1 class="title">Webscraping in R and Python</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Monday, November 28, 2022</p>
+  <p class="date">Monday, November 18, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Homework 10 due last day of normal semester
+<li>Homework 10 due on Thursday night
 <ul>
 <li>1 problem, 1 extra credit</li>
 </ul></li>
 <li>Projects!
 <ul>
-<li>Group assignments should have gone out earlier today</li>
+<li>You have your project groups!</li>
 <li>I’ll be leaving time in the latter half of every class this week for
 you to work with your group</li>
 </ul></li>
-<li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
+</section>
+<section>
+<section id="the-art-of-scraping" class="title-slide slide level1">
+<h1>The Art of Scraping</h1>
+
 </section>
 <section id="webscraping" class="slide level2">
 <h2>Webscraping</h2>
@@ -69,13 +75,13 @@ formatted</li>
 <li>Our goal today is to touch on how you could do each of these in
 either Python or R
 <ul>
-<li>In Python we’ll be using the <code class="python">requests</code>,
-<code class="python">pandas</code>,
-<code class="python">beautifulsoup</code> and
+<li>In Python we’ll be using the <code class="pgsql">requests</code>,
+<code class="pgsql">pandas</code>,
+<code class="pgsql">beautifulsoup</code> and
 <code class="python">json</code> libraries</li>
-<li>In R we’ll be using <code class="python">httr</code>,
-<code class="python">rvest</code> (with comes as part of tidyverse), and
-<code class="python">jsonlite</code></li>
+<li>In R we’ll be using <code class="pgsql">httr</code>,
+<code class="pgsql">rvest</code> (with comes as part of tidyverse), and
+<code class="pgsql">jsonlite</code></li>
 </ul></li>
 </ul>
 </section>
@@ -87,11 +93,11 @@ grab the necessary html</p></li>
 <li><p>This is exactly what your browser is doing when it accesses a
 webpage</p></li>
 <li><p>In Python, this is done using the
-<code class="python">requests</code> library
-<code class="python">get</code> function:</p>
+<code class="pgsql">requests</code> library
+<code class="pgsql">get</code> function:</p>
 <pre ><code class="python">html = requests.get(url).text</code></pre></li>
-<li><p>In R, this can be done using the <code class="python">GET</code>
-function from <code class="python">httr</code>:</p>
+<li><p>In R, this can be done using the <code class="pgsql">GET</code>
+function from <code class="pgsql">httr</code>:</p>
 <pre ><code class="r">html <- content(GET(url))</code></pre></li>
 </ul>
 </section>
@@ -118,27 +124,37 @@ tag that surrounds your data of interest</li>
 <section id="option-1-data-from-tables" class="slide level2">
 <h2>Option 1: Data from Tables</h2>
 <ul>
-<li>One method in which data is frequently stored on a webpage is in
-tables
+<li><p>One method in which data is frequently stored on a webpage is in
+tables</p>
 <ul>
 <li>These are surrounded by the <code class="html">< table ></code>
 tag</li>
 </ul></li>
-<li>So long as the table is fairly simple, both Python and R have very
-easy ways of grabbing the table information directly into a
-corresponding dataframe
-<ul>
-<li>Python</li>
-</ul>
-<pre ><code class="python">df = pandas.read_html(html)</code></pre>
-<ul>
-<li>R</li>
-</ul>
-<pre ><code class="r">df <- html %>% html_table</code></pre></li>
-<li>These will automatically correct for things like cells spanning
-multiple rows, which is very nice</li>
-<li>By default, both options technically return a list of dataframes for
-every table on the page</li>
+<li><p>So long as the table is fairly simple, both Python and R have
+very easy ways of grabbing the table information directly into a
+corresponding dataframe</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Language</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">Python</td>
+<td><code class="pgsql">df = pandas.read_html(html)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">R</td>
+<td><code class="pgsql">df <- html %>% html_table</code></td>
+</tr>
+</tbody>
+</table></li>
+<li><p>These will automatically correct for things like cells spanning
+multiple rows, which is very nice</p></li>
+<li><p>By default, both options technically return a list of dataframes
+for every table on the page</p></li>
 </ul>
 </section>
 <section id="option-2-other-data-on-a-page" class="slide level2">
@@ -159,9 +175,9 @@ information such as link or image urls</li>
 <li>When selecting the tags you want, you can provide multiple separated
 by spaces to provide a hierarchy of what you are looking for
 <ul>
-<li>Looking for <code class="python">'tr td'</code> says you can all the
-<code class="python">td</code> tags that are inside a
-<code class="python">tr</code> tag</li>
+<li>Looking for <code class="pgsql">'tr td'</code> says you can all the
+<code class="pgsql">td</code> tags that are inside a
+<code class="pgsql">tr</code> tag</li>
 </ul></li>
 <li>Gathering the data in this way may generate a list of content, but
 it won’t generally create more complicated tables of information, so you
@@ -179,35 +195,57 @@ tags from the larger structure</li>
 </ul>
 <pre ><code class="python">soup = bs4.BeautifulSoup(html)
 links = soup.select('td a')</code></pre></li>
-<li><p>In R, if you are using the <code class="python">rvest</code>
+<li><p>In R, if you are using the <code class="pgsql">rvest</code>
 library, you just need to pass the html into the proper function:
-<code class="python">html_elements</code></p>
+<code class="pgsql">html_elements</code></p>
 <pre ><code class="r">links <- html %>% html_elements('td a')</code></pre></li>
 </ul>
 </section>
 <section id="option-2-information-from-tags" class="slide level2">
 <h2>Option 2: Information from tags</h2>
 <ul>
-<li>Both the previous methods will get you a list of the tags that match
-what you want</li>
-<li>Generally, you then want some information <em>from</em> those tags,
-either the enclosed text or some attribute</li>
-<li>To get the text associated with a tag:
-<ul>
-<li>In Python:
-<code class="inlinecode python hljs">link_text = [tag.text for tag in links]</code></li>
-<li>In R:
-<code class="inlinecode r">link_text <- only_links %>% html_text()</code></li>
-</ul></li>
-<li>To get an attribute value of a tag (content inside the
-<code class="python"><</code> <code class="python">></code> parts of the
-tag)
-<ul>
-<li><p>In Python:
-<code class="inlinecode">link_url = [tag['href'] for tag in links]</code></p></li>
-<li><p>In R:
-<code class="inlinecode">link_url <- only_links %>% html_attr('href')</code></p></li>
-</ul></li>
+<li><p>Generally, you then want some information <em>from</em> those
+tags, either the enclosed text or some attribute</p></li>
+<li><p>To get the text associated with a tag:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Language</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">Python</td>
+<td><code class="python">link_text = [tag.text for tag in links]</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">R</td>
+<td><code class="r">link_text <- only_links %>% html_text</code></td>
+</tr>
+</tbody>
+</table></li>
+<li><p>To get an attribute value of a tag (content inside the
+<code class="pgsql"><</code> <code class="pgsql">></code> parts of the
+tag)</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Language</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">Python</td>
+<td><code class="python">link_url = [tag['href'] for tag in links]</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">R</td>
+<td><code class="r">link_url <- only_links %>% html_attr('href')</code></td>
+</tr>
+</tbody>
+</table></li>
 </ul>
 </section>
 <section id="option-3-apis" class="slide level2">
@@ -237,8 +275,8 @@ webscraping usage!</strong></li>
 <li>The information can be downloaded just like html information was
 downloaded
 <ul>
-<li><code class="python">data = requests.get(url).text</code></li>
-<li><code class="python">data <- read_html(url)</code></li>
+<li><code class="pgsql">data = requests.get(url).text</code></li>
+<li><code class="pgsql">data <- read_html(url)</code></li>
 </ul></li>
 <li>Commonly, the output will be a string of JSON data, so it helps to
 use a JSON package to convert it to your language’s natural data
@@ -269,6 +307,11 @@ table of the names of the astronauts and what vessel they are currently
 on.</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="projects" class="title-slide slide level1">
+<h1>Projects!</h1>
+
 </section>
 <section id="project-time" class="slide level2">
 <h2>Project Time!</h2>
@@ -288,7 +331,7 @@ analyze in some fashion.
 </ul></li>
 </ul></li>
 </ul>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -299,13 +342,15 @@ analyze in some fashion.
   <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
   <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
   // Added plugins
-  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
-  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
   <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/multimodal/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/mypgsql.js"></script>
 
   <script>
 
@@ -333,7 +378,7 @@ analyze in some fashion.
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -380,7 +425,7 @@ analyze in some fashion.
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -415,14 +460,18 @@ analyze in some fashion.
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
-	reveald3: {
-			runLastState: true, // true/false, default: true
-			onSlideChangedDelay: 200,
-			mapPath: false, // true / false / "spefific/path/as/string", default: false
-			tryFallbackURL: true, // true/false, default false
-			disableCheckFile: false, //default false
-		 },
-
+          highlight: {
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -430,31 +479,31 @@ analyze in some fashion.
           RevealNotes,
           RevealSearch,
           RevealZoom,
-		  RevealChart,
 		  RevealChalkboard,
           RevealMenu,
           Reveald3,
+          Multimodal,
         ],
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
@@ -462,5 +511,17 @@ analyze in some fashion.
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
