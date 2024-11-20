@@ -16,15 +16,18 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/nord_light.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/nord.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/../css/highlight/tokyo-night-light.css">
 </head>
 <body>
   <div class="reveal">
@@ -33,23 +36,21 @@
 <section id="title-slide">
   <h1 class="title">A Functional View</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Wednesday, November 30, 2022</p>
+  <p class="date">Wednesday, November 20, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Homework 10 due a week from Friday</li>
+<li>Homework 10 due tomorrow</li>
 <li>Be making progress on your group project!</li>
 <li>For next week:
 <ul>
 <li>Monday - rest of Ch 15</li>
-<li>Wednesday - presentations!</li>
 </ul></li>
-<li>Grade reports: I haven’t forgotten! But there was a bug in some that
-I haven’t had a chance to fix. Actively working on it today.</li>
-<li>Polling today: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>Grade reports: Should go out tonight I hope! All my attention is
+turning toward scoring HW8-9 now
+<!--- Polling today: [rembold-class.ddns.net](http://rembold-class.ddns.net)--></li>
 </ul>
 <!--## Review Question-->
 <!--Which of the following is not a library needed in either R or Python for webscraping?-->
@@ -80,6 +81,11 @@ to better adhere to DRY principles
 </ul></li>
 </ul>
 </section>
+<section>
+<section id="admiring-the-view" class="title-slide slide level1">
+<h1>Admiring the View</h1>
+
+</section>
 <section id="views" class="slide level2">
 <h2>Views</h2>
 <ul>
@@ -91,16 +97,17 @@ their contents</p>
 contents</li>
 </ul></li>
 <li><p>Syntax similar to creating a new table, just with
-<code class="python">VIEW</code></p>
-<pre ><code class="pgsql">CREATE VIEW view_name AS
-SELECT colnames
-FROM tablename</code></pre></li>
+<code class="pgsql">VIEW</code></p>
+<pre ><code class="pgsql">CREATE VIEW |||view name||| AS
+SELECT |||columns|||
+FROM |||table|||</code></pre></li>
 </ul>
 </section>
 <section id="view-vs-table" class="slide level2">
 <h2>View vs Table</h2>
 <ul>
-<li>Despite seeming similar, views are different from tables
+<li>Despite seeming similar, views are fundamentally different from
+tables
 <ul>
 <li>A view stores no new internal information in the database, whereas
 creating a new table copies that information
@@ -120,21 +127,21 @@ permissions to change various tables</li>
 <h2>View Operations</h2>
 <ul>
 <li>You can drop views just like tables:
-<code class="python">DROP VIEW view_name;</code></li>
-<li>You can create or <em>replace</em> views if the original column
-number and type are still present:
-<code class="python">CREATE OR REPLACE VIEW view_name ...</code>
+<code class="pgsql">DROP VIEW |||view name|||;</code></li>
+<li>You can create or <em>replace</em> views if the original columns and
+corresponding types are the same:
 <ul>
+<li><code class="pgsql">CREATE OR REPLACE VIEW |||view name||| ...</code></li>
 <li>Avoids having to drop first to recreate</li>
 <li>New view could have more columns, but can not have less</li>
 </ul></li>
-<li>Insertions, updates and removes can be made on <em>simple
-views</em>, which will propogate back to the original table!
+<li>Insertions, updates and removes can be made on <strong>simple
+views</strong>, which will propagate back to the original table!
 <ul>
 <li>Views must reference single tables (no joins) and have no distinct
 or group by type clauses</li>
 <li>Data in the original table <strong>not</strong> present in the view
-will be given <code class="python">NULL</code> values (if not further
+will be given <code class="pgsql">NULL</code> values (if not further
 restrictions on the view)</li>
 </ul></li>
 </ul>
@@ -142,7 +149,7 @@ restrictions on the view)</li>
 <section id="further-limiting-views" class="slide level2">
 <h2>Further Limiting Views</h2>
 <ul>
-<li>Can also add <code class="python">WITH LOCAL CHECK OPTION</code> to
+<li>Can also add <code class="pgsql">WITH LOCAL CHECK OPTION</code> to
 the end of a view creation query</li>
 <li>This will enforce that <strong>only data visible within the
 view</strong> can be edited with inserts, updates or removes
@@ -150,14 +157,19 @@ view</strong> can be edited with inserts, updates or removes
 <li>This includes any filtering done by the view!</li>
 </ul></li>
 <li>Can be an excellent way to limit what data can be changed</li>
-<li>Can replace <code class="python">LOCAL</code> with
-<code class="python">CASCADED</code> if you are referencing a view
-nested several times and want the restrictions to apply based on all the
-parent views as well
+<li>Can replace <code class="pgsql">LOCAL</code> with
+<code class="pgsql">CASCADE</code> if you are referencing a view nested
+several times and want the restrictions to apply based on all the parent
+views as well
 <ul>
 <li>Needs to be applied at every nesting level</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="custom-functions" class="title-slide slide level1">
+<h1>Custom Functions</h1>
+
 </section>
 <section id="functions" class="slide level2">
 <h2>Functions</h2>
@@ -167,16 +179,15 @@ semester</li>
 <li>Sometimes you need something a bit more bespoke though, for which
 Postgres gives you some “easy” methods of writing your own
 functions</li>
-<li>What language you use to write your own function can be
-exceptionally flexible:
+<li>What language you use to write your own function is highly flexible:
 <ul>
 <li>Pure SQL</li>
-<li>PL/pgSQL is an extension of SQL that offers more programming
+<li>PL/pgSQL: an extension of SQL that offers more programming
 logic</li>
 <li>Python</li>
 </ul></li>
-<li>All functions will follow a similar structure, but the body will
-depend on the details of your chosen language
+<li>All functions will follow a similar syntax structure, but the body
+will depend on the details of your chosen language
 <ul>
 <li>Documentation for all the languages (and functions in general) can
 be found <a
@@ -189,19 +200,19 @@ href="https://www.postgresql.org/docs/current/server-programming.html">here</a><
 <ul>
 <li><p>The structure of any defined function will generally look
 like:</p>
-<pre ><code class="pgsql">CREATE FUNCTION func_name(func_arguments)
-RETURNS return_type AS
-'function_body'
-LANGUAGE func_lang;</code></pre></li>
-<li><p><code class="python">func_name</code> - The desired name of the
+<pre ><code class="pgsql">CREATE FUNCTION |||func_name|||(|||func_arguments|||)
+RETURNS |||return_type||| AS
+|||'function_body'|||
+LANGUAGE |||func_lang|||;</code></pre></li>
+<li><p><code class="pgsql">func_name</code> - The desired name of the
 function</p></li>
-<li><p><code class="python">func_arguments</code> - A comma separated
+<li><p><code class="pgsql">func_arguments</code> - A comma separated
 list of paired arguments and types</p></li>
-<li><p><code class="python">return_type</code> - The variable type of
+<li><p><code class="pgsql">return_type</code> - The variable type of
 what will be returned (selected)</p></li>
-<li><p><code class="python">func_lang</code> - The language used for the
+<li><p><code class="pgsql">func_lang</code> - The language used for the
 function body</p></li>
-<li><p><code class="python">function_body</code> - a
+<li><p><code class="pgsql">function_body</code> - a
 <strong>string</strong> containing the query or logic to process
 whenever the function is run</p></li>
 </ul>
@@ -209,27 +220,27 @@ whenever the function is run</p></li>
 <section id="in-sql" class="slide level2">
 <h2>In SQL</h2>
 <ul>
-<li><code class="python">LANGUAGE SQL</code></li>
+<li><code class="pgsql">LANGUAGE SQL</code></li>
 <li>Using the basic SQL language gives you access to any existing SQL
 queries that you already know</li>
 <li>To return something you should use the
-<code class="python">SELECT</code></li>
+<code class="pgsql">SELECT</code></li>
 <li>You can also write functions that do <strong>not</strong> return
-something by specifying <code class="python">RETURNS void</code> and
-then using <code class="python">INSERT</code>,
-<code class="python">UPDATE</code>, <code class="python">REMOVE</code>,
+something by specifying <code class="pgsql">RETURNS void</code> and then
+using <code class="pgsql">INSERT</code>,
+<code class="pgsql">UPDATE</code>, <code class="pgsql">REMOVE</code>,
 etc.</li>
-<li>Using <code class="python">$$</code> to quote the body is
-recommended so that you do not need to double up any single quotes</li>
+<li>Using <code class="pgsql">$$</code> to quote the body is recommended
+so that you do not need to double up any single quotes</li>
 </ul>
 </section>
 <section id="in-pgsql" class="slide level2">
 <h2>In pgSQL</h2>
 <ul>
-<li><code class="python">LANGUAGE plpgsql</code></li>
+<li><code class="pgsql">LANGUAGE plpgsql</code></li>
 <li>Extends SQL to add classic programming control structures</li>
-<li>Needs to be wrapped in <code class="python">BEGIN</code>,
-<code class="python">END</code> keywords</li>
+<li>Needs to be wrapped in <code class="pgsql">BEGIN</code>,
+<code class="pgsql">END</code> keywords</li>
 <li>Operates like a hybrid between SQL and a more typical programming
 language</li>
 <li>Each phrase needs a terminating semicolon at the end</li>
@@ -242,9 +253,9 @@ language</li>
 <pre ><code class="pgsql" style="font-size:1em">x := 56;</code></pre></li>
 <li><p>Control statements</p>
 <pre ><code class="pgsql" style="font-size:1em">IF x > 5 THEN
-  ...do something...
+  |||...do something...|||
 ELSE
-  ...do something else...
+  |||...do something else...|||
 END IF;</code></pre></li>
 <li><p>Returns</p>
 <pre ><code class="pgsql" style="font-size:1em">RETURN x;</code></pre></li>
@@ -253,7 +264,7 @@ END IF;</code></pre></li>
 <section id="in-python" class="slide level2">
 <h2>In Python</h2>
 <ul>
-<li><p><code class="python">LANGUAGE plpython3u</code></p></li>
+<li><p><code class="pgsql">LANGUAGE plpython3u</code></p></li>
 <li><p>Python is another supported language in which functions can be
 written</p></li>
 <li><p>Requires an extension to be active:</p>
@@ -267,35 +278,37 @@ then copy it in</p></li>
 </section>
 <section id="activity" class="slide level2">
 <h2>Activity!</h2>
+<div style="font-size:.8em">
 <ul>
 <li>I’ve given you a simple starter bit of sql <a
 href="../activity_data/boxes.sql">here</a> to create and populate some
 tables. Use them to practice the below in the shown pairings.</li>
 <li>Tasks:
 <ul>
-<li>Create a view called <code class="python">newest</code> that will
+<li>Create a view called <code class="pgsql">newest</code> that will
 only show the “new” boxes from
-<code class="python">best_boxes</code></li>
-<li>Create a view called <code class="python">newred</code> that will
+<code class="pgsql">best_boxes</code></li>
+<li>Create a view called <code class="pgsql">newred</code> that will
 only show new and red boxes using only
-<code class="python">newest</code></li>
-<li>Adjust the <code class="python">CHECK OPTION</code> setting for both
+<code class="pgsql">newest</code></li>
+<li>Adjust the <code class="pgsql">CHECK OPTION</code> setting for both
 views so that you could add
-<code class="python">('Jane', 2, 7, 9, 'red', 'new')</code> to
-<code class="python">newred</code> but not
-<code class="python">('Bart', 6, 10, 12, 'red', 'used')</code> to
-<code class="python">newred</code></li>
-<li>Write a function named <code class="python">box_volume</code> to
+<code class="pgsql">('Jane', 2, 7, 9, 'red', 'new')</code> to
+<code class="pgsql">newred</code> but not
+<code class="pgsql">('Bart', 6, 10, 12, 'red', 'used')</code> to
+<code class="pgsql">newred</code></li>
+<li>Write a function named <code class="pgsql">box_volume</code> to
 compute the volume of a cubic object, and use that function to populate
-a new <code class="python">volume</code> column in
-<code class="python">best_boxes</code></li>
-<li>Write a function called <code class="python">scale_boxes</code>
-which updates the <code class="python">best_boxes</code> table to scale
-the value in the named <code class="python">width</code>,
-<code class="python">height</code>, or <code class="python">depth</code>
+a new <code class="pgsql">volume</code> column in
+<code class="pgsql">best_boxes</code></li>
+<li>Write a function called <code class="pgsql">scale_boxes</code> which
+updates the <code class="pgsql">best_boxes</code> table to scale the
+value in the named <code class="pgsql">width</code>,
+<code class="pgsql">height</code>, or <code class="pgsql">depth</code>
 columns by the provided argument. Run it to ensure it is working.</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="group-work" class="slide level2">
 <h2>Group Work!</h2>
@@ -303,7 +316,7 @@ columns by the provided argument. Run it to ensure it is working.</li>
 <li>The remainder of class is set aside for you to work with your group
 on your projects!</li>
 </ul>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -314,13 +327,15 @@ on your projects!</li>
   <script src="../html_srcs/reveal.js/plugin/search/search.js"></script>
   <script src="../html_srcs/reveal.js/plugin/zoom/zoom.js"></script>
   // Added plugins
-  <script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>
-  <script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/reveal.js/../plugin/chart/plugin.js"></script>-->
   <script src="../html_srcs/reveal.js/../plugin/chalkboard/plugin.js"></script>
   <script src="../html_srcs/reveal.js/../plugin/menu/menu.js"></script>
   <script src="../html_srcs/reveal.js/../other_plugins/reveald3/reveald3.js"></script>
+  <script src="../html_srcs/reveal.js/../other_plugins/multimodal/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/reveal.js/../js/mypgsql.js"></script>
 
   <script>
 
@@ -348,7 +363,7 @@ on your projects!</li>
         // page/copying the URL will return you to the same slide
         hash: true,
         // Push each slide change to the browser history
-        history: true,
+        history: false,
         // Enable keyboard shortcuts for navigation
         keyboard: true,
         // Enable the slide overview mode
@@ -395,7 +410,7 @@ on your projects!</li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -430,14 +445,18 @@ on your projects!</li>
 		  <!--},-->
 		  CommonHTML: {scale: 80},
 		},
-	reveald3: {
-			runLastState: true, // true/false, default: true
-			onSlideChangedDelay: 200,
-			mapPath: false, // true / false / "spefific/path/as/string", default: false
-			tryFallbackURL: true, // true/false, default false
-			disableCheckFile: false, //default false
-		 },
-
+          highlight: {
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
+          },
         // reveal.js plugins
         plugins: [
 		  RevealMath,
@@ -445,31 +464,31 @@ on your projects!</li>
           RevealNotes,
           RevealSearch,
           RevealZoom,
-		  RevealChart,
 		  RevealChalkboard,
           RevealMenu,
           Reveald3,
+          Multimodal,
         ],
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
           boardmarkers : [
-                  { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
-                  { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
-                  { color: 'rgba(191,97,106,1)',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
-                  { color: 'rgba(163,190,140,1)', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
-                  { color: 'rgba(208,135,112,1)', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
-                  { color: 'rgba(180,142,173,1)', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
-                  { color: 'rgba(235,203,139,1)', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
           ],
           chalks: [
-                  { color: 'rgba(216,222,223,0.5)',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
-                  { color: 'rgba(94,129,172,0.5)', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
-                  { color: 'rgba(191,97,106,0.5)', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
-                  { color: 'rgba(163,190,140,0.5)',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
-                  { color: 'rgba(208,135,112,0.5)',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
-                  { color: 'rgba(180,142,173,0.5)',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
-                  { color: 'rgba(235,203,139,0.5)',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
           ]
 		},
 		dependencies: [
@@ -477,5 +496,17 @@ on your projects!</li>
 		],
       });
     </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
     </body>
 </html>
