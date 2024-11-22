@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <meta name="dcterms.date" content="2023-11-27">
+  <meta name="dcterms.date" content="2024-11-22">
   <title>Token Searches</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,15 +17,18 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_monokai.css" id="theme">
-  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/dist/theme/python_catppuccin.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/reveal.js/plugin/highlight/catppuccin-mocha.css">
 </head>
 <body>
   <div class="reveal">
@@ -34,36 +37,35 @@
 <section id="title-slide">
   <h1 class="title">Token Searches</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">November 27, 2023</p>
+  <p class="date">November 22, 2024</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Project 5 guide posted!
+<li>Project 5!
 <ul>
-<li>Section meetings this week will focus on common sticking points</li>
+<li>Get a start!</li>
 <li>I’m fine with you partnering with anyone from your small section or
-this class
-<ul>
-<li>Even if working alone, you will still need to form a “team” when
-accepting the assignment</li>
-<li>Only join a team if you and that person have agreed to work
-together!</li>
-</ul></li>
+this class</li>
 <li><strong>Back things up to GitHub after finishing every
 Milestone!</strong></li>
 </ul></li>
 <li>Final
 <ul>
-<li>I will be posting final study materials and an old test over the
-weekend so that you can start studying</li>
+<li>I will be posting final study materials and an old test a week from
+tomorrow so that you can start studying</li>
 <li>Will be more weighted toward content from the latter half of the
 semester, but everything we’ve been doing this semester builds on
 earlier material</li>
+<li>Adventure largely marks the end of testable material, though content
+we cover between now and the final may show up in some extra credit
+contexts</li>
 </ul></li>
+<li>I will be giving you time on the last day of class to complete our
+course course evals (the SAIs)</li>
 <li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+href="https://polling.jedrembold.prof">polling.jedrembold.prof</a></li>
 </ul>
 </section>
 <section id="review-question" class="slide level2">
@@ -83,7 +85,7 @@ course of the Adventure Project. What python data type is
 </div>
 </div>
 <div class="col">
-<pre ><code class="mypython" style="max-height:1000px; font-size:.6em;">class AdvObject:
+<pre ><code class="python" style="max-height:1000px; font-size:.6em;">class AdvObject:
     def __init__(self, name, loc):
         self.name = name
         self.loc = loc
@@ -107,52 +109,30 @@ RA.store(B)
 ANS = RA.retrieve_top().get_loc()</code></pre>
 </div>
 </div>
+<!--
+## Abstract Data Types
+- Many object types have some aspect of storing information as their primary purpose
+- Types that are instead defined largely by their behavior are called _abstract data types_ or _ADT_ s which have the following advantages
+    - Simplicity. The internal representation is hidden from the client
+    - Flexibility. If the internal representation needs to be changed by the programmer, they can do so without breaking outside compatibility
+    - Security. Keeping the internal representation away from clients prevents clients from directly altering values that may cause the type to behave unexpectedly
+- Want to start to focus on how we can bring all these ideas together to define our own abstract types
+
+
+## Token ADT
+- I find it helps to think of ADT's as a data type which helps to fulfill a particular objective or behavioral goal
+    - They are little machines, packaged up inside a class
+- Thinking back to our Pig Latin translation program:
+    - `word_to_pig_latin` took a single word and translated into Pig Latin
+    - To translate an entire sentence, we would need code to break the sentence up into individual words, which we could then pass into `word_to_pig_latin`
+- The latter is an example of something that comes up often in computer science: breaking a larger thing into particular smaller chunks
+    - These "chunks" can really be anything, so the more general term computer scientists use is a _token_
+-->
 </section>
-<section id="abstract-data-types" class="slide level2">
-<h2>Abstract Data Types</h2>
-<ul>
-<li>Many object types have some aspect of storing information as their
-primary purpose</li>
-<li>Types that are instead defined largely by their behavior are called
-<em>abstract data types</em> or <em>ADT</em> s which have the following
-advantages
-<ul>
-<li>Simplicity. The internal representation is hidden from the
-client</li>
-<li>Flexibility. If the internal representation needs to be changed by
-the programmer, they can do so without breaking outside
-compatibility</li>
-<li>Security. Keeping the internal representation away from clients
-prevents clients from directly altering values that may cause the type
-to behave unexpectedly</li>
-</ul></li>
-<li>Want to start to focus on how we can bring all these ideas together
-to define our own abstract types</li>
-</ul>
-</section>
-<section id="token-adt" class="slide level2">
-<h2>Token ADT</h2>
-<ul>
-<li>I find it helps to think of ADT’s as a data type which helps to
-fulfill a particular objective or behavioral goal
-<ul>
-<li>They are little machines, packaged up inside a class</li>
-</ul></li>
-<li>Thinking back to our Pig Latin translation program:
-<ul>
-<li><code class="python">word_to_pig_latin</code> took a single word and
-translated into Pig Latin</li>
-<li>To translate an entire sentence, we would need code to break the
-sentence up into individual words, which we could then pass into
-<code class="python">word_to_pig_latin</code></li>
-</ul></li>
-<li>The latter is an example of something that comes up often in
-computer science: breaking a larger thing into particular smaller chunks
-<ul>
-<li>These “chunks” can really be anything, so the more general term
-computer scientists use is a <em>token</em></li>
-</ul></li>
-</ul>
+<section>
+<section id="back-to-scanning" class="title-slide slide level1">
+<h1>Back to Scanning</h1>
+
 </section>
 <section id="a-token-scanner" class="slide level2">
 <h2>A Token Scanner</h2>
@@ -182,22 +162,22 @@ include in the token scanner</li>
 <li>Chapter 12 includes an example of a common implementation</li>
 <li>Exports 4 main methods:
 <ol>
-<li><code class="mypython">scanner.set_input(|||str|||)</code>
+<li><code class="python">|||scanner|||.set_input(|||str|||)</code>
 <ul>
 <li>Sets the input of the token scanner to the specified string or input
 stream</li>
 </ul></li>
-<li><code class="python">scanner.next_token()</code>
+<li><code class="python">|||scanner|||.next_token()</code>
 <ul>
 <li>Returns the next token from the scanner text, or
 <code class="python">""</code> at the end</li>
 </ul></li>
-<li><code class="python">scanner.has_more_tokens()</code>
+<li><code class="python">|||scanner|||.has_more_tokens()</code>
 <ul>
 <li>Returns <code class="python">True</code> if more tokens exist,
 <code class="python">False</code> otherwise</li>
 </ul></li>
-<li><code class="python">scanner.ignore_whitespace()</code>
+<li><code class="python">|||scanner|||.ignore_whitespace()</code>
 <ul>
 <li>Customization option which tells the scanner to ignore whitespace
 characters</li>
@@ -207,7 +187,7 @@ characters</li>
 </section>
 <section id="token-scanner-code" class="slide level2">
 <h2>Token Scanner Code</h2>
-<pre ><code class="mypython" style="max-height:900px; font-size:.6em; font-spacing:2em;" data-line-numbers="7-46|54-59|63-69|71-86|88-94|96-100|104-109"># File: tokenscanner.py
+<pre ><code class="python" style="max-height:900px; font-size:.7em; font-spacing:2em;" data-line-numbers="7-46|54-59|63-69|71-87|89-95|97-101|105-110"># File: tokenscanner.py
 
 """
 This file implements a simple version of a token scanner class.
@@ -289,7 +269,8 @@ class TokenScanner:
         token = self._source[self._cp]
         self._cp += 1
         if token.isalnum():
-            while self._cp < self._nch and self._source[self._cp].isalnum():
+            while self._cp < (
+                self._nch and self._source[self._cp].isalnum()):
                 token += self._source[self._cp]
                 self._cp += 1
         return token
@@ -335,7 +316,7 @@ it</li>
 <section id="using-tokenscanner-in-piglatin" class="slide level2">
 <h2>Using <code class="python">TokenScanner</code> in
 <code class="python">PigLatin</code></h2>
-<pre ><code class="mypython" style="max-height:900px">from tokenscanner import TokenScanner
+<pre ><code class="fragment python" style="max-height:900px">from tokenscanner import TokenScanner
 
 def to_pig_latin(text):
     translation = ""
@@ -347,6 +328,11 @@ def to_pig_latin(text):
             token = word_to_pig_latin(token)
         translation += token
     return translation</code></pre>
+</section></section>
+<section>
+<section id="which-way-is-better" class="title-slide slide level1">
+<h1>Which Way is Better?</h1>
+
 </section>
 <section id="searching-for-efficiency" class="slide level2">
 <h2>Searching for Efficiency</h2>
@@ -358,12 +344,12 @@ and more about better understanding what we already have</li>
 <ul>
 <li>So far, the first way you figure out has likely been the “best”, in
 that it gets the job done.</li>
-<li>Sometimes there is a different though in an approach that is
+<li>Sometimes there is a difference though in an approach that is
 technically correct and one that is practically correct.</li>
 <li>How can we make informed choices about the algorithms we use?</li>
 </ul></li>
 <li>Want to look at algorithm efficiency in this chapter</li>
-<li>Will focus mainly on Searching and Sorting as our examples to better
+<li>Will focus mainly on searching and sorting as our examples to better
 understand how an algorithm’s efficiency can be quantified</li>
 </ul>
 </section>
@@ -380,7 +366,7 @@ it is the one you desire</p>
 <li>This approach is called a <em>linear search</em></li>
 </ul></li>
 <li><p>Easy to understand and implement:</p>
-<pre ><code class="mypython">def linear_search(target, array):
+<pre ><code class="python">def linear_search(target, array):
     for i in range(len(array)):
         if array[i] == target:
              return i
@@ -463,7 +449,7 @@ data-style="width:100%; display:inline;" data-scroll="no">
 </section>
 <section id="implementing-binary-search" class="slide level2">
 <h2>Implementing Binary Search</h2>
-<pre ><code class="mypython" style="max-height:900px">def binary_search(target, array):
+<pre ><code class="python" style="max-height:900px">def binary_search(target, array):
     lh = 0
     rh = len(array) - 1
     while lh <= rh:
@@ -476,6 +462,123 @@ data-style="width:100%; display:inline;" data-scroll="no">
             rh = middle - 1
     return -1</code></pre>
 </section>
+<section id="linear-search-efficiency" class="slide level2">
+<h2>Linear Search Efficiency</h2>
+<ul>
+<li>The running time of the linear search depends on the size of the
+array
+<ul>
+<li>That in itself is not particularly surprising. The running time of
+most algorithms will depend on the size of the problem to which the
+algorithm is applied.</li>
+</ul></li>
+<li>For many applications, it is easy to come up with a numeric value
+that describes the problem size, commonly called <span
+class="math inline">\(N\)</span>.
+<ul>
+<li>For most lists, <span class="math inline">\(N\)</span> is simply the
+length of the array</li>
+</ul></li>
+<li>In the worst case, when the target value is the last element of the
+list or does not appear at all, the linear search requires <span
+class="math inline">\(N\)</span> steps
+<ul>
+<li>On average, it takes about half that, or <span
+class="math inline">\(\frac{N}{2}\)</span></li>
+<li>Computer scientists are apparently pessimists though, and will
+generally use the worse case scenario to compare</li>
+</ul></li>
+</ul>
+</section>
+<section id="binary-search-efficiency" class="slide level2">
+<h2>Binary Search Efficiency</h2>
+<ul>
+<li>The running time of binary search also depends on the size of the
+array, but in a very different way</li>
+<li>Each step of the process, the binary search rules out half the
+remaining options
+<ul>
+<li>The worst case (which we had earlier!) requires a number of steps
+equal to however many times we can divide the array in half until we
+have only a single number left.</li>
+<li>Mathematically, this looks like <span class="math display">\[1 = N /
+\underbrace{2 / 2 / 2 / 2 \cdots / 2}_{k\text{ times}} =
+\frac{N}{2^k}\]</span></li>
+</ul></li>
+<li>We really want to know the number of steps, <span
+class="math inline">\(k\)</span>, so solving for <span
+class="math inline">\(k\)</span>: <span class="math display">\[2^k = N
+\quad\Rightarrow\quad k = \log_2(N)\]</span></li>
+</ul>
+</section>
+<section id="comparing-efficiencies" class="slide level2">
+<h2>Comparing Efficiencies</h2>
+<ul>
+<li>The below table illustrates the differences in the number of
+required steps for the two search algorithms</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Problem Size</th>
+<th>Linear (<span class="math inline">\(N\)</span>)</th>
+<th>Binary (<span class="math inline">\(log_2 N\)</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>10</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>100</td>
+<td>100</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td>1,000</td>
+<td>1,000</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>1,000,000</td>
+<td>1,000,000</td>
+<td>20</td>
+</tr>
+<tr class="odd">
+<td>1,000,000,000</td>
+<td>1,000,000,000</td>
+<td>30</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Clearly, for large values, the difference in the number of steps is
+<strong>enormous</strong></li>
+<li>At 1 million elements, the binary search is 50,000 times
+faster!</li>
+</ul>
+</section>
+<section id="sorting" class="slide level2">
+<h2>Sorting</h2>
+<ul>
+<li>Binary search only works on arrays in which the elements are
+ordered.
+<ul>
+<li>The process of putting the elements into order is called
+<em>sorting</em>.</li>
+</ul></li>
+<li>Lots of different sorting algorithms, which can vary substantially
+in their efficiency.</li>
+<li>From an algorithms view, sorting is probably the most applicable
+algorithm we’ll discuss in this course
+<ul>
+<li>Organizing data makes it easier to digest that data, whether the
+data is being digested by other machines or by humans</li>
+</ul></li>
+</ul>
+</section></section>
     </div>
   </div>
 
@@ -488,6 +591,7 @@ data-style="width:100%; display:inline;" data-scroll="no">
   <script src="../html_srcs/reveal.js/plugin/chart/Chart.min.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chart/plugin.js"></script>
   <script src="../html_srcs/reveal.js/plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/reveal.js/plugin/multimodal/multimodal.js"></script>
   <script src="../html_srcs/reveal.js/plugin/math/math.js"></script>
   <script src="../html_srcs/reveal.js/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/reveal.js/../js/python_language.js"></script>
@@ -610,7 +714,7 @@ data-style="width:100%; display:inline;" data-scroll="no">
 		 },
 
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+            beforeHighlight: hljs => hljs.registerLanguage("python", function(hljs) {
               console.log(mypythondef);
               return mypythondef(hljs); } )
           },
@@ -624,6 +728,7 @@ data-style="width:100%; display:inline;" data-scroll="no">
           RevealZoom,
 		  RevealChart,
 		  RevealChalkboard,
+          Multimodal,
         ],
 		chalkboard: {
 		boardmarkerWidth: 4,
