@@ -42,11 +42,11 @@
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Homework 10 due tomorrow</li>
-<li>Be making progress on your group project!</li>
-<li>For next week:
+<li>Be making progress on your group project!
 <ul>
-<li>Monday - rest of Ch 15</li>
+<li>Presentations on Monday and Wednesday when we get back!</li>
+<li>A list of learning objectives from HW over this semester will be
+posted tonight</li>
 </ul></li>
 <li>Grade reports: Should go out tonight I hope! All my attention is
 turning toward scoring HW8-9 now
@@ -64,21 +64,34 @@ turning toward scoring HW8-9 now
 <section id="project-presentations" class="slide level2">
 <h2>Project Presentations</h2>
 <ul>
-<li>Recall that you are presenting the week we get back! ::::::cols
-::::col :::{block name=‘Monday’}</li>
+<li>Recall that you are presenting the week we get back!</li>
+</ul>
+<div class="cols">
+<div class="col">
+<div class="block" name="Monday">
+<ul>
 <li>Jack &amp; Connor</li>
 <li>Matthew &amp; Aurora</li>
 <li>Sam H &amp; Michael</li>
 <li>Greg &amp; Marcus</li>
 <li>Grace &amp; Haley</li>
-<li>Dayton &amp; Nick ::: ::::</li>
+<li>Dayton &amp; Nick</li>
 </ul>
-<div class="col">
-<p>:::{block name=‘Wednesday’} - Harleen &amp; Sam J - Jordan &amp;
-Mallory - AJ &amp; Jerrick - Hannah &amp; Tippy - Sergio &amp; Evan -
-Elise &amp; Tiffany</p>
 </div>
-<p>:::: ::::::</p>
+</div>
+<div class="col">
+<div class="block" name="Wednesday">
+<ul>
+<li>Harleen &amp; Sam J</li>
+<li>Jordan &amp; Mallory</li>
+<li>AJ &amp; Jerrick</li>
+<li>Hannah &amp; Tippy</li>
+<li>Sergio &amp; Evan</li>
+<li>Elise &amp; Tiffany</li>
+</ul>
+</div>
+</div>
+</div>
 </section>
 <section id="dry" class="slide level2">
 <h2>DRY</h2>
@@ -177,7 +190,7 @@ view</strong> can be edited with inserts, updates or removes
 </ul></li>
 <li>Can be an excellent way to limit what data can be changed</li>
 <li>Can replace <code class="pgsql">LOCAL</code> with
-<code class="pgsql">CASCADE</code> if you are referencing a view nested
+<code class="pgsql">CASCADED</code> if you are referencing a view nested
 several times and want the restrictions to apply based on all the parent
 views as well
 <ul>
