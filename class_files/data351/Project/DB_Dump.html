@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Learning Objectives</title>
+<title>Database Backups</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -18,6 +18,40 @@ ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
 width: 0.8em;
 margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
+}
+
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+}
+pre.numberSource { margin-left: 3em; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -3064,8 +3098,8 @@ background: linear-gradient(135deg, rgb(15, 75, 110) 0%, rgb(56, 95, 13) 100%);
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Learning Objectives</h1>
-            <p class="subtitle lead">Collected from past Homework Assignments</p>
+      <h1 class="title">Database Backups</h1>
+            <p class="subtitle lead">Using pg_dump effectively</p>
                       </div>
   </div>
     
@@ -3079,8 +3113,17 @@ background: linear-gradient(135deg, rgb(15, 75, 110) 0%, rgb(56, 95, 13) 100%);
     
   
   </header><div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-  
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#connection-options" id="toc-connection-options" class="nav-link active" data-scroll-target="#connection-options">Connection Options</a></li>
+  <li><a href="#backup-options" id="toc-backup-options" class="nav-link" data-scroll-target="#backup-options">Backup Options</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+  <li><a href="#storage" id="toc-storage" class="nav-link" data-scroll-target="#storage">Storage</a></li>
+  </ul>
+</nav>
 </div>
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
@@ -3088,82 +3131,128 @@ background: linear-gradient(135deg, rgb(15, 75, 110) 0%, rgb(56, 95, 13) 100%);
 
 
 
-<ul>
-<li>HW1
-<ul>
-<li>I can write a <code>SELECT</code> query that utilizes basic <code>WHERE</code> filtering and <code>ORDER BY</code>.</li>
-<li>I can properly use <code>DISTINCT</code> in a query to answer a question.</li>
-<li>I understand how to use basic wildcards with <code>LIKE</code> and <code>ILIKE</code> to find text patterns.</li>
-</ul></li>
-<li>HW2
-<ul>
-<li>I can create a table in SQL with desired columns and types.</li>
-<li>I can insert values into a table.</li>
-<li>I can populate a table by reading from a CSV.</li>
-<li>I can convert between data types when necessary.</li>
-<li>I can output the results of a query to a CSV file.</li>
-</ul></li>
-<li>HW3
-<ul>
-<li>I can compute many different calculations between columns in a table.</li>
-<li>I can compute many different aggregate calculations over an entire column.</li>
-<li>I can store the results of queries in permanent or temporary tables.</li>
-</ul></li>
-<li>HW4
-<ul>
-<li>I can use a basic inner <code>JOIN</code> to combine information from several tables appropriately.</li>
-<li>I understand when an alternative (<code>LEFT</code>, <code>RIGHT</code>, <code>FULL OUTER</code>, <code>CROSS</code>) <code>JOIN</code> is necessary and can use one to combine information from several tables in those cases.</li>
-<li>I understand when a self-<code>JOIN</code> is necessary and can compute one in those instances.</li>
-</ul></li>
-<li>HW5
-<ul>
-<li>I can create various column constraints to limit data that can be placed in a column.</li>
-<li>I can create various table constraints to limit data that can be placed in a table.</li>
-<li>I understand the relationship constraints described by <code>FOREIGN KEY</code> constraints, and can create them to formally link table columns together.</li>
-<li>I can create simple or compound <code>PRIMARY KEY</code> constraints, and understand what is meant and occurs when I create a primary key.</li>
-<li>I can identify when and how previously defined constraints are being violated.</li>
-</ul></li>
-<li>HW6
-<ul>
-<li>I can use <code>GROUP BY</code> to compare values across categorical variables.</li>
-<li>I understand when to use <code>HAVING</code> and can implement it accordingly to select a subset of groups.</li>
-<li>I understand when a table is in 1st normal form, and can convert an unnormalized table into 1st normal form.</li>
-<li>I understand when a table is in 2nd normal form, and can convert a 1NF table into a collection of 2NF tables.</li>
-<li>I understand when a table is in 3rd normal form, and can convert a 2NF table into a collection of 3NF tables.</li>
-</ul></li>
-<li>HW7
-<ul>
-<li>I can use <code>ALTER TABLE</code> statements to make changes to the structure of an existing table.</li>
-<li>I can use <code>UPDATE</code> statements to make changes to the specific content within a table that I want to change.</li>
-<li>I can remove specific rows from a table using <code>DELETE</code></li>
-<li>I can get remove tables, columns, constraints or indexes using <code>DROP</code>.</li>
-<li>I can use window functions to rank information within a table.</li>
-</ul></li>
-<li>HW8
-<ul>
-<li>I can use CTE’s to precompute information for later use within a query.</li>
-<li>I can use subqueries in multiple parts of a query (<code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>, etc.) to access specific information.</li>
-<li>I can use predicate functions like <code>IN</code>, <code>EXISTS</code>, <code>ANY</code> and <code>ALL</code> alongside subqueries to filter rows from a table.</li>
-<li>I can create pivot tables using Postgres’s <code>CROSSTAB</code> function.</li>
-<li>I can work with and add time zones to timestamp columns.</li>
-<li>I can extract portions of datetime-type columns according to what information I desire.</li>
-</ul></li>
-<li>HW9
-<ul>
-<li>I can use regular expressions to split and filter data.</li>
-<li>I can use regular expressions to select subsets of text from a larger text field.</li>
-<li>I can use <code>TSVECTOR</code> and <code>TSQUERY</code> objects to find where certain text phrases appear in large bodies of text.</li>
-<li>I can extract snippets of text near where certain phrases occur using <code>ts_headline</code>.</li>
-</ul></li>
-<li>HW10
-<ul>
-<li>I can create geometry and geography columns to hold geospatial data.</li>
-<li>I can assign geospatial information to appropriate coordinate systems.</li>
-<li>I can use special geospatial functions to filter geospatial data.</li>
-<li>I can use special geospatial functions to compute new geospatial data.</li>
-<li>I can load a shapefile into a Postgres database.</li>
-</ul></li>
-</ul>
+<p>It is frequently desirable to back up the structure and contents of databases, and the core utility that handles backing up information from a Postgres database is <code>pg_dump</code>. Remember, if you delete or change things in a database, there is no undo button! And so making regular backups of important databases should be a routine that you adopt. Moreover, backing up a database can also double as an effective way to duplicate the information to another user or database, and can thus often be useful for information transfer. The content below will highlight some parameters and options that <code>pg_dump</code> can use, but you can also check out the official documentation <a href="https://www.postgresql.org/docs/current/app-pgdump.html">here</a>.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>pg_dump</code> is a command-line or terminal command, and thus your terminal needs to be configured to know where the program resides. It is included as part of the normal PostgreSQL server install, so you already have it residing on your computer. If you have already configured your path earlier this semester so that you can run <code>psql</code>, then you are good to go. If you can <em>not</em> run <code>psql</code> on your system, then neither will you be able to run <code>pg_dump</code>. You’ll have to fix your system <code>PATH</code> as described earlier in the semester for it to recognize the <code>pg_dump</code> command.</p>
+</div>
+</div>
+<p>Like most command-line applications, <code>pg_dump</code> takes a variety of arguments after the initial command. Some of these are mandatory, but most are optional. In general, the structure looks like:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pg_dump</span> [connection options][backup options] dbname</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="connection-options" class="level3">
+<h3 class="anchored" data-anchor-id="connection-options">Connection Options</h3>
+<p>The connections options set the specific ways in which you connect to your database of choice. There are defaults for all of these, but you may need to be specific. In general, you have all of these options already specified in whatever client you have been using to connect to your database, so you could always check there. Some of the most common to be aware of are:</p>
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 5%">
+<col style="width: 22%">
+<col style="width: 71%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Flag</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Hostname</td>
+<td><code>-h host</code></td>
+<td>Provides the hostname or IP address of where the database server resides</td>
+</tr>
+<tr class="even">
+<td>Username</td>
+<td><code>-U username</code></td>
+<td>Provides the username of who is connecting. Defaults to OS user, but most should probably set it to <code>postgres</code></td>
+</tr>
+<tr class="odd">
+<td>Port</td>
+<td><code>-p port</code></td>
+<td>Provides the system port to connect to. Defaults to 5432, and should only need to be set if you changed the server port</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="backup-options" class="level3">
+<h3 class="anchored" data-anchor-id="backup-options">Backup Options</h3>
+<p>The backup options finetune how you want the backup to proceed. Most of these are optional, but there are some I would suggest setting, and some that may be more appropriate to however you stored your tables.</p>
+<table class="table-striped table-hover caption-top table">
+<colgroup>
+<col style="width: 4%">
+<col style="width: 29%">
+<col style="width: 66%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Flag</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Output file</td>
+<td><code>-f filename</code></td>
+<td>The filename you want to dump the database contents to. Should end in a <code>.sql</code> suffix.</td>
+</tr>
+<tr class="even">
+<td>Schema</td>
+<td><code>-n pattern</code></td>
+<td>If you need to just dump 1 or more specific schema of tables from an otherwise heavily populated database, this gives you a method to do so. All schema names that match the pattern will be dumped.</td>
+</tr>
+<tr class="odd">
+<td>Ownership</td>
+<td><code>-O</code></td>
+<td>By default, the backup recreates all user permissions. If you want any user (not a superuser) to be able to restore the data, this is a good option to set.</td>
+</tr>
+<tr class="even">
+<td>Table</td>
+<td><code>-t pattern</code></td>
+<td>If you only want to backup specific table(s) for whatever reason, you can just use this flag. Only table names matching the pattern will be dumped.</td>
+</tr>
+<tr class="odd">
+<td>Inserts</td>
+<td><code>--inserts</code></td>
+<td>This will force the backup to use insert statements instead of <code>COPY</code>. This is <em>much</em> slower to restore, and should only be used if you need the backup to be portable to another database variant.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="examples" class="level3">
+<h3 class="anchored" data-anchor-id="examples">Examples</h3>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For all the following examples, suppose that the database <code>mydb</code> is running on the local computer and can be connected to with the postgres user.</p>
+</div>
+</div>
+<p>Dump the entire <code>mydb</code> database into a file called <code>backup.sql</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pg_dump</span> <span class="at">-h</span> localhost <span class="at">-U</span> postgres <span class="at">-f</span> backup.sql mydb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Dump only the schema named <code>project</code> from within the <code>mydb</code> database into a file called <code>project.sql</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pg_dump</span> <span class="at">-h</span> localhost <span class="at">-U</span> postgres <span class="at">-f</span> project.sql <span class="at">-n</span> project mydb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Dump only the table named <code>best_table</code> from within the <code>mydb</code> database into a file called <code>backup.sql</code>, ignoring user permissions:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pg_dump</span> <span class="at">-h</span> localhost <span class="at">-U</span> postgres <span class="at">-f</span> backup.sql <span class="at">-t</span> best_table <span class="at">-O</span> mydb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="storage" class="level3">
+<h3 class="anchored" data-anchor-id="storage">Storage</h3>
+<p>Once you have created your database dump, depending on the amount of data in your database, it might be larger than the 25MB limit that GitHub enforces. If this is the case, I would recommend uploading it to your Google Drive and then sharing it with me in that way. If that is still problematic, reach out to me directly and we’ll find another way for you to get the data to me.</p>
+</section>
 
 </main>
 <!-- /main column -->
