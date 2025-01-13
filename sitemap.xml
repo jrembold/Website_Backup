@@ -2,415 +2,409 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/Website_Backup/</loc>
+    <loc>/tags/active_class/</loc>
+    <lastmod>2025-01-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/classes/data275/data275/</loc>
+    <lastmod>2025-01-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2025-01-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/classes/data275/schedule/</loc>
+    <lastmod>2025-01-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/classes/data503/schedule/</loc>
+    <lastmod>2025-01-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2025-01-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/classes/cs151/schedule/</loc>
     <lastmod>2024-08-26T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/schedule/</loc>
+    <loc>/classes/data351/schedule/</loc>
     <lastmod>2024-08-26T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data351/schedule/</loc>
-    <lastmod>2024-08-26T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/Website_Backup/classes/data510/data510/</loc>
+    <loc>/classes/data510/data510/</loc>
     <lastmod>2024-05-22T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/tags/inactive_class/</loc>
+    <loc>/tags/inactive_class/</loc>
     <lastmod>2024-05-22T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs500/cs500/</loc>
+    <loc>/classes/cs500/cs500/</loc>
     <lastmod>2024-05-22T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs500/schedule/</loc>
+    <loc>/classes/cs500/schedule/</loc>
     <lastmod>2024-05-22T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data510/schedule/</loc>
+    <loc>/classes/data510/schedule/</loc>
     <lastmod>2024-05-22T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/tags/</loc>
-    <lastmod>2024-05-22T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/Website_Backup/classes/data275/schedule/</loc>
-    <lastmod>2024-01-17T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/Website_Backup/classes/data503/schedule1/</loc>
-    <lastmod>2024-01-17T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/Website_Backup/classes/data503/schedule2/</loc>
-    <lastmod>2024-01-15T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/Website_Backup/tags/editor/</loc>
+    <loc>/tags/editor/</loc>
     <lastmod>2023-12-06T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/editor/</loc>
+    <loc>/classes/cs151/editor/</loc>
     <lastmod>2023-12-06T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data275/guides/</loc>
+    <loc>/classes/data275/guides/</loc>
     <lastmod>2023-01-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data299/guides/</loc>
+    <loc>/classes/data299/guides/</loc>
     <lastmod>2023-01-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/software_setup/</loc>
+    <loc>/classes/cs151/software_setup/</loc>
     <lastmod>2023-01-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs500/software_setup/</loc>
+    <loc>/classes/cs500/software_setup/</loc>
     <lastmod>2023-01-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data299/schedule/</loc>
+    <loc>/classes/data299/schedule/</loc>
     <lastmod>2023-01-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data503/schedule/</loc>
-    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/Website_Backup/classes/data275/data275/</loc>
+    <loc>/classes/data299/data299/</loc>
     <lastmod>2023-01-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data299/data299/</loc>
-    <lastmod>2023-01-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/Website_Backup/tags/active_class/</loc>
+    <loc>/classes/data351/data351/</loc>
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data351/data351/</loc>
+    <loc>/classes/data503/data503/</loc>
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data503/data503/</loc>
+    <loc>/classes/cs151/guides/</loc>
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/guides/</loc>
+    <loc>/classes/data351/guides/</loc>
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data351/guides/</loc>
+    <loc>/classes/data275/hw/</loc>
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data275/hw/</loc>
+    <loc>/classes/data299/hw/</loc>
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data299/hw/</loc>
+    <loc>/classes/data351/hw/</loc>
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data351/hw/</loc>
+    <loc>/classes/data503/hw/</loc>
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data503/hw/</loc>
+    <loc>/classes/data510/deliverables/</loc>
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data510/deliverables/</loc>
+    <loc>/tags/hw/</loc>
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/tags/hw/</loc>
+    <loc>/classes/cs151/cs151/</loc>
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/cs151/</loc>
+    <loc>/classes/cs500/projects/</loc>
     <lastmod>2022-08-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs500/projects/</loc>
-    <lastmod>2022-08-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/Website_Backup/tags/test/</loc>
+    <loc>/tags/test/</loc>
     <lastmod>2021-03-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/testprep/</loc>
+    <loc>/classes/cs151/testprep/</loc>
     <lastmod>2021-03-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data275/testprep/</loc>
+    <loc>/classes/data275/testprep/</loc>
     <lastmod>2021-03-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data299/testprep/</loc>
+    <loc>/classes/data299/testprep/</loc>
     <lastmod>2021-03-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data351/testprep/</loc>
+    <loc>/classes/data351/testprep/</loc>
     <lastmod>2021-03-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data503/testprep/</loc>
+    <loc>/classes/data503/testprep/</loc>
     <lastmod>2021-03-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/extras/</loc>
+    <loc>/classes/cs151/extras/</loc>
     <lastmod>2021-02-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs500/extras/</loc>
+    <loc>/classes/cs500/extras/</loc>
     <lastmod>2021-02-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data299/extras/</loc>
+    <loc>/classes/data299/extras/</loc>
     <lastmod>2021-02-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data351/extras/</loc>
+    <loc>/classes/data351/extras/</loc>
     <lastmod>2021-02-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/slides/</loc>
+    <loc>/classes/cs151/slides/</loc>
     <lastmod>2021-01-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs500/slides/</loc>
+    <loc>/classes/cs500/slides/</loc>
     <lastmod>2021-01-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data275/slides/</loc>
+    <loc>/classes/data275/slides/</loc>
     <lastmod>2021-01-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data299/slides/</loc>
+    <loc>/classes/data299/slides/</loc>
     <lastmod>2021-01-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data351/slides/</loc>
+    <loc>/classes/data351/slides/</loc>
     <lastmod>2021-01-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data503/slides/</loc>
+    <loc>/classes/data503/slides/</loc>
     <lastmod>2021-01-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data510/slides/</loc>
+    <loc>/classes/data510/slides/</loc>
     <lastmod>2021-01-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/tags/slides/</loc>
+    <loc>/tags/slides/</loc>
     <lastmod>2021-01-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec33/</loc>
+    <loc>/classes/cs151/code_samples/lec33/</loc>
     <lastmod>2020-04-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec32/</loc>
+    <loc>/classes/cs151/code_samples/lec32/</loc>
     <lastmod>2020-04-15T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec31/</loc>
+    <loc>/classes/cs151/code_samples/lec31/</loc>
     <lastmod>2020-04-13T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec26/</loc>
+    <loc>/classes/cs151/code_samples/lec26/</loc>
     <lastmod>2020-03-30T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec25/</loc>
+    <loc>/classes/cs151/code_samples/lec25/</loc>
     <lastmod>2020-03-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec24/</loc>
+    <loc>/classes/cs151/code_samples/lec24/</loc>
     <lastmod>2020-03-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec23/</loc>
+    <loc>/classes/cs151/code_samples/lec23/</loc>
     <lastmod>2020-03-16T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec22/</loc>
+    <loc>/classes/cs151/code_samples/lec22/</loc>
     <lastmod>2020-03-13T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec13/</loc>
+    <loc>/classes/cs151/code_samples/lec13/</loc>
     <lastmod>2020-02-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec12/</loc>
+    <loc>/classes/cs151/code_samples/lec12/</loc>
     <lastmod>2020-02-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec11/</loc>
+    <loc>/classes/cs151/code_samples/lec11/</loc>
     <lastmod>2020-02-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec4/</loc>
+    <loc>/classes/cs151/code_samples/lec4/</loc>
     <lastmod>2020-01-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec3/</loc>
+    <loc>/classes/cs151/code_samples/lec3/</loc>
     <lastmod>2020-01-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys222/vhw_examples/</loc>
+    <loc>/classes/phys222/vhw_examples/</loc>
     <lastmod>2020-01-16T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec30/</loc>
+    <loc>/classes/cs151/code_samples/lec30/</loc>
     <lastmod>2019-11-08T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec29/</loc>
+    <loc>/classes/cs151/code_samples/lec29/</loc>
     <lastmod>2019-11-06T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec28/</loc>
+    <loc>/classes/cs151/code_samples/lec28/</loc>
     <lastmod>2019-11-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec27/</loc>
+    <loc>/classes/cs151/code_samples/lec27/</loc>
     <lastmod>2019-11-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec21/</loc>
+    <loc>/classes/cs151/code_samples/lec21/</loc>
     <lastmod>2019-10-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec20/</loc>
+    <loc>/classes/cs151/code_samples/lec20/</loc>
     <lastmod>2019-10-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec19/</loc>
+    <loc>/classes/cs151/code_samples/lec19/</loc>
     <lastmod>2019-10-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec18/</loc>
+    <loc>/classes/cs151/code_samples/lec18/</loc>
     <lastmod>2019-10-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec17/</loc>
+    <loc>/classes/cs151/code_samples/lec17/</loc>
     <lastmod>2019-10-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec16/</loc>
+    <loc>/classes/cs151/code_samples/lec16/</loc>
     <lastmod>2019-10-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec15/</loc>
+    <loc>/classes/cs151/code_samples/lec15/</loc>
     <lastmod>2019-09-30T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec14/</loc>
+    <loc>/classes/cs151/code_samples/lec14/</loc>
     <lastmod>2019-09-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec10/</loc>
+    <loc>/classes/cs151/code_samples/lec10/</loc>
     <lastmod>2019-09-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec9/</loc>
+    <loc>/classes/cs151/code_samples/lec9/</loc>
     <lastmod>2019-09-16T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec8/</loc>
+    <loc>/classes/cs151/code_samples/lec8/</loc>
     <lastmod>2019-09-13T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec7/</loc>
+    <loc>/classes/cs151/code_samples/lec7/</loc>
     <lastmod>2019-09-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec6/</loc>
+    <loc>/classes/cs151/code_samples/lec6/</loc>
     <lastmod>2019-09-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/code_samples/lec5/</loc>
+    <loc>/classes/cs151/code_samples/lec5/</loc>
     <lastmod>2019-09-06T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/labs/</loc>
+    <loc>/classes/cs151/labs/</loc>
     <lastmod>2019-09-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/tags/labs/</loc>
+    <loc>/tags/labs/</loc>
     <lastmod>2019-09-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/data503/guides/</loc>
+    <loc>/classes/data503/guides/</loc>
     <lastmod>2019-08-26T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys110/schedule/</loc>
+    <loc>/classes/phys110/schedule/</loc>
     <lastmod>2019-08-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys222/schedule/</loc>
+    <loc>/classes/phys222/schedule/</loc>
     <lastmod>2019-08-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys339/schedule/</loc>
+    <loc>/classes/phys339/schedule/</loc>
     <lastmod>2019-08-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys339/compdays/</loc>
+    <loc>/classes/phys339/compdays/</loc>
     <lastmod>2019-01-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys222/vhw/</loc>
+    <loc>/classes/phys222/vhw/</loc>
     <lastmod>2019-01-24T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/ids138/labs/</loc>
+    <loc>/classes/ids138/labs/</loc>
     <lastmod>2019-01-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/ids138/ids138/</loc>
+    <loc>/classes/ids138/ids138/</loc>
     <lastmod>2019-01-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys222/phys222/</loc>
+    <loc>/classes/phys222/phys222/</loc>
     <lastmod>2019-01-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys339/phys339/</loc>
+    <loc>/classes/phys339/phys339/</loc>
     <lastmod>2019-01-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/ids138/schedule/</loc>
+    <loc>/classes/ids138/schedule/</loc>
     <lastmod>2019-01-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys222/schedule_old/</loc>
+    <loc>/classes/phys222/schedule_old/</loc>
     <lastmod>2019-01-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys339/schedule_old/</loc>
+    <loc>/classes/phys339/schedule_old/</loc>
     <lastmod>2019-01-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/ids138/finalproject/</loc>
+    <loc>/classes/ids138/finalproject/</loc>
     <lastmod>2018-09-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/tags/project/</loc>
+    <loc>/tags/project/</loc>
     <lastmod>2018-09-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys110/testprep/</loc>
+    <loc>/classes/phys110/testprep/</loc>
     <lastmod>2018-09-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys222/testprep/</loc>
+    <loc>/classes/phys222/testprep/</loc>
     <lastmod>2018-09-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys110/hwextra/</loc>
+    <loc>/classes/phys110/hwextra/</loc>
     <lastmod>2018-09-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/tags/comp/</loc>
+    <loc>/tags/comp/</loc>
     <lastmod>2018-08-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys345/computation/</loc>
+    <loc>/classes/phys345/computation/</loc>
     <lastmod>2018-08-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys339/guides/</loc>
+    <loc>/classes/phys339/guides/</loc>
     <lastmod>2018-08-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/resources/python_guides/guides/</loc>
+    <loc>/resources/python_guides/guides/</loc>
     <lastmod>2018-08-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys222/lab/</loc>
+    <loc>/classes/phys222/lab/</loc>
     <lastmod>2018-08-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys339/lec_notes/</loc>
+    <loc>/classes/phys339/lec_notes/</loc>
     <lastmod>2018-08-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys339/slides/</loc>
+    <loc>/classes/phys339/slides/</loc>
     <lastmod>2018-08-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys345/slides/</loc>
+    <loc>/classes/phys345/slides/</loc>
     <lastmod>2018-08-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys345/schedule/</loc>
+    <loc>/classes/phys345/schedule/</loc>
     <lastmod>2018-08-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys221/hw/</loc>
+    <loc>/classes/phys221/hw/</loc>
     <lastmod>2018-08-19T19:14:43-07:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys110/phys110/</loc>
+    <loc>/classes/phys110/phys110/</loc>
     <lastmod>2018-08-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys345/phys345/</loc>
+    <loc>/classes/phys345/phys345/</loc>
     <lastmod>2018-08-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/hw/</loc>
+    <loc>/classes/cs151/hw/</loc>
     <lastmod>2018-08-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/ids138/hw/</loc>
+    <loc>/classes/ids138/hw/</loc>
     <lastmod>2018-08-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys339/hw/</loc>
+    <loc>/classes/phys339/hw/</loc>
     <lastmod>2018-08-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys345/hw/</loc>
+    <loc>/classes/phys345/hw/</loc>
     <lastmod>2018-08-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys110/lab3/</loc>
+    <loc>/classes/phys110/lab3/</loc>
     <lastmod>2018-08-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys110/labs/</loc>
+    <loc>/classes/phys110/labs/</loc>
     <lastmod>2018-08-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/ids138/slides/</loc>
+    <loc>/classes/ids138/slides/</loc>
     <lastmod>2018-08-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys110/slides/</loc>
+    <loc>/classes/phys110/slides/</loc>
     <lastmod>2018-08-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys222/slides/</loc>
+    <loc>/classes/phys222/slides/</loc>
     <lastmod>2018-08-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys222/hw/</loc>
+    <loc>/classes/phys222/hw/</loc>
     <lastmod>2018-08-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/</loc>
+    <loc>/classes/</loc>
     <lastmod>2018-08-18T20:26:11-07:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/resources/</loc>
+    <loc>/resources/</loc>
     <lastmod>2018-08-18T20:26:11-07:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/phys221/phys221/</loc>
+    <loc>/classes/phys221/phys221/</loc>
     <lastmod>2018-08-18T19:04:06-07:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/about/</loc>
+    <loc>/about/</loc>
     <lastmod>2018-08-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/resources/grad_resources/grad_resources/</loc>
+    <loc>/resources/grad_resources/grad_resources/</loc>
     <lastmod>2018-08-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/wu_schedule/</loc>
+    <loc>/wu_schedule/</loc>
     <lastmod>2018-08-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/Website_Backup/classes/cs151/setup/</loc>
+    <loc>/classes/cs151/setup/</loc>
   </url><url>
-    <loc>/Website_Backup/classes/data275/setup/</loc>
+    <loc>/classes/data275/setup/</loc>
   </url><url>
-    <loc>/Website_Backup/classes/data299/setup/</loc>
+    <loc>/classes/data299/setup/</loc>
   </url><url>
-    <loc>/Website_Backup/classes/data351/setup/</loc>
+    <loc>/classes/data351/setup/</loc>
   </url><url>
-    <loc>/Website_Backup/classes/data503/setup/</loc>
+    <loc>/classes/data503/setup/</loc>
   </url><url>
-    <loc>/Website_Backup/categories/</loc>
+    <loc>/categories/</loc>
   </url>
 </urlset>
