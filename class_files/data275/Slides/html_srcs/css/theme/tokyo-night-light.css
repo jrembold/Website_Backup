@@ -672,10 +672,10 @@ margin-left: 1em;*/ }
 .reveal .slide-number {
   background-color: transparent;
   color: var(--comments);
-  font-size: 0.6em;
-  bottom: 22px;
-  right: 26px;
-  width: 2em;
+  font-size: 0.4em;
+  bottom: 42px;
+  right: 24px;
+  width: 3em;
   text-align: center;
 }
 
