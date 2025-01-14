@@ -87,7 +87,7 @@ $body$
   <!--<script src="$revealjs-url$/../plugin/chart/Chart.min.js"></script>-->
   <!--<script src="$revealjs-url$/../plugin/chart/plugin.js"></script>-->
   <script src="$revealjs-url$/../plugin/chalkboard/plugin.js"></script>
-  <script src="$revealjs-url$/../plugin/menu/menu.js"></script>
+  <script src="$revealjs-url$/../other_plugins/menu/menu.js"></script>
   <script src="$revealjs-url$/../other_plugins/reveald3/reveald3.js"></script>,
 $if(mathjax)$
   <script src="$revealjs-url$/plugin/math/math.js"></script>
