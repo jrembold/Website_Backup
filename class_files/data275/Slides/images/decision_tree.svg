@@ -7,7 +7,7 @@
    viewBox="0 0 360.83377 181.85958"
    version="1.1"
    id="svg13040"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
    sodipodi:docname="decision_tree.svg"
    inkscape:export-filename="decision_tree.png"
    inkscape:export-xdpi="96"
@@ -28,14 +28,14 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="0.67882997"
-     inkscape:cx="709.3087"
-     inkscape:cy="378.5926"
-     inkscape:window-width="1680"
-     inkscape:window-height="1020"
-     inkscape:window-x="0"
-     inkscape:window-y="30"
+     inkscape:cx="206.97377"
+     inkscape:cy="274.00087"
+     inkscape:window-width="2560"
+     inkscape:window-height="1440"
+     inkscape:window-x="1080"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="g13621" />
   <defs
      id="defs13037">
     <marker
@@ -235,18 +235,18 @@
        id="g13441"
        transform="matrix(1.4199959,0,0,1.4199959,11.219421,-10.173304)">
       <path
-         style="fill:#206b00;fill-opacity:1;stroke:#206b00;stroke-width:0.979001;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart)"
+         style="fill:#485e30;fill-opacity:1;stroke:#485e30;stroke-width:0.979001;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart)"
          d="M 70.472074,55.757787 54.886436,71.52875"
          id="path13350" />
       <text
          xml:space="preserve"
-         style="font-size:9.57351px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;text-anchor:middle;fill:#206b00;fill-opacity:1;stroke:none;stroke-width:1.47598;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+         style="font-size:9.57351px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;text-anchor:middle;fill:#485e30;fill-opacity:1;stroke:none;stroke-width:1.47598;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
          x="51.098816"
          y="63.047138"
          id="text13434"><tspan
            sodipodi:role="line"
            id="tspan13432"
-           style="stroke:none;stroke-width:1.47598"
+           style="stroke:none;stroke-width:1.47598;fill:#485e30"
            x="51.098816"
            y="63.047138">True</tspan></text>
     </g>
@@ -254,18 +254,18 @@
        id="g13461"
        transform="matrix(1.4199959,0,0,1.4199959,117.25859,-10.173304)">
       <path
-         style="fill:#7a0000;fill-opacity:1;stroke:#7a0000;stroke-width:0.979001;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart)"
+         style="fill:#8c4351;fill-opacity:1;stroke:#8c4351;stroke-width:0.979001;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart)"
          d="M 52.932247,55.757787 68.517885,71.52875"
          id="path13455" />
       <text
          xml:space="preserve"
-         style="font-size:9.57351px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;text-anchor:middle;fill:#7a0000;fill-opacity:1;stroke:none;stroke-width:1.47598;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+         style="font-size:9.57351px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;text-anchor:middle;fill:#8c4351;fill-opacity:1;stroke:none;stroke-width:1.47598;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
          x="72.217667"
          y="62.96312"
          id="text13459"><tspan
            sodipodi:role="line"
            id="tspan13457"
-           style="fill:#7a0000;stroke:none;stroke-width:1.47598"
+           style="fill:#8c4351;stroke:none;stroke-width:1.47598"
            x="72.217667"
            y="62.96312">False</tspan></text>
     </g>
@@ -273,18 +273,18 @@
        id="g13589"
        transform="matrix(1.4199959,0,0,1.4199959,-78.995341,57.620369)">
       <path
-         style="fill:#206b00;fill-opacity:1;stroke:#206b00;stroke-width:0.979001;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart)"
+         style="fill:#485e30;fill-opacity:1;stroke:#485e30;stroke-width:0.979001;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart)"
          d="M 70.472074,55.757787 54.886436,71.52875"
          id="path13583" />
       <text
          xml:space="preserve"
-         style="font-size:9.57351px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;text-anchor:middle;fill:#206b00;fill-opacity:1;stroke:none;stroke-width:1.47598;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+         style="font-size:9.57351px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;text-anchor:middle;fill:#485e30;fill-opacity:1;stroke:none;stroke-width:1.47598;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
          x="51.098816"
          y="63.047138"
          id="text13587"><tspan
            sodipodi:role="line"
            id="tspan13585"
-           style="stroke:none;stroke-width:1.47598"
+           style="stroke:none;stroke-width:1.47598;fill:#485e30"
            x="51.098816"
            y="63.047138">True</tspan></text>
     </g>
@@ -292,18 +292,18 @@
        id="g13599"
        transform="matrix(1.4199959,0,0,1.4199959,102.25662,58.47698)">
       <path
-         style="fill:#206b00;fill-opacity:1;stroke:#206b00;stroke-width:0.979001;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart)"
+         style="fill:#485e30;fill-opacity:1;stroke:#485e30;stroke-width:0.979001;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart)"
          d="M 70.472074,55.757787 54.886436,71.52875"
          id="path13593" />
       <text
          xml:space="preserve"
-         style="font-size:9.57351px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;text-anchor:middle;fill:#206b00;fill-opacity:1;stroke:none;stroke-width:1.47598;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+         style="font-size:9.57351px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;text-anchor:middle;fill:#485e30;fill-opacity:1;stroke:none;stroke-width:1.47598;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
          x="51.098816"
          y="63.047138"
          id="text13597"><tspan
            sodipodi:role="line"
            id="tspan13595"
-           style="stroke:none;stroke-width:1.47598"
+           style="stroke:none;stroke-width:1.47598;fill:#485e30"
            x="51.098816"
            y="63.047138">True</tspan></text>
     </g>
@@ -311,18 +311,18 @@
        id="g13611"
        transform="matrix(1.4199959,0,0,1.4199959,30.886223,58.488726)">
       <path
-         style="fill:#7a0000;fill-opacity:1;stroke:#7a0000;stroke-width:0.979001;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart)"
+         style="fill:#8c4351;fill-opacity:1;stroke:#8c4351;stroke-width:0.979001;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart)"
          d="M 52.932247,55.757787 68.517885,71.52875"
          id="path13605" />
       <text
          xml:space="preserve"
-         style="font-size:9.57351px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;text-anchor:middle;fill:#7a0000;fill-opacity:1;stroke:none;stroke-width:1.47598;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+         style="font-size:9.57351px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;text-anchor:middle;fill:#8c4351;fill-opacity:1;stroke:none;stroke-width:1.47598;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
          x="72.217667"
          y="62.96312"
          id="text13609"><tspan
            sodipodi:role="line"
            id="tspan13607"
-           style="fill:#7a0000;stroke:none;stroke-width:1.47598"
+           style="fill:#8c4351;stroke:none;stroke-width:1.47598"
            x="72.217667"
            y="62.96312">False</tspan></text>
     </g>
@@ -330,18 +330,18 @@
        id="g13621"
        transform="matrix(1.4199959,0,0,1.4199959,210.07404,58.083915)">
       <path
-         style="fill:#7a0000;fill-opacity:1;stroke:#7a0000;stroke-width:0.979001;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart)"
+         style="fill:#8c4351;fill-opacity:1;stroke:#8c4351;stroke-width:0.979001;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart)"
          d="M 52.932247,55.757787 68.517885,71.52875"
          id="path13615" />
       <text
          xml:space="preserve"
-         style="font-size:9.57351px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;text-anchor:middle;fill:#7a0000;fill-opacity:1;stroke:none;stroke-width:1.47598;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+         style="font-size:9.57351px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';text-align:center;text-anchor:middle;fill:#8c4351;fill-opacity:1;stroke:none;stroke-width:1.47598;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
          x="72.217667"
          y="62.96312"
          id="text13619"><tspan
            sodipodi:role="line"
            id="tspan13617"
-           style="fill:#7a0000;stroke:none;stroke-width:1.47598"
+           style="fill:#8c4351;stroke:none;stroke-width:1.47598"
            x="72.217667"
            y="62.96312">False</tspan></text>
     </g>

@@ -127,7 +127,7 @@ svg {
 }
 
 /* This doesn't work atm */
-.reveal .alert .block:before {
+.reveal .alert.block:before {
   background-color: var(--red);
 }
 

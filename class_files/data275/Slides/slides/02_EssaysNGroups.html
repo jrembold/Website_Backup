@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-01-16">
+  <title>Computational Essays and Group Work</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Computational Essays and Group Work</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">January 16, 2025</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 1 is posted!
+<ul>
+<li>Partners revealed and introduction at end of class</li>
+<li>Example of a basic computational essay is on website as well as what
+we’ll do in class today</li>
+<li>You should be able to at least start problem 1, but will need next
+Tuesday to complete it</li>
+</ul></li>
+<li>First check-in is this weekend!</li>
+</ul>
+</section>
+<section id="todays-plan" class="slide level2">
+<h2>Today’s Plan</h2>
+<ul>
+<li>Computational Essays
+<ul>
+<li>Software</li>
+<li>Dos and Don’ts</li>
+<li>Live Demo</li>
+</ul></li>
+<li>Group Work
+<ul>
+<li>Approaches</li>
+<li>Reflection Form</li>
+<li>Partner Intros</li>
+</ul></li>
+</ul>
+</section>
+<section>
+<section id="computational-essays" class="title-slide slide level1">
+<h1>Computational Essays</h1>
+
+</section>
+<section id="overview" class="slide level2">
+<h2>Overview</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Each problem from an assignment should have a separate computational
+essay submitted.</li>
+<li>Essays should be standalone (self-contained) HTML documents.</li>
+<li>They are not just annotated code. They are a guide and explanation
+of your thoughts and conclusions while working through a problem.</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/comp_essay_snapshot.png" /></p>
+</div>
+</div>
+</section>
+<section id="software" class="slide level2">
+<h2>Software</h2>
+<ul>
+<li>While you could potentially write a computational essay in any text
+editor, I am going to push hard for you to use <a
+href="https://quarto.org/">Quarto</a> this semester.
+<ul>
+<li>The benefits are worth it. It is seriously nice.</li>
+</ul></li>
+<li>Can be utilized in a variety of ways:
+<ul>
+<li>Pure markdown: Write everything in pure markdown with code cells,
+and when you compile it the code is run</li>
+<li>Jupyter Notebooks: You can work in an interactive JupyterNB
+environment, but can export to a nice Quarto document by just adding
+some material at the start of the notebook</li>
+<li>RMarkdown/Notebooks: Renders in basically the exact same way you can
+knit R Notebooks, but better</li>
+</ul></li>
+<li>What method you to prefer is entirely up to you. They all get to the
+same place in the end.</li>
+</ul>
+</section>
+<section id="editors" class="slide level2">
+<h2>Editors</h2>
+<ul>
+<li>You have a lot of flexibility in what environment you want to work
+in:
+<ul>
+<li>VSCode
+<ul>
+<li>Can render Quarto markdown with extension, using either Python or R
+if installed on your system</li>
+<li>Natively supports Jupyter notebooks (and can render with Quarto if
+installed)</li>
+<li>Jupyter Notebooks can also run R code (See <a
+href="https://irkernel.github.io/installation/">IRkernel</a>)</li>
+</ul></li>
+<li>JupyterLab
+<ul>
+<li>Alternative interface to Jupyter notebooks</li>
+</ul></li>
+<li>RStudio
+<ul>
+<li>Primarily for R, but can be used with some Python through the
+reticulate package</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="computational-essay-fundamentals" class="slide level2">
+<h2>Computational Essay Fundamentals</h2>
+<ul>
+<li>Start with a brief introduction. What are you trying to achieve in
+this problem. What are you starting with? What are the broad steps that
+you are going to be following to find your solution.</li>
+<li>Explain what libraries you are importing and why you need/want
+them.</li>
+<li>Proceed to explain and showcase the steps you are going through on
+the way to your solution
+<ul>
+<li>Explanations of equations, code, or visuals should always come in
+the text <em>before</em> they appear</li>
+</ul></li>
+<li>Summarize at the end, ensuring that you have answered all the
+question</li>
+</ul>
+</section>
+<section id="dos-and-donts" class="slide level2">
+<h2>Dos and Don’ts</h2>
+<div class="cols">
+<div class="col">
+<div class="block" name="Do">
+<ul>
+<li>Include units: in graphs, in printed out values</li>
+<li>Include axis labels in all plots</li>
+<li>Explain why a reader should care about anything you show them: a
+table, a visual, and equation. What should they pay attention to?</li>
+<li>Feel free to collapse some code, if the output is what matters, but
+don’t hide it completely</li>
+<li>Have everyone in your group proofread your writing. This is an essay
+after all.</li>
+<li>Be consistent with text side, headings, etc.</li>
+</ul>
+</div>
+</div>
+<div class="col">
+<div class="block alert" name="Don&#39;t">
+<ul>
+<li>Have back-to-back code chunks without any textual exposition
+between</li>
+<li>Rely on your code to explain something. That is what writing is
+for.</li>
+<li>Print off unnecessary things from code blocks. That is for testing.
+Clean it up before publishing.</li>
+<li>Use an important equation in a block of code before explaining it
+and rendering it nicely</li>
+<li>Make single plots huge, as they then break up the flow of your
+writing. Side-by-side figures are very useful.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="example-problem" class="slide level2">
+<h2>Example Problem</h2>
+<ul>
+<li>The file <a href="../demos/brightest_200.csv">here</a> is a CSV file
+containing the names and celestial coordinates of the brightest 200
+stars in the night sky.</li>
+<li>Visualize the stars and highlight the constellation Orion.</li>
+<li>How long after the start Arcturus sets will the star Betelgeuse
+set?</li>
+</ul>
+</section></section>
+<section>
+<section id="group-work" class="title-slide slide level1">
+<h1>Group Work</h1>
+
+</section>
+<section id="strategies" class="slide level2">
+<h2>Strategies</h2>
+<div style="font-size:.9em">
+<p>You are always free to follow your own strategies, for what you think
+will work best for you and your partner. The following are just some
+strategies that I have observed led to students being more
+successful.</p>
+<ul>
+<li>Start early. Many questions are demanding conceptually, and you want
+to leave yourself time to ask questions.</li>
+<li>Do <strong>not</strong> divide and conquer. Find time to work
+together on 1 problem at a time.</li>
+<li>Embrace individual strengths and passions. What do you both enjoy
+doing/working on?</li>
+<li>Plan to meet multiple times over the two-week span.</li>
+<li>Leave time for both members to read and approve of the final
+submissions.</li>
+<li>Keep very clear lines of communication! What method do you both
+prefer to communicate with?</li>
+<li>Extend the grace to your partner to assume they are trying their
+best.</li>
+</ul>
+</div>
+</section>
+<section id="introspection" class="slide level2">
+<h2>Introspection</h2>
+<ul>
+<li>The best groups I have been a part of functioned well because of an
+understanding of the strengths and weaknesses of the individual members.
+That means you should have an idea going into any group of <em>how</em>
+you would prefer to contribute.
+<ul>
+<li>What do you feel you are particularly good at?</li>
+<li>What sort of work makes you happy or feeling satisfied?</li>
+<li>What do you feel less strong in, and could use support with?</li>
+</ul></li>
+<li>Any/All of the above could be about technical knowledge (e.g. data
+visualization, dataframe manipulation, error analysis), scientific
+knowledge (e.g. how to determine the period of an oscillation, or
+interpret a spectrum), or “soft” skills (e.g. explaining concepts,
+organization, proofreading and polish)</li>
+</ul>
+</section>
+<section id="reflection" class="slide level2">
+<h2>Reflection</h2>
+<ul>
+<li>Take 10-15 minutes to fill out the form <a
+href="https://docs.google.com/forms/d/e/1FAIpQLSdaUjeiwdLBnon0uamSm0lKLgxC88S24TsB70UcPs0_8yrzFQ/viewform?usp=sharing">here</a>
+<ul>
+<li>The first few questions are just for my information</li>
+<li>The later questions should give you material to help guide initial
+meetings with new partners
+<ul>
+<li>Take time on these and make sure you are happy with them. I promise
+it will help.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="hw1-partners" class="slide level2">
+<h2>HW1 Partners!</h2>
+<p>Below are the partner assignments for HW1. Rearrange yourself in the
+room to find your partner and prepare to answer the questions on the
+following slide.</p>
+<div class="cols" style="align-items: flex-start">
+<div class="col">
+<div class="block" name="Left Tables">
+<ul>
+<li>Mamadou, Felicity &amp; Luca C</li>
+<li>Jared &amp; Tegan</li>
+<li>Emalia &amp; Sadie</li>
+<li>Gabriella &amp; Conor</li>
+<li>Marcus &amp; Lucca B</li>
+<li>Maddie &amp; Luna</li>
+<li>Aurora &amp; Sergio</li>
+</ul>
+</div>
+</div>
+<div class="col">
+<div class="block" name="Right Tables">
+<ul>
+<li>Izzy &amp; Elliot</li>
+<li>M &amp; Evan</li>
+<li>Oscar &amp; Sawyer</li>
+<li>Clay &amp; Evyn</li>
+<li>Sage &amp; Pearson</li>
+<li>Greg &amp; Salem</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="partner-questions" class="slide level2">
+<h2>Partner Questions</h2>
+<ul>
+<li>Briefly introduce yourself: name, pronouns, year, major, preferred
+scripting language</li>
+<li>What was your favorite thing that you did over winter break?</li>
+<li>Why did you register for this course? What are you most looking
+forward to?</li>
+<li>What are you feeling least confident about currently in this course?
+Could your partner help with that?</li>
+<li>What strengths do you bring to this group?</li>
+<li>How do you prefer to communicate?</li>
+<li>When do you plan to meet to start working on HW1?</li>
+</ul>
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
+    </body>
+</html>
