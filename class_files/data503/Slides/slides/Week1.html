@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-01-15">
   <title>And So It Begins</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,8 +17,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -33,7 +37,7 @@
 <section id="title-slide">
   <h1 class="title">And So It Begins</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">January 18/23, 2024</p>
+  <p class="date">January 15, 2025</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -45,10 +49,10 @@
 <li>Access the course webpage <a
 href="http://www.willamette.edu/~jjrembold/classes/data503/data503/">here</a>
 <ul>
-<li>Also linked to from Canvas</li>
+<li>Also linked to from Canvas page</li>
 </ul></li>
 <li>Read over the full syllabus</li>
-<li>You now have your SQL book</li>
+<li>Procure the book if you haven’t already</li>
 <li>Join the class Discord channel, to facilitate remote questions,
 answers, and general communication
 <ul>
@@ -80,7 +84,7 @@ PhD in Physics with specialization in Astrophysics
 </dd>
 <dd>
 <ul>
-<li>Have been teaching CS now for past 4 years</li>
+<li>Have been teaching CS/DS now for past 5 years</li>
 </ul>
 </dd>
 <dt>Office:</dt>
@@ -101,6 +105,11 @@ jjrembold@willamette.edu
 <p><img data-src="../images/about_me.png" style="width:80.0%" /></p>
 </div>
 </div>
+</section>
+<section>
+<section id="syllabus-stuff" class="title-slide slide level1">
+<h1>Syllabus Stuff</h1>
+
 </section>
 <section id="grade-breakdown" class="slide level2">
 <h2>Grade Breakdown</h2>
@@ -202,9 +211,15 @@ responsibilities may well entail both the work of a data scientist
 information</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="what-even-is-data-engineering"
+class="title-slide slide level1">
+<h1>What even is Data Engineering?</h1>
+
 </section>
-<section id="what-even-is-data-engineering" class="slide level2">
-<h2>What even is Data Engineering?</h2>
+<section id="varied-opinions" class="slide level2">
+<h2>Varied opinions!</h2>
 <div class="r-stack">
 <div class="fragment quote current-visible fade-up">
 <blockquote>
@@ -292,29 +307,42 @@ without the Data Engineer!</li>
 style="width:100.0%" /></p>
 </div>
 </div>
-<!--
-## The Five V's
-- Data Engineers need to contend with multiple facets of data
-    
-  Volume:
-    : the quantity of data points
-
-  Variety:
-    : the type and nature of the data (text, images, video, audio)
-
-  Velocity:
-    : the speed at which new data is generated and processed
-
-  Veracity:
-    : how trustworthy the sources are
-
-  Value:
-    : how actionable the data is
--->
 </section>
-<section id="the-data-software-landscape" class="slide level2">
-<h2>The Data Software Landscape</h2>
+<section id="the-five-vs" class="slide level2">
+<h2>The Five V’s</h2>
+<ul>
+<li><p>Data Engineers need to contend with multiple facets of data</p>
+<dl>
+<dt>Volume:</dt>
+<dd>
+the quantity of data points
+</dd>
+<dt>Variety:</dt>
+<dd>
+the type and nature of the data (text, images, video, audio)
+</dd>
+<dt>Velocity:</dt>
+<dd>
+the speed at which new data is generated and processed
+</dd>
+<dt>Veracity:</dt>
+<dd>
+how trustworthy the sources are
+</dd>
+<dt>Value:</dt>
+<dd>
+how actionable the data is
+</dd>
+</dl></li>
+</ul>
+</section>
+<section id="the-data-software-landscape-2020" class="slide level2">
+<h2>The Data Software Landscape 2020</h2>
 <p><img data-src="../images/Landscape.png" style="width:80.0%" /></p>
+</section>
+<section id="the-data-software-landscape-2024" class="slide level2">
+<h2>The Data Software Landscape 2024</h2>
+<p><img data-src="../images/mad2024.png" style="width:90.0%" /></p>
 </section>
 <section id="sampling-the-landscape" class="slide level2">
 <h2>Sampling the Landscape</h2>
@@ -336,24 +364,46 @@ day-to-day work?</li>
 <li>Gain experience using a few representative pieces of software</li>
 </ul></li>
 </ul>
-<!--
-## Quick Note On Data Types
-- Notice that in a relational database we can specify what _type_ of information is allowed in each column
-- Will discuss more in Ch 3, but you have the basic types you might expect
-    - `int` for integers
-    - `varchar` for text
-    - `date` for dates
-- This keeps information consistent and predictable
--->
-<!--
-## Alternative Storage Structures
-
-|  | Structured | Semi-Structured | Unstructured |
-| ---|---|---|--- |
-| <span style="font-weight: bold;">Ability to search and organize data?</span> | Easy | Moderate | Difficult |
-| <span style="font-weight: bold;">Format of Data?</span> | Tables of numbers and some text | Tables, lists of numbers and text | Images, videos, detailed text |
-| <span style="font-weight: bold;">Where is it stored?</span> | Relational databases | NoSQL, XML, JSON | Data Lakes |
--->
+</section>
+<section id="alternative-storage-structures" class="slide level2">
+<h2>Alternative Storage Structures</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Structured</th>
+<th>Semi-Structured</th>
+<th>Unstructured</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span style="font-weight: bold;">Ability to search and organize
+data?</span></td>
+<td>Easy</td>
+<td>Moderate</td>
+<td>Difficult</td>
+</tr>
+<tr class="even">
+<td><span style="font-weight: bold;">Format of Data?</span></td>
+<td>Tables of numbers and some text</td>
+<td>Tables, lists of numbers and text</td>
+<td>Images, videos, detailed text</td>
+</tr>
+<tr class="odd">
+<td><span style="font-weight: bold;">Where is it stored?</span></td>
+<td>Relational databases</td>
+<td>NoSQL, XML, JSON</td>
+<td>Data Lakes</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="languages-to-know" class="slide level2">
 <h2>Languages to Know?</h2>
@@ -372,7 +422,7 @@ Prevalent for common open source Apache projects like Spark and Hive
 </dd>
 <dt>Bash</dt>
 <dd>
-The command line interface for Linux operating systems
+The default text interface for Linux operating systems
 </dd>
 </dl>
 </section>
@@ -406,21 +456,16 @@ real-time</li>
 <li>Speed depends on how fast new data is being generated</li>
 </ul></li>
 </ul>
-</section>
-<section id="undercurrents" class="slide level2">
-<h2>Undercurrents</h2>
-<ul>
-<li>There are several items to consider throughout the lifecycle that we
-will also occasionally touch on
-<ul>
-<li>Security</li>
-<li>Data management</li>
-<li>DataOps</li>
-<li>Data architecture</li>
-<li>Orchestration</li>
-<li>Software Engineering</li>
-</ul></li>
-</ul>
+<!--
+## Undercurrents
+- There are several items to consider throughout the lifecycle that we will also occasionally touch on
+  - Security
+  - Data management
+  - DataOps
+  - Data architecture
+  - Orchestration
+  - Software Engineering
+-->
 </section>
 <section id="group-activity" class="slide level2">
 <h2>Group Activity</h2>
@@ -443,6 +488,11 @@ above 3 dimensions</li>
 <li>We’ll summarize at the end what people found</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="break" class="title-slide slide level1">
+<h1>Break</h1>
+
 </section>
 <section id="dinner-break" class="slide level2">
 <h2>Dinner Break!</h2>
@@ -451,6 +501,11 @@ above 3 dimensions</li>
 </ul>
 <p><img data-src="../images/nomming_catepillar.png" /></p>
 <!-- SQL SECTION STARTS -->
+</section></section>
+<section>
+<section id="why-relational-databases" class="title-slide slide level1">
+<h1>Why Relational Databases?</h1>
+
 </section>
 <section id="how-to-store-data" class="slide level2">
 <h2>How to store data?</h2>
@@ -760,7 +815,8 @@ alt="Relational Database Schema" />
 databases</li>
 <li>These days it is pronounced “ESS-CUE-ELL”, though you may still hear
 it occasionally referred to in an older form of “SEQUEL”</li>
-<li>Does <strong>not</strong> stand for “Structured Query Language”!
+<li>Does <strong>not</strong> technically stand for “Structured Query
+Language”!
 <ul>
 <li>Is not structured in a programming sense</li>
 <li>Does far more than just query</li>
@@ -773,6 +829,11 @@ ANSI and ISO, so none stray too far from the standards
 semester</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="sql-basics" class="title-slide slide level1">
+<h1>SQL Basics</h1>
+
 </section>
 <section id="sql-servers" class="slide level2">
 <h2>SQL Servers</h2>
@@ -830,8 +891,8 @@ to take with a database</li>
 </ul></li>
 </ul>
 <pre ><code class="pgsql">CREATE TABLE |||table name||| (
-    |||column_name_1||| |||type_1|||,
-    |||column_name_2||| |||type_2|||,
+    |||column_name₁||| |||type₁|||,
+    |||column_name₂||| |||type₂|||,
     etc...
 );</code></pre>
 </section>
@@ -861,10 +922,15 @@ columns</li>
 <li>Need to include an entry for each column (rows can’t be unequal in
 length)</li>
 </ul>
-<pre ><code class="pgsql">INSERT INTO |||table name||| (|||column A|||, |||column C|||)
-VALUES ('row1a', 'row1b'),
-       ('row2a', 'row2b'),
-       ('row3a', 'row3b');</code></pre>
+<pre ><code class="pgsql">INSERT INTO |||table name||| (|||column₁|||, |||column₂|||)
+VALUES ('row1a', 'row2a'),
+       ('row1b', 'row2b'),
+       ('row1c', 'row2c');</code></pre>
+</section></section>
+<section>
+<section id="asking-questions" class="title-slide slide level1">
+<h1>Asking Questions</h1>
+
 </section>
 <section id="query-time" class="slide level2">
 <h2>Query Time</h2>
@@ -881,7 +947,7 @@ and don’t alter the database in any way</p></li>
 <li>The table you want to get the information from</li>
 </ul></li>
 <li><p>Basic syntax then could look something like:</p>
-<pre ><code class="pgsql">SELECT |||column 1|||, |||column 2||| FROM |||table name|||;</code></pre></li>
+<pre ><code class="pgsql">SELECT |||column₁|||, |||column₂||| FROM |||table name|||;</code></pre></li>
 <li><p>An asterisk <code class="python">*</code>, can stand in for the
 column names to stand for “all the columns”</p>
 <pre ><code class="pgsql">SELECT * FROM |||table name|||;</code></pre></li>
@@ -906,7 +972,7 @@ display the <em>unique</em> values that appear in a column
 <li>Then interpreted as “For each X in the table, what are all the Y
 values?”</li>
 </ul>
-<pre ><code class="pgsql">SELECT DISTINCT |||column 1|||, |||column 2|||
+<pre ><code class="pgsql">SELECT DISTINCT |||column₁|||, |||column₂|||
 FROM |||table name|||;</code></pre></li>
 </ul>
 </section>
@@ -929,9 +995,9 @@ indicate a column to use for ordering</li>
 ordering</li>
 <li>Can also order by multiple columns (separate by comma)</li>
 </ul>
-<pre ><code class="pgsql">SELECT |||column 1|||, |||column 2|||
+<pre ><code class="pgsql">SELECT |||column₁|||, |||column₂|||
 FROM |||table name|||
-ORDER BY |||column 2||| DESC;</code></pre>
+ORDER BY |||column₂||| DESC;</code></pre>
 </section>
 <section id="ordering-basics" class="slide level2">
 <h2>Ordering Basics</h2>
@@ -1071,7 +1137,7 @@ to “escape” it with a backslash (<code class="python">\_</code> or
 <section id="conditional-combinations" class="slide level2">
 <h2>Conditional Combinations</h2>
 <ul>
-<li>Often, you might need to filter or several or more complicated
+<li>Often, you might need to filter on several or more complicated
 conditions</li>
 <li>SQL also has the boolean <code class="python">AND</code> and
 <code class="python">OR</code> operators that you can use to stitch
@@ -1081,8 +1147,8 @@ parentheses if you need them evaluated earlier</li>
 </ul>
 <pre ><code class="pgsql">SELECT *
 FROM |||table name|||
-WHERE |||column 1||| LIKE 'F%' AND
-      (|||column 2||| > 50 OR |||column 3||| <= 10);</code></pre>
+WHERE |||column₁||| LIKE 'F%' AND
+      (|||column₂||| > 50 OR |||column₃||| <= 10);</code></pre>
 </section>
 <section id="reaching-your-limit" class="slide level2">
 <h2>Reaching Your Limit</h2>
@@ -1111,7 +1177,7 @@ somewhere in its name that has the highest amount of sugar per serving.
 Construct a query that could help you figure out what cereal you should
 be grabbing!</li>
 </ul>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -1205,7 +1271,7 @@ be grabbing!</li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
