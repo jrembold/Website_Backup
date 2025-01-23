@@ -2031,7 +2031,7 @@ to be exported. In that case, you have a few options:</li>
 <ul>
 <li>Just specify the desired columns after the table name</li>
 </ul>
-<pre ><code class="pgsql" style="font-size:1em;">COPY |||table name||| (|||col1|||, |||col2|||, |||col3|||)
+<pre ><code class="pgsql" style="font-size:1em;">COPY |||table name||| (|||col₁|||, |||col₂|||, |||col₃|||)
 TO |||full path to filename|||
 WITH ( |||import options||| );</code></pre></li>
 <li>Export just the output of a query:
@@ -2039,8 +2039,8 @@ WITH ( |||import options||| );</code></pre></li>
 <li>Embed the query instead of a table name</li>
 </ul>
 <pre ><code class="pgsql" style="font-size:1em;">COPY (
-  SELECT |||col1|||, |||col2||| FROM |||table name|||
-  ORDER BY |||col2|||
+  SELECT |||col₁|||, |||col₂||| FROM |||table name|||
+  ORDER BY |||col₂|||
   )
 TO |||full path to filename|||
 WITH ( |||import_options||| );</code></pre></li>

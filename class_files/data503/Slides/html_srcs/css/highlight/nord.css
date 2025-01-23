@@ -209,7 +209,7 @@ Aurora
 .hljs-pseudo {
   font-family: serif;
   font-style: italic;
-  font-size: 1.15em;
+  /*font-size: 1.15em;*/
   color: #EBCB8B;
 ;
 }
