@@ -84,7 +84,7 @@ function Code(inline)
 				table.concat(css_classes, ' '))
 			table.insert(code_tag_attributes, class_attribute)
 		else --[[we will assume python if no language given ]]--
-			table.insert(css_classes, "python")
+			table.insert(css_classes, "pgsql")
 			class_attribute = string.format('class="%s"',
 				table.concat(css_classes, ' '))
 			table.insert(code_tag_attributes, class_attribute)

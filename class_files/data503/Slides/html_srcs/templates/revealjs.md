@@ -368,9 +368,16 @@ $endif$
 		 },
 $if(highlightjs)$
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
-              console.log(mypgsqldef);
-              return mypgsqldef(hljs); } )
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
           },
 $endif$
 

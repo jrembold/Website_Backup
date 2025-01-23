@@ -476,8 +476,8 @@ margin-left: 1em;*/ }
   border-radius: 10px;
   display: inline;
   font-size: 1em;
-  background: var(--white4);
-  color: var(--frost5);
+  background: var(--gray4);
+  color: var(--white1);
   text-transform: none; 
   padding: 0px 10px;
 }
@@ -673,7 +673,11 @@ margin-left: 1em;*/ }
 .reveal .slide-number {
   background-color: transparent;
   color: var(--gray4);
-  font-size: 0.4em;
+  font-size: 0.35em;
+  bottom: 45px;
+  right: 20px;
+  width: 4em;
+  text-align: center;
 }
 
 /*********************************************

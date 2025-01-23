@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-01-22">
   <title>The Source of Types and Commerce</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -36,7 +37,7 @@
 <section id="title-slide">
   <h1 class="title">The Source of Types and Commerce</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">January 25/30, 2024</p>
+  <p class="date">January 22, 2025</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -46,15 +47,9 @@
 <ul>
 <li>If you had any issues, let’s get them figured out before you leave
 tonight</li>
+<li>My apologies about the Canvas mistake</li>
 </ul></li>
-<li>Homework 2 is posted!</li>
-<li>Starting next week, I like incorporating some in-class polling in
-many lectures to give you a chance to think (and stop listening to me).
-<ul>
-<li><a href="http:\rembold-class.ddns.net">rembold-class.ddns.net</a> to
-respond!</li>
-<li>No actual points associated with this.</li>
-</ul></li>
+<li>Homework 2 is posted! On both the website and Canvas!</li>
 <li>For next week:
 <ul>
 <li>DeBarros: Ch 6</li>
@@ -73,6 +68,11 @@ respond!</li>
 - There are _many_ systems that can address one of these needs, but rarely all
 - How can we think about the tools and options to design a data system that fits our requirements?
 -->
+</section>
+<section>
+<section id="system-objectives" class="title-slide slide level1">
+<h1>System Objectives</h1>
+
 </section>
 <section id="the-primary-objectives" class="slide level2">
 <h2>The Primary Objective(s)</h2>
@@ -118,8 +118,13 @@ be build or managed
 <li>Regulatory climate</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="reliability" class="title-slide slide level1">
+<h1>Reliability</h1>
+
 </section>
-<section id="reliability" class="slide level2">
+<section id="reliability-1" class="slide level2">
 <h2>Reliability</h2>
 <ul>
 <li><strong>The system should continue to work correctly, even when
@@ -189,8 +194,13 @@ alt="Not this type" />
 </figure>
 </div>
 </div>
+</section></section>
+<section>
+<section id="scalability" class="title-slide slide level1">
+<h1>Scalability</h1>
+
 </section>
-<section id="scalability" class="slide level2">
+<section id="scalability-1" class="slide level2">
 <h2>Scalability</h2>
 <div class="cols" style="align-items:center">
 <div class="col">
@@ -200,7 +210,7 @@ alt="Prepare for growth!" />
 <figcaption aria-hidden="true">Prepare for growth!</figcaption>
 </figure>
 </div>
-<div class="col">
+<div class="col" style="font-size:.9em">
 <ul>
 <li>As the demands on the data system grow, there should be reasonable
 options available for handling the increased demand.
@@ -214,18 +224,29 @@ routes where growth COULD happen.</li>
 </ul>
 </div>
 </div>
-<!--
-## Load and Performance
-- _Load_ is characterized by how much work your system is having to do
-  - Can vary from system to system, and often times might have several key factors
-  - Examples: number of requests/queries per second, amount of data to process per second, number of active users
-- Changes to load can yield changes in _performance_
-  - Often measure through metrics such as records processed per second, or speed of response time
-  - What is the typical case? -- _median_
-  - What are the worst cases? -- _95%, 99%, or 99.9%_
-
-![](../images/percentiles.png){width=90%}
--->
+</section>
+<section id="load-and-performance" class="slide level2">
+<h2>Load and Performance</h2>
+<div style="font-size=.9em">
+<ul>
+<li><em>Load</em> is characterized by how much work your system is
+having to do
+<ul>
+<li>Can vary from system to system, and often times might have several
+key factors</li>
+<li>Examples: number of requests/queries per second, amount of data to
+process per second, number of active users</li>
+</ul></li>
+<li>Changes to load can yield changes in <em>performance</em>
+<ul>
+<li>Often measure through metrics such as records processed per second,
+or speed of response time</li>
+<li>What is the typical case? – <em>median</em></li>
+<li>What are the worst cases? – <em>95%, 99%, or 99.9%</em></li>
+</ul></li>
+</ul>
+</div>
+<p><img data-src="../images/percentiles.png" style="width:50.0%" /></p>
 </section>
 <section id="common-scaling-options" class="slide level2">
 <h2>Common Scaling Options</h2>
@@ -252,8 +273,13 @@ powerful</li>
 </ul>
 </dd>
 </dl>
+</section></section>
+<section>
+<section id="maintainability" class="title-slide slide level1">
+<h1>Maintainability</h1>
+
 </section>
-<section id="maintainability" class="slide level2">
+<section id="maintainability-1" class="slide level2">
 <h2>Maintainability</h2>
 <ul>
 <li>Other people who work on the system <strong>should be able to work
@@ -273,7 +299,7 @@ costs!</li>
 </section>
 <section id="achieving-maintainability" class="slide level2">
 <h2>Achieving Maintainability</h2>
-<div style="font-size:.9em">
+<div style="font-size:.8em">
 <ul>
 <li><em>Operability</em>
 <ul>
@@ -307,6 +333,11 @@ much complexity as possible
 </ul></li>
 </ul>
 </div>
+</section></section>
+<section>
+<section id="data-generation" class="title-slide slide level1">
+<h1>Data Generation</h1>
+
 </section>
 <section id="a-plunge-into-the-data-engineering-lifecycle"
 class="slide level2">
@@ -512,6 +543,11 @@ queries?</li>
 <li>How hot or cold is the data you need to store?</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="beyond-relational" class="title-slide slide level1">
+<h1>Beyond Relational</h1>
+
 </section>
 <section id="database-landscape" class="slide level2">
 <h2>Database Landscape</h2>
@@ -601,15 +637,15 @@ documents and outside relationships are fairly rare</li>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="242.93298mm"
-   height="246.04034mm"
-   viewBox="0 0 242.93298 246.04034"
+   width="185.07043mm"
+   height="187.43767mm"
+   viewBox="0 0 185.07043 187.43766"
    version="1.1"
    id="svg5"
    inkscape:export-filename="/home/jedediah/Teaching/DataEng/FundDE/Lectures/images/data_models.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
-   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    sodipodi:docname="document_tree.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -626,148 +662,150 @@ documents and outside relationships are fairly rare</li>
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="0.66368547"
-     inkscape:cx="577.83396"
+     inkscape:cx="577.83395"
      inkscape:cy="616.25577"
-     inkscape:window-width="2528"
-     inkscape:window-height="1381"
-     inkscape:window-x="1096"
-     inkscape:window-y="43"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
   <defs
      id="defs2" />
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-384.64743,8.3869042)">
+     transform="translate(-384.64743,8.3869038)">
     <circle
-       style="fill:#a3be8c;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#a3be8c;stroke:#2e3440;stroke-width:0.866498;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="path5930"
-       cx="518.90948"
-       cy="11.042206"
-       r="18.860405" />
+       cx="486.93051"
+       cy="6.4145179"
+       r="14.368173" />
     <circle
-       style="fill:#81a1c1;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#81a1c1;stroke:#2e3440;stroke-width:0.866498;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6012"
-       cx="519.62805"
-       cy="69.949684"
-       r="18.860405" />
+       cx="487.47794"
+       cy="51.291222"
+       r="14.368173" />
     <circle
-       style="fill:#81a1c1;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#81a1c1;stroke:#2e3440;stroke-width:0.866498;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6014"
-       cx="431.10477"
-       cy="69.949684"
-       r="18.860405" />
+       cx="420.0394"
+       cy="51.291222"
+       r="14.368173" />
     <circle
-       style="fill:#81a1c1;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#81a1c1;stroke:#2e3440;stroke-width:0.866498;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6016"
-       cx="608.15131"
-       cy="69.949684"
-       r="18.860405" />
+       cx="554.91644"
+       cy="51.291222"
+       r="14.368173" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 503.24744,21.549744 446.76681,59.442146"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.761817;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 474.9989,14.419336 431.97101,43.286403"
        id="path6040"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#path5930"
        inkscape:connection-end="#circle6014" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 519.13953,29.901199 0.25848,21.189492"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.761817;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 487.10577,20.781615 0.19691,16.142509"
        id="path6144"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#path5930"
        inkscape:connection-end="#circle6012" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 534.64962,21.432086 57.76155,38.127718"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.761817;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 498.92161,14.329702 44.00373,29.046336"
        id="path6146"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#path5930"
        inkscape:connection-end="#circle6016" />
     <circle
-       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:0.866498;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6282"
-       cx="404.07654"
-       cy="143.11349"
-       r="18.860405" />
+       cx="399.44885"
+       cy="107.02864"
+       r="14.368173" />
     <circle
-       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:0.866498;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6284"
-       cx="451.73239"
-       cy="143.11349"
-       r="18.860405" />
+       cx="435.75388"
+       cy="107.02864"
+       r="14.368173" />
     <circle
-       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:0.866498;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6286"
-       cx="520.43475"
-       cy="143.11349"
-       r="18.860405" />
+       cx="488.0925"
+       cy="107.02864"
+       r="14.368173" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 424.56912,87.641289 410.61218,125.42189"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.761817;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 415.06044,64.768983 404.42781,93.550879"
        id="path6346"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6014"
        inkscape:connection-end="#circle6282" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 436.22261,88.102088 10.39194,36.859002"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.761817;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 423.93826,65.120027 7.91675,28.079809"
        id="path6348"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6014"
        inkscape:connection-end="#circle6284" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 519.83599,88.808813 0.39082,35.445557"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.761817;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 487.63635,65.658422 0.29774,27.003018"
        id="path6350"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6012"
        inkscape:connection-end="#circle6286" />
     <circle
-       style="fill:#b48ead;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#b48ead;stroke:#2e3440;stroke-width:0.866498;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6432"
-       cx="404.07654"
-       cy="218.22433"
-       r="18.860405" />
+       cx="399.44885"
+       cy="164.24934"
+       r="14.368173" />
     <circle
-       style="fill:#b48ead;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#b48ead;stroke:#2e3440;stroke-width:0.866498;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6434"
-       cx="496.57126"
-       cy="218.22433"
-       r="18.860405" />
+       cx="469.91287"
+       cy="164.24934"
+       r="14.368173" />
     <circle
-       style="fill:#b48ead;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#b48ead;stroke:#2e3440;stroke-width:0.866498;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6436"
-       cx="550.32861"
-       cy="218.22433"
-       r="18.860405" />
+       cx="510.86612"
+       cy="164.24934"
+       r="14.368173" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 404.07654,161.9739 v 37.39003"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.761817;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 399.44885,121.39681 v 28.48436"
        id="path6478"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6282"
        inkscape:connection-end="#circle6432" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 514.72393,161.08842 -12.44185,39.16099"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.761817;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 483.7419,120.72224 -9.47843,29.8335"
        id="path6480"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6286"
        inkscape:connection-end="#circle6434" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 527.409,160.63687 15.94537,40.06409"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.761817;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 493.40559,120.37824 12.14744,30.5215"
        id="path6482"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
@@ -822,15 +860,15 @@ it really well</li>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="246.42206mm"
-   height="261.45273mm"
-   viewBox="0 0 246.42205 261.45272"
+   width="200.5764mm"
+   height="212.81071mm"
+   viewBox="0 0 200.57639 212.81071"
    version="1.1"
    id="svg5"
    inkscape:export-filename="/home/jedediah/Teaching/DataEng/FundDE/Lectures/images/data_models.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
-   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    sodipodi:docname="graph_tree.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -847,180 +885,182 @@ it really well</li>
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="0.66368547"
-     inkscape:cx="462.17661"
-     inkscape:cy="513.05449"
-     inkscape:window-width="2528"
-     inkscape:window-height="1381"
-     inkscape:window-x="1096"
-     inkscape:window-y="43"
+     inkscape:cx="461.81514"
+     inkscape:cy="513.7976"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
   <defs
      id="defs2" />
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-385.40628,8.3869042)">
+     transform="translate(-385.40629,8.3869041)">
     <circle
-       style="fill:#a3be8c;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#a3be8c;stroke:#2e3440;stroke-width:0.9258;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="path5930"
-       cx="518.90948"
-       cy="11.042206"
-       r="18.860405" />
+       cx="494.07187"
+       cy="7.4275136"
+       r="15.351518" />
     <circle
-       style="fill:#81a1c1;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#81a1c1;stroke:#2e3440;stroke-width:0.9258;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6012"
-       cx="564.88049"
-       cy="107.91157"
-       r="18.860405" />
+       cx="531.49017"
+       cy="86.274796"
+       r="15.351518" />
     <circle
-       style="fill:#81a1c1;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#81a1c1;stroke:#2e3440;stroke-width:0.9258;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6014"
-       cx="440.42334"
-       cy="34.155361"
-       r="18.860405" />
+       cx="430.18768"
+       cy="26.240578"
+       r="15.351518" />
     <circle
-       style="fill:#b48ead;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#b48ead;stroke:#2e3440;stroke-width:0.9258;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6016"
-       cx="612.34399"
-       cy="58.437183"
-       r="18.860405" />
+       cx="570.12335"
+       cy="46.004883"
+       r="15.351518" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 500.81758,16.370039 458.51525,28.827528"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.813955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 479.34587,11.764128 444.91368,21.903963"
        id="path6040"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#path5930"
        inkscape:connection-end="#circle6014" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 526.99559,28.081121 29.7988,62.791531"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.813955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 500.65359,21.296422 24.25486,51.109465"
        id="path6144"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#path5930"
        inkscape:connection-end="#circle6012" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 535.72942,19.574176 59.79464,30.331037"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.813955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 507.76254,14.372151 48.67014,24.688094"
        id="path6146"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#path5930"
        inkscape:connection-end="#circle6016" />
     <circle
-       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:0.9258;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6282"
-       cx="404.83539"
-       cy="127.75301"
-       r="18.860405" />
+       cx="401.2207"
+       cy="102.42484"
+       r="15.351518" />
     <circle
-       style="fill:#bf616a;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#bf616a;stroke:#2e3440;stroke-width:0.9258;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6284"
-       cx="477.89328"
-       cy="91.187714"
-       r="18.860405" />
+       cx="460.68652"
+       cy="72.662338"
+       r="15.351518" />
     <circle
-       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#ebcb8b;stroke:#2e3440;stroke-width:0.9258;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6286"
-       cx="505.0946"
-       cy="178.9637"
-       r="18.860405" />
+       cx="482.82718"
+       cy="144.10802"
+       r="15.351518" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 433.72048,51.784138 411.53825,110.12424"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.813955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 424.73186,40.589606 406.67653,88.075815"
        id="path6346"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6014"
        inkscape:connection-end="#circle6282" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 450.77924,49.917903 16.75814,25.507269"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.813955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 438.61692,39.070574 13.64037,20.761768"
        id="path6348"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6014"
        inkscape:connection-end="#circle6284" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 552.73748,122.34285 -35.49986,42.18956"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.813955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 521.60631,98.021211 492.71104,132.3616"
        id="path6350"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6012"
        inkscape:connection-end="#circle6286" />
     <circle
-       style="fill:#88c0d0;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#88c0d0;stroke:#2e3440;stroke-width:0.9258;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6432"
-       cx="427.0943"
-       cy="209.22621"
-       r="18.860405" />
+       cx="419.33844"
+       cy="168.74034"
+       r="15.351518" />
     <circle
-       style="fill:#bf616a;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#bf616a;stroke:#2e3440;stroke-width:0.9258;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6434"
-       cx="566.5946"
-       cy="233.63672"
-       r="18.860405" />
+       cx="532.88538"
+       cy="188.60939"
+       r="15.351518" />
     <circle
-       style="fill:#88c0d0;stroke:#2e3440;stroke-width:1.13741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       style="fill:#88c0d0;stroke:#2e3440;stroke-width:0.9258;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
        id="circle6436"
-       cx="612.39923"
-       cy="160.54115"
-       r="18.860405" />
+       cx="570.16827"
+       cy="129.1129"
+       r="15.351518" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 409.80591,145.94637 12.31787,45.08648"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.813955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 405.26648,117.23342 10.02618,36.69835"
        id="path6478"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6282"
        inkscape:connection-end="#circle6432" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 519.19014,191.49452 33.30893,29.61137"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.813955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 494.30031,154.30755 27.11194,24.10231"
        id="path6480"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6286"
        inkscape:connection-end="#circle6434" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 523.68287,175.77238 70.12809,-12.03991"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.813955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 497.95719,141.51043 57.08107,-9.79994"
        id="path6482"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6286"
        inkscape:connection-end="#circle6436" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 496.41415,94.74847 49.94548,9.60234"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.813955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 475.76167,75.560633 40.65335,7.815868"
        id="path6705"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6284"
        inkscape:connection-end="#circle6012" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 483.47599,109.20256 16.03591,51.74629"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.813955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 465.2306,87.325613 13.0525,42.119127"
        id="path6707"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6284"
        inkscape:connection-end="#circle6286" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 576.60926,217.65521 25.77531,-41.13254"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.813955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 541.03686,175.60116 20.97993,-33.48003"
        id="path6709"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-start="#circle6434"
        inkscape:connection-end="#circle6436" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 612.38903,141.68081 612.3542,77.297526"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.813955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 570.15998,113.76143 -0.0283,-52.40508"
        id="path6711"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
@@ -1224,6 +1264,11 @@ ORDER BY date_taken DESC;
 ::::
 ::::::
 -->
+</section></section>
+<section>
+<section id="data-types" class="title-slide slide level1">
+<h1>Data Types</h1>
+
 </section>
 <section id="data-type-fundamentals" class="slide level2">
 <h2>Data Type Fundamentals</h2>
@@ -1232,7 +1277,7 @@ ORDER BY date_taken DESC;
 <strong>single</strong> type
 <ul>
 <li>Or be missing an entry, designated with a special
-<code class="python">NULL</code> entry</li>
+<code class="pgsql">NULL</code> entry</li>
 </ul></li>
 <li>Assigning the correct data types of columns can
 <ul>
@@ -1256,30 +1301,29 @@ sequences of characters</li>
 <li>Postgres has several types you can use to store this sort of
 information:
 <ul>
-<li><code class="python">CHAR(n)</code>: A fixed length column of
+<li><code class="pgsql">CHAR(|||n|||)</code>: A fixed length column of
 <em>n</em> characters. <strong>Always</strong> uses this amount of
 characters, padding with spaces if your stored sequence of characters is
 shorter.
 <ul>
-<li>Omitting the <code class="python">(n)</code> is the same as
+<li>Omitting the <code class="pgsql">(|||n|||)</code> is the same as
 <code class="pgsql">CHAR(1)</code></li>
 </ul></li>
-<li><code class="python">VARCHAR(n)</code>: A variable length column
-with a <strong>maximum</strong> of <em>n</em> characters. If your stored
-sequence is smaller, then no padding is done and the data is stored as
-is.
+<li><code class="pgsql">VARCHAR(|||n|||)</code>: A variable length
+column with a <strong>maximum</strong> of <em>n</em> characters. If your
+stored sequence is smaller, then no padding is done and the data is
+stored as is.
 <ul>
-<li>Omitting the <code class="python">(n)</code> is the same as
+<li>Omitting the <code class="pgsql">(|||n|||)</code> is the same as
 <code class="pgsql">TEXT</code></li>
 </ul></li>
-<li><code class="python">TEXT</code><span class="orange">★</span>: A
+<li><code class="pgsql">TEXT</code><span class="orange">★</span>: A
 variable length column of “unlimited length” (about 1 GB).</li>
 </ul></li>
 <li>In Postgres (unlike in some other variants) there is not really a
 difference in performance between all 3 types</li>
 </ul>
 </div>
-<br>
 <hr>
 <div style="font-size:.8em">
 <p><span class="orange">★</span> – Postgres specific, though similar
@@ -1289,23 +1333,23 @@ implementations exist in other variants</p>
 <section id="character-takeaways" class="slide level2">
 <h2>Character Takeaways</h2>
 <ul>
-<li>In general, don’t use <code class="python">CHAR</code> unless what
+<li>In general, don’t use <code class="pgsql">CHAR</code> unless what
 you are storing is <em>always</em> a given length of characters
 <ul>
 <li>State abbreviations for instance, or possibly other single character
 encodings</li>
 </ul></li>
-<li>Use <code class="python">VARCHAR</code> or
-<code class="python">TEXT</code> in most situations
+<li>Use <code class="pgsql">VARCHAR</code> or
+<code class="pgsql">TEXT</code> in most situations
 <ul>
-<li><code class="python">VARCHAR</code> is more portable, but make sure
+<li><code class="pgsql">VARCHAR</code> is more portable, but make sure
 to choose a max that is well above whatever your longest sequence of
 characters could be</li>
-<li>Can also choose <code class="python">VARCHAR</code> if you
+<li>Can also choose <code class="pgsql">VARCHAR</code> if you
 <em>want</em> an error to be output if too many characters are
 entered</li>
 <li>If you don’t mind being Postgres specific,
-<code class="python">TEXT</code> should always work</li>
+<code class="pgsql">TEXT</code> should always work</li>
 </ul></li>
 </ul>
 </section>
@@ -1345,26 +1389,26 @@ database</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">SMALLINT</code></td>
+<td><code class="pgsql">SMALLINT</code></td>
 <td>2 bytes</td>
 <td>±32,767</td>
 </tr>
 <tr class="even">
-<td><code class="python">INTEGER</code></td>
+<td><code class="pgsql">INTEGER</code></td>
 <td>4 bytes</td>
 <td>±2,147,483,648</td>
 </tr>
 <tr class="odd">
-<td><code class="python">BIGINT</code></td>
+<td><code class="pgsql">BIGINT</code></td>
 <td>8 bytes</td>
 <td>±9,223,372,036,854,775,808</td>
 </tr>
 </tbody>
 </table></li>
-<li><code class="python">SMALLINT</code> is generally only used if disk
+<li><code class="pgsql">SMALLINT</code> is generally only used if disk
 space is at a premium</li>
-<li>Probably only use <code class="python">BIGINT</code> if sure that
-<code class="python">INTEGER</code> is insufficient</li>
+<li>Probably only use <code class="pgsql">BIGINT</code> if sure that
+<code class="pgsql">INTEGER</code> is insufficient</li>
 </ul>
 </section>
 <section id="serial-integers" class="slide level2">
@@ -1373,30 +1417,43 @@ space is at a premium</li>
 <li>If you want a column to be auto-incrementing, you can use the serial
 form of the integer types:
 <ul>
-<li><code class="python">SMALLSERIAL</code></li>
-<li><code class="python">SERIAL</code></li>
-<li><code class="python">BIGSERIAL</code></li>
+<li><code class="pgsql">SMALLSERIAL</code></li>
+<li><code class="pgsql">SERIAL</code></li>
+<li><code class="pgsql">BIGSERIAL</code></li>
 </ul></li>
-<li>Have the same allowed ranges as their integer counterparts</li>
 <li>No need to specify that column when adding a row: Postgres will
 automatically increment and add it</li>
 <li>While each increment will be unique, you may not have perfect even
 intervals
 <ul>
 <li>Removed row values are not reused</li>
-<li>If an <code class="python">INSERT</code> is interrupted because of
-an error, that unique integer is basically skipped</li>
+<li>If an <code class="pgsql">INSERT</code> is interrupted because of an
+error, that unique integer is basically skipped</li>
 </ul></li>
+</ul>
+</section>
+<section id="your-identity" class="slide level2">
+<h2>Your Identity</h2>
+<ul>
+<li><p>The <code class="pgsql">SERIAL</code> datatypes are Postgres
+specific</p></li>
+<li><p>Since Postgres 10 the SQL core version with
+<code class="pgsql">IDENTITY</code> has been supported</p></li>
+<li><p>Automatically fill the column with the incremented number:</p>
+<pre ><code class="pgsql">INTEGER GENERATED ALWAYS AS IDENTITY</code></pre></li>
+<li><p>Automatically fill column but allow overwriting:</p>
+<pre ><code class="pgsql">INTEGER GENERATED BY DEFAULT AS IDENTITY</code></pre></li>
 </ul>
 </section>
 <section id="fixed-point-numbers" class="slide level2">
 <h2>Fixed-Point Numbers</h2>
+<div style="font-size:.9em">
 <ul>
 <li>Represents a fractional value</li>
 <li>Two methods of writing:
 <ul>
-<li><code class="python">NUMERIC(precision, scale)</code></li>
-<li><code class="python">DECIMAL(precision, scale)</code></li>
+<li><code class="pgsql">NUMERIC(|||precision|||, |||scale|||)</code></li>
+<li><code class="pgsql">DECIMAL(|||precision|||, |||scale|||)</code></li>
 </ul></li>
 <li><em>precision</em> is a positive integer representing the max total
 number of digits comprising the number (on both sides of the decimal
@@ -1411,6 +1468,7 @@ correct number of digits after the decimal</li>
 <li>Will return an error if the input number can’t fit within the
 precision</li>
 </ul>
+</div>
 </section>
 <section id="fixed-point-examples" class="slide level2">
 <h2>Fixed-Point Examples</h2>
@@ -1418,20 +1476,20 @@ precision</li>
 <li>Consider the number: 192.837465</li>
 <li>In various fixed-point formats:
 <ul>
-<li><code class="python">NUMERIC(5,2)</code> = 192.84</li>
-<li><code class="python">NUMERIC(10,2)</code> = 192.84</li>
-<li><code class="python">NUMERIC(15,10)</code> = 192.8374650000</li>
-<li><code class="python">NUMERIC(6,3)</code> = 192.837</li>
-<li><code class="python">NUMERIC(4,2)</code> =
+<li><code class="pgsql">NUMERIC(5,2)</code> = 192.84</li>
+<li><code class="pgsql">NUMERIC(10,2)</code> = 192.84</li>
+<li><code class="pgsql">NUMERIC(15,10)</code> = 192.8374650000</li>
+<li><code class="pgsql">NUMERIC(6,3)</code> = 192.837</li>
+<li><code class="pgsql">NUMERIC(4,2)</code> =
 <strong>ERROR</strong></li>
 </ul></li>
 <li>If you don’t include inputs:
 <ul>
-<li><code class="python">NUMERIC(5)</code> = 193
+<li><code class="pgsql">NUMERIC(5)</code> = 193
 <ul>
 <li>Treats the scale as 0</li>
 </ul></li>
-<li><code class="python">NUMERIC</code> = 192.837465
+<li><code class="pgsql">NUMERIC</code> = 192.837465
 <ul>
 <li>Will store up to the maximum precision and scale allowed (131,072
 digits before and 16,383 digits after the decimal, lol)</li>
@@ -1447,21 +1505,22 @@ digits before and 16,383 digits after the decimal, lol)</li>
 information, so the decimal point could “float”</li>
 <li>Two data types that can be used:
 <ul>
-<li><code class="python">REAL</code></li>
-<li><code class="python">DOUBLE PRECISION</code></li>
+<li><code class="pgsql">REAL</code></li>
+<li><code class="pgsql">DOUBLE PRECISION</code></li>
 </ul></li>
 <li>They differ just in their precision (and how much storage space they
 take)
 <ul>
-<li><code class="python">REAL</code> will show at most 9 significant
+<li><code class="pgsql">REAL</code> will show at most 9 significant
 digits and takes up 4 bytes</li>
-<li><code class="python">DOUBLE PRECISION</code> will show at most 17
+<li><code class="pgsql">DOUBLE PRECISION</code> will show at most 17
 significant digits and takes up 8 bytes</li>
 </ul></li>
 </ul>
 </section>
 <section id="floating-pitfalls" class="slide level2">
 <h2>Floating Pitfalls</h2>
+<div style="font-size:.9em">
 <ul>
 <li>Float-point representations are computed using binary math to make
 them easy to store in the computer</li>
@@ -1488,6 +1547,7 @@ around the desired value</li>
 </ul></li>
 </ul></li>
 </ul>
+</div>
 <!--
 ## Understanding Check!
 
@@ -1544,28 +1604,28 @@ below table</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">DATE</code></td>
+<td><code class="pgsql">DATE</code></td>
 <td>4 bytes</td>
 <td>4713 BC</td>
 <td>5874897 AD</td>
 <td>1 day</td>
 </tr>
 <tr class="even">
-<td><code class="python">TIME</code></td>
+<td><code class="pgsql">TIME</code></td>
 <td>8 bytes</td>
 <td>00:00:00</td>
 <td>24:00:00</td>
 <td>1 μs</td>
 </tr>
 <tr class="odd">
-<td><code class="python">TIMESTAMP</code></td>
+<td><code class="pgsql">TIMESTAMP</code></td>
 <td>8 bytes</td>
 <td>4713 BC</td>
 <td>294276 AD</td>
 <td>1 μs</td>
 </tr>
 <tr class="even">
-<td><code class="python">INTERVAL</code></td>
+<td><code class="pgsql">INTERVAL</code></td>
 <td>16 bytes</td>
 <td>-178000000 yrs</td>
 <td>-178000000 yrs</td>
@@ -1618,17 +1678,21 @@ YYYY-MM-DD</li>
 <li>Still needs to be enclosed in single quotes</li>
 <li>Has variants that are both with and without timezone
 <ul>
-<li><code class="python">TIME</code> is technically without
-timezone</li>
-<li><code class="python">TIME WITH TIME ZONE</code> is, as expected,
+<li><code class="pgsql">TIME</code> is technically without timezone</li>
+<li><code class="pgsql">TIME WITH TIME ZONE</code> is, as expected,
 including a timezone
 <ul>
 <li>Postgres has a shorthand notation for this, called
-<code class="python">TIMETZ</code><span class="orange">★</span></li>
+<code class="pgsql">TIMETZ</code><span class="orange">★</span></li>
 <li>Due to the way timezones are stored and some issues that arise,
 using this data type is generally discouraged.</li>
 </ul></li>
 </ul></li>
+</ul>
+</section>
+<section id="more-times" class="slide level2">
+<h2>More Times</h2>
+<ul>
 <li>ISO time formats looks like HH:MM:SS.FFFF, where the hours are on
 the <strong>24 hour clock</strong></li>
 <li>Other formats are accepted, including</li>
@@ -1650,6 +1714,7 @@ the <strong>24 hour clock</strong></li>
 </section>
 <section id="timezones" class="slide level2">
 <h2>Timezones</h2>
+<div style="font-size:.9em">
 <ul>
 <li>If specifying a timezone, it comes after the time and there are a
 few ways to describe it:
@@ -1671,23 +1736,24 @@ timezone is used</li>
 <li>16:05:06-8</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="timestamps" class="slide level2">
 <h2>Timestamps</h2>
+<div style="font-size:.9em">
 <ul>
-<li>A <code class="python">TIMESTAMP</code> field holds basically both a
+<li>A <code class="pgsql">TIMESTAMP</code> field holds basically both a
 time and a date</li>
 <li>The date portion always needs to come first</li>
 <li>The same properties and formats that apply to each individually
 apply here as well</li>
 <li>Also have the option of with or without a timezone
 <ul>
-<li><code class="python">TIMESTAMP</code> by itself is without a
+<li><code class="pgsql">TIMESTAMP</code> by itself is without a
 timezone, as per SQL standards</li>
-<li><code class="python">TIMESTAMP WITH TIME ZONE</code> is with a
+<li><code class="pgsql">TIMESTAMP WITH TIME ZONE</code> is with a
 timezone. Shorthand in Postgres is
-<code class="python">TIMESTAMPTZ</code><span
-class="orange">★</span></li>
+<code class="pgsql">TIMESTAMPTZ</code><span class="orange">★</span></li>
 </ul></li>
 <li>Internally, timestamps with a timezone are always <em>stored</em> in
 UTC, but then when displayed are converted back to the local
@@ -1698,9 +1764,11 @@ timezone</li>
 <li>Jan-18-2022 2:30 PM PST</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="intervals" class="slide level2">
 <h2>Intervals</h2>
+<div style="font-size:.9em">
 <ul>
 <li>Represents a span of time</li>
 <li>Generally given by first a number and then by a unit
@@ -1722,6 +1790,7 @@ types
 <li>Can also be used in comparisons if subtracting timestamps</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="more" class="slide level2">
 <h2>MORE!</h2>
@@ -1743,6 +1812,7 @@ the semester, but you have the core basics now</li>
 </section>
 <section id="conversions" class="slide level2">
 <h2>Conversions</h2>
+<div style="font-size:.9em">
 <ul>
 <li><p>There are plenty of instances where you may need to convert
 between types</p>
@@ -1751,7 +1821,7 @@ between types</p>
 <li>Sometimes the information was just not stored in the most ideal
 type</li>
 </ul></li>
-<li><p>Can use the <code class="python">CAST</code> function to convert
+<li><p>Can use the <code class="pgsql">CAST</code> function to convert
 between data types (where it makes sense)</p></li>
 <li><p>Core syntax is</p>
 <pre ><code class="pgsql">CAST(|||column name||| AS |||new data type|||)</code></pre></li>
@@ -1762,16 +1832,23 @@ colons:</p>
 smaller than the data will <em>truncate</em> the conversion to get it to
 fit, <em>not</em> give an error.</p></li>
 </ul>
+</div>
+</section></section>
+<section>
+<section id="table-inputoutput" class="title-slide slide level1">
+<h1>Table Input/Output</h1>
+
 </section>
 <section id="sql-io" class="slide level2">
 <h2>SQL I/O</h2>
+<div style="font-size:.9em">
 <ul>
-<li><code class="python">INSERT INTO</code> is great for small tables or
+<li><code class="pgsql">INSERT INTO</code> is great for small tables or
 adding a few rows, not so great for bulk populating of a table</li>
 <li>Frequently, data is stored in delimited text files for flexibility
 and portability</li>
 <li>Postgres can import data from <em>or</em> write data to these sorts
-of delimited text files using its <code class="python">COPY</code>
+of delimited text files using its <code class="pgsql">COPY</code>
 command
 <ul>
 <li>This command is Postgres specific, though other SQL variants have
@@ -1782,15 +1859,15 @@ order to import or export!
 <ul>
 <li>If having issues:
 <ul>
-<li>On Windows: The <code class="python">C:\Users\Public</code> should
-be universally accessible</li>
-<li>On Mac: The <code class="python">/tmp</code> folder should be
-universally accessible, or just give the
-<code class="python">postgres</code> user read/write access to a folder
-of your choosing</li>
+<li>On Windows: The <code class="text">C:\Users\Public</code> should be
+universally accessible</li>
+<li>On Mac: <code class="pgsql">/Users/Shared</code> folder should be
+universally accessible, or you could use <code class="pgsql">/tmp</code>
+(but that gets purged each time you reboot)</li>
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="delimited-files" class="slide level2">
 <h2>Delimited Files</h2>
@@ -1844,52 +1921,53 @@ but contains no actual data</li>
 <section id="importing-data" class="slide level2">
 <h2>Importing Data</h2>
 <ul>
-<li><p>The <code class="python">COPY</code> command will copy
-information into an <em>existing</em> table, it won’t create the
-table</p>
+<li><p>The <code class="pgsql">COPY</code> command will copy information
+into an <em>existing</em> table, it won’t create the table</p>
 <ul>
 <li>Thus you are still responsible for creating the table (and
 associated data types for each column) before
-<code class="python">COPY</code> will be useful
+<code class="pgsql">COPY</code> will be useful
 <ul>
 <li>Yes, this can still be painful for huge tables. There are some
 scripts that can help with it or do some automated checking, but they
 tend to be far from perfect.</li>
 </ul></li>
 </ul></li>
-<li><p>Syntax of the <code class="python">COPY</code> statement:</p>
+<li><p>Syntax of the <code class="pgsql">COPY</code> statement:</p>
 <pre ><code class="pgsql">COPY |||table name|||
-FROM |||full path to filename|||
+FROM |||'full path to filename'|||
 WITH ( |||import options||| );</code></pre></li>
 </ul>
 </section>
 <section id="importing-details" class="slide level2">
 <h2>Importing Details</h2>
+<div style="font-size:.9em">
 <ul>
 <li>The full text filename needs to be the entire path that points to
 your file
 <ul>
 <li>On Windows, that would start with
-<code class="python">C:\</code></li>
-<li>On MacOS, that would start with <code class="python">/</code></li>
+<code class="pgsql">C:\</code></li>
+<li>On MacOS, that would start with <code class="pgsql">/</code></li>
 </ul></li>
 <li>You have a basic selection of import options:
 <ul>
-<li><code class="python">FORMAT CSV</code> sets the delimiter to a comma
+<li><code class="pgsql">FORMAT CSV</code> sets the delimiter to a comma
 and the default text qualifier to double quotes</li>
-<li><code class="python">HEADER</code> specifies that there is a header,
+<li><code class="pgsql">HEADER</code> specifies that there is a header,
 and so the first row of the file should be skipped</li>
-<li><code class="python">DELIMITER 'x'</code> sets
-<code class="python">x</code> to be the delimiter instead of the default
+<li><code class="pgsql">DELIMITER 'x'</code> sets
+<code class="pgsql">x</code> to be the delimiter instead of the default
 comma (or tab)</li>
-<li><code class="python">QUOTE 'x'</code> sets
-<code class="python">x</code> to be the new text qualifier, instead of
+<li><code class="pgsql">QUOTE 'x'</code> sets
+<code class="pgsql">x</code> to be the new text qualifier, instead of
 double quotes</li>
 </ul></li>
-<li>If you run the <code class="python">COPY</code> command multiple
+<li>If you run the <code class="pgsql">COPY</code> command multiple
 times, it will just keep adding the CSV contents to the end of the
 current table</li>
 </ul>
+</div>
 </section>
 <section id="subset-imports" class="slide level2">
 <h2>Subset Imports</h2>
@@ -1904,7 +1982,7 @@ only a portion of the CSV columns</li>
 </ul></li>
 <li><p>Just requires that you specify the target SQL columns after
 specifying the table</p>
-<pre ><code class="pgsql">COPY |||table name||| (|||col1|||, |||col2|||, |||col3|||)
+<pre ><code class="pgsql">COPY |||table name||| (|||col₁|||, |||col₂|||, |||col₃|||)
 FROM |||full path to filename|||
 WITH (FORMAT CSV, HEADER);</code></pre></li>
 </ul>
@@ -1913,14 +1991,14 @@ WITH (FORMAT CSV, HEADER);</code></pre></li>
 <h2>Importing only certain rows</h2>
 <ul>
 <li><p>Starting with Postgres 12, the option was added to use a
-<code class="python">WHERE</code> keyword to only copy rows that met a
+<code class="pgsql">WHERE</code> keyword to only copy rows that met a
 certain condition to the table</p></li>
-<li><p>The <code class="python">WHERE</code> comes <em>after</em> the
-<code class="python">WITH</code> statement:</p>
-<pre ><code class="pgsql">COPY |||table name||| (|||col1|||, |||col2|||)
+<li><p>The <code class="pgsql">WHERE</code> comes <em>after</em> the
+<code class="pgsql">WITH</code> statement:</p>
+<pre ><code class="pgsql">COPY |||table name||| (|||col₁|||, |||col₂|||)
 FROM |||full path to filename|||
 WITH (FORMAT CSV)
-WHERE |||col1||| = 'Baboon'</code></pre></li>
+WHERE |||col₂||| = 'Baboon'</code></pre></li>
 </ul>
 </section>
 <section id="exporting-data" class="slide level2">
@@ -1934,8 +2012,8 @@ column are not stored, just the contents and (possibly) column
 names</li>
 </ul></li>
 <li><p>Syntax-wise, it is almost exactly like copying into a SQL table,
-except using <code class="python">TO</code> instead of
-<code class="python">FROM</code></p>
+except using <code class="pgsql">TO</code> instead of
+<code class="pgsql">FROM</code></p>
 <pre ><code class="pgsql">COPY |||table name|||
 TO |||full path to filename|||
 WITH ( |||import options||| );</code></pre></li>
@@ -1945,7 +2023,7 @@ table to the filename with the desired format</p></li>
 </section>
 <section id="exporting-subsets" class="slide level2">
 <h2>Exporting Subsets</h2>
-<div style="font-size:.9em">
+<div style="font-size:.8em">
 <ul>
 <li>In many instances, you may not want <strong>all</strong> the columns
 to be exported. In that case, you have a few options:</li>
@@ -1968,7 +2046,7 @@ TO |||full path to filename|||
 WITH ( |||import_options||| );</code></pre></li>
 </ul>
 </div>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -2077,7 +2155,7 @@ WITH ( |||import_options||| );</code></pre></li>
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
-        height: 1200,
+        height: 1080,
         // The display mode that will be used to show slides
         display: 'block',
 		math: {
@@ -2105,9 +2183,16 @@ WITH ( |||import_options||| );</code></pre></li>
 			disableCheckFile: false, //default false
 		 },
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
-              console.log(mypgsqldef);
-              return mypgsqldef(hljs); } )
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
           },
 
         // reveal.js plugins
