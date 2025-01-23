@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-01-23">
+  <title>Gravity and Distributions</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Gravity and Distributions</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">January 23, 2025</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 1
+<ul>
+<li>Should have everything you need to do all of P1 and potentially
+start P2</li>
+<li>Second check-in will go out this weekend! Don’t forget to fill it
+out!</li>
+</ul></li>
+<li>Just a few of you still need to fill out the information gathering
+poll <a
+href="https://docs.google.com/forms/d/e/1FAIpQLSdaUjeiwdLBnon0uamSm0lKLgxC88S24TsB70UcPs0_8yrzFQ/viewform?usp=sharing">here</a></li>
+</ul>
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap</h2>
+<ul>
+<li>Kepler found that all orbiting objects move in an ellipse (Kepler’s
+1st Law)
+<ul>
+<li>The central object exists at one of the focus points</li>
+</ul></li>
+<li>Ellipse and orbit vocabulary</li>
+<li>Using the <code class="python">fitellipse</code> libraries</li>
+</ul>
+</section>
+<section id="todays-plan" class="slide level2">
+<h2>Today’s Plan</h2>
+<ul>
+<li>Kepler continued
+<ul>
+<li>Laws 2 and 3</li>
+</ul></li>
+<li>Gravity</li>
+<li>Distributions
+<ul>
+<li>Histograms/Density plots</li>
+<li>2D variants</li>
+</ul></li>
+</ul>
+<!--
+## More Vocab
+- _Apogee/Aphelion_: The point at which a body is at its furthest from the Earth/Sun
+- _Perigee/Perihelion_: The point at which a body is at its closest to the Earth/Sun
+
+\begin{tikzpicture}%%width=70%
+[every node/.style={font=\sf, color=Black}]
+  \coordinate (sun) at (1.65,0);
+  \draw[very thick] (0,0) ellipse (3cm and 2.5cm);
+  \fill[inner color=yellow, outer color=orange] (sun) circle (2mm);
+  \node[circle, fill, inner sep=2pt, label={right: Perihelion}](p) at (3,0) {};
+  \node[circle, fill, inner sep=2pt, label={left: Aphelion}](a) at (-3,0) {};
+  \draw[stealth-stealth, thick, Red] (p) -- (sun);
+  \draw[stealth-stealth, thick, Red] (a) -- (sun);
+\end{tikzpicture}
+
+
+
+## Pesky Ellipses
+- Because the elliptical orbits that space objects follow are tied directly to some physical properties, it can be very useful to determine elliptical parameters
+- The classic equation of an ellipse:
+  $$ \frac{(x-x_c)^2}{a^2} + \frac{(y-y_c)^2}{b^2} = 1 $$
+  allows for no rotations
+- The general polynomial form:
+  $$ Ax^2 + Bxy + Cy^2 + Dx + Ey + F = 0 $$
+  doesn't give obvious expressions for the desired parameters
+
+
+## Fitting Tactics
+- There are a variety of approaches, most perform best when the sampled points come from around the entire ellipse
+    - Different approaches can error in different ways if all points are from one side of the ellipse
+- All the pre-built options required some odd libraries and worked in very different ways between Python and R
+- So I found starting code for both and then customized to create fitting options that work very similarly in both
+    - In Python: [fitellipse.py](../libs/fitellipse.py)
+    - In R: [fitellipse.r](../libs/fitellipse.r)
+
+
+## Library Explanation
+- Both libraries introduce 3 functions. To get access to them, run or import the library
+    - In Python: `run fitellipse.py` or `from fitellipse import *`
+    - In R: `source('fitellipse.r')`
+- 3 functions:
+    - `fit_ellipse(x, y)`: Computes the best fit ellipse and returns both the coefficients and the common fit parameters as an associative array. Takes points to fit as lists of x and y coordinates.
+    - `get_ellipse(fit_params)`: Computes a series of x and y points representing the given ellipse, where `fit_params` is the output of `fit_ellipse`. Useful for plotting purposes
+    - `create_test_ellipse(Rx,Ry,Cx,Cy,Rotation,NoiseLevel)`: creates a series of x and y coordinates representing an ellipse with the given parameters
+
+
+## Caveats
+- Both fitting functions seem to do excellent at determining the center of the ellipse and major and minor axes
+- There is some variability with the resulting angle, where it sometimes comes out $90^\circ$ off ($\pi/2$ technically since the angle is in radians)
+    - I believe this stems from discrepancies with whether it ends up finding the angle from the major or minor axis, but I spent hours last night trying to make more robust and failed
+    - Fortunately, the angle of the ellipse has absolutely no bearing on any physical laws, and is only of interest for plotting purposes
+        - If the angle of the ellipse is wrong when plotting, add or subtract $\pi/2$ from it
+
+
+## Example with Comet NeoWISE
+- Comet NeoWISE made an appearance several years back
+    - That particular comet had a huge eccentricity and thus couldn't be plotted
+- A different NeoWISE comet though has its positions over the next 100 years stored [here](../demos/neowise_positions.csv)
+- How could I estimate the eccentricity of this comet?
+
+
+## Activity!
+- I have given you [here](../demos/pluto_positions.csv) the coordinates of Pluto over a 300 year span
+- Your task: determining the closest approach Pluto makes with the Sun. That is to say, what is its perihelion distance?
+    - Doing so will require working out the major axis and determining where the Sun would be
+    - A picture might help you keep things straight as you go
+- **Note**: If you compare this value to the known value, it isn't going to be perfect, owing to us not fully accounting for the tilt of Pluto's orbit when computing the ellipse
+-->
+</section>
+<section>
+<section id="return-of-kepler" class="title-slide slide level1">
+<h1>Return of Kepler</h1>
+
+</section>
+<section id="keplers-2nd-law" class="slide level2">
+<h2>Kepler’s 2nd Law</h2>
+<ul>
+<li>A line joining a planet to the Sun sweeps out equal areas in equal
+times
+<ul>
+<li>Results in planets moving faster when close to the Sun and slower
+when far away</li>
+</ul></li>
+</ul>
+<p><img
+data-src="../images/svg_cache/23ff5b744fdc7f124a03addac600f2ca39645fe6.svg"
+style="width:60.0%" /></p>
+</section>
+<section id="keplers-3rd-law" class="slide level2">
+<h2>Kepler’s 3rd Law</h2>
+<div>
+<ul>
+<li class="fragment">The square of a planet’s orbital period is
+proportional to the cube of its semi-major axis.
+<ul>
+<li class="fragment">A planet’s <em>period</em> is the time it takes to
+complete an entire orbit</li>
+<li class="fragment">An orbit’s semi-major axis we defined earlier to be
+half the major axis</li>
+</ul></li>
+<li class="fragment">Mathematically, this looks like: <span
+class="math display">\[ p^2 \propto a^3 \qquad\text{or}\qquad
+\frac{p^2}{a^3} = \text{constant} \]</span> where <span
+class="math inline">\(p\)</span> is the period and <span
+class="math inline">\(a\)</span> is the semi-major axis</li>
+<li class="fragment">For objects orbiting the Sun, if you choose units
+of years and AU, then <span class="math display">\[ p^2 \approx a^3
+\]</span>
+<ul>
+<li class="fragment">1 <em>AU</em> = 1 astronomic unit = average
+distance from Earth to Sun (<span
+class="math inline">\(1.496\times10^{11}\)</span> meter)</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="projections" class="slide level2">
+<h2>Projections</h2>
+<ul>
+<li>When observing, you rarely get a perfectly top-down view of an
+ellipse</li>
+<li>Often, you are looking at some view projected from the side
+<ul>
+<li>This does not change the measurement of the period!</li>
+<li>It may make measuring the semi-major axis more difficult though</li>
+</ul></li>
+<li>Since many planets (and moons) have <em>mostly</em> circular orbits,
+you can estimate the major axis by just taking the largest end-to-end
+distance that you observe</li>
+</ul>
+</section></section>
+<section>
+<section id="newtons-gravity" class="title-slide slide level1">
+<h1>Newton’s Gravity</h1>
+
+</section>
+<section id="why-gravity" class="slide level2">
+<h2>Why Gravity?</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Kepler told us that there <strong>must</strong> be these
+relationships, but he couldn’t say <em>why</em></li>
+<li>Newton found that, if the direction that something is moving
+changes, then it <strong>must</strong> have experienced some force
+<ul>
+<li>Newton’s big connection (one of them) was determining that the
+necessary force turns out to be from gravity (at least for most
+astronomic objects)</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/6f47647cd8f1beb665a3fded706c4ce74894eff4.svg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="gravity" class="slide level2">
+<h2>Gravity</h2>
+<ul>
+<li>Gravity is the universal attractor
+<ul>
+<li>Anything with mass attracts anything else with mass</li>
+<li>Strength of force increases with the amount of mass involved</li>
+<li>Strength of force decreases rapidly with distance between the
+masses</li>
+</ul></li>
+</ul>
+<p><img
+data-src="../images/svg_cache/a20fe72a00cd3d940e96ea4ff061d862e8e9a191.svg"
+style="width:70.0%" /></p>
+</section>
+<section id="newton-meets-keplers-3rd" class="slide level2">
+<h2>Newton meets Kepler’s 3rd</h2>
+<div style="font-size:.9em">
+<ul>
+<li>Kepler already had worked out <span class="math display">\[
+\frac{a^3}{p^2} = \text{same value for all planets orbiting Sun}
+\]</span></li>
+<li>Newton worked out, starting with the force, that two objects held in
+orbit by gravity would obey: <span class="math display">\[
+\frac{a^3}{p^2} = \frac{G(M_1 + M_2)}{4\pi^2} \]</span> where:
+<ul>
+<li><span class="math inline">\(M_1, M_2\)</span> are the masses of the
+objects in <em>kilograms</em></li>
+<li><span class="math inline">\(a\)</span> is the average separation
+between the objects in <em>meters</em></li>
+<li><span class="math inline">\(p\)</span> is the orbital period in
+<em>seconds</em></li>
+<li><span class="math inline">\(G\)</span> is the gravitational constant
+(<span
+class="math inline">\(6.67\times10^{-11}\,\tfrac{m^3}{kg\,s^2}\)</span>)</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="some-nicer-units" class="slide level2">
+<h2>Some nicer units</h2>
+<ul>
+<li>Put in more convenient units, Newton’s formulation of Kepler’s 3rd
+boils down to: <span class="math display">\[ \frac{a^3}{p^2} = (M_1 +
+M_2)_\odot \]</span> where
+<ul>
+<li><span class="math inline">\(M_1, M_2\)</span> are the masses of
+objects in <em>solar masses</em> (multiples of the Sun’s mass)</li>
+<li><span class="math inline">\(a\)</span> is the average separation of
+the objects in <em>AU</em></li>
+<li><span class="math inline">\(p\)</span> is the orbital period in
+<em>years</em></li>
+</ul></li>
+<li>For the Sun and most planets, <span class="math inline">\(M_1 + M_2
+\approx 1 M_\odot\)</span></li>
+<li>If you can measure <span class="math inline">\(a\)</span> and <span
+class="math inline">\(p\)</span>, then you can work out the mass of the
+objects!</li>
+</ul>
+</section></section>
+<section>
+<section id="visualizing-distributions"
+class="title-slide slide level1">
+<h1>Visualizing Distributions</h1>
+
+</section>
+<section id="distributions" class="slide level2">
+<h2>Distributions</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>There is a <strong>lot</strong> of stuff in space!</li>
+<li>To understand bulk properties of objects, we commonly need to resort
+to looking at various <em>distributions</em></li>
+<li>Distributions can be comprised by looking at almost any variable of
+interest (or in some cases multiple variables)</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/distribution.png"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="common-usages" class="slide level2">
+<h2>Common usages:</h2>
+<ul>
+<li>EDA: exploring and bringing to light interesting properties or
+trends in the gathered data</li>
+<li>By fitting mathematical expressions to the distribution, you now
+have a tool to use in further analysis
+<ul>
+<li>This is particularly common in simulations, where simulations pull
+from known distributions to create physically realistic situations</li>
+<li>What type of mathematical distribution fits best can potentially
+tell you about possible inner workings that yielded that
+distribution</li>
+</ul></li>
+<li>Classification: sometimes there are several distinct groupings in a
+distribution that can lead to various types of classification</li>
+</ul>
+</section>
+<section id="histograms" class="slide level2">
+<h2>Histograms</h2>
+<ul>
+<li>A <em>histogram</em> is a visual indication of how many times a
+certain variable appears</li>
+<li>Y-axis represents counts, and the x-axis is divided into a number of
+bins</li>
+<li>Data points that have a value appearing within a particular bin
+contribute to that bin’s count</li>
+<li>Commonly will want to try several binning methods or sizes</li>
+</ul>
+</section>
+<section id="generating-histograms" class="slide level2">
+<h2>Generating Histograms</h2>
+<div class="cols" style="align-items: flex-start">
+<div class="col">
+<div class="block" name="Python">
+<ul>
+<li><p>Matplotlib can generate plots directly:</p>
+<pre ><code class="python">plt.hist( variable_list, 
+          bins=num_bins )
+plt.show()</code></pre></li>
+</ul>
+</div>
+</div>
+<div class="col">
+<div class="block" name="R">
+<ul>
+<li><p>Just use the <code class="python">hist</code> function:</p>
+<pre ><code class="r">hist( variable_list, 
+      breaks=num_bins )</code></pre></li>
+<li><p>Or, in ggplot</p>
+<pre ><code class="r">ggplot(data=df, 
+       aes(x=variable)
+      ) +
+  geom_histogram()</code></pre></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="when-bins-fail" class="slide level2">
+<h2>When Bins fail</h2>
+<ul>
+<li>The choice of bins can often lead to distributions that might feel
+pretty subjective</li>
+<li>One option is to use one of the auto-binning algorithms provided by
+your histogram software (read documentation)</li>
+<li>Another, which especially makes sense for continuous data, is to
+look at a Kernel Density Estimate, or KDE plot
+<ul>
+<li>Most common kernel is that of a Gaussian, but can be different</li>
+<li>Essentially stacks multiple Gaussians for each point, and then sums
+them together</li>
+<li>Results in a “smoother” looking histogram</li>
+</ul></li>
+</ul>
+</section>
+<section id="generating-kde-plots" class="slide level2">
+<h2>Generating KDE Plots</h2>
+<div class="cols" style="align-items: flex-start">
+<div class="col">
+<div class="block" name="Python">
+<ul>
+<li><p>Pandas can generate plots directly:</p>
+<pre ><code class="python">df[column name].plot(kind='kde')</code></pre>
+<ul>
+<li>Does require <code class="python">scipy</code> under the hood, so
+will need it installed</li>
+</ul></li>
+<li><p>Can also install Seaborn and use its variants of you like</p>
+<pre ><code class="python">import seaborn as sbn
+sbn.kdeplot(df[column name])</code></pre></li>
+</ul>
+</div>
+</div>
+<div class="col">
+<div class="block" name="R">
+<ul>
+<li><p>Just use the <code class="python">plot</code> and
+<code class="python">density</code> functions:</p>
+<pre ><code class="r">plot(density(variable_list))</code></pre></li>
+<li><p>In ggplot:</p>
+<pre ><code class="r">ggplot(data=df, aes(x=column)) +
+  geom_density(bw='bcv')</code></pre></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity!</h2>
+<ul>
+<li><a href="../demos/satellites.csv">Here</a> is a collection of
+satellite information for satellites orbiting the Earth
+<ul>
+<li>It has a lot of (some nonsense) columns</li>
+<li>You will be interested in the column named
+<code class="python">'Apogee (km)'</code></li>
+<li>This table originally included some satellites that are
+<strong>really</strong> distant from the Earth, but I’ve already
+filtered it a bit down to our region of interest</li>
+</ul></li>
+<li>Create both histogram and KDE plots of the distribution of satellite
+apogee distances
+<ul>
+<li>Can you see the outer cluster formed from geosynchronous
+satellites?</li>
+</ul></li>
+</ul>
+</section>
+<section id="d-histograms-and-kde-plots" class="slide level2">
+<h2>2D Histograms and KDE Plots</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Sometimes you have multiple variables that you want to visualize
+together as a distribution</li>
+<li>There are 2D analogs of both histograms and KDE plots
+<ul>
+<li>One variable along each axis</li>
+<li>Counts or density still determine color</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/distribution2d.png" /></p>
+</div>
+</div>
+</section>
+<section id="multivariate-distribution-creation" class="slide level2">
+<h2>Multivariate Distribution Creation</h2>
+<div class="cols" style="align-items: flex-start">
+<div class="col">
+<div class="block" name="Python">
+<ul>
+<li><p>Histogram in Matplotlib</p>
+<pre ><code class="python">plt.hist2d(xs, ys, bins=20)</code></pre></li>
+<li><p>KDE plot easiest through Seaborn</p>
+<pre ><code class="python">sbn.kdeplot(x=xs, 
+            y=ys, 
+            fill=True)</code></pre></li>
+</ul>
+</div>
+</div>
+<div class="col">
+<div class="block" name="R">
+<ul>
+<li><p>Histogram through ggplot</p>
+<pre ><code class="python">ggplot(data=df, 
+       aes(x=xs, y=xs)
+      ) + 
+  geom_bin_2d()</code></pre></li>
+<li><p>KDE plot through ggplot</p>
+<pre ><code class="r">ggplot(data=df, 
+       aes(x=xs, y=xs)
+      ) + 
+  geom_density_2d_filled()</code></pre></li>
+</ul>
+</div>
+</div>
+</div>
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          boardmarkers : [
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
+    </body>
+</html>
