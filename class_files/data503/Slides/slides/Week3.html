@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-01-29">
   <title>Calculating the Shell</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -36,28 +37,33 @@
 <section id="title-slide">
   <h1 class="title">Calculating the Shell</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">February 1/6, 2024</p>
+  <p class="date">January 29, 2025</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
+<li>Homework
+<ul>
 <li>Did HW2 get turned in?</li>
-<li>Feedback for HW1 has gone out today!
+<li>Feedback for HW1 went out over the weekend
 <ul>
 <li>You likely got a notification email about it, or I can show you
 where to access the comments in your repository</li>
-<li>If I comment on something from HW1 that you still did in HW2, feel
-free to change it, no penalty, since I was slow with these</li>
 </ul></li>
-<li>Homework 3 should be out very soon</li>
-<li>Some in-class polling (later) today! <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>Homework 3 is posted
+<!--- Some in-class polling (later) today! [rembold-class.ddns.net](http://rembold-class.ddns.net)--></li>
+</ul></li>
 <li>For next week:
 <ul>
 <li>DeBarros: Ch 7</li>
 </ul></li>
 </ul>
+</section>
+<section>
+<section id="the-terminal" class="title-slide slide level1">
+<h1>The Terminal</h1>
+
 </section>
 <section id="why-a-terminal" class="slide level2">
 <h2>Why a Terminal?</h2>
@@ -90,10 +96,10 @@ of the older hardware terminals
 <li>Most systems have a terminal emulator of some sort built into the
 operating system
 <ul>
-<li><code class="python">terminal</code> on MacOS</li>
-<li><code class="python">cmd</code> on Windows</li>
-<li><code class="python">urxvt</code>,
-<code class="python">xterm</code>, etc. on Linux</li>
+<li><code class="pgsql">terminal</code> on MacOS</li>
+<li><code class="pgsql">cmd</code> on Windows</li>
+<li><code class="pgsql">urxvt</code>, <code class="pgsql">xterm</code>,
+etc. on Linux</li>
 </ul></li>
 </ul></li>
 <li>The terminal itself though is just the input-output structure. What
@@ -147,9 +153,9 @@ very long time, and many of which build on one another</p>
 <h2>Shell as a Language</h2>
 <ul>
 <li>Shells are interactive environments, just like you have the
-interactive environment in R</li>
+interactive environment in R or Python</li>
 <li>This means that the commands you type into the shell are a
-programming language in and of themself!</li>
+programming language in and of themselves!</li>
 <li>Why script in this language rather than something else like R or
 Python?
 <ul>
@@ -177,11 +183,11 @@ shell working.
 default PowerShell and BASH though</li>
 <li>Options
 <ul>
-<li>Installing GitBash, which is meant largely for Git but gets you a
-BASH shell that seems to do everything we need it to in this class</li>
 <li>Install the Windows Subsystem for Linux (WSL2) which installs a
 lightweight virtual Linux environment on your system in which you can
 launch and run a BASH shell.</li>
+<li>Installing GitBash, which is meant largely for Git but gets you a
+BASH shell that seems to do everything we need it to in this class</li>
 </ul></li>
 </ul></li>
 </ul>
@@ -206,32 +212,32 @@ file structure</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">pwd</code></td>
+<td><code class="pgsql">pwd</code></td>
 <td>Prints out the current working directory</td>
 </tr>
 <tr class="even">
-<td><code class="python">cd arg</code></td>
+<td><code class="pgsql">cd arg</code></td>
 <td>Changes directory to the provided directory path</td>
 </tr>
 <tr class="odd">
-<td><code class="python">ls</code></td>
+<td><code class="pgsql">ls</code></td>
 <td>Lists the contents of the current directory</td>
 </tr>
 </tbody>
 </table>
 </div>
 <ul>
-<li>Directories are separated by <code class="python">/</code> in
-Linux/Mac and <code class="python">\</code> on Windows</li>
+<li>Directories are separated by <code class="pgsql">/</code> in
+Linux/Mac and <code class="pgsql">\</code> on Windows</li>
 <li>Directory paths can be either <em>absolute</em> or <em>relative</em>
 <ul>
 <li>Absolute paths start from the <em>root</em> of your file system
-(<code class="python">/</code> on Mac or Linux, usually
-<code class="python">C:\</code> on Windows)</li>
+(<code class="pgsql">/</code> on Mac or Linux, usually
+<code class="pgsql">C:\</code> on Windows)</li>
 <li>Relative paths are determined from the current folder location
 <ul>
-<li><code class="python">..</code> refers to the parent directory</li>
-<li><code class="python">.</code> refers to the current directory</li>
+<li><code class="pgsql">..</code> refers to the parent directory</li>
+<li><code class="pgsql">.</code> refers to the current directory</li>
 </ul></li>
 </ul></li>
 </ul>
@@ -252,8 +258,8 @@ argument/option, or between multiple arguments/options</strong></li>
 <li>If you need to refer to a file path with spaces, you must either
 quote it or “escape” the spaces with a backslash in front of each
 <ul>
-<li><code class="python">"/teaching/class/data science in the natural sciences"</code></li>
-<li><code class="python">/teaching/class/data\ science\ in\ the\ natural\ sciences</code></li>
+<li><code class="text">"/teaching/class/data science in the natural sciences"</code></li>
+<li><code class="text">/teaching/class/data\ science\ in\ the\ natural\ sciences</code></li>
 </ul></li>
 <li>This will be a recurring theme, so in general don’t go inserting
 arbitrary spaces in your shell commands</li>
@@ -280,24 +286,24 @@ or removing files:</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">mkdir arg</code></td>
+<td><code class="pgsql">mkdir |||arg|||</code></td>
 <td>Makes a new directory at the given argument location. Defaults to
 relative</td>
 </tr>
 <tr class="even">
-<td><code class="python">mv og_file new_file</code></td>
-<td>Moves the <code class="python">og_file</code> to the new location
-(and name) as <code class="python">new_file</code></td>
+<td><code class="pgsql">mv |||og_file||| |||new_file|||</code></td>
+<td>Moves the <code class="pgsql">|||og_file|||</code> to the new
+location (and name) as <code class="pgsql">|||new_file|||</code></td>
 </tr>
 <tr class="odd">
-<td><code class="python">cp og_file dup_file</code></td>
-<td>Copies the <code class="python">og_file</code> to the location (and
-name) of <code class="python">dup_file</code></td>
+<td><code class="pgsql">cp |||og_file||| |||dup_file|||</code></td>
+<td>Copies the <code class="pgsql">|||og_file|||</code> to the location
+(and name) of <code class="pgsql">|||dup_file|||</code></td>
 </tr>
 <tr class="even">
-<td><code class="python">rm arg</code></td>
-<td>Removes the file given by <code class="python">arg</code> from the
-system. This bypasses any trashcan!</td>
+<td><code class="pgsql">rm |||arg|||</code></td>
+<td>Removes the file given by <code class="pgsql">|||arg|||</code> from
+the system. This bypasses any trashcan!</td>
 </tr>
 </tbody>
 </table>
@@ -311,14 +317,14 @@ system. This bypasses any trashcan!</td>
 <li><p>Many commands have various options that can be toggled or set
 through the use of <em>flags</em></p></li>
 <li><p>A flag is a short command prefaced by a
-<code class="python">-</code> or <code class="python">--</code> that
-comes after a shell command</p>
+<code class="pgsql">-</code> or <code class="bash">--</code> that comes
+after a shell command</p>
 <ul>
-<li><p>Short forms are usually a <code class="python">-</code> followed
+<li><p>Short forms are usually a <code class="pgsql">-</code> followed
 by a single character</p>
 <pre ><code class="bash">ls -s</code></pre></li>
-<li><p>Long forms are usually a <code class="python">--</code> followed
-by a longer term or phrase</p>
+<li><p>Long forms are usually a <code class="bash">--</code> followed by
+a longer term or phrase</p>
 <pre ><code class="bash">ls --size</code></pre></li>
 <li><p>Short form flags can be concatenated to effectively combine
 multiple flags</p>
@@ -339,14 +345,14 @@ does</p></li>
 <li><p>Almost all BASH commands have built in help pages in the form of
 a <em>manual</em></p></li>
 <li><p>To access and read a manual, use the BASH command
-<code class="bash">man cmd</code>, where <code class="python">cmd</code>
+<code class="bash">man cmd</code>, where <code class="pgsql">cmd</code>
 is the command you want to get information about</p>
 <pre ><code class="bash">man ls</code></pre></li>
-<li><p><code class="python">man</code> actually opens up the
-documentation in another program called
-<code class="python">less</code>, which allows you to scroll around and
-then press <code class="python">q</code> when done to return to your
-original screen</p></li>
+<li><p><code class="pgsql">man</code> actually opens up the
+documentation in another program called <code class="pgsql">less</code>,
+which allows you to scroll around and then press
+<code class="pgsql">q</code> when done to return to your original
+screen</p></li>
 </ul>
 </section>
 <section id="practice" class="slide level2">
@@ -354,19 +360,27 @@ original screen</p></li>
 <p>Choose a folder on your system that has a lot of files in it, and
 then see if you can achieve the following in the shell:</p>
 <ul>
-<li>navigate to that folder</li>
-<li>display the contents of that folder so that they:
+<li>Open a terminal and shell</li>
+<li>Navigate to your chosen folder</li>
+<li>Display the contents of that folder so that they:
 <ul>
 <li>Are ordered by size</li>
 <li>Display the size next to each file in human-readable format</li>
 <li>Include any “hidden” files (those that start with a
-<code class="python">.</code>)</li>
+<code class="pgsql">.</code>)</li>
 <li>Use colors</li>
 </ul></li>
 </ul>
+</section></section>
+<section id="mini-break" class="title-slide slide level1">
+<h1>Mini Break!</h1>
+
 </section>
-<section id="break-time" class="slide level2">
-<h2>Break Time!</h2>
+
+<section>
+<section id="shell-details" class="title-slide slide level1">
+<h1>Shell Details</h1>
+
 </section>
 <section id="how-does-it-know" class="slide level2">
 <h2>How does it know?!</h2>
@@ -394,7 +408,7 @@ variable</em></p>
 <h2>Environment Variables</h2>
 <div class="smaller">
 <ul>
-<li>The command <code class="python">echo</code> will generally print
+<li>The command <code class="pgsql">echo</code> will generally print
 whatever argument comes after it to the screen</li>
 <li>We specify that we are interested in a particular variable value by
 prefacing that variable name with a dollar sign</li>
@@ -451,58 +465,58 @@ input</em></li>
 output</em></li>
 </ul></li>
 <li>Both generally work with sequences of bytes, or text</li>
-<li>By default, <code class="python">stdin</code> is your keyboard and
-<code class="python">stdout</code> is the screen being printed to</li>
+<li>By default, <code class="pgsql">stdin</code> is your keyboard and
+<code class="pgsql">stdout</code> is the screen being printed to</li>
 <li>We are actually allowed to “rewire” these inputs and outputs though!
 <ul>
 <li>Called <em>redirecting</em> and uses the
-<code class="python"><</code> and <code class="python">></code>
+<code class="pgsql"><</code> and <code class="pgsql">></code>
 commands</li>
-<li><code class="python"><</code> changes
-<code class="python">stdin</code> to be whatever comes after</li>
-<li><code class="python">></code> changes
-<code class="python">stdout</code> to be whatever comes after</li>
+<li><code class="pgsql"><</code> changes
+<code class="pgsql">stdin</code> to be whatever comes after</li>
+<li><code class="pgsql">></code> changes
+<code class="pgsql">stdout</code> to be whatever comes after</li>
 </ul></li>
 </ul>
 </section>
 <section id="a-weird-cat" class="slide level2">
 <h2>A weird cat</h2>
 <ul>
-<li><p>The BASH <code class="python">cat</code> function concatenates
-any of its arguments together, sticking them together end to end, and
-outputs them to <code class="python">stdout</code></p>
+<li><p>The BASH <code class="pgsql">cat</code> function concatenates any
+of its arguments together, sticking them together end to end, and
+outputs them to <code class="pgsql">stdout</code></p>
 <ul>
 <li>If given filenames for arguments, for example, it will stick their
 contents together</li>
-<li><code class="python">cat</code> is frequently just used with a
-single argument to display it to the screen</li>
+<li><code class="pgsql">cat</code> is frequently just used with a single
+argument to display it to the screen</li>
 </ul></li>
-<li><p>If given no arguments, <code class="python">cat</code> instead
-reads from <code class="python">stdin</code></p></li>
+<li><p>If given no arguments, <code class="pgsql">cat</code> instead
+reads from <code class="pgsql">stdin</code></p></li>
 <li><p>We can redirect any of these as we might see fit:</p>
 <pre ><code class="bash">cat > temp.txt
 cat < temp.txt
 cat < temp.txt > new.txt</code></pre></li>
-<li><p>Be aware that <code class="python">></code> <em>overwrites</em>
-the contents of a file if you redirect there. You can use
-<code class="python">>></code> to append the contents to a file if you
-prefer</p></li>
+<li><p>Be aware that <code class="pgsql">></code>
+<strong>overwrites</strong> the contents of a file if you redirect
+there. You can use <code class="pgsql">>></code> to append the contents
+to a file if you prefer</p></li>
 </ul>
 </section>
 <section id="plumbing-time" class="slide level2">
 <h2>Plumbing Time</h2>
 <ul>
 <li><p>Because so many shell commands accept input from
-<code class="python">stdin</code> and output to
-<code class="python">stdout</code>, it can be very useful to take the
+<code class="pgsql">stdin</code> and output to
+<code class="pgsql">stdout</code>, it can be very useful to take the
 output of one and pass it into another</p></li>
-<li><p>This could be done with intermediate files, but it more
+<li><p>This could be done with intermediate files, but it is more
 convenient to pass the information directly, using what are called
 <em>pipes</em></p></li>
-<li><p>Pipes utilize the pipe character <code class="python">|</code>
-and basically say: “take the <code class="python">stdout</code> from the
-left command and use it as the <code class="python">stdin</code> on the
-right command”</p>
+<li><p>Pipes utilize the pipe character <code class="pgsql">|</code> and
+basically say: “take the <code class="pgsql">stdout</code> from the left
+command and use it as the <code class="pgsql">stdin</code> on the right
+command”</p>
 <pre ><code class="bash">ls | cat</code></pre></li>
 <li><p>You can chain as many pipes together as you like</p></li>
 <li><p>This is where the real flexibility of shell scripting comes into
@@ -512,56 +526,72 @@ achieve a final product</p></li>
 </section>
 <section id="practice-1" class="slide level2">
 <h2>Practice!</h2>
-<p>The <code class="python">wc</code> command stands for “word count”
-and will give you information about the number of words, characters or
-lines read in from a file or <code class="python">stdin</code>. Use this
-in conjunction with <code class="python">ls</code> to write the number
-of current objects in a folder to a file called
-<code class="python">obj_count.txt</code>. Don’t forget you can check
-the help flag or man page of <code class="python">wc</code> for some
-more information on how you can customize its output!</p>
-</section>
-<section id="warm-up" class="slide level2">
-<h2>Warm Up!</h2>
-<div class="cols">
-<div class="col">
-<pre ><code class="pgsql" style="font-size:.7em">CREATE TABLE purchases (
+<p>The <code class="pgsql">wc</code> command stands for “word count” and
+will give you information about the number of words, characters or lines
+read in from a file or <code class="pgsql">stdin</code>. Use this in
+conjunction with <code class="pgsql">ls</code> to write the number of
+current objects in a folder to a file called
+<code class="pgsql">obj_count.txt</code>. Don’t forget you can check the
+help flag or man page of <code class="pgsql">wc</code> for some more
+information on how you can customize its output!</p>
+<!--
+## Warm Up!
+::::::cols
+::::col
+```{.pgsql style='font-size:.7em'}
+CREATE TABLE purchases (
   "date" DATE,
   "store" VARCHAR(20),
   "purchased" TEXT,
-  "tot_price" NUMERIC(10,2));</code></pre>
-<div style="font-size:.7em">
-<p>How to import the data to the right into the above table?</p>
-</div>
-</div>
-<div class="col">
-<pre ><code class="text file" name="C:\DATA\purchases.csv" style="font-size:.8em">date:store:purchased
+  "tot_price" NUMERIC(10,2));
+```
+:::{style='font-size:.7em'}
+How to import the data to the right into the above table?
+:::
+::::
+
+::::col
+```{.text .file name="C:\DATA\purchases.csv" style='font-size:.8em'}
+date:store:purchased
 Jan-5-22:Walmart:eggs,milk
 Jan-10-22:Roths:cereal,steak
 Jan-16-22:Roths:milk,butter
-Jan-18-22:Winco:beans</code></pre>
-</div>
-</div>
-<div class="cols">
-<div class="col">
-<pre ><code class="pgsql answer" style="font-size:.6em;" name="A">COPY purchases
+Jan-18-22:Winco:beans
+```
+::::
+::::::
+::::::cols
+::::col
+```{.pgsql style='font-size:.6em;' .answer name="A"}
+COPY purchases
 FROM 'C:\DATA\purchases.csv'
-WITH (FORMAT CSV, HEADER);</code></pre>
-<pre ><code class="pgsql answer" style="font-size:.6em;" name="C">COPY purchases (date, store, purchased)
+WITH (FORMAT CSV, HEADER);
+```
+
+```{.pgsql style='font-size:.6em;' .answer name="C"}
+COPY purchases (date, store, purchased)
 FROM 'C:\DATA\purchases.csv'
 WITH (FORMAT CSV, HEADER, 
-      DELIMITER ':');</code></pre>
-</div>
-<div class="col">
-<pre ><code class="pgsql answer" style="font-size:.6em;" name="B">COPY purchases (date, store, purchased)
+      DELIMITER ':');
+```
+::::
+
+::::col
+```{.pgsql style='font-size:.6em;' .answer name="B"}
+COPY purchases (date, store, purchased)
 FROM 'C:\DATA\purchases.csv'
-WITH (FORMAT CSV, DELIMITER ':');</code></pre>
-<pre ><code class="pgsql answer" style="font-size:.6em;" name="D">COPY purchases (date, store)
+WITH (FORMAT CSV, DELIMITER ':');
+```
+```{.pgsql style='font-size:.6em;' .answer name="D"}
+COPY purchases (date, store)
 FROM 'purchases.csv'
 WITH (FORMAT CSV, HEADER,
-      DELIMITER ',');</code></pre>
-</div>
-</div>
+      DELIMITER ',');
+```
+
+::::
+::::::
+-->
 <!--
 ## Exporting Data
 - Exporting data takes information from your SQL table and allows you to store it in a text file
@@ -595,21 +625,31 @@ WITH (FORMAT CSV, HEADER,
     WITH ( import_options );
     ```
 -->
+</section></section>
+<section id="mini-break-1" class="title-slide slide level1">
+<h1>Mini Break!</h1>
+
+</section>
+
+<section>
+<section id="sql-tidbits" class="title-slide slide level1">
+<h1>SQL Tidbits</h1>
+
 </section>
 <section id="not-null" class="slide level2">
 <h2>Not Null</h2>
 <ul>
 <li><p>Probably have come across instances where you don’t want to have
-a bunch of <code class="python">NULL</code> values in your output
+a bunch of <code class="pgsql">NULL</code> values in your output
 query</p></li>
 <li><p>You can <strong>not</strong> filter them out using
-<code class="python">colname != NULL</code></p>
+<code class="pgsql">colname != NULL</code></p>
 <ul>
-<li>A <code class="python">NULL</code> value comparison <em>always</em>
-gives <code class="python">NULL</code>, no matter the comparison</li>
+<li>A <code class="pgsql">NULL</code> value comparison <em>always</em>
+gives <code class="pgsql">NULL</code>, no matter the comparison</li>
 </ul></li>
-<li><p>Need to use the keywords <code class="python">IS NOT NULL</code>
-(or <code class="python">IS NULL</code> if you want to find the null
+<li><p>Need to use the keywords <code class="pgsql">IS NOT NULL</code>
+(or <code class="pgsql">IS NULL</code> if you want to find the null
 values)</p>
 <pre ><code class="pgsql">SELECT |||column|||
 FROM |||table|||
@@ -626,11 +666,11 @@ later</li>
 <li>Like many programming languages, SQL has the concept of a
 <em>comment</em>, which is a piece of text that is entirely ignored by
 the system when running commands</li>
-<li>Use a double dash prefix <code class="python">--</code> to turn
+<li>Use a double dash prefix <code class="text">--</code> to turn
 everything following on that line to a comment</li>
-<li>Bracket an area with <code class="python">/*</code> and
-<code class="python">*/</code> to bulk comment everything between the
-two symbols</li>
+<li>Bracket an area with <code class="text">/*</code> and
+<code class="text">*/</code> to bulk comment everything between the two
+symbols</li>
 </ul>
 </div>
 <pre ><code class="pgsql" style="font-size:.9em">-- This is a comment
@@ -640,6 +680,11 @@ ORDER BY |||column||| /*
 Nothing here of note!
 Still nothing! */
 ;</code></pre>
+</section></section>
+<section>
+<section id="sql-calculations" class="title-slide slide level1">
+<h1>SQL Calculations</h1>
+
 </section>
 <section id="making-calculations" class="slide level2">
 <h2>Making Calculations</h2>
@@ -666,11 +711,11 @@ work with entire tables
 <li>You don’t have to worry about generating a “test” table to work
 with</li>
 </ul></li>
-<li>You can run <code class="python">SELECT</code> statements on values
+<li>You can run <code class="pgsql">SELECT</code> statements on values
 directly if needed, omitting a reference to a table!
 <ul>
-<li><p>Just leave off the <code class="python">FROM</code> portion of
-the statement</p>
+<li><p>Just leave off the <code class="pgsql">FROM</code> portion of the
+statement</p>
 <pre ><code class="pgsql">SELECT CAST('Jan 25, 2022' AS DATE);
 SELECT 'aardvark' > 'Zebra';</code></pre></li>
 </ul></li>
@@ -695,24 +740,24 @@ learned in grade school</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;"><code class="python">+</code></td>
+<td style="text-align: center;"><code class="pgsql">+</code></td>
 <td>Addition</td>
-<td style="text-align: center;"><code class="python">4 + 5</code></td>
+<td style="text-align: center;"><code class="pgsql">4 + 5</code></td>
 </tr>
 <tr class="even">
-<td style="text-align: center;"><code class="python">-</code></td>
+<td style="text-align: center;"><code class="pgsql">-</code></td>
 <td>Subtraction</td>
-<td style="text-align: center;"><code class="python">8 - 5</code></td>
+<td style="text-align: center;"><code class="pgsql">8 - 5</code></td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;"><code class="python">*</code></td>
+<td style="text-align: center;"><code class="pgsql">*</code></td>
 <td>Multiplication</td>
-<td style="text-align: center;"><code class="python">2 * 4</code></td>
+<td style="text-align: center;"><code class="pgsql">2 * 4</code></td>
 </tr>
 <tr class="even">
-<td style="text-align: center;"><code class="python">/</code></td>
+<td style="text-align: center;"><code class="pgsql">/</code></td>
 <td>Division</td>
-<td style="text-align: center;"><code class="python">8 / 2</code></td>
+<td style="text-align: center;"><code class="pgsql">8 / 2</code></td>
 </tr>
 </tbody>
 </table>
@@ -740,34 +785,34 @@ mathematical symbolic operations</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">%</code></td>
+<td><code class="pgsql">%</code></td>
 <td>Modulo (remainder)</td>
-<td><code class="python">7 % 5</code></td>
+<td><code class="pgsql">7 % 5</code></td>
 </tr>
 <tr class="even">
-<td><code class="python">^</code></td>
+<td><code class="pgsql">^</code></td>
 <td>Exponentiation</td>
-<td><code class="python">3 ^ 2</code></td>
+<td><code class="pgsql">3 ^ 2</code></td>
 </tr>
 <tr class="odd">
-<td><code class="python">|/</code></td>
+<td><code class="pgsql">|/</code></td>
 <td>Square root</td>
-<td><code class="python">|/9</code></td>
+<td><code class="pgsql">|/9</code></td>
 </tr>
 <tr class="even">
-<td><code class="python">||/</code></td>
+<td><code class="pgsql">||/</code></td>
 <td>Cube root</td>
-<td><code class="python">||/27</code></td>
+<td><code class="pgsql">||/27</code></td>
 </tr>
 <tr class="odd">
-<td><code class="python">!</code></td>
+<td><code class="pgsql">!</code></td>
 <td>Factorial</td>
-<td><code class="python">5!</code></td>
+<td><code class="pgsql">5!</code></td>
 </tr>
 <tr class="even">
-<td><code class="python">@</code></td>
+<td><code class="pgsql">@</code></td>
 <td>Absolute value</td>
-<td><code class="python">@ -42</code></td>
+<td><code class="pgsql">@ -42</code></td>
 </tr>
 </tbody>
 </table>
@@ -795,8 +840,8 @@ precision/scale)</li>
 numeric, regardless of if an integer is entered</li>
 <li>You may need to cast a value to a different data type to get the
 desired output at times!</li>
-<li>The <code class="python">pg_typeof()</code> function can be useful
-at times if you need to check a data type</li>
+<li>The <code class="pgsql">pg_typeof()</code> function can be useful at
+times if you need to check a data type</li>
 </ul>
 </div>
 </section>
@@ -813,19 +858,21 @@ at times if you need to check a data type</li>
 group things accordingly, as operations in parentheses happen first</p>
 <pre ><code class="pgsql">SELECT 4 ^ (9 % 2 + 1);</code></pre></li>
 </ul>
-</section>
-<section id="understanding-check" class="slide level2">
-<h2>Understanding Check</h2>
-<p>What would be the output of the below selection?</p>
-<pre ><code class="pgsql">SELECT (1 + 2) ^ (9 % (10 - 4) / 2) * 2::REAL;</code></pre>
-<div class="poll">
-<ol>
-<li>10.3923</li>
-<li>6</li>
-<li>8.4821</li>
-<li>2</li>
-</ol>
-</div>
+<!--
+## Understanding Check
+What would be the output of the below selection?
+```pgsql
+SELECT (1 + 2) ^ (9 % (10 - 4) / 2) * 2::REAL;
+```
+
+
+:::{.poll}
+#. 10.3923
+#. 6
+#. 8.4821
+#. 2
+:::
+-->
 </section>
 <section id="common-mathematical-functions" class="slide level2">
 <h2>Common Mathematical Functions</h2>
@@ -842,43 +889,43 @@ group things accordingly, as operations in parentheses happen first</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">sqrt(num)</code></td>
+<td><code class="pgsql">sqrt(num)</code></td>
 <td>Square root</td>
 </tr>
 <tr class="even">
-<td><code class="python">abs(num)</code></td>
+<td><code class="pgsql">abs(num)</code></td>
 <td>Absolute value</td>
 </tr>
 <tr class="odd">
-<td><code class="python">factorial(num)</code></td>
+<td><code class="pgsql">factorial(num)</code></td>
 <td>Factorial of a number</td>
 </tr>
 <tr class="even">
-<td><code class="python">sin(num)</code></td>
+<td><code class="pgsql">sin(num)</code></td>
 <td>Sine of radians</td>
 </tr>
 <tr class="odd">
-<td><code class="python">sind(num)</code></td>
+<td><code class="pgsql">sind(num)</code></td>
 <td>Sine of degrees</td>
 </tr>
 <tr class="even">
-<td><code class="python">asin(num)</code></td>
+<td><code class="pgsql">asin(num)</code></td>
 <td>Inverse sine in radians</td>
 </tr>
 <tr class="odd">
-<td><code class="python">degrees(num)</code></td>
+<td><code class="pgsql">degrees(num)</code></td>
 <td>Convert radians to degrees</td>
 </tr>
 <tr class="even">
-<td><code class="python">log(num)</code></td>
+<td><code class="pgsql">log(num)</code></td>
 <td>Base 10 logarithm</td>
 </tr>
 <tr class="odd">
-<td><code class="python">ln(num)</code></td>
+<td><code class="pgsql">ln(num)</code></td>
 <td>Base e logarithm</td>
 </tr>
 <tr class="even">
-<td><code class="python">round(num,scale)</code></td>
+<td><code class="pgsql">round(num,scale)</code></td>
 <td>Round number to scale decimal places</td>
 </tr>
 </tbody>
@@ -891,18 +938,18 @@ group things accordingly, as operations in parentheses happen first</p>
 <li><p>You may have noticed that the default column names when selecting
 a calculation can be nonsensical</p></li>
 <li><p>SQL provides a way for you to name a column on the fly, using the
-<code class="python">AS</code> keyword</p></li>
+<code class="pgsql">AS</code> keyword</p></li>
 <li><p>Technically forms what is commonly called an alias</p></li>
 <li><p>Syntax:</p>
 <pre ><code class="pgsql">SELECT ||| fancy calculation ||| AS |||column name|||;</code></pre></li>
 <li><p>You can then refer to that column name later in your command if
 you want or need</p>
 <ul>
-<li>In particular, in <code class="python">ORDER BY</code> or (later)
-<code class="python">GROUP BY</code></li>
+<li>In particular, in <code class="pgsql">ORDER BY</code> or (later)
+<code class="pgsql">GROUP BY</code></li>
 <li>You can <em>not</em> use the alias in
-<code class="python">WHERE</code> or (later)
-<code class="python">HAVING</code></li>
+<code class="pgsql">WHERE</code> or (later)
+<code class="pgsql">HAVING</code></li>
 </ul></li>
 </ul>
 </section>
@@ -918,6 +965,12 @@ filters, ordering, etc.)</p>
 </ul>
 <p><br> <img data-src="../images/column_calc.png"
 style="width:70.0%" /></p>
+</section></section>
+<section>
+<section id="sql-aggregate-calculations"
+class="title-slide slide level1">
+<h1>SQL Aggregate Calculations</h1>
+
 </section>
 <section id="bulk-column-operations" class="slide level2">
 <h2>Bulk Column Operations</h2>
@@ -949,7 +1002,7 @@ style="width:40.0%" /></p>
 <ul>
 <li>Many common aggregate functions are geared around determining
 descriptive statistics</li>
-<li>Unless otherwise specified, <code class="python">NULL</code> values
+<li>Unless otherwise specified, <code class="pgsql">NULL</code> values
 are ignored in the calculations</li>
 </ul>
 <table>
@@ -965,34 +1018,34 @@ are ignored in the calculations</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">avg(col)</code></td>
+<td><code class="pgsql">avg(col)</code></td>
 <td>Finds the average or mean of a column</td>
 </tr>
 <tr class="even">
-<td><code class="python">sum(col)</code></td>
+<td><code class="pgsql">sum(col)</code></td>
 <td>Computes the sum of a column</td>
 </tr>
 <tr class="odd">
-<td><code class="python">count(*)</code></td>
+<td><code class="pgsql">count(*)</code></td>
 <td>Computes the number of input rows in the table</td>
 </tr>
 <tr class="even">
-<td><code class="python">count(col)</code></td>
+<td><code class="pgsql">count(col)</code></td>
 <td>Computes the number of non-null input rows in that column</td>
 </tr>
 <tr class="odd">
-<td><code class="python">max(col)</code></td>
+<td><code class="pgsql">max(col)</code></td>
 <td>Finds the maximum value in a column</td>
 </tr>
 <tr class="even">
-<td><code class="python">min(col)</code></td>
+<td><code class="pgsql">min(col)</code></td>
 <td>Finds the minimum value in a column</td>
 </tr>
 </tbody>
 </table>
 <ul>
 <li><strong>Note:</strong> You can <em>not</em> use aggregate functions
-within <code class="python">WHERE</code> statements</li>
+within <code class="pgsql">WHERE</code> statements</li>
 </ul>
 </div>
 </section>
@@ -1002,7 +1055,7 @@ within <code class="python">WHERE</code> statements</li>
 <li><p>The median is commonly desired as it is a measure of the
 distribution center less affected by outliers</p></li>
 <li><p>Postgres (and most other SQL variants) do <strong>not</strong>
-have a <code class="python">median()</code> function</p></li>
+have a <code class="pgsql">median()</code> function</p></li>
 <li><p>Instead they offer more general percentile functions</p>
 <ul>
 <li>Allow you to find the values in the data where X percent of the data
@@ -1022,19 +1075,19 @@ FROM |||table|||;</code></pre>
 <h2>WITHIN GROUP Functions</h2>
 <div class="smaller">
 <ul>
-<li>All <code class="python">WITHIN GROUP</code> functions entirely
-ignore <code class="python">NULL</code> values</li>
+<li>All <code class="pgsql">WITHIN GROUP</code> functions entirely
+ignore <code class="pgsql">NULL</code> values</li>
 <li>Postgres offers you two options for determining percentile
 locations:
 <ul>
-<li><code class="python">percentile_cont</code> is best used for
+<li><code class="pgsql">percentile_cont</code> is best used for
 continuous values
 <ul>
 <li>Should the percentile land between two data points, they will be
 averaged</li>
 </ul></li>
-<li><code class="python">percentile_disc</code> is best used for
-discrete values
+<li><code class="pgsql">percentile_disc</code> is best used for discrete
+values
 <ul>
 <li>Will return the last actual bit of data before the percentile
 split</li>
@@ -1043,7 +1096,7 @@ split</li>
 <li>Postgres also offers a function to find the mode of a distribution
 (not in standard SQL)
 <ul>
-<li><code class="python">mode()</code></li>
+<li><code class="pgsql">mode()</code></li>
 <li>No value needs to go within the parentheses</li>
 <li>If multiple values have the same count, the first encountered in the
 table is chosen (so the ordering still matters)</li>
@@ -1060,17 +1113,17 @@ database table</p></li>
 <li><p>This can give you a multistep process in approaching more
 complicated actions</p></li>
 <li><p>Sometimes useful to use a <em>temporary</em> table as well by
-adding the <code class="python">TEMP</code> keyword</p>
+adding the <code class="pgsql">TEMP</code> keyword</p>
 <ul>
 <li>Only exists until you close out the session</li>
 </ul></li>
 <li><p>To set a table to a query output, use the
-<code class="python">AS</code> keyword</p>
+<code class="pgsql">AS</code> keyword</p>
 <pre ><code class="pgsql">CREATE TEMP TABLE |||temporary table name||| AS (
   SELECT |||desired columns||| FROM |||existing table|||
 );</code></pre></li>
 </ul>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -1164,7 +1217,7 @@ adding the <code class="python">TEMP</code> keyword</p>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -1207,9 +1260,16 @@ adding the <code class="python">TEMP</code> keyword</p>
 			disableCheckFile: false, //default false
 		 },
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
-              console.log(mypgsqldef);
-              return mypgsqldef(hljs); } )
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
           },
 
         // reveal.js plugins
