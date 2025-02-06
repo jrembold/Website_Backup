@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-02-05">
   <title>Remote Joins</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,8 +17,11 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -33,7 +37,7 @@
 <section id="title-slide">
   <h1 class="title">Remote Joins</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">February 8/13, 2024</p>
+  <p class="date">February 5, 2025</p>
 </section>
 
 <section id="announcements" class="slide level2">
@@ -42,18 +46,13 @@
 <li>Homework
 <ul>
 <li>Did HW3 get submitted?</li>
-<li>I’m lagging a touch on getting feedback on HW2 back to you, as I’ve
-had to implement a few things</li>
-<li>In general, only a randomly selected subset of problems will be
-scored on most assignments, and then I’ll make solutions available if
-you want to check your others
-<ul>
-<li>It is the only way I can reasonably keep up</li>
+<li>Homework Solutions are being posted! You’ll need a password, which I
+will include as a comment to the last problem feedback.</li>
+<li>Homework 4 is posted</li>
+<li>Going forward, I am going to make the HW deadline Tuesday nights.
+Tuesdays are wasted otherwise.
+<!--- Polling: [rembold-class.ddns.net](http://rembold-class.ddns.net)--></li>
 </ul></li>
-</ul></li>
-<li>I’ll have Homework 4 posted soon</li>
-<li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 <li>For next week, read:
 <ul>
 <li>DeBarros: Ch 8</li>
@@ -219,26 +218,31 @@ href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 ![Storage and Retrieval Island](../images/ch3_island.png){width=60%}
 -->
 </section>
+<section>
+<section id="connecting-remotely" class="title-slide slide level1">
+<h1>Connecting Remotely</h1>
+
+</section>
 <section id="remote-sessions" class="slide level2">
 <h2>Remote Sessions</h2>
 <ul>
 <li><p>An extremely useful aspect of working in a shell is the
 simplicity with which you can connect to other remote systems</p></li>
 <li><p>The program usually used to do so is called
-<code class="python">ssh</code>, standing for “secure shell”</p></li>
+<code class="pgsql">ssh</code>, standing for “secure shell”</p></li>
 <li><p>To log into a remote server, the command looks something
 like:</p>
 <pre ><code class="bash">ssh {user name}@{ip address or domain name}</code></pre>
 <p>where</p>
 <ul>
-<li><code class="python">user name</code> is your user name on the
+<li><code class="bash">user name</code> is your user name on the
 <em>remote</em> server (which may be different than your local
 name)</li>
-<li><code class="python">ip address or domain name</code> is either the
+<li><code class="bash">ip address or domain name</code> is either the
 direct ip address of the server (eg. 165.213.13.194) or the domain name
 (myserver.net)</li>
 <li>Some servers may require a special port as well, which can be
-indicated with <code class="python">-p</code></li>
+indicated with <code class="pgsql">-p</code></li>
 </ul></li>
 </ul>
 </section>
@@ -246,23 +250,27 @@ indicated with <code class="python">-p</code></li>
 <h2>Working Remotely</h2>
 <ul>
 <li>Upon remote connection to a server, you will just end up in another
-shell</li>
+shell, usually another Bash shell</li>
 <li>This is where being comfortable in a shell can really shine!
 <ul>
 <li>Anything you could normally do in a shell, you can do here instead,
 but it happens on the remote system</li>
 </ul></li>
-<li>When you are done, you can type <code class="python">exit</code> to
-leave the remote connection and return to your local shell</li>
+<li>When you are done, you can type <code class="bash">exit</code> to
+leave the remote connection and return to your local shell
+<ul>
+<li>Pay attention to your shell prompts! It is easy to get confused of
+if you are on the remote server or on your local system!</li>
+</ul></li>
 </ul>
 </section>
 <section id="executing-commands-directly" class="slide level2">
 <h2>Executing commands directly</h2>
 <ul>
 <li><p>If you just need to run a quick command on the remote system, you
-can do so directly from <code class="python">ssh</code></p></li>
+can do so directly from <code class="pgsql">ssh</code></p></li>
 <li><p>Simply add the desired command as the last
-<code class="python">ssh</code> argument</p>
+<code class="pgsql">ssh</code> argument</p>
 <pre ><code class="bash">ssh username@server mycommand</code></pre>
 <ul>
 <li>This runs the command on the remote server, but then gets the stdout
@@ -272,6 +280,11 @@ that only exists locally on your system to further process the
 data!</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="connecting-efficiently" class="title-slide slide level1">
+<h1>Connecting Efficiently</h1>
+
 </section>
 <section id="streamlining-security" class="slide level2">
 <h2>Streamlining Security</h2>
@@ -304,9 +317,9 @@ shared!</li>
 and the key will still be much more secure than most password systems,
 but you could also add a passphrase necessary to “unlock” the key</li>
 <li>Two files will be created inside your
-<code class="python">.ssh</code> folder in your home directory: one with
-just <code class="python">id_ed25519</code> and one with
-<code class="python">id_ed25519.pub</code></li>
+<code class="pgsql">.ssh</code> folder in your home directory: one with
+just <code class="pgsql">id_ed25519</code> and one with
+<code class="pgsql">id_ed25519.pub</code></li>
 </ul></li>
 <li><p>To copy the public key over to the desired server:</p>
 <pre ><code class="bash" style="font-size:.9em">ssh-copy-id {username}@{servername}</code></pre>
@@ -325,15 +338,20 @@ key contents will be copied over</li>
 server location, ports, etc</li>
 </ul></li>
 <li><p>Instead, you can set up “profiles” in your
-<code class="python">.ssh/config</code> file</p></li>
+<code class="pgsql">.ssh/config</code> file</p></li>
 <li><p>A general profile entry might look something like:</p>
 <pre ><code class="text">Host {profile_name}
   User {username}
   HostName {domain name or ip address}
   Port {port, if not default}</code></pre></li>
 <li><p>There are more options and settings that can be configured. See
-<code class="python">man ssh_config</code>.</p></li>
+<code class="pgsql">man ssh_config</code>.</p></li>
 </ul>
+</section></section>
+<section>
+<section id="connecting-transfers" class="title-slide slide level1">
+<h1>Connecting Transfers</h1>
+
 </section>
 <section id="copy-that" class="slide level2">
 <h2>Copy That</h2>
@@ -342,15 +360,15 @@ server location, ports, etc</li>
 files between your local system and remote server</li>
 <li>Here you have options
 <ul>
-<li><p>SSH + <code class="python">tee</code>: The
-<code class="python">tee</code> command “splits” a stream, displaying it
+<li><p>SSH + <code class="pgsql">tee</code>: The
+<code class="pgsql">tee</code> command “splits” a stream, displaying it
 both to stdout and writing it to a file at the same time. You can thus
 do things like:</p>
 <pre ><code class="bash">cat local_file | ssh remote_server tee remote_file</code></pre>
 <p>using normal pipes</p></li>
-<li><p><code class="python">scp</code>: The
-<code class="python">scp</code> command combines normal
-<code class="python">cp</code> and <code class="python">ssh</code>,
+<li><p><code class="pgsql">scp</code>: The
+<code class="pgsql">scp</code> command combines normal
+<code class="pgsql">cp</code> and <code class="pgsql">ssh</code>,
 allowing you to include a remote server in the standard format</p>
 <pre ><code class="bash">scp local_file remote_server:remote_file</code></pre></li>
 </ul></li>
@@ -362,8 +380,7 @@ allowing you to include a remote server in the standard format</p>
 <ul>
 <li><p>The previous options can be nice for just copying single files,
 but what if you need to copy over entire folders?</p></li>
-<li><p><code class="python">rsync</code> is probably your best
-option</p>
+<li><p><code class="pgsql">rsync</code> is probably your best option</p>
 <pre ><code class="bash">rsync -avP local_folder/ remote_server:remote_path</code></pre>
 <ul>
 <li>Clever about what is transferred: only copying over necessary data
@@ -372,11 +389,11 @@ that isn’t already present on the other system</li>
 </ul></li>
 <li><p>Common options</p>
 <ul>
-<li><code class="python">-a</code> is for archive, and basically means:
+<li><code class="pgsql">-a</code> is for archive, and basically means:
 “make a perfect copy”</li>
-<li><code class="python">-v</code> is for verbose, to output more
+<li><code class="pgsql">-v</code> is for verbose, to output more
 information as it is copied</li>
-<li><code class="python">-P</code> is for partial and progress, so that
+<li><code class="pgsql">-P</code> is for partial and progress, so that
 partial transfers will resume and progress output to the screen</li>
 </ul></li>
 </ul>
@@ -389,7 +406,7 @@ partial transfers will resume and progress output to the screen</li>
 information. Use that to work through the following:</p>
 <ul>
 <li>SSH into the server using your information and change your password
-using <code class="python">passwd</code>. Note that when you type in
+using <code class="pgsql">passwd</code>. Note that when you type in
 passwords on most shells, they will not <strong>show anything</strong>
 for security but are indeed recording what you type.</li>
 <li>How many files are in your remote home directory initially? Some
@@ -398,7 +415,7 @@ might be hidden!</li>
 Copy the public key over to the server. Ensure you can log in to the
 server now without needing your server password!</li>
 <li>Set up a simple profile in your
-<code class="python">.ssh/config</code> file to facilitate connecting to
+<code class="pgsql">.ssh/config</code> file to facilitate connecting to
 this server</li>
 </ul>
 </div>
@@ -425,41 +442,61 @@ can not leave a program running
 <li>Running a multiplexer like tmux can assist with this</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="break-time" class="title-slide slide level1">
+<h1>Break Time!</h1>
+
 </section>
-<section id="break-time" class="slide level2">
+<section id="break-time-1" class="slide level2">
 <h2>Break Time!</h2>
 <ul>
 <li>Stretch! Eat! Don’t think about data for half an hour!</li>
 </ul>
-</section>
-<section id="understanding-check" class="slide level2">
-<h2>Understanding Check</h2>
-<div class="cols">
-<div class="col">
-<p>Suppose you have a table of items with the schema shown below and
-wanted to find the most common difference between Price A and Price B.
-You are looking for bargains, so in the case of a tie, you’d like to
-know the biggest. Which query will deliver on your wish?</p>
-<pre ><code class="pgsql" style="font-size:.8em">CREATE TABLE rev (
+<!--
+## Understanding Check
+::::::cols
+::::col
+Suppose you have a table of items with the schema shown below and wanted to find the most common difference between Price A and Price B. You are looking for bargains, so in the case of a tie, you'd like to know the biggest. Which query will deliver on your wish?
+
+```{.pgsql style='font-size:.8em'}
+CREATE TABLE rev (
   "name" TEXT,
   "pa" NUMERIC(4,2),
   "pb" NUMERIC(4,2)
-);</code></pre>
-</div>
-<div class="col" style="flex-grow:1.2">
-<pre ><code class="pgsql answer" style="font-size:.6em" name="A">SELECT mode(pb - pa) FROM rev;</code></pre>
-<pre ><code class="pgsql answer" style="font-size:.6em" name="B">SELECT
+);
+```
+::::
+
+::::{.col style='flex-grow:1.2'}
+```{.pgsql style='font-size:.6em' .answer name='A'}
+SELECT mode(pb - pa) FROM rev;
+```
+```{.pgsql style='font-size:.6em' .answer name='B'}
+SELECT
   mode() WITHIN GROUP (ORDER BY pb) -
   mode() WITHIN GROUP (ORDER BY pa)
-FROM rev;</code></pre>
-<pre ><code class="pgsql answer" style="font-size:.6em" name="C">SELECT
+FROM rev;
+```
+```{.pgsql style='font-size:.6em' .answer name='C'}
+SELECT
   mode() WITHIN GROUP (ORDER BY (pb-pa))
-FROM rev;</code></pre>
-<pre ><code class="pgsql answer" style="font-size:.6em" name="D">SELECT
+FROM rev;
+```
+```{.pgsql style='font-size:.6em' .answer name='D'}
+SELECT
   mode() WITHIN GROUP (ORDER BY (pb-pa) DESC)
-FROM rev;</code></pre>
-</div>
-</div>
+FROM rev;
+```
+
+::::
+::::::
+-->
+</section></section>
+<section>
+<section id="selecting-across-tables" class="title-slide slide level1">
+<h1>Selecting Across Tables</h1>
+
 </section>
 <section id="linking-tables" class="slide level2">
 <h2>Linking Tables</h2>
@@ -521,6 +558,28 @@ selecting particular columns you want out of the joined table</li>
 FROM tab1
 JOIN tab2 ON tab1.age = tab2.age;</code></pre>
 </section>
+<section id="cross-join" class="slide level2">
+<h2>Cross Join</h2>
+<ul>
+<li>Sometimes you want to see <em>all the possible</em> combinations
+between the rows of two tables
+<ul>
+<li>Sometimes called a <em>cartesian product</em></li>
+</ul></li>
+<li>A <code class="pgsql">CROSS JOIN</code> will return a table of all
+of these possibilities</li>
+<li>Could imagine cross joining all the values with all the suits to
+generate your standard 52 card deck of playing cards.</li>
+<li>These can get very large very fast!
+<ul>
+<li>Do <strong>not</strong> run on tables of millions of rows!</li>
+</ul></li>
+</ul>
+</section>
+<section id="cross-joins-visualized" class="slide level2">
+<h2>Cross Joins Visualized</h2>
+<div class="fig-container" data-file="../images/d3/CrossJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
+</section>
 <section id="inner-join" class="slide level2">
 <h2>(Inner) Join</h2>
 <ul>
@@ -528,6 +587,7 @@ JOIN tab2 ON tab1.age = tab2.age;</code></pre>
 on the given column keys
 <ul>
 <li>This is also called an <em>inner join</em></li>
+<li>Essentially a cross join with a filter statement</li>
 </ul></li>
 <li>Any row in table 1 that had no counterpart in table 2 is left out
 <ul>
@@ -540,7 +600,7 @@ tables</li>
 joined table as well
 <ul>
 <li>One reason that many times people try to join on columns that hold
-unique values, but not always necesarry</li>
+unique values, but not always necessary</li>
 </ul></li>
 </ul>
 </section>
@@ -555,16 +615,16 @@ unique values, but not always necesarry</li>
 were in both table</li>
 <li>Maybe you want <strong>all</strong> the rows from one table, but
 joining the other data when it is available</li>
-<li>In these cases, you can use a <code class="python">LEFT JOIN</code>
-or <code class="python">RIGHT JOIN</code>
+<li>In these cases, you can use a <code class="pgsql">LEFT JOIN</code>
+or <code class="pgsql">RIGHT JOIN</code>
 <ul>
-<li><code class="python">LEFT JOIN</code> is decidedly the more common,
-and you can make any <code class="python">RIGHT JOIN</code> a
-<code class="python">LEFT JOIN</code> just by flipping the table
+<li><code class="pgsql">LEFT JOIN</code> is decidedly the more common,
+and you can make any <code class="pgsql">RIGHT JOIN</code> a
+<code class="pgsql">LEFT JOIN</code> just by flipping the table
 ordering</li>
 </ul></li>
 <li>Rows still need to have the same number of columns, so
-<code class="python">NULL</code> values will be inserted for the
+<code class="pgsql">NULL</code> values will be inserted for the
 secondary table columns if it is missing a match</li>
 </ul>
 </section>
@@ -580,41 +640,24 @@ secondary table columns if it is missing a match</li>
 <li>Matching where possible</li>
 <li>But keeping data from both left or right tables if no match</li>
 </ul></li>
-<li>In these cases, a <code class="python">FULL OUTER JOIN</code> will
-do what you want
+<li>In these cases, a <code class="pgsql">FULL OUTER JOIN</code> will do
+what you want
 <ul>
-<li>Essentially does a <code class="python">LEFT JOIN</code> followed by
-a <code class="python">RIGHT JOIN</code> with the existing table</li>
+<li>Essentially does a <code class="pgsql">LEFT JOIN</code> followed by
+a <code class="pgsql">RIGHT JOIN</code> with the existing table</li>
 </ul></li>
 <li>Anything without a match is still represented with
-<code class="python">NULL</code> values</li>
+<code class="pgsql">NULL</code> values</li>
 </ul>
 </section>
 <section id="outer-joins-visualized" class="slide level2">
 <h2>Outer Joins Visualized</h2>
 <div class="fig-container" data-file="../images/d3/OuterJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
-</section>
-<section id="cross-join" class="slide level2">
-<h2>Cross Join</h2>
-<ul>
-<li>Lastly, sometimes you want to see <em>all the possible</em>
-combinations between the rows of two tables
-<ul>
-<li>Sometimes called a <em>cartesian product</em></li>
-</ul></li>
-<li>A <code class="python">CROSS JOIN</code> will return a table of all
-of these possibilities</li>
-<li>Could imagine cross joining all the values with all the suits to
-generate your standard 52 card deck of playing cards.</li>
-<li>These can get very large very fast!
-<ul>
-<li>Do <strong>not</strong> run on tables of millions of rows!</li>
-</ul></li>
-</ul>
-</section>
-<section id="cross-joins-visualized" class="slide level2">
-<h2>Cross Joins Visualized</h2>
-<div class="fig-container" data-file="../images/d3/CrossJoin.html" data-scroll="no", data-style="width:90%; display:inline;"></div>
+</section></section>
+<section>
+<section id="practicing-joins" class="title-slide slide level1">
+<h1>Practicing Joins</h1>
+
 </section>
 <section id="practice" class="slide level2">
 <h2>Practice</h2>
@@ -647,15 +690,20 @@ style="width:70.0%" /></p>
 <div class="center quip">
 <p>All combinations of students and homework assignments?</p>
 </div>
+</section></section>
+<section>
+<section id="complicating-joins" class="title-slide slide level1">
+<h1>Complicating Joins</h1>
+
 </section>
 <section id="multiple-join-conditionals" class="slide level2">
 <h2>Multiple Join Conditionals</h2>
 <ul>
 <li>You are not limited to just a single condition in your
-<code class="python">ON</code> statement!</li>
+<code class="pgsql">ON</code> statement!</li>
 <li>You can chain multiple conditions together with
-<code class="python">AND</code> or <code class="python">OR</code>, just
-like you could with <code class="python">WHERE</code></li>
+<code class="pgsql">AND</code> or <code class="pgsql">OR</code>, just
+like you could with <code class="pgsql">WHERE</code></li>
 <li>Just recall when comparing two rows that ALL the conditions must be
 true for the data to be included in the joined table</li>
 </ul>
@@ -673,13 +721,13 @@ information from two different tables can get tedious</li>
 <li>You can define aliases for table names just like you can for column
 names!</li>
 <li>Syntax looks just like column aliases, using
-<code class="python">AS</code></li>
+<code class="pgsql">AS</code></li>
 <li>Can come immediately after you first reference a table name
 <ul>
-<li>Usually after a <code class="python">FROM</code> or
-<code class="python">JOIN</code> statement</li>
+<li>Usually after a <code class="pgsql">FROM</code> or
+<code class="pgsql">JOIN</code> statement</li>
 </ul></li>
-<li>In truth, the <code class="python">AS</code> is optional, but it
+<li>In truth, the <code class="pgsql">AS</code> is optional, but it
 helps some with readability</li>
 </ul>
 <pre ><code class="pgsql" style="font-size:.9em">SELECT *
@@ -725,13 +773,13 @@ want</li>
 diagrams</li>
 </ul>
 <p><img data-src="../images/joins_venn_diagrams.png"
-style="width:65.0%" /></p>
+style="width:60.0%" /></p>
 <!--
 ## Image/Animation Credits
 - [1] https://yetanotherdevblog.com/
 - https://dataschool.com/how-to-teach-people-sql
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -825,7 +873,7 @@ style="width:65.0%" /></p>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -868,9 +916,16 @@ style="width:65.0%" /></p>
 			disableCheckFile: false, //default false
 		 },
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
-              console.log(mypgsqldef);
-              return mypgsqldef(hljs); } )
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
           },
 
         // reveal.js plugins
