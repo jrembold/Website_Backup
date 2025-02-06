@@ -49,8 +49,7 @@
 <li>Homework Solutions are being posted! You’ll need a password, which I
 will include as a comment to the last problem feedback.</li>
 <li>Homework 4 is posted</li>
-<li>Going forward, I am going to make the HW deadline Tuesday nights.
-Tuesdays are wasted otherwise.
+<li>Deadline adjustment! Tuesday or Wednesday nights? Vote in Discord!
 <!--- Polling: [rembold-class.ddns.net](http://rembold-class.ddns.net)--></li>
 </ul></li>
 <li>For next week, read:
@@ -659,9 +658,23 @@ a <code class="pgsql">RIGHT JOIN</code> with the existing table</li>
 <h1>Practicing Joins</h1>
 
 </section>
+<section id="gotta-practice" class="slide level2">
+<h2>Gotta Practice</h2>
+<ul>
+<li>The difficult part of joins isn’t understanding the vocabulary of
+what each does, it is in understanding for a give question and data
+model what type of join you want to be able to answer the question.</li>
+<li>You can do the following practice parts without data, but sometimes
+it helps to have something to play with and visualize
+<ul>
+<li>Data <a
+href="../activity_data/assignment_submission_joins.sql">here</a></li>
+</ul></li>
+</ul>
+</section>
 <section id="practice" class="slide level2">
 <h2>Practice</h2>
-<p><img data-src="../images/hw_assignment_schema.png"
+<p><img data-src="../images/hw_assignment_schema2.png"
 style="width:70.0%" /></p>
 <div class="center quip">
 <p>First names of students who have submitted any assignment?</p>
@@ -669,7 +682,7 @@ style="width:70.0%" /></p>
 </section>
 <section id="practice-1" class="slide level2">
 <h2>Practice</h2>
-<p><img data-src="../images/hw_assignment_schema.png"
+<p><img data-src="../images/hw_assignment_schema2.png"
 style="width:70.0%" /></p>
 <div class="center quip">
 <p>Student ID and name of the assignment for all perfect scores?</p>
@@ -677,7 +690,7 @@ style="width:70.0%" /></p>
 </section>
 <section id="practice-2" class="slide level2">
 <h2>Practice</h2>
-<p><img data-src="../images/hw_assignment_schema.png"
+<p><img data-src="../images/hw_assignment_schema2.png"
 style="width:70.0%" /></p>
 <div class="center quip">
 <p>Number of assignments with no submissions?</p>
@@ -685,7 +698,7 @@ style="width:70.0%" /></p>
 </section>
 <section id="practice-3" class="slide level2">
 <h2>Practice</h2>
-<p><img data-src="../images/hw_assignment_schema.png"
+<p><img data-src="../images/hw_assignment_schema2.png"
 style="width:70.0%" /></p>
 <div class="center quip">
 <p>All combinations of students and homework assignments?</p>
@@ -751,6 +764,15 @@ won’t be apparent</li>
 FROM tablename AS t1
 JOIN tablename2 AS t2 ON t1.col1 = t2.col1
 JOIN tablename3 AS t3 ON t1.col2 = t3.col1;</code></pre>
+</section>
+<section id="more-practice" class="slide level2">
+<h2>More Practice</h2>
+<p><img data-src="../images/hw_assignment_schema2.png"
+style="width:70.0%" /></p>
+<div class="center quip">
+<p>First names of all individuals who are missing at least one
+assignment (no submission made)?</p>
+</div>
 </section>
 <section id="self-joins" class="slide level2">
 <h2>Self Joins</h2>
