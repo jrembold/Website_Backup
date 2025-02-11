@@ -387,6 +387,7 @@ $endif$
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
+          theme: "whiteboard",
           boardmarkers : [
                   { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                   { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
