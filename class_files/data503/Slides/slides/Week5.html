@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-02-12">
   <title>Docking Constraints</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -36,25 +37,31 @@
 <section id="title-slide">
   <h1 class="title">Docking Constraints</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">February 15/20, 2024</p>
+  <p class="date">February 12, 2025</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>HW4 due
+<li>Homework
 <ul>
-<li>I’m trying really hard to get caught up on feedback. Hopefully it is
-coming.</li>
-<li>FYI, when I am behind in grading, you are unpenalized for late days.
-So if you need an extra day to get something in, feel free to take
-it.</li>
-<li>Once I get somewhat caught up on grading, I’ll see about making sure
-my solutions are shared</li>
+<li>HW4 due</li>
+<li>I had 10+ hrs of grading this weekend for another class, so I’m
+still playing catch-up on HW3 feedback. Sorry, it is coming soon.</li>
+<li>I’ll include passwords to HW1 and HW2 solutions when I score
+HW3</li>
 </ul></li>
-<li>In class polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>Fill out the form that Hillary sent about desired summer courses!
+<ul>
+<li>There are many constraints, so we are trying to figure out how to
+best ensure the most people are well served</li>
+</ul></li>
 </ul>
+</section>
+<section>
+<section id="on-the-dock-of-the-bay" class="title-slide slide level1">
+<h1>On the Dock of the Bay…</h1>
+
 </section>
 <section id="docker-overview" class="slide level2">
 <h2>Docker Overview</h2>
@@ -141,6 +148,11 @@ variety of container types</li>
 work with, and run multiple containers at the same time</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="using-docker" class="title-slide slide level1">
+<h1>Using Docker</h1>
+
 </section>
 <section id="installing-docker" class="slide level2">
 <h2>Installing Docker</h2>
@@ -455,15 +467,14 @@ build</p></li>
 terminal:</p>
 <pre ><code class="bash">docker run --flags container_name</code></pre>
 <ul>
-<li><code class="python">run</code> creates and starts the
-container</li>
-<li><code class="python">--flags</code> could be any number of options
-or boolean flags. Common ones include:
+<li><code class="pgsql">run</code> creates and starts the container</li>
+<li><code class="pgsql">--flags</code> could be any number of options or
+boolean flags. Common ones include:
 <ul>
-<li><code class="python">-it</code> to launch interactively</li>
-<li><code class="python">--rm</code> to remove the container once the
+<li><code class="pgsql">-it</code> to launch interactively</li>
+<li><code class="pgsql">--rm</code> to remove the container once the
 command or interactive session finishes</li>
-<li><code class="python">-d</code> to run the container detached</li>
+<li><code class="pgsql">-d</code> to run the container detached</li>
 </ul></li>
 <li>The container name is the name and (optionally) tag of the container
 you want to launch.
@@ -480,7 +491,7 @@ it from DockerHub</li>
 <li><p>To get a view of currently <em>running</em> containers:</p>
 <pre ><code class="bash">docker ps</code></pre>
 <ul>
-<li>Add a <code class="python">-a</code> flag at the end to see
+<li>Add a <code class="pgsql">-a</code> flag at the end to see
 <strong>all</strong> containers</li>
 </ul></li>
 <li><p>To remove old containers:</p>
@@ -495,7 +506,7 @@ it from DockerHub</li>
 <li><p>Generally, you will want to customize a base image by adding your
 own layers on top</p></li>
 <li><p>The schematic of what comprises an image is all contained in a
-special text file, named <code class="python">Dockerfile</code></p>
+special text file, named <code class="pgsql">Dockerfile</code></p>
 <ul>
 <li>Note the lack of extension at the end!</li>
 </ul></li>
@@ -512,13 +523,13 @@ that dictate what layers comprise your image</p></li>
 <ul>
 <li>Dockerfiles use a syntax with only a few keywords
 <ul>
-<li><code class="python">FROM</code> specifies the base image you are
+<li><code class="pgsql">FROM</code> specifies the base image you are
 starting with</li>
-<li><code class="python">RUN</code> specifies a command to run. Often to
+<li><code class="pgsql">RUN</code> specifies a command to run. Often to
 satisfy dependencies or get libraries</li>
-<li><code class="python">COPY</code> will copy file from your local
+<li><code class="pgsql">COPY</code> will copy file from your local
 system into the image</li>
-<li><code class="python">CMD</code> specifies the default command to be
+<li><code class="pgsql">CMD</code> specifies the default command to be
 run when the image is launched</li>
 </ul></li>
 </ul>
@@ -574,7 +585,7 @@ your outside system
 <h2>Challenge</h2>
 <ul>
 <li>I have uploaded an image of my own to DockerHub, which you can find
-at <code class="python">jrembold/dockerdemo</code></li>
+at <code class="pgsql">jrembold/dockerdemo</code></li>
 <li>On your own time, see if you can:
 <ul>
 <li>Download the image</li>
@@ -584,16 +595,26 @@ at <code class="python">jrembold/dockerdemo</code></li>
 <li>I’ll give you some extra HW points if you can email me with the
 answer to the further instructions :)</li>
 </ul>
+</section></section>
+<section>
+<section id="break" class="title-slide slide level1">
+<h1>Break!</h1>
+
 </section>
 <section id="break-time" class="slide level2">
 <h2>Break Time!</h2>
 <p><img data-src="../images/nomming_catepillar.png" /></p>
+</section></section>
+<section>
+<section id="identify-yourself" class="title-slide slide level1">
+<h1>Identify Yourself</h1>
+
 </section>
 <section id="review" class="slide level2">
 <h2>Review!</h2>
 <div class="cols">
 <div class="col">
-<p>Given the table (named <code class="python">employees</code>) to the
+<p>Given the table (named <code class="pgsql">employees</code>) to the
 right and the query immediately below, what would the output table look
 like?</p>
 <pre ><code class="pgsql" style="font-size:.8em">SELECT p1.name, p2.name
@@ -768,11 +789,16 @@ sweet.</li>
 <li><strong>When copying tables, use new names that assist later
 management:</strong> Often you may want to copy a table to run some
 calculations or alter it in a way that does not affect the original.
-Consider appending the date in <code class="python">YYYY-MM-DD</code> to
+Consider appending the date in <code class="pgsql">YYYY-MM-DD</code> to
 the table name to make it easier to find later what your latest version
 is.</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="encoding-constraints" class="title-slide slide level1">
+<h1>Encoding Constraints</h1>
+
 </section>
 <section id="why-constrain-yourself" class="slide level2">
 <h2>Why Constrain Yourself?</h2>
@@ -810,24 +836,24 @@ applied in either location</p>
 should be applied as table constraints</li>
 </ul></li>
 <li><p>The anatomy of a constraint syntax looks like:</p>
-<pre ><code class="pgsql" style="font-size:0.8em">CONSTRAINT constraint_name CONSTRAINT_TYPE CONSTRAINT_CONDITIONS</code></pre></li>
+<pre ><code class="pgsql" style="font-size:0.8em">CONSTRAINT |||constraint name||| |||CONSTRAINT_TYPE||| |||CONSTRAINT_CONDITIONS|||</code></pre></li>
 </ul>
 </section>
 <section id="check" class="slide level2">
 <h2>CHECK</h2>
 <ul>
-<li>The <code class="python">CHECK</code> constraint is perhaps the most
+<li>The <code class="pgsql">CHECK</code> constraint is perhaps the most
 straightforward, in that it just checks to see if a certain condition is
 true</li>
 <li>If the condition is untrue, then an error will be raised</li>
 <li>Can be written in either form, but must be a table constrain if
 referencing multiple columns</li>
 </ul>
-<pre ><code class="pgsql" style="font-size:1em">CREATE TABLE example (
-  col1 INT CHECK (col1 > 0),
-  col2 INT,
-  col3 INT,
-  CONSTRAINT second_constraint CHECK (col2 > col3)
+<pre ><code class="pgsql" style="font-size:1em">CREATE TABLE |||tablename||| (
+  |||col₁||| INT CHECK (|||col₁||| > 0),
+  |||col₂||| INT,
+  |||col₃||| INT,
+  CONSTRAINT |||constraint_name||| CHECK (|||col₂||| > |||col₃|||)
 );</code></pre>
 </section>
 <section id="not-null" class="slide level2">
@@ -837,12 +863,12 @@ referencing multiple columns</li>
 <em>always</em> have data</li>
 <li>To do so, you can set up a contraint on a column to not contain any
 null values</li>
-<li>The <code class="python">NOT NULL</code> constraint is only applied
+<li>The <code class="pgsql">NOT NULL</code> constraint is only applied
 to columns, not to the entire table!</li>
 </ul>
-<pre ><code class="pgsql">CREATE TABLE example (
-  col1 INT NOT NULL,
-  col2 INT
+<pre ><code class="pgsql">CREATE TABLE |||tablename||| (
+  |||col₁||| INT NOT NULL,
+  |||col₂||| INT
 );</code></pre>
 </section>
 <section id="uniqueness" class="slide level2">
@@ -855,11 +881,11 @@ duplicates will be rejected.</li>
 <li>If done as a table constraint, can also require
 <strong>pairs</strong> of columns to be unique</li>
 </ul>
-<pre ><code class="pgsql">CREATE TABLE example (
-  col1 INT UNIQUE,
-  col2 INT,
-  col3 INT,
-  CONSTRAINT uniq_pair UNIQUE (col2, col3)
+<pre ><code class="pgsql">CREATE TABLE |||tablename||| (
+  |||col₁||| INT UNIQUE,
+  |||col₂||| INT,
+  |||col₃||| INT,
+  CONSTRAINT |||constraint_name||| UNIQUE (|||col₂|||, |||col₃|||)
 );</code></pre>
 </section>
 <section id="understanding-check" class="slide level2">
@@ -896,8 +922,8 @@ complete successfully?</p>
 <section id="the-primary-directive" class="slide level2">
 <h2>The Primary Directive</h2>
 <ul>
-<li>Combining <code class="python">UNIQUE</code> and
-<code class="python">NOT NULL</code> is so common that such a constraint
+<li>Combining <code class="pgsql">UNIQUE</code> and
+<code class="pgsql">NOT NULL</code> is so common that such a constraint
 gets its own name: the <em>primary key</em></li>
 <li>A primary key gives you an unambiguous way to select a specific row
 from a table</li>
@@ -934,8 +960,8 @@ necessary
 <li>Adds an artificial column to your table that contains purely unique,
 non-null values
 <ul>
-<li>The <code class="python">SERIAL</code> data types are great for
-this, or some people prefer to use UUIDs</li>
+<li>The <code class="pgsql">SERIAL</code> data types are great for this,
+or some people prefer to use UUIDs</li>
 </ul></li>
 <li>The drawback is that your tables may lose some meaning without
 performing a bunch of joins</li>
@@ -949,15 +975,15 @@ performing a bunch of joins</li>
 either syntax</li>
 <li>Composite primary keys must be done as a table constraint</li>
 </ul>
-<pre ><code class="pgsql" style="font-size:1em; margin-bottom:1em">CREATE TABLE example (
-  col1 TEXT PRIMARY KEY,
-  col2 INT
+<pre ><code class="pgsql" style="font-size:1em; margin-bottom:1em">CREATE TABLE |||tablename||| (
+  |||col₁||| TEXT PRIMARY KEY,
+  |||col₂||| INT
   );</code></pre>
-<pre ><code class="pgsql" style="font-size:1em;">CREATE TABLE example (
-  col1 TEXT,
-  col2 INT,
-  col3 INT,
-  CONSTRAINT comp_key PRIMARY KEY (col1, col2)
+<pre ><code class="pgsql" style="font-size:1em;">CREATE TABLE |||tablename||| (
+  |||col₁||| TEXT,
+  |||col₂||| INT,
+  |||col₃||| INT,
+  CONSTRAINT |||constraint_name||| PRIMARY KEY (|||col₁|||, |||col₂|||)
 );</code></pre>
 </section>
 <section id="foreign-keys" class="slide level2">
@@ -973,10 +999,10 @@ technically be any uniquely constrained column</li>
 </ul></li>
 <li><p>Could have many foreign key constraints in one table, as opposed
 to having only a single primary key constraint</p></li>
-<li><p>Uses the keyword <code class="python">REFERENCES</code></p>
-<pre ><code class="pgsql" style="font-size:1em">CREATE TABLE example2 (
-  col1 TEXT PRIMARY KEY,
-  col2 INT REFERENCES example (col1)
+<li><p>Uses the keyword <code class="pgsql">REFERENCES</code></p>
+<pre ><code class="pgsql" style="font-size:1em">CREATE TABLE |||table₂||| (
+  |||col₁||| TEXT PRIMARY KEY,
+  |||col₂||| INT REFERENCES |||table₁||| (|||col₁|||)
 );</code></pre></li>
 </ul>
 </section>
@@ -987,12 +1013,12 @@ to having only a single primary key constraint</p></li>
 cumbersome, and I’d only do it if you had a composite primary key that
 you needed to match</li>
 </ul>
-<pre ><code class="pgsql">CREATE TABLE example2 (
-  col1 TEXT PRIMARY KEY,
-  col2 INT,
-  col3 INT,
-  CONSTRAINT fkey_pair FOREIGN KEY (col2,col3) 
-    REFERENCES example (col1,col2)
+<pre ><code class="pgsql">CREATE TABLE |||table₂||| (
+  |||col₁||| TEXT PRIMARY KEY,
+  |||col₂||| INT,
+  |||col₃||| INT,
+  CONSTRAINT |||constraint_name||| FOREIGN KEY (|||col₂|||, |||col₃|||) 
+    REFERENCES |||table₁||| (|||col₁|||, |||col₂|||)
 );</code></pre>
 </section>
 <section id="foreign-considerations" class="slide level2">
@@ -1009,11 +1035,11 @@ table that is being referenced by another
 <ul>
 <li>Can alter this so that any referencing rows are ALSO deleted</li>
 <li>Could also tweak to set those row foreign keys to be
-<code class="python">NULL</code> or the column default</li>
+<code class="pgsql">NULL</code> or the column default</li>
 </ul>
 <pre ><code class="pgsql">...
-col2 INT REFERENCES example ON DELETE CASCADE
-col3 INT REFERENCES example ON DELETE SET NULL
+|||col₂||| INT REFERENCES |||table₁||| ON DELETE CASCADE
+|||col₃||| INT REFERENCES |||table₁||| ON DELETE SET NULL
 ...</code></pre></li>
 </ul></li>
 </ul>
@@ -1050,6 +1076,11 @@ appropriate.</p>
 href="https://drawsql.app/">drawsql</a>, <a
 href="https://online.visual-paradigm.com/">visual-paradigm</a>, or <a
 href="https://app.diagrams.net/">DrawIO</a></p>
+</section></section>
+<section>
+<section id="the-quest-for-efficiency" class="title-slide slide level1">
+<h1>The Quest for Efficiency</h1>
+
 </section>
 <section id="creating-indexes" class="slide level2">
 <h2>Creating Indexes</h2>
@@ -1057,7 +1088,7 @@ href="https://app.diagrams.net/">DrawIO</a></p>
 <li>We’ve talked previously about indexes from a theoretical view, now
 to put them into practice</li>
 <li>Postgres will automatically index any column that is a primary key
-or which has the <code class="python">UNIQUE</code> constraint</li>
+or which has the <code class="pgsql">UNIQUE</code> constraint</li>
 <li>You can choose to set up indexes on other columns as well
 though</li>
 <li>By default, the assigned index type is a B-Tree index in Postgres
@@ -1072,7 +1103,7 @@ come up</li>
 </ul></li>
 </ul></li>
 </ul>
-<pre ><code class="pgsql" style="font-size:1em">CREATE INDEX index_name ON table_name (col_name);</code></pre>
+<pre ><code class="pgsql" style="font-size:1em">CREATE INDEX |||index_name||| ON |||table||| (|||column|||);</code></pre>
 </section>
 <section id="benchmarking" class="slide level2">
 <h2>Benchmarking</h2>
@@ -1081,13 +1112,13 @@ come up</li>
 or manipulation of the data later</li>
 <li>How can we objectively test this?
 <ul>
-<li>Postgres has the <code class="python">EXPLAIN</code> keyword to give
+<li>Postgres has the <code class="pgsql">EXPLAIN</code> keyword to give
 you information about what the database is doing in the background</li>
-<li>Using <code class="python">EXPLAIN ANALYZE</code> will also give you
+<li>Using <code class="pgsql">EXPLAIN ANALYZE</code> will also give you
 timing information about how long it took a query to run</li>
 </ul></li>
-<li><code class="python">EXPLAIN</code> always comes at the start of
-your query</li>
+<li><code class="pgsql">EXPLAIN</code> always comes at the start of your
+query</li>
 <li>Other SQL variants have their own versions, but most have some
 method of getting information back about execution time or what is being
 done under the hood</li>
@@ -1110,7 +1141,7 @@ columns, as those are done automatically</li>
 after adding an index to see if you are really gaining much from
 it!</li>
 </ul>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -1129,6 +1160,7 @@ it!</li>
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
+  <script src="../html_srcs/revealjs/../js/mybash.js"></script>
 
   <script>
 
@@ -1204,7 +1236,7 @@ it!</li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -1247,9 +1279,20 @@ it!</li>
 			disableCheckFile: false, //default false
 		 },
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
-              console.log(mypgsqldef);
-              return mypgsqldef(hljs); } )
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              hljs.registerLanguage("bash", function(hljs) {
+                console.log(mybashdef);
+                return mybashdef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
           },
 
         // reveal.js plugins
