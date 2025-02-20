@@ -92,6 +92,7 @@ $endif$
 $if(highlightjs)$
   <script src="$revealjs-url$/plugin/highlight/highlight.js"></script>
   <script src="$revealjs-url$/../js/mypgsql.js"></script>
+  <script src="$revealjs-url$/../js/mybash.js"></script>
 $endif$
 
   <script>
@@ -373,6 +374,10 @@ $if(highlightjs)$
                 console.log(mypgsqldef);
                 return mypgsqldef(hljs); 
               });
+              hljs.registerLanguage("bash", function(hljs) {
+                console.log(mybashdef);
+                return mybashdef(hljs); 
+              });
               console.log(hljs);
               document.querySelectorAll('code').forEach((block) => {
                 hljs.highlightElement(block);
@@ -400,6 +405,7 @@ $endif$
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
+          theme: "whiteboard",
           boardmarkers : [
                   { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                   { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},

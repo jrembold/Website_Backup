@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <title>Grouping JSON Models</title>
+  <meta name="dcterms.date" content="2025-02-19">
+  <title>Grouping JSON Model Indexes</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -34,25 +35,31 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Grouping JSON Models</h1>
+  <h1 class="title">Grouping JSON Model Indexes</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">February 22/27, 2024</p>
+  <p class="date">February 19, 2025</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Homework 5 due date:</li>
-<li>No homework for next week, because you have the midterm video to be
-working on!
+<li>Homework 5 due tonight!</li>
+<li>Homework 6 due next Wednesday</li>
+<li><strong>No class next week!</strong>
 <ul>
-<li>We’ll discuss in a moment</li>
-<li>A guide will be sent out to everyone soon</li>
+<li>I’ll be in Pittsburgh for SIGCSE</li>
+<li>Instead, next Wednesday you’ll be sent the description and
+requirements of the midterm tutorial video assignment</li>
+<li>You’ll have until the following Wednesday (March 5th) to submit a
+link to that upload</li>
 </ul></li>
-<li>Polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
 </ul>
 <!--------  THEORY ------------------>
+</section>
+<section>
+<section id="building-a-model" class="title-slide slide level1">
+<h1>Building a Model</h1>
+
 </section>
 <section id="data-modeling" class="slide level2">
 <h2>Data Modeling</h2>
@@ -376,10 +383,10 @@ column depends on another (that depends on the primary key), instead of
 depending directly on the primary key</li>
 <li>Here we have 2! One in each table:
 <ul>
-<li><code class="python">ProductName</code> depends on
-<code class="python">Sku</code></li>
-<li><code class="python">CustomerName</code> depends on
-<code class="python">CustomerID</code></li>
+<li><code class="pgsql">ProductName</code> depends on
+<code class="pgsql">Sku</code></li>
+<li><code class="pgsql">CustomerName</code> depends on
+<code class="pgsql">CustomerID</code></li>
 </ul></li>
 <li>Solution? More tables!</li>
 </ul>
@@ -481,10 +488,119 @@ database, as they make maintaining, adding, updating, and adjusting your
 database and tables much easier</li>
 </ul>
 </section>
-<section id="break-time" class="slide level2">
-<h2>Break Time!</h2>
-<p><img data-src="../images/nomming_catepillar.png" /></p>
-<!---------------- SQL ------------------>
+<section id="activity" class="slide level2">
+<h2>Activity</h2>
+<div class="smaller">
+<ul>
+<li><p>Think back to the Spotify modeling that we were playing around
+with last week</p></li>
+<li><p>Suppose you have the following information you need to store for
+each track:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Info</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Track Name</td>
+<td>The name of the track</td>
+</tr>
+<tr class="even">
+<td>Artists</td>
+<td>Comma separated list of contributing artists</td>
+</tr>
+<tr class="odd">
+<td>Album</td>
+<td>The album this specific track appears on</td>
+</tr>
+<tr class="even">
+<td>Duration</td>
+<td>The duration of the track in seconds</td>
+</tr>
+<tr class="odd">
+<td>Genre</td>
+<td>The general genre of the track</td>
+</tr>
+<tr class="even">
+<td>Track Num</td>
+<td>The placement of this track on the album</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>Your task is to model this information into purely tables of
+3NF</p></li>
+</ul>
+</div>
+</section>
+<section id="activity-example-data" class="slide level2">
+<h2>Activity Example Data</h2>
+<ul>
+<li>Sometimes it helps to have some example data to look at:</li>
+</ul>
+<div class="smaller">
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 19%" />
+<col style="width: 29%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
+<col style="width: 6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>TName</th>
+<th>Artists</th>
+<th>Album</th>
+<th>Duration</th>
+<th>Genre</th>
+<th>TNum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Don’t Stop Believin’</td>
+<td>Journey</td>
+<td>Greatest Hits</td>
+<td>249</td>
+<td>Rock</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>Don’t Stop Believin’</td>
+<td>Journey</td>
+<td>Escape</td>
+<td>251</td>
+<td>Rock</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>Fifteen</td>
+<td>Taylor Swift</td>
+<td>Fearless (Taylor’s Version)</td>
+<td>294</td>
+<td>Country Pop</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>Under Pressure</td>
+<td>Queen,David Bowie</td>
+<td>Greatest Hits</td>
+<td>238</td>
+<td>Rock</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section></section>
+<section>
+<section id="indexing" class="title-slide slide level1">
+<h1>Indexing</h1>
+
 </section>
 <section id="consulting-an-index" class="slide level2">
 <h2>Consulting an Index</h2>
@@ -521,7 +637,7 @@ key in a B-Tree</figcaption>
 <h2>Creating Indexes</h2>
 <ul>
 <li><p>Postgres will automatically index any column that is a primary
-key or which has the <code class="python">UNIQUE</code>
+key or which has the <code class="pgsql">UNIQUE</code>
 constraint</p></li>
 <li><p>You can choose to set up indexes on other columns as well, but do
 so outside of the table creation</p>
@@ -536,12 +652,12 @@ index name:</p>
 <ul>
 <li><p>How can we objectively test this?</p>
 <ul>
-<li>Postgres has the <code class="python">EXPLAIN</code> keyword to give
+<li>Postgres has the <code class="pgsql">EXPLAIN</code> keyword to give
 you information about what the database is doing in the background</li>
-<li>Using <code class="python">EXPLAIN ANALYZE</code> will also give you
+<li>Using <code class="pgsql">EXPLAIN ANALYZE</code> will also give you
 timing information about how long it took a query to run</li>
 </ul></li>
-<li><p><code class="python">EXPLAIN</code> always comes at the start of
+<li><p><code class="pgsql">EXPLAIN</code> always comes at the start of
 your query</p>
 <pre ><code class="pgsql">EXPLAIN ANALYZE
 SELECT * FROM |||table name|||
@@ -554,7 +670,7 @@ done under the hood</p></li>
 <section id="benchmarking-caveats" class="slide level2">
 <h2>Benchmarking Caveats</h2>
 <ul>
-<li><code class="python">EXPLAIN ANALYZE</code> reports to you the time
+<li><code class="pgsql">EXPLAIN ANALYZE</code> reports to you the time
 it took the server to process the query, not necessarily the time it
 took your client to finish getting and rendering the response!
 <ul>
@@ -566,7 +682,7 @@ you index a column doesn’t mean that Postgres will <strong>use</strong>
 that index if you are doing an incompatible operation!
 <ul>
 <li>Check more than just the timings from
-<code class="python">EXPLAIN ANALYZE</code>
+<code class="pgsql">EXPLAIN ANALYZE</code>
 <ul>
 <li>See comments about Bitmaps and Heaps? Then the index was used.</li>
 <li>See comments about Parallel or Seq scans? Then the index was not
@@ -604,11 +720,11 @@ it!</li>
 your computer</li>
 <li>Benchmark that data set under three different queries, for each
 getting a time both before creating an index and then after creating an
-index over the desired column
+index over the filtered column
 <ul>
-<li>Select all the columns for the row where the taxi id = 56789</li>
+<li>Select all the columns for the row where the ride id = 56789</li>
 <li>Select all the columns for the rows where the total amount charged
-was greater than $20</li>
+was greater than $40</li>
 <li>Select all the columns for the rows where the total amount charged
 was greater than $10</li>
 </ul></li>
@@ -616,6 +732,20 @@ was greater than $10</li>
 href="https://docs.google.com/spreadsheets/d/1WLhoEYzDR3I6LZqeZZ-FM0lmdiTKde_Ygwk1f5_sQRk/edit?usp=sharing">here</a>
 (Just choose an unused trial number)</li>
 </ul>
+</section></section>
+<section>
+<section id="break" class="title-slide slide level1">
+<h1>Break!</h1>
+
+</section>
+<section id="break-time" class="slide level2">
+<h2>Break Time!</h2>
+<p><img data-src="../images/nomming_catepillar.png" /></p>
+</section></section>
+<section>
+<section id="grouping" class="title-slide slide level1">
+<h1>Grouping</h1>
+
 </section>
 <section id="birds-of-a-feather" class="slide level2">
 <h2>Birds of a Feather</h2>
@@ -646,14 +776,15 @@ many categories</p></li>
 </section>
 <section id="the-fix" class="slide level2">
 <h2>The Fix</h2>
+<div class="smaller">
 <ul>
-<li>SQL has one last trick up its sleeve with the
-<code class="python">GROUP BY</code> command</li>
-<li><code class="python">GROUP BY</code> gathers together all rows with
+<li>SQL has one last fundamental trick up its sleeve with the
+<code class="pgsql">GROUP BY</code> command</li>
+<li><code class="pgsql">GROUP BY</code> gathers together all rows with
 matching values from a particular column
 <ul>
 <li>By itself, this is basically the same as running
-<code class="python">DISTINCT</code> on a column</li>
+<code class="pgsql">DISTINCT</code> on a column</li>
 <li>Note that once you make a grouping, you can only select entire
 columns that are a part of the grouping</li>
 </ul>
@@ -664,13 +795,14 @@ GROUP BY |||grouped column|||;</code></pre></li>
 grouping, which are then joined back together with each table
 contributing one row</li>
 </ul>
+</div>
 </section>
 <section id="aggregating-groups" class="slide level2">
 <h2>Aggregating Groups</h2>
 <ul>
 <li><p>Groups by themselves are not that useful, since we already had
-<code class="python">DISTINCT</code></p></li>
-<li><p>The prime use-case of <code class="python">GROUP BY</code> is to
+<code class="pgsql">DISTINCT</code></p></li>
+<li><p>The prime use-case of <code class="pgsql">GROUP BY</code> is to
 be able to run aggregates across <em>all</em> potential groups
 <em>simultaneously</em> for comparison</p>
 <pre ><code class="pgsql">SELECT 
@@ -689,14 +821,14 @@ group tables</p></li>
 <ul>
 <li>Which manufacturer sells the most sugar-laden cereal?</li>
 <li>What shelf has the most cereals placed on it? What about the
-greatest sum of calories?</li>
+greatest calorie average?</li>
 </ul>
 </section>
 <section id="multiple-groups" class="slide level2">
 <h2>MULTIPLE GROUPS</h2>
 <ul>
-<li>Like with <code class="python">DISTINCT</code> or
-<code class="python">UNIQUE</code>, you can group by multiple
+<li>Like with <code class="pgsql">DISTINCT</code> or
+<code class="pgsql">UNIQUE</code>, you can group by multiple
 columns</li>
 <li>Essentially splits the sub-tables into even smaller tables, one for
 each combination</li>
@@ -713,15 +845,15 @@ GROUP BY |||grouped col1|||, |||grouped col2|||</code></pre>
 <h2>HAVE or HAVE NOT</h2>
 <ul>
 <li>You can not filter based on aggregates using
-<code class="python">WHERE</code>
+<code class="pgsql">WHERE</code>
 <ul>
-<li><code class="python">WHERE</code> actions happen before any
+<li><code class="pgsql">WHERE</code> actions happen before any
 aggregates can be computed</li>
 </ul></li>
 <li>If you want to filter your grouped results, you need to use
-<code class="python">HAVING</code>
+<code class="pgsql">HAVING</code>
 <ul>
-<li><code class="python">HAVING</code> filters take place
+<li><code class="pgsql">HAVING</code> filters take place
 <strong>after</strong> groups and aggregates have been computed</li>
 </ul></li>
 </ul>
@@ -737,7 +869,7 @@ HAVING min(|||other col|||) > 50;</code></pre>
 <h2>Server Ordering</h2>
 <p><img data-src="../images/query_flowchart.png"
 style="width:80.0%" /></p>
-<!--
+<!-- for next class
 ## SHOWDOWN TIME!
 - Teams to be announced on next slide
 - Whoever want to be in charge of submitting your answer can change your polling name to a fun team name :)
@@ -754,67 +886,73 @@ style="width:80.0%" /></p>
 - Micah and Alaina
 - Aaryan and Phil
 -->
+</section></section>
+<section>
+<section id="whos-son" class="title-slide slide level1">
+<h1>Who’s Son?</h1>
+
 </section>
 <section id="json-in-postgres" class="slide level2">
 <h2>JSON in Postgres</h2>
 <ul>
 <li>One data type that we haven’t discussed yet in Postgres is
-<code class="python">json</code></li>
-<li>Postgres actually support two <code class="python">json</code>
-types:
+<code class="pgsql">json</code></li>
+<li>Postgres actually support two <code class="pgsql">json</code> types:
 <ul>
-<li><code class="python">json</code>: stores data as text
+<li><code class="pgsql">json</code>: stores data as text
 <ul>
 <li>Slower to process, but maintains whitespace and key orderings</li>
 </ul></li>
-<li><code class="python">jsonb</code>: stores data in a binary format
+<li><code class="pgsql">jsonb</code>: stores data in a binary format
 <ul>
 <li>Slightly slow to insert, but much faster to process</li>
 <li>Can have indexes defined</li>
 </ul></li>
 </ul></li>
-<li>In general, <code class="python">jsonb</code> is probably preferable
-unless you really need what the base <code class="python">json</code>
+<li>In general, <code class="pgsql">jsonb</code> is probably preferable
+unless you really need what the base <code class="pgsql">json</code>
 type offers</li>
 </ul>
 </section>
 <section id="populating-json-tables" class="slide level2">
 <h2>Populating JSON Tables</h2>
 <ul>
-<li><p>JSON is frequently given with the outermost type be a list, and
-then each record inside separated by commas</p></li>
+<li><p>JSON is frequently given with the outermost type being a list,
+and then each record inside separated by commas</p></li>
 <li><p>Postgres will <strong>not</strong> innately be able to import
 this type of document</p></li>
-<li><p>Instead, Postgres <code class="python">COPY</code> works best
-when the JSON is a newline delimited JSON file (sometimes called
-jsonlines), where each new record is on a single line, and there is no
-surrounding <code class="python">[]</code></p>
+<li><p>Instead, Postgres <code class="pgsql">COPY</code> works best when
+the JSON is a newline delimited JSON file (sometimes called jsonlines),
+where each new record is on a single line, and there is no surrounding
+<code class="pgsql">[]</code></p>
 <pre ><code class="pgsql">COPY |||table name|||
 FROM |||your newline json file|||.json</code></pre></li>
+<li><p>Want to follow along? A jsonlines file is <a
+href="../activity_data/jsondemo.jsonlines">here</a>!</p></li>
 </ul>
 </section>
 <section id="json-selections" class="slide level2">
 <h2>JSON Selections</h2>
 <ul>
 <li><p>You can drill down and select specific values from
-<code class="python">json</code> or <code class="python">jsonb</code>
+<code class="pgsql">json</code> or <code class="pgsql">jsonb</code>
 types using two different syntaxes:</p>
 <ul>
-<li><code class="python">raw_json -> 'key/index'</code> where:
+<li><code class="pgsql">raw_json -> 'key'/index</code> where:
 <ul>
 <li>key is a string for key-value pairs</li>
 <li>index is an integer for arrays (0-based!)</li>
 </ul></li>
-<li><code class="python">raw_json['key'/index]</code> with the same
+<li><code class="pgsql">raw_json['key'/index]</code> with the same
 conventions as above</li>
 </ul></li>
 <li><p>These can be “chained” to “drill down” to the desired info</p>
 <pre ><code class="postgresql">raw_json -> 'siblings' -> 0 -> 'name'</code></pre></li>
 <li><p>These selections return more
-<code class="python">json</code>/<code class="python">jsonb</code>
+<code class="pgsql">json</code>/<code class="pgsql">jsonb</code>
 objects! Convert as needed</p></li>
-<li><p>Using <code class="python">->></code> will instead return a
-<code class="python">TEXT</code> type object</p></li>
+<li><p>Using <code class="pgsql">->></code> will instead return a
+<code class="pgsql">TEXT</code> type object</p></li>
 </ul>
 </section>
 <section id="json-existence" class="slide level2">
@@ -825,30 +963,33 @@ entries may have keys or values that others are missing</p></li>
 <li><p>It can thus be useful to check for the existence of certain keys
 or values</p></li>
 <li><p>You can check if an entire chunk is contained within a block of
-JSON using <code class="python">@></code>:</p>
-<pre ><code class="pgsql">raw_json @> sub_json</code></pre></li>
+JSON using <code class="pgsql">@></code>:</p>
+<pre ><code class="pgsql">raw_json @> |||sub-snippet of json|||</code></pre></li>
 <li><p>You can also check if a key or value shows up in the <strong>top
-level</strong> of the JSON block using
-<code class="python">?</code>:</p>
-<pre ><code class="pgsql">raw_json ? 'siblings'</code></pre></li>
+level</strong> of the JSON block using <code class="pgsql">?</code>:</p>
+<pre ><code class="pgsql">raw_json ? |||top-level key|||</code></pre></li>
 </ul>
 </section>
 <section id="json-indexes" class="slide level2">
 <h2>JSON Indexes</h2>
 <ul>
 <li><p>While you can create a default B-tree index for
-<code class="python">jsonb</code> columns, they generally wouldn’t be
+<code class="pgsql">jsonb</code> columns, they generally wouldn’t be
 very useful</p></li>
 <li><p>Instead, we can use a different type of index called a
 <em>generalized inverted index</em>, or GIN</p></li>
 <li><p>This type of index works much better when the data is comprised
 of nested composite items (we’ll see it again when we look at text
 searching)</p></li>
-<li><p>Just add <code class="python">USING GIN</code> to your normal
+<li><p>Just add <code class="pgsql">USING GIN</code> to your normal
 command to make an index</p>
 <pre ><code class="pgsql">CREATE INDEX |||my index||| ON |||mytable||| USING GIN (|||colname|||);</code></pre></li>
 </ul>
-<!---------------- SQL ------------------>
+</section></section>
+<section>
+<section id="a-question-of-timing" class="title-slide slide level1">
+<h1>A Question of Timing</h1>
+
 </section>
 <section id="date-time-reminders" class="slide level2">
 <h2>Date-Time Reminders</h2>
@@ -856,16 +997,15 @@ command to make an index</p>
 <li>We have about 4 current date or time related data types</li>
 <li>Date time types:
 <ul>
-<li><code class="python">DATE</code>: holds a single individual day</li>
-<li><code class="python">TIME</code>: holds a single individual
-time</li>
-<li><code class="python">TIMESTAMP</code> or variants with
-<code class="python">TIMESTAMPZ</code>: holds a combination of date and
+<li><code class="pgsql">DATE</code>: holds a single individual day</li>
+<li><code class="pgsql">TIME</code>: holds a single individual time</li>
+<li><code class="pgsql">TIMESTAMP</code> or variants with
+<code class="pgsql">TIMESTAMPTZ</code>: holds a combination of date and
 time, along with a potential time zone</li>
 </ul></li>
 <li>Interval types:
 <ul>
-<li><code class="python">INTERVAL</code>: holds a duration of time</li>
+<li><code class="pgsql">INTERVAL</code>: holds a duration of time</li>
 </ul></li>
 </ul>
 </section>
@@ -881,16 +1021,16 @@ you only need pieces
 <li>Two methods to extract pieces of any datetime or interval type:
 <ul>
 <li>SQL standard:
-<code class="python">extract( text FROM datetime_value )</code></li>
+<code class="pgsql">extract( part FROM |||datetime_value||| )</code></li>
 <li>Postgres specific:
-<code class="python">date_part( text, datetime_value )</code></li>
+<code class="pgsql">date_part( |||part|||, |||datetime_value||| )</code></li>
 </ul></li>
-<li>Both will return a <code class="python">DOUBLE PRECISION</code>
-value of whatever part was requested</li>
+<li>Both will return a <code class="pgsql">DOUBLE PRECISION</code> value
+of whatever part was requested</li>
 </ul>
 </section>
-<section id="parts-of-extract" class="slide level2">
-<h2>Parts of Extract</h2>
+<section id="parts-to-extract" class="slide level2">
+<h2>Parts To Extract</h2>
 <ul>
 <li>You have a wide variety of what you can extract</li>
 </ul>
@@ -1015,15 +1155,15 @@ aspects of the date or time
 type for further use.</li>
 <li>Postgres gives you a handful of functions to do so:
 <ul>
-<li><code class="python">make_date( year, month, day )</code>: Returns a
-new <code class="python">DATE</code> type value</li>
-<li><code class="python">make_time( hour, minute, seconds )</code>:
-Returns a new <code class="python">TIME</code> type value (with no
+<li><code class="pgsql">make_date( |||year|||, |||month|||, |||day|||)</code>:
+Returns a new <code class="pgsql">DATE</code> type value</li>
+<li><code class="pgsql">make_time( |||hour|||, |||minute|||, |||seconds||| )</code>:
+Returns a new <code class="pgsql">TIME</code> type value (with no
 timezone)</li>
-<li><code class="python">make_timestampz(year,month,day,hour,minute,second,time zone)</code>:
-Returns a new <code class="python">TIMESTAMPZ</code> type value</li>
-<li><code class="python">make_timestamp</code> and
-<code class="python">make_interval</code> also exist</li>
+<li><code class="pgsql">make_timestamptz(|||year|||,|||month|||,|||day|||,|||hour|||,|||minute|||,|||second|||,|||time zone|||)</code>:
+Returns a new <code class="pgsql">TIMESTAMPTZ</code> type value</li>
+<li><code class="pgsql">make_timestamp</code> and
+<code class="pgsql">make_interval</code> also exist</li>
 </ul></li>
 </ul>
 </div>
@@ -1031,20 +1171,20 @@ Returns a new <code class="python">TIMESTAMPZ</code> type value</li>
 <section id="aging-well" class="slide level2">
 <h2>Aging well</h2>
 <ul>
-<li>Subtracting two <code class="python">DATE</code> type values will
-give just an <code class="python">INT</code> (in days)</li>
-<li>Subtracting two <code class="python">TIMESTAMP</code> type values
-will give an <code class="python">INTERVAL</code>, with the biggest
+<li>Subtracting two <code class="pgsql">DATE</code> type values will
+give just an <code class="pgsql">INT</code> (in days)</li>
+<li>Subtracting two <code class="pgsql">TIMESTAMP</code> type values
+will give an <code class="pgsql">INTERVAL</code>, with the biggest
 “unit” in days</li>
-<li>Using Postgres’s <code class="python">age()</code> function can
+<li>Using Postgres’s <code class="pgsql">age()</code> function can
 smooth over both and give units larger than days
 <ul>
-<li><code class="python">age( datetime1, datetime2 )</code>: Subtracts
+<li><code class="pgsql">age( datetime1, datetime2 )</code>: Subtracts
 datetime2 from datetime1</li>
 </ul></li>
 <li>This can <strong>still</strong> give you awkward interval units at
 times though, so also consider using
-<code class="python">justify_interval( interval )</code>, which breaks
+<code class="pgsql">justify_interval( interval )</code>, which breaks
 intervals into divisions that don’t exceed a categories max
 <ul>
 <li>Hours would always be between 0 and 23 for instance, or months
@@ -1074,24 +1214,24 @@ time and date</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">current_date</code></td>
+<td><code class="pgsql">current_date</code></td>
 <td>Returns the current date</td>
 </tr>
 <tr class="even">
-<td><code class="python">current_time</code></td>
+<td><code class="pgsql">current_time</code></td>
 <td>Returns the current time with timezone</td>
 </tr>
 <tr class="odd">
-<td><code class="python">localtime</code></td>
+<td><code class="pgsql">localtime</code></td>
 <td>Returns the current time without timezone</td>
 </tr>
 <tr class="even">
-<td><code class="python">current_timestamp</code><span
+<td><code class="pgsql">current_timestamp</code><span
 class="orange">★</span></td>
 <td>Returns the current date and time with timezone</td>
 </tr>
 <tr class="odd">
-<td><code class="python">localtimestamp</code></td>
+<td><code class="pgsql">localtimestamp</code></td>
 <td>Returns the current date and time without timezone</td>
 </tr>
 </tbody>
@@ -1099,7 +1239,7 @@ class="orange">★</span></td>
 </div>
 <hr>
 <p><span class="orange">★</span> – Postgres also offers the shorter
-<code class="python">now()</code> <em>function</em> to do the same
+<code class="pgsql">now()</code> <em>function</em> to do the same
 thing</p>
 <!--## Current vs Clock-->
 <!--- Any query using `current_timestamp` has it computed once at the start of a query-->
@@ -1116,17 +1256,17 @@ zone with the time as you would measure it in your current system
 timezone</li>
 <li>What is your current system timezone?
 <ul>
-<li><code class="python">SHOW timezone;</code></li>
+<li><code class="pgsql">SHOW timezone;</code></li>
 </ul></li>
 <li>Getting general information about timezones:
 <ul>
 <li>Getting abbreviations:
 <ul>
-<li><code class="python">SELECT * FROM pg_timezone_abbrevs;</code></li>
+<li><code class="pgsql">SELECT * FROM pg_timezone_abbrevs;</code></li>
 </ul></li>
 <li>Getting full names:
 <ul>
-<li><code class="python">SELECT * FROM pg_timezone_names;</code></li>
+<li><code class="pgsql">SELECT * FROM pg_timezone_names;</code></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -1141,17 +1281,17 @@ time zone</li>
 </ul></li>
 <li>Several methods to make the switch:
 <ul>
-<li><p>Change your <code class="python">postgressql.conf</code> file,
+<li><p>Change your <code class="pgsql">postgressql.conf</code> file,
 which controls your Postgres server. Only recommended if you have
 permanently moved elsewhere and the database time zone has not updated
 appropriately.</p></li>
 <li><p>Set future queries in a single session to be from a new
 timezone:</p>
-<p><code class="python">SET timezone TO time_zone_name_or_abbrv;</code></p>
+<p><code class="pgsql">SET timezone TO time_zone_name_or_abbrv;</code></p>
 <ul>
 <li>This will also adjust what values your
-<code class="python">localtime</code> or
-<code class="python">localtimestamp</code> report!</li>
+<code class="pgsql">localtime</code> or
+<code class="pgsql">localtimestamp</code> report!</li>
 </ul></li>
 <li><p>Transform a single query to be reported in a different time
 zone:</p>
@@ -1160,7 +1300,7 @@ FROM |||table name|||;</code></pre></li>
 </ul></li>
 </ul>
 </section>
-<section id="activity" class="slide level2">
+<section id="activity-1" class="slide level2">
 <h2>Activity</h2>
 <ul>
 <li>Using the taxi rides dataset, see if you can:
@@ -1172,7 +1312,7 @@ FROM |||table name|||;</code></pre></li>
 day</li>
 </ul></li>
 </ul>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -1191,6 +1331,7 @@ day</li>
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
+  <script src="../html_srcs/revealjs/../js/mybash.js"></script>
 
   <script>
 
@@ -1266,7 +1407,7 @@ day</li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -1309,9 +1450,20 @@ day</li>
 			disableCheckFile: false, //default false
 		 },
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
-              console.log(mypgsqldef);
-              return mypgsqldef(hljs); } )
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              hljs.registerLanguage("bash", function(hljs) {
+                console.log(mybashdef);
+                return mybashdef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
           },
 
         // reveal.js plugins
@@ -1329,6 +1481,7 @@ day</li>
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
+          theme: "whiteboard",
           boardmarkers : [
                   { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                   { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
