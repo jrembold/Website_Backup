@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="1060.8082pt"
-   height="682.66284pt"
-   viewBox="0 0 1060.8082 682.66284"
+   width="591.77478pt"
+   height="535.94611pt"
+   viewBox="0 0 591.77476 535.9461"
    version="1.1"
    id="svg3429"
    sodipodi:docname="conv4_annotated.svg"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -27,12 +27,12 @@
      inkscape:document-units="pt"
      showgrid="false"
      inkscape:zoom="0.5462963"
-     inkscape:cx="632.44068"
-     inkscape:cy="574.77966"
-     inkscape:window-width="1680"
-     inkscape:window-height="1020"
-     inkscape:window-x="0"
-     inkscape:window-y="30"
+     inkscape:cx="204.10169"
+     inkscape:cy="483.25423"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg3429" />
   <metadata
@@ -210,16 +210,8 @@
     </marker>
   </defs>
   <g
-     id="patch_1"
-     transform="translate(-144,-77.76)">
-    <path
-       d="M 0,648 H 1152 V 0 H 0 Z"
-       style="fill:none"
-       id="path8" />
-  </g>
-  <g
      id="axes_1"
-     transform="matrix(1.1881813,0,0,1.1881813,-171.09811,-92.392978)">
+     transform="matrix(0.6628302,0,0,0.93281939,-95.447549,-72.536036)">
     <g
        id="patch_2">
       <path
@@ -382,7 +374,7 @@
   </g>
   <g
      id="axes_2"
-     transform="matrix(1.1881813,0,0,1.1881813,-171.09811,-92.392978)">
+     transform="matrix(0.6628302,0,0,0.93281939,-95.447549,-72.536036)">
     <g
        id="patch_7">
       <path
@@ -578,7 +570,7 @@
   </g>
   <g
      id="axes_3"
-     transform="matrix(1.1881813,0,0,1.1881813,-171.09811,-92.392978)">
+     transform="matrix(0.6628302,0,0,0.93281939,-95.447549,-72.536036)">
     <g
        id="patch_12">
       <path
@@ -741,7 +733,7 @@
   </g>
   <g
      id="axes_4"
-     transform="matrix(1.1881813,0,0,1.1881813,-171.09811,-92.392978)">
+     transform="matrix(0.6628302,0,0,0.93281939,-95.447549,-72.536036)">
     <g
        id="patch_17">
       <path
@@ -926,7 +918,7 @@
   </g>
   <g
      id="axes_5"
-     transform="matrix(1.1881813,0,0,1.1881813,-171.09811,-2.5850669)">
+     transform="matrix(0.6628302,0,0,0.93281939,-95.447549,-2.0294885)">
     <g
        id="patch_22">
       <path
@@ -10105,7 +10097,7 @@
   </g>
   <g
      id="axes_6"
-     transform="matrix(1.1881813,0,0,1.1881813,-171.09811,-2.5850669)">
+     transform="matrix(0.6628302,0,0,0.93281939,-95.447549,-2.0294885)">
     <g
        id="patch_27">
       <path
@@ -10336,7 +10328,7 @@
   </defs>
   <g
      id="g2687"
-     transform="matrix(1.1850279,0,0,1.1850279,-169.58807,-74.236246)"
+     transform="matrix(0.66107107,0,0,0.93034372,-94.605164,-58.281518)"
      style="stroke-width:0.843862;stroke-linecap:butt;stroke-linejoin:round">
     <path
        style="fill:#206b00;stroke:#206b00;stroke-width:3.99653;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262;marker-start:url(#TriangleStart367075428);marker-end:url(#marker2302882742558)"
@@ -10356,7 +10348,7 @@
   </g>
   <g
      id="g2711"
-     transform="matrix(1.1850279,0,0,1.1850279,-169.58807,131.40758)"
+     transform="matrix(0.66107107,0,0,0.93034372,-94.605164,103.16569)"
      style="stroke-width:0.843862;stroke-linecap:butt;stroke-linejoin:round">
     <path
        style="fill:#206b00;stroke:#206b00;stroke-width:3.99653;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262;marker-start:url(#TriangleStart669352256);marker-end:url(#marker23026334149)"
@@ -10376,7 +10368,7 @@
   </g>
   <g
      id="g2735"
-     transform="matrix(1.1850279,0,0,1.1850279,-169.58807,414.47806)"
+     transform="matrix(0.66107107,0,0,0.93034372,-94.605164,325.39914)"
      style="stroke-width:0.843862;stroke-linecap:butt;stroke-linejoin:round">
     <path
        style="fill:#206b00;stroke:#206b00;stroke-width:3.99653;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262;marker-start:url(#TriangleStart94211528);marker-end:url(#marker2302651484264)"
@@ -10395,33 +10387,35 @@
          y="143.60776">FT</tspan></text>
   </g>
   <path
-     style="fill:none;stroke:#7a0000;stroke-width:4.736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262;marker-end:url(#marker313386930406)"
-     d="m 118.63157,404.81679 v 60.20995"
+     style="fill:none;stroke:#7a0000;stroke-width:3.13422;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262;marker-end:url(#marker313386930406)"
+     d="m 66.178947,317.81425 v 47.26973"
      id="path3113" />
   <text
      xml:space="preserve"
-     style="font-weight:bold;font-size:23.4009px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Bold';fill:#7a0000;stroke:none;stroke-width:4.736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
-     x="131.44702"
-     y="445.08893"
-     id="text3313"><tspan
+     style="font-weight:bold;font-size:18.3507px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Bold';fill:#7a0000;stroke:none;stroke-width:3.71391;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
+     x="74.07328"
+     y="350.10941"
+     id="text3313"
+     transform="scale(0.99885981,1.0011415)"><tspan
        sodipodi:role="line"
        id="tspan3311"
-       style="stroke:none;stroke-width:4.736"
-       x="131.44702"
-       y="445.08893">Pointwise product</tspan></text>
+       style="stroke:none;stroke-width:3.71391"
+       x="74.07328"
+       y="350.10941">Pointwise product</tspan></text>
   <path
-     style="fill:#007367;stroke:#007367;stroke-width:4.736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262;marker-end:url(#marker313377152)"
-     d="m 753.69494,408.40677 v 60.20996"
+     style="fill:#007367;stroke:#007367;stroke-width:3.13422;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262;marker-end:url(#marker313377152)"
+     d="m 420.4508,320.63268 v 47.26974"
      id="path4099" />
   <text
      xml:space="preserve"
-     style="font-weight:bold;font-size:23.4009px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Bold';fill:#007367;stroke:none;stroke-width:4.736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
-     x="766.51038"
-     y="448.67896"
-     id="text4103"><tspan
+     style="font-weight:bold;font-size:18.3507px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Bold';fill:#007367;stroke:none;stroke-width:3.71391;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.998262"
+     x="437.19965"
+     y="350.77142"
+     id="text4103"
+     transform="scale(0.99885981,1.0011415)"><tspan
        sodipodi:role="line"
        id="tspan4101"
-       style="fill:#007367;stroke:none;stroke-width:4.736"
-       x="766.51038"
-       y="448.67896">Convolution</tspan></text>
+       style="fill:#007367;stroke:none;stroke-width:3.71391"
+       x="437.19965"
+       y="350.77142">Convolution</tspan></text>
 </svg>
