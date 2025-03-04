@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-03-04">
+  <title>Transit Techniques</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Transit Techniques</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">March 4, 2025</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Welcome back!</li>
+<li>I was slow getting the weekend checkins available, and then somehow
+put in the wrong dates at first. So I’ve given you until the end of
+<em>today</em> to get a checkin submitted if you haven’t yet</li>
+<li>HW3 deadline pushed until next Tuesday night, to account for slow
+feedback</li>
+<li>Quiz 1 will be handed back and discussed on Thursday. I still need
+to record scores.</li>
+</ul>
+<!--
+## Quiz Talk
+- Be aware that even if you split HW problems across partners, you are still responsible for knowing and understanding the content from all questions
+- The study guide has on it the equations that you need to know
+- Raw class average was a _71%_, the max a 100%
+- Only about 24% of people go Question 2 correct, and Question 4 had some ambiguity, plus it was the first quiz
+  - As such, I've added 1.5 points to your raw score in the gradebook
+-->
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap</h2>
+<ul>
+<li>The Lomb-Scargle Periodogram is an approach that works well for
+non-uniform data
+<ul>
+<li>Requires you to specify the range of angular frequencies /
+frequencies / periods that you want to computer the power over</li>
+<li>Aliasing will generally be a factor you need to content with</li>
+</ul></li>
+<li>Planets and their parent star technically orbit their shared center
+of mass</li>
+<li>Causes the star to “wobble”, which can be measured!
+<ul>
+<li>Astrometric method looks for the shift in the star relative to
+background stars
+<!--- Doppler method looks for the doppler shift in light as the star move towards then away from us--></li>
+</ul></li>
+</ul>
+</section>
+<section id="discussing-today" class="slide level2">
+<h2>Discussing Today</h2>
+<ul>
+<li>Doppler method for wobbles</li>
+<li>Planet properties from wobbling methods</li>
+<li>The Transit Method</li>
+<li>If time: extra numerical techniques</li>
+</ul>
+</section>
+<section>
+<section id="understanding-wobbles" class="title-slide slide level1">
+<h1>Understanding Wobbles</h1>
+
+</section>
+<section id="wiggle-wiggle" class="slide level2">
+<h2>Wiggle Wiggle</h2>
+<ul>
+<li>Often, we are not viewing the plane of an exoplanetary system
+directly from the top</li>
+<li>How we see this “wiggle” from Earth depends on how the planets orbit
+is oriented relative to us
+<ul>
+<li>A perfectly “top down” view would have us seeing the planet making
+little circles</li>
+<li>A perfectly “side” view would have us seeing the planet move towards
+us and away from us on the left and right sides</li>
+</ul></li>
+<li>In general, it is easier for us to detect and measure the forwards
+and backwards motion, but instruments like Gaia <em>can</em> detect the
+tinier circular motion for some systems</li>
+</ul>
+</section>
+<section id="full-example" class="slide level2">
+<h2>Full Example</h2>
+<iframe width="1920px" height="900px" src="https://www.glowscript.org/#/user/jjrembold/folder/Public/program/ExoplanetHunting">
+</iframe>
+</section>
+<section id="doppler-wiggle" class="slide level2">
+<h2>Doppler Wiggle</h2>
+<ul>
+<li>The idea is to monitor the dominant frequency of light emitted over
+a period of time</li>
+<li>Should result in a sinusoidal curve as the star wiggles toward and
+then away from us</li>
+<li>The amount of wiggle will depend on <strong>both</strong> the mass
+of the orbiting planet <strong>and</strong> our perspective</li>
+</ul>
+<p><img data-src="../images/pegasi_51.png" style="width:70.0%" /></p>
+</section></section>
+<section>
+<section id="determining-planetary-mass"
+class="title-slide slide level1">
+<h1>Determining Planetary Mass</h1>
+
+</section>
+<section id="beginning-to-extract-planetary-properties"
+class="slide level2">
+<h2>Beginning to extract planetary properties</h2>
+<ul>
+<li>In general, to understand any exoplanet, you must first understand
+its parent star</li>
+<li>This is often <strong>considerably</strong> easier, since the star
+is big and bright</li>
+<li>Several parameters in particular are useful to know:
+<ul>
+<li>The mass of the star</li>
+<li>The size of the star</li>
+</ul></li>
+<li>Both generally require knowing the distance to the star, but
+otherwise can be worked out from luminosities or location on the HR
+diagram</li>
+</ul>
+</section>
+<section id="planetary-period-and-distance" class="slide level2">
+<h2>Planetary Period and Distance</h2>
+<ul>
+<li>If you have the period of the star, then you have the period of the
+planet
+<ul>
+<li>Both move in lockstep about the center of mass</li>
+<li>If you have multiple planets, you can separate the different
+components from the stars motion</li>
+</ul></li>
+<li>Extracting the distance to the planet / semimajor axis requires
+application of Kepler’s 3rd law along with the center of mass location:
+<span class="math display">\[\text{Kepler&#39;s 3rd: }
+\frac{GM_{tot}}{4\pi^2} = \frac{a^3}{p^2} \qquad\qquad\text{Center of
+Mass: } M_1a_1 = M_2 a_2 \]</span></li>
+</ul>
+</section>
+<section id="planetary-mass-part-i" class="slide level2">
+<h2>Planetary Mass (Part I)</h2>
+<ul>
+<li>Combining <span class="math inline">\(a_1\)</span> and <span
+class="math inline">\(a_2\)</span>: <span class="math display">\[ a =
+a_1 + a_2 = a_1\left(1 + \frac{a_2}{a_1}\right) = a_1\left(1 +
+\frac{M_1}{M_2}\right) = \frac{a_1}{M_2}\left(M_2 + M_1\right) =
+\frac{a_1 M_{tot}}{M_2} \]</span></li>
+<li>Plugging into Kepler: <span class="math display">\[
+\frac{GM_{tot}}{4\pi^2} = \frac{1}{p^2} \left(\frac{a_1
+M_{tot}}{M_2}\right)^3 \]</span></li>
+<li>If you know <span class="math inline">\(a_1\)</span> by direct
+observation, then you are done, and can solve for <span
+class="math inline">\(M_2\)</span>!</li>
+<li>Otherwise you need to write <span class="math inline">\(a_1\)</span>
+in terms of a velocity
+<ul>
+<li>If you assume mostly circular orbits: <span
+class="math display">\[v_1 = \frac{2\pi a_1}{p} \quad\Rightarrow\quad
+a_1 = \frac{v_1 p}{2\pi}\]</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="planetary-mass-part-ii" class="slide level2">
+<h2>Planetary Mass (Part II)</h2>
+<ul>
+<li>Plugging that back into Kepler: <span class="math display">\[
+\frac{GM_{tot}}{4\pi^2} = \frac{1}{p^2} \left(\frac{a_1^3
+M^3_{tot}}{M^3_2}\right) \]</span></li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[ \frac{GM_{tot}}{4\pi^2} = \frac{1}{p^2}
+\frac{M^3_{tot}}{M^3_2} \left(\frac{v_1 p}{2\pi}\right)^3 \]</span></p>
+</div>
+<div class="fragment">
+<p><span class="math display">\[ \frac{GM_{tot}}{4\pi^2} = \frac{1}{p^2}
+\frac{M^3_{tot}}{M^3_2} \frac{v_1^3 p^3}{8\pi^3} \]</span></p>
+</div>
+<div class="fragment">
+<p><span class="math display">\[ G = \frac{M^2_{tot}}{M^3_2} \frac{v_1^3
+p}{2\pi} \]</span></p>
+</div>
+<div class="fragment">
+<p><span class="math display">\[ M_2 =
+\left(\frac{M^2_{tot}}{G}\frac{v_1^3 p}{2\pi}\right)^{1/3} \]</span></p>
+</div>
+</section>
+<section id="some-caveats" class="slide level2">
+<h2>Some Caveats</h2>
+<ul>
+<li>The true velocity is only what is measured at the peak of the
+Doppler curve if you are viewing the orbit <strong>perfectly</strong>
+edge-on</li>
+<li>In general: <span class="math display">\[ v_{obs} = v_1\sin(i)
+\]</span> where <span class="math inline">\(i\)</span> is the
+<em>orbital inclination</em> (<span
+class="math inline">\(0^\circ\)</span> if viewing face-on, or <span
+class="math inline">\(90^\circ\)</span> if viewing edge-on)
+<ul>
+<li>If the inclination angle in unknown, then technically you are
+finding a minimum mass</li>
+</ul></li>
+<li>If the eccentricity is known, then: <span class="math display">\[
+M_2 = \left(\frac{M^2_{tot}}{G}\frac{v_1^3 p}{2\pi}(1-
+\epsilon^2)^{3/2}\right)^{1/3} \]</span></li>
+</ul>
+</section>
+<section id="practice" class="slide level2">
+<h2>Practice</h2>
+<ul>
+<li>The file <a href="../demos/planet_mass_activity.csv">here</a>
+contains velocity information determined from the redshift/blueshift of
+a star with a single planet orbiting it.</li>
+<li>You can assume the planet is traveling in a mostly circular
+orbit.</li>
+<li>You know that the parent star has a mass of <span
+class="math inline">\(2\times10^{30}\)</span> kg.</li>
+<li>Determine:
+<ul>
+<li>The period of the planet</li>
+<li>The minimum mass of the planet</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="determining-size" class="title-slide slide level1">
+<h1>Determining Size</h1>
+
+</section>
+<section id="full-example-1" class="slide level2">
+<h2>Full Example</h2>
+<iframe width="1920px" height="900px" src="https://www.glowscript.org/#/user/jjrembold/folder/Public/program/ExoplanetHunting">
+</iframe>
+</section>
+<section id="transits" class="slide level2">
+<h2>Transits</h2>
+<ul>
+<li>If a planet system is oriented towards us <strong>just
+right</strong>, then on occasion we should see a planet pass in front of
+the star
+<ul>
+<li>This is a much narrower restriction than what we had with Doppler,
+which was just that we needed the planet system to be tilted toward or
+away from us at all</li>
+</ul></li>
+<li>The effect is similar to a solar eclipse on Earth
+<ul>
+<li>Light from the Sun/star is blocked for a certain amount of time</li>
+</ul></li>
+<li>Some important differences owing to perspective though:
+<ul>
+<li>Our Moon is of a size and distance that it can totally block our
+Sun. That is not the case for exoplanets</li>
+<li>Our Moon orbits Earth, not the Sun as exoplanets do</li>
+</ul></li>
+<li>We <strong>can</strong> observe these same effects for Mercury and
+Venus though</li>
+</ul>
+</section>
+<section id="venus-transit" class="slide level2"
+data-background-iframe="https://www.youtube.com/embed/ku7YjMol1k4">
+<h2
+data-background-iframe="https://www.youtube.com/embed/ku7YjMol1k4">Venus
+Transit</h2>
+</section>
+<section id="transit-info" class="slide level2">
+<h2>Transit Info</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>The most important information from a transit involves the depth of
+the brightness reduction
+<ul>
+<li>This directly correlates to the ratio of the cross-sectional area of
+the star and the planet</li>
+</ul></li>
+<li>Duration of transit can give other useful information, but tougher
+to extract
+<ul>
+<li>Planet speed</li>
+<li>Inclination angle</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/3edc4ec0cb3cb1672f8e03362e3b252cb891c45d.svg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="planetary-radii" class="slide level2">
+<h2>Planetary Radii</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>As long as your transit shows a flat portion at the bottom of the
+dip, then you know that the planet fully covered the star</li>
+<li>Then you can work out the planet radius</li>
+</ul>
+</div>
+<div class="col">
+<p><span class="math display">\[\begin{aligned}
+\text{% of light } &amp;= \frac{\text{Area of planet}}{\text{Area of
+star}} \\
+&amp;= \frac{\pi R^2_p}{\pi R^2_s} \\
+&amp;= \left(\frac{R_p}{R_s}\right)^2
+\end{aligned}\]</span></p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="dealing-with-noise" class="title-slide slide level1">
+<h1>Dealing with Noise</h1>
+
+</section>
+<section id="averaging-out-noise" class="slide level2">
+<h2>Averaging out Noise</h2>
+<ul>
+<li>There will often times be noise that detracts from or obscurs a
+signal</li>
+<li>In astronomy, this commonly comes from thermal sensor noise or
+atmospheric effects
+<ul>
+<li>Can show up in any signal though where measurement-to-measurement
+variations obscur a longer pattern in the signal</li>
+</ul></li>
+<li>One method to try to eliminate this noise is with Fourier Transforms
+<ul>
+<li>Set all signals in the frequency domain to 0 except your main signal
+and then inverse it back to the time domain</li>
+<li>We can’t do that (easily) for non-uniform measurements though</li>
+</ul></li>
+<li>What other options might we have?</li>
+</ul>
+</section>
+<section id="rolling-averages" class="slide level2">
+<h2>Rolling Averages</h2>
+<ul>
+<li>A <em>rolling average</em> computes an average for
+<strong>each</strong> point in a data series, usually taking into
+account a certain number of observations on either side of the point in
+question</li>
+<li>This is the same result as convolving a square wave with a certain
+width with the noisy signal</li>
+<li>The size of the square wave or “window” directly affects the amount
+of smoothing that will be seen: bigger windows smooth things more</li>
+<li>Algorithm can vary, but the basic algorithm is just looking a
+position of data within the series, so it does <strong>not</strong>
+account for data spacing.
+<ul>
+<li>Data ordering matters!</li>
+<li>This may still be fine for some non-uniformly sampled data, provided
+the window in only marginally larger than the average spacing</li>
+</ul></li>
+</ul>
+</section>
+<section id="in-python-direct-convolution" class="slide level2">
+<h2>In Python: Direct Convolution</h2>
+<ul>
+<li><p>Doing the convolution directly means constructing the square wave
+in Numpy and then using Numpy’s convolution function</p>
+<pre ><code class="python">window = np.ones(size) / size # necessary to scale!
+out = np.convolve(signal, window)</code></pre>
+<ul>
+<li>The output by default has length <span
+class="math inline">\(L_{signal} + L_{window} -1\)</span>, so if you
+want to plot it against your original times, you need to mask off the
+last parts</li>
+</ul></li>
+<li><p>You <strong>really</strong> need to ensure your signal points are
+ordered by time for this to work! The easiest way to achieve this is
+with <code class="python">np.argsort</code>:</p>
+<pre ><code class="python">sorted_idxs = np.argsort(ts)
+sorted_times = ts[sorted_idxs]
+sorted_signal = signal[sorted_idxs]</code></pre></li>
+</ul>
+</section>
+<section id="in-python-with-pandas" class="slide level2">
+<h2>In Python: With Pandas</h2>
+<ul>
+<li><p>Assuming you already have your data in a dataframe, you
+<strong>still need to ensure it is ordered!</strong></p>
+<pre ><code class="python">df = df.sort_values('ts')</code></pre>
+<p>where <code class="python">ts</code> is whatever column you want to
+sort by</p>
+<ul>
+<li>This just reorders the index, so be aware if you try to extract just
+a column by itself</li>
+</ul></li>
+<li><p>Computing the rolling average is then straightforward:</p>
+<pre ><code class="python">df['rolling'] = df.sig.rolling(wsize).mean()</code></pre>
+<p>where <code class="python">sig</code> is whatever column you are
+computing the average over, and <code class="python">wsize</code> is the
+size of the window you want</p></li>
+</ul>
+</section>
+<section id="in-r-with-zoo" class="slide level2">
+<h2>In R: With Zoo</h2>
+<ul>
+<li><p>You still want to ensure your data is ordered! Can use
+<code class="python">arrange</code> if using Tidyverse</p>
+<pre ><code class="r">df <- arrange(df, colname)</code></pre></li>
+<li><p>Easiest to use <code class="python">rollmean</code> from the
+<code class="python">zoo</code> library for the rolling averages</p>
+<pre ><code class="r">library(zoo)
+df <- df %>% 
+  mutate(
+    rolling = rollmean(colname, k=wsize, fill=NA)
+    )</code></pre></li>
+</ul>
+</section>
+<section id="rebinning" class="slide level2">
+<h2>Rebinning</h2>
+<ul>
+<li>Sometimes, you just need to take non-uniformly sampled data and cast
+it into something more consistent</li>
+<li>If the data is noisy, this can also help cut down on the noise</li>
+<li>The idea is to compute new, evenly spaced bins, and then compute the
+mean (or median) of all the points that fall within that bin
+<ul>
+<li>Some bins might not contain any points, and that is ok! They can
+just get assigned null values.</li>
+</ul></li>
+<li>You could then proceed to do anything you would do with uniformly
+sampled data: Fourier transforms, further rolling averages, etc</li>
+</ul>
+</section>
+<section id="rebinning-in-pandas" class="slide level2">
+<h2>Rebinning in Pandas</h2>
+<ul>
+<li>You can either specify the bins with a list, or have Pandas compute
+the bins for you given a desired number of bins
+<ul>
+<li>I find the former better when I have specific data that I’m trying
+to rebin</li>
+</ul></li>
+<li>Key function in Pandas is <code class="python">pd.cut</code>, which
+takes several arguments:
+<ul>
+<li>The array that you are trying to bin by</li>
+<li>The bins or number of bins that you desire</li>
+<li>How you want to handle the bin labels</li>
+</ul>
+<pre ><code class="python">bin_labels = pd.cut(df.ts, bins=np.arange(0,10,0.1), 
+                    labels=False)</code></pre>
+<ul>
+<li>This gives labels as <strong>indexes</strong>. I prefer to know the
+start of the bin, so I multiply by the bin step size</li>
+</ul></li>
+</ul>
+</section>
+<section id="rebinning-in-r" class="slide level2">
+<h2>Rebinning in R</h2>
+<ul>
+<li><p>Similar to Pandas, you can use the
+<code class="python">cut</code> or <code class="python">ntile</code>
+functions to compute a binning:</p>
+<pre ><code class="r">df %>% mutate(
+  bins = cut(colname, breaks=seq(0,10,0.1)
+  )</code></pre>
+<p>gives your bins as intervals, whereas</p>
+<pre ><code class="r">df %>% mutate(bins = ntile(colname, n=100))</code></pre>
+<p>gives the bins as integers</p></li>
+</ul>
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          theme: "whiteboard",
+          boardmarkers : [
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
+    </body>
+</html>
