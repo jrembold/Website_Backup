@@ -36,13 +36,14 @@
 <section id="title-slide">
   <h1 class="title">Scraping a Railway on Schedule</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">Feb 29/Mar 5, 2024</p>
+  <p class="date">Mar 5, 2025</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
+<div class="smaller">
 <ul>
-<li>Midterm video deadline!</li>
+<li>Midterm video deadline tonight!</li>
 <li>Upcoming Project Starts
 <ul>
 <li>We are coming up on a point where it would be useful to strategize
@@ -58,9 +59,16 @@ relationships that you could later analyze</li>
 <li>Most obvious join options would be date, but could be more
 interesting relationships depending on what you are both gathering</li>
 </ul></li>
-<li>Homework 6 coming out</li>
+<li>No homework this coming week! Just getting started on the
+project!</li>
 </ul>
+</div>
 <!-------- Scraping ----------------->
+</section>
+<section>
+<section id="gathering-data" class="title-slide slide level1">
+<h1>Gathering Data</h1>
+
 </section>
 <section id="webscraping" class="slide level2">
 <h2>Webscraping</h2>
@@ -102,17 +110,20 @@ frequency</li>
 <h2>Controlling the Environment</h2>
 <ul>
 <li><p>You control the behavior of the Web2DB container through
-environment variables</p></li>
-<li><p>Keeps you have needing to build your own images on top for
-customization</p></li>
+environment variables</p>
+<ul>
+<li>Keeps you have needing to build your own images on top for
+customization</li>
+</ul></li>
 <li><p>Usually a good idea to store secrets such as database passwords
 in environment variables anyway</p></li>
-<li><p>Locally, the easiest way to handle the variables is to create a
-<code class="python">vars.env</code> file and provide it to the docker
-container</p>
+<li><p><strong>Locally</strong>, the easiest way to handle the variables
+is to create a <code class="pgsql">vars.env</code> file and provide it
+to the docker container</p>
 <pre ><code class="bash">docker run --rm --env-file vars.env web2db</code></pre></li>
 <li><p>You <em>can</em> specify them individually, one after each
-<code class="python">-E</code> flag</p></li>
+<code class="pgsql">-e</code> flag, if you really wanted</p>
+<pre ><code class="bash">docker run --rm -e SITE_URL=www.google.com web2db</code></pre></li>
 </ul>
 </section>
 <section id="web2db-environment-variables" class="slide level2">
@@ -120,14 +131,15 @@ container</p>
 <ul>
 <li><p>web2db recognizes (or requires) 6 environment variables:</p>
 <ul>
-<li><code class="python">SITE_URL</code> (required)</li>
-<li><code class="python">TABLE_NUM</code> (situational/optional)</li>
-<li><code class="python">FILE_NAME</code> (optional)</li>
-<li><code class="python">DATABASE_URL</code> (optional)</li>
-<li><code class="python">TABLE_NAME</code> (situational)</li>
-<li><code class="python">SCHED</code> (optional)</li>
+<li><code class="pgsql">SITE_URL</code> (required)</li>
+<li><code class="pgsql">TABLE_NUM</code> (situational/optional)</li>
+<li><code class="pgsql">FILE_NAME</code> (optional)</li>
+<li><code class="pgsql">DATABASE_URL</code> (optional)</li>
+<li><code class="text">TABLE_NAME</code> (situational)</li>
+<li><code class="text">DEBUG</code> (optional)</li>
+<li><code class="pgsql">HEADER_KEYS</code> (optional)</li>
 </ul></li>
-<li><p>When providing in <code class="python">vars.env</code>, use no
+<li><p>When providing in <code class="pgsql">vars.env</code>, use no
 spaces:</p>
 <pre ><code class="bash">SITE_URL=https://willamette.edu/~jjrembold  </code></pre></li>
 </ul>
@@ -135,11 +147,12 @@ spaces:</p>
 <section id="site_url-for-tables" class="slide level2">
 <h2>SITE_URL for Tables</h2>
 <ul>
-<li>If you are trying to scrape a static table off a site, provide:
+<li>If you are trying to scrape a <em>static</em> table off a site,
+provide:
 <ul>
-<li>The URL of the site as <code class="python">SITE_URL</code></li>
+<li>The URL of the site as <code class="pgsql">SITE_URL</code></li>
 <li>Indicate the number of which table you want as
-<code class="python">TABLE_NUM</code>
+<code class="pgsql">TABLE_NUM</code>
 <ul>
 <li>Defaults to 0 for the first table on the page</li>
 </ul></li>
@@ -162,7 +175,7 @@ directly, most often in a JSON format
 <li>Many APIs also let you add extra information to the URL to better
 specify <em>exactly</em> what information you want back</li>
 <li>These generally take the form of parameter strings, and come after a
-<code class="python">?</code> in the URL</li>
+<code class="pgsql">?</code> in the URL</li>
 </ul></li>
 <li>Some APIs will require you to register for a key, which is often
 free. This is to safeguard against people slamming their servers with
@@ -190,27 +203,42 @@ each endpoint to get the data you want</li>
 <ul>
 <li>web2db is currently configured to handle REST GET APIs
 <ul>
-<li>I may be able to add <code class="python">POST</code> functionality
+<li>I may be able to add <code class="pgsql">POST</code> functionality
 if needed</li>
 </ul></li>
 <li>You just need to provide the desired endpoint to
-<code class="python">SITE_URL</code></li>
+<code class="pgsql">SITE_URL</code></li>
 <li>If you have parameters to include at the end (following a
-<code class="python">?</code>), <strong>include them in your
+<code class="pgsql">?</code>), <strong>include them in your
 URL</strong></li>
 <li>web2db assumes that the response will be in JSON, which is probably
 the case in over 95% of APIs, but it will break if given something in
 another format</li>
 </ul>
 </section>
+<section id="header-keys" class="slide level2">
+<h2>HEADER KEYS</h2>
+<ul>
+<li><p>Some APIs may demand that you provide certain information in what
+is known as a <em>header key</em></p>
+<ul>
+<li>This is an additional source of information that the API server
+receives along with the URL</li>
+</ul></li>
+<li><p>Sometimes used to indicate authentication keys or type of
+response requested</p></li>
+<li><p>Provided as a string version of a key-value dictionary:</p>
+<pre ><code class="json">"{'key_1':13, 'key_2': 'Jed'}"</code></pre></li>
+</ul>
+</section>
 <section id="writing-to-file" class="slide level2">
 <h2>Writing to File</h2>
 <ul>
-<li>If you include the <code class="python">FILE_NAME</code> environment
+<li>If you include the <code class="pgsql">FILE_NAME</code> environment
 variable, the data will be written to a newline JSON file with this name
-in the container’s <code class="python">/app/output</code> folder</li>
+in the container’s <code class="pgsql">/app/output</code> folder</li>
 <li>This format is perfect for copying directly into Postgres tables
-using <code class="python">COPY</code>
+using <code class="pgsql">COPY</code>
 <ul>
 <li>Instead of having a list of entries, it has 1 entry on each new
 line</li>
@@ -223,54 +251,28 @@ you’ll need to set up a volume bind!</li>
 <h2>Writing to Database</h2>
 <ul>
 <li>web2db can write the information directly to your database, provided
-you fill out the <code class="python">DATABASE_URL</code> and
-<code class="python">TABLE_NAME</code> variables</li>
-<li><code class="python">DATABASE_URL</code> contains
+you fill out the <code class="pgsql">DATABASE_URL</code> and
+<code class="text">TABLE_NAME</code> variables</li>
+<li><code class="pgsql">DATABASE_URL</code> contains
 <strong>all</strong> the info to connect to your database
 <ul>
 <li>Form:
-<code class="python">username:password@hostname:port/database</code></li>
+<code class="text">username:password@hostname:port/database</code></li>
 </ul></li>
-<li><code class="python">TABLE_NAME</code> should be a table that
+<li><code class="text">TABLE_NAME</code> should be a table that
 <em>already</em> exists in the database and has a column named
-<code class="python">raw_json</code>
+<code class="pgsql">raw_json</code>
 <ul>
 <li>It can have other columns, but web2db will only fill out the
-<code class="python">raw_json</code> column</li>
+<code class="pgsql">raw_json</code> column</li>
 <li>I like adding a timestamp column with a
-<code class="python">DEFAULT now()</code> to automatically add the time
+<code class="pgsql">DEFAULT now()</code> to automatically add the time
 each entry is added to the database</li>
 </ul></li>
-<li>If connecting to a local database, may need to include
-<code class="python">--network=host</code> option when running the
+<li>If connecting to a local database, you <strong>may</strong> need to
+include <code class="text">--network=host</code> option when running the
 docker container</li>
 </ul>
-</section>
-<section id="scheduling-with-cron" class="slide level2">
-<h2>Scheduling with CRON</h2>
-<ul>
-<li>If no <code class="python">SCHED</code> variable is provided, the
-Docker container runs the program once and then exits</li>
-<li>If a <code class="python">SCHED</code> variable is provided, then
-the Docker container will schedule a recurring job using
-<code class="python">cron</code>
-<ul>
-<li>This will effectively run the program at some given interval</li>
-<li>The Docker container is kept open in this case, indefinitely</li>
-</ul></li>
-<li><code class="python">SCHED</code> needs to be a
-<code class="python">cron</code> expression that describes the desired
-schedule</li>
-</ul>
-</section>
-<section id="cron-scheduling" class="slide level2">
-<h2>CRON Scheduling</h2>
-<figure>
-<img data-src="../images/cron_expression_syntax.png"
-style="width:100.0%" alt="From crontogo.com" />
-<figcaption aria-hidden="true">From <a
-href="https://crontogo.com/blog/the-complete-guide-to-cron/">crontogo.com</a></figcaption>
-</figure>
 </section>
 <section id="practice" class="slide level2">
 <h2>Practice!</h2>
@@ -278,11 +280,10 @@ href="https://crontogo.com/blog/the-complete-guide-to-cron/">crontogo.com</a></f
 <li>See if you can do the following:
 <ul>
 <li>Create a table in your local database with at least one column with
-the <code class="python">jsonb</code> data type (to be discussed more
-later!)</li>
+the <code class="pgsql">jsonb</code> data type</li>
 <li>Use the Docker container to dump the table containing our class
 schedule <a
-href="https://willamette.edu/~jjrembold/classes/data503/schedule/">here</a>
+href="https://jrembold.github.io/Website_Backup/classes/data503/hw/">here</a>
 into your Postgres table</li>
 <li>Use the Docker container to dump the results from the API endpoint
 <a href="http://api.open-notify.org/astros.json">here</a> into your
@@ -290,8 +291,8 @@ Postgres table. The API gives information about all the humans currently
 in space.</li>
 </ul></li>
 <li>Note that although these two results have very different schema, you
-can dump them both into the same <code class="python">jsonb</code>
-column in Postgres!</li>
+can dump them both into the same <code class="pgsql">jsonb</code> column
+in Postgres!</li>
 </ul>
 <!--------  THEORY ------------------>
 <!--
@@ -419,6 +420,11 @@ column in Postgres!</li>
     - Ensure after creating it that you can access and query this table from your client of choice!
   - From within R, read in a dataframe of all the number of superheros who have each available superhero power and use that to create a histogram in ggplot.
 -->
+</section></section>
+<section>
+<section id="break" class="title-slide slide level1">
+<h1>Break!</h1>
+
 </section>
 <section id="break-time" class="slide level2">
 <h2>Break Time!</h2>
@@ -426,6 +432,11 @@ column in Postgres!</li>
 <p><img
 data-src="https://64.media.tumblr.com/tumblr_lpc46oU6Cy1qi1pnpo1_500.gifv"
 style="width:50.0%" /></p>
+</section></section>
+<section>
+<section id="online-deployments" class="title-slide slide level1">
+<h1>Online Deployments</h1>
+
 </section>
 <section id="railway-introduction" class="slide level2">
 <h2>Railway Introduction</h2>
@@ -444,13 +455,12 @@ acquisition</li>
 <section id="railway-details" class="slide level2">
 <h2>Railway Details</h2>
 <ul>
-<li>As a new user, you get $5 free credit that does not expire
+<li>As a registered new user, you get $5 free credit that does not
+expire
 <ul>
 <li>For what we are using, monthly costs are usually around $2-$2.50, so
 you <em>probably</em> will not need to pay anything to get through the
 end of the semester</li>
-<li>I am looking into and working with Railway to see if we can get some
-educational rate, but absolute worse case it costs $5</li>
 </ul></li>
 <li>Can spin up a Postgres database easily, in the cloud</li>
 <li>Can also launch a Docker container
@@ -489,7 +499,7 @@ class="slide level2">
 <li>Recently, Railway added the option to deploy a Docker container
 directly from an image hosted on DockerHub</li>
 <li>This makes it <strong>very</strong> easy to deploy the
-<code class="python">jrembold/web2db</code> image!</li>
+<code class="pgsql">jrembold/web2db</code> image!</li>
 <li>When it first is added to your project, it will not be running. It
 gives you some time to make any adjustments or corrections before you
 can then hit “Deploy” to get it going.</li>
@@ -519,12 +529,12 @@ slick</li>
 <ul>
 <li>Railway has available all the database environment variables, but
 you just need to import which ones you need over to the web2db image
-(the <code class="python">DATABASE_URL</code> one!)</li>
+(the <code class="pgsql">DATABASE_URL</code> one!)</li>
 <li>Select the Docker container and then click on the “variables”
 tab</li>
-<li>Here you can click the <code class="python">+ New Variable</code>
+<li>Here you can click the <code class="text">+ New Variable</code>
 button to add the same variables and corresponding values you had in
-your <code class="python">var.env</code> file!
+your <code class="pgsql">var.env</code> file!
 <ul>
 <li>This way you never need to have something like a password or similar
 saved in text as part of your deployment</li>
@@ -532,7 +542,40 @@ saved in text as part of your deployment</li>
 restart the Docker container to ensure it sees the new values!</li>
 </ul></li>
 </ul>
+</section>
+<section id="scheduling-with-railway" class="slide level2">
+<h2>Scheduling with Railway</h2>
+<ul>
+<li>By design, the Docker container runs the program once and then
+exits</li>
+<li>Especially on remote systems, this is an efficient use of
+materials</li>
+<li>Often though, you want to scrape new data on a particular interval,
+so we need a way to “wake up” and run the Docker container again</li>
+<li>This is done in Railway by setting a <em>CRON Schedule</em>
+<ul>
+<li>This will effectively run redeploy the container and run the program
+at some given interval</li>
+<li>Requires specifying a schedule with some special CRON syntax</li>
+</ul></li>
+</ul>
+</section>
+<section id="cron-scheduling" class="slide level2">
+<h2>CRON Scheduling</h2>
+<figure>
+<img data-src="../images/cron_expression_syntax.png" style="width:70.0%"
+alt="From crontogo.com. Also useful is this site!" />
+<figcaption aria-hidden="true">From <a
+href="https://crontogo.com/blog/the-complete-guide-to-cron/">crontogo.com</a>.
+Also useful is <a href="https://crontab.guru/">this
+site</a>!</figcaption>
+</figure>
 <!---------------- SQL ------------------>
+</section></section>
+<section>
+<section id="regrouping-to-sql" class="title-slide slide level1">
+<h1>Regrouping to SQL</h1>
+
 </section>
 <section id="showdown-time" class="slide level2">
 <h2>SHOWDOWN TIME!</h2>
@@ -540,9 +583,10 @@ restart the Docker container to ensure it sees the new values!</li>
 <li>Teams to be announced on next slide</li>
 <li>Whoever want to be in charge of submitting your answer can change
 your polling name to a fun team name :)</li>
-<li>Only one computer can be used by the pair of you at a time
+<li>Only one computer can be used by the team at a time
 <ul>
 <li>We’ll be using the superhero dataset from HW4</li>
+<li>Another computer can have the ERD open if you want</li>
 <li>4 rounds: each round switch who is typing</li>
 </ul></li>
 <li>You’ll have 5 minutes to answer each question. After 2 minutes you
@@ -555,31 +599,226 @@ wait at least the two minutes.</li>
 </section>
 <section id="showdown-teams" class="slide level2">
 <h2>Showdown Teams</h2>
+<div class="cols">
+<div class="col">
 <ul>
-<li>Frances and Miles</li>
-<li>Cristian, Jill and Oscar</li>
-<li>Micah and Alaina</li>
-<li>Aaryan and Phil</li>
+<li>Nate, Landon, Joshue</li>
+<li>Ryan, Kaiona, Sam P</li>
+<li>Jace, Charlie, Sammy T</li>
+<li>Sarah, Rohan, Kendall</li>
+<li>Hriday, Jeffrey, Cameron</li>
 </ul>
+</div>
+<div class="col">
+<ul>
+<li>Jacob, Tatum, Logan</li>
+<li>Andrew, Simon, Brandon</li>
+<li>Endy, Paxton, Dane</li>
+<li>Alexander, Dylan</li>
+</ul>
+</div>
+</div>
+</section></section>
+<section>
+<section id="a-question-of-timing" class="title-slide slide level1">
+<h1>A Question of Timing</h1>
+
+</section>
+<section id="date-time-reminders" class="slide level2">
+<h2>Date-Time Reminders</h2>
+<ul>
+<li>We have about 4 current date or time related data types</li>
+<li>Date time types:
+<ul>
+<li><code class="pgsql">DATE</code>: holds a single individual day</li>
+<li><code class="pgsql">TIME</code>: holds a single individual time</li>
+<li><code class="pgsql">TIMESTAMP</code> or variants with
+<code class="pgsql">TIMESTAMPTZ</code>: holds a combination of date and
+time, along with a potential time zone</li>
+</ul></li>
+<li>Interval types:
+<ul>
+<li><code class="pgsql">INTERVAL</code>: holds a duration of time</li>
+</ul></li>
+</ul>
+</section>
+<section id="extracting-pieces" class="slide level2">
+<h2>Extracting Pieces</h2>
+<ul>
+<li>Having all the information in one value is convenient, but sometimes
+you only need pieces
+<ul>
+<li>The hour from the time, or the month from the date</li>
+</ul></li>
+<li>These can be particularly important with aggregates!</li>
+<li>Two methods to extract pieces of any datetime or interval type:
+<ul>
+<li>SQL standard:
+<code class="pgsql">extract( part FROM |||datetime_value||| )</code></li>
+<li>Postgres specific:
+<code class="pgsql">date_part( |||part|||, |||datetime_value||| )</code></li>
+</ul></li>
+<li>Both will return a <code class="pgsql">DOUBLE PRECISION</code> value
+of whatever part was requested</li>
+</ul>
+</section>
+<section id="parts-to-extract" class="slide level2">
+<h2>Parts To Extract</h2>
+<ul>
+<li>You have a wide variety of what you can extract</li>
+</ul>
+<div style="font-size:.60em">
+<div class="cols">
+<div class="col">
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 81%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>text</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>century</td>
+<td>What century the date is in. 1st century starts 0001-01-01<span
+class="orange">★</span></td>
+</tr>
+<tr class="even">
+<td>day</td>
+<td>What day of the month</td>
+</tr>
+<tr class="odd">
+<td>decade</td>
+<td>The year divided by 10</td>
+</tr>
+<tr class="even">
+<td>dow</td>
+<td>The day of the week (0-6, starting with Sunday)</td>
+</tr>
+<tr class="odd">
+<td>doy</td>
+<td>The day of the year</td>
+</tr>
+<tr class="even">
+<td>epoch</td>
+<td>Number of seconds since 1970-01-01</td>
+</tr>
+<tr class="odd">
+<td>hour</td>
+<td>The current hour (0-23)</td>
+</tr>
+<tr class="even">
+<td>microseconds</td>
+<td>The number of microseconds</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="col">
+<table>
+<thead>
+<tr class="header">
+<th>text</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>milliseconds</td>
+<td>The number of milliseconds</td>
+</tr>
+<tr class="even">
+<td>minute</td>
+<td>The minute</td>
+</tr>
+<tr class="odd">
+<td>month</td>
+<td>The month (1-12)</td>
+</tr>
+<tr class="even">
+<td>quarter</td>
+<td>What quarter of the year (1-4)</td>
+</tr>
+<tr class="odd">
+<td>second</td>
+<td>The number of seconds</td>
+</tr>
+<tr class="even">
+<td>timezone</td>
+<td>The timezone offset in seconds</td>
+</tr>
+<tr class="odd">
+<td>timezone_hour</td>
+<td>The timezone offset in hours</td>
+</tr>
+<tr class="even">
+<td>week</td>
+<td>What week of the year. ISO weeks start on Monday</td>
+</tr>
+<tr class="odd">
+<td>year</td>
+<td>The year</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<hr>
+<div style="font-size:.5em">
+<p><span class="orange">★</span> – If you disagree with this, please
+write your complaint to: Pope, Cathedral Saint-Peter of Roma,
+Vatican.</p>
+</div>
+</section>
+<section id="reversing-it" class="slide level2">
+<h2>Reversing it</h2>
+<div style="font-size:.9em">
+<ul>
+<li>Often times existing data sets have already separated out different
+aspects of the date or time
+<ul>
+<li>Year, month, and day might be in different columns for example</li>
+</ul></li>
+<li>It can be useful to “stitch” these together into an actual datetime
+type for further use.</li>
+<li>Postgres gives you a handful of functions to do so:
+<ul>
+<li><code class="pgsql">make_date( |||year|||, |||month|||, |||day|||)</code>:
+Returns a new <code class="pgsql">DATE</code> type value</li>
+<li><code class="pgsql">make_time( |||hour|||, |||minute|||, |||seconds||| )</code>:
+Returns a new <code class="pgsql">TIME</code> type value (with no
+timezone)</li>
+<li><code class="pgsql">make_timestamptz(|||year|||,|||month|||,|||day|||,|||hour|||,|||minute|||,|||second|||,|||time zone|||)</code>:
+Returns a new <code class="pgsql">TIMESTAMPTZ</code> type value</li>
+<li><code class="pgsql">make_timestamp</code> and
+<code class="pgsql">make_interval</code> also exist</li>
+</ul></li>
+</ul>
+</div>
 </section>
 <section id="aging-well" class="slide level2">
 <h2>Aging well</h2>
 <ul>
-<li>Subtracting two <code class="python">DATE</code> type values will
-give just an <code class="python">INT</code> (in days)</li>
-<li>Subtracting two <code class="python">TIMESTAMP</code> type values
-will give an <code class="python">INTERVAL</code>, with the biggest
+<li>Subtracting two <code class="pgsql">DATE</code> type values will
+give just an <code class="pgsql">INT</code> (in days)</li>
+<li>Subtracting two <code class="pgsql">TIMESTAMP</code> type values
+will give an <code class="pgsql">INTERVAL</code>, with the biggest
 “unit” in days</li>
-<li>Using Postgres’s <code class="python">age()</code> function can
+<li>Using Postgres’s <code class="pgsql">age()</code> function can
 smooth over both and give units larger than days
 <ul>
-<li><code class="python">age( datetime1, datetime2 )</code>: Subtracts
-datetime2 from datetime1</li>
+<li><code class="pgsql">age( |||datetime₁|||, |||datetime₂||| )</code>:
+Subtracts datetime2 from datetime1</li>
 </ul></li>
 <li>This can <strong>still</strong> give you awkward interval units at
 times though, so also consider using
-<code class="python">justify_interval( interval )</code>, which breaks
-intervals into divisions that don’t exceed a categories max
+<code class="pgsql">justify_interval( |||interval||| )</code>, which
+breaks intervals into divisions that don’t exceed a categories max
 <ul>
 <li>Hours would always be between 0 and 23 for instance, or months
 between 1 and 12</li>
@@ -590,6 +829,7 @@ recommended</li>
 </section>
 <section id="what-time-is-it" class="slide level2">
 <h2>What time is it?</h2>
+<div class="smaller">
 <ul>
 <li>Standard SQL also provides constants for grabbing the current system
 time and date</li>
@@ -607,32 +847,32 @@ time and date</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">current_date</code></td>
+<td><code class="pgsql">current_date</code></td>
 <td>Returns the current date</td>
 </tr>
 <tr class="even">
-<td><code class="python">current_time</code></td>
+<td><code class="pgsql">current_time</code></td>
 <td>Returns the current time with timezone</td>
 </tr>
 <tr class="odd">
-<td><code class="python">localtime</code></td>
+<td><code class="pgsql">localtime</code></td>
 <td>Returns the current time without timezone</td>
 </tr>
 <tr class="even">
-<td><code class="python">current_timestamp</code><span
+<td><code class="pgsql">current_timestamp</code><span
 class="orange">★</span></td>
 <td>Returns the current date and time with timezone</td>
 </tr>
 <tr class="odd">
-<td><code class="python">localtimestamp</code></td>
+<td><code class="pgsql">localtimestamp</code></td>
 <td>Returns the current date and time without timezone</td>
 </tr>
 </tbody>
 </table>
-<hr>
 <p><span class="orange">★</span> – Postgres also offers the shorter
-<code class="python">now()</code> <em>function</em> to do the same
+<code class="pgsql">now()</code> <em>function</em> to do the same
 thing</p>
+</div>
 <!--## Current vs Clock-->
 <!--- Any query using `current_timestamp` has it computed once at the start of a query-->
 <p><!--- This is frequently desired for logging, so that you just get 1 consistent time for any records added from a single query-->
@@ -648,17 +888,17 @@ zone with the time as you would measure it in your current system
 timezone</li>
 <li>What is your current system timezone?
 <ul>
-<li><code class="python">SHOW timezone;</code></li>
+<li><code class="pgsql">SHOW timezone;</code></li>
 </ul></li>
 <li>Getting general information about timezones:
 <ul>
 <li>Getting abbreviations:
 <ul>
-<li><code class="python">SELECT * FROM pg_timezone_abbrevs;</code></li>
+<li><code class="pgsql">SELECT * FROM pg_timezone_abbrevs;</code></li>
 </ul></li>
 <li>Getting full names:
 <ul>
-<li><code class="python">SELECT * FROM pg_timezone_names;</code></li>
+<li><code class="pgsql">SELECT * FROM pg_timezone_names;</code></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -673,22 +913,22 @@ time zone</li>
 </ul></li>
 <li>Several methods to make the switch:
 <ul>
-<li><p>Change your <code class="python">postgressql.conf</code> file,
+<li><p>Change your <code class="pgsql">postgressql.conf</code> file,
 which controls your Postgres server. Only recommended if you have
 permanently moved elsewhere and the database time zone has not updated
 appropriately.</p></li>
 <li><p>Set future queries in a single session to be from a new
 timezone:</p>
-<p><code class="python">SET timezone TO time_zone_name_or_abbrv;</code></p>
+<p><code class="pgsql">SET |||timezone||| TO |||time_zone_name_or_abbrv|||;</code></p>
 <ul>
 <li>This will also adjust what values your
-<code class="python">localtime</code> or
-<code class="python">localtimestamp</code> report!</li>
+<code class="pgsql">localtime</code> or
+<code class="pgsql">localtimestamp</code> report!</li>
 </ul></li>
 <li><p>Transform a single query to be reported in a different time
 zone:</p>
-<pre ><code class="pgsql">SELECT dt_col_name AT TIME ZONE tz_name_or_abbrv
-FROM tablename;</code></pre></li>
+<pre ><code class="pgsql">SELECT |||dt_col_name||| AT TIME ZONE |||tz_name_or_abbrv|||
+FROM |||tablename|||;</code></pre></li>
 </ul></li>
 </ul>
 </section>
@@ -708,7 +948,7 @@ day</li>
 <section id="results-to-compare-against" class="slide level2">
 <h2>Results to compare against</h2>
 <p><img data-src="../images/taxi_datetime_activity_results.png"
-style="width:80.0%" /></p>
+style="width:70.0%" /></p>
 <!--
 ## Subqueries
 - A _subquery_ is simply a query embedded within another piece of SQL
@@ -881,7 +1121,7 @@ SELECT ...
 - Good use of CTE's can help clarify and simplify queries
   - _Especially_ if you have a subquery that you need to reference a few times, use a CTE!
 -->
-</section>
+</section></section>
     </div>
   </div>
 
@@ -900,6 +1140,7 @@ SELECT ...
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
+  <script src="../html_srcs/revealjs/../js/mybash.js"></script>
 
   <script>
 
@@ -975,7 +1216,7 @@ SELECT ...
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -990,7 +1231,7 @@ SELECT ...
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
         width: 1920,
-        height: 1200,
+        height: 1080,
         // The display mode that will be used to show slides
         display: 'block',
 		math: {
@@ -1018,9 +1259,20 @@ SELECT ...
 			disableCheckFile: false, //default false
 		 },
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
-              console.log(mypgsqldef);
-              return mypgsqldef(hljs); } )
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              hljs.registerLanguage("bash", function(hljs) {
+                console.log(mybashdef);
+                return mybashdef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
           },
 
         // reveal.js plugins
@@ -1038,6 +1290,7 @@ SELECT ...
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
+          theme: "whiteboard",
           boardmarkers : [
                   { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                   { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
