@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-03-06">
+  <title>Exo-Techniques</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Exo-Techniques</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">March 6, 2025</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Reminder: Homework 3 deadline is next Tuesday at midnight
+<ul>
+<li>Debriefing poll <strong>not available this weekend</strong>, but
+instead from Tuesday night through Thursday night</li>
+</ul></li>
+<li>Homework 4 and new partners will be announced Tuesday</li>
+<li>Also on Tuesday we’ll start into our new unit on galaxies</li>
+</ul>
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap</h2>
+<ul>
+<li>By utilizing Kepler’s 3rd law and the definition of center of mass,
+we can extract the mass of the exoplanet (assuming the star’s mass is
+much larger)</li>
+<li>If a planet orbits such that it happens to pass between its host
+star and Earth, we will detect a dip in the brightness observed. This is
+called a <em>transit</em>.</li>
+<li>The depth of the transit dip corresponds to the ratio of the planet
+radius to the star’s radius: <span class="math display">\[\text{% light
+lost} = \frac{R_{planet}^2}{R_{star}^2}\]</span></li>
+</ul>
+</section>
+<section id="discussing-today" class="slide level2">
+<h2>Discussing Today</h2>
+<ul>
+<li>Quiz Discussion</li>
+<li>Rolling Averages</li>
+<li>Rebinning</li>
+<li>HW3 work time</li>
+</ul>
+<!--
+## A Transit Example
+- The data [here](../demos/transit_averaging.csv) contains some transit information on a simulated exoplanet. How does the exoplanet's radius compare to it's parent star's?
+-->
+</section>
+<section>
+<section id="quiz-discussion" class="title-slide slide level1">
+<h1>Quiz Discussion</h1>
+
+</section>
+<section id="aggegrate-results" class="slide level2">
+<h2>Aggegrate Results</h2>
+<div class="cols">
+<div class="col">
+<p><img
+data-src="../images/svg_cache/46fe9b8738700ed9c9a6c0b4fcfef2b18a207a5c.svg"
+style="width:100.0%" /></p>
+</div>
+<div class="col">
+<ul>
+<li>Pre-curve:
+<ul>
+<li>Max: 95%</li>
+<li>Mean: 76.5%</li>
+<li>Median: 78.75%</li>
+<li>St Dev: 16.2%</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="quiz-talk" class="slide level2">
+<h2>Quiz Talk</h2>
+<ul>
+<li>Be aware that even if you split HW problems across partners, you are
+still responsible for knowing and understanding the content from all
+questions</li>
+<li>I think many could have benefitted from a bit more studying, or
+perhaps just looking at the study materials a little more</li>
+<li>Quizzes can be a bit more punishing owing to limited points, plus
+this was the first one in this class, so perhaps you didn’t know what to
+expect
+<ul>
+<li>As such, I’ve added 1 point (5%) to your total score in the
+gradebook</li>
+</ul></li>
+<li>Grade Reports will be coming out as soon as I finish scoring
+HW2</li>
+</ul>
+</section></section>
+<section>
+<section id="rolling-away" class="title-slide slide level1">
+<h1>Rolling Away</h1>
+
+</section>
+<section id="dealing-with-noise" class="slide level2">
+<h2>Dealing with Noise</h2>
+<ul>
+<li>There will often times be noise that detracts from or obscures a
+signal</li>
+<li>In astronomy, this commonly comes from thermal sensor noise or
+atmospheric effects
+<ul>
+<li>Can show up in any signal though where measurement-to-measurement
+variations obscure a longer pattern in the signal</li>
+</ul></li>
+<li>One method to try to eliminate this noise is with Fourier Transforms
+<ul>
+<li>Set all signals in the frequency domain to 0 except your main signal
+and then inverse it back to the time domain</li>
+<li>We can’t do that (easily) for non-uniform measurements though</li>
+</ul></li>
+<li>What other options might we have?</li>
+</ul>
+</section>
+<section id="rolling-averages" class="slide level2">
+<h2>Rolling Averages</h2>
+<ul>
+<li>A <em>rolling average</em> computes an average for
+<strong>each</strong> point in a data series, usually taking into
+account a certain number of observations on either side of the point in
+question</li>
+<li>This is the same result as convolving a tophat function with a
+certain width with the noisy signal</li>
+<li>The width of the tophat or “window” directly affects the amount of
+smoothing that will be seen: bigger windows smooth things more</li>
+<li>Algorithms can vary, but the basic algorithm is just looking at
+position of data within the series, so it does <strong>not</strong>
+account for data spacing.
+<ul>
+<li>Data ordering matters!</li>
+<li>This may still be fine for some non-uniformly sampled data, provided
+the window in only marginally larger than the average spacing</li>
+</ul></li>
+</ul>
+<!--
+## In Python: Direct Convolution
+- Doing the convolution directly means constructing the square wave in Numpy and then using Numpy's convolution function
+  ```python
+  window = np.ones(size) / size # necessary to scale!
+  out = np.convolve(signal, window)
+  ```
+  - The output by default has length $L_{signal} + L_{window} -1$, so if you want to plot it against your original times, you need to mask off the last parts
+- You **really** need to ensure your signal points are ordered by your x-axis for this to work! The easiest way to achieve this is with `np.argsort`:
+  ```python
+  sorted_idxs = np.argsort(ts)
+  sorted_times = ts[sorted_idxs]
+  sorted_signal = signal[sorted_idxs]
+  ```
+-->
+</section>
+<section id="in-python-with-pandas" class="slide level2">
+<h2>In Python: With Pandas</h2>
+<ul>
+<li><p>Assuming you already have your data in a dataframe, you
+<strong>still need to ensure it is ordered!</strong></p>
+<pre ><code class="python">df = df.sort_values('ts')</code></pre>
+<p>where <code class="python">ts</code> is whatever column you want to
+sort by</p>
+<ul>
+<li>This just reorders the index, so be aware if you try to extract just
+a column by itself</li>
+</ul></li>
+<li><p>Computing the rolling average is then straightforward:</p>
+<pre ><code class="python">df['rolling'] = df.sig.rolling(wsize).mean()</code></pre>
+<p>where <code class="python">sig</code> is whatever column you are
+computing the average over, and <code class="python">wsize</code> is the
+size of the window you want</p></li>
+</ul>
+</section>
+<section id="in-r-with-zoo" class="slide level2">
+<h2>In R: With Zoo</h2>
+<ul>
+<li><p>You still want to ensure your data is ordered! Can use
+<code class="python">arrange</code> if using Tidyverse</p>
+<pre ><code class="r">df <- arrange(df, colname)</code></pre></li>
+<li><p>Easiest to use <code class="python">rollmean</code> from the
+<code class="python">zoo</code> library for the rolling averages</p>
+<pre ><code class="r">library(zoo)
+df <- df %>% 
+  mutate(
+    rolling = rollmean(colname, k=wsize, fill=NA)
+    )</code></pre></li>
+</ul>
+</section></section>
+<section>
+<section id="the-bin-man" class="title-slide slide level1">
+<h1>The Bin Man</h1>
+
+</section>
+<section id="rebinning" class="slide level2">
+<h2>Rebinning</h2>
+<ul>
+<li>Sometimes, you just need to take non-uniformly sampled data and cast
+it into something more consistent</li>
+<li>If the data is noisy, this can also help cut down on the noise</li>
+<li>The idea is to compute new, evenly spaced bins, and then compute the
+mean (or median) of all the points that fall within that bin
+<ul>
+<li>Some bins might not contain any points, and that is ok! They can
+just get assigned null values.</li>
+</ul></li>
+<li>You could then proceed to do anything you would do with uniformly
+sampled data: Fourier transforms, further rolling averages, etc
+<ul>
+<li>Do be careful about null values with Fourier transforms though. They
+aren’t handled well, and you probably need to interpolate.</li>
+</ul></li>
+</ul>
+</section>
+<section id="rebinning-in-pandas" class="slide level2">
+<h2>Rebinning in Pandas</h2>
+<ul>
+<li>You can either specify the bins with a list, or have Pandas compute
+the bins for you given a desired number of bins
+<ul>
+<li>I find the former better when I have specific data that I’m trying
+to rebin</li>
+</ul></li>
+<li>Key function in Pandas is <code class="python">pd.cut</code>, which
+takes several arguments:
+<ul>
+<li>The array that you are trying to bin by</li>
+<li>The bins or number of bins that you desire</li>
+<li>How you want to handle the bin labels</li>
+</ul>
+<pre ><code class="python">bin_labels = pd.cut(df.ts, bins=np.arange(0,10,0.1), 
+                    labels=False)</code></pre>
+<ul>
+<li>This gives labels as <strong>indexes</strong>. I prefer to know the
+start of the bin, so I multiply by the bin step size</li>
+</ul></li>
+</ul>
+</section>
+<section id="rebinning-in-r" class="slide level2">
+<h2>Rebinning in R</h2>
+<ul>
+<li><p>Similar to Pandas, you can use the
+<code class="python">cut</code> or <code class="python">ntile</code>
+functions to compute a binning:</p>
+<pre ><code class="r">df %>% mutate(
+  bins = cut(colname, breaks=seq(0,10,0.1)
+  )</code></pre>
+<p>gives your bins as intervals, whereas</p>
+<pre ><code class="r">df %>% mutate(bins = ntile(colname, n=100))</code></pre>
+<p>gives the bins as integers</p></li>
+</ul>
+</section></section>
+<section>
+<section id="work-time" class="title-slide slide level1">
+<h1>Work Time!</h1>
+
+</section>
+<section id="hw-work-time" class="slide level2">
+<h2>HW Work Time</h2>
+<ul>
+<li>The rest of the class is yours to work with your partner on HW3</li>
+</ul>
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          theme: "whiteboard",
+          boardmarkers : [
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
+    </body>
+</html>
