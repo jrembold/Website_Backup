@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-03-12">
   <title>Windows into Transformation</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -36,20 +37,103 @@
 <section id="title-slide">
   <h1 class="title">Windows into Transformation</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">March 7/12, 2024</p>
+  <p class="date">March 12, 2025</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>Homework 6 is due on Monday night</li>
+<li>Homework 7 is due next Wednesday night (coming out this
+evening)</li>
 <li>My grading quest continues</li>
-<li>Project Pairs/Groups sent out?</li>
-<li>Project Guidelines coming soon</li>
-<li>In class polling: <a
-href="http://rembold-class.ddns.net">rembold-class.ddns.net</a></li>
+<li>Project Pairs/Groups were sent out and Project Guidelines shared!
+<ul>
+<li>Some good target deadlines would be to:
+<ul>
+<li>Have your scraper up and scraping by this weekend</li>
+<li>Have a transforming/cleaning container up and running by the end of
+next week (to be introduced later today)</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section>
+<section id="getting-in-the-zone" class="title-slide slide level1">
+<h1>Getting in the Zone</h1>
+
+</section>
+<section id="time-zones" class="slide level2">
+<h2>Time Zones</h2>
+<ul>
+<li>Dealing with time zones can be a headache, and it is a very nice
+feature that Postgres can work with them smoothly</li>
+<li>By default, Postgres will <em>display</em> any timestamp with a time
+zone with the time as you would measure it in your current system
+timezone</li>
+<li>What is your current system timezone?
+<ul>
+<li><code class="pgsql">SHOW timezone;</code></li>
+</ul></li>
+<li>Getting general information about timezones:
+<ul>
+<li>Getting abbreviations:
+<ul>
+<li><code class="pgsql">SELECT * FROM pg_timezone_abbrevs;</code></li>
+</ul></li>
+<li>Getting full names:
+<ul>
+<li><code class="pgsql">SELECT * FROM pg_timezone_names;</code></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="teleportation" class="slide level2">
+<h2>Teleportation</h2>
+<ul>
+<li>It can sometimes be useful to switch your “current” time zone
+<ul>
+<li>Maybe it is easier to compare times to someone else living in that
+time zone</li>
+</ul></li>
+<li>Several methods to make the switch:
+<ul>
+<li><p>Change your <code class="pgsql">postgressql.conf</code> file,
+which controls your Postgres server. Only recommended if you have
+permanently moved elsewhere and the database time zone has not updated
+appropriately.</p></li>
+<li><p>Set future queries in a single session to be from a new
+timezone:</p>
+<p><code class="pgsql">SET |||timezone||| TO |||time_zone_name_or_abbrv|||;</code></p>
+<ul>
+<li>This will also adjust what values your
+<code class="pgsql">localtime</code> or
+<code class="pgsql">localtimestamp</code> report!</li>
+</ul></li>
+<li><p>Transform a single query to be reported in a different time
+zone:</p>
+<pre ><code class="pgsql">SELECT |||dt_col_name||| AT TIME ZONE |||tz_name_or_abbrv|||
+FROM |||tablename|||;</code></pre></li>
+</ul></li>
+</ul>
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity</h2>
+<ul>
+<li>Using the taxi rides dataset, see if you can:
+<ul>
+<li>Compute the number of rides given each hour of the day</li>
+<li>Compute the average cost of rides over each day of the month</li>
+<li>Compute the median cost of rides over each day of the week</li>
+<li>Compute the average duration of each ride over each hour of the
+day</li>
+</ul></li>
 </ul>
 <!----- Windows ------>
+</section></section>
+<section>
+<section id="through-the-window" class="title-slide slide level1">
+<h1>Through the Window</h1>
+
 </section>
 <section id="window-functions" class="slide level2">
 <h2>Window Functions</h2>
@@ -67,8 +151,8 @@ rows included within its “window” in making an aggregation</li>
 <li>Any normal aggregate function can be used as a window function,
 though there are specific window functions as well</li>
 <li>Window functions can only be used inside
-<code class="python">SELECT</code> or
-<code class="python">ORDER BY</code> statements
+<code class="pgsql">SELECT</code> or <code class="pgsql">ORDER BY</code>
+statements
 <ul>
 <li>They are evaluated <em>after</em> any filtering, grouping, or normal
 aggregations</li>
@@ -79,18 +163,17 @@ aggregations</li>
 <h2>Over the Hill</h2>
 <ul>
 <li>The defining characteristic of any window function is the
-<code class="python">OVER ()</code> keyword, which comes after the
+<code class="pgsql">OVER ()</code> keyword, which comes after the
 aggregating window function</li>
-<li>Content inside the <code class="python">()</code> determines the
+<li>Content inside the <code class="pgsql">()</code> determines the
 “window” of the window function</li>
 <li>By default, if nothing is provided, the entire column is the
 window</li>
 <li>The below would output the average of the column in every row
 <ul>
-<li>This means it is technically no different from accomplishing this
-with a subquery</li>
+<li>There will be ways we can also achieve this through subqueries</li>
 </ul>
-<pre ><code class="pgsql">SELECT AVG(|||col|||) OVER()
+<pre ><code class="pgsql">SELECT AVG(|||col|||) OVER ()
 FROM |||table name|||;</code></pre></li>
 </ul>
 </section>
@@ -98,7 +181,8 @@ FROM |||table name|||;</code></pre></li>
 <h2>Dedicated Window Functions</h2>
 <ul>
 <li>You can use any existing aggregate function as a window function,
-but there are also more specific window functions</li>
+but there are also more specific window functions (full list <a
+href="https://www.postgresql.org/docs/current/functions-window.html">here</a>)</li>
 </ul>
 <div style="font-size:.8em">
 <table>
@@ -114,37 +198,44 @@ but there are also more specific window functions</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">row_number()</code></td>
+<td><code class="pgsql">row_number()</code></td>
 <td>Assigns an ascending row number to each row in a window</td>
 </tr>
 <tr class="even">
-<td><code class="python">rank()</code></td>
+<td><code class="pgsql">rank()</code></td>
 <td>Assigns an ascending rank to each row, with possible ties skipping
 the next value</td>
 </tr>
 <tr class="odd">
-<td><code class="python">dense_rank()</code></td>
+<td><code class="pgsql">dense_rank()</code></td>
 <td>Assigns an ascending rank to each row, with possible ties not
 skipping the next value</td>
 </tr>
 <tr class="even">
-<td><code class="python">first_value(col)</code></td>
+<td><code class="pgsql">first_value(|||col|||)</code></td>
 <td>Returns the first value in the window of column
-<code class="python">col</code></td>
+<code class="pgsql">|||col|||</code></td>
 </tr>
 <tr class="odd">
-<td><code class="python">last_value(col)</code></td>
+<td><code class="pgsql">last_value(|||col|||)</code></td>
 <td>Returns the last value in the window of column
-<code class="python">col</code></td>
+<code class="pgsql">|||col|||</code></td>
 </tr>
 <tr class="even">
-<td><code class="python">lag(col)</code></td>
+<td><code class="pgsql">lag(|||col|||)</code></td>
 <td>Returns the previous row of column
-<code class="python">col</code></td>
+<code class="pgsql">|||col|||</code></td>
 </tr>
 <tr class="odd">
-<td><code class="python">lead(col)</code></td>
-<td>Returns the next row of column <code class="python">col</code></td>
+<td><code class="pgsql">lead(|||col|||)</code></td>
+<td>Returns the next row of column
+<code class="pgsql">|||col|||</code></td>
+</tr>
+<tr class="even">
+<td><code class="pgsql">nth_value(|||col|||, |||n|||)</code></td>
+<td>Returns the <code class="pgsql">|||n|||</code>th row of column
+<code class="pgsql">|||col|||</code> (<code class="pgsql">NULL</code> if
+doesn’t exist)</td>
 </tr>
 </tbody>
 </table>
@@ -154,18 +245,18 @@ skipping the next value</td>
 <h2>DETERMINING ORDER</h2>
 <ul>
 <li>Often, to be useful, you may want to define an ordering inside the
-<code class="python">OVER()</code> statement</li>
+<code class="pgsql">OVER ()</code> statement</li>
 <li>As soon as you specify an ordering, <strong>the default window
 changes</strong>
 <ul>
-<li>By default, each window now encompasses everything from the start,
-up to that current row
+<li>By default, each window now encompasses everything from the first
+row, up to that current row
 <ul>
 <li>Easiest to see with classic aggregate functions</li>
 </ul></li>
 </ul></li>
 </ul>
-<pre ><code class="pgsql">SELECT COUNT(*) OVER(ORDER BY |||col|||)
+<pre ><code class="pgsql">SELECT COUNT(*) OVER (ORDER BY |||col|||)
 FROM |||table name|||;</code></pre>
 </section>
 <section id="tweaking-the-window" class="slide level2">
@@ -173,15 +264,38 @@ FROM |||table name|||;</code></pre>
 <ul>
 <li><p>You can tweak this window by specifying the starting and stopping
 point, using the syntax:</p>
-<pre ><code class="pgsql">... ROWS BETWEEN |||offset1||| PRECEDING AND |||offset2||| FOLLOWING</code></pre>
-<p>which appears in the <code class="python">OVER</code> clause, after
-any provided ordering</p></li>
-<li><p>Can also exclude the current row or group from the window:</p>
-<pre ><code class="pgsql">... EXCLUDE CURRENT ROW</code></pre>
+<pre ><code class="pgsql">...|||type||| BETWEEN |||offset||| PRECEDING AND |||offset||| FOLLOWING</code></pre>
+<p>which appears in the <code class="pgsql">OVER</code> clause, after
+any provided ordering</p>
 <ul>
-<li>Group here refers to all other rows tied with the current row</li>
+<li><code class="pgsql">|||type|||</code> can be either
+<code class="pgsql">ROWS</code>, <code class="pgsql">RANGE</code>, or
+<code class="pgsql">GROUP</code></li>
+<li><code class="pgsql">|||offset|||</code> can be
+<ul>
+<li>an non-null, non-negative integer or
+<code class="pgsql">UNBOUNDED</code> if the type is
+<code class="pgsql">ROWS</code> or <code class="pgsql">GROUP</code></li>
+<li>an value that makes sense to add or subtract from the ordered column
+if the type is <code class="pgsql">RANGE</code></li>
 </ul></li>
-<li><p>Can be used to compute “rolling” averages and similar</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="excluding-the-window" class="slide level2">
+<h2>Excluding the Window</h2>
+<ul>
+<li><p>Can also exclude the current row or group from the window:</p>
+<pre ><code class="pgsql">... EXCLUDE |||type|||</code></pre></li>
+<li><p><code class="pgsql">|||type|||</code> here can be:</p>
+<ul>
+<li><code class="pgsql">CURRENT ROW</code>, which excludes the current
+row from the window</li>
+<li><code class="pgsql">GROUP</code> which excludes the current row and
+all other rows currently tied with it</li>
+<li><code class="pgsql">TIES</code> which just excludes the tied rows,
+but keeps the current row</li>
+</ul></li>
 </ul>
 </section>
 <section id="partitioning" class="slide level2">
@@ -192,19 +306,20 @@ any provided ordering</p></li>
 <li>Partitioning here is determined <em>before</em> the rows comprising
 the window are computed
 <ul>
-<li>This has a similar feel to <code class="python">GROUP BY</code>, but
+<li>This has a similar feel to <code class="pgsql">GROUP BY</code>, but
 <em>every</em> row will get a value here</li>
 </ul></li>
 <li>Window functions evaluated within each window within each
 partition</li>
 </ul>
-<pre ><code class="pgsql">SELECT AVG(|||col1|||) OVER (
-    PARTITION BY |||col2|||
+<pre ><code class="pgsql">SELECT AVG(|||column|||) OVER (
+    PARTITION BY |||column|||
   )
-FROM |||table_name|||;</code></pre>
+FROM |||table|||;</code></pre>
 </section>
-<section id="activity" class="slide level2">
+<section id="activity-1" class="slide level2">
 <h2>Activity!</h2>
+<div class="smaller">
 <ul>
 <li>Contained <a href="../activity_data/halloween.sql">here</a> is an
 SQL file to generate a table of Halloween trick-or-treater data, which
@@ -214,45 +329,22 @@ contains two columns:
 <li>What candy was given to the trick-or-treater</li>
 </ul></li>
 <li>You had a supply of 40 of each type of candy</li>
-<li>Using this information, answer the following questions. Some might
-take a temp table.
+<li>Using this information, answer the following:
 <ul>
-<li>At what minute of the hour did you run out of Starburst?</li>
-<li>Which candy did you run out of first?</li>
-<li>For each candy, at what minute did you reach a 50% supply?</li>
+<li>What candies did you never run out of?</li>
+<li>At what time did you run out of Starburst?</li>
+<li>What times did you run out of the three most popular candies?</li>
 <li>Construct a 5-minute rolling average of the number of
 trick-or-treaters you saw each minute of the evening. According to this,
 about when were things busiest?</li>
 </ul></li>
 </ul>
-</section>
-<section id="break-time" class="slide level2">
-<h2>Break Time!</h2>
-<p><img data-src="../images/nomming_catepillar.png" /></p>
-<!---------------- SQL ------------------>
-</section>
-<section id="overview" class="slide level2">
-<h2>Overview</h2>
-<ul>
-<li>Chapter 10 is essentially a tale in two parts, which are closely
-entwined
-<ul>
-<li>Data is likely going to be messy. How do you go about cleaning up
-data for further analysis. What sorts of anomalies should you keep an
-eye out for?</li>
-<li>Tables are usually not static entities, but stores of data that
-might be changing. How you can make adjustments not only to the contents
-of a table but to the design of the table itself?</li>
-</ul></li>
-<li>We could look at either piece first, but let’s look first at
-cleaning data to provide the motivation for altering our tables
-<ul>
-<li>Many of the issues we’ll look at could have been avoided with good
-use of constraints. But for now we are supposing that the data was
-generated outside the table, and you have just imported it in
-naively.</li>
-</ul></li>
-</ul>
+</div>
+</section></section>
+<section>
+<section id="cleaning-tips" class="title-slide slide level1">
+<h1>Cleaning Tips</h1>
+
 </section>
 <section id="cleaning-checking-for-duplicates" class="slide level2">
 <h2>Cleaning: Checking for Duplicates</h2>
@@ -261,13 +353,13 @@ naively.</li>
 duplicate row entries</li>
 <li>Duplicate entries across <em>many</em> columns is usually the sign
 <!--- A duplicate entry in just one or two columns is frequently not cause for concern (unless you were expecting that column to have unique values)--></li>
-<li><code class="python">GROUP BY</code> and
-<code class="python">HAVING</code> can be very useful here!
+<li><code class="pgsql">GROUP BY</code> and
+<code class="pgsql">HAVING</code> can be very useful here!
 <ul>
-<li><code class="python">GROUP BY</code> all the columns that you want
-to check for repetition</li>
-<li>Use <code class="python">HAVING</code> to only grab those groups
-that have more than one element (and thus a repetition)</li>
+<li><code class="pgsql">GROUP BY</code> all the columns that you want to
+check for repetition</li>
+<li>Use <code class="pgsql">HAVING</code> to only grab those groups that
+have more than one element (and thus a repetition)</li>
 </ul>
 <pre ><code class="pgsql">SELECT |||col1, col2, col3, col4|||, COUNT(*)
 FROM |||table name|||
@@ -301,14 +393,14 @@ entered
 <li>Typos happen, or people just refer to the same thing in different
 ways</li>
 </ul></li>
-<li>To use <code class="python">GROUP BY</code> effectively, you really
+<li>To use <code class="pgsql">GROUP BY</code> effectively, you really
 need categories to be consistently named across the data set</li>
 <li>Several possible approaches to identify:
 <ul>
 <li>Scanning over a sorted distinct column for quasi-duplications:
 phrases that are just a bit distinct
 <ul>
-<li><code class="python">GROUP BY</code> could do similar but add
+<li><code class="pgsql">GROUP BY</code> could do similar but add
 counts</li>
 </ul></li>
 <li>Use pattern matching to look for duplicates matching a single
@@ -316,27 +408,6 @@ approximate pattern</li>
 <li>Use the fuzzystrmatch module to check Levershtein distances
 (probably rather slow)</li>
 </ul></li>
-</ul>
-</section>
-<section id="cleaning-checking-text-length" class="slide level2">
-<h2>Cleaning: Checking Text Length</h2>
-<ul>
-<li>For certain fields, you’d expect text of a certain number of
-characters
-<ul>
-<li>2 for state abbreviations</li>
-<li>5 for zip codes</li>
-<li>13 for isbn13</li>
-</ul></li>
-<li>Can be a good idea to check these using the
-<code class="python">LENGTH</code> string function
-<ul>
-<li><code class="python">LENGTH(str)</code> just returns the number of
-characters in said string</li>
-</ul>
-<pre ><code class="pgsql">SELECT *
-FROM |||table name|||
-WHERE LENGTH(|||col1|||) != 5;</code></pre></li>
 </ul>
 </section>
 <section id="damage-control" class="slide level2">
@@ -352,6 +423,45 @@ WHERE LENGTH(|||col1|||) != 5;</code></pre></li>
 <li>Can your analysis work around those columns?</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="break" class="title-slide slide level1">
+<h1>Break!</h1>
+
+</section>
+<section id="break-time" class="slide level2">
+<h2>Break Time!</h2>
+<p><img data-src="../images/nomming_catepillar.png" /></p>
+<!---------------- SQL ------------------>
+<!--
+## Overview
+- Chapter 10 is essentially a tale in two parts, which are closely entwined
+  - Data is likely going to be messy. How do you go about cleaning up data for further analysis. What sorts of anomalies should you keep an eye out for?
+  - Tables are usually not static entities, but stores of data that might be changing. How you can make adjustments not only to the contents of a table but to the design of the table itself?
+- We could look at either piece first, but let's look first at cleaning data to provide the motivation for altering our tables
+  - Many of the issues we'll look at could have been avoided with good use of constraints. But for now we are supposing that the data was generated outside the table, and you have just imported it in naively.
+
+
+
+## Cleaning: Checking Text Length
+- For certain fields, you'd expect text of a certain number of characters
+  - 2 for state abbreviations
+  - 5 for zip codes
+  - 13 for isbn13
+- Can be a good idea to check these using the `LENGTH` string function
+  - `LENGTH(str)` just returns the number of characters in said string
+```pgsql
+SELECT *
+FROM |||table name|||
+WHERE LENGTH(|||col1|||) != 5;
+```
+
+-->
+</section></section>
+<section>
+<section id="changing-tables" class="title-slide slide level1">
+<h1>Changing Tables</h1>
+
 </section>
 <section id="making-adjustments" class="slide level2">
 <h2>Making Adjustments</h2>
@@ -363,11 +473,11 @@ categories:
 <ul>
 <li>Changing the structure of the table itself
 <ul>
-<li>Uses keywords <code class="python">ALTER TABLE</code></li>
+<li>Uses keywords <code class="pgsql">ALTER TABLE</code></li>
 </ul></li>
 <li>Changing the row content within the table
 <ul>
-<li>Uses keyword <code class="python">UPDATE</code></li>
+<li>Uses keyword <code class="pgsql">UPDATE</code></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -381,7 +491,7 @@ style="width:100.0%" /></p>
 <section id="table-altering-part-1" class="slide level2">
 <h2>Table Altering: Part 1</h2>
 <ul>
-<li><p><code class="python">ALTER TABLE</code> is generally followed by
+<li><p><code class="pgsql">ALTER TABLE</code> is generally followed by
 the table name and then another keyword command, depending on what you
 want to do</p>
 <pre ><code class="pgsql">ALTER TABLE |||table name||| ...</code></pre>
@@ -411,8 +521,8 @@ want to do</p>
 <ul>
 <li>If you want to change the values in a particular row (or many rows),
 you don’t want to alter the table, you want to
-<code class="python">UPDATE</code> it</li>
-<li><code class="python">UPDATE</code> sets particular columns to a
+<code class="pgsql">UPDATE</code> it</li>
+<li><code class="pgsql">UPDATE</code> sets particular columns to a
 particular value
 <ul>
 <li><strong>BE CAREFUL!</strong> If you do not specify <em>which</em>
@@ -426,296 +536,31 @@ method to update just a single row should you need</li>
 SET |||column name||| = |||new value|||;</code></pre></li>
 </ul></li>
 <li>You can specify which rows should be changed by filtering with
-<code class="python">WHERE</code></li>
+<code class="pgsql">WHERE</code></li>
 </ul>
-</section>
-<section id="understanding-check" class="slide level2">
-<h2>Understanding Check</h2>
-<div class="cols">
-<div class="col">
-<p>The table named <code class="python">revq</code> to the right is
-acted upon by the below SQL queries. What entries in the table are left
-untouched once all queries have been run? Each choice corresponds to
-those highlighted cells.</p>
-</div>
-<div class="col">
-<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<!--
+## Understanding Check
+::::::cols
+::::col
+The table named `revq` to the right is acted upon by the below SQL queries. What entries in the table are left untouched once all queries have been run? Each choice corresponds to those highlighted cells.
+::::
 
-<svg
-   width="153.30701mm"
-   height="102.056mm"
-   viewBox="0 0 153.30701 102.056"
-   version="1.1"
-   id="svg5"
-   xml:space="preserve"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
-   sodipodi:docname="uc_ch9_2.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
-     id="namedview7"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     showgrid="false"
-     inkscape:zoom="0.84096521"
-     inkscape:cx="306.79034"
-     inkscape:cy="202.14867"
-     inkscape:window-width="1680"
-     inkscape:window-height="1020"
-     inkscape:window-x="0"
-     inkscape:window-y="30"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" /><defs
-     id="defs2" /><g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(-94.538953,-23.838356)"><path
-       style="fill:#000000;stroke:#000000;stroke-width:0.9816;stroke-linecap:round;stroke-dasharray:none"
-       d="M 97.029611,26.329082 H 211.65658"
-       id="path296" /><path
-       style="fill:#000000;stroke:#000000;stroke-width:0.9816;stroke-linecap:round;stroke-dasharray:none"
-       d="M 97.029611,122.165 H 211.65658"
-       id="path975" /><path
-       style="fill:#000000;stroke:#000000;stroke-width:0.434336;stroke-linecap:round;stroke-dasharray:none"
-       d="M 97.029611,62.699642 H 211.65658"
-       id="path977" /><text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:none;stroke-width:0.989595;stroke-linecap:round;stroke-dasharray:none"
-       x="101.53363"
-       y="41.13623"
-       id="text1033"><tspan
-         sodipodi:role="line"
-         id="tspan1031"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:0.989595"
-         x="101.53363"
-         y="41.13623">col1</tspan></text><text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:none;stroke-width:0.989595;stroke-linecap:round;stroke-dasharray:none"
-       x="141.62927"
-       y="41.13623"
-       id="text1037"><tspan
-         sodipodi:role="line"
-         id="tspan1035"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:0.989595"
-         x="141.62927"
-         y="41.13623">col2</tspan></text><text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:none;stroke-width:0.989595;stroke-linecap:round;stroke-dasharray:none"
-       x="182.6946"
-       y="41.13623"
-       id="text1041"><tspan
-         sodipodi:role="line"
-         id="tspan1039"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5679px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:0.989595"
-         x="182.6946"
-         y="41.13623">col3</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke:none;stroke-width:0.956942;stroke-linecap:round;stroke-dasharray:none"
-       x="100.15795"
-       y="56.296406"
-       id="text1095"><tspan
-         sodipodi:role="line"
-         id="tspan1093"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke-width:0.956942"
-         x="100.15795"
-         y="56.296406">TEXT</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke:none;stroke-width:0.956942;stroke-linecap:round;stroke-dasharray:none"
-       x="141.11984"
-       y="56.296406"
-       id="text1822"><tspan
-         sodipodi:role="line"
-         id="tspan1820"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke-width:0.956942"
-         x="141.11984"
-         y="56.296406">REAL</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke:none;stroke-width:0.956942;stroke-linecap:round;stroke-dasharray:none"
-       x="185.97403"
-       y="56.296406"
-       id="text1826"><tspan
-         sodipodi:role="line"
-         id="tspan1824"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1532px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#6281ac;fill-opacity:1;stroke-width:0.956942"
-         x="185.97403"
-         y="56.296406">INT</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="108.8076"
-       y="77.305122"
-       id="text1932"><tspan
-         sodipodi:role="line"
-         id="tspan1930"
-         style="fill:#000000;stroke-width:0.492176"
-         x="108.8076"
-         y="77.305122">A</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="154.84677"
-       y="77.305122"
-       id="text1956"><tspan
-         sodipodi:role="line"
-         id="tspan1954"
-         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
-         x="154.84677"
-         y="77.305122">0.24</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="195.58284"
-       y="77.305122"
-       id="text1968"><tspan
-         sodipodi:role="line"
-         id="tspan1966"
-         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
-         x="195.58284"
-         y="77.305122">15</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="108.42769"
-       y="96.991028"
-       id="text1936"><tspan
-         sodipodi:role="line"
-         id="tspan1934"
-         style="fill:#000000;stroke-width:0.492176"
-         x="108.42769"
-         y="96.991028">B</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="156.08406"
-       y="96.991028"
-       id="text1960"><tspan
-         sodipodi:role="line"
-         id="tspan1958"
-         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
-         x="156.08406"
-         y="96.991028">9.1</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="195.85854"
-       y="96.991028"
-       id="text1972"><tspan
-         sodipodi:role="line"
-         id="tspan1970"
-         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
-         x="195.85854"
-         y="96.991028">4</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="108.61933"
-       y="116.69038"
-       id="text1940"><tspan
-         sodipodi:role="line"
-         id="tspan1938"
-         style="fill:#000000;stroke-width:0.492176"
-         x="108.61933"
-         y="116.69038">C</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="155.09892"
-       y="116.69038"
-       id="text1964"><tspan
-         sodipodi:role="line"
-         id="tspan1962"
-         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
-         x="155.09892"
-         y="116.69038">4</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.7716px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.492176;stroke-linecap:round;stroke-dasharray:none"
-       x="195.52232"
-       y="116.69038"
-       id="text1976"><tspan
-         sodipodi:role="line"
-         id="tspan1974"
-         style="text-align:center;text-anchor:middle;fill:#000000;stroke-width:0.492176"
-         x="195.52232"
-         y="116.69038">10</tspan></text><rect
-       style="fill:#ff0000;fill-opacity:0.297502;stroke:none;stroke-width:0.403014;stroke-linecap:round;stroke-dasharray:none"
-       id="rect2072"
-       width="74.09626"
-       height="17.42337"
-       x="134.86285"
-       y="63.780529"
-       ry="5.1545014" /><rect
-       style="fill:#00e2ff;fill-opacity:0.297502;stroke:none;stroke-width:0.390717;stroke-linecap:round;stroke-dasharray:none"
-       id="rect3478"
-       width="21.745987"
-       height="55.799976"
-       x="185.08685"
-       y="63.54591"
-       ry="6.433053" /><rect
-       style="fill:#00d779;fill-opacity:0.297502;stroke:none;stroke-width:0.391625;stroke-linecap:round;stroke-dasharray:none"
-       id="rect3480"
-       width="70.689957"
-       height="17.245436"
-       x="84.162178"
-       y="162.00232"
-       ry="5.1018615"
-       transform="matrix(0.89292302,-0.45020938,0.40934778,0.91237843,0,0)" /><rect
-       style="fill:#d700cc;fill-opacity:0.297502;stroke:none;stroke-width:0.434336;stroke-linecap:round;stroke-dasharray:none"
-       id="rect3534"
-       width="36.34494"
-       height="37.63588"
-       x="138.1024"
-       y="64.224426"
-       ry="6.2449827" /><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.2824px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#d700cc;fill-opacity:0.8;stroke:none;stroke-width:0.867818;stroke-linecap:round;stroke-dasharray:none"
-       x="238.46535"
-       y="48.250973"
-       id="text4890"><tspan
-         sodipodi:role="line"
-         id="tspan4888"
-         style="fill:#d700cc;fill-opacity:0.8;stroke-width:0.867818"
-         x="238.46535"
-         y="48.250973">A</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.2824px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#ff0000;fill-opacity:0.8;stroke:none;stroke-width:0.867818;stroke-linecap:round;stroke-dasharray:none"
-       x="238.46535"
-       y="71.033676"
-       id="text4894"><tspan
-         sodipodi:role="line"
-         id="tspan4892"
-         style="fill:#ff0000;fill-opacity:0.8;stroke-width:0.867818"
-         x="238.46535"
-         y="71.033676">B</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.2824px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#00d779;fill-opacity:0.8;stroke:none;stroke-width:0.867818;stroke-linecap:round;stroke-dasharray:none"
-       x="238.46535"
-       y="94.065376"
-       id="text5243"><tspan
-         sodipodi:role="line"
-         id="tspan5241"
-         style="fill:#00d779;fill-opacity:0.8;stroke-width:0.867818"
-         x="238.46535"
-         y="94.065376">C</tspan></text><text
-       xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.2824px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#00e1ff;fill-opacity:0.8;stroke:none;stroke-width:0.867818;stroke-linecap:round;stroke-dasharray:none"
-       x="238.46535"
-       y="117.08521"
-       id="text5247"><tspan
-         sodipodi:role="line"
-         id="tspan5245"
-         style="fill:#00e1ff;fill-opacity:0.8;stroke-width:0.867818"
-         x="238.46535"
-         y="117.08521">D</tspan></text></g></svg>
-</p>
-</div>
-</div>
-<pre ><code class="pgsql" style="font-size:.85em;">ALTER TABLE revq ADD COLUMN col4 INT;
+::::col
+
+![](../images/uc_ch9_2.svg)
+
+::::
+::::::
+
+```{.pgsql style='font-size:.85em;'}
+ALTER TABLE revq ADD COLUMN col4 INT;
 UPDATE revq SET col4 = col2;
 UPDATE revq SET (col2,col3)=(col3, col2) WHERE col1 IN ('B','C');
 UPDATE revq SET col3 = col3 - col4;
 UPDATE revq SET col2 = col2 + col4 WHERE col3 > 10;
-ALTER TABLE revq DROP COLUMN col4;</code></pre>
+ALTER TABLE revq DROP COLUMN col4;
+```
+-->
 </section>
 <section id="backup-tables" class="slide level2">
 <h2>Backup Tables</h2>
@@ -746,7 +591,7 @@ original table</li>
 <li><p>In core SQL, you’d need to use subqueries, which we’ll be talking
 about in a few chapters</p></li>
 <li><p>In Postgres, to update, you can use
-<code class="python">FROM</code>:</p>
+<code class="pgsql">FROM</code>:</p>
 <pre ><code class="pgsql" style="font-size:.9em">UPDATE table_name1
 SET |||column name||| = table_name2.|||column name|||
 FROM table_name2
@@ -761,15 +606,15 @@ WHERE table_name1.|||col1||| = table_name2.|||col1|||;</code></pre></li>
 <li>Similar to changing tables, removing things from tables has two main
 keywords:
 <ul>
-<li><code class="python">DROP</code> for removing aspects of a table
-like columns, constraints, indexes, or the table itself</li>
-<li><code class="python">DELETE FROM</code> for removing rows from
+<li><code class="pgsql">DROP</code> for removing aspects of a table like
+columns, constraints, indexes, or the table itself</li>
+<li><code class="pgsql">DELETE FROM</code> for removing rows from
 tables</li>
 </ul></li>
-<li><code class="python">DROP</code> will frequently come after an
-<code class="python">ALTER TABLE</code> unless you are dropping the
-table itself</li>
-<li><code class="python">DELETE FROM</code> without a filter will
+<li><code class="pgsql">DROP</code> will frequently come after an
+<code class="pgsql">ALTER TABLE</code> unless you are dropping the table
+itself</li>
+<li><code class="pgsql">DELETE FROM</code> without a filter will
 <strong>delete all rows</strong>
 <ul>
 <li>Make absolutely sure you are using a filter if you don’t want that
@@ -795,83 +640,6 @@ data from a table
 data, etc.</li>
 </ul></li>
 </ul>
-</section>
-<section id="transactions" class="slide level2">
-<h2>Transactions</h2>
-<ul>
-<li><em>Atomicity</em> is an important aspect of most database changes
-<ul>
-<li>The idea that related changes should happen in a single,
-self-contained step</li>
-</ul></li>
-<li>Many changes you might make to a database have several steps though!
-<ul>
-<li>Need to change one value in one table and another value in another
-table</li>
-<li>Need to create a new row and then copy some information into it</li>
-</ul></li>
-<li>Remember that, in general, others can access the database at the
-same time
-<ul>
-<li>What if they tried to access the data you were working on
-mid-operation?</li>
-</ul></li>
-<li>To solve these issues, SQL has the concept of a
-<em>transaction</em></li>
-</ul>
-</section>
-<section id="bundling-up" class="slide level2">
-<h2>Bundling Up</h2>
-<ul>
-<li>A <em>transaction</em> is essentially a bundling of several
-statements into one, discrete change to the database</li>
-<li>Commands within the transaction have not yet modified the database,
-but exist only in local memory</li>
-<li>Changes get written to the database all at once upon the conclusion
-of the transaction</li>
-<li>Starting a transaction?
-<ul>
-<li><code class="python">START TRANSACTION;</code> or
-<code class="python">BEGIN;</code></li>
-</ul></li>
-<li>Ending a transaction?
-<ul>
-<li><code class="python">COMMIT;</code> actually makes the changes</li>
-<li><code class="python">ROLLBACK;</code> throws out everything within
-the transaction</li>
-</ul></li>
-</ul>
-</section>
-<section id="uses-of-transactions" class="slide level2">
-<h2>Uses of Transactions</h2>
-<div class="smaller">
-<ul>
-<li>Protecting against system faults
-<ul>
-<li>What if you have a system crash in the middle of an operation?
-<ul>
-<li>What commands had been run? What commands had not?</li>
-</ul></li>
-<li>Transactions actually write to a log what they are <em>going</em> to
-do before they actually do it. So in case of a crash, then the
-transaction can then simply be rerun</li>
-</ul></li>
-<li>Protecting against simultaneous access
-<ul>
-<li>Changes occur all at once, so it is impossible for another database
-user to access data “mid-change”</li>
-<li>Other users of the database will see none of your changes until
-actually committed</li>
-</ul></li>
-<li>Testing changes
-<ul>
-<li>Sometimes it is useful to check to see that some changes look the
-way you wanted before actually changing the database</li>
-<li>Embedding within a transaction block always gives you the option to
-rollback</li>
-</ul></li>
-</ul>
-</div>
 </section>
 <section id="practice-activity" class="slide level2">
 <h2>Practice Activity</h2>
@@ -922,7 +690,145 @@ percentage of national debt overall all the years?
 <li>Only about 0.05%, but seemingly a slight steady increase</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="tis-transactional" class="title-slide slide level1">
+<h1>Tis Transactional</h1>
+
 </section>
+<section id="transactions" class="slide level2">
+<h2>Transactions</h2>
+<ul>
+<li><em>Atomicity</em> is an important aspect of most database changes
+<ul>
+<li>The idea that related changes should happen in a single,
+self-contained step</li>
+</ul></li>
+<li>Many changes you might make to a database have several steps though!
+<ul>
+<li>Need to change one value in one table and another value in another
+table</li>
+<li>Need to create a new row and then copy some information into it</li>
+</ul></li>
+<li>Remember that, in general, others can access the database at the
+same time
+<ul>
+<li>What if they tried to access the data you were working on
+mid-operation?</li>
+</ul></li>
+<li>To solve these issues, SQL has the concept of a
+<em>transaction</em></li>
+</ul>
+</section>
+<section id="bundling-up" class="slide level2">
+<h2>Bundling Up</h2>
+<ul>
+<li>A <em>transaction</em> is essentially a bundling of several
+statements into one, discrete change to the database</li>
+<li>Commands within the transaction have not yet modified the database,
+but exist only in local memory</li>
+<li>Changes get written to the database all at once upon the conclusion
+of the transaction</li>
+<li>Starting a transaction?
+<ul>
+<li><code class="pgsql">START TRANSACTION;</code> or
+<code class="pgsql">BEGIN;</code></li>
+</ul></li>
+<li>Ending a transaction?
+<ul>
+<li><code class="pgsql">COMMIT;</code> actually makes the changes</li>
+<li><code class="pgsql">ROLLBACK;</code> throws out everything within
+the transaction</li>
+</ul></li>
+</ul>
+</section>
+<section id="uses-of-transactions" class="slide level2">
+<h2>Uses of Transactions</h2>
+<div class="smaller">
+<ul>
+<li>Protecting against system faults
+<ul>
+<li>What if you have a system crash in the middle of an operation?
+<ul>
+<li>What commands had been run? What commands had not?</li>
+</ul></li>
+<li>Transactions actually write to a log what they are <em>going</em> to
+do before they actually do it. So in case of a crash, then the
+transaction can then simply be rerun</li>
+</ul></li>
+<li>Protecting against simultaneous access
+<ul>
+<li>Changes occur all at once, so it is impossible for another database
+user to access data “mid-change”</li>
+<li>Other users of the database will see none of your changes until
+actually committed</li>
+</ul></li>
+<li>Testing changes
+<ul>
+<li>Sometimes it is useful to check to see that some changes look the
+way you wanted before actually changing the database</li>
+<li>Embedding within a transaction block always gives you the option to
+rollback</li>
+</ul></li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="project-transformations" class="title-slide slide level1">
+<h1>Project Transformations</h1>
+
+</section>
+<section id="transforming-data" class="slide level2">
+<h2>Transforming Data</h2>
+<ul>
+<li>Often you will need to move data from one location to another to
+organize it, possibly cleaning it along the way</li>
+<li>There are a variety of automation setups that can aid with this,
+though most all require some scripting knowledge</li>
+<li>For many transformations though, we can accomplish what is necessary
+purely through SQL and some scheduling</li>
+</ul>
+</section>
+<section id="project-transformation-checklist" class="slide level2">
+<h2>Project Transformation Checklist</h2>
+<div class="smaller">
+<ul>
+<li>Create a GitHub repository of your own using the template repository
+<a
+href="https://github.com/rembold-data-engineering-master/db_transformation_template">here</a></li>
+<li>Download the created repository to your system</li>
+<li>Edit the <code class="text">clean.sql</code> file to add whatever
+commands you need to move, organize, and clean your data.</li>
+<li>Upload the new <code class="text">clean.sql</code> file back to your
+repository, keeping the filename the same!</li>
+<li>In your project on Railway, click New and then “GitHub Repo”
+<ul>
+<li>You’ll have to agree to let Railway access your account, and you can
+specify only certain repositories</li>
+<li>Select your created repository</li>
+</ul></li>
+<li>Selecting the repository, go to settings and then scroll down to the
+CRON schedule to set up a schedule</li>
+</ul>
+</div>
+</section>
+<section id="things-to-keep-in-mind" class="slide level2">
+<h2>Things to keep in mind</h2>
+<ul>
+<li><p>You’ll need to create more tables to organize your data. These
+get run a <strong>single</strong> time, so they should not go in
+<code class="text">clean.sql</code>!</p></li>
+<li><p>It can be useful to empty out your original dumping table after
+you organize things each time so that you don’t “double process”
+anything</p></li>
+<li><p>If you are getting duplicate information occasionally through
+your API, it can be useful to understand “Upserting”:</p>
+<pre ><code class="pgsql">INSERT INTO |||new table||| VALUES
+SELECT |||special id, other cols||| FROM |||old table|||
+ON CONFLICT |||column or constraint name|||
+DO NOTHING</code></pre></li>
+</ul>
+</section></section>
     </div>
   </div>
 
@@ -941,6 +847,7 @@ percentage of national debt overall all the years?
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
+  <script src="../html_srcs/revealjs/../js/mybash.js"></script>
 
   <script>
 
@@ -1016,7 +923,7 @@ percentage of national debt overall all the years?
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -1059,9 +966,20 @@ percentage of national debt overall all the years?
 			disableCheckFile: false, //default false
 		 },
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
-              console.log(mypgsqldef);
-              return mypgsqldef(hljs); } )
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              hljs.registerLanguage("bash", function(hljs) {
+                console.log(mybashdef);
+                return mybashdef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
           },
 
         // reveal.js plugins
@@ -1079,6 +997,7 @@ percentage of national debt overall all the years?
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
+          theme: "whiteboard",
           boardmarkers : [
                   { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                   { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
