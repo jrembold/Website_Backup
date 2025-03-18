@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-03-18">
+  <title>Logistic Regression</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Logistic Regression</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">March 18, 2025</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>HW4 is out!
+<ul>
+<li>You can already do the first two problems in their entirety!</li>
+<li>We’ll be spending the rest of this week and a day after break
+getting you the techniques for Problem 3</li>
+<li>I’m actually bumping the HW4 deadline back to Thursday (Apr 3)
+because of the need for the day after break.</li>
+</ul></li>
+<li>I’m 80% of the way through the HW2 feedback
+<ul>
+<li>Once I finish it, I’ll give you 2-3 days of
+<strong>non-break</strong> time to make any updates to HW3 that you
+might desire based on the feedback.</li>
+<li>I’m targeting by the end of Thursday, which I think is actually
+doable</li>
+</ul></li>
+</ul>
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap</h2>
+<div style="font-size:.8em">
+<ul>
+<li>Galaxies largely form as the result of large regions of mostly
+hydrogen gas collapsing inwards under gravity</li>
+<li>Galaxies come in three main “flavors”:
+<ul>
+<li>Spiral Galaxies</li>
+<li>Elliptical Galaxies</li>
+<li>Irregular</li>
+</ul></li>
+<li>Classification models commonly use confusion matrices to judge the
+relative quality of the model
+<ul>
+<li>There are ways to attach numbers to these for comparison, but the
+goal is almost never to just optimize a number</li>
+</ul></li>
+<li>Machine Learning methods are more concerned with predicting, as
+opposed to statistical methods focusing on inference</li>
+<li>Supervised learning requires labeled data for training, where the
+categories are already known</li>
+</ul>
+</div>
+</section>
+<section id="discussing-today" class="slide level2">
+<h2>Discussing Today</h2>
+<ul>
+<li>Basic data prep in Python and R</li>
+<li>Our first model: Logistic Regression
+<ul>
+<li>Building, training, and testing models in Python</li>
+<li>Building, training, and testing models in R</li>
+</ul></li>
+</ul>
+</section>
+<section>
+<section id="prepping-the-data" class="title-slide slide level1">
+<h1>Prepping the Data</h1>
+
+</section>
+<section id="training-vs-testing" class="slide level2">
+<h2>Training vs Testing</h2>
+<ul>
+<li>Because of the iterative approach, many models will, if given enough
+time, <em>perfectly</em> model the data
+<ul>
+<li><strong>THIS IS A BAD THING!</strong></li>
+</ul></li>
+<li>If a model too perfectly matches a given set of data, the chances of
+it being able to accurate predict other data have greatly diminished
+<ul>
+<li>Generally called <em>overfitting</em></li>
+</ul></li>
+<li>It is common then to set aside a portion of data that the model is
+<strong>not</strong> trained on to serve as a test to compare the model
+against</li>
+<li>These are generally denoted as the “training” and “testing” data
+sets
+<ul>
+<li>A common split is to put about 80% of the observations into the
+training set, and reserve the remaining 20% for the testing</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-libraries" class="slide level2">
+<h2>The Libraries</h2>
+<ul>
+<li><p>Doing this sort of work benefits greatly from a streamlined
+architecture and common syntax</p>
+<ul>
+<li>It helps greatly for the code to look similar despite whatever model
+is used</li>
+</ul></li>
+<li><p>In Python, the gold standard is Scikit-Learn:</p>
+<pre ><code class="bash">pip install -U scikit-learn</code></pre></li>
+<li><p>In R, TidyModels is the best similar resource I’ve seen:</p>
+<pre ><code class="r">install.package('tidymodels')</code></pre></li>
+<li><p>Both can take a bit of time to install</p></li>
+</ul>
+<!--
+## The Very Basics (In Python)
+- Scikit-learn provides the `sklearn` package in Python, which is the industry standard for doing most ML in Python
+- Several useful function to probably always import:
+  ```python
+  from sklearn.model_selection import train_test_split
+  from sklearn.metrics import confusion_matrix
+  ```
+- Will also commonly want to import in your basic ML model
+  - We will initially just look at Logistic Regression
+    ```python
+    from sklearn.linear_model import LogisticRegression
+    ```
+-->
+</section>
+<section id="making-the-split-python" class="slide level2">
+<h2>Making the Split (Python)</h2>
+<ul>
+<li><p>To split your data, <code class="python">train_test_split</code>
+can assist:</p>
+<pre ><code class="python">from sklearn.model_selection import train_test_split</code></pre></li>
+<li><p>Need to include an option
+<code class="python">test_size=frac</code> where
+<code class="python">frac</code> is the amount that you want to set
+aside for <em>testing</em></p></li>
+<li><p><code class="python">train_test_split</code> shuffles the data
+before making the splits, so you don’t need to worry about that</p></li>
+<li><p>Usage:</p>
+<pre ><code class="python" style="font-size:.95em">train_df, test_df = train_test_split(df, 
+                                     test_size=0.2,
+                                     random_state=0)</code></pre></li>
+</ul>
+</section>
+<section id="making-the-split-r" class="slide level2">
+<h2>Making the Split (R)</h2>
+<ul>
+<li><p>To split your data in R, several functions from
+<code class="python">rsamples</code> (part of
+<code class="python">tidymodels</code>) are useful</p></li>
+<li><p>You indicate the amount of observations you want to use for
+<em>training</em></p>
+<pre ><code class="r">splits <- initial_split(df, prop=0.8)
+train_df <- training(splits)
+test_df <- testing(splits)</code></pre></li>
+<li><p>Useful to also set the seed before splitting for
+reproducability:</p>
+<pre ><code class="r">set.seed(num)</code></pre></li>
+</ul>
+</section></section>
+<section>
+<section id="logistic-regression" class="title-slide slide level1">
+<h1>Logistic Regression</h1>
+
+</section>
+<section id="modeling" class="slide level2">
+<h2>Modeling</h2>
+<ul>
+<li>Within the supervised machine learning for classification domain,
+there are many possible specific models that can be used for the
+training</li>
+<li>We’ll end up looking at several in this class:
+<ul>
+<li>Logistic Regression (Multinomial Regression)</li>
+<li>Decision Trees</li>
+<li>Random Forests</li>
+</ul></li>
+<li>Our ML libraries make working with any of these a very similar
+experience!</li>
+</ul>
+</section>
+<section id="binomial-logistic-regression" class="slide level2">
+<h2>Binomial Logistic Regression</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Draws a line (or plane or hyperplane) that separates the two
+groups</li>
+<li>Closer to the division equates to less confidence in the assigned
+type</li>
+</ul>
+</div>
+<div class="col">
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="166.47144mm"
+   height="166.47145mm"
+   viewBox="0 0 166.47143 166.47145"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   sodipodi:docname="log_regression.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.1367864"
+     inkscape:cx="387.05601"
+     inkscape:cy="226.51573"
+     inkscape:window-width="2560"
+     inkscape:window-height="1440"
+     inkscape:window-x="1080"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <marker
+       style="overflow:visible"
+       id="TriangleStart"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="TriangleStart"
+       markerWidth="5.3244081"
+       markerHeight="6.155385"
+       viewBox="0 0 5.3244081 6.1553851"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-31.485415,-13.758326)">
+    <path
+       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:2.4134;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
+       d="M 45.60368,179.02307 V 22.32849"
+       id="path236" />
+    <path
+       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:2.4134;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
+       d="M 32.692115,164.77518 H 189.38669"
+       id="path1143" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1199"
+       cx="67.449898"
+       cy="48.415108"
+       r="4.4506021" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1201"
+       cx="74.969582"
+       cy="34.805443"
+       r="4.4506021" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1203"
+       cx="66.759064"
+       cy="71.108994"
+       r="4.4506021" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1205"
+       cx="90.174362"
+       cy="64.953476"
+       r="4.4506021" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1207"
+       cx="99.283897"
+       cy="42.398533"
+       r="4.4506021" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1323"
+       width="9.3253241"
+       height="9.3253241"
+       x="64.61599"
+       y="122.5301" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1325"
+       width="9.3253241"
+       height="9.3253241"
+       x="76.189293"
+       y="130.0892" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1327"
+       width="9.3253241"
+       height="9.3253241"
+       x="91.367966"
+       y="113.47852" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1329"
+       width="9.3253241"
+       height="9.3253241"
+       x="105.34735"
+       y="124.83598" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1331"
+       width="9.3253241"
+       height="9.3253241"
+       x="90.082664"
+       y="137.73201" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1333"
+       width="9.3253241"
+       height="9.3253241"
+       x="61.809994"
+       y="142.18916" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle20"
+       cx="106.87402"
+       cy="60.405178"
+       r="4.4506021"
+       inkscape:spray-origin="#path1199" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle21"
+       cx="169.18466"
+       cy="59.519947"
+       r="4.4506021"
+       inkscape:spray-origin="#circle1203" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle22"
+       cx="131.84276"
+       cy="60.291435"
+       r="4.4506021"
+       inkscape:spray-origin="#circle1203" />
+    <circle
+       style="display:inline;fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle23"
+       cx="132.65794"
+       cy="20.001829"
+       r="4.4506021"
+       inkscape:spray-origin="#circle1203" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle24"
+       cx="126.24362"
+       cy="37.529243"
+       r="4.4506021"
+       inkscape:spray-origin="#circle1207" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle25"
+       cx="115.32821"
+       cy="28.069141"
+       r="4.4506021"
+       inkscape:spray-origin="#path1199" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle26"
+       cx="117.57765"
+       cy="83.67791"
+       r="4.4506021"
+       inkscape:spray-origin="#path1199" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle27"
+       cx="92.197746"
+       cy="78.208382"
+       r="4.4506021"
+       inkscape:spray-origin="#circle1207" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle28"
+       cx="58.587734"
+       cy="100.76998"
+       r="4.4506021"
+       inkscape:spray-origin="#circle1203" />
+    <circle
+       style="fill:#8c4351;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle29"
+       cx="84.342758"
+       cy="99.743462"
+       r="4.4506021"
+       inkscape:spray-origin="#circle1205" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect29"
+       width="9.3253241"
+       height="9.3253241"
+       x="119.71356"
+       y="101.15153"
+       inkscape:spray-origin="#rect1327" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect30"
+       width="9.3253241"
+       height="9.3253241"
+       x="159.1788"
+       y="92.976707"
+       inkscape:spray-origin="#rect1327" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect31"
+       width="9.3253241"
+       height="9.3253241"
+       x="149.97935"
+       y="43.191162"
+       inkscape:spray-origin="#rect1331" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect32"
+       width="9.3253241"
+       height="9.3253241"
+       x="154.60654"
+       y="69.973763"
+       inkscape:spray-origin="#rect1329" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect33"
+       width="9.3253241"
+       height="9.3253241"
+       x="126.82493"
+       y="71.337402"
+       inkscape:spray-origin="#rect1327" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect34"
+       width="9.3253241"
+       height="9.3253241"
+       x="157.8524"
+       y="122.97147"
+       inkscape:spray-origin="#rect1323" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect35"
+       width="9.3253241"
+       height="9.3253241"
+       x="141.43312"
+       y="142.56865"
+       inkscape:spray-origin="#rect1331" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect36"
+       width="9.3253241"
+       height="9.3253241"
+       x="127.09831"
+       y="122.38644"
+       inkscape:spray-origin="#rect1329" />
+    <rect
+       style="fill:#5a4a78;fill-opacity:1;stroke:#000000;stroke-width:1.1736;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect37"
+       width="9.3253241"
+       height="9.3253241"
+       x="111.68083"
+       y="140.01817"
+       inkscape:spray-origin="#rect1331" />
+    <path
+       style="fill:none;stroke:#8f5e15;stroke-width:3.92854;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:3.92854, 7.85709;stroke-dashoffset:0"
+       d="M 33.961237,145.80999 194.58263,32.637628"
+       id="path37"
+       sodipodi:nodetypes="cc"
+       class="fragment" />
+  </g>
+</svg>
+</p>
+</div>
+</div>
+</section>
+<section id="behind-the-scenes-multi-logistic-regression"
+class="slide level2">
+<h2>Behind the Scenes: Multi-Logistic Regression</h2>
+<ul>
+<li>Scikit-Learn’s handling of multinomial logistic regression uses a
+“one-vs-rest” model</li>
+<li>Binary logistic regressions are run on each category vs
+<strong>all</strong> the <strong>other</strong> categories</li>
+<li>Final assignment is determined by whichever model is most confident
+about that points category
+<ul>
+<li>Confidence usually builds as you move away from the division
+line</li>
+</ul></li>
+</ul>
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="373.21942mm"
+   height="80.704262mm"
+   viewBox="0 0 373.21942 80.704262"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="one_vs_rest.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.5946522"
+     inkscape:cx="646.59645"
+     inkscape:cy="228.70512"
+     inkscape:window-width="1680"
+     inkscape:window-height="1020"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <marker
+       style="overflow:visible"
+       id="TriangleStart"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="TriangleStart"
+       markerWidth="5.3244081"
+       markerHeight="6.155385"
+       viewBox="0 0 5.3244081 6.1553851"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-0.69387532,140.0695)">
+    <path
+       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
+       d="M 7.5383175,-59.950233 V -135.91474"
+       id="path236" />
+    <path
+       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
+       d="M 1.2788753,-66.85752 H 77.243382"
+       id="path1143" />
+    <circle
+       style="fill:#7a0000;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1199"
+       cx="18.129221"
+       cy="-123.26812"
+       r="2.1576226" />
+    <circle
+       style="fill:#7a0000;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1201"
+       cx="25.660347"
+       cy="-123.64897"
+       r="2.1576226" />
+    <circle
+       style="fill:#7a0000;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1203"
+       cx="17.79431"
+       cy="-112.26627"
+       r="2.1576226" />
+    <circle
+       style="fill:#7a0000;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1205"
+       cx="29.145889"
+       cy="-115.25043"
+       r="2.1576226" />
+    <circle
+       style="fill:#7a0000;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1207"
+       cx="33.562138"
+       cy="-126.18491"
+       r="2.1576226" />
+    <path
+       sodipodi:type="star"
+       style="fill:#007367;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1261"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484" />
+    <path
+       sodipodi:type="star"
+       style="fill:#007367;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1263"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(9.3407505,0.8864813)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#007367;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1265"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(3.7330903,5.4079827)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#007367;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1267"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(9.594124,8.4901163)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#007367;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1269"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(-2.5951908,13.037566)" />
+    <rect
+       style="fill:#452981;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1323"
+       width="4.5208559"
+       height="4.5208559"
+       x="16.75536"
+       y="-87.337654" />
+    <rect
+       style="fill:#452981;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1325"
+       width="4.5208559"
+       height="4.5208559"
+       x="22.36602"
+       y="-83.67305" />
+    <rect
+       style="fill:#452981;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1327"
+       width="4.5208559"
+       height="4.5208559"
+       x="24.595503"
+       y="-90.016129" />
+    <rect
+       style="fill:#452981;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1329"
+       width="4.5208559"
+       height="4.5208559"
+       x="32.771442"
+       y="-84.199249" />
+    <rect
+       style="fill:#452981;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1331"
+       width="4.5208559"
+       height="4.5208559"
+       x="29.101437"
+       y="-79.967873" />
+    <rect
+       style="fill:#452981;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1333"
+       width="4.5208559"
+       height="4.5208559"
+       x="15.395031"
+       y="-77.807068" />
+    <path
+       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
+       d="M 121.41829,-59.950233 V -135.91474"
+       id="path1337" />
+    <path
+       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
+       d="m 115.15885,-66.85752 h 75.96451"
+       id="path1339" />
+    <circle
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1341"
+       cx="132.0092"
+       cy="-123.26812"
+       r="2.1576226" />
+    <circle
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1343"
+       cx="139.54033"
+       cy="-123.64897"
+       r="2.1576226" />
+    <circle
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1345"
+       cx="131.67429"
+       cy="-112.26627"
+       r="2.1576226" />
+    <circle
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1347"
+       cx="143.02586"
+       cy="-115.25043"
+       r="2.1576226" />
+    <circle
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1349"
+       cx="147.44211"
+       cy="-126.18491"
+       r="2.1576226" />
+    <path
+       sodipodi:type="star"
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1351"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(113.87998)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1353"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(123.22073,0.8864813)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1355"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(117.61307,5.4079827)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1357"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(123.4741,8.4901163)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1359"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(111.28479,13.037566)" />
+    <rect
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1361"
+       width="4.5208559"
+       height="4.5208559"
+       x="130.63533"
+       y="-87.337654" />
+    <rect
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1363"
+       width="4.5208559"
+       height="4.5208559"
+       x="136.246"
+       y="-83.67305" />
+    <rect
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1365"
+       width="4.5208559"
+       height="4.5208559"
+       x="138.47548"
+       y="-90.016129" />
+    <rect
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1367"
+       width="4.5208559"
+       height="4.5208559"
+       x="146.65141"
+       y="-84.199249" />
+    <rect
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1369"
+       width="4.5208559"
+       height="4.5208559"
+       x="142.98141"
+       y="-79.967873" />
+    <rect
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1371"
+       width="4.5208559"
+       height="4.5208559"
+       x="129.27501"
+       y="-77.807068" />
+    <path
+       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
+       d="M 212.47007,-59.950233 V -135.91474"
+       id="path1377" />
+    <path
+       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
+       d="m 206.21063,-66.85752 h 75.9645"
+       id="path1379" />
+    <circle
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1381"
+       cx="223.06097"
+       cy="-123.26812"
+       r="2.1576226" />
+    <circle
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1383"
+       cx="230.5921"
+       cy="-123.64897"
+       r="2.1576226" />
+    <circle
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1385"
+       cx="222.72606"
+       cy="-112.26627"
+       r="2.1576226" />
+    <circle
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1387"
+       cx="234.07764"
+       cy="-115.25043"
+       r="2.1576226" />
+    <circle
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1389"
+       cx="238.4939"
+       cy="-126.18491"
+       r="2.1576226" />
+    <path
+       sodipodi:type="star"
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1391"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(204.93175)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1393"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(214.2725,0.8864813)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1395"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(208.66484,5.4079827)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1397"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(214.52588,8.4901163)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1399"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(202.33656,13.037566)" />
+    <rect
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1401"
+       width="4.5208559"
+       height="4.5208559"
+       x="221.68712"
+       y="-87.337654" />
+    <rect
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1403"
+       width="4.5208559"
+       height="4.5208559"
+       x="227.29778"
+       y="-83.67305" />
+    <rect
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1405"
+       width="4.5208559"
+       height="4.5208559"
+       x="229.52725"
+       y="-90.016129" />
+    <rect
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1407"
+       width="4.5208559"
+       height="4.5208559"
+       x="237.7032"
+       y="-84.199249" />
+    <rect
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1409"
+       width="4.5208559"
+       height="4.5208559"
+       x="234.03319"
+       y="-79.967873" />
+    <rect
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1411"
+       width="4.5208559"
+       height="4.5208559"
+       x="220.32678"
+       y="-77.807068" />
+    <path
+       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
+       d="M 300.05347,-59.950233 V -135.91474"
+       id="path1417" />
+    <path
+       style="fill:#000000;fill-opacity:0.148259;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
+       d="m 293.79402,-66.85752 h 75.96451"
+       id="path1419" />
+    <circle
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1421"
+       cx="310.64438"
+       cy="-123.26812"
+       r="2.1576226" />
+    <circle
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1423"
+       cx="318.17551"
+       cy="-123.64897"
+       r="2.1576226" />
+    <circle
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1425"
+       cx="310.30945"
+       cy="-112.26627"
+       r="2.1576226" />
+    <circle
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1427"
+       cx="321.66104"
+       cy="-115.25043"
+       r="2.1576226" />
+    <circle
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="circle1429"
+       cx="326.0773"
+       cy="-126.18491"
+       r="2.1576226" />
+    <path
+       sodipodi:type="star"
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1431"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(292.51515)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1433"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(301.8559,0.8864813)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1435"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(296.24824,5.4079827)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1437"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(302.10927,8.4901163)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#0d52bf;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="path1439"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="50.627159"
+       sodipodi:cy="-108.59898"
+       sodipodi:r1="3.6124482"
+       sodipodi:r2="1.8062241"
+       sodipodi:arg1="0.56408693"
+       sodipodi:arg2="1.6112845"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 53.679956,-106.66761 -3.125908,-0.12663 -3.125908,-0.12663 1.67262,-2.6438 1.672621,-2.6438 1.453288,2.77043 z"
+       inkscape:transform-center-x="0.07311134"
+       inkscape:transform-center-y="-0.83905484"
+       transform="translate(289.91996,13.037566)" />
+    <rect
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1441"
+       width="4.5208559"
+       height="4.5208559"
+       x="309.27051"
+       y="-87.337654" />
+    <rect
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1443"
+       width="4.5208559"
+       height="4.5208559"
+       x="314.88116"
+       y="-83.67305" />
+    <rect
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1445"
+       width="4.5208559"
+       height="4.5208559"
+       x="317.11066"
+       y="-90.016129" />
+    <rect
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1447"
+       width="4.5208559"
+       height="4.5208559"
+       x="325.28659"
+       y="-84.199249" />
+    <rect
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1449"
+       width="4.5208559"
+       height="4.5208559"
+       x="321.61658"
+       y="-79.967873" />
+    <rect
+       style="fill:#d48e15;fill-opacity:1;stroke:#000000;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1451"
+       width="4.5208559"
+       height="4.5208559"
+       x="307.91019"
+       y="-77.807068" />
+    <g
+       id="divisions"
+       class="fragment">
+      <path
+         style="fill:#485a6c;fill-opacity:1;stroke:#485a6c;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:4.68, 4.68;stroke-dashoffset:0"
+         d="m 123.94243,-89.382967 51.49331,-44.482113"
+         id="path1509" />
+      <path
+         style="fill:#485a6c;fill-opacity:1;stroke:#485a6c;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:4.68, 4.68;stroke-dashoffset:0"
+         d="m 245.93399,-127.09857 1.03405,55.366285"
+         id="path1511" />
+      <path
+         style="fill:#485a6c;fill-opacity:1;stroke:#485a6c;stroke-width:1.17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:4.68, 4.68;stroke-dashoffset:0"
+         d="m 305.77729,-102.64168 47.75144,26.197111"
+         id="path1513" />
+    </g>
+    <path
+       style="fill:#485a6c;fill-opacity:1;stroke:#485a6c;stroke-width:0.597696;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+       d="m 83.590827,-102.2171 h 6.586344 v -5.14285 l 9.612986,7.714279 -9.612986,7.714283 v -5.142855 h -6.586344 z"
+       id="path1637"
+       sodipodi:nodetypes="cccccccc" />
+  </g>
+</svg>
+</p>
+</section>
+<section id="the-logistic-regression-model-python" class="slide level2">
+<h2>The Logistic Regression Model (Python)</h2>
+<ul>
+<li><p>The logistic regression model is provided directly from
+Scikit-Learn:</p>
+<pre ><code class="python">from sklearn.linear_model import LogisticRegression</code></pre></li>
+<li><p>You need to <em>initialize</em> a model before you can try to fit
+anything to it</p></li>
+<li><p>At its most simple:</p>
+<pre ><code class="python">model = LogisticRegression()</code></pre></li>
+<li><p>Note that there are a <strong>lot</strong> of options that can be
+further provided to the model as arguments</p></li>
+</ul>
+</section>
+<section id="the-logistic-regression-model-r" class="slide level2">
+<h2>The Logistic Regression Model (R)</h2>
+<ul>
+<li><p>Tidymodels distinguishes between Logistic Regression (2
+categories) and Multinomial Regression (&gt;2 categories)</p></li>
+<li><p>You still need to <em>initialize</em> a model before you can try
+to fit anything to it</p>
+<pre ><code class="r">model <- logistic_reg() # or
+model <- multinom_reg()</code></pre></li>
+<li><p>Can tweak with the underlying engine that powers these, but the
+default is fine</p></li>
+</ul>
+</section>
+<section id="fitting-the-model" class="slide level2">
+<h2>Fitting the Model</h2>
+<ul>
+<li><p>Fitting the model is the act of iteratively improving on the fit
+parameters</p></li>
+<li><p>You need to provide your model the training data when doing so,
+both the feature data and the classification labels (this is supervised
+remember!)</p>
+<pre ><code class="python">model_fit = model.fit(train_df[[feature_cols]], 
+                      train_df[label_col]
+                      )</code></pre>
+<pre ><code class="r">model_fit <- model %>% 
+  fit(label_col ~ feature_cols, data=train_df)</code></pre></li>
+</ul>
+</section></section>
+<section>
+<section id="how-did-we-do" class="title-slide slide level1">
+<h1>How did we do?</h1>
+
+</section>
+<section id="evaluating-the-model" class="slide level2">
+<h2>Evaluating the Model</h2>
+<ul>
+<li>Once the model has been fit, the fit can be used to make predictions
+<ul>
+<li><p>Generally, the first predictions that should be made should be
+made on the testing data!</p>
+<pre ><code class="python">test_df['predicted'] = 
+  model_fit.predict(test_df[[feature_cols]])</code></pre>
+<pre ><code class="r">test_df <- test_df %>% 
+  bind_cols(model_fit %>% predict(test_df)</code></pre></li>
+<li><p>This should return a list of label predictions</p></li>
+</ul></li>
+<li>These could be compared directly to the known labels of the testing
+data, or, more likely, you may want to create a confusion matrix</li>
+</ul>
+</section>
+<section id="creating-confusion-python" class="slide level2">
+<h2>Creating Confusion (Python)</h2>
+<ul>
+<li><p>You could construct the confusion matrix manually, but imports
+can help</p>
+<pre ><code class="python" style="font-size:.9em">from sklearn.metrics import confusion_matrix
+from sklearn.metrics import ConfusionMatrixDisplay as CMD</code></pre></li>
+<li><p>Armed with the predictions, you can construct your confusion
+matrix</p>
+<pre ><code class="python" style="font-size:.9em">confusion_matrix(test_df[label_col], test_df['predicted'])</code></pre>
+<p>which will print out the matrix in a Numpy array</p></li>
+<li><p>Want graphics?</p>
+<pre ><code class="python" style="font-size:.85em">CMD.from_predictions(test_df[label_col], test_df['predicted'])</code></pre></li>
+</ul>
+</section>
+<section id="sewing-confusion-r" class="slide level2">
+<h2>Sewing Confusion (R)</h2>
+<ul>
+<li><p>The <code class="python">yardstick</code> library in
+<code class="python">tidymodels</code> provides the
+<code class="python">conf_mat</code> function</p></li>
+<li><p>Provides a special confusion matrix object, which can then have a
+variety of things done with it</p>
+<pre ><code class="r">cm <- conf_mat(test_df, label_col, .pred_class)</code></pre></li>
+<li><p>Printing this will just give a text representation of the
+matrix</p></li>
+<li><p>Want graphics?</p>
+<pre ><code class="r">autoplot(cm, type='heatmap')</code></pre></li>
+</ul>
+</section>
+<section id="understanding-probabilities" class="slide level2">
+<h2>Understanding Probabilities</h2>
+<ul>
+<li><p>Classification models usually internally assign a probability to
+a point as to what label it should have</p>
+<ul>
+<li>The dominant probability is what wins, and that label gets
+assigned</li>
+</ul></li>
+<li><p>It can be useful sometimes to see the predicted probabilities for
+each point, rather than the final category</p>
+<pre ><code class="python">model_fit.predict_proba(test_df[[feature_cols])</code></pre>
+<pre ><code class="r">predict(model_fit, test_df, type='prob')</code></pre></li>
+</ul>
+</section>
+<section id="decision-boundaries" class="slide level2">
+<h2>Decision Boundaries</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>It can be a useful aid to visualize where the decision boundaries
+lie</li>
+<li>This is not quite as simple as extracting the lines that bisect each
+region, since the decision regions will involve the areas of most
+confidence in a particular classification</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/decision_boundary.png"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="decision-boundary-python" class="slide level2">
+<h2>Decision Boundary (Python)</h2>
+<ul>
+<li><p>Need to import:</p>
+<pre ><code class="python" style="font-size:.87em">from sklearn.inspection import DecisionBoundaryDisplay as DBD</code></pre></li>
+<li><p>Create the plot from the estimator:</p>
+<pre ><code class="python">DBD.from_estimator(model, df[[features]])</code></pre>
+<ul>
+<li>Unlike the confusion matrix, here the estimate needs both the model
+and the feature values to predict from</li>
+<li>Can also pass in other arguments, like axis labels or the actual
+axis you want to add the plot to</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="your-turn" class="title-slide slide level1">
+<h1>Your Turn!</h1>
+
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity!</h2>
+<ul>
+<li>The dataset <a href="../demos/basic_labeling.csv">here</a> has two
+independent variables and then a label column that can be one of three
+options</li>
+<li>Fit a Logistic Multinomial Regression model to the data and compute
+the resulting confusion matrix and model accuracy</li>
+</ul>
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          theme: "whiteboard",
+          boardmarkers : [
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
+    </body>
+</html>
