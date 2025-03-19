@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <title>Subqueries, Pivots and Patterns</title>
+  <meta name="dcterms.date" content="2025-03-19">
+  <title>Foreign Subqueries about Pivots</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -34,48 +35,155 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Subqueries, Pivots and Patterns</h1>
+  <h1 class="title">Foreign Subqueries about Pivots</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">March 14/19, 2024</p>
+  <p class="date">March 19, 2025</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li>HW7 is out!
+<li>Homework
 <ul>
-<li>Deals with table modifications and cleaning</li>
+<li>HW7 is due tonight</li>
+<li>HW8 is coming out tonight, due Wed after break</li>
+<li>I’m spending part of my break getting caught up</li>
 </ul></li>
-<li>HW8 will come out next Monday</li>
 <li>Today is going to be mostly SQL focused</li>
 <li>Projects
 <ul>
-<li>I am getting at least part 1 of the project guide out by the end of
-the weekend</li>
-<li>I will augment it over next week with further guidance on later
-parts</li>
-<li>Railway is working on getting all of you verified, I will confirm
-that with you as soon as they confirm it with me</li>
-<li>In general, the goal should be to have your Railway database and
-scraper deployed and running before the start of Spring Break</li>
-<li>Next week we will talk about how to set up some automatic
-transformation steps / pipeline</li>
+<li>Is your scraper up and running? Ensure that it is before Spring
+Break starts!</li>
+<li>Is your automatic cleaner/transformer up and running? Try to have
+that done before we meet next</li>
+<li>We’ll be talking the serving components after break</li>
 </ul></li>
 </ul>
-<!--
-## Current vs Clock
-- Any query using `current_timestamp` has it computed once at the start of a query
-  - This is frequently desired for logging, so that you just get 1 consistent time for any records added from a single query
-- If you **want** record-by-record time keeping, you should use `clock_timestamp()` instead, which will work the same way but be updated before every value written to the table
+</section>
+<section>
+<section id="database-connections" class="title-slide slide level1">
+<h1>Database Connections</h1>
 
+</section>
+<section id="connecting-databases" class="slide level2">
+<h2>Connecting Databases</h2>
+<ul>
+<li>Postgres has a few ways you can access tables from one database
+while in another</li>
+<li>Both are extensions that you would <strong>need to activate</strong>
+<ul>
+<li>dblink: Simple for one-off data access</li>
+<li>postgres_fdw: Better if you need a more permanent connection</li>
+</ul></li>
+<li>Both can be useful, so I’ll try to touch on each</li>
+</ul>
+</section>
+<section id="the-connection" class="slide level2">
+<h2>The Connection</h2>
+<ul>
+<li><p>Accessing data using <code class="pgsql">dblink</code> is a
+two-step process: connect and then query</p></li>
+<li><p>To connect, use <code class="pgsql">dblink_connect</code>
+(shocking!)</p>
+<pre ><code class="pgsql">SELECT dblink_connect(|||connection string|||)</code></pre></li>
+<li><p>The connection string can either be a full database url, or a
+space delimited sequence of keywords, e.g.:</p>
+<pre ><code class="pgsql">'host=localhost user=postgres password=1234'</code></pre></li>
+</ul>
+</section>
+<section id="querying" class="slide level2">
+<h2>Querying</h2>
+<ul>
+<li><p>Once the connection has been made (within a session) you can send
+across queries</p>
+<pre ><code class="pgsql">SELECT * FROM dblink(|||query string|||)</code></pre></li>
+<li><p><code class="pgsql">dblink</code> is essentially blind, in that
+it has no idea what would be returned by the query</p>
+<ul>
+<li>As such, similar to creating a pivot table (coming soon!), you
+<strong>must</strong> supply a table alias <strong>and</strong>
+columns/types at the end</li>
+</ul>
+<pre ><code class="pgsql">SELECT * 
+FROM dblink(|||query string|||)
+AS |||table alias||| ( |||col₁||| |||type₁|||, |||col₂||| |||type₂|||, |||etc.|||);</code></pre></li>
+</ul>
+</section>
+<section id="executing" class="slide level2">
+<h2>Executing</h2>
+<ul>
+<li><p>If you have a command to run remotely, and don’t need a table
+back, you can use <code class="pgsql">dblink_exec</code></p></li>
+<li><p>This may be useful for creating, updating or deleting data from a
+remote table.</p>
+<pre ><code class="pgsql">SELECT dblink_exec(
+  'CREATE TABLE test (col1 text, col2 int)'
+);</code></pre></li>
+</ul>
+</section>
+<section id="foreign-data-wrapper" class="slide level2">
+<h2>Foreign Data Wrapper</h2>
+<ul>
+<li>Using the <code class="pgsql">postgres_fdw</code> extension is a bit
+more of a setup, but makes working with remote tables a breeze</li>
+<li>Multistep process:
+<ul>
+<li>Activate the extension</li>
+<li>Create a foreign server object, representing the remote database
+server</li>
+<li>Create a user wrapping which allows that user to access that foreign
+server</li>
+<li>Create the foreign tables</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-foreign-server-objects" class="slide level2">
+<h2>The Foreign Server Objects</h2>
+<ul>
+<li><p>You first need to define a foreign server</p>
+<pre ><code class="pgsql">CREATE SERVER |||server_name|||
+FOREIGN DATA WRAPPER postgres_fdw
+OPTIONS (|||server config settings|||)</code></pre></li>
+<li><p>Server name can be whatever you like, provided it is
+unique</p></li>
+<li><p>Server settings are a comma delimited, space separated sequence
+of host, port, dbname, etc</p></li>
+</ul>
+</section>
+<section id="the-user-wrapper" class="slide level2">
+<h2>The User Wrapper</h2>
+<ul>
+<li><p>You essentially need to give your user permission to access the
+remote server</p>
+<pre ><code class="pgsql">CREATE USER MAPPING FOR CURRENT_USER
+SERVER |||server_name|||
+OPTIONS (|||user options|||)</code></pre></li>
+<li><p>Server name will be the name you just used for the created
+server</p></li>
+<li><p>User options should include the corresponding <em>remote</em>
+user info like username and password</p></li>
+</ul>
+</section>
+<section id="bring-on-the-tables" class="slide level2">
+<h2>Bring On the Tables!</h2>
+<ul>
+<li><p>Last but not least, you can import in the tables you
+want</p></li>
+<li><p>Can do one at a time with
+<code class="pgsql">CREATE FOREIGN TABLE</code>, but I far prefer
+<code class="pgsql">IMPORT FOREIGN SCHEMA</code></p>
+<pre ><code class="pgsql">IMPORT FOREIGN SCHEMA |||schema name|||
+FROM SERVER |||server_name|||
+INTO |||local schema name|||</code></pre></li>
+<li><p>Can also include <code class="pgsql">LIMIT TO</code> or
+<code class="pgsql">EXCEPT</code> followed by a list of table names to
+fine-tune which tables are imported</p></li>
+</ul>
+</section></section>
+<section>
+<section id="nesting-queries" class="title-slide slide level1">
+<h1>Nesting Queries</h1>
 
-## Quick Review Activity
-- Using the taxi rides dataset, see if you can:
-  - Compute the number of rides given each hour of the day
-  - Compute the average cost of rides over each day of the month
-  - Compute the median cost of rides over each day of the week
-  - Compute the average duration of each ride over each hour of the day
--->
 </section>
 <section id="subqueries" class="slide level2">
 <h2>Subqueries</h2>
@@ -173,16 +281,16 @@ FROM |||table 1|||;</code></pre></li>
 is present within the subquery output</li>
 <li>Combinations of a keyword followed by the subquery
 <ul>
-<li><code class="python">expr IN (subquery)</code> and
-<code class="python">expr NOT IN (subquery)</code></li>
-<li><code class="python">EXISTS (subquery)</code> and
-<code class="python">NOT EXISTS (subquery)</code></li>
-<li><code class="python">expr op ANY (subquery)</code></li>
-<li><code class="python">expr op ALL (subquery)</code></li>
+<li><code class="pgsql">|||expr||| IN (|||subquery|||)</code> and
+<code class="pgsql">|||expr||| NOT IN (|||subquery|||)</code></li>
+<li><code class="pgsql">EXISTS (|||subquery|||)</code> and
+<code class="pgsql">NOT EXISTS (|||subquery|||)</code></li>
+<li><code class="pgsql">|||expr||| |||op||| ANY (|||subquery|||)</code></li>
+<li><code class="pgsql">|||expr||| |||op||| ALL (|||subquery|||)</code></li>
 </ul></li>
-<li><code class="python">expr</code> is a column name or value, and
-<code class="python">op</code> is a boolean operator
-(<code class="python">=,>,>=</code>,etc)</li>
+<li><code class="pgsql">|||expr|||</code> is a column name or value, and
+<code class="pgsql">|||op|||</code> is a boolean operator
+(<code class="pgsql">=,>,>=</code>,etc)</li>
 <li>All subquery expressions are evaluated in short-circuit mode: they
 will return an answer as soon as they can</li>
 </ul>
@@ -194,16 +302,16 @@ will return an answer as soon as they can</li>
 output</li>
 <li>The subquery must output a <strong>single column</strong> (though it
 could be empty)</li>
-<li><code class="python">NOT IN</code> just reverses the situation</li>
+<li><code class="pgsql">NOT IN</code> just reverses the situation</li>
 <li><strong>Be careful of NULLs</strong>
 <ul>
-<li><code class="python">1 IN (1,2,3)</code> gives True</li>
-<li><code class="python">1 IN (2,3)</code> gives False</li>
-<li><code class="python">1 IN (NULL,2,3)</code> gives
-<code class="python">NULL</code></li>
-<li>Most dangerous with <code class="python">NOT IN</code>, since
-<code class="python">1 NOT IN (NULL,2,3)</code> will give
-<code class="python">NULL</code>, and not True as you might expect</li>
+<li><code class="pgsql">1 IN (1,2,3)</code> gives True</li>
+<li><code class="pgsql">1 IN (2,3)</code> gives False</li>
+<li><code class="pgsql">1 IN (NULL,2,3)</code> gives
+<code class="pgsql">NULL</code></li>
+<li>Most dangerous with <code class="pgsql">NOT IN</code>, since
+<code class="pgsql">1 NOT IN (NULL,2,3)</code> will give
+<code class="pgsql">NULL</code>, and not True as you might expect</li>
 </ul></li>
 </ul>
 </section>
@@ -216,8 +324,7 @@ the output
 <li>No expression to compare to, just looking at subquery output</li>
 </ul></li>
 <li>The <em>contents</em> of the subquery do not matter at all, so a
-simple <code class="python">SELECT 1 FROM ...</code> is usually
-used</li>
+simple <code class="pgsql">SELECT 1 FROM ...</code> is usually used</li>
 <li>To be useful, the subquery is frequently what is called a
 <em>correlated subquery</em>, where it references the table in the outer
 query
@@ -225,12 +332,12 @@ query
 <li>These types of subqueries can <strong>not</strong> be run in
 isolation</li>
 </ul>
-<pre ><code class="pgsql" style="font-size:.9em">SELECT |||column 1, column 2|||
-FROM |||table 1|||
+<pre ><code class="pgsql" style="font-size:.9em">SELECT |||column₁, column₂|||
+FROM |||table₁|||
 WHERE EXISTS (
   SELECT 1
-  FROM |||table 2|||
-  WHERE table1.col1 = table2.col2
+  FROM |||table₂|||
+  WHERE |||table₁.column₁||| = |||table₂.column₂|||
 );</code></pre></li>
 </ul>
 </section>
@@ -242,17 +349,17 @@ subquery output, but rather how it <em>compares</em> to the
 output</p></li>
 <li><p>A boolean expression needs to return a single True or False
 though</p></li>
-<li><p><code class="python">ANY</code> and
-<code class="python">ALL</code> “broadcast” the boolean comparison
-across all the subquery rows</p>
+<li><p><code class="pgsql">ANY</code> and <code class="pgsql">ALL</code>
+“broadcast” the boolean comparison across all the subquery rows</p>
 <ul>
-<li><code class="python">ANY</code> will return True if <em>any</em> of
+<li><code class="pgsql">ANY</code> will return True if <em>any</em> of
 the rows evaluate to True with the expression</li>
-<li><code class="python">ALL</code> will only return True if
-<em>all</em> of the rows evaluate to True with the expression</li>
+<li><code class="pgsql">ALL</code> will only return True if <em>all</em>
+of the rows evaluate to True with the expression</li>
 </ul></li>
-<li><p><code class="python">expr = ANY (subquery)</code> is thus
-identical to <code class="python">expr IN (subquery)</code></p>
+<li><p><code class="pgsql">|||expr||| = ANY (|||subquery|||)</code> is
+thus identical to
+<code class="pgsql">|||expr||| IN (|||subquery|||)</code></p>
 <pre ><code class="pgsql" style="font-size:.9em">SELECT |||column|||
 FROM |||table 1|||
 WHERE |||column||| < ALL ( SELECT |||column||| FROM |||table 2|||);</code></pre></li>
@@ -303,11 +410,10 @@ them</li>
 <li>I’ve prepped a simple grades database <a
 href="../activity_data/assignment_submission.sql">here</a> that you can
 download and run the sql file to create a
-<code class="python">subq1</code> schema in your database of choice
-which will contain three common tables:
-<code class="python">roster</code>,
-<code class="python">assignments</code>,
-<code class="python">submissions</code></li>
+<code class="pgsql">subq1</code> schema in your database of choice which
+will contain three common tables: <code class="pgsql">roster</code>,
+<code class="pgsql">assignments</code>,
+<code class="pgsql">submissions</code></li>
 <li>See if you can answer the questions below <strong>without using
 joins</strong> and only subqueries (as practice).
 <ul>
@@ -319,6 +425,11 @@ joins</strong> and only subqueries (as practice).
 <!--- Maribel and Connor--></li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="ctes" class="title-slide slide level1">
+<h1>CTEs</h1>
+
 </section>
 <section id="common-table-expressions" class="slide level2">
 <h2>Common Table Expressions</h2>
@@ -330,7 +441,7 @@ way</li>
 <li><em>Common Table Expressions</em> or CTEs are a way for you to
 define up front a derived table that can be referenced anywhere in the
 rest of the query</li>
-<li>To do so, you use a <code class="python">WITH</code> keyword:</li>
+<li>To do so, you use a <code class="pgsql">WITH</code> keyword:</li>
 </ul>
 <pre ><code class="pgsql">WITH
   |||derived table name||| (|||new column names|||) AS (
@@ -364,6 +475,11 @@ reference a few times, use a CTE!</li>
 <h2>Example</h2>
 <p>Using a CTE and other subqueries, let’s extract the middle 50% of the
 taxi_rides by duration.</p>
+</section></section>
+<section>
+<section id="pivot-tables" class="title-slide slide level1">
+<h1>Pivot Tables</h1>
+
 </section>
 <section id="why-cross-tabulation" class="slide level2">
 <h2>Why Cross Tabulation?</h2>
@@ -467,17 +583,17 @@ more which add some functionality to a particular database</li>
 database</p>
 <pre ><code class="pgsql">CREATE EXTENSION |||extension_name|||;</code></pre></li>
 <li><p>To facilitate making pivot tables, we need to add the
-<code class="python">tablefunc</code> extension to our database, which
-will add the <code class="python">crosstab</code> function</p></li>
+<code class="pgsql">tablefunc</code> extension to our database, which
+will add the <code class="pgsql">crosstab</code> function</p></li>
 <li><p>You can always remove an extension using
-<code class="python">DROP</code> if you need later</p></li>
+<code class="pgsql">DROP</code> if you need later</p></li>
 </ul>
 </section>
 <section id="pieces-of-the-crosstab" class="slide level2">
 <h2>Pieces of the Crosstab</h2>
 <ul>
-<li>The <code class="python">crosstab</code> function has a lot going
-on, so let’s break things down</li>
+<li>The <code class="pgsql">crosstab</code> function has a lot going on,
+so let’s break things down</li>
 </ul>
 <div class="cols">
 <div class="col">
@@ -524,6 +640,11 @@ creating</li>
 <h2>Example</h2>
 <p>Let’s construct a pivot table comparing the total number of taxi
 rides at different days of the week across different hours.</p>
+</section></section>
+<section>
+<section id="a-case-study" class="title-slide slide level1">
+<h1>A Case Study</h1>
+
 </section>
 <section id="on-the-case" class="slide level2">
 <h2>On the Case</h2>
@@ -531,7 +652,7 @@ rides at different days of the week across different hours.</p>
 <li>It can be useful in certain situations to employ a little
 conditional logic <em>outside</em> a filtering statement</li>
 <li>Can be particularly useful to tweak or reclassify values</li>
-<li>Standard SQL has the <code class="python">CASE</code> statement to
+<li>Standard SQL has the <code class="pgsql">CASE</code> statement to
 accomplish this
 <ul>
 <li>Essentially works like programming languages if…else if…else
@@ -545,19 +666,19 @@ blocks</li>
   ELSE |||fallback output|||
 END</code></pre>
 </section>
-<section id="a-case-study" class="slide level2">
+<section id="a-case-study-1" class="slide level2">
 <h2>A Case Study</h2>
 <ul>
 <li><p>Comparisons are made in order, so the first condition that
 matches, that output is used</p></li>
-<li><p>If you do not include an <code class="python">ELSE</code> part,
-then <code class="python">NULL</code> will be output if nothing else
+<li><p>If you do not include an <code class="pgsql">ELSE</code> part,
+then <code class="pgsql">NULL</code> will be output if nothing else
 matches</p></li>
-<li><p><code class="python">CASE</code> statements most often show up in
-<code class="python">SELECT</code> statements where column outputs are
+<li><p><code class="pgsql">CASE</code> statements most often show up in
+<code class="pgsql">SELECT</code> statements where column outputs are
 being selected, but they could potentially also show up in filtering or
 ordering statements</p></li>
-<li><p>A <code class="python">CASE</code> statement will not evaluate
+<li><p>A <code class="pgsql">CASE</code> statement will not evaluate
 results where the condition is not met, so they can be used to prevent
 certain errors as well (such as dividing by 0)</p>
 <pre ><code class="pgsql" style="font-size:.9em">SELECT
@@ -578,12 +699,12 @@ FROM tablename;</code></pre></li>
 <section id="coalesce" class="slide level2">
 <h2>Coalesce</h2>
 <ul>
-<li>Similar to <code class="python">CASE</code>, SQL also has the
-<code class="python">COALESCE</code> statement</li>
-<li><code class="python">COALESCE</code> returns the first non-null
-value in the list</li>
+<li>Similar to <code class="pgsql">CASE</code>, SQL also has the
+<code class="pgsql">COALESCE</code> statement</li>
+<li><code class="pgsql">COALESCE</code> returns the first non-null value
+in the list</li>
 <li>Frequently used to substitute a default value for
-<code class="python">NULL</code> values</li>
+<code class="pgsql">NULL</code> values</li>
 </ul>
 <pre ><code class="pgsql">SELECT
   student_id,
@@ -598,10 +719,10 @@ them again), do the following:</p>
 <ul>
 <li>Create a pivot table for student quiz point scores with full student
 names as the rows and individual quizes as the columns. You can
-concatenate two strings in SQL using the <code class="python">||</code>
-operator. So <code class="python">fname || ' ' || lname</code> would
-give the first and last name with a space between as a single string.
-Feel free to use joins here.</li>
+concatenate two strings in SQL using the <code class="pgsql">||</code>
+operator. So <code class="pgsql">fname || ' ' || lname</code> would give
+the first and last name with a space between as a single string. Feel
+free to use joins here.</li>
 </ul>
 <table>
 <thead>
@@ -733,289 +854,110 @@ FROM table_name;
 <!--- More complicated pattern matching-->
 <!--- Full text searching using normalization and lexemes-->
 <!--- All are geared around making using text and strings much more powerful and flexible--></p>
-</section>
-<section id="stringy-functions-core" class="slide level2">
-<h2>Stringy Functions (CORE)</h2>
-<div style="font-size:.9em">
-<table>
-<colgroup>
-<col style="width: 43%" />
-<col style="width: 56%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Function</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code class="python">str1 || str2</code></td>
-<td>Concatenates string 1 and string 2 together</td>
-</tr>
-<tr class="even">
-<td><code class="python">upper(str)</code></td>
-<td>Converts a string to all uppercase characters</td>
-</tr>
-<tr class="odd">
-<td><code class="python">lower(str)</code></td>
-<td>Converts a string to all lowercase characters</td>
-</tr>
-<tr class="even">
-<td><code class="python">char_length(str)</code></td>
-<td>Returns the number of characters in the string</td>
-</tr>
-<tr class="odd">
-<td><code class="python">position(str IN substr)</code></td>
-<td>Find the number of the character where the substring begins</td>
-</tr>
-<tr class="even">
-<td><code class="python">trim(opt chr FROM str)</code></td>
-<td>Removes the given characters from the string, optionally taking from
-the <em>leading</em> or <em>trailing</em> edge</td>
-</tr>
-<tr class="odd">
-<td><code class="python">substring(str FROM n FOR l)</code></td>
-<td>Returns the portion of the string starting at position n and
-continuing for l characters</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="string-functions-postgres" class="slide level2">
-<h2>String Functions (Postgres)</h2>
-<div style="font-size:.9em">
-<table>
-<colgroup>
-<col style="width: 26%" />
-<col style="width: 73%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Function</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code class="python">initcap(str)</code></td>
-<td>Converts the first character of each word to uppercase, and the rest
-lower</td>
-</tr>
-<tr class="even">
-<td><code class="python">left(str,n)</code></td>
-<td>Returns the first n characters of the string</td>
-</tr>
-<tr class="odd">
-<td><code class="python">right(str,n)</code></td>
-<td>Returns the last n characters of the string</td>
-</tr>
-<tr class="even">
-<td><code class="python">ltrim(str,chr)</code></td>
-<td>Remove the characters (space by default) from the start of the
-string</td>
-</tr>
-<tr class="odd">
-<td><code class="python">rtrim(str,chr)</code></td>
-<td>Remove the characters (space by default) from the end of the
-string</td>
-</tr>
-<tr class="even">
-<td><code class="python">replace(str,from,to)</code></td>
-<td>Replaces all occurance of <em>from</em> in the string to
-<em>to</em></td>
-</tr>
-<tr class="odd">
-<td><code class="python">length(str)</code></td>
-<td>Returns the number of characters in the string</td>
-</tr>
-<tr class="even">
-<td><code class="python">substr(str, n, l)</code></td>
-<td>Returns the portion of the string starting at position n and
-continuing l characters</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="enhanced-pattern-matching" class="slide level2">
-<h2>Enhanced Pattern Matching</h2>
-<ul>
-<li>We’ve already seen basic pattern matching with
-<code class="python">LIKE</code> and <code class="python">LIKE</code>
-<ul>
-<li>Some flexibility with wildcard characters:
-<code class="python">%</code> and <code class="python">_</code></li>
-</ul></li>
-<li>To get (much) more flexibility, we need to pivot to something made
-for exactly this purpose: <em>regular expressions</em> (or
-<em>regex</em>)</li>
-<li>Regular expressions are a sequence of mostly single character
-symbols that denote exactly what patterns one could wish for
-<ul>
-<li>These sequences of characters can initially look very inscrutable!
-Stick with it!</li>
-</ul></li>
-<li>Regex’s are useful all over, and supported in almost all programming
-languages as well. Learning at least the basics is time very well
-spent.</li>
-</ul>
-</section>
-<section id="basic-regex-terms" class="slide level2">
-<h2>Basic Regex Terms</h2>
-<div style="font-size:.7em">
-<div class="cols">
-<div class="col">
-<table>
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 83%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Expression</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code class="python">.</code></td>
-<td>Matches <em>any</em> character except a new line</td>
-</tr>
-<tr class="even">
-<td><code class="python">[abc]</code></td>
-<td>Matches any character in the square brackets (a or b or c)</td>
-</tr>
-<tr class="odd">
-<td><code class="python">[a-z]</code></td>
-<td>Matches a range of characters (all lowercase letters here)</td>
-</tr>
-<tr class="even">
-<td><code class="python">[^a-z]</code></td>
-<td>Caret negates what follows (so no lowercase letters here)</td>
-</tr>
-<tr class="odd">
-<td><code class="python">\w</code></td>
-<td>Any word character, digit or underscore</td>
-</tr>
-<tr class="even">
-<td><code class="python">\d</code></td>
-<td>Any digit</td>
-</tr>
-<tr class="odd">
-<td><code class="python">\s</code></td>
-<td>A space</td>
-</tr>
-<tr class="even">
-<td><code class="python">\t</code></td>
-<td>A tab character</td>
-</tr>
-<tr class="odd">
-<td><code class="python">\n</code></td>
-<td>A newline character</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="col">
-<table>
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 79%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Expression</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code class="python">^</code></td>
-<td>Match at the start of the string</td>
-</tr>
-<tr class="even">
-<td><code class="python">$</code></td>
-<td>Match at the end of the string</td>
-</tr>
-<tr class="odd">
-<td><code class="python">?</code></td>
-<td>Get the preceding match 0 or one time</td>
-</tr>
-<tr class="even">
-<td><code class="python">*</code></td>
-<td>Get the preceding match zero or more times</td>
-</tr>
-<tr class="odd">
-<td><code class="python">+</code></td>
-<td>Get the preceding match one or more times</td>
-</tr>
-<tr class="even">
-<td><code class="python">{m}</code></td>
-<td>Get the preceding match exactly m times</td>
-</tr>
-<tr class="odd">
-<td><code class="python">{m,n}</code></td>
-<td>Get the preceding match between m and n times</td>
-</tr>
-<tr class="even">
-<td><code class="python">a|b</code></td>
-<td>Match on either a or b</td>
-</tr>
-<tr class="odd">
-<td><code class="python">( )</code></td>
-<td>Create a capture group or set precedence</td>
-</tr>
-<tr class="even">
-<td><code class="python">(?: )</code></td>
-<td>Negate reporting a capture group</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-<section id="other-regex-concepts" class="slide level2">
-<h2>Other Regex Concepts</h2>
-<ul>
-<li>If you ever want to match off a symbol that has special meaning in
-regex (a parenthese, for instance) you must <em>escape it</em> with a
-backslash: <code class="python">\(</code></li>
-<li>Reserved characters include:
-<code class="python">{ } [ ] / \ + * . $ ^ | ?</code></li>
-<li>Flags can be added at the end to tweak matching
-<ul>
-<li><code class="python">/i</code> means that matches will be case
-insensitive</li>
-<li><code class="python">/g</code> means that all instances of the match
-will be returned, not just the first</li>
-<li><code class="python">/m</code> allows the anchor characters
-(<code class="python">^</code> and <code class="python">$</code>) to
-operate on each line, not just across the entire string.</li>
-</ul></li>
-</ul>
-</section>
-<section id="section" class="slide level2"
-data-background-iframe="https://regexr.com/6hfai">
-<h2 data-background-iframe="https://regexr.com/6hfai"></h2>
-</section>
-<section id="your-turn" class="slide level2">
-<h2>Your Turn!</h2>
-<ul>
-<li>The link <a
-href="https://regexone.com/problem/matching_phone_numbers">here</a> has
-a nice sequence of short problems to test your skills against</li>
-<li>Most problems consist of:
-<ul>
-<li>Terms that you want to match correctly</li>
-<li>Terms that you want to <strong>not</strong> match</li>
-<li>Capture groups that you’d like to capture</li>
-</ul></li>
-<li>Working with a partner, see how many you can figure out in our
-remaining time tonight</li>
-</ul>
+<!--
+## Stringy Functions (CORE)
+
+:::{style='font-size:.9em'}
+
+| Function                  | Description                                                                                           |
+|-----------------------------------|---------------------------------------------|
+| `str1 || str2` | Concatenates string 1 and string 2 together |
+| `upper(str)`              | Converts a string to all uppercase characters                                                         |
+| `lower(str)`              | Converts a string to all lowercase characters                                                         |
+| `char_length(str)`        | Returns the number of characters in the string                                                        |
+| `position(str IN substr)` | Find the number of the character where the substring begins                                           |
+| `trim(opt chr FROM str)`  | Removes the given characters from the string, optionally taking from the _leading_ or _trailing_ edge |
+| `substring(str FROM n FOR l)` | Returns the portion of the string starting at position n and continuing for l characters |
+
+:::
+
+## String Functions (Postgres)
+
+:::{style='font-size:.9em'}
+
+| Function                  | Description                                                                              |
+|--------------------------------|------------------------------------------------------------------------------------------|
+| `initcap(str)`            | Converts the first character of each word to uppercase, and the rest lower               |
+| `left(str,n)`             | Returns the first n characters of the string                                             |
+| `right(str,n)`            | Returns the last n characters of the string                                              |
+| `ltrim(str,chr)`          | Remove the characters (space by default) from the start of the string                    |
+| `rtrim(str,chr)`          | Remove the characters (space by default) from the end of the string                      |
+| `replace(str,from,to)`    | Replaces all occurance of _from_ in the string to _to_                                   |
+| `length(str)`             | Returns the number of characters in the string                                           |
+| `substr(str, n, l)` | Returns the portion of the string starting at position n and continuing l characters |
+
+:::
+
+
+## Enhanced Pattern Matching
+- We've already seen basic pattern matching with `LIKE` and `LIKE`
+  - Some flexibility with wildcard characters: `%` and `_`
+- To get (much) more flexibility, we need to pivot to something made for exactly this purpose: _regular expressions_ (or _regex_)
+- Regular expressions are a sequence of mostly single character symbols that denote exactly what patterns one could wish for
+  - These sequences of characters can initially look very inscrutable! Stick with it!
+- Regex's are useful all over, and supported in almost all programming languages as well. Learning at least the basics is time very well spent.
+
+
+## Basic Regex Terms
+
+:::{style='font-size:.7em'}
+
+::::::cols
+::::col
+
+| Expression | Description                                                |
+|------------|------------------------------------------------------------|
+| `.`        | Matches _any_ character except a new line                  |
+| `[abc]`    | Matches any character in the square brackets (a or b or c) |
+| `[a-z]`    | Matches a range of characters (all lowercase letters here) |
+| `[^a-z]`   | Caret negates what follows (so no lowercase letters here)  |
+| `\w`       | Any word character, digit or underscore                    |
+| `\d`       | Any digit                                                  |
+| `\s`       | A space                                                    |
+| `\t`       | A tab character                                            |
+| `\n`       | A newline character                                        |
+
+::::
+
+::::col
+
+| Expression | Description                                   |
+|------------|-----------------------------------------------|
+| `^`        | Match at the start of the string                           |
+| `$`        | Match at the end of the string                             |
+| `?`        | Get the preceding match 0 or one time         |
+| `*`        | Get the preceding match zero or more times    |
+| `+`        | Get the preceding match one or more times     |
+| `{m}`      | Get the preceding match exactly m times       |
+| `{m,n}`    | Get the preceding match between m and n times |
+| `a|b`      | Match on either a or b                        |
+| `( )`      | Create a capture group or set precedence      |
+| `(?: )`    | Negate reporting a capture group              |
+::::
+::::::
+
+:::
+
+## Other Regex Concepts
+- If you ever want to match off a symbol that has special meaning in regex (a parenthese, for instance) you must _escape it_ with a backslash: `\(`
+- Reserved characters include: `{ } [ ] / \ + * . $ ^ | ?`
+- Flags can be added at the end to tweak matching
+  - `/i` means that matches will be case insensitive
+  - `/g` means that all instances of the match will be returned, not just the first
+  - `/m` allows the anchor characters (`^` and `$`) to operate on each line, not just across the entire string.
+
+
+
+## {data-background-iframe="https://regexr.com/6hfai"}
+
+## Your Turn!
+- The link [here](https://regexone.com/problem/matching_phone_numbers) has a nice sequence of short problems to test your skills against
+- Most problems consist of:
+  - Terms that you want to match correctly
+  - Terms that you want to **not** match
+  - Capture groups that you'd like to capture
+- Working with a partner, see how many you can figure out in our remaining time tonight
+-->
 <!--## Back to SQL-->
 <!--- One of the main ways we previously used pattern matching was for filtering-->
 <!--- You can also use regexes for pattern matching!-->
@@ -1044,7 +986,7 @@ remaining time tonight</li>
 <p><!--- Create and populate new columns for first, middle, and last name-->
 <!--- Create and populate new columns to hold the width and height in inches (in `1 1/4` form)-->
 <!--- If feeling good about the above, create new columns to hold decimal equivalents of the width and height--></p>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -1063,6 +1005,7 @@ remaining time tonight</li>
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
+  <script src="../html_srcs/revealjs/../js/mybash.js"></script>
 
   <script>
 
@@ -1138,7 +1081,7 @@ remaining time tonight</li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -1181,9 +1124,20 @@ remaining time tonight</li>
 			disableCheckFile: false, //default false
 		 },
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
-              console.log(mypgsqldef);
-              return mypgsqldef(hljs); } )
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              hljs.registerLanguage("bash", function(hljs) {
+                console.log(mybashdef);
+                return mybashdef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
           },
 
         // reveal.js plugins
@@ -1201,6 +1155,7 @@ remaining time tonight</li>
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
+          theme: "whiteboard",
           boardmarkers : [
                   { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                   { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
