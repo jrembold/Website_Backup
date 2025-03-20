@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-03-20">
+  <title>Such Pretty Trees</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Such Pretty Trees</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">March 20, 2025</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework 4!
+<ul>
+<li>Due the Thursday after we return (2 weeks from today)</li>
+<li>A check-in this weekend before you “check out” on Spring Break–don’t
+forget!</li>
+</ul></li>
+<li>I’ll be around my computer Spring Break if you have questions come
+up, but also give yourself a break</li>
+</ul>
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap</h2>
+<ul>
+<li>Split data into training and testing sets before fitting to have
+something to compare against</li>
+<li>Logistic (and Multinomial) Regression labels categories by
+determining lines/planes/hyperplanes to separate groups</li>
+<li>The general flow of supervised classification learning looks like:
+<ul>
+<li>Split your data</li>
+<li>Choose your model and initialize it</li>
+<li>Fit the model to your training data</li>
+<li>Use the fitted model to predict labels for your testing data</li>
+<li>Evaluate how the model did: confusion matrix</li>
+</ul></li>
+</ul>
+</section>
+<section id="discussing-today" class="slide level2">
+<h2>Discussing Today</h2>
+<ul>
+<li>Understanding model results
+<ul>
+<li>Visualizing decision boundaries (when reasonable)</li>
+</ul></li>
+<li>Practice time!</li>
+<li>Introducing model #2: Decision Trees</li>
+<li>Ensembles (if time)</li>
+</ul>
+</section>
+<section>
+<section id="drawing-boundaries" class="title-slide slide level1">
+<h1>Drawing Boundaries</h1>
+
+</section>
+<section id="decision-boundaries" class="slide level2">
+<h2>Decision Boundaries</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>It can be a useful aid to visualize where the decision boundaries
+lie</li>
+<li>This is not quite as simple as extracting the lines that bisect each
+region, since the decision regions will involve the areas of most
+confidence in a particular classification</li>
+<li>Really only reasonable for data with 2 independent variables or
+features</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/decision_boundary.png"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="decision-boundary-python" class="slide level2">
+<h2>Decision Boundary (Python)</h2>
+<ul>
+<li><p>Need to import:</p>
+<pre ><code class="python" style="font-size:.87em">from sklearn.inspection import DecisionBoundaryDisplay as DBD</code></pre></li>
+<li><p>Create the plot from the estimator:</p>
+<pre ><code class="python">DBD.from_estimator(model, df[[features]])</code></pre>
+<ul>
+<li>Unlike the confusion matrix, here the estimator needs both the model
+and the feature values to predict from</li>
+<li>Can also pass in other arguments, like axis labels or the matplotlib
+axis you want to add the plot to</li>
+</ul></li>
+</ul>
+</section>
+<section id="decision-boundary-r" class="slide level2">
+<h2>Decision Boundary (R)</h2>
+<div style="font-size:.9em">
+<ul>
+<li><p>Tidymodels doesn’t really have a comparable function to
+DecisionBoundaryDisplay, but it can be computed directly with other
+tools</p></li>
+<li><p>Main idea is to compute a fine grid of points in feature-space
+that you’ll use to get predictions</p>
+<pre ><code class="r">pred_df <- expand.grid(
+              feat1 = seq(low, high, length.out=1000),
+              feat2 = seq(low, high, length.out=1000))</code></pre></li>
+<li><p>Then get predictions from your model</p>
+<pre ><code class="r">pred_cat <- model_fit %>% predict(pred_df)</code></pre></li>
+<li><p>Plot the results with a raster plot with the fill determined by
+the predicted label</p>
+<pre ><code class="r">ggplot(pred_df, aes(feat1, feat2, fill=.pred_class)) +
+  geom_raster(alpha = 0.5)</code></pre></li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="practice-time" class="title-slide slide level1">
+<h1>Practice Time!</h1>
+
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity!</h2>
+<ul>
+<li>The dataset <a href="../demos/basic_labeling.csv">here</a> has two
+independent variables and then a label column that can be one of three
+options</li>
+<li>Fit a Logistic Multinomial Regression model to the data and compute
+the resulting confusion matrix and model accuracy</li>
+<li>If time, plot the decision boundaries</li>
+</ul>
+</section></section>
+<section>
+<section id="a-strong-independent-tree"
+class="title-slide slide level1">
+<h1>A strong, independent tree</h1>
+
+</section>
+<section id="why-other-models" class="slide level2">
+<h2>Why other models?</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>We are going to look at some alternative classification models, but
+why?</li>
+<li>Logistic Regression is not going to classify non-linear
+relationships well</li>
+<li>Different strengths with respect to preprocessing or feature
+distribution</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/banana_dist.png" style="width:80.0%" /></p>
+</div>
+</div>
+</section>
+<section id="a-decision-tree" class="slide level2">
+<h2>A Decision Tree</h2>
+<p><img data-src="../images/decision_tree.png"
+style="width:80.0%" /></p>
+</section>
+<section id="planting-trees-1" class="slide level2"
+data-transition="fade" data-transition-speed="slow">
+<h2 data-transition="fade" data-transition-speed="slow">Planting Trees
+1</h2>
+<p><img data-src="../images/banana_tree1.png" style="width:90.0%" /></p>
+</section>
+<section id="planting-trees-2" class="slide level2"
+data-transition="fade" data-transition-speed="slow">
+<h2 data-transition="fade" data-transition-speed="slow">Planting Trees
+2</h2>
+<p><img data-src="../images/banana_tree2.png" style="width:90.0%" /></p>
+</section>
+<section id="planting-trees-3" class="slide level2"
+data-transition="fade" data-transition-speed="slow">
+<h2 data-transition="fade" data-transition-speed="slow">Planting Trees
+3</h2>
+<p><img data-src="../images/banana_tree3.png" style="width:90.0%" /></p>
+</section>
+<section id="minimizing-impurity" class="slide level2">
+<h2>Minimizing Impurity</h2>
+<ul>
+<li>Two common methods used to evaluate impurity
+<ul>
+<li>Gini Index: <span class="math display">\[ H_{gini} = \sum_{k\in y}
+p_{mk}(1-p_{mk}) \]</span></li>
+<li>Cross-Entropy: <span class="math display">\[ H_{CE} = - \sum_{k\in
+y} p_{mk}\log(p_{mk}) \]</span></li>
+<li>In both:
+<ul>
+<li><span class="math inline">\(y\)</span> are all the different
+classes</li>
+<li><span class="math inline">\(p_{mk}\)</span> is the distribution or
+proportion of points that are of class <span
+class="math inline">\(k\)</span> in node <span
+class="math inline">\(m\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="creating-decision-trees-python" class="slide level2">
+<h2>Creating Decision Trees (Python)</h2>
+<ul>
+<li><p>Import the classifier:</p>
+<pre ><code class="python">from sklearn.tree import DecisionTreeClassifier</code></pre></li>
+<li><p>Create your model:</p>
+<pre ><code class="python">tree = DecisionTreeClassifier()</code></pre></li>
+<li><p>We will mention available options in just a moment, as they can
+be more important here</p></li>
+<li><p>Everything else works the same as the logistic regression
+models!</p></li>
+</ul>
+</section>
+<section id="creating-decision-trees-r" class="slide level2">
+<h2>Creating Decision Trees (R)</h2>
+<ul>
+<li><p>You already have the model as part of the parsnip
+library</p></li>
+<li><p>Create your model:</p>
+<pre ><code class="r">tree <- decision_tree(mode="classification")</code></pre></li>
+<li><p>Everything else works the same as the logistic regression
+models!</p></li>
+</ul>
+</section>
+<section id="visualizing-decision-trees-python" class="slide level2">
+<h2>Visualizing Decision Trees (Python)</h2>
+<ul>
+<li><p>Can also import a plotter for Matplotlib to sketch out nice
+trees</p>
+<pre ><code class="python">from sklearn.tree import plot_tree</code></pre></li>
+<li><p>Then just pass the tree model after fitting it</p>
+<pre ><code class="python">plot_tree(tree)</code></pre></li>
+<li><p>Can adjust the <code class="python">filled</code> option to color
+the nodes, or <code class="python">feature_names</code> to show better
+comparisons</p></li>
+</ul>
+</section>
+<section id="visualizing-decision-trees-r" class="slide level2">
+<h2>Visualizing Decision Trees (R)</h2>
+<ul>
+<li><p>You need another package to plot the decision trees nicely</p>
+<pre ><code class="r">library(rpart.plot)</code></pre></li>
+<li><p>Then just pass the tree model after fitting it</p>
+<pre ><code class="r">rpart.plot(tree_fit$fit)</code></pre></li>
+<li><p>Can adjust the <code class="python">type</code> and
+<code class="python">extra</code> to different numbers to further
+customize</p></li>
+</ul>
+</section>
+<section id="parameter-tuning" class="slide level2">
+<h2>Parameter Tuning</h2>
+<ul>
+<li>Decision Tree classifiers have several parameters that can be tuned
+to adjust the proportions of the tree</li>
+<li>Often called <em>pruning</em>, and falls into either
+<em>pre-pruning</em> or <em>post-pruning</em> categories
+<ul>
+<li><p>Pre-pruning limits the tree’s size as it is build (pick one,
+maybe two)</p>
+<div class="cols" style="align-items:flex-start">
+<div class="col">
+<ul>
+<li>Python
+<ul>
+<li><code class="python">max_depth</code></li>
+<li><code class="python">max_leaf_nodes</code></li>
+<li><code class="python">min_samples_split</code></li>
+<li><code class="python">min_impurity_decrease</code></li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<ul>
+<li>R
+<ul>
+<li><code class="python">tree_depth</code></li>
+<li><code class="python">min_n</code></li>
+</ul></li>
+</ul>
+</div>
+</div></li>
+</ul></li>
+</ul>
+</section>
+<section id="post-pruning" class="slide level2">
+<h2>Post-Pruning</h2>
+<ul>
+<li>Post-pruning takes the full tree and then proceeds to “snip” off
+branches that don’t have much happening</li>
+<li>Most common approach is likely <em>cost complexity pruning</em>
+<span class="math display">\[ R_\alpha(T) = R(T) + \alpha |T| \]</span>
+<ul>
+<li>Where
+<ul>
+<li><span class="math inline">\(R(T)\)</span> is the total leaf
+impurity</li>
+<li><span class="math inline">\(|T|\)</span> is the number of leaf
+nodes</li>
+<li><span class="math inline">\(\alpha\)</span> is a free parameter that
+is chosen</li>
+</ul></li>
+</ul></li>
+<li>In Python: indicate with <code class="python">ccp_alpha</code> when
+creating the tree</li>
+<li>In R: indicate with <code class="python">cost_complexity</code> when
+creating the tree</li>
+</ul>
+</section>
+<section id="instability" class="slide level2">
+<h2>Instability</h2>
+<ul>
+<li>A drawback of decision trees is that they are inherently
+unstable</li>
+<li>The tree you get will depend heavily on the randomized training and
+test sets</li>
+<li>They might do a similarly good job of prediction, but they can look
+wildly different</li>
+<li>The <code class="python">random_state</code> option (or setting a
+seed) in examples have been fixing this so far. But remove that and run
+the same trial multiple times</li>
+</ul>
+</section>
+<section id="feature-importance" class="slide level2">
+<h2>Feature Importance</h2>
+<ul>
+<li><p>It can be useful to get an idea of what features are most
+important in constructing the tree</p></li>
+<li><p>Once the model has been fit, you can query the model to get this
+information:</p>
+<pre ><code class="python">tree.feature_importances_</code></pre></li>
+<li><p>This returns a list of relative importance for each feature, in
+the same order as the features you passed into the model
+originally</p></li>
+<li><p>In R you need the <code class="python">vip</code> library</p>
+<pre ><code class="r">library(vip)
+vip(tree_fit)</code></pre></li>
+</ul>
+</section>
+<section id="activity-1" class="slide level2">
+<h2>Activity</h2>
+<ul>
+<li>Taking the same dataset from earlier (<a
+href="../demos/basic_labeling.csv">here!</a>) build a classifier using a
+decision tree</li>
+<li>For several different forms of pruning, create a tree and then
+compare its confusion matrix to the others</li>
+</ul>
+</section></section>
+<section>
+<section id="our-powers-combined" class="title-slide slide level1">
+<h1>Our Powers Combined…</h1>
+
+</section>
+<section id="why-ensembles" class="slide level2">
+<h2>Why Ensembles?</h2>
+<ul>
+<li>Ensembles leverage the idea that many efforts trying to get the
+right answer will be off in a <strong>random</strong> way</li>
+<li>This is in fact what the Galaxy Zoo project does!
+<ul>
+<li>Most volunteers are not experts, and will make mistakes from time to
+time</li>
+<li>But the mistakes will be random, and thus averaging them will get
+close to the correct answer</li>
+</ul></li>
+<li>You can actually do this with any machine learning model</li>
+</ul>
+</section>
+<section id="voting-classifiers" class="slide level2">
+<h2>Voting Classifiers</h2>
+<ul>
+<li><p>You can construct your own arbitrary ensembles</p></li>
+<li><p>In Python:</p>
+<pre ><code class="python">combo = VotingClassifier( 
+            [ 
+              ('logreg',log_mod), # first model
+              ('dec_tree',tree)   # second model
+            ], 
+            voting='soft')
+combo.fit(training_df[['x','y']])</code></pre></li>
+<li><p>I haven’t yet found an equivalent in R, but I’d imagine it is out
+there</p></li>
+</ul>
+</section>
+<section id="gerrymandering-voting-boundaries" class="slide level2">
+<h2>Gerrymandering (Voting Boundaries)</h2>
+<p><img data-src="../images/python/VotingClassifier.png"
+style="width:100.0%" /></p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          theme: "whiteboard",
+          boardmarkers : [
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
+    </body>
+</html>
