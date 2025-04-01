@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-04-01">
+  <title>The Dark Forest</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">The Dark Forest</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">April 1, 2025</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>HW4 is due on Thursday evening!</li>
+<li>Quiz 2 on Exoplanets and Galaxies a week from Thursday
+<ul>
+<li>Review and study materials will go out on Thursday</li>
+</ul></li>
+<li>HW2 feedback went out!
+<ul>
+<li>Do you want to use it to make any changes to HW3? They need to be
+done and submitted by Friday at noon. My goal is to try to see if I can
+get through HW3 feedback this weekend</li>
+</ul></li>
+<li>Will start our next unit on Thursday</li>
+</ul>
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap</h2>
+<ul>
+<li>For certain data, alternative models are necessary to capture
+relationships within the data</li>
+<li>Decision Trees are one alternative method of creating a classifier
+model
+<ul>
+<li>Comprised of a conditional tree of yes/no questions</li>
+<li>Each question attempts to minimize the resulting overall “impurity”
+of the classifications</li>
+<li>Utilizing a full decision tree will often <em>overfit</em> the data,
+and thus various parameters can be chosen to “prune” the tree</li>
+<li>Decision trees are unstable in that the resulting tree can heavily
+depend on the randomized initial training data</li>
+</ul></li>
+</ul>
+</section>
+<section id="discussing-today" class="slide level2">
+<h2>Discussing Today</h2>
+<ul>
+<li>Combining Models
+<ul>
+<li>When and why might an ensemble of models give better results?</li>
+<li>How can we easily generate new “models”?</li>
+</ul></li>
+<li>Introducing and understanding random forest models</li>
+</ul>
+<!--
+## Feature Importance
+- It can be useful to get an idea of what features are most important in constructing the tree
+- Once the model has been fit, you can query the model to get this information:
+  ```python
+  tree.feature_importances_
+  ```
+- This returns a list of relative importance for each feature, in the same order as the features you passed into the model originally
+- In R you need the `vip` library
+  ```r
+  library(vip)
+  vip(tree_fit)
+  ```
+-->
+</section>
+<section>
+<section id="strength-in-numbers" class="title-slide slide level1">
+<h1>Strength in Numbers</h1>
+
+</section>
+<section id="why-ensembles" class="slide level2">
+<h2>Why Ensembles?</h2>
+<ul>
+<li>Ensembles leverage the idea that many efforts trying to get the
+right answer will be off in a <strong>random</strong> way</li>
+<li>This is in fact what the Galaxy Zoo project does!
+<ul>
+<li>Most volunteers are not experts, and will make mistakes from time to
+time</li>
+<li>But the mistakes will be random, and thus averaging them will get
+close to the correct answer</li>
+</ul></li>
+<li>You can actually do this with any machine learning model</li>
+</ul>
+</section>
+<section id="voting-classifiers" class="slide level2">
+<h2>Voting Classifiers</h2>
+<ul>
+<li><p>You can construct your own arbitrary ensembles</p></li>
+<li><p>In Python:</p>
+<pre ><code class="python">combo = VotingClassifier( 
+            [ 
+              ('logreg',log_mod), # first model
+              ('dec_tree',tree)   # second model
+            ], 
+            voting='soft')
+combo.fit(training_df[['x','y']])</code></pre></li>
+<li><p>I haven’t yet found an equivalent in R, but I’d imagine it is out
+there</p></li>
+</ul>
+</section>
+<section id="gerrymandering-voting-boundaries" class="slide level2">
+<h2>Gerrymandering (Voting Boundaries)</h2>
+<p><img data-src="../images/python/VotingClassifier.png"
+style="width:100.0%" /></p>
+</section></section>
+<section>
+<section id="generating-chaos" class="title-slide slide level1">
+<h1>Generating Chaos</h1>
+
+</section>
+<section id="creating-model-variations" class="slide level2">
+<h2>Creating Model Variations</h2>
+<div class="cols" style="align-items: center">
+<div class="col">
+<ul>
+<li>Changing the <code class="python">random_state</code> won’t always
+generate a very different model
+<ul>
+<li>And in some cases, like logistic regression, there is no random
+element</li>
+</ul></li>
+<li>A better way is using <em>bagging</em> (Bootstrap Aggregation)</li>
+<li>In SkLearn as <code class="python">BaggingClassifier</code></li>
+<li>In R from <code class="python">baguette</code> library</li>
+</ul>
+</div>
+<div class="col">
+<div class="fig-container" data-file="../images/d3/Bagging.html" data-scroll="no", data-style="width:100%; display:block; height:700px"></div>
+</div>
+</div>
+</section>
+<section id="bias-and-variance" class="slide level2">
+<h2>Bias and Variance</h2>
+<p><img data-src="../images/bias_variance.png"
+style="width:50.0%" /></p>
+</section>
+<section id="applications-to-ensembles" class="slide level2">
+<h2>Applications to Ensembles</h2>
+<ul>
+<li>The ability of an ensemble of classifiers to generalize depends on:
+<ul>
+<li>The strength of the individual classifiers (how well does each
+individual model do at predicting a class?)</li>
+<li>The inverse correlation of the models
+<ul>
+<li>100 of essentially the same model isn’t going to gain you anything
+in the averaging</li>
+<li>The more distinct the models are in their own unique errors, the
+better the ensemble will operate as a whole</li>
+</ul></li>
+</ul></li>
+<li>Often worth making an individual model worse if it uncorrelates the
+ensemble models</li>
+</ul>
+</section></section>
+<section>
+<section id="entering-the-forest" class="title-slide slide level1">
+<h1>Entering the Forest</h1>
+
+</section>
+<section id="building-a-forest" class="slide level2">
+<h2>Building a Forest</h2>
+<p><img data-src="../images/python/ForestBuilding.png"
+style="width:70.0%" /></p>
+</section>
+<section id="randomizing-trees" class="slide level2">
+<h2>Randomizing Trees</h2>
+<div class="cols" style="align-items: start">
+<div class="col">
+<ul>
+<li>Random forests are created by randomizing each tree in two ways:
+<ul>
+<li>Bagging the training data for each tree</li>
+<li>For each split, picking a random subset of features to use</li>
+</ul></li>
+<li>More trees are always better, but will slow training</li>
+</ul>
+</div>
+<div class="col">
+<div class="fig-container" data-file="../images/d3/Forest.html" data-scroll="no", data-style="width:100%; display:inline; height:700px"></div>
+</div>
+</div>
+</section>
+<section id="creating-a-random-forest" class="slide level2">
+<h2>Creating a Random Forest</h2>
+<ul>
+<li><p>In Python, random forest models come from the Scikit-learn
+<code class="python">ensemble</code> module</p>
+<pre ><code class="python">from sklearn.ensemble import RandomForestClassifier
+
+forest = RandomForestClassifier()</code></pre></li>
+<li><p>In R, they are one of Parsnips available models</p>
+<pre ><code class="r">forest <- rand_forest(mode="classification")</code></pre></li>
+<li><p>Fitting, computing confusion matrices, visualizing classification
+boundaries, etc. proceed exactly as they have for other models</p></li>
+</ul>
+</section></section>
+<section>
+<section id="trimming-the-forest" class="title-slide slide level1">
+<h1>Trimming the Forest</h1>
+
+</section>
+<section id="tuning-forests-python" class="slide level2">
+<h2>Tuning Forests (Python)</h2>
+<ul>
+<li>How many trees in the forest?
+<ul>
+<li><code class="python">n_estimators</code> (default=100)</li>
+</ul></li>
+<li>Main tuning parameter: <code class="python">max_features</code>
+<ul>
+<li>Determines how many features to keep at each split</li>
+<li>For classification, using about <span
+class="math inline">\(\sqrt{\text{n_features}}\)</span> is best, and
+this is the default</li>
+</ul></li>
+<li>Tree pre-pruning can still help!
+<ul>
+<li>If nothing else with model size and training time</li>
+<li>Still <code class="python">max_depth</code>,
+<code class="python">max_leaf_nodes</code>, etc.</li>
+</ul></li>
+</ul>
+</section>
+<section id="tuning-forests-r" class="slide level2">
+<h2>Tuning Forests (R)</h2>
+<ul>
+<li>How many trees in the forest?
+<ul>
+<li><code class="python">trees</code> (default=100)</li>
+</ul></li>
+<li>Main tuning parameter: <code class="python">mtry</code>
+<ul>
+<li>Determines how many features to keep at each split</li>
+<li>Default is the same <span
+class="math inline">\(\sqrt{\text{n_features}}\)</span></li>
+</ul></li>
+<li>Tree pre-pruning can still help!
+<ul>
+<li><code class="python">min_n</code> is the minimum number of points
+still in a node to be split further</li>
+</ul></li>
+</ul>
+</section>
+<section id="warming-up" class="slide level2">
+<h2>Warming Up</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>More trees is always better, but at a cost to time</li>
+<li>How many trees get you the most “bang for your (time) buck”?</li>
+<li>Sklearn’s <code class="python">warm_start</code> option lets you
+resume from last training point</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/python/warm_start.png"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity</h2>
+<ul>
+<li>Taking the same dataset from before (<a
+href="../demos/basic_labeling.csv">here!</a>) build a classifier using a
+random forest</li>
+<li>For several sizes of forest and pre-pruning parameters, create a
+forest and then compare its confusion matrix to the others.</li>
+<li>If you have a time, see if you can determine the least number of
+trees you need while still maximizing your model’s effectiveness.</li>
+</ul>
+</section></section>
+<section>
+<section id="working-time" class="title-slide slide level1">
+<h1>Working Time!</h1>
+
+</section>
+<section id="hw4-working-time" class="slide level2">
+<h2>HW4 Working Time!</h2>
+<ul>
+<li>I’ve set aside the rest of class for you to touch base/work with
+your partner(s) on HW4</li>
+<li>Ensure you are on track to finish by the end of Thursday!</li>
+<li>What questions do you have? Discuss them with your partner, and then
+potentially myself</li>
+</ul>
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          theme: "whiteboard",
+          boardmarkers : [
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
+    </body>
+</html>
