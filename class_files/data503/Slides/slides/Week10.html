@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-04-02">
   <title>Transforming Regular Expressions</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -36,295 +37,271 @@
 <section id="title-slide">
   <h1 class="title">Transforming Regular Expressions</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">March 21/April 9, 2024</p>
+  <p class="date">April 2, 2025</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
 <ul>
-<li><p>Homework 8 due Monday after break</p></li>
-<li><p>My grading quest continues. I’m optimistic to get a good chunk
-done over break</p></li>
-<li><p>Reminder about 2 week schedule after Spring break:</p>
-<table>
-<thead>
-<tr class="header">
-<th>Tues</th>
-<th>Thurs</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>No class</td>
-<td>Remote Class</td>
-</tr>
-<tr class="even">
-<td>Remote Class</td>
-<td>No Class</td>
-</tr>
-</tbody>
-</table></li>
-</ul>
-</section>
-<section id="transforming-data" class="slide level2">
-<h2>Transforming Data</h2>
+<li>Homework
 <ul>
-<li>Often you will need to move data from one location to another to
-organize it, possibly cleaning it along the way</li>
-<li>There are a variety of automation setups that can aid with this,
-though most all require some scripting knowledge</li>
-<li>For many transformations though, we can accomplish what is necessary
-purely through SQL and some scheduling</li>
-</ul>
-</section>
-<section id="project-transformation-checklist" class="slide level2">
-<h2>Project Transformation Checklist</h2>
-<ul>
-<li>Create a GitHub repository of your own using the template repository
-<a
-href="https://github.com/rembold-data-engineering-master/db_transformation_template">here</a></li>
-<li>Download the created repository to your system</li>
-<li>Edit the <code class="python">clean.sql</code> file to add whatever
-commands you need to move, organize, and clean your data.</li>
-<li>Upload the new <code class="python">clean.sql</code> file back to
-your repository, keeping the filename the same!</li>
-<li>In your project on Railway, click New and then “GitHub Repo”
-<ul>
-<li>You’ll have to agree to let Railway access your account, and you can
-specify only certain repositories</li>
-<li>Select your created repository</li>
+<li>Homework 8 due tonight</li>
+<li>HW5 and HW6 feedback went out!</li>
+<li>HW9 goes live tonight</li>
 </ul></li>
-<li>Selecting the repository, go to settings and then scroll down to the
-CRON schedule to set up a schedule</li>
+<li>Project
+<ul>
+<li>Normalization went pretty rough on HW6. Have your partner check your
+data model and ensure you are properly normalizing things!
+<ul>
+<li>I can also look at it for some feedback</li>
+</ul></li>
+<li>In the coming week, I’d see about getting your partner’s database
+tables linked into your database using a foreign data wrapper as
+discussed before break</li>
+</ul></li>
 </ul>
 </section>
-<section id="things-to-keep-in-mind" class="slide level2">
-<h2>Things to keep in mind</h2>
+<section>
+<section id="serving-part-i" class="title-slide slide level1">
+<h1>Serving: Part I</h1>
+
+</section>
+<section id="apis" class="slide level2">
+<h2>APIs</h2>
 <ul>
-<li><p>You’ll need to create more tables to organize your data. These
-get run a <strong>single</strong> time, so they should not go in
-<code class="python">clean.sql</code>!</p></li>
-<li><p>It can be useful to empty out your original dumping table after
-you organize things each time so that you don’t “double process”
-anything</p></li>
-<li><p>If you are getting duplicate information occassionally through
-your API, it can be useful to understand:</p>
-<pre ><code class="pgsql">INSERT INTO |||new table||| VALUES
-SELECT |||special id, other cols||| FROM |||old table|||
-ON CONFLICT |||column or constraint name|||
-DO NOTHING</code></pre></li>
+<li>One common way that you might want to make your data available is
+through an API
+<ul>
+<li>This gives others a streamlined method to retrieve information, in
+an identical fashion to how you may have scraped an API initially</li>
+<li>API’s can do more than just read information though, they can also
+be used, if set up to do so, to write or change information in a
+database</li>
+</ul></li>
+<li>Creating an API is a bit like creating a dynamic website:
+<ul>
+<li>A server waits for a request at a particular endpoint</li>
+<li>The server runs SQL (or other code) to interact with the server’s
+database</li>
+<li>The server returns the desired information to the requestor</li>
+</ul></li>
 </ul>
-<!--
-## Project Information
-- Projects will be in pairs. You should be getting a poll about whom you may like to or not like to work with, at which point I'll create the pairs and notify you by the end of the week.
-- Projects are comprised of two parts:
-  - Database creation:
-    - You are to bring together _several_ (at least two) different datasets of your choosing into a single database
-      - If you can't find the info that you want already collected into something like a CSV, but the information in available on the web, I'm happy to help you learn about web-scraping
-    - Relationships between tables, appropriate indexes and constraints should be established
-  - Database analysis:
-    - Using your database, you should investigate a novel question and provide a detailed summary of what you found
+</section>
+<section id="api-creation" class="slide level2">
+<h2>API Creation</h2>
+<ul>
+<li>Many scripting languages have libraries and other utilities to help
+create web-based APIs
+<ul>
+<li>In Python, <a href="https://fastapi.tiangolo.com/">FastAPI</a> is
+probably the most popular and nice to use</li>
+<li>In R, <a href="https://www.rplumber.io/">Plumber</a> seems the most
+common</li>
+</ul></li>
+<li>Writing a bespoke API undeniably gives you the most control over how
+it works, but not everyone has extensive enough scripting
+backgrounds</li>
+<li>Alternatives:
+<ul>
+<li>Docker-based solutions (<a
+href="https://github.com/rembold-data-engineering-master/db_serving_api_template/">mine</a>
+uses FastAPI under the hood)</li>
+<li><a href="https://docs.postgrest.org/en/v12/">PostgREST</a></li>
+</ul></li>
+</ul>
+</section>
+<section id="postgrest-basics" class="slide level2">
+<h2>PostgREST Basics</h2>
+<ul>
+<li>PostgREST is a service that connects to a database and automatically
+offers up an API to connect to desired tables</li>
+<li>Each table (or view) essentially gets assigned an endpoint</li>
+<li>A user accessing that endpoint receives JSON of the contents in that
+table</li>
+</ul>
+</section>
+<section id="more-advanced-postgrest" class="slide level2">
+<h2>More Advanced PostgREST</h2>
+<ul>
+<li>PostgREST also offers up a slew of endpoint <a
+href="https://docs.postgrest.org/en/v12/references/api/tables_views.html#operators">options</a>
+that can be included to further filter the data returned
+<ul>
+<li>This is actually a huge boon, as such capabilities otherwise have to
+be manually coded</li>
+</ul></li>
+<li>PostgREST can not only read from the database, but perform most CRUD
+operations (create, read, update, or delete)
+<ul>
+<li>If you are going to let the API edit the database though, you should
+DEFINITELY implement access controls</li>
+<li>PostgREST can help you handle this without a ton of effort, but it
+does complicate things.</li>
+<li>My suggestion for the project is to just implement various useful
+read-only endpoints</li>
+</ul></li>
+</ul>
+</section>
+<section id="installing-postgrest" class="slide level2">
+<h2>Installing PostgREST</h2>
+<ul>
+<li><a
+href="https://docs.postgrest.org/en/v12/explanations/install.html#docker">Docker</a>
+is the easiest route!
+<ul>
+<li>Image is <code class="pgsql">postgrest/postgrest</code></li>
+</ul></li>
+<li>One primary environment variable:
+<ul>
+<li><code class="pgsql">PGRST_DB_URI</code> is the same address we’ve
+used several times already to connect to a database:
+<code class="text">postgres://user:password@host:port/database</code></li>
+</ul></li>
+<li>Need to tell the container to use the system network
+<ul>
+<li>On Windows or Linux, add the <code class="text">--net=host</code>
+flag when running the container</li>
+<li>On MacOS, use <code class="pgsql">host.docker.internal</code>
+instead of <code class="pgsql">localhost</code> in the URI</li>
+</ul></li>
+</ul>
+</section>
+<section id="authenticating-postgrest" class="slide level2">
+<h2>Authenticating PostgREST</h2>
+<ul>
+<li>If you try to access and endpoint currently, you’ll get a response
+about how anonymous access is disabled</li>
+<li>If you wanted the API to be able to write and update the database,
+you can set PostgREST up with full user <a
+href="https://docs.postgrest.org/en/v12/references/auth.html">authentication</a></li>
+<li>For just read-access though, we can enable anonymous access. We just
+need to:
+<ul>
+<li>Create a schema we want the accessible tables to live in
+<ul>
+<li>I like to call it something like <code class="pgsql">api</code></li>
+</ul></li>
+<li>Create a database user for the anonymous accessor</li>
+<li>Give that database user permission to (read) access the schema and
+tables in that schema</li>
+</ul></li>
+</ul>
+</section>
+<section id="postgres-user-permissions" class="slide level2">
+<h2>Postgres User Permissions</h2>
+<ul>
+<li><p>A fundamental part of database management is user management,
+which are called <a
+href="https://www.postgresql.org/docs/current/database-roles.html">roles</a>
+in Postgres</p></li>
+<li><p>You can create new roles with various permission attributes</p>
+<pre ><code class="postgresql">CREATE ROLE |||name||| |||attributes|||;</code></pre></li>
+<li><p>You can see all existing roles in the build-in table!</p>
+<pre ><code class="postgresql">SELECT * FROM pg_roles;</code></pre></li>
+<li><p>A little confusingly, roles can represent either individuals or
+groups</p>
+<ul>
+<li>You can grant one role to another (inheriting that roles
+permissions) to create groups</li>
+</ul></li>
+</ul>
+</section>
+<section id="postgrest-roles" class="slide level2">
+<h2>PostgREST Roles</h2>
+<ul>
+<li><p>For anonymous validation, we can create a role that is not
+allowed to login</p>
+<pre ><code class="postgresql" style="font-size:.9em">CREATE ROLE web_anon NOLOGIN;</code></pre></li>
+<li><p>Note that this will NOT change the
+<code class="pgsql">PGRST_DB_URI</code> login. It isn’t a bad idea to
+login though with a non-superuser account. So,
+<strong>optionally</strong>:</p>
+<pre ><code class="postgresql" style="font-size:.9em">CREATE ROLE web_auth 
+  NOINHERIT LOGIN PASSWORD 'secretsecret';
+GRANT web_anon TO web_auth;</code></pre>
+<p>then use that for your URI:</p>
+<pre ><code class="text" style="font-size:.9em">postgresql://web_auth:secretsecret@localhost:port/database</code></pre></li>
+</ul>
+</section>
+<section id="granting-permissions" class="slide level2">
+<h2>GRANTING Permissions</h2>
+<ul>
+<li><p>Roles by themselves have very limited permissions! Need to
+explicitly <a
+href="https://www.postgresql.org/docs/17/sql-grant.html">grant</a> them
+(unless they inherited them elsewhere)</p></li>
+<li><p>We need to <code class="pgsql">GRANT</code>
+<code class="pgsql">USAGE</code> rights to schemas</p>
+<pre ><code class="postgresql">GRANT USAGE ON SCHEMA api TO web_anon;</code></pre></li>
+<li><p>We need to <code class="pgsql">GRANT</code>
+<code class="pgsql">SELECT</code> rights to tables/views</p>
+<pre ><code class="postgresql">GRANT SELECT ON api.|||table name||| TO web_anon;</code></pre></li>
+</ul>
+</section>
+<section id="updating-environment-variables" class="slide level2">
+<h2>Updating Environment Variables</h2>
+<ul>
+<li>Need to add a few more environment variables:
+<ul>
+<li><code class="pgsql">PGRST_DB_SCHEMA</code>: The schema that we want
+PostgREST to generate endpoints for (and the one we just gave
+permissions to</li>
+<li><code class="pgsql">PGRST_DB_ANON_ROLE</code>: The role we created
+and gave the permissions to (<code class="pgsql">web_anon</code>)</li>
+</ul></li>
+<li>With those specified, we should be able to then access our
+endpoint!</li>
+</ul>
+</section>
+<section id="documentation" class="slide level2">
+<h2>Documentation</h2>
+<ul>
+<li>It is often a good idea to document your APIs, so that someone can
+tell what you are making available</li>
+<li>PostgREST can create a basic layout for you using the OpenAPI
+documentation syntax</li>
+<li>We can hook another service into this (SwaggerUI is common) to have
+a website where we can view our lovely documentation</li>
+<li>Requires setting another environment variable in PostgREST to make
+this available:
+<ul>
+<li><code class="pgsql">PGRST_OPENAPI_SERVER_PROXY_URI</code>: Set to
+localhost or to your PostgREST server URL</li>
+</ul></li>
+</ul>
+</section>
+<section id="swaggerui" class="slide level2">
+<h2>SwaggerUI</h2>
+<ul>
+<li>There are many website documentation programs that can “talk” to the
+OpenAPI service to discover what endpoints your API offers and display
+them in a pretty fashion</li>
+<li>A common one is SwaggerUI, installed most easy through (you guessed
+it) Docker
+<ul>
+<li><code class="pgsql">swaggerapi/swagger-ui</code> on DockerHub</li>
+<li>Requires setting 1 environment variable:
+<code class="pgsql">API_URL</code> which should match the proxy URI we
+just defined for PostgREST</li>
+<li>“Poke a Docker hole” in port 8080 to then be able to access the
+documentation</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="break" class="title-slide slide level1">
+<h1>Break!</h1>
 
-## More Project Info
-- Write-ups should probably be around 6-8 pages, describing what datasets you utilized, how you related them within your dataset, what question you sought to investigate, and your findings and conclusions.
-- Write-ups will be due the night of April 22nd
-- A more formal guideline will be included when you get your partner assignment this weekend.
--->
-<!--## Review Question-->
-<!--Which of the below phrases would match to the following regular expression:-->
-<!--`[a-z]+-\d{2}$`{.inlinecode}-->
-<!--:::poll-->
-<!--#. June-13-2022-->
-<!--#. dec-8-->
-<!--#. Jan-feb-28-->
-<!--#. August 27-->
-<!--:::-->
-<!--------  THEORY ------------------>
-<!--
-## Data Modeling
-- Data Modeling is the act of best deciding how to represent and store data such that it relates to the real world
-- As much as possible, it is generally desirable to:
-  - ensure the model can easily help answer the types of questions you will want to ask
-  - operate at a as low a level of granularity as possible
-  - remove redundancy
-  - ensure referential integrity
-
-
-## Normalization
-- First introduced by Edgar Codd in the early 1970s
-- Codd outlined the following goals:
-  - to free the collection of relations from undesirable insertion, update, and deletion dependences
-  - To reduce the need for restructing the collection of relations as new types of data are introduced
-  - To make the relational model more informative to users
-  - To make the collection of relations neutral to what queries are being run on them
-- To assist in these efforts, Codd introduced the idea of _normal forms_
-
-
-## What is normal?
-- Each normal form builds on those before
-- The primary normal forms are:
-
-Denormalized
-  : No normalization. Nested and redundant data is allowed
-
-First normal form (1NF)
-  : Each column is unique and has a single value. The table has a unique primary key.
-
-Second normal form (2NF)
-  : Partial dependencies are removed (only necessary if compound primary key)
-
-Third normal form (3NF)
-  : Each table contains fields only relevant to its primary key, and has no transitive dependencies
-
-
-## Denormalized
-::::cols
-:::col
-- APIs will commonly give denormalized data, since they tend to return JSON type entries
-- Consider the entry to the right about a particular order
-:::
-:::{.col style='flex-grow:2'}
-```{.json style='max-height:1000px'}
-{ "OrderID": 100,
-  "OrderItems": [
-    {
-      "sku": 1,
-      "price": 10,
-      "quantity": 1,
-      "name": "Thingmajig"
-    },
-    {
-      "sku": 2,
-      "price": 25,
-      "quantity": 2,
-      "name": "Whatchamacalit"
-    }],
-  "CustomerID": 5,
-  "CustomerName": "Jed Rembold",
-  "OrderDate": "2022-11-09" }
-```
-:::
-::::
-
-## Initial Attempt
-
-<table>
-<tr>
-<th>OrderID</th>
-<th>OrderItems</th>
-<th>CustomerID</th>
-<th>CustomerName</th>
-<th>OrderDate</th>
-</tr>
-<tr>
-<td>100</td>
-<td><pre><code class='json' style='font-size:.6em'>
-  [
-    {
-      "sku": 1,
-      "price": 10,
-      "quantity": 1,
-      "name": "Thingmajig"
-    },
-    {
-      "sku": 2,
-      "price": 25,
-      "quantity": 2,
-      "name": "Whatchamacalit"
-    }
-  ]
-    </code></pre>
-</td>
-<td>5</td>
-<td>Jed Rembold</td>
-<td>2022-11-09</td>
-</tr>
-</table>
-
-## 1st Normal Form
-
-:::{style='font-size: .8em'}
-
-| OrderID | Sku | Price | Quantity | ProductName    | CustomerID | CustomerName | OrderDate  |
-|---------|-----|-------|----------|----------------|------------|--------------|------------|
-| 100     | 1   | 50    | 1        | Thingmajig     | 5          | Jed Rembold  | 2022-11-09 |
-| 100     | 2   | 25    | 2        | Whatchamacalit | 5          | Jed Rembold  | 2022-11-09 |
-
-:::
-
-## 1st Normal Form (PK)
-
-:::{style='font-size: .7em'}
-
-| OrderID | ItemNum | Sku | Price | Quantity | ProductName    | CustomerID | CustomerName | OrderDate  |
-|---------|---------|-----|-------|----------|----------------|------------|--------------|------------|
-| 100     | 1       | 1   | 50    | 1        | Thingmajig     | 5          | Jed Rembold  | 2022-11-09 |
-| 100     | 2       | 2   | 25    | 2        | Whatchamacalit | 5          | Jed Rembold  | 2022-11-09 |
-
-:::
-
-## Evaluating 2NF
-- To be in second normal form, there can be no partial dependencies, where columns depend on only one of the compound keys
-- Here though the last 3 columns all depend only on OrderID
-  - Solution: Split to new tables!
-
-## 2nd Normal Form
-
-| OrderID | CustomerID | CustomerName | OrderDate  |
-|---------|------------|--------------|------------|
-| 100     | 5          | Jed Rembold  | 2022-11-09 |
-
-| OrderID | ItemNum | Sku | Price | Quantity | ProductName    |
-|---------|---------|-----|-------|----------|----------------|
-| 100     | 1       | 1   | 50    | 1        | Thingmajig     |
-| 100     | 2       | 2   | 25    | 2        | Whatchamacalit |
-
-## Evaluating 3NF
-- The third normal form prohibits transitive dependencies, where a column depends on another (that depends on the primary key), instead of depending directly on the primary key
-- Here we have 2! One in each table:
-  - `ProductName` depends on `Sku`
-  - `CustomerName` depends on `CustomerID`
-- Solution? More tables!
-
-
-## 3rd Normal Form
-::::cols
-:::col
-
-| Sku | ProductName    |
-|-----|----------------|
-| 1   | Thingmajig     |
-| 2   | Whatchamacalit |
-
-| CustomerID | CustomerName |
-|------------|--------------|
-| 5          | Jed Rembold  |
-
-:::
-:::col
-
-| OrderID | ItemNum | Sku | Price | Quantity |
-|---------|---------|-----|-------|----------|
-| 100     | 1       | 1   | 50    | 1        |
-| 100     | 2       | 2   | 25    | 2        |
-
-
-| OrderID | CustomerID | OrderDate  |
-|---------|------------|------------|
-| 100     | 5          | 2022-11-09 |
-
-:::
-::::
-
-## Beyond
-- Other normal forms exist (up to 6NF in the Boyce-Codd system)
-- Most people only care about the first 3 to get data in a "normalized" state
-- Unless you have specific performance reasons for wanting otherwise, you really should strive for normalized tables in your relational database, as they make maintaining, adding, updating, and adjusting your database and tables much easier
--->
 </section>
 <section id="break-time" class="slide level2">
 <h2>Break Time!</h2>
 <!--------  SQL ------------------>
+</section></section>
+<section>
+<section id="string-basics" class="title-slide slide level1">
+<h1>String Basics</h1>
+
 </section>
 <section id="stringy-functions-core" class="slide level2">
 <h2>Stringy Functions (CORE)</h2>
@@ -342,32 +319,32 @@ Third normal form (3NF)
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">str1 || str2</code></td>
+<td><code class="pgsql">str1 || str2</code></td>
 <td>Concatenates string 1 and string 2 together</td>
 </tr>
 <tr class="even">
-<td><code class="python">upper(str)</code></td>
+<td><code class="pgsql">upper(str)</code></td>
 <td>Converts a string to all uppercase characters</td>
 </tr>
 <tr class="odd">
-<td><code class="python">lower(str)</code></td>
+<td><code class="pgsql">lower(str)</code></td>
 <td>Converts a string to all lowercase characters</td>
 </tr>
 <tr class="even">
-<td><code class="python">char_length(str)</code></td>
+<td><code class="pgsql">char_length(str)</code></td>
 <td>Returns the number of characters in the string</td>
 </tr>
 <tr class="odd">
-<td><code class="python">position(str IN substr)</code></td>
+<td><code class="pgsql">position(str IN substr)</code></td>
 <td>Find the number of the character where the substring begins</td>
 </tr>
 <tr class="even">
-<td><code class="python">trim(opt chr FROM str)</code></td>
+<td><code class="pgsql">trim(opt chr FROM str)</code></td>
 <td>Removes the given characters from the string, optionally taking from
 the <em>leading</em> or <em>trailing</em> edge</td>
 </tr>
 <tr class="odd">
-<td><code class="python">substring(str FROM n FOR l)</code></td>
+<td><code class="pgsql">substring(str FROM n FOR l)</code></td>
 <td>Returns the portion of the string starting at position n and
 continuing for l characters</td>
 </tr>
@@ -391,54 +368,59 @@ continuing for l characters</td>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">initcap(str)</code></td>
+<td><code class="pgsql">initcap(str)</code></td>
 <td>Converts the first character of each word to uppercase, and the rest
 lower</td>
 </tr>
 <tr class="even">
-<td><code class="python">left(str,n)</code></td>
+<td><code class="pgsql">left(str,n)</code></td>
 <td>Returns the first n characters of the string</td>
 </tr>
 <tr class="odd">
-<td><code class="python">right(str,n)</code></td>
+<td><code class="pgsql">right(str,n)</code></td>
 <td>Returns the last n characters of the string</td>
 </tr>
 <tr class="even">
-<td><code class="python">ltrim(str,chr)</code></td>
+<td><code class="pgsql">ltrim(str,chr)</code></td>
 <td>Remove the characters (space by default) from the start of the
 string</td>
 </tr>
 <tr class="odd">
-<td><code class="python">rtrim(str,chr)</code></td>
+<td><code class="pgsql">rtrim(str,chr)</code></td>
 <td>Remove the characters (space by default) from the end of the
 string</td>
 </tr>
 <tr class="even">
-<td><code class="python">replace(str,from,to)</code></td>
+<td><code class="pgsql">replace(str,from,to)</code></td>
 <td>Replaces all occurance of <em>from</em> in the string to
 <em>to</em></td>
 </tr>
 <tr class="odd">
-<td><code class="python">length(str)</code></td>
+<td><code class="pgsql">length(str)</code></td>
 <td>Returns the number of characters in the string</td>
 </tr>
 <tr class="even">
-<td><code class="python">substr(str, n, l)</code></td>
+<td><code class="pgsql">substr(str, n, l)</code></td>
 <td>Returns the portion of the string starting at position n and
 continuing l characters</td>
 </tr>
 </tbody>
 </table>
 </div>
+</section></section>
+<section>
+<section id="regular-expressions" class="title-slide slide level1">
+<h1>Regular Expressions</h1>
+
 </section>
 <section id="enhanced-pattern-matching" class="slide level2">
 <h2>Enhanced Pattern Matching</h2>
 <ul>
 <li>We’ve already seen basic pattern matching with
-<code class="python">LIKE</code> and <code class="python">LIKE</code>
+<code class="pgsql">LIKE</code> and <code class="pgsql">LIKE</code>
 <ul>
 <li>Some flexibility with wildcard characters:
-<code class="python">%</code> and <code class="python">_</code></li>
+<code class="pgsql">%</code> and <code class="pgsql">_</code></li>
 </ul></li>
 <li>To get (much) more flexibility, we need to pivot to something made
 for exactly this purpose: <em>regular expressions</em> (or
@@ -472,39 +454,39 @@ spent.</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">.</code></td>
+<td><code class="pgsql">.</code></td>
 <td>Matches <em>any</em> character except a new line</td>
 </tr>
 <tr class="even">
-<td><code class="python">[abc]</code></td>
+<td><code class="pgsql">[abc]</code></td>
 <td>Matches any character in the square brackets (a or b or c)</td>
 </tr>
 <tr class="odd">
-<td><code class="python">[a-z]</code></td>
+<td><code class="pgsql">[a-z]</code></td>
 <td>Matches a range of characters (all lowercase letters here)</td>
 </tr>
 <tr class="even">
-<td><code class="python">[^a-z]</code></td>
+<td><code class="pgsql">[^a-z]</code></td>
 <td>Caret negates what follows (so no lowercase letters here)</td>
 </tr>
 <tr class="odd">
-<td><code class="python">\w</code></td>
+<td><code class="pgsql">\w</code></td>
 <td>Any word character, digit or underscore</td>
 </tr>
 <tr class="even">
-<td><code class="python">\d</code></td>
+<td><code class="pgsql">\d</code></td>
 <td>Any digit</td>
 </tr>
 <tr class="odd">
-<td><code class="python">\s</code></td>
+<td><code class="pgsql">\s</code></td>
 <td>A space</td>
 </tr>
 <tr class="even">
-<td><code class="python">\t</code></td>
+<td><code class="pgsql">\t</code></td>
 <td>A tab character</td>
 </tr>
 <tr class="odd">
-<td><code class="python">\n</code></td>
+<td><code class="pgsql">\n</code></td>
 <td>A newline character</td>
 </tr>
 </tbody>
@@ -524,43 +506,43 @@ spent.</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">^</code></td>
+<td><code class="pgsql">^</code></td>
 <td>Match at the start of the string</td>
 </tr>
 <tr class="even">
-<td><code class="python">$</code></td>
+<td><code class="pgsql">$</code></td>
 <td>Match at the end of the string</td>
 </tr>
 <tr class="odd">
-<td><code class="python">?</code></td>
+<td><code class="pgsql">?</code></td>
 <td>Get the preceding match 0 or one time</td>
 </tr>
 <tr class="even">
-<td><code class="python">*</code></td>
+<td><code class="pgsql">*</code></td>
 <td>Get the preceding match zero or more times</td>
 </tr>
 <tr class="odd">
-<td><code class="python">+</code></td>
+<td><code class="pgsql">+</code></td>
 <td>Get the preceding match one or more times</td>
 </tr>
 <tr class="even">
-<td><code class="python">{m}</code></td>
+<td><code class="pgsql">{m}</code></td>
 <td>Get the preceding match exactly m times</td>
 </tr>
 <tr class="odd">
-<td><code class="python">{m,n}</code></td>
+<td><code class="pgsql">{m,n}</code></td>
 <td>Get the preceding match between m and n times</td>
 </tr>
 <tr class="even">
-<td><code class="python">a|b</code></td>
+<td><code class="pgsql">a|b</code></td>
 <td>Match on either a or b</td>
 </tr>
 <tr class="odd">
-<td><code class="python">( )</code></td>
+<td><code class="pgsql">( )</code></td>
 <td>Create a capture group or set precedence</td>
 </tr>
 <tr class="even">
-<td><code class="python">(?: )</code></td>
+<td><code class="pgsql">(?: )</code></td>
 <td>Negate reporting a capture group</td>
 </tr>
 </tbody>
@@ -574,17 +556,17 @@ spent.</li>
 <ul>
 <li>If you ever want to match off a symbol that has special meaning in
 regex (a parenthese, for instance) you must <em>escape it</em> with a
-backslash: <code class="python">\(</code></li>
+backslash: <code class="pgsql">\(</code></li>
 <li>Reserved characters include:
-<code class="python">{ } [ ] / \ + * . $ ^ | ?</code></li>
+<code class="pgsql">{ } [ ] / \ + * . $ ^ | ?</code></li>
 <li>Flags can be added at the end to tweak matching
 <ul>
-<li><code class="python">/i</code> means that matches will be case
+<li><code class="pgsql">/i</code> means that matches will be case
 insensitive</li>
-<li><code class="python">/g</code> means that all instances of the match
+<li><code class="pgsql">/g</code> means that all instances of the match
 will be returned, not just the first</li>
-<li><code class="python">/m</code> allows the anchor characters
-(<code class="python">^</code> and <code class="python">$</code>) to
+<li><code class="pgsql">/m</code> allows the anchor characters
+(<code class="pgsql">^</code> and <code class="pgsql">$</code>) to
 operate on each line, not just across the entire string.</li>
 </ul></li>
 </ul>
@@ -618,11 +600,11 @@ next 20 minutes</li>
 filtering</li>
 <li>You can also use regexes for filtering!
 <ul>
-<li><code class="python">~</code> is a case sensitive match using the
+<li><code class="pgsql">~</code> is a case sensitive match using the
 following regex</li>
-<li><code class="python">~*</code> is a case insensitive match using the
+<li><code class="pgsql">~*</code> is a case insensitive match using the
 following regex</li>
-<li>Either can have a <code class="python">!</code> in front to negate
+<li>Either can have a <code class="pgsql">!</code> in front to negate
 the search (where things do <strong>not</strong> match the regex)</li>
 </ul></li>
 </ul>
@@ -638,7 +620,7 @@ you want from a much larger string</p></li>
 <li><p>This can be particularly useful when cleaning data or
 constructing useful database tables</p></li>
 <li><p>Since PostgreSQL 15, you have had a perfect tool to accomplish
-this easily: <code class="python">regexp_substr</code></p>
+this easily: <code class="pgsql">regexp_substr</code></p>
 <pre ><code class="pgsql">SELECT
   regexp_substr('today is March 21, 2024', '\d{4}');</code></pre></li>
 </ul>
@@ -647,7 +629,7 @@ this easily: <code class="python">regexp_substr</code></p>
 <h2>Further Extracting Data</h2>
 <ul>
 <li>What if you have multiple capture groups though?</li>
-<li><code class="python">regexp_match(str, regex)</code> returns the
+<li><code class="pgsql">regexp_match(str, regex)</code> returns the
 first matching instance in the string
 <ul>
 <li>What is returned is whatever is in any <em>capture groups</em> you
@@ -655,9 +637,9 @@ may have included in your regex, or the entire match if there are no
 capture groups</li>
 <li>Output is returned as an array, to allow for potentially multiple
 capture groups</li>
-<li>Index it out specific values using <code class="python">[N]</code>
-at the end after wrapping entire expression in ()</li>
-<li>Can also <code class="python">UNNEST</code></li>
+<li>Index it out specific values using <code class="pgsql">[N]</code> at
+the end after wrapping entire expression in ()</li>
+<li>Can also <code class="pgsql">UNNEST</code></li>
 </ul></li>
 </ul>
 <pre ><code class="pgsql" style="font-size:.9em">SELECT (regexp_match('today is March 15, 2022', '\d{4}'))[1];</code></pre>
@@ -666,15 +648,15 @@ at the end after wrapping entire expression in ()</li>
 <h2>Regular Splitting</h2>
 <ul>
 <li>You can also use regular expressions to replace or split text</li>
-<li><code class="python">regexp_replace(text, re, replacement)</code>
+<li><code class="pgsql">regexp_replace(text, re, replacement)</code>
 will replace the first matches of re in text with the replacement
 <ul>
-<li>Add another <code class="python">'g'</code> argument on the end to
-do so globally (replacing all matches)</li>
+<li>Add another <code class="pgsql">'g'</code> argument on the end to do
+so globally (replacing all matches)</li>
 </ul></li>
-<li><code class="python">regexp_split_to_array(text, re)</code> will
+<li><code class="pgsql">regexp_split_to_array(text, re)</code> will
 split the text into an array on each match to re</li>
-<li><code class="python">regexp_split_to_table(text, re)</code> will
+<li><code class="pgsql">regexp_split_to_table(text, re)</code> will
 split the text into a table column on each match to re. This is just
 like unnesting the array.</li>
 </ul>
@@ -692,11 +674,16 @@ set</li>
 <li>Create and populate new columns for first, middle, and last
 name</li>
 <li>Create and populate new columns to hold the width and height in
-inches (in <code class="python">1 1/4</code> form)</li>
+inches (in <code class="pgsql">1 1/4</code> form)</li>
 <li>If the above was easy and you finish quickly, create new columns to
 hold decimal equivalents of the width and height</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="full-text-tools" class="title-slide slide level1">
+<h1>Full Text Tools</h1>
+
 </section>
 <section id="full-text-search" class="slide level2">
 <h2>Full Text Search</h2>
@@ -711,8 +698,8 @@ longer passage?
 <li>Using these new tools will require using some new functions and data
 types:
 <ul>
-<li><code class="python">ts_vector</code></li>
-<li><code class="python">ts_query</code></li>
+<li><code class="pgsql">ts_vector</code></li>
+<li><code class="pgsql">ts_query</code></li>
 </ul></li>
 </ul>
 </section>
@@ -729,7 +716,7 @@ particular ideas</li>
 words</li>
 <li>RUN: run, runs, ran, running</li>
 </ul></li>
-<li>Postgres’s <code class="python">to_tsvector</code> will break a
+<li>Postgres’s <code class="pgsql">to_tsvector</code> will break a
 string down into its component lexemes, and keep track of where each
 occured in the original string</li>
 </ul>
@@ -742,16 +729,16 @@ occured in the original string</li>
 <ul>
 <li>Text that you want to search <strong>through</strong> will need to
 be converted to a vector through
-<code class="python">to_tsvector</code></li>
+<code class="pgsql">to_tsvector</code></li>
 <li>Text that you want to search <strong>for</strong> will be converted
-using <code class="python">to_tsquery</code></li>
-<li><code class="python">to_tsquery</code> takes a sequence of words
-with symbols connecting them conveying relationships
+using <code class="pgsql">to_tsquery</code></li>
+<li><code class="pgsql">to_tsquery</code> takes a sequence of words with
+symbols connecting them conveying relationships
 <ul>
-<li><code class="python">&</code> - and</li>
-<li><code class="python">|</code> - or</li>
-<li><code class="python">!</code> - not</li>
-<li><code class="python"><-></code> - followed by</li>
+<li><code class="pgsql">&</code> - and</li>
+<li><code class="pgsql">|</code> - or</li>
+<li><code class="pgsql">!</code> - not</li>
+<li><code class="pgsql"><-></code> - followed by</li>
 </ul>
 <pre ><code class="postgresql">SELECT to_tsquery('fly & monday')</code></pre></li>
 </ul>
@@ -760,32 +747,31 @@ with symbols connecting them conveying relationships
 <h2>Combining Vectors and Queries</h2>
 <ul>
 <li><p>To actually complete a full text search, you ask Postgres to look
-through a <code class="python">tsvector</code> object for a particular
-<code class="python">tsquery</code></p></li>
+through a <code class="pgsql">tsvector</code> object for a particular
+<code class="pgsql">tsquery</code></p></li>
 <li><p>The syntax to do so utilizes the match operator, which is two
-“at” symbols: <code class="python">@@</code></p>
+“at” symbols: <code class="pgsql">@@</code></p>
 <pre ><code class="postgresql">SELECT some_tsvector @@ some_tsquery;</code></pre></li>
-<li><p>Using <code class="python">@@</code> is a true/false search, so
+<li><p>Using <code class="pgsql">@@</code> is a true/false search, so
 the query is either found or not</p>
 <ul>
 <li>This means it can be used for filtering with
-<code class="python">WHERE</code> as well!</li>
+<code class="pgsql">WHERE</code> as well!</li>
 </ul></li>
 </ul>
 </section>
 <section id="indexing-tsvectors" class="slide level2">
 <h2>Indexing TSVectors</h2>
 <ul>
-<li><p>Individual <code class="python">tsvector</code>s can not be
-easily ordered, so indexing a column with
-<code class="python">tsvector</code> contents using the normal B-Tree
-method would not be effective</p></li>
+<li><p>Individual <code class="pgsql">tsvector</code>s can not be easily
+ordered, so indexing a column with <code class="pgsql">tsvector</code>
+contents using the normal B-Tree method would not be effective</p></li>
 <li><p>For this sort of content, use a <em>Generalized Inverted
 Index</em> or GIN indexing method instead</p>
 <pre ><code class="postgresql">CREATE INDEX idx_name ON tab_name 
 USING gin(col_name);</code></pre></li>
 <li><p>Seriously consider adding your
-<code class="python">tsvector</code> column as an index, as it can
+<code class="pgsql">tsvector</code> column as an index, as it can
 significantly speed up these sorts of searches</p></li>
 </ul>
 </section>
@@ -794,25 +780,25 @@ significantly speed up these sorts of searches</p></li>
 <ul>
 <li>Sometimes it can be useful to get a bit more information about
 <em>where</em> a match shows up in the text</li>
-<li>The <code class="python">ts_headline</code> function can capture
+<li>The <code class="pgsql">ts_headline</code> function can capture
 snippets of text around a match and display them
 <ul>
-<li><code class="python">ts_headline</code> operates on the original
+<li><code class="pgsql">ts_headline</code> operates on the original
 text, <strong>not</strong> the tsvector! This will absolutely make it
 slower, so use it wisely!</li>
 </ul></li>
 <li>There are a few required parameters and some options for
-<code class="python">ts_headline</code>:
+<code class="pgsql">ts_headline</code>:
 <ul>
 <li>the text to search</li>
 <li>the tsquery to look for</li>
 <li>Other options appear in an option string:
 <ul>
-<li><code class="python">StartSel</code>/<code class="python">StopSel</code>:
+<li><code class="pgsql">StartSel</code>/<code class="pgsql">StopSel</code>:
 the delimiters that will showcase the word</li>
-<li><code class="python">MinWords</code>/<code class="python">MaxWords</code>:
+<li><code class="pgsql">MinWords</code>/<code class="pgsql">MaxWords</code>:
 the min or max number of words to show around the match</li>
-<li><code class="python">MaxFragments</code>: a max number of fragments
+<li><code class="pgsql">MaxFragments</code>: a max number of fragments
 to show if the match occurs multiple times</li>
 </ul></li>
 </ul></li>
@@ -825,14 +811,14 @@ to show if the match occurs multiple times</li>
 want a method to rank or compare them and only select the “best”</li>
 <li>Ranking by relevancy is vague and tends to be very application
 specific, but it can be useful</li>
-<li><code class="python">ts_rank</code> will give an arbitrary rank
-based on how many times your query words appear in the text
+<li><code class="pgsql">ts_rank</code> will give an arbitrary rank based
+on how many times your query words appear in the text
 <ul>
 <li>This might mean that longer texts will always receive a higher rank!
 You can normalize by the text length by providing an extra numeric code
 as a third argument (2 or 8 probably best)</li>
 </ul></li>
-<li><code class="python">ts_rank_cd</code> does similar, but also
+<li><code class="pgsql">ts_rank_cd</code> does similar, but also
 considers the proximity of searched lexemes</li>
 <li>Both functions take 2 required arguments:
 <ul>
@@ -845,16 +831,16 @@ considers the proximity of searched lexemes</li>
 <h2>Your Turn!</h2>
 <p>The file <a href="../activity_data/alice.sql">here</a> contains the
 SQL commands to generate and populate a simple table
-<code class="python">alice</code> which hold the raw chapter contents of
+<code class="pgsql">alice</code> which hold the raw chapter contents of
 the book: Alice in Wonderland. You will need to set up your own
-<code class="python">tsvector</code> column and index. With yet one more
+<code class="pgsql">tsvector</code> column and index. With yet one more
 new partner, see if you can use the data to answer the following:</p>
 <ul>
 <li>In what chapters does the “Chesire cat” appear?</li>
 <li>In what chapter does the word “mushroom” appear the most? How many
 times does it appear?</li>
 </ul>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -873,6 +859,7 @@ times does it appear?</li>
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
+  <script src="../html_srcs/revealjs/../js/mybash.js"></script>
 
   <script>
 
@@ -948,7 +935,7 @@ times does it appear?</li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -991,9 +978,20 @@ times does it appear?</li>
 			disableCheckFile: false, //default false
 		 },
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
-              console.log(mypgsqldef);
-              return mypgsqldef(hljs); } )
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              hljs.registerLanguage("bash", function(hljs) {
+                console.log(mybashdef);
+                return mybashdef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
           },
 
         // reveal.js plugins
@@ -1011,6 +1009,7 @@ times does it appear?</li>
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
+          theme: "whiteboard",
           boardmarkers : [
                   { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                   { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
