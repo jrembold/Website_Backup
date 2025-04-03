@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-04-03">
+  <title>Fitting</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Fitting</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">April 3, 2025</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>HW5 coming out today
+<ul>
+<li>Due on April 14th (Happy Birthday to my brother…)</li>
+<li>This is a quick one! But only 2 problems</li>
+<li>New partners at the end of today</li>
+</ul></li>
+<li>If you are making any corrections to HW3 based on HW2 feedback, they
+need to be uploaded by tomorrow at noon</li>
+<li>Quiz 2 a week from today
+<ul>
+<li>Study guide going up after class today</li>
+</ul></li>
+<li>HW4 Debrief this weekend</li>
+</ul>
+<!--
+## Recap
+- Rotation or velocity curves measure the speed of orbiting objects as you move outwards from a central body
+  - Commonly assume circular or largely circular orbits
+  - Generally measured through Doppler shifts
+- The shape of a rotation curve tells you about the distribution of material throughout the region
+- The rotation curves of galaxies do not match what we would expect, thus leading to conjectures about dark matter
+-->
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap</h2>
+<ul>
+<li>Ensemble models can help combat noisy data where a single model
+tends to overfit the noise</li>
+<li>To be effective, need the individual models to be non-correlated
+<ul>
+<li>Commonly achieved through bootstrap aggregation (bagging)</li>
+</ul></li>
+<li>Random forests are an ensemble of decision trees
+<ul>
+<li>In addition to bagging, they consider a random subset of features at
+each decision</li>
+<li>Parameters general concern the size of the forest, the number of
+features considered, or other pre-pruning options</li>
+<li>General grant the benefits of decision trees, but without the
+inherent instability</li>
+</ul></li>
+</ul>
+</section>
+<section id="discussing-today" class="slide level2">
+<h2>Discussing Today</h2>
+<ul>
+<li>What do we want from a model fit?</li>
+<li>Why might we need methods beyond least-mean squares?</li>
+<li>How can randomness help us determine the output of integrals?</li>
+</ul>
+</section>
+<section>
+<section id="data-fitting" class="title-slide slide level1">
+<h1>Data Fitting</h1>
+
+</section>
+<section id="why-fit-data" class="slide level2">
+<h2>Why fit data?</h2>
+<ul>
+<li>A “fit” model computes the values of unknown constants within the
+model</li>
+<li>In science, and in astronomy in particular, such models are usually
+derived from fundamental first principles, and thus those constants are
+linked to physical properties or laws
+<ul>
+<li>The <code class="python">T</code> when we fit Planck’s Law, for
+instance</li>
+</ul></li>
+<li>Individual fits themselves may still not be that important: rather,
+they can contribute to an overall story that the data is telling
+<ul>
+<li>“Hotter things emit more light and bluer light”</li>
+</ul></li>
+</ul>
+</section>
+<section id="fitting-neglect" class="slide level2">
+<h2>Fitting Neglect</h2>
+<ul>
+<li>In the fitting that we have done so far this semester, we have been
+leaving some important things out
+<ul>
+<li>What role does any known error or variance play in our fitting of
+data?</li>
+<li>How confident should we be in our fit parameters? That is, what
+variance should we expect in the fit parameters?</li>
+</ul></li>
+<li>All of these things can <em>sometimes</em> be estimated easily from
+current techniques, and can <em>sometimes</em> have easy analytic
+results.
+<ul>
+<li>But what about in more complicated situations?</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="case-study-integration" class="title-slide slide level1">
+<h1>Case Study: Integration</h1>
+
+</section>
+<section id="a-seeming-aside-solving-integrals" class="slide level2">
+<h2>A seeming aside: Solving Integrals</h2>
+<ul>
+<li>Suppose you want to find the area under a function <span
+class="math inline">\(f(x)\)</span> between <span
+class="math inline">\(x=a\)</span> and <span
+class="math inline">\(x=b\)</span>, such that you are interested in
+<span class="math display">\[ \int_a^b f(x)\,dx \]</span></li>
+<li>If <span class="math inline">\(f(x)\)</span> is simple and you know
+a bit of calculus, this is relatively straightforward</li>
+<li>But what if <span class="math inline">\(f(x)\)</span> is some
+terribly complicated function that you don’t know how to integrate?
+<ul>
+<li>Or worse, what if <span class="math inline">\(f(x)\)</span> is a
+largely black-box, wherein you put in an input and then some time later
+get an output, without seeing what happens in the middle?</li>
+</ul></li>
+</ul>
+</section>
+<section id="alternative-approaches" class="slide level2">
+<h2>Alternative Approaches</h2>
+<ul>
+<li>When posed with an intractable integral, most folks these days look
+to:
+<ul>
+<li>Wolfram Alpha, or some other computation engine, for aid with
+analytic integration</li>
+<li>Numerical techniques</li>
+</ul></li>
+<li>Numerical techniques rely on breaking the integral up into simple
+approximations
+<ul>
+<li>The key here is that they are always approximations (midpoint rule,
+trapezoid rule, Simpson’s rule, etc.)</li>
+<li>As approximations, there will always be some inherent error
+associated with using these methods</li>
+</ul></li>
+</ul>
+</section>
+<section id="entering-the-multiverse" class="slide level2">
+<h2>Entering the Multiverse</h2>
+<ul>
+<li>For nice one-dimensional problems, these methods can work out
+nicely</li>
+<li>But what if our function was instead dependent on, for instance, 6
+parameters? <span class="math display">\[ f(x,y,z,a,b,c)
+\quad\rightarrow\quad \int\int\int\int\int\int
+f(x,y,z,a,b,c)\,dx\,dy\,dz\,da\,db\,dc \]</span></li>
+<li>The trapezoid rule is a decent approximation method, but if you work
+it out, its error scales as: <span class="math display">\[ \epsilon
+\propto \frac{1}{N^{2/d}} \]</span> where <span
+class="math inline">\(N\)</span> is the number of sample points (how
+skinny are the rectangles) and <span class="math inline">\(d\)</span>
+the number of dimensions being integrated over</li>
+</ul>
+</section>
+<section id="compiling-errors" class="slide level2">
+<h2>Compiling Errors</h2>
+<ul>
+<li>In order to keep a constant error value then as the number of
+dimensions increase: <span class="math display">\[ N =
+(1/\epsilon)^{d/2} \]</span></li>
+<li>This is highly problematic for higher dimensional data, as we need
+exponentially more data to keep the errors at a given level!
+<ul>
+<li>We need to compute the area of each of those trapezoids, so
+exponentially more trapezoids means exponentially longer running
+time</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="a-random-rescue" class="title-slide slide level1">
+<h1>A Random Rescue</h1>
+
+</section>
+<section id="a-random-solution" class="slide level2">
+<h2>A Random Solution</h2>
+<ul>
+<li>What if, instead of slicing up the entire region of interest, we
+instead randomly sampled from that region</li>
+<li>Computing, for instance, just the area at a given, randomly selected
+point</li>
+<li>It turns out this error scales as: <span class="math display">\[
+\epsilon \propto \frac{1}{\sqrt{N}} \]</span> which no longer has any
+<span class="math inline">\(d\)</span> dependence!!</li>
+<li>This is the basis behind random (or <em>Monte Carlo</em>) selection
+methods</li>
+</ul>
+</section>
+<section id="random-areas" class="slide level2">
+<h2>Random Areas?</h2>
+<ul>
+<li>How do random points get us an accurate portrayal of the area under
+the curve?
+<ul>
+<li>At each random point, compute the value of the function at that
+point, this will be the height of your rectangle</li>
+<li>The width of your rectangle is just the span of your boundaries</li>
+</ul></li>
+<li>Some points will overestimate the area, and some will underestimate
+the area</li>
+<li>The amazing aspect is that given enough points, the
+<strong>average</strong> of the point areas <strong>will</strong>
+closely approximate the actual area under the curve</li>
+</ul>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<p>Suppose we wanted to evaluate the area under the curve <span
+class="math display">\[ f(x) = -\frac{4}{5}x + 4 \]</span> from <span
+class="math inline">\(x=0\)</span> to <span
+class="math inline">\(x=5\)</span>, using Monte Carlo methods. This
+describes a triangle with height 4 and width 5, and thus should have an
+area of 20. Is that what we get?</p>
+</section>
+<section id="example-2" class="slide level2">
+<h2>Example 2</h2>
+<p>What if we slightly complicate this function by looking instead at a
+piece-wise function: <span class="math display">\[
+f(x) = \begin{cases}
+0 &amp; x &lt; 3; \\
+-\frac{4}{5}x + 4 &amp; 3 \leq x \leq 5; \\
+0 &amp; x &gt; 5 \end{cases}
+\]</span> This now describes a triangle with height of 1.6 and width of
+2, thus having an area of 1.6. Does the Monte Carlo method still
+work?</p>
+</section></section>
+<section>
+<section id="the-probable" class="title-slide slide level1">
+<h1>The Probable</h1>
+
+</section>
+<section id="probability-distributions" class="slide level2">
+<h2>Probability Distributions</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>A <em>probability distribution</em> describes the likelihood of
+selecting a particular value over a range of values.</li>
+<li>The area under the probability distribution <strong>must</strong>
+sum to 1, so the odds add up.</li>
+<li>In our current examples, any number between 0 and 5 was
+<em>equally</em> likely, which would have led to the probability
+distribution to the right.</li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/python/constant_pdf.png" /></p>
+</div>
+</div>
+</section>
+<section id="importance" class="slide level2">
+<h2>Importance</h2>
+<ul>
+<li>For some functions, all points might not be equally interesting, and
+thus a constant probability distribution makes no sense.</li>
+<li>We instead might want to weigh certain regions higher in our random
+selection, as that is where the interesting things are happening</li>
+<li>If we do so, we need to recognize that in computing our areas, we
+are now doing <span class="math display">\[ A = \frac{f(x_k)}{p(x_k)}
+\]</span> where <span class="math inline">\(p(x_k)\)</span> is the
+probability of selecting a particular <span
+class="math inline">\(x\)</span>
+<ul>
+<li>This is the same as what we were doing before, since for a uniform
+sampling, the probability weights looked like 0.2, and 1/0.2 is 5.</li>
+</ul></li>
+</ul>
+</section>
+<section id="selecting-from-a-probability-distribution"
+class="slide level2">
+<h2>Selecting from a probability distribution</h2>
+<ul>
+<li><p>Trying to select from a continuous probability distribution
+discretely is not ideal, but that is all that is immediately available
+through Numpy</p></li>
+<li><p>For a better option, roll your own selector:</p>
+<pre ><code class="python" style="line-height:1.2em">def sample_from_prob_dist(pdf, lower, upper, num):
+    samples = []
+    while len(samples) < num:
+        x = np.random.uniform(lower, upper)
+        p = pdf(x)
+        if np.random.uniform(0,1) <= p:
+            samples.append(x)
+    return np.array(samples)</code></pre></li>
+</ul>
+</section>
+<section id="example-3" class="slide level2">
+<h2>Example 3</h2>
+<p>Now suppose we wanted to evaluate the area under the same piece-wise
+function as earlier: <span class="math display">\[
+f(x) = \begin{cases}
+0 &amp; x &lt; 3; \\
+-\frac{4}{5}x + 4 &amp; 3 \leq x \leq 5; \\
+0 &amp; x &gt; 5 \end{cases}
+\]</span> But this time choosing points based on two different
+probability distributions: <span class="math display">\[
+{p(x) = \begin{cases}
+0 &amp; x &lt; 3; \\
+0.5 &amp; 3 \leq x \leq 5; \\
+0 &amp; x &gt; 5 \end{cases}}\qquad
+{p(x) = \begin{cases}
+0 &amp; x &lt; 3; \\
+\frac{1}{2}\left(x - 3\right) &amp; 3 \leq x \leq 5; \\
+0 &amp; x &gt; 5 \end{cases}}
+\]</span></p>
+</section>
+<section id="an-unknown-pdf" class="slide level2">
+<h2>An Unknown PDF</h2>
+<ul>
+<li>What if we don’t know or have a PDF to work with?</li>
+<li>The <em>perfect</em> PDF would look just like the function we are
+trying to integrate, but scaled to have area = 1
+<ul>
+<li>But if we could easily calculate the area, we wouldn’t be doing this
+integration in the first place</li>
+</ul></li>
+<li>Instead we will construct a process to semi-randomly “walk” it’s way
+around our initial function
+<ul>
+<li>Goal is to have it spend more of its time near “higher” parts of the
+function</li>
+<li>Then we’ll look at the distribution of where it spent time</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="looking-to-hw5" class="title-slide slide level1">
+<h1>Looking to HW5</h1>
+
+</section>
+<section id="groups" class="slide level2">
+<h2>Groups!</h2>
+<div class="cols">
+<div class="col">
+<div class="block" name="Left">
+<ul>
+<li>Oscar &amp; Lucca</li>
+<li>Mamadou &amp; Sadie</li>
+<li>Jared &amp; Pearson</li>
+<li>Maddie &amp; Aurora</li>
+<li>Luca &amp; Evan</li>
+<li>Sage &amp; Conor</li>
+</ul>
+</div>
+</div>
+<div class="col">
+<div class="block" name="Right">
+<ul>
+<li>M &amp; Felicity</li>
+<li>Sawyer &amp; Ema</li>
+<li>Greg &amp; Evyn</li>
+<li>Sergio &amp; Izzy</li>
+<li>Tegan &amp; Elliott</li>
+<li>Gabby, Salem &amp; Luna</li>
+</ul>
+</div>
+</div>
+</div>
+<!--
+# Chaining
+## Markov Chains
+- A Markov chain is a model that represents a sequence of events where the probability of the next event is determined only by the current event
+- In our case, the point we are currently "at" will make it likely that our next point is nearby
+- Our process will then follow that of Metropolis-Hastings and is shown below. Note that you must keep track of the visited points along the way!
+  - Choose a starting point
+  - For some number of iterations:
+    - Randomly choose a nearby point
+    - Compare that point to your current point, to see if it would move you "higher" up the function
+    - If above a random threshold, move to that point, otherwise stay where you are at
+
+
+## Choosing a Nearby Point
+- Randomly choosing a nearby point inherently pulls from a probability distribution centered on the current point
+- Most frequently used is a Gaussian probability distribution
+  - Centered (mean) on the current point
+  - Spread (std) can be tuned, but 1 is a reasonable starting value
+  ```python
+  np.random.normal(loc=0, spread=1)
+  ```
+
+- Working in higher dimensions? A multi-variate Gaussian will still work!
+  ```python
+  np.random.multivariate_normal(mean=VEC, cov=MAT)
+  ```
+
+## Move onward or stay?
+- Once you have the new point candidate, you need to decide whether to keep it or your current point
+- In Metropolis-Hastings, you:
+  - Take the ratio of your sampled function evaluated at the new point over the sampled function evaluated at the current
+    $$ \frac{f(x^\prime)}{f(x)} $$
+    where $x$ is your current position and $x^\prime$ your proposed new position
+  - Compare that ratio to a randomly generated number between 0 and 1
+    - If bigger, keep the new position, making it your new current
+    - If smaller, keep the old position (but still add it to your visited list again)
+
+
+## Backing out a PDF
+- The history of the random walk contains information about where the walker spent the most time
+  - Due to how we constructed the walk, this **should** be near the maximum portions of our function
+- Creating a histogram or KDE plot will allow us to visualize the probability distribution.
+- We could use the histogram information to directly sample from the distribution
+
+-->
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          theme: "whiteboard",
+          boardmarkers : [
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
+    </body>
+</html>
