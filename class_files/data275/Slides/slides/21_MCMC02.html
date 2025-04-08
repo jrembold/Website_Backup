@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-04-08">
+  <title>Monte Carlo Markov Chains</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Monte Carlo Markov Chains</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">April 8, 2025</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Homework
+<ul>
+<li>Homework 5 posted! You should be good to go on Prob 1 and Part A of
+Prob 2 after today</li>
+<li>I’m working on HW3 feedback</li>
+</ul></li>
+<li>Quiz 2 on Exoplanets and Galaxies at end of class on Thursday
+<ul>
+<li>Study guide is posted!</li>
+</ul></li>
+</ul>
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap</h2>
+<ul>
+<li>When it comes to fitting models, the best-fitting parameters may
+tell an incomplete story</li>
+<li>Often, we also want to know the error or uncertainty in our
+parameters
+<ul>
+<li>Methods like least-squares can do this, but only reliably for narrow
+use-cases</li>
+<li>We’d like other methods to get at similar information</li>
+</ul></li>
+<li>Random or “Monte Carlo” methods can help deal with high-dimensional
+data
+<ul>
+<li>Errors for this type of data otherwise increase exponentially for
+most numeric methods</li>
+</ul></li>
+</ul>
+</section>
+<section id="sampling-from-a-pdf-in-r" class="slide level2">
+<h2>Sampling from a PDF in R</h2>
+<ul>
+<li><p>Last class we saw a Python function to sample from a given
+probability distribution</p></li>
+<li><p>We can of course build something similar in R:</p>
+<pre ><code class="r" style="font-size:.9em">sample_from_prob_dist <- function(pdf, lower, upper, num) {
+  samples <- c()
+  while (length(samples) < num) {
+    x <- runif(1, lower, upper)
+    p <- pdf(x)
+    if (runif(1) <= p) {
+      samples <- c(samples, x)
+    }
+  }
+  return(samples)
+}</code></pre></li>
+</ul>
+</section>
+<section id="an-unknown-pdf" class="slide level2">
+<h2>An Unknown PDF</h2>
+<ul>
+<li>What if we don’t know or have a PDF to work with?</li>
+<li>The <em>perfect</em> PDF would look just like the function we are
+trying to integrate, but scaled to have area = 1
+<ul>
+<li>But if we could easily calculate the area, we wouldn’t be doing this
+integration in the first place</li>
+</ul></li>
+<li>Instead we will construct a process to semi-randomly “walk” it’s way
+around our initial function
+<ul>
+<li>Goal is to have it spend more of its time near “higher” parts of the
+function</li>
+<li>Then we’ll look at the distribution of where it spent time</li>
+</ul></li>
+</ul>
+</section>
+<section id="today" class="slide level2">
+<h2>Today</h2>
+<ul>
+<li>Sampling data using a Markov Chain
+<ul>
+<li>Accepting or rejecting based on Metropolis-Hastings</li>
+</ul></li>
+<li>Applications to model fitting</li>
+</ul>
+<!--
+## Example 2
+:::{.block name=Previously...}
+Now suppose we wanted to evaluate the area under the piece-wise function:
+$$ f(x) = \begin{cases}0 & x \leq 4;\\ 5x-20 & 4 < x \leq 5;\\ -5x+30 & 5 < x \leq 6;\\ 0 & x > 6;\end{cases} $$
+from $x=0$ to $x=10$, using Monte Carlo methods. Check into both uniform sampling and sampling targeted about the central peak.
+:::
+- Uniform sampling worked here, but our targeted sampling was struggling. What went wrong?
+
+
+## Issue #1
+- **Make absolutely sure your probability distribution function (pdf) actually integrates to 1!**
+- Previously, I had equated a triangle with height 0.5 to thus have slopes of 0.5, and -0.5
+  - This is, of course, not necessarily true
+- A valid pdf:
+  $$
+  p(x) = \begin{cases}
+            0, & x <= 3 \\
+            0.25x - 0.75, & 3 < x <= 5 \\
+            -0.25x + 1.75, & 5 < x <= 7 \\
+            0, & x > 7
+          \end{cases}
+  $$
+
+## Issue #2
+- Trying to select from a continuous probability distribution discretely is not ideal
+  - But it is what is immediately available though numpy
+- For a better option, roll your own selector:
+  ```{.python style='line-height:1.2em'}
+  def sample_from_prob_dist(pdf, lower, upper, num):
+      samples = []
+      while len(samples) < num:
+          x = np.random.uniform(lower, upper)
+          p = pdf(x)
+          if np.random.uniform(0,1) <= p:
+              samples.append(x)
+      return np.array(samples)
+  ```
+
+
+## Returning to Example 2
+Now suppose we wanted to evaluate the area under the piece-wise function:
+$$ f(x) = \begin{cases}0 & x \leq 4;\\ 5x-20 & 4 < x \leq 5;\\ -5x+30 & 5 < x \leq 6;\\ 0 & x > 6;\end{cases} $$
+from $x=0$ to $x=10$, using Monte Carlo methods. Sample from the probability distribution defined as:
+  $$
+  p(x) = \begin{cases}
+            0, & x <= 3 \\
+            0.25x - 0.75, & 3 < x <= 5 \\
+            -0.25x + 1.75, & 5 < x <= 7 \\
+            0, & x > 7
+          \end{cases}
+  $$
+-->
+</section>
+<section>
+<section id="chaining-together-a-walk" class="title-slide slide level1">
+<h1>Chaining Together a Walk</h1>
+
+</section>
+<section id="markov-chains" class="slide level2">
+<h2>Markov Chains</h2>
+<ul>
+<li>A Markov chain is a model that represents a sequence of events where
+the probability of the next event is determined only by the current
+event</li>
+<li>In our case, the point we are currently “at” will make it likely
+that our next point is nearby
+<ul>
+<li>However, we don’t just want a totally <em>random</em> nearby
+point</li>
+</ul></li>
+<li>We want to generally walk “uphill”, because that’s where the
+important “stuff” is, but we don’t want to <strong>always</strong> go
+uphill
+<ul>
+<li>Why not?
+<ul>
+<li>We could get “stuck” in a local maximum</li>
+<li>Our whole goal is to “sample” the space, not directly optimize it. A
+bit of wandering is a good thing!</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="metropolis-hastings" class="slide level2">
+<h2>Metropolis-Hastings</h2>
+<div>
+<ul>
+<li class="fragment">There are a variety of potential algorithms, but
+we’ll follow the work of Metropolis and Hastings</li>
+<li class="fragment">Our process will be as follows:
+<ol>
+<li class="fragment">Start a list of all the visited points (initially
+empty)</li>
+<li class="fragment">Choose a starting point, and add it to the visited
+list</li>
+<li class="fragment">For some number of iterations:
+<ul>
+<li class="fragment">Randomly choose point nearby to your current
+location</li>
+<li class="fragment">Compare that point to your current point, to see if
+it would move you “higher” up the function</li>
+<li class="fragment">Randomly select a number and compare to a
+threshold. If the the number is smaller, move to that point, otherwise
+revisit your current location.
+<ul>
+<li class="fragment">Add your destination to your visited list</li>
+</ul></li>
+</ul></li>
+</ol></li>
+</ul>
+</div>
+</section>
+<section id="choosing-a-nearby-point" class="slide level2">
+<h2>Choosing a Nearby Point</h2>
+<ul>
+<li><p>Randomly choosing a nearby point inherently pulls from a
+probability distribution centered on the current point</p></li>
+<li><p>Most frequently used is a Gaussian probability distribution</p>
+<ul>
+<li>Centered (mean) on the current point</li>
+<li>Spread (std) can be tuned, but 1 is a reasonable starting value</li>
+</ul></li>
+<li><p>Working in higher dimensions? A multivariate Gaussian will still
+work!</p>
+<pre ><code class="python">np.random.multivariate_normal(mean=VEC, cov=MAT)</code></pre>
+<pre ><code class="r">MASS::mvrnorm(n, mu=VEC, Sigma=MAT)</code></pre></li>
+</ul>
+</section>
+<section id="move-onward-or-stay" class="slide level2">
+<h2>Move onward or stay?</h2>
+<ul>
+<li>Once you have the new point, you need to decide whether to keep it
+or your current point</li>
+<li>In Metropolis-Hastings, you:
+<ul>
+<li>Take the ratio of your sampled function evaluated at the new point
+over the sampled function evaluated at the current <span
+class="math display">\[ \frac{f(x^\prime)}{f(x)} \]</span> where <span
+class="math inline">\(x\)</span> is your current position and <span
+class="math inline">\(x^\prime\)</span> your proposed new position</li>
+<li>Compare that ratio of a randomly generated number between 0 and 1
+<ul>
+<li>If bigger, keep the new position, making it your new current</li>
+<li>If smaller, keep the old position (but still add it to your visited
+list again)</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="hand-example" class="slide level2">
+<h2>Hand Example</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>It can be instructive to see how this works by hand in a simple
+example</li>
+<li>Suppose we want to sample the 1D function space to the right</li>
+<li>We will start at the point x = 1.5</li>
+<li>For convenience, say we randomly move in steps of 1</li>
+</ul>
+</div>
+<div class="col">
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="208.67651mm"
+   height="213.18895mm"
+   viewBox="0 0 208.67651 213.18894"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.1 (93de688d07, 2025-03-30)"
+   sodipodi:docname="metropolis_hastings_hand_example.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.73197654"
+     inkscape:cx="578.57045"
+     inkscape:cy="445.36946"
+     inkscape:window-width="2560"
+     inkscape:window-height="1413"
+     inkscape:window-x="1080"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <defs
+     id="defs1">
+    <marker
+       style="overflow:visible"
+       id="Triangle"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="0.5"
+       markerHeight="0.5"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="GridCartesian:X8:Y8"
+     transform="matrix(4.5234023,0,0,4.5234023,17.046998,10.527891)"
+     id="g95"
+     style="stroke:#9699a3">
+    <g
+       inkscape:label="MajorXGridlines"
+       id="g71"
+       style="stroke:#9699a3">
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 5,0 V 40"
+         inkscape:label="MajorXDiv1"
+         id="path65" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 10,0 V 40"
+         inkscape:label="MajorXDiv2"
+         id="path66" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 15,0 V 40"
+         inkscape:label="MajorXDiv3"
+         id="path67" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 20,0 V 40"
+         inkscape:label="MajorXDiv4"
+         id="path68" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 25,0 V 40"
+         inkscape:label="MajorXDiv5"
+         id="path69" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 30,0 V 40"
+         inkscape:label="MajorXDiv6"
+         id="path70" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 35,0 V 40"
+         inkscape:label="MajorXDiv7"
+         id="path71" />
+    </g>
+    <g
+       inkscape:label="MajorYGridlines"
+       id="g78"
+       style="stroke:#9699a3">
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 0,5 H 40"
+         inkscape:label="MajorYDiv1"
+         id="path72" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 0,10 H 40"
+         inkscape:label="MajorYDiv2"
+         id="path73" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 0,15 H 40"
+         inkscape:label="MajorYDiv3"
+         id="path74" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 0,20 H 40"
+         inkscape:label="MajorYDiv4"
+         id="path75" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 0,25 H 40"
+         inkscape:label="MajorYDiv5"
+         id="path76" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 0,30 H 40"
+         inkscape:label="MajorYDiv6"
+         id="path77" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+         d="M 0,35 H 40"
+         inkscape:label="MajorYDiv7"
+         id="path78" />
+    </g>
+    <g
+       inkscape:label="SubMinorXGridlines"
+       id="g86"
+       style="stroke:#9699a3">
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 2.5,0 V 40"
+         inkscape:label="SubminorXDiv0:0:1"
+         id="path79" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 7.5,0 V 40"
+         inkscape:label="SubminorXDiv1:0:1"
+         id="path80" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 12.5,0 V 40"
+         inkscape:label="SubminorXDiv2:0:1"
+         id="path81" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 17.5,0 V 40"
+         inkscape:label="SubminorXDiv3:0:1"
+         id="path82" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 22.5,0 V 40"
+         inkscape:label="SubminorXDiv4:0:1"
+         id="path83" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 27.5,0 V 40"
+         inkscape:label="SubminorXDiv5:0:1"
+         id="path84" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 32.5,0 V 40"
+         inkscape:label="SubminorXDiv6:0:1"
+         id="path85" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 37.5,0 V 40"
+         inkscape:label="SubminorXDiv7:0:1"
+         id="path86" />
+    </g>
+    <g
+       inkscape:label="SubMinorYGridlines"
+       id="g94"
+       style="stroke:#9699a3">
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 0,2.5 H 40"
+         inkscape:label="SubminorXDiv0:0:1"
+         id="path87" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 0,7.5 H 40"
+         inkscape:label="SubminorXDiv1:0:1"
+         id="path88" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 0,12.5 H 40"
+         inkscape:label="SubminorXDiv2:0:1"
+         id="path89" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 0,17.5 H 40"
+         inkscape:label="SubminorXDiv3:0:1"
+         id="path90" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 0,22.5 H 40"
+         inkscape:label="SubminorXDiv4:0:1"
+         id="path91" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 0,27.5 H 40"
+         inkscape:label="SubminorXDiv5:0:1"
+         id="path92" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 0,32.5 H 40"
+         inkscape:label="SubminorXDiv6:0:1"
+         id="path93" />
+      <path
+         style="fill:none;stroke:#9699a3;stroke-width:0.079375"
+         d="M 0,37.5 H 40"
+         inkscape:label="SubminorXDiv7:0:1"
+         id="path94" />
+    </g>
+    <rect
+       x="0"
+       y="0"
+       width="40"
+       height="40"
+       style="fill:none;stroke:#9699a3;stroke-width:0.264583"
+       inkscape:label="Border"
+       id="rect94" />
+  </g>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-17.998745,-14.093768)">
+    <path
+       style="fill:#8c4351;stroke:#8f5e15;stroke-width:6.11587;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#Triangle)"
+       d="M 35.211265,205.55774 V 24.952724"
+       id="path1" />
+    <path
+       style="fill:#8c4351;stroke:#8f5e15;stroke-width:6.11587;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#Triangle)"
+       d="M 35.211265,205.55774 H 215.81631"
+       id="path2" />
+  </g>
+  <path
+     style="fill:none;stroke:#166775;stroke-width:6.11587;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     d="m 39.519053,191.04498 0.102873,-21.93234 23.257517,0.33274 v -45.83243 h 22.0186 l 4e-6,-89.508873 45.234023,0.274049 v 21.383786 l 22.617,4e-6 V 123.61295 H 174.955 l -0.0868,45.23402 0.0947,21.37584"
+     id="path96"
+     sodipodi:nodetypes="ccccccccccccc" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="33.485054"
+     y="212.97638"
+     id="text96"><tspan
+       sodipodi:role="line"
+       id="tspan96"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="33.485054"
+       y="212.97638">1</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="56.779255"
+     y="212.97638"
+     id="text97"><tspan
+       sodipodi:role="line"
+       id="tspan97"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="56.779255"
+       y="212.97638">2</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="80.347504"
+     y="212.97638"
+     id="text98"><tspan
+       sodipodi:role="line"
+       id="tspan98"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="80.347504"
+       y="212.97638">3</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="102.81956"
+     y="212.97638"
+     id="text99"><tspan
+       sodipodi:role="line"
+       id="tspan99"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="102.81956"
+       y="212.97638">4</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="124.46945"
+     y="212.97638"
+     id="text100"><tspan
+       sodipodi:role="line"
+       id="tspan100"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="124.46945"
+       y="212.97638">5</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="148.31175"
+     y="212.97638"
+     id="text101"><tspan
+       sodipodi:role="line"
+       id="tspan101"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="148.31175"
+       y="212.97638">6</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="170.78381"
+     y="212.97638"
+     id="text102"><tspan
+       sodipodi:role="line"
+       id="tspan102"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="170.78381"
+       y="212.97638">7</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="2.1086771"
+     y="174.06136"
+     id="text103"><tspan
+       sodipodi:role="line"
+       id="tspan103"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="2.1086771"
+       y="174.06136">1</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="0.15305214"
+     y="151.79578"
+     id="text104"><tspan
+       sodipodi:role="line"
+       id="tspan104"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="0.15305214"
+       y="151.79578">2</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="0.025513243"
+     y="129.31761"
+     id="text105"><tspan
+       sodipodi:role="line"
+       id="tspan105"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="0.025513243"
+       y="129.31761">3</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="-0.32310206"
+     y="107.05203"
+     id="text106"><tspan
+       sodipodi:role="line"
+       id="tspan106"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="-0.32310206"
+       y="107.05203">4</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="-0.19555908"
+     y="84.57386"
+     id="text107"><tspan
+       sodipodi:role="line"
+       id="tspan107"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="-0.19555908"
+       y="84.57386">5</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="-0.10202973"
+     y="62.316784"
+     id="text108"><tspan
+       sodipodi:role="line"
+       id="tspan108"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="-0.10202973"
+       y="62.316784">6</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;line-height:1.1;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0.0724673px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a4a78;stroke:none;stroke-width:3.39626;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+     x="0.051019382"
+     y="40.051193"
+     id="text109"><tspan
+       sodipodi:role="line"
+       id="tspan109"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.4135px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:no-contextual;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#5a4a78;stroke:none;stroke-width:3.39626"
+       x="0.051019382"
+       y="40.051193">7</tspan></text>
+</svg>
+</p>
+</div>
+</div>
+</section>
+<section id="backing-out-a-pdf" class="slide level2">
+<h2>Backing out a PDF</h2>
+<ul>
+<li>The history of the random walk contains information about where the
+walker spent the most time
+<ul>
+<li>Due to how we constructed the walk, this <strong>should</strong> be
+near the maximum portions of our function</li>
+</ul></li>
+<li>Creating a histogram or KDE plot will allow us to visualize the
+probability distribution.</li>
+<li>We could use the histogram information to directly sample from the
+distribution</li>
+</ul>
+</section>
+<section id="example-walking-the-function" class="slide level2">
+<h2>Example: Walking the Function</h2>
+<ul>
+<li>Last class we were looking at the piece-wise function described by:
+<span class="math display">\[
+f(x) = \begin{cases}
+0 &amp; x &lt; 3; \\
+-\frac{4}{5}x + 4 &amp; 3 \leq x \leq 5; \\
+0 &amp; x &gt; 5 \end{cases}
+\]</span></li>
+<li>Let’s “walk” this function according to Metropolis-Hastings to
+generate a PDF of the same shape</li>
+</ul>
+</section></section>
+<section>
+<section id="back-to-model-fitting" class="title-slide slide level1">
+<h1>Back to Model Fitting</h1>
+
+</section>
+<section id="model-fitting-and-bayes-theorem" class="slide level2">
+<h2>Model Fitting and Baye’s Theorem</h2>
+<ul>
+<li>Here we are not as concerned with the best fit</li>
+<li>Concerned instead with our confidence about our fit parameters
+<ul>
+<li>“What was the probability of getting these parameters given this
+data?”</li>
+</ul></li>
+<li>Baye’s Theorem provides a way to compute this probability <span
+class="math display">\[ P(\theta | D) = \frac{P(D | \theta) \cdot
+P(\theta)}{P(D)} \]</span> where <span
+class="math inline">\(\theta\)</span> represents our fit parameters and
+<span class="math inline">\(D\)</span> represents the data</li>
+<li>For our purposes, viewing this through a Bayesian lens will be more
+informative</li>
+</ul>
+</section>
+<section id="baye-life" class="slide level2">
+<h2>Baye Life</h2>
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="368.3237mm"
+   height="173.84492mm"
+   viewBox="0 0 368.3237 173.84492"
+   version="1.1"
+   id="svg5"
+   xml:space="preserve"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="bayes.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.4204826"
+     inkscape:cx="846.6462"
+     inkscape:cy="354.35473"
+     inkscape:window-width="1680"
+     inkscape:window-height="1020"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" /><defs
+     id="defs2"><marker
+   style="overflow:visible"
+   refX="0"
+   refY="0"
+   orient="auto-start-reverse"
+   inkscape:stockid="Arrow25607"
+   markerWidth="7.6999998"
+   markerHeight="5.5999999"
+   viewBox="0 0 7.7 5.6"
+   inkscape:isstock="true"
+   inkscape:collect="always"
+   preserveAspectRatio="xMidYMid"
+   id="Arrow25607"><path
+     transform="scale(0.7)"
+     d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+     style="fill:#007367;fill-opacity:1;fill-rule:evenodd;stroke:#007367;stroke-opacity:1"
+     id="path1730" /></marker><marker
+   style="overflow:visible"
+   refX="0"
+   refY="0"
+   orient="auto-start-reverse"
+   inkscape:stockid="Arrow2353"
+   markerWidth="7.6999998"
+   markerHeight="5.5999999"
+   viewBox="0 0 7.7 5.6"
+   inkscape:isstock="true"
+   inkscape:collect="always"
+   preserveAspectRatio="xMidYMid"
+   id="Arrow2353"><path
+     transform="scale(0.7)"
+     d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+     style="fill:#7a0000;fill-opacity:1;fill-rule:evenodd;stroke:#7a0000;stroke-opacity:1"
+     id="path1733" /></marker><marker
+   style="overflow:visible"
+   refX="0"
+   refY="0"
+   orient="auto-start-reverse"
+   inkscape:stockid="Arrow28637"
+   markerWidth="7.6999998"
+   markerHeight="5.5999999"
+   viewBox="0 0 7.7 5.6"
+   inkscape:isstock="true"
+   inkscape:collect="always"
+   preserveAspectRatio="xMidYMid"
+   id="Arrow28637"><path
+     transform="scale(0.7)"
+     d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+     style="fill:#452981;fill-opacity:1;fill-rule:evenodd;stroke:#452981;stroke-opacity:1"
+     id="path1736" /></marker><marker
+   style="overflow:visible"
+   refX="0"
+   refY="0"
+   orient="auto-start-reverse"
+   inkscape:stockid="Arrow25664"
+   markerWidth="7.6999998"
+   markerHeight="5.5999999"
+   viewBox="0 0 7.7 5.6"
+   inkscape:isstock="true"
+   inkscape:collect="always"
+   preserveAspectRatio="xMidYMid"
+   id="Arrow25664"><path
+     transform="scale(0.7)"
+     d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+     style="fill:#ad5f00;fill-opacity:1;fill-rule:evenodd;stroke:#ad5f00;stroke-opacity:1"
+     id="path1739" /></marker><clipPath
+   id="clipPath5398">
+      <path
+   clip-rule="nonzero"
+   d="m 245,17 h 4 v 12.238281 h -4 z m 0,0"
+   id="path9031" />
+    </clipPath>
+    <clipPath
+   id="clipPath57">
+      <path
+   clip-rule="nonzero"
+   d="m 260,17 h 3 v 12.238281 h -3 z m 0,0"
+   id="path2548" />
+    </clipPath>
+  </defs><g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(7.6337894,-92.398545)"><g
+       id="prior"
+       class="fragment"
+       transform="matrix(0.8753245,0,0,0.8753245,-0.9517465,11.519835)"><path
+         style="fill:#7a0000;stroke:#7a0000;stroke-width:1.85989;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#Arrow2353)"
+         d="m 365.41245,121.5151 -30.14812,27.0586"
+         id="path364" /><text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:31.5556px;font-family:C059;-inkscape-font-specification:'C059, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#7a0000;stroke:none;stroke-width:1.85989;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+         x="375.72659"
+         y="115.65502"
+         id="text1193"><tspan
+           sodipodi:role="line"
+           id="tspan1191"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:31.5556px;font-family:C059;-inkscape-font-specification:'C059, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:1.85989"
+           x="375.72659"
+           y="115.65502">Prior</tspan></text></g><g
+       id="likelihood"
+       class="fragment"
+       transform="matrix(0.8753245,0,0,0.8753245,-0.9517465,11.519835)"><path
+         style="fill:#007367;stroke:#007367;stroke-width:1.85989;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#Arrow25607)"
+         d="m 173.02519,121.5151 30.14811,27.0586"
+         id="path1195" /><text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:31.5556px;font-family:C059;-inkscape-font-specification:'C059, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#007367;stroke:none;stroke-width:1.85989;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+         x="171.55209"
+         y="115.65502"
+         id="text1199"><tspan
+           sodipodi:role="line"
+           id="tspan1197"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:31.5556px;font-family:C059;-inkscape-font-specification:'C059, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#007367;stroke:none;stroke-width:1.85989"
+           x="171.55209"
+           y="115.65502">Likelihood</tspan></text></g><g
+       id="evidence"
+       class="fragment"
+       transform="matrix(0.8753245,0,0,0.8753245,-0.9517465,11.519835)"><path
+         style="fill:#452981;stroke:#452981;stroke-width:1.85989;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#Arrow28637)"
+         d="m 309.79155,263.41536 -30.14811,-27.0586"
+         id="path1303" /><text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:31.5556px;font-family:C059;-inkscape-font-specification:'C059, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#452981;stroke:none;stroke-width:1.85989;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+         x="321.24954"
+         y="290.53146"
+         id="text1307"><tspan
+           sodipodi:role="line"
+           id="tspan1305"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:31.5556px;font-family:C059;-inkscape-font-specification:'C059, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#452981;stroke:none;stroke-width:1.85989"
+           x="321.24954"
+           y="290.53146">Evidence</tspan></text></g><g
+       id="posterior"
+       class="fragment"
+       transform="matrix(0.8753245,0,0,0.8753245,-0.9517465,11.519835)"><path
+         style="fill:#ad5f00;stroke:#ad5f00;stroke-width:1.85989;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#Arrow25664)"
+         d="m 56.338888,248.63384 30.148111,-27.0586"
+         id="path1411" /><text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:31.5556px;font-family:C059;-inkscape-font-specification:'C059, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#ad5f00;stroke:none;stroke-width:1.85989;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+         x="57.875668"
+         y="274.8757"
+         id="text1415"><tspan
+           sodipodi:role="line"
+           id="tspan1413"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:31.5556px;font-family:C059;-inkscape-font-specification:'C059, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ad5f00;stroke:none;stroke-width:1.85989"
+           x="57.875668"
+           y="274.8757">Posterior</tspan></text></g><g
+       inkscape:label=""
+       transform="matrix(5.8366839,0,0,5.8366839,46.674033,152.66073)"
+       id="g2038"><g
+   fill="#000000"
+   fill-opacity="1"
+   id="g41"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use39"
+   transform="translate(160.39301,18.051001)">
+      <path
+   d="m 3.53125,-3.796875 h 2.015625 c 1.65625,0 3.296875,-1.21875 3.296875,-2.59375 0,-0.921875 -0.78125,-1.765625 -2.296875,-1.765625 h -3.6875 c -0.234375,0 -0.34375,0 -0.34375,0.21875 0,0.125 0.109375,0.125 0.296875,0.125 0.71875,0 0.71875,0.09375 0.71875,0.21875 0,0.03125 0,0.09375 -0.046875,0.28125 L 1.875,-0.890625 C 1.765625,-0.46875 1.75,-0.34375 0.90625,-0.34375 c -0.21875,0 -0.34375,0 -0.34375,0.21875 C 0.5625,0 0.671875,0 0.734375,0 0.96875,0 1.203125,-0.03125 1.4375,-0.03125 H 2.828125 C 3.0625,-0.03125 3.3125,0 3.53125,0 3.640625,0 3.765625,0 3.765625,-0.234375 3.765625,-0.34375 3.65625,-0.34375 3.484375,-0.34375 2.765625,-0.34375 2.75,-0.4375 2.75,-0.546875 2.75,-0.609375 2.765625,-0.6875 2.765625,-0.75 Z m 0.875,-3.546875 C 4.5,-7.796875 4.546875,-7.8125 5.015625,-7.8125 h 1.1875 c 0.890625,0 1.640625,0.28125 1.640625,1.171875 0,0.3125 -0.15625,1.328125 -0.703125,1.890625 -0.203125,0.203125 -0.78125,0.65625 -1.875,0.65625 h -1.6875 z m 0,0"
+   id="path137" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g45"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use43"
+   transform="translate(169.564,18.051001)">
+      <path
+   d="m 3.890625,2.90625 c 0,-0.03125 0,-0.0625 -0.203125,-0.265625 C 2.484375,1.4375 1.8125,-0.53125 1.8125,-2.96875 c 0,-2.328125 0.5625,-4.328125 1.953125,-5.734375 0.125,-0.109375 0.125,-0.125 0.125,-0.171875 0,-0.0625 -0.0625,-0.09375 -0.109375,-0.09375 -0.15625,0 -1.140625,0.859375 -1.71875,2.03125 -0.609375,1.21875 -0.890625,2.484375 -0.890625,3.96875 0,1.0625 0.171875,2.484375 0.78125,3.75 C 2.671875,2.21875 3.640625,3 3.78125,3 3.828125,3 3.890625,2.96875 3.890625,2.90625 Z m 0,0"
+   id="path141" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g49"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use47"
+   transform="translate(174.117,18.051001)">
+      <path
+   d="m 5.296875,-6.015625 c 0,-1.21875 -0.390625,-2.40625 -1.359375,-2.40625 -1.671875,0 -3.453125,3.515625 -3.453125,6.140625 0,0.546875 0.109375,2.40625 1.375,2.40625 1.625,0 3.4375,-3.421875 3.4375,-6.140625 z m -3.625,1.6875 c 0.1875,-0.703125 0.4375,-1.703125 0.90625,-2.5625 0.390625,-0.71875 0.8125,-1.28125 1.34375,-1.28125 0.390625,0 0.65625,0.328125 0.65625,1.484375 0,0.421875 -0.03125,1.015625 -0.375,2.359375 z m 2.4375,0.359375 C 3.8125,-2.796875 3.5625,-2.046875 3.125,-1.296875 2.78125,-0.6875 2.359375,-0.125 1.859375,-0.125 1.5,-0.125 1.1875,-0.40625 1.1875,-1.59375 c 0,-0.765625 0.203125,-1.578125 0.390625,-2.375 z m 0,0"
+   id="path145" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g53"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use51"
+   transform="translate(179.897,18.051001)">
+      <path
+   d="m 1.90625,-8.53125 c 0,-0.21875 0,-0.4375 -0.25,-0.4375 -0.234375,0 -0.234375,0.21875 -0.234375,0.4375 V 2.5625 c 0,0.203125 0,0.421875 0.234375,0.421875 0.25,0 0.25,-0.21875 0.25,-0.421875 z m 0,0"
+   id="path149" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g57"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use55"
+   transform="translate(183.218,18.051001)">
+      <path
+   d="M 1.875,-0.890625 C 1.765625,-0.46875 1.75,-0.34375 0.90625,-0.34375 c -0.21875,0 -0.34375,0 -0.34375,0.21875 C 0.5625,0 0.640625,0 0.875,0 h 3.78125 c 2.421875,0 4.78125,-2.5 4.78125,-5.15625 0,-1.734375 -1.03125,-3 -2.75,-3 H 2.859375 c -0.234375,0 -0.34375,0 -0.34375,0.21875 0,0.125 0.109375,0.125 0.296875,0.125 0.71875,0 0.71875,0.09375 0.71875,0.21875 0,0.03125 0,0.09375 -0.046875,0.28125 z M 4.40625,-7.34375 C 4.5,-7.796875 4.546875,-7.8125 5.015625,-7.8125 h 1.3125 c 1.125,0 2.15625,0.609375 2.15625,2.25 0,0.609375 -0.234375,2.6875 -1.390625,4 -0.34375,0.390625 -1.25,1.21875 -2.625,1.21875 H 3.109375 c -0.171875,0 -0.1875,0 -0.265625,-0.015625 -0.125,-0.015625 -0.140625,-0.03125 -0.140625,-0.125 0,-0.09375 0.015625,-0.15625 0.046875,-0.265625 z m 0,0"
+   id="path153" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g61"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use59"
+   transform="translate(193.26199,18.051001)">
+      <path
+   d="M 3.375,-2.96875 C 3.375,-3.890625 3.25,-5.359375 2.578125,-6.75 1.875,-8.1875 0.890625,-8.96875 0.765625,-8.96875 c -0.046875,0 -0.109375,0.03125 -0.109375,0.09375 0,0.046875 0,0.0625 0.203125,0.265625 1.203125,1.203125 1.859375,3.1875 1.859375,5.625 0,2.3125 -0.5625,4.3125 -1.9375,5.71875 C 0.65625,2.84375 0.65625,2.875 0.65625,2.90625 0.65625,2.96875 0.71875,3 0.765625,3 0.921875,3 1.90625,2.140625 2.484375,0.96875 3.09375,-0.25 3.375,-1.546875 3.375,-2.96875 Z m 0,0"
+   id="path157" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g65"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use63"
+   transform="translate(201.13809,18.051001)">
+      <path
+   d="m 8.0625,-3.875 c 0.171875,0 0.390625,0 0.390625,-0.21875 C 8.453125,-4.3125 8.25,-4.3125 8.0625,-4.3125 H 1.03125 c -0.171875,0 -0.390625,0 -0.390625,0.21875 0,0.21875 0.203125,0.21875 0.390625,0.21875 z m 0,2.21875 c 0.171875,0 0.390625,0 0.390625,-0.203125 C 8.453125,-2.09375 8.25,-2.09375 8.0625,-2.09375 H 1.03125 c -0.171875,0 -0.390625,0 -0.390625,0.21875 0,0.21875 0.203125,0.21875 0.390625,0.21875 z m 0,0"
+   id="path161" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g69"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use67"
+   transform="translate(214.756,9.9630003)">
+      <path
+   d="m 3.53125,-3.796875 h 2.015625 c 1.65625,0 3.296875,-1.21875 3.296875,-2.59375 0,-0.921875 -0.78125,-1.765625 -2.296875,-1.765625 h -3.6875 c -0.234375,0 -0.34375,0 -0.34375,0.21875 0,0.125 0.109375,0.125 0.296875,0.125 0.71875,0 0.71875,0.09375 0.71875,0.21875 0,0.03125 0,0.09375 -0.046875,0.28125 L 1.875,-0.890625 C 1.765625,-0.46875 1.75,-0.34375 0.90625,-0.34375 c -0.21875,0 -0.34375,0 -0.34375,0.21875 C 0.5625,0 0.671875,0 0.734375,0 0.96875,0 1.203125,-0.03125 1.4375,-0.03125 H 2.828125 C 3.0625,-0.03125 3.3125,0 3.53125,0 3.640625,0 3.765625,0 3.765625,-0.234375 3.765625,-0.34375 3.65625,-0.34375 3.484375,-0.34375 2.765625,-0.34375 2.75,-0.4375 2.75,-0.546875 2.75,-0.609375 2.765625,-0.6875 2.765625,-0.75 Z m 0.875,-3.546875 C 4.5,-7.796875 4.546875,-7.8125 5.015625,-7.8125 h 1.1875 c 0.890625,0 1.640625,0.28125 1.640625,1.171875 0,0.3125 -0.15625,1.328125 -0.703125,1.890625 -0.203125,0.203125 -0.78125,0.65625 -1.875,0.65625 h -1.6875 z m 0,0"
+   id="path165" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g73"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use71"
+   transform="translate(223.927,9.9630003)">
+      <path
+   d="m 3.890625,2.90625 c 0,-0.03125 0,-0.0625 -0.203125,-0.265625 C 2.484375,1.4375 1.8125,-0.53125 1.8125,-2.96875 c 0,-2.328125 0.5625,-4.328125 1.953125,-5.734375 0.125,-0.109375 0.125,-0.125 0.125,-0.171875 0,-0.0625 -0.0625,-0.09375 -0.109375,-0.09375 -0.15625,0 -1.140625,0.859375 -1.71875,2.03125 -0.609375,1.21875 -0.890625,2.484375 -0.890625,3.96875 0,1.0625 0.171875,2.484375 0.78125,3.75 C 2.671875,2.21875 3.640625,3 3.78125,3 3.828125,3 3.890625,2.96875 3.890625,2.90625 Z m 0,0"
+   id="path169" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g77"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use75"
+   transform="translate(228.48,9.9630003)">
+      <path
+   d="M 1.875,-0.890625 C 1.765625,-0.46875 1.75,-0.34375 0.90625,-0.34375 c -0.21875,0 -0.34375,0 -0.34375,0.21875 C 0.5625,0 0.640625,0 0.875,0 h 3.78125 c 2.421875,0 4.78125,-2.5 4.78125,-5.15625 0,-1.734375 -1.03125,-3 -2.75,-3 H 2.859375 c -0.234375,0 -0.34375,0 -0.34375,0.21875 0,0.125 0.109375,0.125 0.296875,0.125 0.71875,0 0.71875,0.09375 0.71875,0.21875 0,0.03125 0,0.09375 -0.046875,0.28125 z M 4.40625,-7.34375 C 4.5,-7.796875 4.546875,-7.8125 5.015625,-7.8125 h 1.3125 c 1.125,0 2.15625,0.609375 2.15625,2.25 0,0.609375 -0.234375,2.6875 -1.390625,4 -0.34375,0.390625 -1.25,1.21875 -2.625,1.21875 H 3.109375 c -0.171875,0 -0.1875,0 -0.265625,-0.015625 -0.125,-0.015625 -0.140625,-0.03125 -0.140625,-0.125 0,-0.09375 0.015625,-0.15625 0.046875,-0.265625 z m 0,0"
+   id="path173" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g81"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use79"
+   transform="translate(238.524,9.9630003)">
+      <path
+   d="m 1.90625,-8.53125 c 0,-0.21875 0,-0.4375 -0.25,-0.4375 -0.234375,0 -0.234375,0.21875 -0.234375,0.4375 V 2.5625 c 0,0.203125 0,0.421875 0.234375,0.421875 0.25,0 0.25,-0.21875 0.25,-0.421875 z m 0,0"
+   id="path177" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g85"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use83"
+   transform="translate(241.845,9.9630003)">
+      <path
+   d="m 5.296875,-6.015625 c 0,-1.21875 -0.390625,-2.40625 -1.359375,-2.40625 -1.671875,0 -3.453125,3.515625 -3.453125,6.140625 0,0.546875 0.109375,2.40625 1.375,2.40625 1.625,0 3.4375,-3.421875 3.4375,-6.140625 z m -3.625,1.6875 c 0.1875,-0.703125 0.4375,-1.703125 0.90625,-2.5625 0.390625,-0.71875 0.8125,-1.28125 1.34375,-1.28125 0.390625,0 0.65625,0.328125 0.65625,1.484375 0,0.421875 -0.03125,1.015625 -0.375,2.359375 z m 2.4375,0.359375 C 3.8125,-2.796875 3.5625,-2.046875 3.125,-1.296875 2.78125,-0.6875 2.359375,-0.125 1.859375,-0.125 1.5,-0.125 1.1875,-0.40625 1.1875,-1.59375 c 0,-0.765625 0.203125,-1.578125 0.390625,-2.375 z m 0,0"
+   id="path181" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g89"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use87"
+   transform="translate(247.625,9.9630003)">
+      <path
+   d="M 3.375,-2.96875 C 3.375,-3.890625 3.25,-5.359375 2.578125,-6.75 1.875,-8.1875 0.890625,-8.96875 0.765625,-8.96875 c -0.046875,0 -0.109375,0.03125 -0.109375,0.09375 0,0.046875 0,0.0625 0.203125,0.265625 1.203125,1.203125 1.859375,3.1875 1.859375,5.625 0,2.3125 -0.5625,4.3125 -1.9375,5.71875 C 0.65625,2.84375 0.65625,2.875 0.65625,2.90625 0.65625,2.96875 0.71875,3 0.765625,3 0.921875,3 1.90625,2.140625 2.484375,0.96875 3.09375,-0.25 3.375,-1.546875 3.375,-2.96875 Z m 0,0"
+   id="path185" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g93"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use91"
+   transform="translate(254.834,9.9630003)">
+      <path
+   d="m 2.296875,-2.984375 c 0,-0.34375 -0.28125,-0.640625 -0.640625,-0.640625 -0.34375,0 -0.625,0.296875 -0.625,0.640625 0,0.34375 0.28125,0.625 0.625,0.625 0.359375,0 0.640625,-0.28125 0.640625,-0.625 z m 0,0"
+   id="path189" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g97"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use95"
+   transform="translate(260.81201,9.9630003)">
+      <path
+   d="m 3.53125,-3.796875 h 2.015625 c 1.65625,0 3.296875,-1.21875 3.296875,-2.59375 0,-0.921875 -0.78125,-1.765625 -2.296875,-1.765625 h -3.6875 c -0.234375,0 -0.34375,0 -0.34375,0.21875 0,0.125 0.109375,0.125 0.296875,0.125 0.71875,0 0.71875,0.09375 0.71875,0.21875 0,0.03125 0,0.09375 -0.046875,0.28125 L 1.875,-0.890625 C 1.765625,-0.46875 1.75,-0.34375 0.90625,-0.34375 c -0.21875,0 -0.34375,0 -0.34375,0.21875 C 0.5625,0 0.671875,0 0.734375,0 0.96875,0 1.203125,-0.03125 1.4375,-0.03125 H 2.828125 C 3.0625,-0.03125 3.3125,0 3.53125,0 3.640625,0 3.765625,0 3.765625,-0.234375 3.765625,-0.34375 3.65625,-0.34375 3.484375,-0.34375 2.765625,-0.34375 2.75,-0.4375 2.75,-0.546875 2.75,-0.609375 2.765625,-0.6875 2.765625,-0.75 Z m 0.875,-3.546875 C 4.5,-7.796875 4.546875,-7.8125 5.015625,-7.8125 h 1.1875 c 0.890625,0 1.640625,0.28125 1.640625,1.171875 0,0.3125 -0.15625,1.328125 -0.703125,1.890625 -0.203125,0.203125 -0.78125,0.65625 -1.875,0.65625 h -1.6875 z m 0,0"
+   id="path193" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g101"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use99"
+   transform="translate(269.983,9.9630003)">
+      <path
+   d="m 3.890625,2.90625 c 0,-0.03125 0,-0.0625 -0.203125,-0.265625 C 2.484375,1.4375 1.8125,-0.53125 1.8125,-2.96875 c 0,-2.328125 0.5625,-4.328125 1.953125,-5.734375 0.125,-0.109375 0.125,-0.125 0.125,-0.171875 0,-0.0625 -0.0625,-0.09375 -0.109375,-0.09375 -0.15625,0 -1.140625,0.859375 -1.71875,2.03125 -0.609375,1.21875 -0.890625,2.484375 -0.890625,3.96875 0,1.0625 0.171875,2.484375 0.78125,3.75 C 2.671875,2.21875 3.640625,3 3.78125,3 3.828125,3 3.890625,2.96875 3.890625,2.90625 Z m 0,0"
+   id="path197" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g105"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use103"
+   transform="translate(274.535,9.9630003)">
+      <path
+   d="m 5.296875,-6.015625 c 0,-1.21875 -0.390625,-2.40625 -1.359375,-2.40625 -1.671875,0 -3.453125,3.515625 -3.453125,6.140625 0,0.546875 0.109375,2.40625 1.375,2.40625 1.625,0 3.4375,-3.421875 3.4375,-6.140625 z m -3.625,1.6875 c 0.1875,-0.703125 0.4375,-1.703125 0.90625,-2.5625 0.390625,-0.71875 0.8125,-1.28125 1.34375,-1.28125 0.390625,0 0.65625,0.328125 0.65625,1.484375 0,0.421875 -0.03125,1.015625 -0.375,2.359375 z m 2.4375,0.359375 C 3.8125,-2.796875 3.5625,-2.046875 3.125,-1.296875 2.78125,-0.6875 2.359375,-0.125 1.859375,-0.125 1.5,-0.125 1.1875,-0.40625 1.1875,-1.59375 c 0,-0.765625 0.203125,-1.578125 0.390625,-2.375 z m 0,0"
+   id="path201" />
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g109"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use107"
+   transform="translate(280.31601,9.9630003)">
+      <path
+   d="M 3.375,-2.96875 C 3.375,-3.890625 3.25,-5.359375 2.578125,-6.75 1.875,-8.1875 0.890625,-8.96875 0.765625,-8.96875 c -0.046875,0 -0.109375,0.03125 -0.109375,0.09375 0,0.046875 0,0.0625 0.203125,0.265625 1.203125,1.203125 1.859375,3.1875 1.859375,5.625 0,2.3125 -0.5625,4.3125 -1.9375,5.71875 C 0.65625,2.84375 0.65625,2.875 0.65625,2.90625 0.65625,2.96875 0.71875,3 0.765625,3 0.921875,3 1.90625,2.140625 2.484375,0.96875 3.09375,-0.25 3.375,-1.546875 3.375,-2.96875 Z m 0,0"
+   id="path205" />
+    </g>
+  </g>
+  <path
+   fill="none"
+   stroke-width="0.478"
+   stroke-linecap="butt"
+   stroke-linejoin="miter"
+   stroke="#000000"
+   stroke-opacity="1"
+   stroke-miterlimit="10"
+   d="M 53.802307,14.06825 H 123.91168"
+   id="path111"
+   transform="scale(0.352778)" />
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g115"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use113"
+   transform="translate(235.65199,26.250999)">
+      <path
+   d="m 3.53125,-3.796875 h 2.015625 c 1.65625,0 3.296875,-1.21875 3.296875,-2.59375 0,-0.921875 -0.78125,-1.765625 -2.296875,-1.765625 h -3.6875 c -0.234375,0 -0.34375,0 -0.34375,0.21875 0,0.125 0.109375,0.125 0.296875,0.125 0.71875,0 0.71875,0.09375 0.71875,0.21875 0,0.03125 0,0.09375 -0.046875,0.28125 L 1.875,-0.890625 C 1.765625,-0.46875 1.75,-0.34375 0.90625,-0.34375 c -0.21875,0 -0.34375,0 -0.34375,0.21875 C 0.5625,0 0.671875,0 0.734375,0 0.96875,0 1.203125,-0.03125 1.4375,-0.03125 H 2.828125 C 3.0625,-0.03125 3.3125,0 3.53125,0 3.640625,0 3.765625,0 3.765625,-0.234375 3.765625,-0.34375 3.65625,-0.34375 3.484375,-0.34375 2.765625,-0.34375 2.75,-0.4375 2.75,-0.546875 2.75,-0.609375 2.765625,-0.6875 2.765625,-0.75 Z m 0.875,-3.546875 C 4.5,-7.796875 4.546875,-7.8125 5.015625,-7.8125 h 1.1875 c 0.890625,0 1.640625,0.28125 1.640625,1.171875 0,0.3125 -0.15625,1.328125 -0.703125,1.890625 -0.203125,0.203125 -0.78125,0.65625 -1.875,0.65625 h -1.6875 z m 0,0"
+   id="path209" />
+    </g>
+  </g>
+  <g
+   clip-path="url(#clipPath5398)"
+   id="g121"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g119">
+      <g
+   id="use117"
+   transform="translate(244.823,26.250999)">
+        <path
+   d="m 3.890625,2.90625 c 0,-0.03125 0,-0.0625 -0.203125,-0.265625 C 2.484375,1.4375 1.8125,-0.53125 1.8125,-2.96875 c 0,-2.328125 0.5625,-4.328125 1.953125,-5.734375 0.125,-0.109375 0.125,-0.125 0.125,-0.171875 0,-0.0625 -0.0625,-0.09375 -0.109375,-0.09375 -0.15625,0 -1.140625,0.859375 -1.71875,2.03125 -0.609375,1.21875 -0.890625,2.484375 -0.890625,3.96875 0,1.0625 0.171875,2.484375 0.78125,3.75 C 2.671875,2.21875 3.640625,3 3.78125,3 3.828125,3 3.890625,2.96875 3.890625,2.90625 Z m 0,0"
+   id="path213" />
+      </g>
+    </g>
+  </g>
+  <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g125"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   id="use123"
+   transform="translate(249.37601,26.250999)">
+      <path
+   d="M 1.875,-0.890625 C 1.765625,-0.46875 1.75,-0.34375 0.90625,-0.34375 c -0.21875,0 -0.34375,0 -0.34375,0.21875 C 0.5625,0 0.640625,0 0.875,0 h 3.78125 c 2.421875,0 4.78125,-2.5 4.78125,-5.15625 0,-1.734375 -1.03125,-3 -2.75,-3 H 2.859375 c -0.234375,0 -0.34375,0 -0.34375,0.21875 0,0.125 0.109375,0.125 0.296875,0.125 0.71875,0 0.71875,0.09375 0.71875,0.21875 0,0.03125 0,0.09375 -0.046875,0.28125 z M 4.40625,-7.34375 C 4.5,-7.796875 4.546875,-7.8125 5.015625,-7.8125 h 1.3125 c 1.125,0 2.15625,0.609375 2.15625,2.25 0,0.609375 -0.234375,2.6875 -1.390625,4 -0.34375,0.390625 -1.25,1.21875 -2.625,1.21875 H 3.109375 c -0.171875,0 -0.1875,0 -0.265625,-0.015625 -0.125,-0.015625 -0.140625,-0.03125 -0.140625,-0.125 0,-0.09375 0.015625,-0.15625 0.046875,-0.265625 z m 0,0"
+   id="path217" />
+    </g>
+  </g>
+  <g
+   clip-path="url(#clipPath57)"
+   id="g131"
+   transform="matrix(0.352778,0,0,0.352778,-56.7815,-0.350749)">
+    <g
+   fill="#000000"
+   fill-opacity="1"
+   id="g129">
+      <g
+   id="use127"
+   transform="translate(259.42001,26.250999)">
+        <path
+   d="M 3.375,-2.96875 C 3.375,-3.890625 3.25,-5.359375 2.578125,-6.75 1.875,-8.1875 0.890625,-8.96875 0.765625,-8.96875 c -0.046875,0 -0.109375,0.03125 -0.109375,0.09375 0,0.046875 0,0.0625 0.203125,0.265625 1.203125,1.203125 1.859375,3.1875 1.859375,5.625 0,2.3125 -0.5625,4.3125 -1.9375,5.71875 C 0.65625,2.84375 0.65625,2.875 0.65625,2.90625 0.65625,2.96875 0.71875,3 0.765625,3 0.921875,3 1.90625,2.140625 2.484375,0.96875 3.09375,-0.25 3.375,-1.546875 3.375,-2.96875 Z m 0,0"
+   id="path221" />
+      </g>
+    </g>
+  </g>
+</g></g></svg>
+</p>
+</section>
+<section id="the-breakdown-part-i" class="slide level2">
+<h2>The Breakdown (Part I)</h2>
+<ul>
+<li>The <strong>Prior</strong> is the probability of the parameters
+without any consideration of the data
+<ul>
+<li>This generally reflects any knowns or assumptions you are making
+about the parameters</li>
+<li>Are they all positive? Are they bounded in some way?</li>
+</ul></li>
+<li>The <strong>Likelihood</strong> is the probability of getting the
+data given the parameters
+<ul>
+<li>For model fitting, this is where we compare the actual data to the
+predicted data by our model</li>
+<li>The better the match, the greater the likelihood</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-breakdown-part-ii" class="slide level2">
+<h2>The Breakdown (Part II)</h2>
+<ul>
+<li>The <strong>Evidence</strong> is the probability of the data being
+the way it is
+<ul>
+<li>This is <em>extremely</em> hard to measure, and also largely
+pointless for our use-case</li>
+<li>It doesn’t depend on the parameters, so would just be a constant
+scaling factor</li>
+</ul></li>
+<li>The <strong>Posterior</strong> is the probability of the parameters
+given the data
+<ul>
+<li>This is what we want!</li>
+<li>“How likely are these parameters given our data?”</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-big-picture" class="slide level2">
+<h2>The Big Picture</h2>
+<ul>
+<li>Our goal here is to sample the right-hand side of Baye’s theorem
+using MCMC</li>
+<li>The resulting distribution would also describe the probabilities on
+the left-hand side
+<ul>
+<li>At least within a scaling factor</li>
+</ul></li>
+<li>What we are really interested in though is the <em>spread</em> of
+the posterior probability distribution, so this scaling is of no
+consequence to us</li>
+</ul>
+</section>
+<section id="logging" class="slide level2">
+<h2>Logging</h2>
+<ul>
+<li>We can get a pretty huge dynamic range when computing the values of
+the right-hand side</li>
+<li>Recall that we compute these for each step to see if we take the
+random step or not</li>
+<li>To avoid computational overflow/underflow errors, it can be
+recommended to work in ln-space instead</li>
+<li>Here, the accept/rejection step becomes: <span
+class="math display">\[\frac{f(\theta^\prime)}{f(\theta)} &gt; r
+\quad\rightarrow\quad \ln f(\theta^\prime) - \ln f(\theta) &gt; \ln r
+\]</span></li>
+</ul>
+</section>
+<section id="the-prior" class="slide level2">
+<h2>The Prior</h2>
+<ul>
+<li><p>Defining the prior pdf is usually straightforward</p></li>
+<li><p>If using an unbounded, flat, prior, then it should just return 1
+always (0 in ln-space)</p></li>
+<li><p>If bounded, check the parameters and return 1 (0 in ln-space) if
+within the bounds or <span class="math inline">\(-\infty\)</span>
+otherwise (<code class="python">-np.inf</code> in Python,
+<code class="python">-Inf</code> in R)</p></li>
+<li><p>Pseudo-example:</p>
+<pre ><code class="mypython">|||function ln_prior(|||params|||)|||
+  if |||illegal condition|||
+    return -|||infinity|||
+  return 0</code></pre></li>
+</ul>
+</section>
+<section id="the-likelihood" class="slide level2">
+<h2>The Likelihood</h2>
+<ul>
+<li>The likelihood essentially compares the data our model would output
+to our actual data</li>
+<li>The goal is to minimize the differences between the two
+<ul>
+<li>Additionally, things are normally scaled by known errors, so that
+values with more error have less weight</li>
+</ul></li>
+<li>As such: <span class="math display">\[ P(\theta | D) \propto
+\exp(-\chi^2(\theta) / 2) \]</span> where <span class="math display">\[
+\chi^2(\theta) = \sum_{i=1}^N \frac{(y_{i,D} -
+y_{i,\theta})^2}{\sigma_{i,D}^2} \]</span></li>
+</ul>
+</section>
+<section id="the-likelihood-in-code" class="slide level2">
+<h2>The Likelihood (In Code)</h2>
+<ul>
+<li><p>The ln-likelihood then could look like:</p>
+<pre ><code class="mypython" style="font-size:.9em">|||function ln_likelihood(|||params, data|||)|||
+  m,b = params
+  x,y,errY = data # extract data
+  y_model = m * x + b # compute model result
+  return - 0.5 * |||sum(|||
+    (y - y_model) ** 2 / errY ** 2
+  |||)|||</code></pre></li>
+</ul>
+</section>
+<section id="all-together-now" class="slide level2">
+<h2>All together now…</h2>
+<ul>
+<li><p>Bring both pieces together (since we don’t care about <span
+class="math inline">\(P(D)\)</span>):</p>
+<pre ><code class="mypython" style="font-size:.9em">|||function ln_pdf(|||params, data|||)|||
+  p = |||call ln_prior|||
+  if p == -|||infinity||| # no sense continuing
+    return -|||infinity|||
+  return p + ln_likelihood(params, data)</code></pre></li>
+</ul>
+<!--
+## Quiz Time!
+- The remaining time is set aside for Quiz 2
+-->
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          theme: "whiteboard",
+          boardmarkers : [
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
+    </body>
+</html>
