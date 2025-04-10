@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jed Rembold">
-  <title>Connections and PostGIS</title>
+  <meta name="dcterms.date" content="2025-04-09">
+  <title>Dashboarding and PostGIS</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -34,236 +35,236 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Connections and PostGIS</h1>
+  <h1 class="title">Dashboarding and PostGIS</h1>
   <p class="author">Jed Rembold</p>
-  <p class="date">April 4/16, 2024</p>
+  <p class="date">April 9, 2025</p>
 </section>
 
 <section id="announcements" class="slide level2">
 <h2>Announcements</h2>
+<div class="smaller">
 <ul>
-<li>Good to see you all again!</li>
-<li>Did you get the last homework submitted?</li>
-<li>Progress was made grading over break!</li>
-<li>Just the project to work on now!
+<li>Almost to the end!
 <ul>
-<li>Make absolutely sure your scraper is running</li>
-<li>See about setting up the cleaning automation (seen last
-lecture)</li>
-<li>Is the Serving side going to happen? We’ll know by Thursday (Apr 18)
+<li>Last homework this week! And it is a short one!</li>
+<li>Are you behind it getting anything post HW6 turned in? Just get it
+in: no penalty if it is submitted before I go to grade it.</li>
+</ul></li>
+<li>Project
 <ul>
-<li>If it does, it will be an easy to implement option</li>
-<li>If you have already gotten it working externally, and it ends up not
-being required, I’ll throw some extra points your way for your
-efforts</li>
+<li>Make <strong>absolutely sure</strong> your scraper is running</li>
+<li>Ensure your automated cleaning is running on a schedule</li>
+<li>Choose one partner where you will deploy the serving aspects of the
+project
+<ul>
+<li>Ensure that partner has set up the foreign data wrapper to connect
+to the other partner’s data (Lec 9)</li>
+<li>PostgREST API set up and sharing data that is at least somewhat a
+mix from both projects (Lec 10)</li>
+<li>Grafana dashboard set up and visualizing data to help answer or
+inform your question (tonight)</li>
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
-<section id="connecting-databases" class="slide level2">
-<h2>Connecting Databases</h2>
+<section>
+<section id="dashboarding" class="title-slide slide level1">
+<h1>Dashboarding</h1>
+
+</section>
+<section id="visualizations" class="slide level2">
+<h2>Visualizations</h2>
 <ul>
-<li>Postgres has a few ways you can access tables from one database
-while in another</li>
-<li>Both are extensions that you would <strong>need to activate</strong>
+<li>It is frequently desirable to have a visual interface through which
+to view or understand data summaries</li>
+<li>There are no shortage of dashboarding options out there:
 <ul>
-<li>dblink: Simple for one-off data access</li>
-<li>postgres_fdw: Better if you need a more permanent connection</li>
+<li>MS Power BI</li>
+<li>Tableau</li>
+<li>Shiny apps (R)</li>
+<li>Plotly, Dash (Python)</li>
 </ul></li>
-<li>Both can be useful, so I’ll try to touch on each</li>
+<li>Here, we will use an open-source tool that is a touch less common
+<em>in this space</em>, but extremely powerful: Grafana</li>
 </ul>
 </section>
-<section id="the-connection" class="slide level2">
-<h2>The Connection</h2>
+<section id="grafana" class="slide level2">
+<h2>Grafana</h2>
+<div class="cols">
+<div class="col">
 <ul>
-<li><p>Accessing data using <code class="python">dblink</code> is a
-two-step process: connect and then query</p></li>
-<li><p>To connect, use <code class="python">dblink_connect</code>
-(shocking!)</p>
-<pre ><code class="pgsql">SELECT dblink_connect('connection_string')</code></pre></li>
-<li><p>The connection string can either be a full database url, or a
-space delimited sequence of keywords:</p>
-<pre ><code class="pgsql">'host=localhost user=postgres password=1234'</code></pre></li>
+<li>Open-source, versatile platform for querying, visualizing, and
+alerting from various data sources</li>
+<li>Creates interactive and customizable dashboards</li>
+<li>Dashboards can be shared within teams or externally</li>
+<li>Data for dashboards queried directly from connected data
+sources</li>
 </ul>
+</div>
+<div class="col">
+<p><img data-src="../images/grafana_intro.png" /></p>
+</div>
+</div>
 </section>
-<section id="querying" class="slide level2">
-<h2>Querying</h2>
+<section id="installation" class="slide level2">
+<h2>Installation</h2>
 <ul>
-<li><p>Once the connection has been made (within a session) you can send
-across queries</p>
-<pre ><code class="pgsql">SELECT * FROM dblink('query string')</code></pre></li>
-<li><p><code class="python">dblink</code> is essentially blind, in that
-it has no idea what would be returned by the query</p>
+<li>As with many things, we can leverage Docker to help us install and
+run Grafana</li>
+<li>Process:
 <ul>
-<li>As such, similar to creating a pivot table, you
-<strong>must</strong> supply a table alias <strong>and</strong>
-columns/types at the end</li>
-</ul>
-<pre ><code class="pgsql">SELECT * 
-FROM dblink('query string')
-AS table1 ( col1 type1, col2 type2, etc.);</code></pre></li>
-</ul>
-</section>
-<section id="executing" class="slide level2">
-<h2>Executing</h2>
-<ul>
-<li><p>If you have a command to run remotely, and don’t need a table
-back, you can use <code class="python">dblink_exec</code></p></li>
-<li><p>This may be useful for creating, updating or deleting data from a
-remote table.</p>
-<pre ><code class="pgsql">SELECT dblink_exec(
-  'CREATE TABLE test (col1 text, col2 int)'
-);</code></pre></li>
-</ul>
-</section>
-<section id="foreign-data-wrapper" class="slide level2">
-<h2>Foreign Data Wrapper</h2>
-<ul>
-<li>Using the <code class="python">postgres_fdw</code> extension is a
-bit more of a setup, but makes working with remote tables a breeze</li>
-<li>Multistep process:
-<ul>
-<li>Activate the extension</li>
-<li>Create a foreign server object, representing the remote database
-server</li>
-<li>Create a user wrapping which allows that user to access that foreign
-server</li>
-<li>Create the foreign tables</li>
+<li>Add the Grafana template on Railway. You want the one by Rèmi A.
+Deploy it.</li>
+<li>Generate a public domain so that you’ll be able to connect to the
+service</li>
+<li>Add a <code class="pgsql">GF_SERVER_ROOT_URL</code> environment
+variable and set it to
+<code class="pgsql">https://${{RAILWAY_PUBLIC_DOMAIN}}</code></li>
+<li>Redeploy</li>
+<li>Access the public domain and log in with the user and password from
+the environment variables</li>
 </ul></li>
 </ul>
 </section>
-<section id="the-foreign-server-objects" class="slide level2">
-<h2>The Foreign Server Objects</h2>
+<section id="user-setup" class="slide level2">
+<h2>User Setup</h2>
 <ul>
-<li><p>You first need to define a foreign server</p>
-<pre ><code class="pgsql">CREATE SERVER |||server_name|||
-FOREIGN DATA WRAPPER postgres_fdw
-OPTIONS (|||server config settings|||)</code></pre></li>
-<li><p>Server name can be whatever you like, provided it is
-unique</p></li>
-<li><p>Server settings are a comma delimited, space separated sequence
-of host, port, dbname, etc</p></li>
+<li>Clearly the admin account is not the easiest to log in as (and that
+is a good thing!)</li>
+<li>Useful to make user or team accounts
+<ul>
+<li>In the left menu, go to Administration</li>
+<li>Click “Users and Access”, and then “Users”</li>
+<li>Click “New User” and enter information.</li>
+<li>After creating, you will see an option about making that user a
+Admin. You might want to do that.</li>
+<li>Under Organizations, change the main organization permission to
+editor or admin</li>
+<li>Create users for each partner</li>
+<li>Sign out and sign back in as your newly created user</li>
+</ul></li>
 </ul>
 </section>
-<section id="the-user-wrapper" class="slide level2">
-<h2>The User Wrapper</h2>
+<section id="data-sources" class="slide level2">
+<h2>Data Sources</h2>
 <ul>
-<li><p>You essentially need to give your user permission to access the
-remote server</p>
-<pre ><code class="pgsql">CREATE USER MAPPING FOR CURRENT_USER
-SERVER |||server_name|||
-OPTIONS (|||user options|||)</code></pre></li>
-<li><p>Server name will be the name you just used for the created
-server</p></li>
-<li><p>User options should include the corresponding <em>remote</em>
-user info like username and password</p></li>
+<li>Grafana needs to know what sources it can access to retrieve the
+data to visualize</li>
+<li>An <strong>admin</strong> account needs to set this up:
+<ul>
+<li>In the left menu, go to Connections</li>
+<li>Search for Postgres and select it</li>
+<li>In the upper right click “Add new data source”</li>
+<li>Populate the necessary portions with the data to connect to your
+Railway database
+<ul>
+<li>Should be host, database name, user, and password</li>
+<li>Look back at your database environment variables as needed</li>
+</ul></li>
+<li>Under Additional Options, set the Postgres version to the latest
+possible</li>
+<li>Hit “Save and Test” at the bottom. If you get the positive pop-up
+dialog, you are good to go!</li>
+</ul></li>
 </ul>
 </section>
-<section id="bring-on-the-tables" class="slide level2">
-<h2>Bring On the Tables!</h2>
+<section id="creating-a-dashboard" class="slide level2">
+<h2>Creating a Dashboard</h2>
 <ul>
-<li><p>Last but not least, you can import in the tables you
-want</p></li>
-<li><p>Can do one at a time with
-<code class="python">CREATE FOREIGN TABLE</code>, but I far prefer
-<code class="python">IMPORT FOREIGN SCHEMA</code></p>
-<pre ><code class="pgsql">IMPORT FOREIGN SCHEMA |||schema name|||
-FROM SERVER |||server_name|||
-INTO |||local schema name|||</code></pre></li>
-<li><p>Can also include <code class="python">LIMIT TO</code> or
-<code class="python">EXCEPT</code> followed by a list of table names to
-fine-tune which tables are imported</p></li>
+<li>Click on the Dashboard section in the left menu</li>
+<li>Click the giant “Create Dashboard” button, and then “Add
+Visualization”</li>
+<li>Select your Postgres data source</li>
+<li>Create your visual!</li>
+<li>You can then go back to the dashboard to create more visuals</li>
+<li>You can arrange and size visuals on the dashboard</li>
+<li>Make sure you save the dashboard!</li>
 </ul>
-<!--
-## Poster Sessions
-- Posters
-  - Actual dimensions not hugely important for virtual, but 36" by 48" or 42" by 56" is typical
-  - Posters will be a bit easier to view virtually if they are in landscape
-  - Common to use a slideshow program and then adjust the dimensions to create posters
-    - I'll ask that you export as PDF to send to me
-  - Consider using the #betterposters format! [Video here](https://www.youtube.com/watch?v=SYk29tnxASs)
-- The Session
-  - Broken into 3 groupings, each will last between 30-45 minutes
-  - You'll need to be standing "by" your poster only during your grouping
-  - The rest of the time you can wander, look at other folks posters, and chat with them about what they did
+</section>
+<section id="making-a-visual" class="slide level2">
+<h2>Making a Visual</h2>
+<div class="cols" style="align-items: center">
+<div class="col">
+<ul>
+<li>Generally, you’ll spend your time in two areas making a visual:
+<ul>
+<li>In the query builder at the bottom of the screen.
+<ul>
+<li>Here you can either construct a query from the GUI, or, because you
+are all competent in SQL, from the query tool directly</li>
+</ul></li>
+<li>In the configuration menu to the right of the screen
+<ul>
+<li>Here, you can choose both the type of visual, as well as all the
+customizable aspects of that visual</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/grafana_visual_example.png" /></p>
+</div>
+</div>
+</section>
+<section id="variables" class="slide level2">
+<h2>Variables</h2>
+<ul>
+<li>You may want to add a little interactivity to your dashboard!
+<ul>
+<li>Maybe a dropdown, or a text field for filtering?</li>
+</ul></li>
+<li>You can define dashboard <em>variables</em> that you can then use in
+your SQL queries to make things dynamic</li>
+<li>While editing the dashboard (not a specific visual), go to Settings
+in the upper right</li>
+<li>Choose the variables tab and add a new variable</li>
+<li>Choose a type, give it a name, and fill in any other
+information</li>
+<li>In a visualization query editor, you can refer to that value with
+<code class="pgsql">'$variable_name'</code>
+<ul>
+<li>Note that it needs to be in a string if it gives text values!</li>
+</ul></li>
+</ul>
+</section>
+<section id="sharing" class="slide level2">
+<h2>Sharing</h2>
+<ul>
+<li>Dashboards are very often meant to be used by others! So how can we
+share them?</li>
+<li>Exit the edit mode for your chosen dashboard to see the “Sharing”
+button</li>
+<li>Externally
+<ul>
+<li>Note that dashboards with variables will not run the necessary SQL
+when shared externally! So this only works if you didn’t use any
+variables.</li>
+<li>Click that you understand it will be public, and then copy the link
+and share it!</li>
+</ul></li>
+<li>Internally
+<ul>
+<li>If you want to share a board with variables, someone will need to
+log into your Grafana instance</li>
+<li>Give them an account with purely viewing privileges</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="break" class="title-slide slide level1">
+<h1>Break!</h1>
 
-## Triggers
-- Triggers are contingencies that you can set up so that when a certain event occurs, a particular function is run
-- Commonly used to update or change values in other tables when something is newly added or changed in a table
-- Requires two things:
-  - A defined trigger function
-    - Can't use the pure SQL language, plpgsql probably best
-  - A defined trigger itself
-
-
-##  The Trigger Function
-- No inputs should be included
-  - The general names `NEW` and `OLD` will refer to the newly changed or previous table values (respectively)
-- The function needs to return a special `TRIGGER` type
-- You need to return _something_, though it probably isn't important
-
-
-## The Trigger Itself
-- Need to give the trigger a name
-- Specify _when_ it will trigger
-- Specify how many times it will trigger
-- Specify what function will be run
-```pgsql
-CREATE TRIGGER trig_name
-AFTER UPDATE
-  ON table_name
-FOR EACH ROW
-EXECUTE PROCEDURE func_name();
-```
-
-## When to Trigger
-- You can listen for `INSERT`, `UPDATE`, or `DELETE` events that affect a particular table
-- Can trigger **before** the event occurs
-  - Would be before any conditions are checked or changes made
-  - What is being returned from your trigger function is important here!
-- Can trigger **after** the event occurs
-  - After all conditions are checked and changes have been made
-  - What is returned from the trigger function has no bearing here
-- Technically can also trigger `INSTEAD OF` the event occurring, but we won't cover that here
-
-
-## Fine-Tuning Triggering
-- In some cases, triggering off of _any_ update or insert is too broad
-- Can localize to just a single (or few) columns by using `OF colname1, colname2`
-  ```pgsql
-  AFTER UPDATE OF colname1
-  ```
-- Can localize to only triggering off certain rows by inserting a `WHEN` condition before the `EXECUTE` line
-  - Can use `NEW` and `OLD` within this condition
-  ```pgsql
-  WHEN OLD.name != NEW.name
-  EXECUTE FUNCTION myfunc();
-  ```
-
-
-## How much triggering
-- Using `FOR EACH ROW` will cause the trigger function to run once for _every_ row that was a part of the triggered event
-  - Run an `UPDATE` that affected 10 rows? The trigger function will be run 10 times, once on each row
-  - Ensures you will have access to the `NEW` and `OLD` variables in your trigger function
-- Using `FOR EACH STATEMENT` will cause the trigger function to run _once_ when the triggering event occurs
-  - Run an `UPDATE` that affects 10 rows? The trigger function just runs once.
-  - A statement altering 0 rows will **still have an effect**!
-  - Statement level triggers do not have a way to examine individual modified rows using `OLD` or `NEW`
-
-## Activity!
-- I've given you a simple starter bit of sql [here](../activity_data/boxes.sql) to create and populate some tables. Use them to practice the below in the shown pairs.
-- Tasks:
-  - Create a view called `newest` that will only show the "new" boxes from `best_boxes`
-  - Create a view called `newred` that will only show new and red boxes using only `newest`
-  - Adjust the `CHECK OPTION` setting for both views so that you could add `('Jane', 2, 7, 9, 'red', 'new')` to `newred` but not `('Bart', 6, 10, 12, 'red', 'used')` to `newred`
-  - Write a function named `VOLUME` to compute the volume of a cubic object, and use that function to populate a new `volume` column in `best_boxes`
-  - Write a trigger (and trigger function) to add both the old and new name to `name_changes` as well as the current time whenever a `name` in `best_boxes` is updated
--->
 </section>
 <section id="break-time" class="slide level2">
 <h2>Break Time!</h2>
 <p><img
 data-src="https://media2.giphy.com/media/26tP4mS08o114G2kg/giphy.gif?cid=ecf05e47lyobwhi0b3chbob5f2y4biam9e28qeku3jhralxd&amp;rid=giphy.gif&amp;ct=g" /></p>
+</section></section>
+<section>
+<section id="geospatial-information" class="title-slide slide level1">
+<h1>Geospatial Information</h1>
+
 </section>
 <section id="positional-data" class="slide level2">
 <h2>Positional Data</h2>
@@ -282,8 +283,8 @@ slides and the text</li>
 <section id="postgis" class="slide level2">
 <h2>PostGIS</h2>
 <ul>
-<li><p>Unlike the <code class="python">tablefunc</code> extension,
-<code class="python">PostGIS</code> does not generally come with plain
+<li><p>Unlike the <code class="pgsql">tablefunc</code> extension,
+<code class="pgsql">PostGIS</code> does not generally come with plain
 Postgres by default</p>
 <ul>
 <li>On Windows and Mac however, if you installed Postgres as indicated
@@ -294,7 +295,7 @@ and should be able to add the extension from there</li>
 </ul></li>
 <li><p>The PostGIS extension will bring in a lot of extra functions and
 data types, so you might consider creating a new database to contain GIS
-type data (maybe <code class="python">analysis_gis</code>)</p></li>
+type data (maybe <code class="pgsql">analysis_gis</code>)</p></li>
 <li><p>Adding the extension to the database is the same as with other
 extensions:</p>
 <pre ><code class="pgsql">CREATE EXTENSION postgis;</code></pre></li>
@@ -318,9 +319,9 @@ well-known text string (or WKT)</li>
 <div style="font-size:.65em">
 <table>
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 43%" />
-<col style="width: 45%" />
+<col style="width: 9%" />
+<col style="width: 51%" />
+<col style="width: 39%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -331,33 +332,33 @@ well-known text string (or WKT)</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code class="python">Point</code></td>
-<td><code class="python">'POINT (-74.9 42.7)'</code></td>
+<td><code class="text">Point</code></td>
+<td><code class="pgsql">'POINT (-74.9 42.7)'</code></td>
 <td>No comma separating, and longitude comes first!</td>
 </tr>
 <tr class="even">
-<td><code class="python">LineString</code></td>
-<td><code class="python">'LINESTRING (-74.9 42.7, -75.1 42.7)'</code></td>
+<td><code class="pgsql">LineString</code></td>
+<td><code class="pgsql">'LINESTRING (-74.9 42.7, -75.1 42.7)'</code></td>
 <td>Comma separates coordinate pairs</td>
 </tr>
 <tr class="odd">
-<td><code class="python">Polygon</code></td>
-<td><code class="python">'POLYGON((74 42, 75 42, 76 43, 74 42))'</code></td>
+<td><code class="text">Polygon</code></td>
+<td><code class="pgsql">'POLYGON((74 42, 75 42, 76 43, 74 42))'</code></td>
 <td>Double parentheses, initial point repeated to close</td>
 </tr>
 <tr class="even">
-<td><code class="python">MultiPoint</code></td>
-<td><code class="python">'MULTIPOINT(75 42, 74 43)'</code></td>
+<td><code class="pgsql">MultiPoint</code></td>
+<td><code class="pgsql">'MULTIPOINT(75 42, 74 43)'</code></td>
 <td>Comma separates coordinate pairs</td>
 </tr>
 <tr class="odd">
-<td><code class="python">MultiLineString</code></td>
-<td><code class="python">'MULTILINESTRING((76 43, 77 43), (78 43, 77 43))'</code></td>
+<td><code class="pgsql">MultiLineString</code></td>
+<td><code class="pgsql">'MULTILINESTRING((76 43, 77 43), (78 43, 77 43))'</code></td>
 <td>Parentheses group individual lines</td>
 </tr>
 <tr class="even">
-<td><code class="python">MultiPolygon</code></td>
-<td><code class="python">'MULTIPOLYGON(((74 43, 75 44, 74 45, 74 43), (81 40, 81 39, 82 39, 81 40)))'</code></td>
+<td><code class="pgsql">MultiPolygon</code></td>
+<td><code class="pgsql">'MULTIPOLYGON(((74 43, 75 44, 74 45, 74 43), (81 40, 81 39, 82 39, 81 40)))'</code></td>
 <td>Still double parentheses to start and end, with 3rd parentheses
 grouping polygons</td>
 </tr>
@@ -385,8 +386,8 @@ System: WGS 84
 <li>If grabbing geospatial data from an online source, <strong>always
 check its coordinate system</strong></li>
 <li>All coordinate system information stored in
-<code class="python">spatial_ref_sys</code> table, so you can query to
-find necessary SRIDs</li>
+<code class="pgsql">spatial_ref_sys</code> table, so you can query to
+find SRIDs if necessary (though it is a bit clunky)</li>
 </ul>
 </div>
 </section>
@@ -396,7 +397,7 @@ find necessary SRIDs</li>
 <ul>
 <li>While PostGIS introduces many new spatial geometries, only a few new
 data types are added to Postgres.</li>
-<li><code class="python">geography</code>
+<li><code class="pgsql">geography</code>
 <ul>
 <li>Based on spherical curvature, all calculations take place on a
 globe</li>
@@ -404,7 +405,7 @@ globe</li>
 more precise, <strong>especially over large spans</strong></li>
 <li>Results expressed in meters</li>
 </ul></li>
-<li><code class="python">geometry</code>
+<li><code class="pgsql">geometry</code>
 <ul>
 <li>Based on a flat map, where all calculations take place on a plane
 (the mathematical sort)</li>
@@ -423,13 +424,13 @@ earlier</li>
 <ul>
 <li><p>Two main methods of creating geography or geometry types:</p>
 <ul>
-<li><code class="python">ST_GeomFromText(WKT, SRID)</code> creates a
+<li><code class="pgsql">ST_GeomFromText(WKT, SRID)</code> creates a
 geometry object to hold the spatial object given by the WKT with the
 optional given SRID
 <ul>
 <li>If no SRID is given, it is assumed to be 0 (no SRID at all)</li>
 </ul></li>
-<li><code class="python">ST_GeogFromText(WKT, SRID)</code> creates a
+<li><code class="pgsql">ST_GeogFromText(WKT, SRID)</code> creates a
 geography object to hold the spatial object given by the WKT with the
 optional given SRID
 <ul>
@@ -438,10 +439,10 @@ optional given SRID
 </ul></li>
 <li><p>If you look at the output of one of these data types, it is
 <strong>not</strong> human-readable</p>
-<pre ><code class="pgsql" style="font-size:.9em">SELECT ST_GeogFromText('POINT(-75 42)');
->>> 0101000020E61000000000000000C052400000000000004540
-SELECT ST_GeomFromText('POINT(-75 42)', 4326);
->>> 0101000020E61000000000000000C052C00000000000004540</code></pre></li>
+<pre ><code class="pgsql" style="font-size:.9em">SELECT ST_GeomFromText('POINT(-75 42)', 4326);
+>>> 0101000020E61000000000000000C052C00000000000004540
+SELECT ST_GeogFromText('POINT(-75 42)');
+>>> 0101000020E61000000000000000C052400000000000004540</code></pre></li>
 </ul>
 </section>
 <section id="making-spatial-objects-pt1" class="slide level2">
@@ -453,13 +454,13 @@ have latitude and longitude values in your table as
 <li>PostGIS offers a number of constructor functions for various objects
 that return <em>geometry</em> data types with no inherent SRID
 <ul>
-<li><code class="python">ST_MakePoint(long, lat, [z,m])</code> will
+<li><code class="pgsql">ST_MakePoint(long, lat, [z,m])</code> will
 create a geometric point with optional 3rd or 4th dimensions as
 well</li>
-<li><code class="python">ST_MakeLine(point1, point2)</code> will create
-a line from the first point to the second. There is an array option as
+<li><code class="pgsql">ST_MakeLine(point1, point2)</code> will create a
+line from the first point to the second. There is an array option as
 well.</li>
-<li><code class="python">ST_MakePolygon(geometry_linestring, [cutout_linestring])</code>
+<li><code class="pgsql">ST_MakePolygon(geometry_linestring, [cutout_linestring])</code>
 will create a geometric polygon using the provided linestring with
 optional cutouts</li>
 </ul></li>
@@ -468,21 +469,22 @@ optional cutouts</li>
 <section id="making-spatial-objects-pt2" class="slide level2">
 <h2>Making Spatial Objects (Pt2)</h2>
 <ul>
-<li>Since these all by default make <code class="python">geometry</code>
-type objects with no SRID, it can be desirable to set or convert as
-needed</li>
-<li>Can have an SRID attached to them:
+<li><p>Since these all by default make
+<code class="pgsql">geometry</code> type objects with no SRID, it can be
+desirable to set or convert as needed</p></li>
+<li><p>Can have an SRID attached to them:</p>
 <ul>
-<li><code class="python">ST_SetSRID(object, SRID)</code> will attach the
-given SRID metadata to the object</li>
+<li><code class="pgsql">ST_SetSRID(|||object|||, |||SRID|||)</code> will
+attach the given SRID metadata to the object</li>
 </ul></li>
-<li>Can be converted:
+<li><p>Can be converted:</p>
 <ul>
-<li><code class="python">object::geography</code> will convert to the
-new type (maintaining any attached SRID</li>
+<li><code class="pgsql">|||object|||::geography</code> will convert to
+the new type (maintaining any attached SRID</li>
 </ul></li>
+<li><p>A common pattern might then look something like:</p>
+<pre ><code class="pgsql" style="font-size:1em">SELECT ST_SetSRID(ST_MakePoint(|||long col|||,|||lat col|||), 4326);</code></pre></li>
 </ul>
-<pre ><code class="pgsql" style="font-size:1em">SELECT ST_SetSRID(ST_MakePoint(75,45), 4326);</code></pre>
 </section>
 <section id="adding-an-index" class="slide level2">
 <h2>Adding an Index</h2>
@@ -494,9 +496,9 @@ information</p>
 </ul></li>
 <li><p>Instead, PostGIS recommends using the <em>Generalized Search
 Tree</em> (GiST) index type</p>
-<pre ><code class="pgsql">CREATE INDEX index_name
-ON table_name
-USING GIST (col_name);</code></pre></li>
+<pre ><code class="pgsql">CREATE INDEX |||index name|||
+ON |||table name|||
+USING GIST (|||column name|||);</code></pre></li>
 </ul>
 </section>
 <section id="actual-analysis" class="slide level2">
@@ -507,18 +509,18 @@ a format that Postgres can understand, we can actually do some
 analysis!</li>
 <li>Two of the most common functions deal with distances:
 <ul>
-<li><code class="python">ST_DWithin(point1, point2, distance)</code>
+<li><code class="pgsql">ST_DWithin(|||point₁|||, |||point₂|||, |||distance|||)</code>
 returns a True or False depending on whether the two points are within
 the given distance from one another
 <ul>
 <li>Remember that geography distances are in meters, whereas geometry
 distance units depend on the SRID</li>
 </ul></li>
-<li><code class="python">ST_Distance(point1, point2)</code> computes the
-distance between the two points
+<li><code class="pgsql">ST_Distance(|||point₁|||, |||point₂|||)</code>
+computes the distance between the two points
 <ul>
-<li>This will be along a curve in geography, or on the flat plane in
-geometry</li>
+<li>This will be along a curve in geography, or the Euclidean distance
+in geometry</li>
 </ul></li>
 </ul></li>
 </ul>
@@ -526,7 +528,7 @@ geometry</li>
 <section id="your-turn" class="slide level2">
 <h2>Your Turn!</h2>
 <ul>
-<li>With your digital neighbors, import in the data <a
+<li>With your neighbors, import in the data <a
 href="../activity_data/nwcolleges.sql">here</a>, which is a collection
 of the small liberal art NW colleges along with their latitude and
 longitudes. See if you can add a new column with the necessary data
@@ -538,6 +540,11 @@ then answer the following questions:
 furthest apart?</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="complicated-shapes" class="title-slide slide level1">
+<h1>Complicated Shapes</h1>
+
 </section>
 <section id="shapefiles" class="slide level2">
 <h2>Shapefiles</h2>
@@ -565,7 +572,7 @@ table within our database</li>
 <div style="font-size:.9em">
 <ul>
 <li>PostGIS comes with a command line utility called
-<code class="python">shp2pgsql</code> on all operating systems
+<code class="pgsql">shp2pgsql</code> on all operating systems
 <ul>
 <li>Windows users can run a graphical version of the same program, but
 it is not available on Mac and Linux
@@ -575,64 +582,67 @@ book’s explanation, which is covered in depth</li>
 </ul></li>
 </ul></li>
 <li>Like many command line utilities,
-<code class="python">shp2pgsql</code> utilizes several flags to control
+<code class="pgsql">shp2pgsql</code> utilizes several flags to control
 its behavior
 <ul>
-<li><code class="python">-I</code> – sets up a GIST index on the
-geometry column</li>
-<li><code class="python">-s</code> – specifies a specific SRID</li>
-<li><code class="python">-W</code> – specifies a particular encoding if
+<li><code class="pgsql">-I</code> – sets up a GIST index on the geometry
+column</li>
+<li><code class="pgsql">-s</code> – specifies a specific SRID</li>
+<li><code class="pgsql">-W</code> – specifies a particular encoding if
 needed (sometimes necessary for location names)</li>
 </ul>
-<code class="python">shp2pgsql -I -s SRID -W ENCODING SHAPEFILE.SHP TABLE_NAME</code></li>
+<code class="pgsql">shp2pgsql -I -s |||SRID||| -W |||encoding||| |||shapefile|||.SHP |||table_name|||</code></li>
 </ul>
 </div>
 </section>
 <section id="bringing-into-pgsql" class="slide level2">
 <h2>Bringing Into PGSQL</h2>
 <ul>
-<li>By itself, <code class="python">shp2pgsql</code> will just generate
-SQL</li>
-<li>It can be more useful to pass that SQL directly into your
-database</li>
-<li>This can be done with the <code class="python">|</code>
-operator</li>
-<li>All together then, the command would look like below (all on one
-line)</li>
+<li><p>By itself, <code class="pgsql">shp2pgsql</code> will just
+generate SQL</p></li>
+<li><p>It can be more useful to pass that SQL directly into your
+database</p></li>
+<li><p>In Bash, this can be done directly with the trusty
+<code class="pgsql">|</code> operator</p></li>
+<li><p>All together then, the command would look like below (all on one
+line)</p>
+<pre ><code class="pgsql">shp2pgsql -I -s |||SRID||| -W |||encoding||| |||shapefile|||.SHP |||table_name||| | pgsql -d |||database||| -U postgres</code></pre></li>
 </ul>
-<p><code class="python">shp2pgsql -I -s SRID -W ENCODING SHAPEFILE.SHP TABLE_NAME | pgsql -d DATABASE -U postgres</code></p>
 </section>
 <section id="back-to-text" class="slide level2">
 <h2>Back to Text</h2>
 <ul>
-<li>Since the shapefile spatial information will be encoded directly to
-a geometry type, it can be tricky to know what exactly you are working
-with at times</li>
-<li>You can call the <code class="python">ST_AsText()</code> function on
-any geometry (or geography) object to output its WKT representation
+<li><p>Since the shapefile spatial information will be encoded directly
+to a geometry type, it can be tricky to know what exactly you are
+working with at times</p></li>
+<li><p>You can call the <code class="pgsql">ST_AsText()</code> function
+on any geometry (or geography) object to output its WKT
+representation</p>
+<pre ><code class="pgsql">SELECT ST_AsText(|||geom|||)
+FROM |||table name|||
+LIMIT 1;</code></pre>
 <ul>
 <li>This can also be useful if you need to get it into a text form to
 copy into another location</li>
 </ul></li>
 </ul>
-<pre ><code class="pgsql">SELECT ST_AsText(geom)
-FROM table_name
-LIMIT 1;</code></pre>
 </section>
 <section id="visualization" class="slide level2">
 <h2>Visualization</h2>
 <ul>
-<li>In general, you would need to take your information to another
-program for visualization purposes</li>
-<li>For a quick view though, <a
+<li><p>In general, you would need to take your information to another
+program for visualization purposes</p></li>
+<li><p>For a quick view though, <a
 href="https://clydedacruz.github.io/openstreetmap-wkt-playground/">this</a>
-site will let you enter in a WKT which it will then display</li>
-<li>Can be used in conjunction with
-<code class="python">ST_AsText</code> to grab results for quick
-visualization</li>
-<li>You can use <code class="python">ST_Collect</code> to aggregate an
+site will let you enter in a WKT which it will then display</p></li>
+<li><p>Can be used in conjunction with
+<code class="pgsql">ST_AsText</code> to grab results for quick
+visualization</p></li>
+<li><p>You can use <code class="pgsql">ST_Collect</code> to aggregate an
 entire column of singular geometries into one Multi-geometry object for
-each of representation</li>
+each of representation</p>
+<pre ><code class="pgsql">SELECT ST_Collect(ST_AsText(|||geom point|||))
+FROM |||table name|||</code></pre></li>
 </ul>
 </section>
 <section id="postgis-polygon-functions" class="slide level2">
@@ -642,12 +652,12 @@ each of representation</li>
 polygonal spatial information</li>
 <li>PostGIS has several useful functions to interact with polygons:
 <ul>
-<li><code class="python">ST_Area(poly)</code> will return the area of
-the provided polygon. This will be in SRID specified units if geometry
-or square meters if geography</li>
-<li><code class="python">ST_Within(point, poly)</code> will return a
-True/False as to whether the given point lies within the provided
-polygon
+<li><code class="pgsql">ST_Area(|||poly|||)</code> will return the area
+of the provided polygon. This will be in SRID specified units if
+geometry or square meters if geography</li>
+<li><code class="pgsql">ST_Within(|||point|||, |||poly|||)</code> will
+return a True/False as to whether the given point lies within the
+provided polygon
 <ul>
 <li>Make sure your SRID values match for point and poly! Or you could
 get bizarre results!</li>
@@ -660,11 +670,11 @@ get bizarre results!</li>
 <ul>
 <li>PostGIS can also determine information about intersections between
 various geometries</li>
-<li><code class="python">ST_Intersects(geom1, geom2)</code> will return
-a True/False if there exists an intersection between the two
+<li><code class="pgsql">ST_Intersects(|||geom₁|||, |||geom₂|||)</code>
+will return a True/False if there exists an intersection between the two
 geometries</li>
-<li><code class="python">ST_Intersection(geom1, geom2)</code> will
-return a new geometry representing the intersection between the two
+<li><code class="pgsql">ST_Intersection(|||geom₁|||, |||geom₂|||)</code>
+will return a new geometry representing the intersection between the two
 geometries
 <ul>
 <li>This might be a point for the intersection between two lines or a
@@ -672,7 +682,7 @@ line for the intersection between a line and a polygon, or a polygon for
 the intersection between two polygons</li>
 </ul></li>
 </ul>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -691,6 +701,7 @@ the intersection between two polygons</li>
   <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
   <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
   <script src="../html_srcs/revealjs/../js/mypgsql.js"></script>
+  <script src="../html_srcs/revealjs/../js/mybash.js"></script>
 
   <script>
 
@@ -766,7 +777,7 @@ the intersection between two polygons</li>
         // Time before the cursor is hidden (in ms)
         hideCursorTime: 5000,
         // Transition style
-        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
         // Transition speed
         transitionSpeed: 'default', // default/fast/slow
         // Transition style for full page slide backgrounds
@@ -809,9 +820,20 @@ the intersection between two polygons</li>
 			disableCheckFile: false, //default false
 		 },
           highlight: {
-            beforeHighlight: hljs => hljs.registerLanguage("pgsql", function(hljs) {
-              console.log(mypgsqldef);
-              return mypgsqldef(hljs); } )
+            beforeHighlight: hljs => {
+              hljs.registerLanguage("pgsql", function(hljs) {
+                console.log(mypgsqldef);
+                return mypgsqldef(hljs); 
+              });
+              hljs.registerLanguage("bash", function(hljs) {
+                console.log(mybashdef);
+                return mybashdef(hljs); 
+              });
+              console.log(hljs);
+              document.querySelectorAll('code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            }
           },
 
         // reveal.js plugins
@@ -829,6 +851,7 @@ the intersection between two polygons</li>
 		chalkboard: {
           boardmarkerWidth: 4,
           chalkWidth: 7,
+          theme: "whiteboard",
           boardmarkers : [
                   { color: 'rgba(46,52,64,1)',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
                   { color: 'rgba(94,129,172,1)',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
