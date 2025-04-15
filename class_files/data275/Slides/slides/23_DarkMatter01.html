@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-04-15">
+  <title>Does Dark Matter?</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Does Dark Matter?</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">April 15, 2025</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>HW5 was due! Try to get it in soon if you are a bit behind, as HW6
+(the last one) is coming out soon!
+<ul>
+<li>HW5 Debrief becomes available at midnight tonight through Thursday
+at midnight</li>
+</ul></li>
+<li>Quiz 2 scores will be handed back on Thursday</li>
+<li>My end of week and weekend was very full, so the group preferences
+poll didn’t get posted. Expect that tonight.</li>
+</ul>
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap</h2>
+<ul>
+<li>A Monte Carlo Markov Chain is a semi-random walk wherein the next
+step is determined by the current location and a bit of randomness</li>
+<li>Directed in the sense that is has a preference to move “uphill”,
+toward higher parts of the function it is sampling</li>
+<li>We can sample the probability of parameters given particular data
+(<span class="math inline">\(P(\theta | D)\)</span>) using Baye’s
+theorem
+<ul>
+<li>Requires being able to write out our priors and our likelihood</li>
+</ul></li>
+</ul>
+</section>
+<section id="discussing-today" class="slide level2">
+<h2>Discussing Today</h2>
+<ul>
+<li>Libraries for MCMC</li>
+<li>What is dark matter?
+<ul>
+<li>Why do we think it exists?</li>
+<li>How can we measure it?</li>
+<li>What ramifications does it have?</li>
+</ul></li>
+</ul>
+</section>
+<section>
+<section id="helpful-mcmc-libraries" class="title-slide slide level1">
+<h1>Helpful MCMC Libraries</h1>
+
+</section>
+<section id="available-options" class="slide level2">
+<h2>Available Options</h2>
+<ul>
+<li>While it isn’t difficult to create our own MCMC sampler, there can
+be some benefits to using existing libraries for more complicated use
+cases
+<ul>
+<li>Tend to give more intuitive interfaces through which to accomplish
+the basic tasks that we would want</li>
+</ul></li>
+<li>In the Python landscape, the main option used is the
+<code class="python">emcee</code> package, which you will probably need
+to install through <code class="python">pip</code>
+<ul>
+<li><code class="python">Emcee</code> operates as an abstract data type,
+wherein you create a sampling object and then can interact with it and
+run samples using defined methods</li>
+</ul></li>
+<li>In the R landscape, there is the <code class="python">mcmc</code>
+package, which also seems reasonably strong, though it doesn’t seem to
+have all of the flexibility of <code class="python">emcee</code></li>
+</ul>
+</section>
+<section id="python-emcee-creation" class="slide level2">
+<h2>Python: Emcee Creation</h2>
+<ul>
+<li>When you create the object initially, you need to provide:
+<ul>
+<li>The number of walkers you’d like to generate</li>
+<li>The number of dimensions you’ll be walking (number of
+parameters)</li>
+<li>The function you’ll be walking (your log posterior)</li>
+<li>Any extra arguments that your function will need beyond the
+parameters</li>
+<li>A pool should you be using multiprocessing</li>
+</ul>
+<pre ><code class="python">sampler = emcee.EnsembleSampler(
+              num_walkers, num_dims,
+              log_function, args=[extra arguments]
+              )</code></pre></li>
+</ul>
+</section>
+<section id="python-emcee-running" class="slide level2">
+<h2>Python: Emcee Running</h2>
+<ul>
+<li><p>Generating starting points usually done with some variation of a
+random gaussian near a starting point:</p>
+<pre ><code class="python">starts = np.random.multivariate_normal(
+            mean = [0,1,10],
+            cov = [[1,0,0],[0,0.5,0], [0,0,5]],
+            size = num_walkers
+            )</code></pre></li>
+<li><p>You can then start a sampling run by telling the sampler where
+all the walkers should begin and how many steps they should take</p>
+<pre ><code class="python">sampler.run_mcmc(starts, num_iterations)</code></pre></li>
+</ul>
+</section>
+<section id="python-emcee-retrieving-chains" class="slide level2">
+<h2>Python: Emcee Retrieving Chains</h2>
+<ul>
+<li><p>You can get the iteration chains back from the sampler after a
+run using <code class="python">.get_chain()</code></p>
+<ul>
+<li><p>This will usually return a 3D array, indexing over the parameter,
+walker, and iteration</p></li>
+<li><p>Can visualize a particular parameter over all walkers using</p>
+<pre ><code class="python">plt.plot(sampler.get_chain()[:,:,0], 'k', alpha=0.3)</code></pre></li>
+</ul></li>
+<li><p>After examining, will commonly want to discard the burn in and
+flatten all the individual walkers:</p>
+<pre ><code class="python">flat_samples = sampler.get_chain(discard=num_dis, 
+                                 flat=True)</code></pre></li>
+</ul>
+</section>
+<section id="python-interpreting-results" class="slide level2">
+<h2>Python: Interpreting Results</h2>
+<ul>
+<li>Commonly several things you’ll want to look at after flattening the
+chains:
+<ul>
+<li>Histograms of the individual parameter distributions</li>
+<li>2D Histograms/KDE plots of pair-wise parameter combinations</li>
+<li>Visualizing the best fit with errors back on the original
+dataset</li>
+</ul></li>
+<li>The first two can be done individually, or they can be streamlined
+using the <code class="python">corner</code> package
+<ul>
+<li><code class="python">corner</code> will automatically generate both
+individual parameter distributions and all pair-wise 2D histograms</li>
+</ul></li>
+</ul>
+</section>
+<section id="r-mcmc" class="slide level2">
+<h2>R: MCMC</h2>
+<ul>
+<li><p>Need to install and load the <code class="python">mcmc</code>
+package</p></li>
+<li><p>Gives you the <code class="python">metrop</code> function, for
+Metropolis-Hastings</p>
+<pre ><code class="r">out <- metrop(ln_pdf, start, num_iterations)</code></pre></li>
+<li><p>You can then access the chain under:
+<code class="r">out$batch</code></p></li>
+<li><p>The documentation specifies you want an accepted ratio of around
+0.2</p>
+<ul>
+<li>Can use the <code class="python">scale</code> argument to adjust
+this (above 1 is bigger steps, smaller than 1 is smaller steps)</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="why-dark-matter" class="title-slide slide level1">
+<h1>Why Dark Matter?</h1>
+
+</section>
+<section id="circular-speeds" class="slide level2">
+<h2>Circular Speeds</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Objects traveling in a circle need a force pulling them inwards</li>
+<li>The amount of force, size of the circle, and speed are related:
+<span class="math display">\[ F_{in} = \frac{mv_{circ}^2}{R}
+\]</span></li>
+<li>For our orbits, the force must be gravity</li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/ecfd9d52f4f13c119ab3c21133ada72c9a9d1713.svg"
+style="width:80.0%" /></p>
+</div>
+</div>
+</section>
+<section id="velocity-dependence" class="slide level2">
+<h2>Velocity Dependence</h2>
+<ul>
+<li>We can work out how the velocity should vary with distance from the
+center: <span class="math display">\[\begin{aligned}
+F_{grav} &amp;= \frac{mv_{circ}^2}{R}\\
+\frac{GMm}{R^2} &amp;= \frac{mv_{circ}^2}{R}\\
+\frac{GM}{R} &amp;= v_{circ}^2
+\end{aligned} \]</span></li>
+<li>For nicely symmetric mass distributions, <span
+class="math inline">\(M\)</span> can be taken to be the total mass
+internal to the radius <span class="math inline">\(R\)</span> <span
+class="math display">\[ v_{circ}(R) = \sqrt{\frac{GM_{in}(R)}{R}}
+\]</span></li>
+</ul>
+</section>
+<section id="consistent-mass" class="slide level2">
+<h2>Consistent Mass</h2>
+<div class="cols" style="align-items: start">
+<div class="col">
+<ul>
+<li>Consider the mass distribution to the right</li>
+<li>How would the resulting velocity curve look as you moved away from
+the center?</li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/57fbe0baa460555d0970cbadcba32712cefd780c.svg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="consistent-density" class="slide level2">
+<h2>Consistent Density</h2>
+<div class="cols" style="align-items: start">
+<div class="col">
+<ul>
+<li>Consider instead the spherically symmetric density distribution to
+the right</li>
+<li>How would the resulting velocity curve look as you moved away from
+the center?</li>
+</ul>
+</div>
+<div class="col">
+<p><img
+data-src="../images/svg_cache/b6b6e6fc8fad2dd408d3c0ed2dd4528f049f25d7.svg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="visualizing-rotations" class="slide level2">
+<h2>Visualizing Rotations</h2>
+<div id="viz1">
+
+</div>
+<script type="text/javascript" src='../images/p5js/orbits.js'></script>
+</section>
+<section id="activity" class="slide level2">
+<h2>Activity</h2>
+<ul>
+<li>I am providing you with two <em>density</em> profiles below:
+<ul>
+<li><a href="../demos/L19_solar.csv">Solar System-like</a> (density in
+<span class="math inline">\(kg/au^3\)</span>)</li>
+<li><a href="../demos/L19_galaxy.csv">Galaxy-like</a> (density in <span
+class="math inline">\(kg/ly^3\)</span>)</li>
+</ul></li>
+<li>For each, you can assume that the density beside a distance
+describes the density between that distance and the <em>previous</em>
+distance</li>
+<li>You task is to generate velocity curve profiles for each. You can
+assume a spherical distribution of the material.</li>
+<li>How do they compare (both to one another and the distributions we
+just looked at)?</li>
+</ul>
+</section>
+<section id="surprises" class="slide level2">
+<h2>Surprises</h2>
+<ul>
+<li>The second velocity curve is what astronomers expected to see when
+looking at the Milky Way and other galaxies
+<ul>
+<li>Would be consistent with the visible light we saw from the galaxy
+and known star masses</li>
+</ul></li>
+<li>But instead…</li>
+</ul>
+</section>
+<section id="rotation-curve-milky-way" class="slide level2">
+<h2>Rotation Curve: Milky Way</h2>
+<p><img data-src="../images/python/MW_RotCurve.png"
+style="width:100.0%" /></p>
+</section>
+<section id="rotation-curve-others" class="slide level2">
+<h2>Rotation Curve: Others</h2>
+<p><img data-src="../images/python/Other_RotCurve.png"
+style="width:100.0%" /></p>
+</section>
+<section id="possibilities" class="slide level2">
+<h2>Possibilities</h2>
+<ul>
+<li>Determining how to reconcile the mass that we <strong>see</strong>,
+with the mass that the rotation curves predict, has been an ongoing
+struggle</li>
+<li>Current estimates predict between 5-10 times as much mass as we see
+<ul>
+<li>Spread somewhat evenly throughout the visible galaxy and far
+beyond</li>
+</ul></li>
+<li>Definitely does <strong>not</strong> seem to have the majority of
+mass concentrated at the center</li>
+<li>Are we missing dark objects?</li>
+</ul>
+</section>
+<section id="being-macho" class="slide level2">
+<h2>Being MACHO</h2>
+<ul>
+<li>What other forms of mass do we know of that would be faint /
+invisible?</li>
+<li>Could the halo of the galaxy be filled with faint, dead stars?
+<ul>
+<li>Massive Compact Halo Objects?</li>
+<li>Brown dwarfs</li>
+<li>Neutron stars</li>
+<li>Black Holes</li>
+</ul></li>
+<li>How does one find an invisible object?</li>
+</ul>
+</section>
+<section id="gravitational-microlensing" class="slide level2">
+<h2>Gravitational (Micro)Lensing</h2>
+<ul>
+<li>We look for their mass’s effect on nearby light</li>
+<li>Find that MACHO’s account for maybe 20% of the missing mass, at
+most</li>
+<li>Hence, the currently named <em>dark matter</em></li>
+</ul>
+<p><img data-src="../images/ch16_lensing.jpg" style="width:70.0%" /></p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          theme: "whiteboard",
+          boardmarkers : [
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
+    </body>
+</html>
