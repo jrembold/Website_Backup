@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jed Rembold">
+  <meta name="dcterms.date" content="2025-04-17">
+  <title>Numeric Integration and the Expanding Cosmos</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../html_srcs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/theme/tokyo-night-light.css" id="theme">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+  <link rel="stylesheet" href="../html_srcs/revealjs/../css/highlight/tokyo-night-light.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Numeric Integration and the Expanding Cosmos</h1>
+  <p class="author">Jed Rembold</p>
+  <p class="date">April 17, 2025</p>
+</section>
+
+<section id="announcements" class="slide level2">
+<h2>Announcements</h2>
+<ul>
+<li>Debriefing for HW5 is available until midnight tonight! Get it
+done!</li>
+<li>Check in for HW6 is available this weekend. At least have touched
+base with your partner.</li>
+<li>Poll link for partner preferences on the final project went out (or
+available <a href="">here</a>). Complete it by tonight if you want your
+preferences expressed!</li>
+<li>Homework 6
+<ul>
+<li>Partner assignments at the end of class</li>
+<li>Some edits being made to second problem (for the better), but should
+come out today</li>
+</ul></li>
+<li>Quiz 2 handed back!
+<ul>
+<li>You can add 1.5 pts to the total written on your last page</li>
+</ul></li>
+</ul>
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap</h2>
+<ul>
+<li>Rotation or velocity curves measure the speed of orbiting objects as
+you move outwards from a central body
+<ul>
+<li>Commonly assume circular or largely circular orbits</li>
+<li>Generally measured through Doppler shifts</li>
+</ul></li>
+<li>The shape of a rotation curve tells you about the distribution of
+material throughout the region</li>
+<li>The rotation curves of galaxies do not match what we would expect,
+thus leading to conjectures about dark matter</li>
+</ul>
+</section>
+<section id="today" class="slide level2">
+<h2>Today</h2>
+<ul>
+<li>Understanding numeric integration
+<ul>
+<li>Why do we care?</li>
+<li>How can we leverage existing tools?</li>
+</ul></li>
+<li>Hubble’s law and implications</li>
+</ul>
+</section>
+<section>
+<section id="numeric-integration" class="title-slide slide level1">
+<h1>Numeric Integration</h1>
+
+</section>
+<section id="the-case-for-integration" class="slide level2">
+<h2>The Case for Integration</h2>
+<ul>
+<li>Models can often require a calculation of all the area beneath a
+curve
+<ul>
+<li>Generally this equates to summing up all the contributions over the
+independent axis</li>
+</ul></li>
+<li>Examples:
+<ul>
+<li>The overall brightness of a star is the area under the Planck curve:
+the brightness at each wavelength summed up</li>
+<li>The overall mass of something is the area under the mass curve: the
+mass at each distance summed up</li>
+</ul></li>
+<li>If one of these things is constant, this calculation becomes easy,
+as it is just the area of a rectangle
+<ul>
+<li>But they usually aren’t constant!</li>
+</ul></li>
+</ul>
+</section>
+<section id="analytic-integration" class="slide level2">
+<h2>Analytic Integration</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Mathematically, this is the domain of calculus</li>
+<li>Can use integration to directly compute these areas …sometimes</li>
+<li>The real world is often messy in a way that nice and neat functions
+almost never are</li>
+<li>So often an analytic solution to the integration simply doesn’t
+exist, or it is simply so hard to calculate that it may not be worth the
+time</li>
+</ul>
+</div>
+<div class="col">
+<p><span class="math display">\[\begin{align}
+f(x) &amp;= 4x^2 + 3 \\
+\int_0^5 f(x)\,dx &amp;= \int_0^5 4x^2 + 3\,dx \\
+&amp;= \left.\frac{4}{3}x^3 + 3x\right|_0^5 \\
+&amp;= \left(\frac{4}{3}5^3 + 3*5\right) - \left(\frac{4}{3}0^3 +
+3*0\right) \\
+&amp;= 181\tfrac{2}{3}
+\end{align}\]</span></p>
+</div>
+</div>
+</section>
+<section id="numeric-integration-1" class="slide level2">
+<h2>Numeric Integration</h2>
+<ul>
+<li>Numeric integration is the task of computationally computing the
+area under these curves</li>
+<li>We actually already visited some problems it has when we introduced
+MCMC, but for lower dimensional integration problems, we will be ok with
+classic methods</li>
+<li>These methods generally involve dividing the data into small bins,
+approximating the area under each bin, and then summing them all up</li>
+<li>While you <strong>could</strong> write a function to do this
+yourself, for this class you should stick with existing defined tools to
+accomplish this, as they will be much more accurate</li>
+</ul>
+</section>
+<section id="in-python-quad" class="slide level2">
+<h2>In Python: <code class="python">quad</code></h2>
+<ul>
+<li>The <a
+href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html"><code class="python">quad</code></a>
+function from <code class="python">scipy.integrate</code> is built to
+handle this sort of numeric integration</li>
+<li>Takes 3 main arguments:
+<ul>
+<li>The function to integrate, where the dimension of integration must
+be the first parameter of the function</li>
+<li>A lower bound to the integration</li>
+<li>An upper bound to the integration</li>
+</ul></li>
+<li>It will return to you a list of values, of which the first is the
+integration total value
+<ul>
+<li>The second is an estimate in the error of that computed value</li>
+</ul></li>
+</ul>
+</section>
+<section id="in-r-integrate" class="slide level2">
+<h2>In R: <code class="python">integrate</code></h2>
+<ul>
+<li>The aptly named <a
+href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/integrate"><code class="python">integrate</code></a>
+function in R functions in basically an identical way</li>
+<li>Still takes 3 main arguments:
+<ul>
+<li>The function to integrate, where the dimension of integration must
+be the first parameter of the function</li>
+<li>A lower bound to the integration</li>
+<li>An upper bound to the integration</li>
+</ul></li>
+<li>Returns an associative array, so if you just want the integration
+total, access it with <code class="python">$value</code></li>
+</ul>
+</section>
+<section id="integration-example" class="slide level2">
+<h2>Integration Example</h2>
+<ul>
+<li>Suppose we wanted to determine the overall brightness of a Plank
+curve with emissivity of 1 and a temperature of 8000K</li>
+<li>Reminder: <span class="math display">\[ B(\lambda, T) =
+\varepsilon\cdot\frac{2hc^2}{\lambda^5}
+\frac{1}{\exp\left(\frac{hc}{\lambda k_B T}\right) - 1} \]</span></li>
+</ul>
+<!--
+## Emcee
+- While it isn't difficult to create our own MCMC sampler, there can be some benefits to using existing libraries for more complicated use cases
+  - Tend to give more intuitive interfaces through which to accomplish the basic tasks that we would want
+- In the Python landscape, the main option used is the `emcee` package, which you will probably need to install through `pip`
+- `Emcee` operates as an abstract data type, wherein you create a sampling object and then can interact with it and run samples using defined methods
+- In the R landscape, there is the `mcmc` package, which also seems reasonably strong, though it doesn't seem to have all of the flexibility of `emcee`
+
+
+## Emcee Creation
+- When you create the object initially, you need to provide:
+  - The number of walkers you'd like to generate
+  - The number of dimensions you'll be walking (number of parameters)
+  - The function you'll be walking (your log posterior)
+  - Any extra arguments that your function will need beyond the parameters
+  - A pool should you be using multiprocessing
+```python
+sampler = emcee.EnsembleSampler(
+                num_walkers, num_dims,
+                log_function, args=[extra arguments]
+                )
+```
+
+## Emcee Running
+- You can then start a sampling run by telling the sampler where all the walkers should begin and how many steps they should take
+- Generating starting points usually done with some variation of a random gaussian near a starting point:
+  ```python
+  starts = np.random.multivariate_normal(
+              mean = [0,1,10],
+              cov = [[1,0,0],[0,0.5,0], [0,0,5]],
+              size = num_dims
+              )
+  ```
+- Then you can just run the sampler:
+  ```python
+  sampler.run_mcmc(starts, num_iterations)
+  ```
+
+## Emcee Retrieving Chains
+- You can get the iteration chains back from the sampler after a run using `.get_chain()`
+  - This will usually return a 3D array, indexing over the parameter, walker, and iteration
+  - Can visualize a particular parameter over all walkers using
+    ```python
+    plt.plot(sampler.get_chain()[:,:,0], 'k', alpha=0.3)
+    ```
+- After examining, will commonly want to discard the burn in and flatten all the individual walkers:
+  ```python
+  flat_samples = sampler.get_chain(discard=num_dis, 
+                                   flat=True)
+  ```
+
+## Interpreting Results
+- Commonly several things you'll want to look at after flattening the chains:
+  - Histograms of the individual parameter distributions
+  - 2D Histograms/KDE plots of pair-wise parameter combinations
+  - Visualizing the best fit with errors back on the original dataset
+- The first two can be done individually, or they can be streamlined using the `corner` package
+  - `corner` will automatically generate both individual parameter distributions and all pair-wise 2D histograms
+-->
+</section></section>
+<section>
+<section id="going-further" class="title-slide slide level1">
+<h1>Going Further</h1>
+
+</section>
+<section id="the-distance-ladder" class="slide level2">
+<h2>The Distance Ladder</h2>
+<p><img
+data-src="../images/svg_cache/1fce4974e08417c30a58b37822b330c3e1cf205e.svg"
+style="width:75.0%" /></p>
+</section>
+<section id="a-red-tale" class="slide level2">
+<h2>A Red Tale</h2>
+<ul>
+<li>Vesto Melvin Slipher - 1912
+<ul>
+<li>While observing spiral galaxies, found that they
+<strong>all</strong> seemed to be redshifted by some amount!</li>
+<li>This would imply that they are <strong>all</strong> moving away from
+us, which seemed somewhat odd</li>
+</ul></li>
+<li>Edwin Hubble - 1929
+<ul>
+<li>Used Type Ia supernova to estimate the distances to distant
+galaxies</li>
+<li>Found that the more distant galaxies were more redshifted</li>
+</ul></li>
+</ul>
+<div class="block fragment alert" name="The Hubble Relation">
+<p>The more distant an object is, the faster it is moving away from
+us!</p>
+</div>
+</section>
+<section id="hubbles-law" class="slide level2">
+<h2>Hubble’s Law</h2>
+<p><img data-src="../images/python/hubble.png"
+style="width:80.0%" /></p>
+</section>
+<section id="the-hubble-constant" class="slide level2">
+<h2>The Hubble Constant</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Has varied greatly throughout its history</li>
+<li>Still empirically (experimentally) determined</li>
+<li>Current estimates range between 65-78</li>
+<li>In a bit of a crisis atm, as competing methods give very different
+answers
+<ul>
+<li>From stars: <span class="math inline">\(\approx 73\)</span> km / s /
+Mpc</li>
+<li>From CMB: <span class="math inline">\(\approx 68\)</span> km / s /
+Mpc</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/python/hubble_evolution.png"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="puffing-up" class="slide level2">
+<h2>Puffing Up</h2>
+<ul>
+<li>So all galaxies are moving away from us, but surely we aren’t
+actually in the center?
+<ul>
+<li><strong>Nope!</strong></li>
+<li>But then again, neither is anyone else!</li>
+</ul></li>
+<li>The <em>Cosmological Principle</em>: at a given cosmic time, the
+universe looks basically the same to all observers.</li>
+<li>Everyone must see everything moving away because the entire universe
+is actually expanding!</li>
+</ul>
+</section>
+<section id="they-are-a-crusty-bunch" class="slide level2">
+<h2>They are a crusty bunch…</h2>
+<div class="cols">
+<div class="col">
+<ul>
+<li>The Raisin Bread Analogy
+<ul>
+<li>Raisins are the galaxies (or stars)</li>
+<li>The dough is space</li>
+<li>At it rises and cooks, all the raisins move away from one
+another</li>
+</ul></li>
+<li>Fails the cosmological principle though!
+<ul>
+<li>The creatures of the crust</li>
+</ul></li>
+</ul>
+</div>
+<div class="col">
+<p><img data-src="../images/ch16_raisinbread.jpg"
+style="width:100.0%" /></p>
+</div>
+</div>
+</section>
+<section id="snakes-on-a-plane" class="slide level2">
+<h2>Snakes on a @#$*&amp;@ Plane!</h2>
+<ul>
+<li>Imagine yourself a smooshed interstellar snake, living on a flat
+sheet of paper</li>
+<li>You can move around on the paper, but can not lift off or dig into
+the paper</li>
+</ul>
+<p><img
+data-src="../images/svg_cache/c16e7660e521830b32306a4ce4c9fc215c5aa6b7.svg"
+style="width:30.0%" /></p>
+<ul>
+<li>This is just the raisin loaf so far</li>
+</ul>
+</section>
+<section id="snakes-on-a-sphere" class="slide level2">
+<h2>Snakes on a @#%*^% Sphere?</h2>
+<div class="cols">
+<div class="col">
+<p><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="252.21025mm"
+   height="252.21025mm"
+   viewBox="0 0 252.21025 252.21025"
+   version="1.1"
+   id="svg5"
+   xml:space="preserve"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="snake_sphere.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.4204826"
+     inkscape:cx="-43.997064"
+     inkscape:cy="706.33124"
+     inkscape:window-width="1680"
+     inkscape:window-height="1020"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"><inkscape:page
+       x="0"
+       y="0"
+       width="252.21025"
+       height="252.21025"
+       id="page1395" /><inkscape:page
+       x="-1.2577159e-06"
+       y="-1.1342947e-06"
+       width="345.86829"
+       height="345.86829"
+       id="page1397" /></sodipodi:namedview><defs
+     id="defs2"><linearGradient
+       inkscape:collect="always"
+       id="linearGradient925"><stop
+         style="stop-color:#ffead1;stop-opacity:1;"
+         offset="0"
+         id="stop921" /><stop
+         style="stop-color:#ad5f00;stop-opacity:1;"
+         offset="1"
+         id="stop923" /></linearGradient><radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient925"
+       id="radialGradient927"
+       cx="316.23303"
+       cy="126.85357"
+       fx="316.23303"
+       fy="126.85357"
+       r="117.98491"
+       gradientUnits="userSpaceOnUse" /><radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient925"
+       id="radialGradient1971"
+       gradientUnits="userSpaceOnUse"
+       cx="316.23303"
+       cy="126.85357"
+       fx="316.23303"
+       fy="126.85357"
+       r="117.98491"
+       gradientTransform="matrix(1.465731,0,0,1.465731,-157.56886,-72.758686)" /><radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient925"
+       id="radialGradient2096"
+       gradientUnits="userSpaceOnUse"
+       cx="316.23303"
+       cy="126.85357"
+       fx="316.23303"
+       fy="126.85357"
+       r="117.98491" /></defs><g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-165.39176,16.709443)" /><g
+     id="scene1"
+     transform="matrix(0.72920895,0,0,0.72920895,-120.60515,12.184675)"><circle
+       style="fill:url(#radialGradient2096);fill-opacity:1;stroke:#ad5f00;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+       id="sphere1"
+       cx="338.3259"
+       cy="156.2247"
+       r="117.48491" /><g
+       id="snake1"
+       transform="matrix(0.13790732,-0.06383328,0.06383329,0.13790733,260.80982,81.122053)"><g
+         id="g1367"><path
+           d="m 85.961,10.793 c -35.949,-0.004 -65.09,18.227 -65.09,40.711 0.012,20.777 27.125,52.258 58.043,40.461 38.492,-14.688 36.734,29.64 42.93,55.84 6.195,26.199 1.621,76.101 26.527,96.023 24.906,19.922 49.594,19.602 77.746,3.805 28.153,-15.801 26.535,-80.992 48.477,-81.227 21.941,-0.23 28.949,68.391 49.492,81.707 20.543,13.317 27.793,16.305 51.961,0.535 24.172,-15.769 45.945,-70.769 47.68,-111.429 1.738,-40.66 -26.954,-117.309 -38.571,-116.785 0,0 14.137,79.453 6.43,111.429 -7.711,31.973 -9.285,72.973 -43.395,73.93 -34.109,0.953 -34.773,-90.727 -77.257,-91.531 -42.481,-0.809 -47.465,77.211 -79.707,69.031 -32.243,-8.184 -32.336,-62.891 -34.2,-74.246 -1.863,-11.352 -6.336,-53.555 -6.254,-54.121 0.086,-0.571 -2.418,-7.637 -2.402,-8.778 C 132.566,21.52 121.906,10.793 85.961,10.793 Z"
+           style="fill:#009d9f;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1369" /></g><g
+         id="g1371"><path
+           d="m 77.719,34.613 c 0,18.723 -9.071,33.903 -20.266,33.903 -11.191,0 -20.265,-15.18 -20.265,-33.903 0,-18.726 9.074,-33.906 20.265,-33.906 11.195,0 20.266,15.18 20.266,33.906 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1373" /></g><g
+         id="g1375"><path
+           d="m 59.539,47.68 c 0,9.832 -3.562,17.804 -7.957,17.804 -4.394,0 -7.953,-7.972 -7.953,-17.804 0,-9.832 3.559,-17.805 7.953,-17.805 4.395,0 7.957,7.973 7.957,17.805 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1377" /></g><g
+         id="g1379"><path
+           d="m 107.719,34.613 c 0,18.723 -9.071,33.903 -20.266,33.903 -11.191,0 -20.265,-15.18 -20.265,-33.903 0,-18.726 9.074,-33.906 20.265,-33.906 11.195,0 20.266,15.18 20.266,33.906 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1381" /></g><g
+         id="g1383"><path
+           d="m 89.539,47.68 c 0,9.832 -3.562,17.804 -7.957,17.804 -4.394,0 -7.953,-7.972 -7.953,-17.804 0,-9.832 3.559,-17.805 7.953,-17.805 4.395,0 7.957,7.973 7.957,17.805 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1385" /></g><g
+         id="g1387"
+         transform="scale(0.905415,1)"><path
+           d="M 50.292,90.801 C 31.029,106.316 15.01,113.082 1.074,114.207"
+           style="fill:none;stroke:#ff0000;stroke-width:2.11734;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1389" /></g><g
+         id="g1391"
+         transform="scale(0.905415,1)"><path
+           d="m 9.479,125.812 c 15.259,-18.519 4.672,-8.874 40.813,-35.011"
+           style="fill:none;stroke:#ff0000;stroke-width:2.11734;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1393" /></g></g><g
+       id="snake2"
+       transform="matrix(-0.02541426,0.149824,-0.14982402,-0.02541426,417.42758,184.88233)"><g
+         id="g1779"><path
+           d="m 85.961,10.793 c -35.949,-0.004 -65.09,18.227 -65.09,40.711 0.012,20.777 27.125,52.258 58.043,40.461 38.492,-14.688 36.734,29.64 42.93,55.84 6.195,26.199 1.621,76.101 26.527,96.023 24.906,19.922 49.594,19.602 77.746,3.805 28.153,-15.801 26.535,-80.992 48.477,-81.227 21.941,-0.23 28.949,68.391 49.492,81.707 20.543,13.317 27.793,16.305 51.961,0.535 24.172,-15.769 45.945,-70.769 47.68,-111.429 1.738,-40.66 -26.954,-117.309 -38.571,-116.785 0,0 14.137,79.453 6.43,111.429 -7.711,31.973 -9.285,72.973 -43.395,73.93 -34.109,0.953 -34.773,-90.727 -77.257,-91.531 -42.481,-0.809 -47.465,77.211 -79.707,69.031 -32.243,-8.184 -32.336,-62.891 -34.2,-74.246 -1.863,-11.352 -6.336,-53.555 -6.254,-54.121 0.086,-0.571 -2.418,-7.637 -2.402,-8.778 C 132.566,21.52 121.906,10.793 85.961,10.793 Z"
+           style="fill:#009d9f;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1777" /></g><g
+         id="g1783"><path
+           d="m 77.719,34.613 c 0,18.723 -9.071,33.903 -20.266,33.903 -11.191,0 -20.265,-15.18 -20.265,-33.903 0,-18.726 9.074,-33.906 20.265,-33.906 11.195,0 20.266,15.18 20.266,33.906 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1781" /></g><g
+         id="g1787"><path
+           d="m 59.539,47.68 c 0,9.832 -3.562,17.804 -7.957,17.804 -4.394,0 -7.953,-7.972 -7.953,-17.804 0,-9.832 3.559,-17.805 7.953,-17.805 4.395,0 7.957,7.973 7.957,17.805 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1785" /></g><g
+         id="g1791"><path
+           d="m 107.719,34.613 c 0,18.723 -9.071,33.903 -20.266,33.903 -11.191,0 -20.265,-15.18 -20.265,-33.903 0,-18.726 9.074,-33.906 20.265,-33.906 11.195,0 20.266,15.18 20.266,33.906 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1789" /></g><g
+         id="g1795"><path
+           d="m 89.539,47.68 c 0,9.832 -3.562,17.804 -7.957,17.804 -4.394,0 -7.953,-7.972 -7.953,-17.804 0,-9.832 3.559,-17.805 7.953,-17.805 4.395,0 7.957,7.973 7.957,17.805 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1793" /></g><g
+         id="g1799"
+         transform="scale(0.905415,1)"><path
+           d="M 50.292,90.801 C 31.029,106.316 15.01,113.082 1.074,114.207"
+           style="fill:none;stroke:#ff0000;stroke-width:2.11734;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1797" /></g><g
+         id="g1803"
+         transform="scale(0.905415,1)"><path
+           d="m 9.479,125.812 c 15.259,-18.519 4.672,-8.874 40.813,-35.011"
+           style="fill:none;stroke:#ff0000;stroke-width:2.11734;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1801" /></g></g></g><g
+     id="scene2"
+     class="fragment"
+     transform="matrix(0.72920895,0,0,0.72920895,-120.60515,12.184675)"><circle
+       style="fill:url(#radialGradient927);fill-opacity:1;stroke:#ad5f00;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+       id="circle1841"
+       cx="338.3259"
+       cy="156.2247"
+       r="117.48491" /><g
+       id="g1871"
+       transform="matrix(-0.12744319,0.08277288,0.08277288,0.12744321,310.80375,54.53614)"><g
+         id="g1845"><path
+           d="m 85.961,10.793 c -35.949,-0.004 -65.09,18.227 -65.09,40.711 0.012,20.777 27.125,52.258 58.043,40.461 38.492,-14.688 36.734,29.64 42.93,55.84 6.195,26.199 1.621,76.101 26.527,96.023 24.906,19.922 49.594,19.602 77.746,3.805 28.153,-15.801 26.535,-80.992 48.477,-81.227 21.941,-0.23 28.949,68.391 49.492,81.707 20.543,13.317 27.793,16.305 51.961,0.535 24.172,-15.769 45.945,-70.769 47.68,-111.429 1.738,-40.66 -26.954,-117.309 -38.571,-116.785 0,0 14.137,79.453 6.43,111.429 -7.711,31.973 -9.285,72.973 -43.395,73.93 -34.109,0.953 -34.773,-90.727 -77.257,-91.531 -42.481,-0.809 -47.465,77.211 -79.707,69.031 -32.243,-8.184 -32.336,-62.891 -34.2,-74.246 -1.863,-11.352 -6.336,-53.555 -6.254,-54.121 0.086,-0.571 -2.418,-7.637 -2.402,-8.778 C 132.566,21.52 121.906,10.793 85.961,10.793 Z"
+           style="fill:#009d9f;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1843" /></g><g
+         id="g1849"><path
+           d="m 77.719,34.613 c 0,18.723 -9.071,33.903 -20.266,33.903 -11.191,0 -20.265,-15.18 -20.265,-33.903 0,-18.726 9.074,-33.906 20.265,-33.906 11.195,0 20.266,15.18 20.266,33.906 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1847" /></g><g
+         id="g1853"><path
+           d="m 59.539,47.68 c 0,9.832 -3.562,17.804 -7.957,17.804 -4.394,0 -7.953,-7.972 -7.953,-17.804 0,-9.832 3.559,-17.805 7.953,-17.805 4.395,0 7.957,7.973 7.957,17.805 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1851" /></g><g
+         id="g1857"><path
+           d="m 107.719,34.613 c 0,18.723 -9.071,33.903 -20.266,33.903 -11.191,0 -20.265,-15.18 -20.265,-33.903 0,-18.726 9.074,-33.906 20.265,-33.906 11.195,0 20.266,15.18 20.266,33.906 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1855" /></g><g
+         id="g1861"><path
+           d="m 89.539,47.68 c 0,9.832 -3.562,17.804 -7.957,17.804 -4.394,0 -7.953,-7.972 -7.953,-17.804 0,-9.832 3.559,-17.805 7.953,-17.805 4.395,0 7.957,7.973 7.957,17.805 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1859" /></g><g
+         id="g1865"
+         transform="scale(0.905415,1)"><path
+           d="M 50.292,90.801 C 31.029,106.316 15.01,113.082 1.074,114.207"
+           style="fill:none;stroke:#ff0000;stroke-width:2.11734;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1863" /></g><g
+         id="g1869"
+         transform="scale(0.905415,1)"><path
+           d="m 9.479,125.812 c 15.259,-18.519 4.672,-8.874 40.813,-35.011"
+           style="fill:none;stroke:#ff0000;stroke-width:2.11734;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1867" /></g></g><g
+       id="g1901"
+       transform="matrix(-0.02541426,0.149824,-0.14982402,-0.02541426,417.42758,184.88233)"><g
+         id="g1875"><path
+           d="m 85.961,10.793 c -35.949,-0.004 -65.09,18.227 -65.09,40.711 0.012,20.777 27.125,52.258 58.043,40.461 38.492,-14.688 36.734,29.64 42.93,55.84 6.195,26.199 1.621,76.101 26.527,96.023 24.906,19.922 49.594,19.602 77.746,3.805 28.153,-15.801 26.535,-80.992 48.477,-81.227 21.941,-0.23 28.949,68.391 49.492,81.707 20.543,13.317 27.793,16.305 51.961,0.535 24.172,-15.769 45.945,-70.769 47.68,-111.429 1.738,-40.66 -26.954,-117.309 -38.571,-116.785 0,0 14.137,79.453 6.43,111.429 -7.711,31.973 -9.285,72.973 -43.395,73.93 -34.109,0.953 -34.773,-90.727 -77.257,-91.531 -42.481,-0.809 -47.465,77.211 -79.707,69.031 -32.243,-8.184 -32.336,-62.891 -34.2,-74.246 -1.863,-11.352 -6.336,-53.555 -6.254,-54.121 0.086,-0.571 -2.418,-7.637 -2.402,-8.778 C 132.566,21.52 121.906,10.793 85.961,10.793 Z"
+           style="fill:#009d9f;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1873" /></g><g
+         id="g1879"><path
+           d="m 77.719,34.613 c 0,18.723 -9.071,33.903 -20.266,33.903 -11.191,0 -20.265,-15.18 -20.265,-33.903 0,-18.726 9.074,-33.906 20.265,-33.906 11.195,0 20.266,15.18 20.266,33.906 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1877" /></g><g
+         id="g1883"><path
+           d="m 59.539,47.68 c 0,9.832 -3.562,17.804 -7.957,17.804 -4.394,0 -7.953,-7.972 -7.953,-17.804 0,-9.832 3.559,-17.805 7.953,-17.805 4.395,0 7.957,7.973 7.957,17.805 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1881" /></g><g
+         id="g1887"><path
+           d="m 107.719,34.613 c 0,18.723 -9.071,33.903 -20.266,33.903 -11.191,0 -20.265,-15.18 -20.265,-33.903 0,-18.726 9.074,-33.906 20.265,-33.906 11.195,0 20.266,15.18 20.266,33.906 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1885" /></g><g
+         id="g1891"><path
+           d="m 89.539,47.68 c 0,9.832 -3.562,17.804 -7.957,17.804 -4.394,0 -7.953,-7.972 -7.953,-17.804 0,-9.832 3.559,-17.805 7.953,-17.805 4.395,0 7.957,7.973 7.957,17.805 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1889" /></g><g
+         id="g1895"
+         transform="scale(0.905415,1)"><path
+           d="M 50.292,90.801 C 31.029,106.316 15.01,113.082 1.074,114.207"
+           style="fill:none;stroke:#ff0000;stroke-width:2.11734;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1893" /></g><g
+         id="g1899"
+         transform="scale(0.905415,1)"><path
+           d="m 9.479,125.812 c 15.259,-18.519 4.672,-8.874 40.813,-35.011"
+           style="fill:none;stroke:#ff0000;stroke-width:2.11734;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1897" /></g></g></g><g
+     id="scene3"
+     class="fragment"
+     transform="matrix(0.72920895,0,0,0.72920895,-120.60515,12.184675)"><circle
+       style="fill:url(#radialGradient1971);fill-opacity:1;stroke:#ad5f00;stroke-width:1.46573;stroke-linecap:round;stroke-linejoin:round"
+       id="circle1905"
+       cx="338.3259"
+       cy="156.2247"
+       r="172.20128" /><g
+       id="g1935"
+       transform="matrix(-0.12744319,0.08277288,0.08277288,0.12744321,284.58797,20.512507)"><g
+         id="g1909"><path
+           d="m 85.961,10.793 c -35.949,-0.004 -65.09,18.227 -65.09,40.711 0.012,20.777 27.125,52.258 58.043,40.461 38.492,-14.688 36.734,29.64 42.93,55.84 6.195,26.199 1.621,76.101 26.527,96.023 24.906,19.922 49.594,19.602 77.746,3.805 28.153,-15.801 26.535,-80.992 48.477,-81.227 21.941,-0.23 28.949,68.391 49.492,81.707 20.543,13.317 27.793,16.305 51.961,0.535 24.172,-15.769 45.945,-70.769 47.68,-111.429 1.738,-40.66 -26.954,-117.309 -38.571,-116.785 0,0 14.137,79.453 6.43,111.429 -7.711,31.973 -9.285,72.973 -43.395,73.93 -34.109,0.953 -34.773,-90.727 -77.257,-91.531 -42.481,-0.809 -47.465,77.211 -79.707,69.031 -32.243,-8.184 -32.336,-62.891 -34.2,-74.246 -1.863,-11.352 -6.336,-53.555 -6.254,-54.121 0.086,-0.571 -2.418,-7.637 -2.402,-8.778 C 132.566,21.52 121.906,10.793 85.961,10.793 Z"
+           style="fill:#009d9f;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1907" /></g><g
+         id="g1913"><path
+           d="m 77.719,34.613 c 0,18.723 -9.071,33.903 -20.266,33.903 -11.191,0 -20.265,-15.18 -20.265,-33.903 0,-18.726 9.074,-33.906 20.265,-33.906 11.195,0 20.266,15.18 20.266,33.906 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1911" /></g><g
+         id="g1917"><path
+           d="m 59.539,47.68 c 0,9.832 -3.562,17.804 -7.957,17.804 -4.394,0 -7.953,-7.972 -7.953,-17.804 0,-9.832 3.559,-17.805 7.953,-17.805 4.395,0 7.957,7.973 7.957,17.805 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1915" /></g><g
+         id="g1921"><path
+           d="m 107.719,34.613 c 0,18.723 -9.071,33.903 -20.266,33.903 -11.191,0 -20.265,-15.18 -20.265,-33.903 0,-18.726 9.074,-33.906 20.265,-33.906 11.195,0 20.266,15.18 20.266,33.906 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1919" /></g><g
+         id="g1925"><path
+           d="m 89.539,47.68 c 0,9.832 -3.562,17.804 -7.957,17.804 -4.394,0 -7.953,-7.972 -7.953,-17.804 0,-9.832 3.559,-17.805 7.953,-17.805 4.395,0 7.957,7.973 7.957,17.805 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1923" /></g><g
+         id="g1929"
+         transform="scale(0.905415,1)"><path
+           d="M 50.292,90.801 C 31.029,106.316 15.01,113.082 1.074,114.207"
+           style="fill:none;stroke:#ff0000;stroke-width:2.11734;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1927" /></g><g
+         id="g1933"
+         transform="scale(0.905415,1)"><path
+           d="m 9.479,125.812 c 15.259,-18.519 4.672,-8.874 40.813,-35.011"
+           style="fill:none;stroke:#ff0000;stroke-width:2.11734;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1931" /></g></g><g
+       id="g1965"
+       transform="matrix(-0.02541426,0.149824,-0.14982402,-0.02541426,449.6821,217.64211)"><g
+         id="g1939"><path
+           d="m 85.961,10.793 c -35.949,-0.004 -65.09,18.227 -65.09,40.711 0.012,20.777 27.125,52.258 58.043,40.461 38.492,-14.688 36.734,29.64 42.93,55.84 6.195,26.199 1.621,76.101 26.527,96.023 24.906,19.922 49.594,19.602 77.746,3.805 28.153,-15.801 26.535,-80.992 48.477,-81.227 21.941,-0.23 28.949,68.391 49.492,81.707 20.543,13.317 27.793,16.305 51.961,0.535 24.172,-15.769 45.945,-70.769 47.68,-111.429 1.738,-40.66 -26.954,-117.309 -38.571,-116.785 0,0 14.137,79.453 6.43,111.429 -7.711,31.973 -9.285,72.973 -43.395,73.93 -34.109,0.953 -34.773,-90.727 -77.257,-91.531 -42.481,-0.809 -47.465,77.211 -79.707,69.031 -32.243,-8.184 -32.336,-62.891 -34.2,-74.246 -1.863,-11.352 -6.336,-53.555 -6.254,-54.121 0.086,-0.571 -2.418,-7.637 -2.402,-8.778 C 132.566,21.52 121.906,10.793 85.961,10.793 Z"
+           style="fill:#009d9f;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1937" /></g><g
+         id="g1943"><path
+           d="m 77.719,34.613 c 0,18.723 -9.071,33.903 -20.266,33.903 -11.191,0 -20.265,-15.18 -20.265,-33.903 0,-18.726 9.074,-33.906 20.265,-33.906 11.195,0 20.266,15.18 20.266,33.906 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1941" /></g><g
+         id="g1947"><path
+           d="m 59.539,47.68 c 0,9.832 -3.562,17.804 -7.957,17.804 -4.394,0 -7.953,-7.972 -7.953,-17.804 0,-9.832 3.559,-17.805 7.953,-17.805 4.395,0 7.957,7.973 7.957,17.805 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1945" /></g><g
+         id="g1951"><path
+           d="m 107.719,34.613 c 0,18.723 -9.071,33.903 -20.266,33.903 -11.191,0 -20.265,-15.18 -20.265,-33.903 0,-18.726 9.074,-33.906 20.265,-33.906 11.195,0 20.266,15.18 20.266,33.906 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1949" /></g><g
+         id="g1955"><path
+           d="m 89.539,47.68 c 0,9.832 -3.562,17.804 -7.957,17.804 -4.394,0 -7.953,-7.972 -7.953,-17.804 0,-9.832 3.559,-17.805 7.953,-17.805 4.395,0 7.957,7.973 7.957,17.805 z"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030000;stroke-width:1.41732;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1953" /></g><g
+         id="g1959"
+         transform="scale(0.905415,1)"><path
+           d="M 50.292,90.801 C 31.029,106.316 15.01,113.082 1.074,114.207"
+           style="fill:none;stroke:#ff0000;stroke-width:2.11734;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1957" /></g><g
+         id="g1963"
+         transform="scale(0.905415,1)"><path
+           d="m 9.479,125.812 c 15.259,-18.519 4.672,-8.874 40.813,-35.011"
+           style="fill:none;stroke:#ff0000;stroke-width:2.11734;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1961" /></g></g></g></svg>
+</p>
+</div>
+<div class="col" style="font-size:.9em">
+<ul>
+<li>Suppose now we connected the ends of the paper to make it into a
+perfect sphere</li>
+<li>Now your “universe” has:
+<ul>
+<li>No center</li>
+<li>No edge</li>
+<li>Looks the same regardless of where you are at!</li>
+</ul></li>
+<li>Inflating the sphere will increase all the distances</li>
+<li>The Hubble constant measures how quickly the sphere inflates</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="expanding-space" class="slide level2">
+<h2>Expanding Space</h2>
+<div style="font-size:.9em">
+<ul>
+<li>Galaxies appear to move only because the space between is expanding
+<ul>
+<li>Galaxies are just conveniently glowing marked points in space</li>
+</ul></li>
+<li>Space was expanding long before there were galaxies though</li>
+<li>Galaxies themselves remain largely the same size
+<ul>
+<li>Gravity holds them together and determines size</li>
+<li>We only observe the effects of expanding space when looking over
+immense regions of space</li>
+</ul></li>
+<li>Light is redshifted because the space expands, stretching the
+wavelength</li>
+</ul>
+</div>
+<p><img
+data-src="../images/svg_cache/31927d7063489826e68667adcfc0dc4584c8592e.svg"
+style="width:80.0%" /></p>
+</section>
+<section id="einsteins-demon" class="slide level2">
+<h2>Einstein’s Demon</h2>
+<ul>
+<li>Einstein’s general relativity + a homogeneous universe predicts
+either an expansion or contraction of space</li>
+<li>Einstein hated this, and was convinced it couldn’t be true</li>
+<li>Originally added an extra term, a <em>“cosmological constant”</em>
+to his equations to allow for a static, unchanging universe</li>
+</ul>
+<div class="cols">
+<div class="col">
+<p><img data-src="../images/ch16_fieldeqns.jpg"
+style="width:80.0%" /></p>
+</div>
+<div class="col">
+<p><span class="math display">\[R_{ab}-\frac{1}{2}Rg_{ab} = -8\pi T_{ab}
++ \Lambda g_{ab}\]</span></p>
+</div>
+</div>
+</section>
+<section id="expansion-and-age" class="slide level2">
+<h2>Expansion and Age</h2>
+<ul>
+<li>If everything is expanding, we can reverse it to figure out how old
+the universe is</li>
+<li>“Hubble Time” <span class="math display">\[ t_H \approx \frac{1}{H}
+\]</span></li>
+<li>Comes out to about 14 billion years with current estimates</li>
+<li>Note that this is assuming the rate of the universe is
+constant!</li>
+</ul>
+</section>
+<section id="homework-6-partners" class="slide level2">
+<h2>Homework 6 Partners</h2>
+<ul>
+<li>Below are your partners for the coming HW6. Check in with them!</li>
+</ul>
+<div class="cols">
+<div class="col">
+<ul>
+<li>Conor &amp; Jared</li>
+<li>Lucca &amp; Gabby</li>
+<li>M &amp; Pearson</li>
+<li>Maddie &amp; Ema</li>
+<li>Sawyer &amp; Aurora</li>
+<li>Sergio &amp; Evyn</li>
+</ul>
+</div>
+<div class="col">
+<ul>
+<li>Evan &amp; Mamadou</li>
+<li>Sage &amp; Felicity</li>
+<li>Salem &amp; Luca</li>
+<li>Izzy &amp; Tegan</li>
+<li>Sadie &amp; Greg</li>
+<li>Oscar, Elliott, and Luna</li>
+</ul>
+</div>
+</div>
+</section></section>
+    </div>
+  </div>
+
+  <script src="../html_srcs/revealjs/dist/reveal.js"></script>
+
+  // reveal.js plugins
+  <script src="../html_srcs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../html_srcs/revealjs/plugin/search/search.js"></script>
+  <script src="../html_srcs/revealjs/plugin/zoom/zoom.js"></script>
+  // Added plugins
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/Chart.min.js"></script>-->
+  <!--<script src="../html_srcs/revealjs/../plugin/chart/plugin.js"></script>-->
+  <script src="../html_srcs/revealjs/../plugin/chalkboard/plugin.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/menu/menu.js"></script>
+  <script src="../html_srcs/revealjs/../other_plugins/reveald3/reveald3.js"></script>,
+  <script src="../html_srcs/revealjs/plugin/math/math.js"></script>
+  <script src="../html_srcs/revealjs/plugin/highlight/highlight.js"></script>
+  <script src="../html_srcs/revealjs/../libs/python_language.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+		//autoAnimateEasing: 'ease-in',
+		//autoAnimateDuration: 1.0,
+		//autoAnimateUnmatched: false,
+        // Display controls in the bottom right corner
+        controls: true,
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Global override for autoplaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+        // Global override for preloading lazy-loaded iframes
+        // - null: Iframes with data-src AND data-preload will be loaded when within
+        //   the viewDistance, iframes with only data-src will be loaded when visible
+        // - true: All iframes with data-src will be loaded when within the viewDistance
+        // - false: All iframes with data-src will be loaded only when visible
+        preloadIframes: null,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+        // The display mode that will be used to show slides
+        display: 'block',
+		math: {
+		  <!--mathjax: '../html_srcs/reveal.js/plugin/math/mathjax/tex-mml-chtml.js',-->
+		  <!--config: 'tex-mml-chtml',-->
+		  <!--tex2jax: {-->
+			<!--inlineMath: [['\\(','\\)']],-->
+			<!--displayMath: [['\\[','\\]']],-->
+			<!--balanceBraces: true,-->
+			<!--processEscapes: false,-->
+			<!--processRefs: true,-->
+			<!--processEnvironments: true,-->
+			<!--preview: 'TeX',-->
+			<!--skipTags: ['script','noscript','style','textarea','pre','code'],-->
+			<!--ignoreClass: 'tex2jax_ignore',-->
+			<!--processClass: 'tex2jax_process'-->
+		  <!--},-->
+		  CommonHTML: {scale: 80},
+		},
+          highlight: {
+            beforeHighlight: hljs => hljs.registerLanguage("mypython", function(hljs) {
+              console.log(hljs.regex);
+              console.log(mypythondef);
+              return mypythondef(hljs); } )
+          },
+        // reveal.js plugins
+        plugins: [
+		  RevealMath,
+          RevealHighlight,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom,
+		  RevealChalkboard,
+          RevealMenu,
+          Reveald3,
+        ],
+		chalkboard: {
+          boardmarkerWidth: 4,
+          chalkWidth: 7,
+          theme: "whiteboard",
+          boardmarkers : [
+                  { color: '#343b58',    cursor: 'url(' + path + 'img/boardmarker-black.png), auto'},
+                  { color: '#34548a',  cursor: 'url(' + path + 'img/boardmarker-blue.png), auto'},
+                  { color: '#8c4351',  cursor: 'url(' + path + 'img/boardmarker-red.png), auto'},
+                  { color: '#485e30', cursor: 'url(' + path + 'img/boardmarker-green.png), auto'},
+                  { color: '#965027', cursor: 'url(' + path + 'img/boardmarker-orange.png), auto'},
+                  { color: '#5a4a78', cursor: 'url(' + path + 'img/boardmarker-purple.png), auto'},
+                  { color: '#166775', cursor: 'url(' + path + 'img/boardmarker-yellow.png), auto'}
+          ],
+          chalks: [
+                  { color: '#d5d6db',cursor: 'url(' + path + 'img/chalk-white.png), auto'},
+                  { color: '#34548a', cursor: 'url(' + path + 'img/chalk-blue.png), auto'},
+                  { color: '#8c4351', cursor: 'url(' + path + 'img/chalk-red.png), auto'},
+                  { color: '#485e30',cursor: 'url(' + path + 'img/chalk-green.png), auto'},
+                  { color: '#965027',cursor: 'url(' + path + 'img/chalk-orange.png), auto'},
+                  { color: '#5a4a78',cursor: 'url(' + path + 'img/chalk-purple.png), auto'},
+                  { color: '#166775',cursor: 'url(' + path + 'img/chalk-yellow.png), auto'}
+          ]
+		},
+		dependencies: [
+            // { src: "../html_srcs/revealjs/plugin/title-footer/title-footer.js", async: true, callback: function() { title_footer.initialize({css:"../html_srcs/revealjs/plugin/title-footer/title-footer.css"}); } },
+		],
+      });
+    </script>
+  <script>
+  // This is admitedly a very hacky way to achieve my pseudo code highlighting, but it works?
+    function remove_bars() {
+      var pseudoBlocks = document.getElementsByClassName("hljs-pseudo");
+      console.log(pseudoBlocks);
+      for ( var i = 0; i < pseudoBlocks.length; i++) {
+        pseudoBlocks[i].innerHTML = pseudoBlocks[i].innerHTML.replaceAll("\|\|\|", "");
+      }
+      }
+    // omg this is even more hacky now, but I need this to run after hljs has done its thing
+    setTimeout(remove_bars, 100);
+  </script>
+    </body>
+</html>
